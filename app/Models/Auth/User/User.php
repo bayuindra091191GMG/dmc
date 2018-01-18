@@ -16,16 +16,22 @@ use Kyslik\ColumnSortable\Sortable;
  * App\Models\Auth\User\User
  *
  * @property int $id
+ * @property int $employee_id
  * @property string $name
+ * @property string $username
  * @property string $email
  * @property string $password
- * @property bool $active
+ * @property int $active
+ * @property int $site_id
  * @property string $confirmation_code
  * @property bool $confirmed
  * @property string $remember_token
+ * @property int $status_id
  * @property \Carbon\Carbon $created_at
+ * @property int $created_by
  * @property \Carbon\Carbon $updated_at
- * @property \Carbon\Carbon $deleted_at
+ * @property int $updated_by
+ * @property string $deleted_at
  * @property-read mixed $avatar
  * @property-read mixed $licensee_name
  * @property-read mixed $licensee_number
@@ -60,7 +66,17 @@ class User extends Authenticatable
         Sortable,
         Protectable;
 
-    public $sortable = ['name', 'email', 'created_at', 'updated_at'];
+    public $sortable = ['username', 'created_at', 'updated_at'];
+
+    protected $casts = [
+        'employee_id' => 'int',
+        'active' => 'int',
+        'site_id' => 'int',
+        'confirmed' => 'bool',
+        'status_id' => 'int',
+        'created_by' => 'int',
+        'updated_by' => 'int'
+    ];
 
     /**
      * The database table used by the model.
@@ -74,7 +90,18 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password', 'active', 'confirmation_code', 'confirmed'];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'active',
+        'confirmation_code',
+        'confirmed',
+        'username',
+        'site_id',
+        'status_id',
+        'created_by',
+        'updated_by'];
 
     /**
      * The attributes that should be hidden for arrays.

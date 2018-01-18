@@ -12,8 +12,11 @@ use App\Models\Auth\Role\Traits\Relations\RoleRelations;
  * @property int $id
  * @property string $name
  * @property int $weight
+ * @property string $description
  * @property \Carbon\Carbon $created_at
+ * @property int $created_by
  * @property \Carbon\Carbon $updated_at
+ * @property int $updated_by
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Auth\User\User[] $users
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Auth\Role\Role sort($direction = 'asc')
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Auth\Role\Role whereCreatedAt($value)
@@ -47,6 +50,10 @@ class Role extends Model
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name',
+        'description',
+        'created_by',
+        'updated_by'];
 
 }

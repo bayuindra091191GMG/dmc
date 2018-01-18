@@ -186,6 +186,7 @@ return [
         DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         AlbertCht\InvisibleReCaptcha\InvisibleReCaptchaServiceProvider::class,
+        Reliese\Coders\CodersServiceProvider::class,
 
         /*
          * Application Service Providers...
