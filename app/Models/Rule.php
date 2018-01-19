@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Thu, 18 Jan 2018 07:30:31 +0000.
+ * Date: Fri, 19 Jan 2018 06:48:33 +0000.
  */
 
 namespace App\Models;
@@ -16,27 +16,28 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $document_id
  * @property string $description
  * @property int $total_approval_users
- * @property \Carbon\Carbon $created_at
- * @property int $created_by
- * @property \Carbon\Carbon $updated_at
- * @property int $updated_by
+ * 
+ * @property \Illuminate\Database\Eloquent\Collection $approval_rules
  *
  * @package App\Models
  */
 class Rule extends Eloquent
 {
+	public $timestamps = false;
+
 	protected $casts = [
 		'document_id' => 'int',
-		'total_approval_users' => 'int',
-		'created_by' => 'int',
-		'updated_by' => 'int'
+		'total_approval_users' => 'int'
 	];
 
 	protected $fillable = [
 		'document_id',
 		'description',
-		'total_approval_users',
-		'created_by',
-		'updated_by'
+		'total_approval_users'
 	];
+
+	public function approval_rules()
+	{
+		return $this->hasMany(\App\Models\ApprovalRule::class);
+	}
 }

@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Thu, 18 Jan 2018 07:30:31 +0000.
+ * Date: Fri, 19 Jan 2018 04:22:50 +0000.
  */
 
 namespace App\Models;
@@ -24,6 +24,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property \App\Models\Department $department
  * @property \App\Models\Status $status
+ * @property \App\Models\Auth\User\User $user
+ * @property \Illuminate\Database\Eloquent\Collection $approval_purchase_requests
  * @property \Illuminate\Database\Eloquent\Collection $purchase_order_headers
  * @property \Illuminate\Database\Eloquent\Collection $purchase_request_details
  *
@@ -55,6 +57,21 @@ class PurchaseRequestHeader extends Eloquent
 	public function status()
 	{
 		return $this->belongsTo(\App\Models\Status::class);
+	}
+
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
+    }
+
+	public function approval_purchase_requests()
+	{
+		return $this->hasMany(\App\Models\ApprovalPurchaseRequest::class, 'purchase_request_id');
 	}
 
 	public function purchase_order_headers()

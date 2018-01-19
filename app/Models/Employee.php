@@ -31,7 +31,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property \App\Models\Site $site
  * @property \App\Models\Status $status
- * @property \App\Models\User $user
+ * @property \App\Models\Auth\User\User $user
  * @property \App\Models\Department $department
  * @property \Illuminate\Database\Eloquent\Collection $payment_requests
  * @property \Illuminate\Database\Eloquent\Collection $users
@@ -81,11 +81,6 @@ class Employee extends Eloquent
 		return $this->belongsTo(\App\Models\Status::class);
 	}
 
-	public function user()
-	{
-		return $this->belongsTo(\App\Models\User::class, 'updated_by');
-	}
-
 	public function department()
 	{
 		return $this->belongsTo(\App\Models\Department::class);
@@ -95,6 +90,16 @@ class Employee extends Eloquent
 	{
 		return $this->hasMany(\App\Models\PaymentRequest::class, 'request_by');
 	}
+
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
+    }
 
 	public function users()
 	{

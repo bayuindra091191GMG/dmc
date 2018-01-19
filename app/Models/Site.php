@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Thu, 18 Jan 2018 07:30:31 +0000.
+ * Date: Fri, 19 Jan 2018 06:52:40 +0000.
  */
 
 namespace App\Models;
@@ -16,12 +16,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $code
  * @property string $name
  * @property string $location
- * @property int $created_by
- * @property \Carbon\Carbon $created_at
- * @property int $updated_by
- * @property \Carbon\Carbon $updated_at
  * 
- * @property \App\Models\User $user
  * @property \Illuminate\Database\Eloquent\Collection $employees
  * @property \Illuminate\Database\Eloquent\Collection $users
  *
@@ -29,23 +24,13 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  */
 class Site extends Eloquent
 {
-	protected $casts = [
-		'created_by' => 'int',
-		'updated_by' => 'int'
-	];
+	public $timestamps = false;
 
 	protected $fillable = [
 		'code',
 		'name',
-		'location',
-		'created_by',
-		'updated_by'
+		'location'
 	];
-
-	public function user()
-	{
-		return $this->belongsTo(\App\Models\User::class, 'updated_by');
-	}
 
 	public function employees()
 	{

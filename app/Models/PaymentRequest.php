@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Thu, 18 Jan 2018 07:30:31 +0000.
+ * Date: Fri, 19 Jan 2018 04:10:48 +0000.
  */
 
 namespace App\Models;
@@ -34,15 +34,14 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property \App\Models\Employee $employee
  * @property \App\Models\PurchaseOrderHeader $purchase_order_header
- * @property \App\Models\Status $status
+ * @property \App\Models\Auth\User\User $user
+ * @property \Illuminate\Database\Eloquent\Collection $approval_payment_requests
  * @property \Illuminate\Database\Eloquent\Collection $payment_installments
  *
  * @package App\Models
  */
 class PaymentRequest extends Eloquent
 {
-	protected $table = 'payment_request';
-
 	protected $casts = [
 		'purchase_order_id' => 'int',
 		'request_by' => 'int',
@@ -89,9 +88,19 @@ class PaymentRequest extends Eloquent
 		return $this->belongsTo(\App\Models\PurchaseOrderHeader::class, 'purchase_order_id');
 	}
 
-	public function status()
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
+    }
+
+	public function approval_payment_requests()
 	{
-		return $this->belongsTo(\App\Models\Status::class, 'id');
+		return $this->hasMany(\App\Models\ApprovalPaymentRequest::class);
 	}
 
 	public function payment_installments()

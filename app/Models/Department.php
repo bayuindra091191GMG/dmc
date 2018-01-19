@@ -40,9 +40,14 @@ class Department extends Eloquent
 		'updated_by'
 	];
 
-	public function user()
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
+    }
+
+	public function updatedBy()
 	{
-		return $this->belongsTo(\App\Models\User::class, 'updated_by');
+		return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
 	}
 
 	public function employees()

@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Thu, 18 Jan 2018 07:30:31 +0000.
+ * Date: Fri, 19 Jan 2018 04:13:45 +0000.
  */
 
 namespace App\Models;
@@ -18,6 +18,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $created_by
  * @property \Carbon\Carbon $updated_at
  * @property int $updated_by
+ * 
+ * @property \App\Models\Auth\User\User $user
  *
  * @package App\Models
  */
@@ -33,4 +35,14 @@ class PermissionDocument extends Eloquent
 		'created_by',
 		'updated_by'
 	];
+
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
+    }
 }

@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Thu, 18 Jan 2018 07:30:31 +0000.
+ * Date: Fri, 19 Jan 2018 04:30:53 +0000.
  */
 
 namespace App\Models;
@@ -16,26 +16,20 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $name
  * @property int $weight
  * @property string $description
- * @property \Carbon\Carbon $created_at
- * @property int $created_by
- * @property \Carbon\Carbon $updated_at
- * @property int $updated_by
  *
  * @package App\Models
  */
 class Role extends Eloquent
 {
+	public $timestamps = false;
+
 	protected $casts = [
-		'weight' => 'int',
-		'created_by' => 'int',
-		'updated_by' => 'int'
+		'weight' => 'int'
 	];
 
 	protected $fillable = [
 		'name',
 		'weight',
-		'description',
-		'created_by',
-		'updated_by'
+		'description'
 	];
 }

@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Thu, 18 Jan 2018 07:30:31 +0000.
+ * Date: Fri, 19 Jan 2018 04:01:54 +0000.
  */
 
 namespace App\Models;
@@ -18,6 +18,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $stock
  * @property float $value
  * @property int $is_serial
+ * @property int $group_id
  * @property int $warehouse_id
  * @property \Carbon\Carbon $created_date
  * @property string $description
@@ -26,7 +27,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $updated_by
  * @property \Carbon\Carbon $updated_at
  * 
- * @property \App\Models\User $user
+ * @property \App\Models\Auth\User\User $user
+ * @property \App\Models\Group $group
  * @property \App\Models\Warehouse $warehouse
  * @property \Illuminate\Database\Eloquent\Collection $purchase_order_details
  * @property \Illuminate\Database\Eloquent\Collection $purchase_request_details
@@ -40,6 +42,7 @@ class Item extends Eloquent
 		'stock' => 'int',
 		'value' => 'float',
 		'is_serial' => 'int',
+		'group_id' => 'int',
 		'warehouse_id' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
@@ -55,6 +58,7 @@ class Item extends Eloquent
 		'stock',
 		'value',
 		'is_serial',
+		'group_id',
 		'warehouse_id',
 		'created_date',
 		'description',
@@ -62,9 +66,9 @@ class Item extends Eloquent
 		'updated_by'
 	];
 
-	public function user()
+	public function group()
 	{
-		return $this->belongsTo(\App\Models\User::class, 'updated_by');
+		return $this->belongsTo(\App\Models\Group::class);
 	}
 
 	public function warehouse()
@@ -86,4 +90,14 @@ class Item extends Eloquent
 	{
 		return $this->hasMany(\App\Models\Serial::class);
 	}
+
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
+    }
 }
