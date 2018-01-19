@@ -20,7 +20,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $updated_by
  * @property \Carbon\Carbon $updated_at
  * 
- * @property \App\Models\User $user
+ * @property \App\Models\Auth\User\User $user
  *
  * @package App\Models
  */
@@ -40,11 +40,11 @@ class Group extends Eloquent
 
     public function createdBy()
     {
-        return $this->belongsTo(\App\Models\User::class, 'created_by');
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
     }
 
     public function updatedBy()
     {
-        return $this->belongsTo(\App\Models\User::class, 'updated_by');
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
     }
 }
