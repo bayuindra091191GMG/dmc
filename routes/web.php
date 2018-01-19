@@ -56,13 +56,29 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     //Users
     Route::get('users', 'UserController@index')->name('users');
     Route::get('users/{user}', 'UserController@show')->name('users.show');
-    Route::get('users/{user}/edit', 'UserController@edit')->name('users.edit');
+    Route::get('users/{user}/ubah', 'UserController@edit')->name('users.edit');
     Route::put('users/{user}', 'UserController@update')->name('users.update');
     Route::delete('users/{user}', 'UserController@destroy')->name('users.destroy');
     Route::get('permissions', 'PermissionController@index')->name('permissions');
     Route::get('permissions/{user}/repeat', 'PermissionController@repeat')->name('permissions.repeat');
     Route::get('dashboard/log-chart', 'DashboardController@getLogChartData')->name('dashboard.log.chart');
     Route::get('dashboard/registration-chart', 'DashboardController@getRegistrationChartData')->name('dashboard.registration.chart');
+
+
+    //Groups
+    Route::get('groups', 'GroupController@index')->name('groups');
+    Route::get('groups/{group}/ubah', 'GroupController@edit')->name('groups.edit');
+    Route::put('groups/ubah/{group}', 'GroupController@update')->name('groups.update');
+    Route::get('groups/tambah', 'GroupController@create')->name('groups.create');
+    Route::post('groups/simpan', 'GroupController@store')->name('groups.store');
+
+    //Machinery Types
+    Route::get('machinery_types', 'MachineryTypeController@index')->name('machinery_types');
+    Route::get('machinery_types/{machinery_type}/ubah', 'MachineryTypeController@edit')->name('machinery_types.edit');
+    Route::put('machinery_types/ubah/{machinery_type}', 'MachineryTypeController@update')->name('machinery_types.update');
+    Route::get('machinery_types/tambah', 'MachineryTypeController@create')->name('machinery_types.create');
+    Route::post('machinery_types/simpan', 'MachineryTypeController@store')->name('machinery_types.store');
+
 });
 
 
