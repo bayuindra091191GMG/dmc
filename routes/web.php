@@ -64,7 +64,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('dashboard/log-chart', 'DashboardController@getLogChartData')->name('dashboard.log.chart');
     Route::get('dashboard/registration-chart', 'DashboardController@getRegistrationChartData')->name('dashboard.registration.chart');
 
-
     //Groups
     Route::get('groups', 'GroupController@index')->name('groups');
     Route::get('groups/{group}/ubah', 'GroupController@edit')->name('groups.edit');
@@ -134,3 +133,5 @@ Route::group(['as' => 'protection.'], function () {
     Route::get('membership/access-denied', 'MembershipController@failed')->name('membership.failed');
     Route::get('membership/clear-cache/', 'MembershipController@clearValidationCache')->name('membership.clear_validation_cache');
 });
+
+Route::get('/datatables-data', 'Admin\UserController@anyData')->name('datatables.data');

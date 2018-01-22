@@ -138,6 +138,15 @@ mix.styles([
     'resources/assets/admin/css/dashboard.css',
 ], 'public/assets/admin/css/dashboard.css').version();
 
+// DataTables
+mix.scripts([
+    'node_modules/datatables.net/js/jquery.dataTables.js',
+], 'public/assets/admin/js/users/index.js').version();
+
+mix.styles([
+    'resources/assets/admin/css/jquery.datatables.min.css',
+], 'public/assets/admin/css/users/index.css').version();
+
 
 /*
  |--------------------------------------------------------------------------

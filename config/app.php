@@ -187,6 +187,7 @@ return [
         Laravel\Socialite\SocialiteServiceProvider::class,
         AlbertCht\InvisibleReCaptcha\InvisibleReCaptchaServiceProvider::class,
         Reliese\Coders\CodersServiceProvider::class,
+        Yajra\DataTables\DataTablesServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -259,8 +260,12 @@ return [
         'Gravatar' => Creativeorange\Gravatar\Facades\Gravatar::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'ToJs' => \App\Helpers\ToJs\Facades\ToJsFacade::class,
-        'Meta' => \App\Helpers\Meta\Facades\MetaFacade::class
+        'Meta' => \App\Helpers\Meta\Facades\MetaFacade::class,
 
+        /*
+         * DataTables
+         * */
+        'DataTables' => Yajra\DataTables\Facades\DataTables::class,
     ],
 
 ];

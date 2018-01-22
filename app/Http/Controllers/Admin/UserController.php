@@ -7,6 +7,7 @@ use App\Models\Auth\User\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
+use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
@@ -17,7 +18,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.users.index', ['users' => User::with('roles')->sortable(['email' => 'asc'])->paginate()]);
+        return view('admin.users.index');
     }
 
     /**
@@ -122,5 +123,29 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    //DataTables
+    /**
+     * Process datatables ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function anyData()
+    {
+        $users = User::all();
+        return DataTables::of($users)
+            ->addColumn('roles', function($user){
+                if($user->roles != null) {
+                    $name = $user->roles->pluck('name')->implode(',');
+                    return $name;
+                }
+                else{
+                    return "";
+                }
+            })->addColumn('action', function ($user) {
+            return "<a class='btn btn-xs btn-primary' href='users/".$user->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>".
+                "<a class='btn btn-xs btn-info' href='users/".$user->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+        })->make(true);
     }
 }

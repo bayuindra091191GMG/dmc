@@ -16,6 +16,7 @@
     "bootstrap-sass": "^3.3.7",
     "clean-webpack-plugin": "^0.1.16",
     "cross-env": "^3.2.3",
+    "datatables.net": "^1.10.16",
     "font-awesome": "^4.7.0",
     "gentelella": "^1.4.0",
     "jcarousel": "^0.3.5",
