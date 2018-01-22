@@ -72,47 +72,47 @@
                                     Machinery Types
                                 </a>
                             </li>
-                            {{--<li>--}}
-                                {{--<a href="{{ route('admin.departments') }}">--}}
-                                    {{--Departments--}}
-                                {{--</a>--}}
-                            {{--</li>--}}
-                            {{--<li>--}}
-                                {{--<a href="{{ route('admin.warehouses') }}">--}}
-                                    {{--Warehouses--}}
-                                {{--</a>--}}
-                            {{--</li>--}}
-                            {{--<li>--}}
-                                {{--<a href="{{ route('admin.documents') }}">--}}
-                                    {{--Documents--}}
-                                {{--</a>--}}
-                            {{--</li>--}}
-                            {{--<li>--}}
-                                {{--<a href="{{ route('admin.uoms') }}">--}}
-                                    {{--UOM--}}
-                                {{--</a>--}}
-                            {{--</li>--}}
-                            {{--<li>--}}
-                                {{--<a href="{{ route('admin.payment_methods') }}">--}}
-                                    {{--Payment Methods--}}
-                                {{--</a>--}}
-                            {{--</li>--}}
+                            <li>
+                                <a href="{{ route('admin.departments') }}">
+                                    Departments
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.warehouses') }}">
+                                    Warehouses
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.documents') }}">
+                                    Documents
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.uoms') }}">
+                                    UOM
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.payment_methods') }}">
+                                    Payment Methods
+                                </a>
+                            </li>
                         </ul>
                     </li>
-                    {{--<li>--}}
-                        {{--<a>--}}
-                            {{--<i class="fa fa-list"></i>--}}
-                            {{--Data--}}
-                            {{--<span class="fa fa-chevron-down"></span>--}}
-                        {{--</a>--}}
-                        {{--<ul class="nav child_menu">--}}
-                            {{--<li>--}}
-                                {{--<a href="{{ route('admin.machineries') }}">--}}
-                                    {{--Machineries--}}
-                                {{--</a>--}}
-                            {{--</li>--}}
-                        {{--</ul>--}}
-                    {{--</li>--}}
+                    <li>
+                        <a>
+                            <i class="fa fa-list"></i>
+                            Data
+                            <span class="fa fa-chevron-down"></span>
+                        </a>
+                        <ul class="nav child_menu">
+                            <li>
+                                <a href="{{ route('admin.machineries') }}">
+                                    Machineries
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
             <div class="menu_section">

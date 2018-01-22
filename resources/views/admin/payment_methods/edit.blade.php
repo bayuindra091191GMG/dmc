@@ -1,21 +1,21 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Ubah Grup' )
+@section('title', 'Ubah Metode Pembayaran' )
 
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            {{ Form::open(['route'=>['admin.groups.update', $group->id],'method' => 'put','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.payment_methods.update', $payment_method->id],'method' => 'put','class'=>'form-horizontal form-label-left']) }}
 
                 <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name" >
-                        Nama Grup
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description" >
+                        Deskripsi Metode Pembayaran
                         <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input id="name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('name')) parsley-error @endif"
-                               name="name" value="{{ $group->name }}" required>
-                        @if($errors->has('name'))
+                        <input id="description" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('description')) parsley-error @endif"
+                               name="description" value="{{ $payment_method->description }}" required>
+                        @if($errors->has('description'))
                             <ul class="parsley-errors-list filled">
                                 @foreach($errors->get('name') as $error)
                                         <li class="parsley-required">{{ $error }}</li>
@@ -26,16 +26,37 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
-                        Kode Grup
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="fee">
+                        Biaya Tambahan Metode Pembayaran
+                        <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12 price-format">
+                        <input id="fee" type="number" class="form-control col-md-7 col-xs-12 @if($errors->has('fee')) parsley-error @endif"
+                               name="fee" value="{{ $payment_method->fee }}" required>
+                        @if($errors->has('fee'))
+                            <ul class="parsley-errors-list filled">
+                                @foreach($errors->get('fee') as $error)
+                                    <li class="parsley-required">{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status">
+                        Status Metode Pembayaran
                         <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
-                               name="code" value="{{ $group->code }}" required>
-                        @if($errors->has('code'))
+
+                        <select id="status" class="form-control" name="status">
+                            <option value="true" selected>Aktif</option>
+                            <option value="false">Non aktif</option>
+                        </select>
+                        @if($errors->has('status'))
                             <ul class="parsley-errors-list filled">
-                                @foreach($errors->get('code') as $error)
+                                @foreach($errors->get('status') as $error)
                                     <li class="parsley-required">{{ $error }}</li>
                                 @endforeach
                             </ul>
@@ -63,4 +84,5 @@
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/users/edit.js')) }}
+    {{ Html::script(mix('assets/admin/js/payment_method/custom.js')) }}
 @endsection

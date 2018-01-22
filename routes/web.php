@@ -79,6 +79,48 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('machinery_types/tambah', 'MachineryTypeController@create')->name('machinery_types.create');
     Route::post('machinery_types/simpan', 'MachineryTypeController@store')->name('machinery_types.store');
 
+    //Machineries
+    Route::get('machineries', 'MachineryController@index')->name('machineries');
+    Route::get('machineries/{machinery}/ubah', 'MachineryController@edit')->name('machineries.edit');
+    Route::put('machineries/ubah/{machinery}', 'MachineryController@update')->name('machineries.update');
+    Route::get('machineries/tambah', 'MachineryController@create')->name('machineries.create');
+    Route::post('machineries/simpan', 'MachineryController@store')->name('machineries.store');
+
+    //Departments
+    Route::get('departments', 'DepartmentController@index')->name('departments');
+    Route::get('departments/{department}/ubah', 'DepartmentController@edit')->name('departments.edit');
+    Route::put('departments/ubah/{department}', 'DepartmentController@update')->name('departments.update');
+    Route::get('departments/tambah', 'DepartmentController@create')->name('departments.create');
+    Route::post('departments/simpan', 'DepartmentController@store')->name('departments.store');
+
+    //Documents
+    Route::get('documents', 'DocumentController@index')->name('documents');
+    Route::get('documents/{document}/ubah', 'DocumentController@edit')->name('documents.edit');
+    Route::put('documents/ubah/{document}', 'DocumentController@update')->name('documents.update');
+    Route::get('documents/tambah', 'DocumentController@create')->name('documents.create');
+    Route::post('documents/simpan', 'DocumentController@store')->name('documents.store');
+
+    //Payment Methods
+    Route::get('payment_methods', 'PaymentMethodController@index')->name('payment_methods');
+    Route::get('payment_methods/{payment_method}/ubah', 'PaymentMethodController@edit')->name('payment_methods.edit');
+    Route::put('payment_methods/ubah/{payment_method}', 'PaymentMethodController@update')->name('payment_methods.update');
+    Route::get('payment_methods/tambah', 'PaymentMethodController@create')->name('payment_methods.create');
+    Route::post('payment_methods/simpan', 'PaymentMethodController@store')->name('payment_methods.store');
+
+    //UOMs
+    Route::get('uoms', 'UOMController@index')->name('uoms');
+    Route::get('uoms/{uom}/ubah', 'UOMController@edit')->name('uoms.edit');
+    Route::put('uoms/ubah/{uom}', 'UOMController@update')->name('uoms.update');
+    Route::get('uoms/tambah', 'UOMController@create')->name('uoms.create');
+    Route::post('uoms/simpan', 'UOMController@store')->name('uoms.store');
+
+    //Warehouses
+    Route::get('warehouses', 'WarehouseController@index')->name('warehouses');
+    Route::get('warehouses/{warehouse}/ubah', 'WarehouseController@edit')->name('warehouses.edit');
+    Route::put('warehouses/ubah/{warehouse}', 'WarehouseController@update')->name('warehouses.update');
+    Route::get('warehouses/tambah', 'WarehouseController@create')->name('warehouses.create');
+    Route::post('warehouses/simpan', 'WarehouseController@store')->name('warehouses.store');
+
 });
 
 

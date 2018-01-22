@@ -1,15 +1,15 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Tambah Grup' )
+@section('title', 'Tambah Gudang' )
 
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            {{ Form::open(['route'=>['admin.groups.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.warehouses.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
 
                 <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name" >
-                        Nama Grup
+                        Nama Gudang
                         <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
@@ -27,7 +27,7 @@
 
                 <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
-                        Kode Grup
+                        Kode Gudang
                         <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
@@ -36,6 +36,42 @@
                         @if($errors->has('code'))
                             <ul class="parsley-errors-list filled">
                                 @foreach($errors->get('code') as $error)
+                                    <li class="parsley-required">{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="location">
+                        Lokasi Gudang
+                        <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input id="location" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('location')) parsley-error @endif"
+                               name="location" required>
+                        @if($errors->has('location'))
+                            <ul class="parsley-errors-list filled">
+                                @foreach($errors->get('location') as $error)
+                                    <li class="parsley-required">{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone">
+                        Nomor Telepon Gudang
+                        <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input id="phone" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('phone')) parsley-error @endif"
+                               name="phone" required>
+                        @if($errors->has('code'))
+                            <ul class="parsley-errors-list filled">
+                                @foreach($errors->get('phone') as $error)
                                     <li class="parsley-required">{{ $error }}</li>
                                 @endforeach
                             </ul>

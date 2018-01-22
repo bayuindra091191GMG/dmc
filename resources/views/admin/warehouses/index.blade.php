@@ -1,11 +1,11 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Index Grup')
+@section('title', 'Index Gudang')
 
 @section('content')
 
     <div class="nav navbar-right">
-        <a href="{{ route('admin.groups.create') }}" class="btn btn-app">
+        <a href="{{ route('admin.warehouses.create') }}" class="btn btn-app">
             <i class="fa fa-plus"></i> Tambah
         </a>
     </div>
@@ -18,6 +18,8 @@
             <tr>
                 <th>Kode</th>
                 <th>Nama</th>
+                <th>Lokasi</th>
+                <th>Nomoe Telepon</th>
                 <th>Dibuat Oleh</th>
                 <th>Tanggal Dibuat</th>
                 <th>Diubah Oleh</th>
@@ -26,16 +28,30 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($groups as $group)
+            @foreach($warehouses as $warehouse)
                 <tr>
-                    <td>{{ $group->code }}</td>
-                    <td>{{ $group->name }}</td>
-                    <td>{{ $group->createdBy->email }}</td>
-                    <td>{{ $group->created_at }}</td>
-                    <td>{{ $group->updatedBy->email }}</td>
-                    <td>{{ $group->updated_at }}</td>
+                    <td>{{ $warehouse->code }}</td>
+                    <td>{{ $warehouse->name }}</td>
                     <td>
-                        <a class="btn btn-xs btn-info" href="{{ route('admin.groups.edit', [$group->id]) }}" data-toggle="tooltip" data-placement="top" data-title="Ubah">
+                        @if(!empty($warehouse->location))
+                            {{ $warehouse->location }}
+                        @else
+                            -
+                        @endif
+                    </td>
+                    <td>
+                        @if(!empty($warehouse->phone))
+                            {{ $warehouse->phone }}
+                        @else
+                            -
+                        @endif
+                    </td>
+                    <td>{{ $warehouse->createdBy->email }}</td>
+                    <td>{{ $warehouse->created_at }}</td>
+                    <td>{{ $warehouse->updatedBy->email }}</td>
+                    <td>{{ $warehouse->updated_at }}</td>
+                    <td>
+                        <a class="btn btn-xs btn-info" href="{{ route('admin.warehouses.edit', [$warehouse->id]) }}" data-toggle="tooltip" data-placement="top" data-title="Ubah">
                             <i class="fa fa-pencil"></i>
                         </a>
                         {{--@if(!$user->hasRole('administrator'))--}}
