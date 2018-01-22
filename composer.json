@@ -31,7 +31,8 @@
         "laravel/socialite": "^3.0",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "5.5.*",
-        "reliese/laravel": "^0.0.13"
+        "reliese/laravel": "^0.0.13",
+        "yajra/laravel-datatables-oracle": "8.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
