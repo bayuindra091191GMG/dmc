@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
 use App\Models\Group;
+use App\Transformer\MasterData\GroupTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use Validator;
+use Yajra\DataTables\DataTables;
 
 class GroupController extends Controller
 {
@@ -19,7 +21,21 @@ class GroupController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.groups.index', ['groups' => Group::all()]);
+        return view('admin.groups.index');
+    }
+
+    //DataTables
+    /**
+     * Process datatables ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function anyData()
+    {
+        $groups = Group::all();
+        return DataTables::of($groups)
+            ->setTransformer(new GroupTransformer())
+            ->make(true);
     }
 
     /**
@@ -56,7 +72,8 @@ class GroupController extends Controller
             'created_at'    => $dateTimeNow->toDateTimeString()
         ]);
 
-        return redirect()->intended(route('admin.groups'));
+//        return redirect()->intended(route('admin.groups'));
+        return view('admin.groups.create');
     }
 
     /**
@@ -106,7 +123,8 @@ class GroupController extends Controller
 
         $group->save();
 
-        return redirect()->intended(route('admin.groups'));
+//        return redirect()->intended(route('admin.groups'));
+        return view('admin.groups.edit', ['group' => $group]);
     }
 
     /**

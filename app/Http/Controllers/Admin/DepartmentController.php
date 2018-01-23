@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
-use App\Models\Group;
+use App\Models\Department;
+use App\Transformer\MasterData\DepartmentTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use Validator;
+use Yajra\DataTables\DataTables;
 
 class DepartmentController extends Controller
 {
@@ -19,7 +21,21 @@ class DepartmentController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.groups.index', ['groups' => Group::all()]);
+        return view('admin.departments.index');
+    }
+
+    //DataTables
+    /**
+     * Process datatables ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function anyData()
+    {
+        $departments = Department::all();
+        return DataTables::of($departments)
+            ->setTransformer(new DepartmentTransformer())
+            ->make(true);
     }
 
     /**
@@ -29,7 +45,7 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        return view('admin.groups.create');
+        return view('admin.departments.create');
     }
 
     /**
@@ -48,7 +64,7 @@ class DepartmentController extends Controller
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
-        $group = Group::create([
+        $department = Department::create([
             'code'          => $request->get('code'),
             'name'          => $request->get('name'),
             'updated_by'    => 1,
@@ -56,7 +72,7 @@ class DepartmentController extends Controller
             'created_at'    => $dateTimeNow->toDateTimeString()
         ]);
 
-        return redirect()->intended(route('admin.groups'));
+        return view('admin.departments.create');
     }
 
     /**
@@ -73,22 +89,22 @@ class DepartmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Group $group
+     * @param Department $department
      * @return \Illuminate\Http\Response
      */
-    public function edit(Group $group)
+    public function edit(Department $department)
     {
-        return view('admin.groups.edit', ['group' => $group]);
+        return view('admin.departments.edit', ['department' => $department]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param Group $group
+     * @param Department $department
      * @return mixed
      */
-    public function update(Request $request, Group $group)
+    public function update(Request $request, Department $department)
     {
         $validator = Validator::make($request->all(), [
             'code' => 'required|max:45',
@@ -99,14 +115,15 @@ class DepartmentController extends Controller
 
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
-        $group->name = $request->get('name');
-        $group->code = $request->get('code');
-        $group->updated_at = $dateTimeNow->toDateTimeString();
-        $group->updated_by = 1;
+        $department->name = $request->get('name');
+        $department->code = $request->get('code');
+        $department->updated_at = $dateTimeNow->toDateTimeString();
+        $department->updated_by = 1;
 
-        $group->save();
+        $department->save();
 
-        return redirect()->intended(route('admin.groups'));
+//        return redirect()->intended(route('admin.departments'));
+        return view('admin.departments.edit', ['department' => $department]);
     }
 
     /**

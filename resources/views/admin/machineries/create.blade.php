@@ -1,42 +1,49 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Tambah Grup' )
+@section('title', 'Tambah Alat Berat' )
 
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            {{ Form::open(['route'=>['admin.groups.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.machineries.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
+
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
+                    Kode Alat Berat
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
+                           name="code" value="{{ old('code') }}"  required>
+                    @if($errors->has('code'))
+                        <ul class="parsley-errors-list filled">
+                            @foreach($errors->get('code') as $error)
+                                <li class="parsley-required">{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </div>
+            </div>
 
                 <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name" >
-                        Nama Grup
+                        Tipe Alat Berat
                         <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input id="name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('name')) parsley-error @endif"
-                               name="name" required>
-                        @if($errors->has('name'))
-                            <ul class="parsley-errors-list filled">
-                                @foreach($errors->get('name') as $error)
-                                        <li class="parsley-required">{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        @endif
-                    </div>
-                </div>
+                        <select id="machinery_type" name="machinery_type" class="form-control col-md-7 col-xs-12  @if($errors->has('machinery_type')) parsley-error @endif">
+                            <option value="-1">Pilih Tipe Alat Berat</option>
 
-                <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
-                        Kode Grup
-                        <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
-                               name="code" required>
-                        @if($errors->has('code'))
+                            @foreach($machinery_types as $machinery_type)
+                                <option value="{{ $machinery_type->id }}">{{ $machinery_type->description }}</option>
+                            @endforeach
+
+                        </select>
+                        @if($errors->has('machinery_type'))
                             <ul class="parsley-errors-list filled">
-                                @foreach($errors->get('code') as $error)
-                                    <li class="parsley-required">{{ $error }}</li>
+                                @foreach($errors->get('machinery_type') as $error)
+                                        <li class="parsley-required">{{ $error }}</li>
                                 @endforeach
                             </ul>
                         @endif

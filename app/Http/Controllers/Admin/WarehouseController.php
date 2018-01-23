@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
 use App\Models\Warehouse;
+use App\Transformer\MasterData\WarehouseTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use Validator;
+use Yajra\DataTables\DataTables;
 
 class WarehouseController extends Controller
 {
@@ -19,7 +21,21 @@ class WarehouseController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.warehouses.index', ['warehouses' => Warehouse::all()]);
+        return view('admin.warehouses.index');
+    }
+
+    //DataTables
+    /**
+     * Process datatables ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function anyData()
+    {
+        $warehouses= Warehouse::all();
+        return DataTables::of($warehouses)
+            ->setTransformer(new WarehouseTransformer())
+            ->make(true);
     }
 
     /**
@@ -58,7 +74,8 @@ class WarehouseController extends Controller
             'created_at'    => $dateTimeNow->toDateTimeString()
         ]);
 
-        return redirect()->intended(route('admin.warehouses'));
+//        return redirect()->intended(route('admin.warehouses'));
+        return view('admin.warehouses.create');
     }
 
     /**
@@ -110,7 +127,8 @@ class WarehouseController extends Controller
 
         $warehouse->save();
 
-        return redirect()->intended(route('admin.warehouses'));
+//        return redirect()->intended(route('admin.warehouses'));
+        return view('admin.warehouses.edit', ['warehouse' => $warehouse]);
     }
 
     /**

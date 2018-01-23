@@ -14,7 +14,7 @@
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         <input id="description" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('description')) parsley-error @endif"
-                               name="description" required>
+                               name="description" value="{{ old('description') }}" required>
                         @if($errors->has('description'))
                             <ul class="parsley-errors-list filled">
                                 @foreach($errors->get('description') as $error)

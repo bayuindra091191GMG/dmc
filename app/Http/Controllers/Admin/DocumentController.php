@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
 use App\Models\Document;
+use App\Transformer\MasterData\DocumentTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use Validator;
+use Yajra\DataTables\DataTables;
 
 class DocumentController extends Controller
 {
@@ -19,7 +21,21 @@ class DocumentController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.documents.index', ['documents' => Document::all()]);
+        return view('admin.documents.index');
+    }
+
+    //DataTables
+    /**
+     * Process datatables ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function anyData()
+    {
+        $documents= Document::all();
+        return DataTables::of($documents)
+            ->setTransformer(new DocumentTransformer())
+            ->make(true);
     }
 
     /**
@@ -51,7 +67,8 @@ class DocumentController extends Controller
             'description'          => $request->get('description')
         ]);
 
-        return redirect()->intended(route('admin.documents'));
+//        return redirect()->intended(route('admin.documents'));
+        return view('admin.documents.create');
     }
 
     /**
@@ -97,7 +114,8 @@ class DocumentController extends Controller
 
         $document->save();
 
-        return redirect()->intended(route('admin.documents'));
+//        return redirect()->intended(route('admin.documents'));
+        return view('admin.documents.edit', ['document' => $document]);
     }
 
     /**

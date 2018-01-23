@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
 use App\Models\Uom;
+use App\Transformer\MasterData\UOMTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use Validator;
+use Yajra\DataTables\DataTables;
 
 class UOMController extends Controller
 {
@@ -19,7 +21,21 @@ class UOMController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.uoms.index', ['uoms' => Uom::all()]);
+        return view('admin.uoms.index');
+    }
+
+    //DataTables
+    /**
+     * Process datatables ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function anyData()
+    {
+        $uoms = Uom::all();
+        return DataTables::of($uoms)
+            ->setTransformer(new UOMTransformer())
+            ->make(true);
     }
 
     /**
@@ -51,7 +67,8 @@ class UOMController extends Controller
             'description'          => $request->get('description')
         ]);
 
-        return redirect()->intended(route('admin.uoms'));
+//        return redirect()->intended(route('admin.uoms'));
+        return view('admin.uoms.create');
     }
 
     /**
@@ -97,7 +114,8 @@ class UOMController extends Controller
 
         $uom->save();
 
-        return redirect()->intended(route('admin.uoms'));
+//        return redirect()->intended(route('admin.uoms'));
+        return view('admin.uoms.edit', ['uom' => $uom]);
     }
 
     /**

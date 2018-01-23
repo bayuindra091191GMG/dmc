@@ -14,7 +14,7 @@
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         <input id="name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('name')) parsley-error @endif"
-                               name="name" required>
+                               name="name" value="{{ old('name') }}" required>
                         @if($errors->has('name'))
                             <ul class="parsley-errors-list filled">
                                 @foreach($errors->get('name') as $error)
@@ -32,7 +32,7 @@
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12 price-format">
                         <input id="fee" type="number" class="form-control col-md-7 col-xs-12  @if($errors->has('fee')) parsley-error @endif"
-                               name="fee" required>
+                               name="fee" value="{{ old('fee') }}"  required>
                         @if($errors->has('fee'))
                             <ul class="parsley-errors-list filled">
                                 @foreach($errors->get('fee') as $error)

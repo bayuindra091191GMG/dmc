@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Index Unit of Measurement')
+@section('title', 'Index Satuan Unit')
 
 @section('content')
 
@@ -13,31 +13,56 @@
 
     <div class="row">
         <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
-               width="100%">
+               width="100%" id="uoms-table">
             <thead>
             <tr>
+                <th>ID</th>
                 <th>Deskripsi</th>
                 <th>Tindakan</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($uoms as $uom)
-                <tr>
-                    <td>{{ $uom->description }}</td>
-                    <td>
-                        <a class="btn btn-xs btn-info" href="{{ route('admin.uoms.edit', [$uom->id]) }}" data-toggle="tooltip" data-placement="top" data-title="Ubah">
-                            <i class="fa fa-pencil"></i>
-                        </a>
+            {{--@foreach($uoms as $uom)--}}
+                {{--<tr>--}}
+                    {{--<td>{{ $uom->description }}</td>--}}
+                    {{--<td>--}}
+                        {{--<a class="btn btn-xs btn-info" href="{{ route('admin.uoms.edit', [$uom->id]) }}" data-toggle="tooltip" data-placement="top" data-title="Ubah">--}}
+                            {{--<i class="fa fa-pencil"></i>--}}
+                        {{--</a>--}}
                         {{--@if(!$user->hasRole('administrator'))--}}
                             {{--<button class="btn btn-xs btn-danger user_destroy"--}}
                                     {{--data-url="{{ route('admin.users.destroy', [$user->id]) }}" data-toggle="tooltip" data-placement="top" data-title="{{ __('views.admin.users.index.delete') }}">--}}
                                 {{--<i class="fa fa-trash"></i>--}}
                             {{--</button>--}}
                         {{--@endif--}}
-                    </td>
-                </tr>
-            @endforeach
+                    {{--</td>--}}
+                {{--</tr>--}}
+            {{--@endforeach--}}
             </tbody>
         </table>
     </div>
+@endsection
+
+@section('styles')
+    @parent
+    {{ Html::style(mix('assets/admin/css/users/index.css')) }}
+@endsection
+
+@section('scripts')
+    @parent
+    {{ Html::script(mix('assets/admin/js/users/index.js')) }}
+    <script>
+        $(function() {
+            $('#uoms-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{!! route('datatables.uoms') !!}',
+                columns: [
+                    { data: 'id', name: 'id' },
+                    { data: 'description', name: 'description' },
+                    { data: 'action', name:'action' }
+                ]
+            });
+        });
+    </script>
 @endsection

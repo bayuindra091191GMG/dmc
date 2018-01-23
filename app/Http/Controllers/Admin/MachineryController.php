@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
 use App\Models\Machinery;
+use App\Models\MachineryType;
+use App\Transformer\MasterData\MachineryTypeTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use Validator;
+use Yajra\DataTables\DataTables;
 
 class MachineryController extends Controller
 {
@@ -19,7 +22,21 @@ class MachineryController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.machineries.index', ['machineries' => Machinery::all()]);
+        return view('admin.machineries.index');
+    }
+
+    //DataTables
+    /**
+     * Process datatables ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function anyData()
+    {
+        $machineries = Machinery::all();
+        return DataTables::of($machineries)
+            ->setTransformer(new MachineryTypeTransformer())
+            ->make(true);
     }
 
     /**
@@ -29,7 +46,7 @@ class MachineryController extends Controller
      */
     public function create()
     {
-        return view('admin.machineries.create');
+        return view('admin.machineries.create', ['machinery_types' => MachineryType::all()]);
     }
 
     /**
@@ -42,21 +59,22 @@ class MachineryController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'code' => 'required|max:45',
-            'name' => 'required|max:45'
+            'machinery_type' => 'required'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
-        $group = Machinery::create([
+        $machinery = Machinery::create([
             'code'          => $request->get('code'),
-            'name'          => $request->get('name'),
+            'machinery_type_id'          => $request->get('machinery_type'),
             'updated_by'    => 1,
             'created_by'    => 1,
             'created_at'    => $dateTimeNow->toDateTimeString()
         ]);
 
-        return redirect()->intended(route('admin.machineries'));
+//        return redirect()->intended(route('admin.machineries'));
+        return view('admin.machineries.create', ['machinery_types' => MachineryType::all()]);
     }
 
     /**
@@ -73,40 +91,41 @@ class MachineryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Machinery $group
+     * @param Machinery $machinery
      * @return \Illuminate\Http\Response
      */
-    public function edit(Machinery $group)
+    public function edit(Machinery $machinery)
     {
-        return view('admin.machineries.edit', ['group' => $group]);
+        return view('admin.machineries.edit', ['machinery' => $machinery]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param Machinery $group
+     * @param Machinery $machinery
      * @return mixed
      */
-    public function update(Request $request, Machinery $group)
+    public function update(Request $request, Machinery $machinery)
     {
         $validator = Validator::make($request->all(), [
             'code' => 'required|max:45',
-            'name' => 'required|max:45'
+            'machinery_type' => 'required'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
-        $group->name = $request->get('name');
-        $group->code = $request->get('code');
-        $group->updated_at = $dateTimeNow->toDateTimeString();
-        $group->updated_by = 1;
+        $machinery->machinery_type_id = $request->get('machinery_type');
+        $machinery->code = $request->get('code');
+        $machinery->updated_at = $dateTimeNow->toDateTimeString();
+        $machinery->updated_by = 1;
 
-        $group->save();
+        $machinery->save();
 
-        return redirect()->intended(route('admin.machineries'));
+//        return redirect()->intended(route('admin.machineries'));
+        return view('admin.machineries.edit', ['machinery' => $machinery]);
     }
 
     /**

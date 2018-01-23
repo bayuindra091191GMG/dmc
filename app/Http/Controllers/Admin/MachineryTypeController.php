@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
 use App\Models\MachineryType;
+use App\Transformer\MasterData\MachineryTypeTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use Validator;
+use Yajra\DataTables\DataTables;
 
 class MachineryTypeController extends Controller
 {
@@ -19,7 +21,22 @@ class MachineryTypeController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.machinery_types.index', ['machinery_types' => MachineryType::all()]);
+        return view('admin.machinery_types.index');
+    }
+
+
+    //DataTables
+    /**
+     * Process datatables ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function anyData()
+    {
+        $machinery_types = MachineryType::all();
+        return DataTables::of($machinery_types)
+            ->setTransformer(new MachineryTypeTransformer())
+            ->make(true);
     }
 
     /**
@@ -51,7 +68,8 @@ class MachineryTypeController extends Controller
             'description'          => $request->get('description'),
         ]);
 
-        return redirect()->intended(route('admin.machinery_types'));
+//        return redirect()->intended(route('admin.machinery_types'));
+        return view('admin.machinery_types.create');
     }
 
     /**
@@ -97,7 +115,8 @@ class MachineryTypeController extends Controller
 
         $machinery_type->save();
 
-        return redirect()->intended(route('admin.machinery_types'));
+//        return redirect()->intended(route('admin.machinery_types'));
+        return view('admin.machinery_types.edit', ['machinery_type' => $machinery_type]);
     }
 
     /**

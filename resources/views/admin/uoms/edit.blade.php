@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Ubah Unit of Measurement' )
+@section('title', 'Ubah Satuan Unit' )
 
 @section('content')
     <div class="row">
@@ -9,7 +9,7 @@
 
                 <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name" >
-                        Deskripsi Unit of Measurement
+                        Deskripsi Satuan Unit
                         <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">

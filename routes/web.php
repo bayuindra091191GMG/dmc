@@ -144,6 +144,14 @@ Route::group(['as' => 'protection.'], function () {
 // MASTER DATA
 Route::get('/datatables-users', 'Admin\UserController@anyData')->name('datatables.users');
 Route::get('/datatables-employees', 'Admin\EmployeeController@getIndex')->name('datatables.employees');
+Route::get('/datatables-groups', 'Admin\GroupController@anyData')->name('datatables.groups');
+Route::get('/datatables-machinery_types', 'Admin\MachineryTypeController@anyData')->name('datatables.machinery_types');
+Route::get('/datatables-machineries', 'Admin\MachineryController@anyData')->name('datatables.machineries');
+Route::get('/datatables-departments', 'Admin\DepartmentController@anyData')->name('datatables.departments');
+Route::get('/datatables-documents', 'Admin\DocumentController@anyData')->name('datatables.documents');
+Route::get('/datatables-payment_methods', 'Admin\PaymentMethodController@anyData')->name('datatables.payment_methods');
+Route::get('/datatables-uoms', 'Admin\UOMController@anyData')->name('datatables.uoms');
+Route::get('/datatables-warehouses', 'Admin\WarehouseController@anyData')->name('datatables.warehouses');
 
 // PURCHASING
 

@@ -165,6 +165,13 @@ mix.styles([
     'resources/assets/admin/css/jquery.datatables.min.css',
 ], 'public/assets/admin/css/employees/index.css').version();
 
+// PAYMENT METHOD
+mix.scripts([
+    'node_modules/autonumeric/dist/autoNumeric.min.js',
+    'resources/assets/admin/js/payment_method/custom.js',
+
+], 'public/assets/admin/js/payment_method/custom.js').version();
+
 
 /*
  |--------------------------------------------------------------------------

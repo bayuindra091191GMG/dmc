@@ -6,10 +6,12 @@ use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
 use App\Models\PaymentMethod;
 use App\Models\Status;
+use App\Transformer\MasterData\PaymentMethodTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use Validator;
+use Yajra\DataTables\DataTables;
 
 class PaymentMethodController extends Controller
 {
@@ -20,7 +22,21 @@ class PaymentMethodController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.payment_methods.index', ['payment_methods' => PaymentMethod::all()]);
+        return view('admin.payment_methods.index');
+    }
+
+    //DataTables
+    /**
+     * Process datatables ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function anyData()
+    {
+        $payment_methods = PaymentMethod::all();
+        return DataTables::of($payment_methods)
+            ->setTransformer(new PaymentMethodTransformer())
+            ->make(true);
     }
 
     /**
@@ -56,7 +72,8 @@ class PaymentMethodController extends Controller
             'status'          => 1
         ]);
 
-        return redirect()->intended(route('admin.payment_methods'));
+//        return redirect()->intended(route('admin.payment_methods'));
+        return view('admin.payment_methods.create');
     }
 
     /**
@@ -105,7 +122,8 @@ class PaymentMethodController extends Controller
 
         $payment_method->save();
 
-        return redirect()->intended(route('admin.payment_methods'));
+//        return redirect()->intended(route('admin.payment_methods'));
+        return view('admin.payment_methods.edit', ['payment_method' => $payment_method]);
     }
 
     /**
