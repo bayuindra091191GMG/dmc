@@ -18,11 +18,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $phone
  * @property \Carbon\Carbon $date_of_birth
  * @property string $address
- * @property \Carbon\Carbon $work_start_date
- * @property \Carbon\Carbon $work_finish_date
  * @property int $department_id
  * @property int $site_id
- * @property float $salary
  * @property int $status_id
  * @property int $created_by
  * @property \Carbon\Carbon $created_at
@@ -61,11 +58,8 @@ class Employee extends Eloquent
 		'phone',
 		'date_of_birth',
 		'address',
-		'work_start_date',
-		'work_finish_date',
 		'department_id',
 		'site_id',
-		'salary',
 		'status_id',
 		'created_by',
 		'updated_by'

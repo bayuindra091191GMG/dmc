@@ -52,7 +52,7 @@
                 </ul>
             </div>
             <div class="menu_section">
-                <h3>Data</h3>
+                <h3>Semua Data</h3>
 
                 <ul class="nav side-menu">
                     <li>
@@ -62,40 +62,103 @@
                             <span class="fa fa-chevron-down"></span>
                         </a>
                         <ul class="nav child_menu">
-                            <li>
-                                <a href="{{ route('admin.groups') }}">
-                                    Groups
-                                </a>
+                            <li><a>Golongan<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.groups') }}">
+                                            Daftar Golongan
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.groups.create') }}">
+                                            Tambah Golongan
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
-                            <li>
-                                <a href="{{ route('admin.machinery_types') }}">
-                                    Machinery Types
-                                </a>
+                            <li><a>Jenis Alat Berat<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.machinery_types') }}">
+                                            Daftar Jenis Alat Berat
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.machinery_types.create') }}">
+                                            Tambah Jenis Alat Berat
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
-                            <li>
-                                <a href="{{ route('admin.departments') }}">
-                                    Departments
-                                </a>
+                            <li><a>Departemen<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.departments') }}">
+                                            Daftar Departemen
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.departments.create') }}">
+                                            Tambah Departemen
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
-                            <li>
-                                <a href="{{ route('admin.warehouses') }}">
-                                    Warehouses
-                                </a>
+                            <li><a>Gudang<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.warehouses') }}">
+                                            Daftar Gudang
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.warehouses.create') }}">
+                                            Tambah Gudang
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
-                            <li>
-                                <a href="{{ route('admin.documents') }}">
-                                    Documents
-                                </a>
+                            <li><a>Jenis Dokumen<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.documents') }}">
+                                            Daftar Jenis Dokumen
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.documents.create') }}">
+                                            Tambah Jenis Dokumen
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
-                            <li>
-                                <a href="{{ route('admin.uoms') }}">
-                                    UOM
-                                </a>
+                            <li><a>Satuan Unit<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.uoms') }}">
+                                            Daftar Satuan Unit
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.uoms.create') }}">
+                                            Tambah Satuan Unit
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
-                            <li>
-                                <a href="{{ route('admin.payment_methods') }}">
-                                    Payment Methods
-                                </a>
+                            <li><a>Metode Pembayaran<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.payment_methods') }}">
+                                            Daftar Metode Pembayaran
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.payment_methods.create') }}">
+                                            Tambah Metode Pembayaran
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
@@ -106,10 +169,33 @@
                             <span class="fa fa-chevron-down"></span>
                         </a>
                         <ul class="nav child_menu">
-                            <li>
-                                <a href="{{ route('admin.machineries') }}">
-                                    Machineries
-                                </a>
+                            <li><a>Karyawan<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.employees') }}">
+                                            Daftar Karyawan
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.employees.create') }}">
+                                            Tambah Karyawan
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><a>Alat Berat<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.machineries') }}">
+                                            Alat Berat
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.machineries.create') }}">
+                                            Alat Berat
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
