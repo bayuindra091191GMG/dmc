@@ -32,7 +32,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $updated_by
  * @property \Carbon\Carbon $updated_at
  * 
- * @property \App\Models\Employee $employee
+ * @property \App\Models\Employee $employees
  * @property \App\Models\PurchaseOrderHeader $purchase_order_header
  * @property \App\Models\Auth\User\User $user
  * @property \Illuminate\Database\Eloquent\Collection $approval_payment_requests

@@ -150,12 +150,20 @@ mix.styles([
 // EMPLOYEE
 mix.scripts([
     'node_modules/gentelella/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-    'resources/assets/admin/js/employee/edit.js'
-], 'public/assets/admin/js/employee/edit.js').version();
+    'resources/assets/admin/js/employees/edit.js'
+], 'public/assets/admin/js/employees/edit.js').version();
 
 mix.styles([
     'C:/PHP Project/victor23mega/node_modules/gentelella/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
-], 'public/assets/admin/css/employee/edit.css').version();
+], 'public/assets/admin/css/employees/edit.css').version();
+
+mix.scripts([
+    'node_modules/datatables.net/js/jquery.dataTables.js',
+], 'public/assets/admin/js/employees/index.js').version();
+
+mix.styles([
+    'resources/assets/admin/css/jquery.datatables.min.css',
+], 'public/assets/admin/css/employees/index.css').version();
 
 
 /*

@@ -98,5 +98,5 @@
 @section('scripts')
     @parent
     {{--{{ Html::script(mix('assets/admin/js/users/edit.js')) }}--}}
-    {{ Html::script(mix('assets/admin/js/employee/edit.js')) }}
+    {{ Html::script(mix('employees')) }}
 @endsection

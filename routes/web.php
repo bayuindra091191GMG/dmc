@@ -64,6 +64,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('dashboard/log-chart', 'DashboardController@getLogChartData')->name('dashboard.log.chart');
     Route::get('dashboard/registration-chart', 'DashboardController@getRegistrationChartData')->name('dashboard.registration.chart');
 
+    //Employees
+    Route::get('employees', 'EmployeeController@index')->name('employees');
+
     //Groups
     Route::get('groups', 'GroupController@index')->name('groups');
     Route::get('groups/{group}/ubah', 'GroupController@edit')->name('groups.edit');
@@ -140,6 +143,7 @@ Route::group(['as' => 'protection.'], function () {
 
 // MASTER DATA
 Route::get('/datatables-users', 'Admin\UserController@anyData')->name('datatables.users');
+Route::get('/datatables-employees', 'Admin\EmployeeController@getIndex')->name('datatables.employees');
 
 // PURCHASING
 
