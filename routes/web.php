@@ -134,4 +134,15 @@ Route::group(['as' => 'protection.'], function () {
     Route::get('membership/clear-cache/', 'MembershipController@clearValidationCache')->name('membership.clear_validation_cache');
 });
 
-Route::get('/datatables-data', 'Admin\UserController@anyData')->name('datatables.data');
+/**
+ * Datatables
+ */
+
+// MASTER DATA
+Route::get('/datatables-users', 'Admin\UserController@anyData')->name('datatables.users');
+
+// PURCHASING
+
+// AUTHORIZATION
+
+// STOCK
