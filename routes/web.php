@@ -69,6 +69,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('employees/tambah', 'EmployeeController@create')->name('employees.create');
     Route::post('employees/simpan', 'EmployeeController@store')->name('employees.store');
 
+    //Roles
+    Route::get('roles', 'RoleController@index')->name('roles');
+    Route::get('roles/{role}/ubah', 'RoleController@edit')->name('roles.edit');
+    Route::put('roles/ubah/{group}', 'RoleController@update')->name('roles.update');
+    Route::get('roles/tambah', 'RoleController@create')->name('roles.create');
+    Route::post('roles/simpan', 'RoleController@store')->name('roles.store');
+
     //Groups
     Route::get('groups', 'GroupController@index')->name('groups');
     Route::get('groups/{group}/ubah', 'GroupController@edit')->name('groups.edit');
@@ -154,6 +161,7 @@ Route::get('/datatables-documents', 'Admin\DocumentController@anyData')->name('d
 Route::get('/datatables-payment_methods', 'Admin\PaymentMethodController@anyData')->name('datatables.payment_methods');
 Route::get('/datatables-uoms', 'Admin\UOMController@anyData')->name('datatables.uoms');
 Route::get('/datatables-warehouses', 'Admin\WarehouseController@anyData')->name('datatables.warehouses');
+Route::get('/datatables-roles', 'Admin\RoleController@getIndex')->name('datatables.roles');
 
 // PURCHASING
 
