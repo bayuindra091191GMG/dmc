@@ -3,6 +3,13 @@
 @section('title', 'Data Role')
 
 @section('content')
+    <div class="nav navbar-right">
+        <a href="{{ route('admin.roles.create') }}" class="btn btn-app">
+            <i class="fa fa-plus"></i> Tambah
+        </a>
+    </div>
+    <div class="clearfix"></div>
+
     <div class="row">
         <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
                width="100%" id="users-table">
@@ -10,8 +17,6 @@
                 <tr>
                     <th>Nama</th>
                     <th>Deskripsi</th>
-                    <th>Tanggal Dibuat</th>
-                    <th>Tanggal Diubah</th>
                     <th>Opsi</th>
                 </tr>
             </thead>
@@ -39,8 +44,6 @@
                 columns: [
                     { data: 'name', name: 'name' },
                     { data: 'description', name: 'description' },
-                    { data: 'created_at', name: 'created_at' },
-                    { data: 'updated_at', name: 'updated_at' },
                     { data: 'action', name:'action' }
                 ]
             });

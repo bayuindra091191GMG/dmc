@@ -160,6 +160,34 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li><a>Role<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.roles') }}">
+                                            Daftar Role
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.roles.create') }}">
+                                            Tambah Role
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><a>Jenis Alat Berat<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.machinery_types') }}">
+                                            Daftar Jenis Alat Berat
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.machinery_types.create') }}">
+                                            Tambah Jenis Alat Berat
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
                     <li>

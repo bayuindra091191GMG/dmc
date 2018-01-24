@@ -3,15 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Auth\Role\Role;
-use Arcanedev\LogViewer\Entities\Log;
-use Arcanedev\LogViewer\Entities\LogEntry;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
-use Validator;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Session;
+use Validator;
 
 class RoleController extends Controller
 {
@@ -61,21 +59,15 @@ class RoleController extends Controller
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
-        $dateTimeNow = Carbon::now('Asia/Jakarta');
-
-        $user = Auth::guard()->user();
 
         Role::create([
             'name'          => $request->get('name'),
-            'description'   => $request->get('description'),
-            'updated_by'    => $user->id,
-            'created_by'    => $user->id,
-            'created_at'    => $dateTimeNow->toDateTimeString()
+            'description'   => $request->get('description')
         ]);
 
         Session::flash('message', 'Sukses membuat Role Baru!');
 
-        return redirect()->intended(route('admin.role.create'));
+        return redirect(route('admin.roles.create'));
     }
 
     /**
@@ -92,24 +84,26 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param Role $role
      * @return \Illuminate\Http\Response
+     * @internal param int $id
      */
     public function edit(Role $role)
     {
         //
-        return view('admin.roles.edit', ['role' => $role, 'roles' => Role::get()]);
+        return view('admin.roles.edit', ['role' => $role]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param Role $role
+     * @param $id
      * @return \Illuminate\Http\Response
+     * @internal param Role $role
      * @internal param int $id
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, $id)
     {
         //
         $validator = Validator::make($request->all(), [
@@ -123,16 +117,15 @@ class RoleController extends Controller
 
         $user = Auth::guard()->user();
 
+        $role = Role::find($id);
         $role->name = $request->get('name');
         $role->description = $request->get('description');
-        $role->updated_by = $user->id;
-        $role->updated_at = $dateTimeNow->toDateTimeString();
 
         $role->save();
 
         Session::flash('message', 'Sukses Mengubah Data!');
 
-        return redirect()->intended(route('admin.roles.edit', ['role' => $role->id]));
+        return redirect(route('admin.roles.edit', ['role' => $role->id]));
     }
 
     /**
