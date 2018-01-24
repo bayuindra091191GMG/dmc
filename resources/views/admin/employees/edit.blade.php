@@ -1,12 +1,11 @@
 @extends('admin.layouts.admin')
 
-@section('title','Tambah Data Karyawan')
+@section('title','Ubah Data Karyawan')
 
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
-
-            {{ Form::open(['route'=>['admin.employees.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.employees.update', $employee->id],'method' => 'put','class'=>'form-horizontal form-label-left']) }}
 
             @if(\Illuminate\Support\Facades\Session::has('message'))
                 <div class="form-group">
@@ -39,7 +38,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('name')) parsley-error @endif"
-                           name="name" value="{{ old('name') }}" required>
+                           name="name" value="{{ $employee->name }}" required>
                 </div>
             </div>
 
@@ -49,7 +48,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="email" type="email" class="form-control col-md-7 col-xs-12 @if($errors->has('email')) parsley-error @endif"
-                           name="email" value="{{ old('email') }}">
+                           name="email" value="{{ $employee->email }}">
                 </div>
             </div>
 
@@ -59,7 +58,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="phone" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('name')) parsley-error @endif"
-                           name="phone" value="{{ old('phone') }}">
+                           name="phone" value="{{ $employee->phone }}">
                 </div>
             </div>
 
@@ -69,7 +68,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="dob" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('dob')) parsley-error @endif"
-                           name="dob" value="{{ old('dob') }}">
+                           name="dob" value="{{ $dob }}">
                 </div>
             </div>
 
@@ -78,20 +77,18 @@
                     Alamat
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <textarea id="address" name="address" rows="5" class="form-control col-md-7 col-xs-12 @if($errors->has('address')) parsley-error @endif" style="resize: vertical">{{ old('address') }}</textarea>
+                    <textarea id="address" name="address" rows="5" class="form-control col-md-7 col-xs-12 @if($errors->has('address')) parsley-error @endif" style="resize: vertical">{{ $employee->address }}</textarea>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="department" >
                     Departemen
-                    <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="department" name="department" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">
-                        <option value="-1" @if(empty(old('department'))) selected @endif>Pilih departemen</option>
                         @foreach($departments as $dep)
-                            <option value="{{ $dep->id }}" {{ old('department') == $dep->id ? "selected":"" }}>{{ $dep->name }}</option>
+                            <option value="{{ $dep->id }}" {{ $employee->department_id == $dep->id ? "selected":"" }}>{{ $dep->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -100,14 +97,25 @@
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="site" >
                     Site
-                    <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="site" name="site" class="form-control col-md-7 col-xs-12 @if($errors->has('site')) parsley-error @endif">
                         <option value="-1" @if(empty(old('site'))) selected @endif>Pilih site</option>
                         @foreach($sites as $site)
-                            <option value="{{ $site->id }}" {{ old('site') == $site->id ? "selected":"" }}>{{ $site->name }}</option>
+                            <option value="{{ $site->id }}" {{ $employee->site_id == $site->id ? "selected":"" }}>{{ $site->name }}</option>
                         @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status" >
+                    Status
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="status" name="status" class="form-control col-md-7 col-xs-12">
+                        <option value="1" @if($employee->status_id == 1) selected @endif>Aktif</option>
+                        <option value="2" @if($employee->status_id == 2) selected @endif>Non Aktif</option>
                     </select>
                 </div>
             </div>
@@ -115,7 +123,7 @@
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                     <a class="btn btn-primary" href="{{ route('admin.employees') }}"> Batal</a>
-                    <button type="submit" class="btn btn-success"> Tambah</button>
+                    <button type="submit" class="btn btn-success"> Ubah</button>
                 </div>
             </div>
             {{ Form::close() }}

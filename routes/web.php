@@ -68,6 +68,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('employees', 'EmployeeController@index')->name('employees');
     Route::get('employees/tambah', 'EmployeeController@create')->name('employees.create');
     Route::post('employees/simpan', 'EmployeeController@store')->name('employees.store');
+    Route::get('employees/{employee}/ubah/', 'EmployeeController@edit')->name('employees.edit');
+    Route::put('employees/ubah/{employee}', 'EmployeeController@update')->name('employees.update');
 
     //Roles
     Route::get('roles', 'RoleController@index')->name('roles');
