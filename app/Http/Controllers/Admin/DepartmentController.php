@@ -36,6 +36,7 @@ class DepartmentController extends Controller
         $departments = Department::all();
         return DataTables::of($departments)
             ->setTransformer(new DepartmentTransformer())
+            ->addIndexColumn()
             ->make(true);
     }
 
@@ -62,7 +63,7 @@ class DepartmentController extends Controller
             'name' => 'required|max:45'
         ]);
 
-        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
+        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
         $department = Department::create([

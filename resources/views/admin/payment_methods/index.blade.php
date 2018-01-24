@@ -16,6 +16,7 @@
                width="100%" id="payment_methods-table">
             <thead>
             <tr>
+                <th>No</th>
                 <th>Deskripsi</th>
                 <th>Biaya Tambahan</th>
                 <th>Status</th>
@@ -61,6 +62,7 @@
                 serverSide: true,
                 ajax: '{!! route('datatables.payment_methods') !!}',
                 columns: [
+                    { data: 'DT_Row_Index', orderable: false, searchable: false},
                     { data: 'description', name: 'description' },
                     { data: 'fee', name: 'fee' },
                     { data: 'status', name: 'status' },

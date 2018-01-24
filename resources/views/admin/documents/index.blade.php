@@ -16,7 +16,7 @@
                width="100%" id="documents-table">
             <thead>
             <tr>
-                <th>ID</th>
+                <th>No</th>
                 <th>Deskripsi</th>
                 <th>Tindakan</th>
             </tr>
@@ -58,7 +58,7 @@
                 serverSide: true,
                 ajax: '{!! route('datatables.documents') !!}',
                 columns: [
-                    { data: 'id', name: 'id' },
+                    { data: 'DT_Row_Index', orderable: false, searchable: false},
                     { data: 'description', name: 'description' },
                     { data: 'action', name:'action' }
                 ]

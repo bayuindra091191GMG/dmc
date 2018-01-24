@@ -36,6 +36,7 @@ class GroupController extends Controller
         $groups = Group::all();
         return DataTables::of($groups)
             ->setTransformer(new GroupTransformer())
+            ->addIndexColumn()
             ->make(true);
     }
 
@@ -62,7 +63,7 @@ class GroupController extends Controller
             'name' => 'required|max:45'
         ]);
 
-        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
+        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
         $group = Group::create([

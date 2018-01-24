@@ -21,7 +21,6 @@ class UOMTransformer extends TransformerAbstract
             "<a class='btn btn-xs btn-info' href='uoms/".$uom->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
         return[
-            'id'            => $uom->id,
             'description'   => $uom->description,
             'action'        => $action
         ];

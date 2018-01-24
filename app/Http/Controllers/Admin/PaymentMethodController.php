@@ -37,6 +37,7 @@ class PaymentMethodController extends Controller
         $payment_methods = PaymentMethod::all();
         return DataTables::of($payment_methods)
             ->setTransformer(new PaymentMethodTransformer())
+            ->addIndexColumn()
             ->make(true);
     }
 
@@ -63,7 +64,7 @@ class PaymentMethodController extends Controller
             'fee' => 'required'
         ]);
 
-        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
+        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
         $payment_method = PaymentMethod::create([

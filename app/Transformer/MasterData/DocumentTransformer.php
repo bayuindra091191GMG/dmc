@@ -23,7 +23,6 @@ class DocumentTransformer extends TransformerAbstract
             "<a class='btn btn-xs btn-info' href='documents/".$document->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
         return[
-            'id'            => $document->id,
             'description'   => $document->description,
             'action'        => $action
         ];

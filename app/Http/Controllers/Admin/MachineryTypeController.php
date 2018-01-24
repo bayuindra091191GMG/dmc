@@ -36,6 +36,7 @@ class MachineryTypeController extends Controller
         $machinery_types = MachineryType::all();
         return DataTables::of($machinery_types)
             ->setTransformer(new MachineryTypeTransformer())
+            ->addIndexColumn()
             ->make(true);
     }
 
@@ -61,7 +62,7 @@ class MachineryTypeController extends Controller
             'description' => 'required|max:50'
         ]);
 
-        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
+        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
         $group = MachineryType::create([

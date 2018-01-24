@@ -36,6 +36,7 @@ class UOMController extends Controller
         $uoms = Uom::all();
         return DataTables::of($uoms)
             ->setTransformer(new UOMTransformer())
+            ->addIndexColumn()
             ->make(true);
     }
 
@@ -61,7 +62,7 @@ class UOMController extends Controller
             'description' => 'required|max:45'
         ]);
 
-        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
+        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
         $uom = Uom::create([

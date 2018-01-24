@@ -16,7 +16,7 @@
                width="100%" id="machinery_types-table">
             <thead>
             <tr>
-                <th>ID</th>
+                <th>No</th>
                 <th>Deskripsi</th>
                 <th>Tindakan</th>
             </tr>
@@ -59,6 +59,7 @@
                 serverSide: true,
                 ajax: '{!! route('datatables.machinery_types') !!}',
                 columns: [
+                    { data: 'DT_Row_Index', orderable: false, searchable: false},
                     { data: 'id', name: 'id' },
                     { data: 'description', name: 'description' },
                     { data: 'action', name:'action' }

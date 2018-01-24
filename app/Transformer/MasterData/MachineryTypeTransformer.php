@@ -23,7 +23,6 @@ class MachineryTypeTransformer extends TransformerAbstract
             "<a class='btn btn-xs btn-info' href='machinery_types/".$machinery_type->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
         return[
-            'id'            => $machinery_type->id,
             'description'   => $machinery_type->description,
             'action'        => $action
         ];

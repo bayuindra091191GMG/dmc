@@ -16,6 +16,7 @@
                width="100%" id="warehouses-table">
             <thead>
             <tr>
+                <th>No</th>
                 <th>Kode</th>
                 <th>Nama</th>
                 <th>Lokasi</th>
@@ -83,6 +84,7 @@
                 serverSide: true,
                 ajax: '{!! route('datatables.warehouses') !!}',
                 columns: [
+                    { data: 'DT_Row_Index', orderable: false, searchable: false},
                     { data: 'code', name: 'code' },
                     { data: 'name', name: 'name' },
                     { data: 'location', name: 'location' },

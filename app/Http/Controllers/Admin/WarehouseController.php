@@ -36,6 +36,7 @@ class WarehouseController extends Controller
         $warehouses= Warehouse::all();
         return DataTables::of($warehouses)
             ->setTransformer(new WarehouseTransformer())
+            ->addIndexColumn()
             ->make(true);
     }
 
@@ -62,7 +63,7 @@ class WarehouseController extends Controller
             'name' => 'required|max:45'
         ]);
 
-        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
+        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
         $group = Warehouse::create([

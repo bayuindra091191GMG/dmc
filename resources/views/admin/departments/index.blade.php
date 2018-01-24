@@ -16,6 +16,7 @@
                width="100%" id="departments-table">
             <thead>
             <tr>
+                <th>No</th>
                 <th>Kode</th>
                 <th>Nama</th>
                 <th>Dibuat Oleh</th>
@@ -67,6 +68,7 @@
                 serverSide: true,
                 ajax: '{!! route('datatables.departments') !!}',
                 columns: [
+                    { data: 'DT_Row_Index', orderable: false, searchable: false},
                     { data: 'code', name: 'code' },
                     { data: 'name', name: 'name' },
                     { data: 'created_by', name: 'created_by' },
