@@ -78,6 +78,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('roles/tambah', 'RoleController@create')->name('roles.create');
     Route::post('roles/simpan', 'RoleController@store')->name('roles.store');
 
+    //Permission Document
+    Route::get('permission_documents', 'PermissionDocumentController@index')->name('permission_documents');
+    Route::get('permission_documents/{permission_document}/ubah', 'PermissionDocumentController@edit')->name('permission_documents.edit');
+    Route::put('permission_documents/ubah/{permission_document}', 'PermissionDocumentController@update')->name('permission_documents.update');
+    Route::get('permission_documents/tambah', 'PermissionDocumentController@create')->name('permission_documents.create');
+    Route::post('permission_documents/simpan', 'PermissionDocumentController@store')->name('permission_documents.store');
+
     //Groups
     Route::get('groups', 'GroupController@index')->name('groups');
     Route::get('groups/{group}/ubah', 'GroupController@edit')->name('groups.edit');
@@ -164,6 +171,7 @@ Route::get('/datatables-payment_methods', 'Admin\PaymentMethodController@anyData
 Route::get('/datatables-uoms', 'Admin\UOMController@anyData')->name('datatables.uoms');
 Route::get('/datatables-warehouses', 'Admin\WarehouseController@anyData')->name('datatables.warehouses');
 Route::get('/datatables-roles', 'Admin\RoleController@getIndex')->name('datatables.roles');
+Route::get('/datatables-permission-documents', 'Admin\PermissionDocumentController@getIndex')->name('datatables.permission_documents');
 
 // PURCHASING
 

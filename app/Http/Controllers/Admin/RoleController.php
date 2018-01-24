@@ -113,10 +113,6 @@ class RoleController extends Controller
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
-        $dateTimeNow = Carbon::now('Asia/Jakarta');
-
-        $user = Auth::guard()->user();
-
         $role = Role::find($id);
         $role->name = $request->get('name');
         $role->description = $request->get('description');

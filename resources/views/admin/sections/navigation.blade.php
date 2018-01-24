@@ -174,6 +174,20 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li><a>Otorisasi Dokumen<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.permission_documents') }}">
+                                            Daftar Otorisasi Dokumen
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.permission_documents.create') }}">
+                                            Tambah Otorisasi Dokumen
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                             <li><a>Jenis Alat Berat<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">

@@ -2,9 +2,9 @@
 
 namespace App\Models\Auth\Role;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Auth\Role\Traits\Scopes\RoleScopes;
 use App\Models\Auth\Role\Traits\Relations\RoleRelations;
+use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * App\Models\Auth\Role\Role
@@ -17,6 +17,7 @@ use App\Models\Auth\Role\Traits\Relations\RoleRelations;
  * @property int $created_by
  * @property \Carbon\Carbon $updated_at
  * @property int $updated_by
+ * @property \Illuminate\Database\Eloquent\Collection $permission_documents
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Auth\User\User[] $users
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Auth\Role\Role sort($direction = 'asc')
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Auth\Role\Role whereCreatedAt($value)
@@ -26,7 +27,7 @@ use App\Models\Auth\Role\Traits\Relations\RoleRelations;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Auth\Role\Role whereWeight($value)
  * @mixin \Eloquent
  */
-class Role extends Model
+class Role extends Eloquent
 {
     use RoleScopes,
         RoleRelations;
@@ -36,7 +37,7 @@ class Role extends Model
      *
      * @var string
      */
-    protected $table = 'roles';
+//    protected $table = 'roles';
 
     /**
      * Indicates if the model should be timestamped.
@@ -55,4 +56,8 @@ class Role extends Model
         'weight',
         'description'];
 
+    public function permission_documents()
+    {
+        return $this->hasMany(\App\Models\PermissionDocument::class);
+    }
 }
