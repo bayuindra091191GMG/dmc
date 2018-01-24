@@ -10,7 +10,8 @@ use App\Transformer\MasterData\MachineryTypeTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
-use Validator;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
 class MachineryController extends Controller
@@ -74,7 +75,9 @@ class MachineryController extends Controller
         ]);
 
 //        return redirect()->intended(route('admin.machineries'));
-        return view('admin.machineries.create', ['machinery_types' => MachineryType::all()]);
+        Session::flash('message', 'Berhasil membuat data alat berat baru!');
+
+        return redirect()->route('admin.machineries.create', ['machinery_types' => MachineryType::all()]);
     }
 
     /**
@@ -125,7 +128,9 @@ class MachineryController extends Controller
         $machinery->save();
 
 //        return redirect()->intended(route('admin.machineries'));
-        return view('admin.machineries.edit', ['machinery' => $machinery]);
+        Session::flash('message', 'Berhasil mengubah data golongan!');
+
+        return redirect()->route('admin.machineries.edit', ['machinery' => $machinery]);
     }
 
     /**

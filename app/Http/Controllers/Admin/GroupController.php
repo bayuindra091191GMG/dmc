@@ -9,7 +9,8 @@ use App\Transformer\MasterData\GroupTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
-use Validator;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
 class GroupController extends Controller
@@ -73,7 +74,9 @@ class GroupController extends Controller
         ]);
 
 //        return redirect()->intended(route('admin.groups'));
-        return view('admin.groups.create');
+        Session::flash('message', 'Berhasil membuat data golongan baru!');
+
+        return redirect()->route('admin.groups.create');
     }
 
     /**
@@ -124,7 +127,9 @@ class GroupController extends Controller
         $group->save();
 
 //        return redirect()->intended(route('admin.groups'));
-        return view('admin.groups.edit', ['group' => $group]);
+        Session::flash('message', 'Berhasil mengubah data golongan!');
+
+        return redirect()->route('admin.groups.edit', ['group' => $group]);
     }
 
     /**

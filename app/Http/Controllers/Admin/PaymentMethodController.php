@@ -10,7 +10,8 @@ use App\Transformer\MasterData\PaymentMethodTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
-use Validator;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
 class PaymentMethodController extends Controller
@@ -59,8 +60,7 @@ class PaymentMethodController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'description' => 'required|max:50',
-            'fee' => 'required|number',
-            'status_id' => 'required|number'
+            'fee' => 'required'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
@@ -69,11 +69,15 @@ class PaymentMethodController extends Controller
         $payment_method = PaymentMethod::create([
             'description'          => $request->get('description'),
             'fee'          => $request->get('fee'),
-            'status'          => 1
+            'status_id'          => 1
         ]);
 
 //        return redirect()->intended(route('admin.payment_methods'));
-        return view('admin.payment_methods.create');
+//        return view('admin.payment_methods.create');
+
+        Session::flash('message', 'Berhasil membuat data metode pembayaran baru!');
+
+        return redirect()->route('admin.payment_methods.create');
     }
 
     /**
@@ -110,7 +114,8 @@ class PaymentMethodController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'description' => 'required|max:50',
-            'fee' => 'required|max:45'
+            'fee' => 'required|max:45',
+            'status' => 'required'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
@@ -119,11 +124,16 @@ class PaymentMethodController extends Controller
 
         $payment_method->description = $request->get('description');
         $payment_method->fee = $request->get('fee');
+        $payment_method->status_id = $request->get('status');
 
         $payment_method->save();
 
 //        return redirect()->intended(route('admin.payment_methods'));
-        return view('admin.payment_methods.edit', ['payment_method' => $payment_method]);
+//        return redirect()->intended(route('admin.payment_methods.edit', ['payment_method' => $payment_method]));
+
+        Session::flash('message', 'Berhasil mengubah data metode pembayaran!');
+
+        return redirect()->route('admin.payment_methods.edit', ['payment_method' => $payment_method]);
     }
 
     /**

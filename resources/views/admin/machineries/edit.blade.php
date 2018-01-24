@@ -8,6 +8,30 @@
             {{ Form::open(['route'=>['admin.machineries.update', $machinery->id],'method' => 'put','class'=>'form-horizontal form-label-left']) }}
 
 
+            @if(\Illuminate\Support\Facades\Session::has('message'))
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        @include('partials._success')
+                    </div>
+                </div>
+            @endif
+
+            @if(count($errors))
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12 alert alert-danger alert-dismissible fade in" role="alert">
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            @endif
+
                 <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
                         Kode Alat Berat
@@ -16,13 +40,6 @@
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         <input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
                                name="code" value="{{ $machinery->code }}" required>
-                        @if($errors->has('code'))
-                            <ul class="parsley-errors-list filled">
-                                @foreach($errors->get('code') as $error)
-                                    <li class="parsley-required">{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        @endif
                     </div>
                 </div>
 
@@ -45,13 +62,6 @@
                             @endforeach
 
                         </select>
-                        @if($errors->has('machinery_type'))
-                            <ul class="parsley-errors-list filled">
-                                @foreach($errors->get('machinery_type') as $error)
-                                    <li class="parsley-required">{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        @endif
                     </div>
                 </div>
 

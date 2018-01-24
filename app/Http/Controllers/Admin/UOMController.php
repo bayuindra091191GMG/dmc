@@ -9,7 +9,8 @@ use App\Transformer\MasterData\UOMTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
-use Validator;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
 class UOMController extends Controller
@@ -68,7 +69,9 @@ class UOMController extends Controller
         ]);
 
 //        return redirect()->intended(route('admin.uoms'));
-        return view('admin.uoms.create');
+        Session::flash('message', 'Berhasil membuat data alat satuan unit!');
+
+        return redirect()->route('admin.uoms.create');
     }
 
     /**
@@ -115,7 +118,9 @@ class UOMController extends Controller
         $uom->save();
 
 //        return redirect()->intended(route('admin.uoms'));
-        return view('admin.uoms.edit', ['uom' => $uom]);
+        Session::flash('message', 'Berhasil mengubah data satuan unit!');
+
+        return redirect()->route('admin.uoms.edit', ['uom' => $uom]);
     }
 
     /**

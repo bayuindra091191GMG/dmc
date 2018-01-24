@@ -9,7 +9,8 @@ use App\Transformer\MasterData\WarehouseTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
-use Validator;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
 class WarehouseController extends Controller
@@ -75,7 +76,9 @@ class WarehouseController extends Controller
         ]);
 
 //        return redirect()->intended(route('admin.warehouses'));
-        return view('admin.warehouses.create');
+        Session::flash('message', 'Berhasil membuat data gudang unit!');
+
+        return redirect()->route('admin.warehouses.create');
     }
 
     /**
@@ -128,7 +131,9 @@ class WarehouseController extends Controller
         $warehouse->save();
 
 //        return redirect()->intended(route('admin.warehouses'));
-        return view('admin.warehouses.edit', ['warehouse' => $warehouse]);
+        Session::flash('message', 'Berhasil mengubah data gudang!');
+
+        return redirect()->route('admin.warehouses.edit', ['warehouse' => $warehouse]);
     }
 
     /**

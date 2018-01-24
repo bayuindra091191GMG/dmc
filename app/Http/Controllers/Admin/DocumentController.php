@@ -9,7 +9,7 @@ use App\Transformer\MasterData\DocumentTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
 class DocumentController extends Controller
@@ -68,7 +68,9 @@ class DocumentController extends Controller
         ]);
 
 //        return redirect()->intended(route('admin.documents'));
-        return view('admin.documents.create');
+        Session::flash('message', 'Berhasil membuat data dokumen baru!');
+
+        return redirect()->route('admin.documents.create');
     }
 
     /**
@@ -115,7 +117,9 @@ class DocumentController extends Controller
         $document->save();
 
 //        return redirect()->intended(route('admin.documents'));
-        return view('admin.documents.edit', ['document' => $document]);
+        Session::flash('message', 'Berhasil mengubah data dokumen!');
+
+        return redirect()->route('admin.documents.edit', ['document' => $document]);
     }
 
     /**

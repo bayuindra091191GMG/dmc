@@ -9,7 +9,8 @@ use App\Transformer\MasterData\DepartmentTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
-use Validator;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
 class DepartmentController extends Controller
@@ -72,7 +73,9 @@ class DepartmentController extends Controller
             'created_at'    => $dateTimeNow->toDateTimeString()
         ]);
 
-        return view('admin.departments.create');
+        Session::flash('message', 'Berhasil membuat data departemen baru!');
+
+        return redirect()->route('admin.departments.create');
     }
 
     /**
@@ -123,7 +126,9 @@ class DepartmentController extends Controller
         $department->save();
 
 //        return redirect()->intended(route('admin.departments'));
-        return view('admin.departments.edit', ['department' => $department]);
+        Session::flash('message', 'Berhasil mengubah data departemen!');
+
+        return redirect()->route('admin.departments.edit', ['department' => $department]);
     }
 
     /**
