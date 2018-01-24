@@ -147,23 +147,26 @@ mix.styles([
     'resources/assets/admin/css/jquery.datatables.min.css',
 ], 'public/assets/admin/css/users/index.css').version();
 
-// EMPLOYEE
+// DATATABLES
+mix.scripts([
+    'node_modules/datatables.net/js/jquery.dataTables.js',
+    'node_modules/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js'
+], 'public/assets/admin/js/datatables.js').version();
+
+mix.styles([
+    'node_modules/gentelella/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css',
+    'resources/assets/admin/css/jquery.datatables.min.css',
+], 'public/assets/admin/css/datatables.css').version();
+
+// BOOTSTRAP DATETIMEPICKER
 mix.scripts([
     'node_modules/gentelella/vendors/moment/moment.js',
     'node_modules/gentelella/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
-], 'public/assets/admin/js/employees/edit.js').version();
+], 'public/assets/admin/js/bootstrap-datetimepicker.js').version();
 
 mix.styles([
     'node_modules/gentelella/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
-], 'public/assets/admin/css/employees/edit.css').version();
-
-mix.scripts([
-    'node_modules/datatables.net/js/jquery.dataTables.js',
-], 'public/assets/admin/js/employees/index.js').version();
-
-mix.styles([
-    'resources/assets/admin/css/jquery.datatables.min.css',
-], 'public/assets/admin/css/employees/index.css').version();
+], 'public/assets/admin/css/bootstrap-datetimepicker.css').version();
 
 // PAYMENT METHOD
 mix.scripts([

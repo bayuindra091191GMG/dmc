@@ -1,10 +1,10 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Data Karyawan')
+@section('title', 'Data Status')
 
 @section('content')
     <div class="nav navbar-right">
-        <a href="{{ route('admin.employees.create') }}" class="btn btn-app">
+        <a href="{{ route('admin.statuses.create') }}" class="btn btn-app">
             <i class="fa fa-plus"></i> Tambah
         </a>
     </div>
@@ -15,15 +15,8 @@
                width="100%" id="employees-table">
             <thead>
             <tr>
-                <th>Nama Lengkap</th>
-                <th>Email</th>
-                <th>Nomor Ponsel</th>
-                <th>Tanggal Lahir</th>
-                <th>Alamat</th>
-                <th>Departemen</th>
-                <th>Site</th>
-                <th>Tanggal Dibuat</th>
-                <th>Tanggal Diubah</th>
+                <th>No</th>
+                <th>Status</th>
                 <th>Opsi</th>
             </tr>
             </thead>
@@ -47,17 +40,10 @@
             $('#employees-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('datatables.employees') !!}',
+                ajax: '{!! route('datatables.statuses') !!}',
                 columns: [
-                    { data: 'name', name: 'name' },
-                    { data: 'email', name: 'email' },
-                    { data: 'phone', name: 'phone' },
-                    { data: 'dob', name: 'dob' },
-                    { data: 'address', name: 'address' },
-                    { data: 'department', name: 'department' },
-                    { data: 'site', name: 'site' },
-                    { data: 'created_at', name: 'created_at' },
-                    { data: 'updated_at', name: 'updated_at' },
+                    { data: 'DT_Row_Index', orderable: false, searchable: false},
+                    { data: 'description', name: 'description' },
                     { data: 'action', name: 'action' }
                 ]
             });

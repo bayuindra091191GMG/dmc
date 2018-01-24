@@ -138,7 +138,7 @@ class EmployeeController extends Controller
         $employee->address = Input::get('address');
         $employee->department_id = Input::get('department');
         $employee->site_id = Input::get('site');
-        $employee->status_id = Input::get('status');
+        $employee->status_id = Input::get('statuses');
         $employee->updated_by = $user->id;
         $employee->updated_at = $now;
 

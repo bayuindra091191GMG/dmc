@@ -115,7 +115,7 @@
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                     <a class="btn btn-primary" href="{{ route('admin.employees') }}"> Batal</a>
-                    <button type="submit" class="btn btn-success"> Tambah</button>
+                    <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>
             {{ Form::close() }}
@@ -125,12 +125,12 @@
 
 @section('styles')
     @parent
-    {{ Html::style(mix('assets/admin/css/employees/edit.css')) }}
+    {{ Html::style(mix('assets/admin/css/bootstrap-datetimepicker.css')) }}
 @endsection
 
 @section('scripts')
     @parent
-    {{ Html::script(mix('assets/admin/js/employees/edit.js')) }}
+    {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
     <script>
         $('#dob').datetimepicker({
             format: "DD MMM Y"
