@@ -188,6 +188,20 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li><a>Otorisasi Menu<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.permission_menus') }}">
+                                            Daftar Otorisasi Menu
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.permission_menus.create') }}">
+                                            Tambah Otorisasi Menu
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                             <li><a>Jenis Alat Berat<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">

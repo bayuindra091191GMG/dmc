@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Thu, 25 Jan 2018 03:23:44 +0000.
+ * Date: Thu, 25 Jan 2018 03:44:47 +0000.
  */
 
 namespace App\Models;
@@ -20,6 +20,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Carbon\Carbon $updated_at
  * @property int $updated_by
  * 
+ * @property \App\Models\User $user
  * @property \App\Models\Menu $menu
  * @property \App\Models\Role $role
  *
@@ -41,6 +42,16 @@ class PermissionMenu extends Eloquent
 		'updated_by'
 	];
 
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
+    }
+
 	public function menu()
 	{
 		return $this->belongsTo(\App\Models\Menu::class);
@@ -48,6 +59,6 @@ class PermissionMenu extends Eloquent
 
 	public function role()
 	{
-		return $this->belongsTo(\App\Models\Role::class);
+		return $this->belongsTo(\App\Models\Auth\Role\Role::class);
 	}
 }

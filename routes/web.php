@@ -81,9 +81,16 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     //Roles
     Route::get('roles', 'RoleController@index')->name('roles');
     Route::get('roles/{role}/ubah', 'RoleController@edit')->name('roles.edit');
-    Route::put('roles/ubah/{group}', 'RoleController@update')->name('roles.update');
+    Route::put('roles/ubah/{role}', 'RoleController@update')->name('roles.update');
     Route::get('roles/tambah', 'RoleController@create')->name('roles.create');
     Route::post('roles/simpan', 'RoleController@store')->name('roles.store');
+
+    //Permission Menu
+    Route::get('permission_menus', 'PermissionMenuController@index')->name('permission_menus');
+    Route::get('permission_menus/{permission_menu}/ubah', 'PermissionMenuController@edit')->name('permission_menus.edit');
+    Route::put('permission_menus/ubah/{permission_menus}', 'PermissionMenuController@update')->name('permission_menus.update');
+    Route::get('permission_menus/tambah', 'PermissionMenuController@create')->name('permission_menus.create');
+    Route::post('permission_menus/simpan', 'PermissionMenuController@store')->name('permission_menus.store');
 
     //Permission Document
     Route::get('permission_documents', 'PermissionDocumentController@index')->name('permission_documents');
@@ -179,6 +186,7 @@ Route::get('/datatables-uoms', 'Admin\UOMController@anyData')->name('datatables.
 Route::get('/datatables-warehouses', 'Admin\WarehouseController@anyData')->name('datatables.warehouses');
 Route::get('/datatables-roles', 'Admin\RoleController@getIndex')->name('datatables.roles');
 Route::get('/datatables-permission-documents', 'Admin\PermissionDocumentController@getIndex')->name('datatables.permission_documents');
+Route::get('/datatables-permission-menus', 'Admin\PermissionMenuController@getIndex')->name('datatables.permission_menus');
 
 // PURCHASING
 

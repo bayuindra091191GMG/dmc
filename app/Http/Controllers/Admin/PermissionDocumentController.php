@@ -64,7 +64,6 @@ class PermissionDocumentController extends Controller
         $validator = Validator::make($request->all(), [
             'role' => 'required',
             'document' => 'required',
-            'read' => 'required'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());

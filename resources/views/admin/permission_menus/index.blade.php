@@ -1,10 +1,10 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Data Otorisasi Dokumen')
+@section('title', 'Data Otorisasi Menu')
 
 @section('content')
     <div class="nav navbar-right">
-        <a href="{{ route('admin.permission_documents.create') }}" class="btn btn-app">
+        <a href="{{ route('admin.permission_menus.create') }}" class="btn btn-app">
             <i class="fa fa-plus"></i> Tambah
         </a>
     </div>
@@ -17,12 +17,7 @@
                 <tr>
                     <th>No</th>
                     <th>Role</th>
-                    <th>Document</th>
-                    <th>Melihat</th>
-                    <th>Membuat</th>
-                    <th>Mengubah</th>
-                    <th>Mencetak</th>
-                    <th>Menghapus</th>
+                    <th>Menu</th>
                     <th>Dibuat Oleh</th>
                     <th>Tanggal Dibuat</th>
                     <th>Diubah Oleh</th>
@@ -50,16 +45,11 @@
             $('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('datatables.permission_documents') !!}',
+                ajax: '{!! route('datatables.permission_menus') !!}',
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false},
                     { data: 'role', name: 'role' },
-                    { data: 'document', name: 'document' },
-                    { data: 'read', name: 'read' },
-                    { data: 'create', name: 'create' },
-                    { data: 'update', name: 'update' },
-                    { data: 'print', name: 'print' },
-                    { data: 'delete', name: 'delete' },
+                    { data: 'menu', name: 'menu' },
                     { data: 'created_by', name: 'created_by' },
                     { data: 'created_at', name: 'created_at' },
                     { data: 'updated_by', name: 'updated_by' },
