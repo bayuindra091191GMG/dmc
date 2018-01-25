@@ -162,6 +162,15 @@ mix.styles([
     'node_modules/gentelella/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
 ], 'public/assets/admin/css/bootstrap-datetimepicker.css').version();
 
+// SELECT2
+mix.styles([
+    'node_modules/gentelella/vendors/select2/dist/css/select2.css',
+], 'public/assets/admin/css/select2.css').version();
+
+mix.scripts([
+    'node_modules/select2/dist/js/select2.full.js'
+], 'public/assets/admin/js/select2.js').version();
+
 // AUTO NUMERIC FOR PRICE
 mix.scripts([
     'node_modules/autonumeric/dist/autoNumeric.min.js',

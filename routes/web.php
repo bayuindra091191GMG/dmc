@@ -71,6 +71,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('employees/{employee}/ubah/', 'EmployeeController@edit')->name('employees.edit');
     Route::put('employees/ubah/{employee}', 'EmployeeController@update')->name('employees.update');
 
+    //Items
+    Route::get('items', 'ItemController@index')->name('items');
+    Route::get('items/tambah', 'ItemController@create')->name('items.create');
+    Route::post('items/simpan', 'ItemController@store')->name('items.store');
+    Route::get('items/{status}/ubah', 'Itemontroller@create')->name('items.edit');
+    Route::put('items/ubah/{status}', 'ItemController@update')->name('items.update');
+
     //Statuses
     Route::get('statuses', 'StatusController@index')->name('statuses');
     Route::get('statuses/tambah', 'StatusController@create')->name('statuses.create');
@@ -181,6 +188,12 @@ Route::group(['as' => 'protection.'], function () {
     Route::get('membership/access-denied', 'MembershipController@failed')->name('membership.failed');
     Route::get('membership/clear-cache/', 'MembershipController@clearValidationCache')->name('membership.clear_validation_cache');
 });
+
+/**
+ * Select2
+ */
+
+Route::get('/select-warehouses', 'Admin\ItemController@getWarehouse')->name('select.warehouses');
 
 /**
  * Datatables
