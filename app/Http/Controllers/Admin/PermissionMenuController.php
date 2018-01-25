@@ -136,10 +136,18 @@ class PermissionMenuController extends Controller
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
+
         $dateTimeNow = Carbon::now('Asia/Jakarta');
         $user = Auth::user();
         $role_id = $request->get('role');
         $menu_id = $request->get('menu');
+
+        //Check
+        $permission = PermissionMenu::where('role_id', $role_id)->where('menu_id', $menu_id)->first();
+        if($permission != null){
+            Session::flash('error', 'Otorisasi Menu Sudah Dibuat!');
+            return redirect(route('admin.permission_menus.create'));
+        }
 
         $permissionMenu = PermissionMenu::find($id);
         $permissionMenu->role_id = $role_id;

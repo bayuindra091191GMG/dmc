@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Thu, 25 Jan 2018 03:24:17 +0000.
+ * Date: Thu, 25 Jan 2018 04:26:01 +0000.
  */
 
 namespace App\Models;
@@ -38,16 +38,28 @@ class ApprovalRule extends Eloquent
 		'document_id',
 		'user_id',
 		'created_by',
-		'updated_by'
+		'updated_by',
+        'created_at',
+        'updated_at'
 	];
 
 	public function user()
 	{
-		return $this->belongsTo(\App\Models\User::class);
+		return $this->belongsTo(\App\Models\Auth\User\User::class);
 	}
 
 	public function document()
 	{
 		return $this->belongsTo(\App\Models\Document::class);
 	}
+
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
+    }
 }

@@ -85,6 +85,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('roles/tambah', 'RoleController@create')->name('roles.create');
     Route::post('roles/simpan', 'RoleController@store')->name('roles.store');
 
+    //Approval Rule
+    Route::get('approval_rules', 'ApprovalRuleController@index')->name('approval_rules');
+    Route::get('approval_rules/{approval_rule}/ubah', 'ApprovalRuleController@edit')->name('approval_rules.edit');
+    Route::put('approval_rules/ubah/{approval_rule}', 'ApprovalRuleController@update')->name('approval_rules.update');
+    Route::get('approval_rules/tambah', 'ApprovalRuleController@create')->name('approval_rules.create');
+    Route::post('approval_rules/simpan', 'ApprovalRuleController@store')->name('approval_rules.store');
+
     //Permission Menu
     Route::get('permission_menus', 'PermissionMenuController@index')->name('permission_menus');
     Route::get('permission_menus/{permission_menu}/ubah', 'PermissionMenuController@edit')->name('permission_menus.edit');
@@ -187,6 +194,7 @@ Route::get('/datatables-warehouses', 'Admin\WarehouseController@anyData')->name(
 Route::get('/datatables-roles', 'Admin\RoleController@getIndex')->name('datatables.roles');
 Route::get('/datatables-permission-documents', 'Admin\PermissionDocumentController@getIndex')->name('datatables.permission_documents');
 Route::get('/datatables-permission-menus', 'Admin\PermissionMenuController@getIndex')->name('datatables.permission_menus');
+Route::get('/datatables-approval-rules', 'Admin\ApprovalRuleController@getIndex')->name('datatables.approval_rules');
 
 // PURCHASING
 
