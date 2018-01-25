@@ -62,6 +62,20 @@
                             <span class="fa fa-chevron-down"></span>
                         </a>
                         <ul class="nav child_menu">
+                            <li><a>Menu<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.menus') }}">
+                                            Daftar Menu
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.menus.create') }}">
+                                            Tambah Menu
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                             <li><a>Golongan<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">

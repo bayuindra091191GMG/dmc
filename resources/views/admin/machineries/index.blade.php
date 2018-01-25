@@ -56,12 +56,12 @@
 
 @section('styles')
     @parent
-    {{ Html::style(mix('assets/admin/css/users/index.css')) }}
+    {{ Html::style(mix('assets/admin/css/datatables.css')) }}
 @endsection
 
 @section('scripts')
     @parent
-    {{ Html::script(mix('assets/admin/js/users/index.js')) }}
+    {{ Html::script(mix('assets/admin/js/datatables.js')) }}
     <script>
         $(function() {
             $('#machineries-table').DataTable({

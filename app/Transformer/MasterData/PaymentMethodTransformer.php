@@ -20,9 +20,11 @@ class PaymentMethodTransformer extends TransformerAbstract
         $action =
             "<a class='btn btn-xs btn-info' href='payment_methods/".$payment_method->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
+        $feeFormated = "Rp ". number_format($payment_method->fee, 0, ",", ".");
+
         return[
             'description'   => $payment_method->description,
-            'fee'           => $payment_method->fee,
+            'fee'           => $feeFormated,
             'status'        => $payment_method->status->description,
             'action'        => $action
         ];

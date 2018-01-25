@@ -99,12 +99,6 @@ mix.scripts([
     'resources/assets/admin/js/users/edit.js',
 ], 'public/assets/admin/js/users/edit.js').version();
 
-mix.scripts([
-    'node_modules/autonumeric/dist/autoNumeric.min.js',
-    'resources/assets/admin/js/payment_method/custom.js',
-
-], 'public/assets/admin/js/payment_method/custom.js').version();
-
 mix.styles([
     'node_modules/select2/dist/css/select2.css',
 ], 'public/assets/admin/css/users/edit.css').version();
@@ -168,12 +162,12 @@ mix.styles([
     'node_modules/gentelella/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
 ], 'public/assets/admin/css/bootstrap-datetimepicker.css').version();
 
-// PAYMENT METHOD
+// AUTO NUMERIC FOR PRICE
 mix.scripts([
     'node_modules/autonumeric/dist/autoNumeric.min.js',
-    'resources/assets/admin/js/payment_method/custom.js',
+    'resources/assets/admin/js/custom-autonumeric.js',
 
-], 'public/assets/admin/js/payment_method/custom.js').version();
+], 'public/assets/admin/js/custom-autonumeric.js').version();
 
 
 /*

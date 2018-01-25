@@ -1,11 +1,11 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Index Dokumen')
+@section('title', 'Index Menu')
 
 @section('content')
 
     <div class="nav navbar-right">
-        <a href="{{ route('admin.documents.create') }}" class="btn btn-app">
+        <a href="{{ route('admin.menus.create') }}" class="btn btn-app">
             <i class="fa fa-plus"></i> Tambah
         </a>
     </div>
@@ -13,20 +13,22 @@
 
     <div class="row">
         <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
-               width="100%" id="documents-table">
+               width="100%" id="menus-table">
             <thead>
             <tr>
                 <th>No</th>
+                <th>Nama</th>
                 <th>Deskripsi</th>
                 <th>Tindakan</th>
             </tr>
             </thead>
             <tbody>
-            {{--@foreach($documents as $document)--}}
+            {{--@foreach($machinery_types as $machinery_type)--}}
                 {{--<tr>--}}
-                    {{--<td>{{ $document->description }}</td>--}}
+                    {{--<td>{{ $machinery_type->id }}</td>--}}
+                    {{--<td>{{ $machinery_type->description }}</td>--}}
                     {{--<td>--}}
-                        {{--<a class="btn btn-xs btn-info" href="{{ route('admin.documents.edit', [$document->id]) }}" data-toggle="tooltip" data-placement="top" data-title="Ubah">--}}
+                        {{--<a class="btn btn-xs btn-info" href="{{ route('admin.machinery_types.edit', [$machinery_type->id]) }}" data-toggle="tooltip" data-placement="top" data-title="Ubah">--}}
                             {{--<i class="fa fa-pencil"></i>--}}
                         {{--</a>--}}
                         {{--@if(!$user->hasRole('administrator'))--}}
@@ -53,12 +55,13 @@
     {{ Html::script(mix('assets/admin/js/datatables.js')) }}
     <script>
         $(function() {
-            $('#documents-table').DataTable({
+            $('#menus-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('datatables.documents') !!}',
+                ajax: '{!! route('datatables.menus') !!}',
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false},
+                    { data: 'name', name: 'name' },
                     { data: 'description', name: 'description' },
                     { data: 'action', name:'action' }
                 ]

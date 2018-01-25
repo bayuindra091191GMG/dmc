@@ -162,6 +162,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('warehouses/tambah', 'WarehouseController@create')->name('warehouses.create');
     Route::post('warehouses/simpan', 'WarehouseController@store')->name('warehouses.store');
 
+    //Menus
+    Route::get('menus', 'MenuController@index')->name('menus');
+    Route::get('menus/{menu}/ubah', 'MenuController@edit')->name('menus.edit');
+    Route::put('menus/ubah/{menu}', 'MenuController@update')->name('menus.update');
+    Route::get('menus/tambah', 'MenuController@create')->name('menus.create');
+    Route::post('menus/simpan', 'MenuController@store')->name('menus.store');
 });
 
 

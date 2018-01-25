@@ -44,11 +44,11 @@
 
                 <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="fee">
-                        Biaya Tambahan Metode Pembayaran
+                        Biaya Metode Pembayaran
                         <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12 price-format">
-                        <input id="fee" type="number" class="form-control col-md-7 col-xs-12 @if($errors->has('fee')) parsley-error @endif"
+                        <input id="fee" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('fee')) parsley-error @endif"
                                name="fee" value="{{ $payment_method->fee }}" required>
                     </div>
                 </div>
@@ -59,10 +59,9 @@
                         <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-
                         <select id="status" class="form-control" name="status">
-                            <option value="1" selected>Aktif</option>
-                            <option value="2">Non aktif</option>
+                            <option value="1" {{ $payment_method->status_id == 1 ? "selected":"" }}>Aktif</option>
+                            <option value="2" {{ $payment_method->status_id == 2 ? "selected":"" }}>Non aktif</option>
                         </select>
                     </div>
                 </div>
@@ -87,5 +86,5 @@
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/users/edit.js')) }}
-    {{ Html::script(mix('assets/admin/js/payment_method/custom.js')) }}
+    {{ Html::script(mix('assets/admin/js/custom-autonumeric.js')) }}
 @endsection

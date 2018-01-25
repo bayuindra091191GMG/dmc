@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
-use App\Models\PaymentMethod;
-use App\Models\Status;
-use App\Transformer\MasterData\PaymentMethodTransformer;
+use App\Models\Menu;
+use App\Transformer\MasterData\MenuTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
@@ -14,7 +13,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
-class PaymentMethodController extends Controller
+class MenuController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,8 +22,9 @@ class PaymentMethodController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.payment_methods.index');
+        return view('admin.menus.index');
     }
+
 
     //DataTables
     /**
@@ -34,9 +34,9 @@ class PaymentMethodController extends Controller
      */
     public function anyData()
     {
-        $payment_methods = PaymentMethod::all();
-        return DataTables::of($payment_methods)
-            ->setTransformer(new PaymentMethodTransformer())
+        $menus = Menu::all();
+        return DataTables::of($menus)
+            ->setTransformer(new MenuTransformer())
             ->addIndexColumn()
             ->make(true);
     }
@@ -48,7 +48,7 @@ class PaymentMethodController extends Controller
      */
     public function create()
     {
-        return view('admin.payment_methods.create');
+        return view('admin.menus.create');
     }
 
     /**
@@ -60,27 +60,22 @@ class PaymentMethodController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'description' => 'required|max:50',
-            'fee' => 'required'
+            'name' => 'required|max:50',
+            'description' => 'required|max:200'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
-
         $dateTimeNow = Carbon::now('Asia/Jakarta');
-        $feeDouble = (double) str_replace('.','', $request->get('fee'));
 
-        $payment_method = PaymentMethod::create([
-            'description'  => $request->get('description'),
-            'fee'          => $feeDouble,
-            'status_id'    => 1
+        $group = Menu::create([
+            'name'          => $request->get('name'),
+            'description'          => $request->get('description'),
         ]);
 
-//        return redirect()->intended(route('admin.payment_methods'));
-//        return view('admin.payment_methods.create');
+//        return redirect()->intended(route('admin.menus'));
+        Session::flash('message', 'Berhasil membuat data menu baru!');
 
-        Session::flash('message', 'Berhasil membuat data metode pembayaran baru!');
-
-        return redirect()->route('admin.payment_methods.create');
+        return redirect()->route('admin.menus.create');
     }
 
     /**
@@ -97,47 +92,41 @@ class PaymentMethodController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param PaymentMethod $payment_method
+     * @param Menu $machinery_type
      * @return \Illuminate\Http\Response
      */
-    public function edit(PaymentMethod $payment_method)
+    public function edit(Menu $menu)
     {
-
-        return view('admin.payment_methods.edit', ['payment_method' => $payment_method]);
+        return view('admin.menus.edit', ['menu' => $menu]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param PaymentMethod $payment_method
+     * @param Menu $machinery_type
      * @return mixed
      */
-    public function update(Request $request, PaymentMethod $payment_method)
+    public function update(Request $request, Menu $menu)
     {
         $validator = Validator::make($request->all(), [
-            'description' => 'required|max:50',
-            'fee' => 'required|max:45',
-            'status' => 'required'
+            'name' => 'required|max:50',
+            'description' => 'required|max:200'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
         $dateTimeNow = Carbon::now('Asia/Jakarta');
-        $feeDouble = (double) str_replace('.','', $request->get('fee'));
 
-        $payment_method->description = $request->get('description');
-        $payment_method->fee = $feeDouble;
-        $payment_method->status_id = $request->get('status');
+        $menu->name = $request->get('name');
+        $menu->description = $request->get('description');
 
-        $payment_method->save();
+        $menu->save();
 
-//        return redirect()->intended(route('admin.payment_methods'));
-//        return redirect()->intended(route('admin.payment_methods.edit', ['payment_method' => $payment_method]));
+//        return redirect()->intended(route('admin.menus'));
+        Session::flash('message', 'Berhasil mengubah data menu!');
 
-        Session::flash('message', 'Berhasil mengubah data metode pembayaran!');
-
-        return redirect()->route('admin.payment_methods.edit', ['payment_method' => $payment_method]);
+        return redirect()->route('admin.menus.edit', ['menu' => $menu]);
     }
 
     /**
