@@ -21,9 +21,10 @@ class ItemTransformer extends TransformerAbstract
         $action = "<a class='btn btn-xs btn-info' href='items/".$item->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
         return[
-            'code'          => $item->code,
             'name'          => $item->name,
+            'code'          => $item->code,
             'uom'           => $item->uom->description,
+            'group'         => $item->group->name,
             'warehouse'     => $item->warehouse->name,
             'description'   => $item->description,
             'created_at'    => $createdDate,

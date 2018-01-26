@@ -45,7 +45,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">
-                    Kode
+                    Part Number
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
@@ -55,15 +55,26 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="uom" >
-                    Satuan Unit
+                    UOM
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="uom" name="uom" class="form-control col-md-7 col-xs-12 @if($errors->has('uoms')) parsley-error @endif">
-                        <option value="-1" @if(empty(old('uoms'))) selected @endif> - Pilih satuan unit - </option>
+                    <select id="uom" name="uom" class="form-control col-md-7 col-xs-12 @if($errors->has('uom')) parsley-error @endif">
+                        <option value="-1" @if(empty(old('uom'))) selected @endif> - Pilih satuan unit - </option>
                         @foreach($uoms as $uom)
-                            <option value="{{ $uom->id }}" {{ old('uoms') == $uom->id ? "selected":"" }}>{{ $uom->name }}</option>
+                            <option value="{{ $uom->id }}" {{ old('uom') == $uom->id ? "selected":"" }}>{{ $uom->name }}</option>
                         @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="group" >
+                    Group
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="group" name="group" class="form-control col-md-7 col-xs-12 @if($errors->has('group')) parsley-error @endif">
                     </select>
                 </div>
             </div>
@@ -92,32 +103,36 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class="col-md-3 col-sm-3 col-xs-12"></div>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
-                           width="100%" id="serials-table">
-                        <thead>
-                        <tr>
-                            <th>Nomor Seri</th>
-                            <th>Gudang</th>
-                            <th>Opsi</th>
-                        </tr>
-                        </thead>
-                        <tbody id="dynamic_field">
-                        <tr>
-                            <td>
-                                <input type="text" name="serial[]" class="form-control">
-                            </td>
-                            <td>
-                                <select class="select-row form-control" name="serial_warehouse[]"></select>
-                            </td>
-                            <td><button type="button" name="add" id="add" class="btn btn-success">Add More</button></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            {{--<div class="form-group">--}}
+                {{--<div class="col-md-3 col-sm-3 col-xs-12"></div>--}}
+                {{--<div class="col-md-6 col-sm-6 col-xs-12">--}}
+                    {{--<table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"--}}
+                           {{--width="100%" id="serials-table">--}}
+                        {{--<thead>--}}
+                        {{--<tr>--}}
+                            {{--<th>Nomor Seri</th>--}}
+                            {{--<th>Alat berat</th>--}}
+                            {{--<th>Gudang</th>--}}
+                            {{--<th>Opsi</th>--}}
+                        {{--</tr>--}}
+                        {{--</thead>--}}
+                        {{--<tbody id="dynamic_field">--}}
+                        {{--<tr>--}}
+                            {{--<td>--}}
+                                {{--<input type="text" name="serial[]" class="form-control">--}}
+                            {{--</td>--}}
+                            {{--<td>--}}
+                                {{--<select class="select-row-machinery form-control" name="machinery[]"></select>--}}
+                            {{--</td>--}}
+                            {{--<td>--}}
+                                {{--<select class="select-row-warehouse form-control" name="serial_warehouse[]"></select>--}}
+                            {{--</td>--}}
+                            {{--<td><button type="button" name="add" id="add" class="btn btn-success">Add More</button></td>--}}
+                        {{--</tr>--}}
+                        {{--</tbody>--}}
+                    {{--</table>--}}
+                {{--</div>--}}
+            {{--</div>--}}
 
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
@@ -141,11 +156,14 @@
     <script type="text/javascript">
         var i=1;
 
-        $('.select-row').select2({
-            placeholder: "Pilih gudang...",
+        $('#group').select2({
+            placeholder: {
+                id: '-1',
+                text: 'Pilih Group...'
+            },
             minimumInputLength: 2,
             ajax: {
-                url: '{{ route('select.warehouses') }}',
+                url: '{{ route('select.groups') }}',
                 dataType: 'json',
                 data: function (params) {
                     return {
@@ -169,46 +187,5 @@
             var button_id = $(this).attr("id");
             $('#row'+button_id+'').remove();
         });
-
-
-        // $.ajaxSetup({
-        //     headers: {
-        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //     }
-        // });
-
-
-        // $('#submit').click(function(){
-        //     $.ajax({
-        //         url:postURL,
-        //         method:"POST",
-        //         data:$('#add_name').serialize(),
-        //         type:'json',
-        //         success:function(data)
-        //         {
-        //             if(data.error){
-        //                 printErrorMsg(data.error);
-        //             }else{
-        //                 i=1;
-        //                 $('.dynamic-added').remove();
-        //                 $('#add_name')[0].reset();
-        //                 $(".print-success-msg").find("ul").html('');
-        //                 $(".print-success-msg").css('display','block');
-        //                 $(".print-error-msg").css('display','none');
-        //                 $(".print-success-msg").find("ul").append('<li>Record Inserted Successfully.</li>');
-        //             }
-        //         }
-        //     });
-        // });
-
-
-        function printErrorMsg (msg) {
-            $(".print-error-msg").find("ul").html('');
-            $(".print-error-msg").css('display','block');
-            $(".print-success-msg").css('display','none');
-            $.each( msg, function( key, value ) {
-                $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
-            });
-        }
     </script>
 @endsection

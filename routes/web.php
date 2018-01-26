@@ -194,6 +194,7 @@ Route::group(['as' => 'protection.'], function () {
  */
 
 Route::get('/select-warehouses', 'Admin\ItemController@getWarehouse')->name('select.warehouses');
+Route::get('/select-groups', 'Admin\GroupController@getGroups')->name('select.groups');
 
 /**
  * Datatables
@@ -202,6 +203,7 @@ Route::get('/select-warehouses', 'Admin\ItemController@getWarehouse')->name('sel
 // MASTER DATA
 Route::get('/datatables-users', 'Admin\UserController@anyData')->name('datatables.users');
 Route::get('/datatables-employees', 'Admin\EmployeeController@getIndex')->name('datatables.employees');
+Route::get('/datatables-items', 'Admin\ItemController@getIndex')->name('datatables.items');
 Route::get('/datatables-groups', 'Admin\GroupController@anyData')->name('datatables.groups');
 Route::get('/datatables-machinery_types', 'Admin\MachineryTypeController@anyData')->name('datatables.machinery_types');
 Route::get('/datatables-machineries', 'Admin\MachineryController@anyData')->name('datatables.machineries');

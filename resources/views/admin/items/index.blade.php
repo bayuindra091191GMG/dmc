@@ -16,10 +16,11 @@
             <thead>
             <tr>
                 <th>No</th>
-                <th>Kode</th>
-                <th>Nama</th>
-                <th>Gudang</th>
+                <th>Nama Barang</th>
+                <th>Part Number</th>
                 <th>Satuan Unit</th>
+                <th>Group</th>
+                <th>Gudang</th>
                 <th>Stock</th>
                 <th>Deskripsi</th>
                 <th>Tanggal Dibuat</th>
@@ -49,14 +50,18 @@
                 ajax: '{!! route('datatables.items') !!}',
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false},
-                    { data: 'code', name: 'code' },
                     { data: 'name', name: 'name' },
+                    { data: 'code', name: 'code' },
                     { data: 'uom', name: 'uom' },
+                    { data: 'group', name: 'group' },
                     { data: 'warehouse', name: 'warehouse' },
                     { data: 'description', name: 'decription' },
                     { data: 'created_at', name: 'created_at' },
                     { data: 'action', name: 'action' }
-                ]
+                ],
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"
+                }
             });
         });
     </script>

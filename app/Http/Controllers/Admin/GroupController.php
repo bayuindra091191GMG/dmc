@@ -9,6 +9,7 @@ use App\Transformer\MasterData\GroupTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
@@ -133,14 +134,16 @@ class GroupController extends Controller
         return redirect()->route('admin.groups.edit', ['group' => $group]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+    public function getGroups(Request $request){
+        $term = trim($request->q);
+        $groups = Group::where('name', 'LIKE', '%'. $term. '%')->get();
+
+        $formatted_tags = [];
+
+        foreach ($groups as $group) {
+            $formatted_tags[] = ['id' => $group->id, 'text' => $group->name];
+        }
+
+        return Response::json($formatted_tags);
     }
 }

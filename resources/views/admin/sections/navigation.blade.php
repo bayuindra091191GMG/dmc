@@ -253,6 +253,20 @@
                             <span class="fa fa-chevron-down"></span>
                         </a>
                         <ul class="nav child_menu">
+                            <li><a>Barang<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.items') }}">
+                                            Daftar Barang
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.items.create') }}">
+                                            Tambah Barang
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                             <li><a>Karyawan<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
