@@ -80,6 +80,17 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="valuation" >
+                    Nilai Awal per UOM
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12 price-format">
+                    <input id="valuation" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
+                           name="valuation" value="{{ old('valuation') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="warehouse" >
                     Gudang
                     <span class="required">*</span>
@@ -103,37 +114,6 @@
                 </div>
             </div>
 
-            {{--<div class="form-group">--}}
-                {{--<div class="col-md-3 col-sm-3 col-xs-12"></div>--}}
-                {{--<div class="col-md-6 col-sm-6 col-xs-12">--}}
-                    {{--<table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"--}}
-                           {{--width="100%" id="serials-table">--}}
-                        {{--<thead>--}}
-                        {{--<tr>--}}
-                            {{--<th>Nomor Seri</th>--}}
-                            {{--<th>Alat berat</th>--}}
-                            {{--<th>Gudang</th>--}}
-                            {{--<th>Opsi</th>--}}
-                        {{--</tr>--}}
-                        {{--</thead>--}}
-                        {{--<tbody id="dynamic_field">--}}
-                        {{--<tr>--}}
-                            {{--<td>--}}
-                                {{--<input type="text" name="serial[]" class="form-control">--}}
-                            {{--</td>--}}
-                            {{--<td>--}}
-                                {{--<select class="select-row-machinery form-control" name="machinery[]"></select>--}}
-                            {{--</td>--}}
-                            {{--<td>--}}
-                                {{--<select class="select-row-warehouse form-control" name="serial_warehouse[]"></select>--}}
-                            {{--</td>--}}
-                            {{--<td><button type="button" name="add" id="add" class="btn btn-success">Add More</button></td>--}}
-                        {{--</tr>--}}
-                        {{--</tbody>--}}
-                    {{--</table>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                     <a class="btn btn-primary" href="{{ route('admin.items') }}"> Batal</a>
@@ -153,6 +133,7 @@
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
+    {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
     <script type="text/javascript">
         var i=1;
 
@@ -186,6 +167,13 @@
         $(document).on('click', '.btn_remove', function(){
             var button_id = $(this).attr("id");
             $('#row'+button_id+'').remove();
+        });
+
+        // autoNumeric
+        numberFormat = new AutoNumeric('.price-format > input', {
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+            decimalPlaces: 0
         });
     </script>
 @endsection

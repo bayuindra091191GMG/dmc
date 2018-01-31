@@ -67,20 +67,6 @@
                 </div>
             </div>
 
-            {{--<div class="form-group">--}}
-                {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="warehouse" >--}}
-                    {{--Gudang--}}
-                    {{--<span class="required">*</span>--}}
-                {{--</label>--}}
-                {{--<div class="col-md-6 col-sm-6 col-xs-12">--}}
-                    {{--<select id="warehouse" name="warehouse" class="form-control col-md-7 col-xs-12 @if($errors->has('warehouse')) parsley-error @endif">--}}
-                        {{--@foreach($warehouses as $warehouse)--}}
-                            {{--<option value="{{ $warehouse->id }}" {{ $item->warehouse_id == $warehouse->id ? "selected":"" }}>{{ $warehouse->name }}</option>--}}
-                        {{--@endforeach--}}
-                    {{--</select>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description" >
                     Keterangan Tambahan

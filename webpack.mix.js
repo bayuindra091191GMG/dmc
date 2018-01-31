@@ -173,10 +173,8 @@ mix.scripts([
 
 // AUTO NUMERIC FOR PRICE
 mix.scripts([
-    'node_modules/autonumeric/dist/autoNumeric.min.js',
-    'resources/assets/admin/js/custom-autonumeric.js',
-
-], 'public/assets/admin/js/custom-autonumeric.js').version();
+    'node_modules/autonumeric/dist/autoNumeric.min.js'
+], 'public/assets/admin/js/autonumeric.js').version();
 
 
 /*

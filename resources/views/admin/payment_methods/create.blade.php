@@ -72,6 +72,14 @@
 
 @section('scripts')
     @parent
+    {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
     {{ Html::script(mix('assets/admin/js/users/edit.js')) }}
-    {{ Html::script(mix('assets/admin/js/custom-autonumeric.js')) }}
+    <script>
+        // autoNumeric
+        numberFormat = new AutoNumeric('.price-format > input', {
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+            decimalPlaces: 0
+        });
+    </script>
 @endsection
