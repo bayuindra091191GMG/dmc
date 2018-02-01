@@ -64,6 +64,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('dashboard/log-chart', 'DashboardController@getLogChartData')->name('dashboard.log.chart');
     Route::get('dashboard/registration-chart', 'DashboardController@getRegistrationChartData')->name('dashboard.registration.chart');
 
+    //Sites
+    Route::get('sites', 'SiteController@index')->name('sites');
+    Route::get('sites/tambah', 'SiteController@create')->name('sites.create');
+    Route::post('sites/simpan', 'SiteController@store')->name('sites.store');
+    Route::get('sites/{site}/ubah/', 'SiteController@edit')->name('sites.edit');
+    Route::put('sites/ubah/{site}', 'SiteController@update')->name('sites.update');
+
     //Employees
     Route::get('employees', 'EmployeeController@index')->name('employees');
     Route::get('employees/tambah', 'EmployeeController@create')->name('employees.create');
@@ -216,6 +223,7 @@ Route::get('/datatables-roles', 'Admin\RoleController@getIndex')->name('datatabl
 Route::get('/datatables-permission-documents', 'Admin\PermissionDocumentController@getIndex')->name('datatables.permission_documents');
 Route::get('/datatables-permission-menus', 'Admin\PermissionMenuController@getIndex')->name('datatables.permission_menus');
 Route::get('/datatables-approval-rules', 'Admin\ApprovalRuleController@getIndex')->name('datatables.approval_rules');
+Route::get('/datatables-sites', 'Admin\SiteController@getIndex')->name('datatables.sites');
 
 // PURCHASING
 

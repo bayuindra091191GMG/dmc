@@ -202,6 +202,20 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li><a>Site<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.sites') }}">
+                                            Daftar Sites
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.sites.create') }}">
+                                            Tambah Site
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                             <li><a>Otorisasi Dokumen<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
