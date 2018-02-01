@@ -1,11 +1,11 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Index Tipe Alat Berat')
+@section('title', 'Daftar Kategori Alat Berat')
 
 @section('content')
 
     <div class="nav navbar-right">
-        <a href="{{ route('admin.machinery_types.create') }}" class="btn btn-app">
+        <a href="{{ route('admin.machinery_categories.create') }}" class="btn btn-app">
             <i class="fa fa-plus"></i> Tambah
         </a>
     </div>
@@ -42,7 +42,7 @@
             $('#machinery-types-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('datatables.machinery_types') !!}',
+                ajax: '{!! route('datatables.machinery_categories') !!}',
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false},
                     { data: 'name', name: 'name' },

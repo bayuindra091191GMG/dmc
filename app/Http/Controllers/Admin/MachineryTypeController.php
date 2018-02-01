@@ -58,7 +58,8 @@ class MachineryTypeController extends Controller
         ]);
 
         if(!empty(Input::get('code'))) $machineryType->code = Input::get('code');
-        if(!empty(Input::get('description'))) $machineryType->code = Input::get('description');
+        if(!empty(Input::get('description'))) $machineryType->description = Input::get('description');
+        $machineryType->save();
 
         Session::flash('message', 'Berhasil membuat data tipe alat berat baru!');
 

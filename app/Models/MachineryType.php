@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Thu, 01 Feb 2018 02:38:40 +0000.
+ * Date: Thu, 01 Feb 2018 07:57:22 +0000.
  */
 
 namespace App\Models;
@@ -33,6 +33,6 @@ class MachineryType extends Eloquent
 
 	public function machineries()
 	{
-		return $this->hasMany(\App\Models\Machinery::class, 'marchinery_type_id');
+		return $this->hasMany(\App\Models\Machinery::class, 'type_id');
 	}
 }

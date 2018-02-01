@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Data Karyawan')
+@section('title', 'Daftar Karyawan')
 
 @section('content')
     <div class="nav navbar-right">
