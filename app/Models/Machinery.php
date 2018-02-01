@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Wed, 31 Jan 2018 07:15:55 +0000.
+ * Date: Thu, 01 Feb 2018 03:36:47 +0000.
  */
 
 namespace App\Models;
@@ -16,7 +16,9 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $code
  * @property int $category_id
  * @property int $brand_id
- * @property int $marchinery_type_id
+ * @property int $type_id
+ * @property string $description
+ * @property int $status_id
  * @property int $created_by
  * @property \Carbon\Carbon $created_at
  * @property int $updated_by
@@ -26,6 +28,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\MachineryBrand $machinery_brand
  * @property \App\Models\MachineryCategory $machinery_category
  * @property \App\Models\MachineryType $machinery_type
+ * @property \App\Models\Status $status
  * @property \Illuminate\Database\Eloquent\Collection $serials
  *
  * @package App\Models
@@ -35,7 +38,8 @@ class Machinery extends Eloquent
 	protected $casts = [
 		'category_id' => 'int',
 		'brand_id' => 'int',
-		'marchinery_type_id' => 'int',
+		'type_id' => 'int',
+		'status_id' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
 	];
@@ -44,7 +48,9 @@ class Machinery extends Eloquent
 		'code',
 		'category_id',
 		'brand_id',
-		'marchinery_type_id',
+		'type_id',
+		'description',
+		'status_id',
 		'created_by',
 		'updated_by'
 	];
@@ -66,7 +72,12 @@ class Machinery extends Eloquent
 
 	public function machinery_type()
 	{
-		return $this->belongsTo(\App\Models\MachineryType::class, 'marchinery_type_id');
+		return $this->belongsTo(\App\Models\MachineryType::class, 'type_id');
+	}
+
+	public function status()
+	{
+		return $this->belongsTo(\App\Models\Status::class);
 	}
 
 	public function serials()

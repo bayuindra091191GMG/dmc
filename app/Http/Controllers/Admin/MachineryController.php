@@ -5,11 +5,16 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
 use App\Models\Machinery;
+use App\Models\MachineryBrand;
+use App\Models\MachineryCategory;
 use App\Models\MachineryType;
+use App\Transformer\MasterData\MachineryTransformer;
 use App\Transformer\MasterData\MachineryTypeTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
@@ -27,16 +32,18 @@ class MachineryController extends Controller
     }
 
     //DataTables
+
     /**
      * Process datatables ajax request.
      *
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
-    public function anyData()
+    public function getIndex()
     {
         $machineries = Machinery::all();
         return DataTables::of($machineries)
-            ->setTransformer(new MachineryTypeTransformer())
+            ->setTransformer(new MachineryTransformer())
             ->addIndexColumn()
             ->make(true);
     }
@@ -48,7 +55,15 @@ class MachineryController extends Controller
      */
     public function create()
     {
-        return view('admin.machineries.create', ['machinery_types' => MachineryType::all()]);
+        $machineryCategories = MachineryCategory::all();
+        $machineryBrands = MachineryBrand::all();
+
+        $data = [
+            'machineryCategories'   => $machineryCategories,
+            'machineryBrands'       => $machineryBrands
+        ];
+
+        return view('admin.machineries.create')->with($data);
     }
 
     /**
@@ -61,24 +76,39 @@ class MachineryController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'code' => 'required|max:45',
-            'machinery_type' => 'required'
+            'description' => 'max:200'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
+
+        if(Input::get('machinery_category') === '-1'){
+            return redirect()->back()->withErrors('Pilih kategori alat berat!', 'default')->withInput($request->all());
+        }
+
+        if(Input::get('machinery_brand') === '-1'){
+            return redirect()->back()->withErrors('Pilih merek alat berat!', 'default')->withInput($request->all());
+        }
+
+        if(empty(Input::get('machinery_type'))){
+            return redirect()->back()->withErrors('Pilih tipe alat berat!', 'default')->withInput($request->all());
+        }
+
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
         $machinery = Machinery::create([
-            'code'          => $request->get('code'),
-            'machinery_type_id'          => $request->get('machinery_type'),
-            'updated_by'    => 1,
-            'created_by'    => 1,
-            'created_at'    => $dateTimeNow->toDateTimeString()
+            'code'                  => $request->get('code'),
+            'category_id'           => Input::get('machinery_category'),
+            'brand_id'              => Input::get('machinery_brand'),
+            'type_id'               => Input::get('machinery_type'),
+            'description'           => Input::get('description'),
+            'status_id'             => 1,
+            'created_by'            => 1,
+            'created_at'            => $dateTimeNow->toDateTimeString()
         ]);
 
-//        return redirect()->intended(route('admin.machineries'));
         Session::flash('message', 'Berhasil membuat data alat berat baru!');
 
-        return redirect()->route('admin.machineries.create', ['machinery_types' => MachineryType::all()]);
+        return redirect()->route('admin.machineries.create');
     }
 
     /**
@@ -100,7 +130,16 @@ class MachineryController extends Controller
      */
     public function edit(Machinery $machinery)
     {
-        return view('admin.machineries.edit', ['machinery' => $machinery]);
+        $machineryCategories = MachineryCategory::all();
+        $machineryBrands = MachineryBrand::all();
+
+        $data = [
+            'machinery'             => $machinery,
+            'machineryCategories'   => $machineryCategories,
+            'machineryBrands'       => $machineryBrands
+        ];
+
+        return view('admin.machineries.edit')->with($data);
     }
 
     /**
@@ -112,26 +151,35 @@ class MachineryController extends Controller
      */
     public function update(Request $request, Machinery $machinery)
     {
+//        dd(Input::get('machinery_type'));
+
         $validator = Validator::make($request->all(), [
             'code' => 'required|max:45',
-            'machinery_type' => 'required'
+            'description' => 'max:200'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
+        $user = Auth::user();
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
-        $machinery->machinery_type_id = $request->get('machinery_type');
-        $machinery->code = $request->get('code');
+        $machinery->code = Input::get('code');
+
+        if(!empty(Input::get('machinery_type'))){
+            $machinery->type_id = Input::get('machinery_type');
+        }
+
+        $machinery->category_id = Input::get('machinery_category');
+        $machinery->brand_id = Input::get('machinery_brand');
+        $machinery->description = Input::get('description');
         $machinery->updated_at = $dateTimeNow->toDateTimeString();
-        $machinery->updated_by = 1;
+        $machinery->updated_by = $user->id;
 
         $machinery->save();
 
-//        return redirect()->intended(route('admin.machineries'));
-        Session::flash('message', 'Berhasil mengubah data golongan!');
+        Session::flash('message', 'Berhasil mengubah data alat berat!');
 
-        return redirect()->route('admin.machineries.edit', ['machinery' => $machinery]);
+        return redirect()->route('admin.machineries.edit', ['machinery' => $machinery->id]);
     }
 
     /**

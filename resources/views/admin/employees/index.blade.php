@@ -59,7 +59,10 @@
                     { data: 'created_at', name: 'created_at' },
                     { data: 'updated_at', name: 'updated_at' },
                     { data: 'action', name: 'action' }
-                ]
+                ],
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"
+                }
             });
         });
     </script>

@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Thu, 01 Feb 2018 02:38:40 +0000.
+ * Date: Thu, 01 Feb 2018 02:39:02 +0000.
  */
 
 namespace App\Models;
@@ -10,7 +10,7 @@ namespace App\Models;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
- * Class MachineryType
+ * Class MachineryCategory
  * 
  * @property int $id
  * @property string $code
@@ -21,7 +21,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class MachineryType extends Eloquent
+class MachineryCategory extends Eloquent
 {
 	public $timestamps = false;
 
@@ -33,6 +33,6 @@ class MachineryType extends Eloquent
 
 	public function machineries()
 	{
-		return $this->hasMany(\App\Models\Machinery::class, 'marchinery_type_id');
+		return $this->hasMany(\App\Models\Machinery::class, 'category_id');
 	}
 }

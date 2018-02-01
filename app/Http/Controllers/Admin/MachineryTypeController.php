@@ -9,6 +9,7 @@ use App\Transformer\MasterData\MachineryTypeTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
@@ -23,22 +24,6 @@ class MachineryTypeController extends Controller
     public function index(Request $request)
     {
         return view('admin.machinery_types.index');
-    }
-
-
-    //DataTables
-    /**
-     * Process datatables ajax request.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function anyData()
-    {
-        $machinery_types = MachineryType::all();
-        return DataTables::of($machinery_types)
-            ->setTransformer(new MachineryTypeTransformer())
-            ->addIndexColumn()
-            ->make(true);
     }
 
     /**
@@ -134,5 +119,33 @@ class MachineryTypeController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Process datatables ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
+    public function getIndex()
+    {
+        $machinery_types = MachineryType::all();
+        return DataTables::of($machinery_types)
+            ->setTransformer(new MachineryTypeTransformer())
+            ->addIndexColumn()
+            ->make(true);
+    }
+
+    public function getMachineryTypes(Request $request){
+        $term = trim($request->q);
+        $groups = MachineryType::where('name', 'LIKE', '%'. $term. '%')->get();
+
+        $formatted_tags = [];
+
+        foreach ($groups as $group) {
+            $formatted_tags[] = ['id' => $group->id, 'text' => $group->name];
+        }
+
+        return Response::json($formatted_tags);
     }
 }

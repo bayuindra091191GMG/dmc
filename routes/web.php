@@ -209,6 +209,7 @@ Route::group(['as' => 'protection.'], function () {
 
 Route::get('/select-warehouses', 'Admin\ItemController@getWarehouse')->name('select.warehouses');
 Route::get('/select-groups', 'Admin\GroupController@getGroups')->name('select.groups');
+Route::get('/select-machinery_types', 'Admin\MachineryTypeController@getMachineryTypes')->name('select.machinery_types');
 
 /**
  * Datatables
@@ -220,7 +221,7 @@ Route::get('/datatables-employees', 'Admin\EmployeeController@getIndex')->name('
 Route::get('/datatables-items', 'Admin\ItemController@getIndex')->name('datatables.items');
 Route::get('/datatables-groups', 'Admin\GroupController@anyData')->name('datatables.groups');
 Route::get('/datatables-machinery_types', 'Admin\MachineryTypeController@anyData')->name('datatables.machinery_types');
-Route::get('/datatables-machineries', 'Admin\MachineryController@anyData')->name('datatables.machineries');
+Route::get('/datatables-machineries', 'Admin\MachineryController@getIndex')->name('datatables.machineries');
 Route::get('/datatables-departments', 'Admin\DepartmentController@anyData')->name('datatables.departments');
 Route::get('/datatables-documents', 'Admin\DocumentController@anyData')->name('datatables.documents');
 Route::get('/datatables-payment_methods', 'Admin\PaymentMethodController@anyData')->name('datatables.payment_methods');

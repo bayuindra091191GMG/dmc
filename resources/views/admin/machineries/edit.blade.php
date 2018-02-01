@@ -43,31 +43,57 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name" >
-                        Tipe Alat Berat
-                        <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        <select id="machinery_type" name="machinery_type" class="form-control col-md-7 col-xs-12  @if($errors->has('machinery_type')) parsley-error @endif">
-                            <option value="-1">Pilih Tipe Alat Berat</option>
-
-                            @foreach($machinery_types as $machinery_type)
-                                @if($machinery_type->id == $machinery->machinery_type_id)
-                                    <option value="{{ $machinery_type->id }}" selected>{{ $machinery_type->description }}</option>
-                                @else
-                                    <option value="{{ $machinery_type->id }}">{{ $machinery_type->description }}</option>
-                                @endif
-                                <option value="{{ $machinery_type->id }}">{{ $machinery_type->description }}</option>
-                            @endforeach
-
-                        </select>
-                    </div>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="machinery_category" >
+                    Kategori Alat Berat
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="machinery_category" name="machinery_category" class="form-control col-md-7 col-xs-12 @if($errors->has('machinery_category')) parsley-error @endif">
+                        @foreach($machineryCategories as $machineryCategory)
+                            <option value="{{ $machineryCategory->id }}" {{ $machinery->category_id == $machineryCategory->id ? "selected":"" }}>{{ $machineryCategory->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="machinery_brand" >
+                    Merek Alat Berat
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="machinery_brand" name="machinery_brand" class="form-control col-md-7 col-xs-12 @if($errors->has('machinery_brand')) parsley-error @endif">
+                        @foreach($machineryBrands as $machineryBrand)
+                            <option value="{{ $machineryBrand->id }}" {{ $machinery->brand_id == $machineryBrand->id ? "selected":"" }}>{{ $machineryBrand->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="machinery_type" >
+                    Tipe Alat Berat
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="machinery_type" name="machinery_type" class="form-control col-md-7 col-xs-12 @if($errors->has('machinery_type')) parsley-error @endif">
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description" >
+                    Keterangan Tambahan
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <textarea id="description" name="description" rows="5" class="form-control col-md-7 col-xs-12 @if($errors->has('description')) parsley-error @endif" style="resize: vertical">{{ $machinery->description }}</textarea>
+                </div>
+            </div>
 
                 <div class="form-group">
                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                        <a class="btn btn-primary" href="{{ URL::previous() }}"> Batal</a>
+                        <a class="btn btn-primary" href="{{ route('admin.machineries') }}"> Batal</a>
                         <button type="submit" class="btn btn-success"> Simpan</button>
                     </div>
                 </div>
@@ -78,10 +104,34 @@
 
 @section('styles')
     @parent
-    {{ Html::style(mix('assets/admin/css/users/edit.css')) }}
+    {{ Html::style(mix('assets/admin/css/select2.css')) }}
 @endsection
 
 @section('scripts')
     @parent
-    {{ Html::script(mix('assets/admin/js/users/edit.js')) }}
+    {{ Html::script(mix('assets/admin/js/select2.js')) }}
+    <script>
+        $('#machinery_type').select2({
+            placeholder: {
+                id: '{{ $machinery->type_id }}',
+                text: '{{ $machinery->machinery_type->name }}'
+            },
+            allowClear: true,
+            minimumInputLength: 1,
+            ajax: {
+                url: '{{ route('select.machinery_types') }}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: $.trim(params.term)
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+    </script>
 @endsection
