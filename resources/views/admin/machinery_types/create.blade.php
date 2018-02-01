@@ -31,20 +31,39 @@
                 </div>
             @endif
 
-                <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name" >
-                        Deskripsi Alat Berat
-                        <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input id="description" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('description')) parsley-error @endif"
-                               name="description"  value="{{ old('description') }}" required>
-                    </div>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name" >
+                    Nama
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('name')) parsley-error @endif"
+                           name="name"  value="{{ old('name') }}" required>
                 </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name" >
+                    Kode
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
+                           name="code"  value="{{ old('code') }}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description" >
+                    Keterangan Tambahan
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <textarea id="description" name="description" rows="5" class="form-control col-md-7 col-xs-12 @if($errors->has('description')) parsley-error @endif" style="resize: vertical">{{ old('description') }}</textarea>
+                </div>
+            </div>
 
                 <div class="form-group">
                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                        <a class="btn btn-primary" href="{{ URL::previous() }}"> Batal</a>
+                        <a class="btn btn-primary" href="{{ route('admin.machinery_types') }}"> Batal</a>
                         <button type="submit" class="btn btn-success"> Simpan</button>
                     </div>
                 </div>

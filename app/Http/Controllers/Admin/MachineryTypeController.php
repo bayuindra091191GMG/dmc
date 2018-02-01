@@ -9,6 +9,7 @@ use App\Transformer\MasterData\MachineryTypeTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -45,18 +46,21 @@ class MachineryTypeController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'description' => 'required|max:50'
+            'name'          => 'required|max:45',
+            'code'          => 'max:45',
+            'description'   => 'max:200'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
-        $dateTimeNow = Carbon::now('Asia/Jakarta');
 
-        $group = MachineryType::create([
-            'description'          => $request->get('description'),
+        $machineryType = MachineryType::create([
+            'name'          => Input::get('name')
         ]);
 
-//        return redirect()->intended(route('admin.machinery_types'));
-        Session::flash('message', 'Berhasil membuat data alat berat baru!');
+        if(!empty(Input::get('code'))) $machineryType->code = Input::get('code');
+        if(!empty(Input::get('description'))) $machineryType->code = Input::get('description');
+
+        Session::flash('message', 'Berhasil membuat data tipe alat berat baru!');
 
         return redirect()->route('admin.machinery_types.create');
     }
@@ -75,39 +79,41 @@ class MachineryTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param MachineryType $machinery_type
+     * @param MachineryType $machineryType
      * @return \Illuminate\Http\Response
      */
-    public function edit(MachineryType $machinery_type)
+    public function edit(MachineryType $machineryType)
     {
-        return view('admin.machinery_types.edit', ['machinery_type' => $machinery_type]);
+        return view('admin.machinery_types.edit', ['machineryType' => $machineryType]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param MachineryType $machinery_type
+     * @param MachineryType $machineryType
      * @return mixed
      */
-    public function update(Request $request, MachineryType $machinery_type)
+    public function update(Request $request, MachineryType $machineryType)
     {
         $validator = Validator::make($request->all(), [
-            'description' => 'required|max:50'
+            'name'          => 'required|max:45',
+            'code'          => 'max:45',
+            'description'   => 'max:200'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
-        $dateTimeNow = Carbon::now('Asia/Jakarta');
+        $machineryType->name = Input::get('name');
+        $machineryType->code = Input::get('code');
+        $machineryType->description = Input::get('description');
 
-        $machinery_type->description = $request->get('description');
-
-        $machinery_type->save();
+        $machineryType->save();
 
 //        return redirect()->intended(route('admin.machinery_types'));
-        Session::flash('message', 'Berhasil mengubah data alat berat!');
+        Session::flash('message', 'Berhasil mengubah data tipe alat berat!');
 
-        return redirect()->route('admin.machinery_types.edit', ['machinery_type' => $machinery_type]);
+        return redirect()->route('admin.machinery_types.edit', ['machinery_type' => $machineryType]);
     }
 
     /**

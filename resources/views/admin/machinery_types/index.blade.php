@@ -13,10 +13,12 @@
 
     <div class="row">
         <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
-               width="100%" id="machinery_types-table">
+               width="100%" id="machinery-types-table">
             <thead>
             <tr>
                 <th>No</th>
+                <th>Name</th>
+                <th>Code</th>
                 <th>Deskripsi</th>
                 <th>Tindakan</th>
             </tr>
@@ -54,13 +56,14 @@
     {{ Html::script(mix('assets/admin/js/datatables.js')) }}
     <script>
         $(function() {
-            $('#machinery_types-table').DataTable({
+            $('#machinery-types-table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: '{!! route('datatables.machinery_types') !!}',
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false},
-                    { data: 'id', name: 'id' },
+                    { data: 'name', name: 'name' },
+                    { data: 'code', name: 'code' },
                     { data: 'description', name: 'description' },
                     { data: 'action', name:'action' }
                 ]

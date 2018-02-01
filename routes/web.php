@@ -220,7 +220,7 @@ Route::get('/datatables-users', 'Admin\UserController@anyData')->name('datatable
 Route::get('/datatables-employees', 'Admin\EmployeeController@getIndex')->name('datatables.employees');
 Route::get('/datatables-items', 'Admin\ItemController@getIndex')->name('datatables.items');
 Route::get('/datatables-groups', 'Admin\GroupController@anyData')->name('datatables.groups');
-Route::get('/datatables-machinery_types', 'Admin\MachineryTypeController@anyData')->name('datatables.machinery_types');
+Route::get('/datatables-machinery_types', 'Admin\MachineryTypeController@getIndex')->name('datatables.machinery_types');
 Route::get('/datatables-machineries', 'Admin\MachineryController@getIndex')->name('datatables.machineries');
 Route::get('/datatables-departments', 'Admin\DepartmentController@anyData')->name('datatables.departments');
 Route::get('/datatables-documents', 'Admin\DocumentController@anyData')->name('datatables.documents');
