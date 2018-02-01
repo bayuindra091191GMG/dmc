@@ -39,39 +39,39 @@
 
                         <div>
                             <button class="btn btn-default submit" type="submit">{{ __('views.auth.login.action_0') }}</button>
-                            <a class="reset_pass" href="{{ route('password.request') }}">
-                                {{ __('views.auth.login.action_1') }}
-                            </a>
+                            {{--<a class="reset_pass" href="{{ route('password.request') }}">--}}
+                                {{--{{ __('views.auth.login.action_1') }}--}}
+                            {{--</a>--}}
                         </div>
 
                         <div class="clearfix"></div>
 
-                        <div class="separator">
-                            <span>{{ __('views.auth.login.message_0') }}</span>
-                            <div>
-                                <a href="{{ route('social.redirect', ['google']) }}" class="btn btn-success btn-google-plus">
-                                    <i class="fa fa-google-plus"></i>
-                                    Google+
-                                </a>
-                                <a href="{{ route('social.redirect', ['facebook']) }}" class="btn btn-success btn-facebook">
-                                    <i class="fa fa-facebook"></i>
-                                    Facebook
-                                </a>
-                                <a href="{{ route('social.redirect', ['twitter']) }}" class="btn btn-success btn-twitter">
-                                    <i class="fa fa-twitter"></i>
-                                    Twitter
-                                </a>
-                            </div>
-                        </div>
+                        {{--<div class="separator">--}}
+                            {{--<span>{{ __('views.auth.login.message_0') }}</span>--}}
+                            {{--<div>--}}
+                                {{--<a href="{{ route('social.redirect', ['google']) }}" class="btn btn-success btn-google-plus">--}}
+                                    {{--<i class="fa fa-google-plus"></i>--}}
+                                    {{--Google+--}}
+                                {{--</a>--}}
+                                {{--<a href="{{ route('social.redirect', ['facebook']) }}" class="btn btn-success btn-facebook">--}}
+                                    {{--<i class="fa fa-facebook"></i>--}}
+                                    {{--Facebook--}}
+                                {{--</a>--}}
+                                {{--<a href="{{ route('social.redirect', ['twitter']) }}" class="btn btn-success btn-twitter">--}}
+                                    {{--<i class="fa fa-twitter"></i>--}}
+                                    {{--Twitter--}}
+                                {{--</a>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
 
                         @if(config('auth.users.registration'))
                             <div class="separator">
-                                <p class="change_link">{{ __('views.auth.login.message_1') }}
-                                    <a href="{{ route('register') }}" class="to_register"> {{ __('views.auth.login.action_2') }} </a>
-                                </p>
+                                {{--<p class="change_link">{{ __('views.auth.login.message_1') }}--}}
+                                    {{--<a href="{{ route('register') }}" class="to_register"> {{ __('views.auth.login.action_2') }} </a>--}}
+                                {{--</p>--}}
 
-                                <div class="clearfix"></div>
-                                <br/>
+                                {{--<div class="clearfix"></div>--}}
+                                {{--<br/>--}}
 
                                 <div>
                                     <div class="h1">{{ config('app.name') }}</div>

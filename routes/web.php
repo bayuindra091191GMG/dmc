@@ -192,7 +192,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 });
 
 
-Route::get('/', 'HomeController@index');
+Route::get('/', 'Auth\LoginController@showLoginForm');
 
 /**
  * Membership
