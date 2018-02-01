@@ -71,6 +71,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('sites/{site}/ubah/', 'SiteController@edit')->name('sites.edit');
     Route::put('sites/ubah/{site}', 'SiteController@update')->name('sites.update');
 
+    //Suppliers
+    Route::get('suppliers', 'SupplierController@index')->name('suppliers');
+    Route::get('suppliers/tambah', 'SupplierController@create')->name('suppliers.create');
+    Route::post('suppliers/simpan', 'SupplierController@store')->name('suppliers.store');
+    Route::get('suppliers/{supplier}/ubah/', 'SupplierController@edit')->name('suppliers.edit');
+    Route::put('suppliers/ubah/{supplier}', 'SupplierController@update')->name('suppliers.update');
+
     //Employees
     Route::get('employees', 'EmployeeController@index')->name('employees');
     Route::get('employees/tambah', 'EmployeeController@create')->name('employees.create');
@@ -224,6 +231,7 @@ Route::get('/datatables-permission-documents', 'Admin\PermissionDocumentControll
 Route::get('/datatables-permission-menus', 'Admin\PermissionMenuController@getIndex')->name('datatables.permission_menus');
 Route::get('/datatables-approval-rules', 'Admin\ApprovalRuleController@getIndex')->name('datatables.approval_rules');
 Route::get('/datatables-sites', 'Admin\SiteController@getIndex')->name('datatables.sites');
+Route::get('/datatables-suppliers', 'Admin\SupplierController@getIndex')->name('datatables.suppliers');
 
 // PURCHASING
 

@@ -216,6 +216,20 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li><a>Supplier<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.suppliers') }}">
+                                            Daftar Supplier
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.suppliers.create') }}">
+                                            Tambah Supplier
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                             <li><a>Otorisasi Dokumen<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
