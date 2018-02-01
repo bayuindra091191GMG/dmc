@@ -1,11 +1,11 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Tambah Tipe Alat Berat' )
+@section('title', 'Tambah Merek Alat Berat' )
 
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            {{ Form::open(['route'=>['admin.machinery_types.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.machinery_brands.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
 
             @if(\Illuminate\Support\Facades\Session::has('message'))
                 <div class="form-group">
@@ -61,12 +61,12 @@
                 </div>
             </div>
 
-                <div class="form-group">
-                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                        <a class="btn btn-primary" href="{{ route('admin.machinery_types') }}"> Batal</a>
-                        <button type="submit" class="btn btn-success"> Simpan</button>
-                    </div>
+            <div class="form-group">
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <a class="btn btn-primary" href="{{ route('admin.machinery_brands') }}"> Batal</a>
+                    <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
+            </div>
             {{ Form::close() }}
         </div>
     </div>

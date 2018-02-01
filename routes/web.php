@@ -141,6 +141,20 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('machinery_types/tambah', 'MachineryTypeController@create')->name('machinery_types.create');
     Route::post('machinery_types/simpan', 'MachineryTypeController@store')->name('machinery_types.store');
 
+    //Machinery Categories
+    Route::get('machinery_categories', 'MachineryCategoryController@index')->name('machinery_categories');
+    Route::get('machinery_categories/{machinery_category}/ubah', 'MachineryCategoryController@edit')->name('machinery_categories.edit');
+    Route::put('machinery_categories/ubah/{machinery_category}', 'MachineryCategoryController@update')->name('machinery_categories.update');
+    Route::get('machinery_categories/tambah', 'MachineryCategoryController@create')->name('machinery_categories.create');
+    Route::post('machinery_categories/simpan', 'MachineryCategoryController@store')->name('machinery_categories.store');
+
+    //Machinery Brands
+    Route::get('machinery_brands', 'MachineryBrandController@index')->name('machinery_brands');
+    Route::get('machinery_brands/{machinery_brand}/ubah', 'MachineryBrandController@edit')->name('machinery_brands.edit');
+    Route::put('machinery_brands/ubah/{machinery_brand}', 'MachineryBrandController@update')->name('machinery_brands.update');
+    Route::get('machinery_brands/tambah', 'MachineryBrandController@create')->name('machinery_brands.create');
+    Route::post('machinery_brands/simpan', 'MachineryBrandController@store')->name('machinery_brands.store');
+
     //Machineries
     Route::get('machineries', 'MachineryController@index')->name('machineries');
     Route::get('machineries/{machinery}/ubah', 'MachineryController@edit')->name('machineries.edit');
@@ -220,8 +234,10 @@ Route::get('/datatables-users', 'Admin\UserController@anyData')->name('datatable
 Route::get('/datatables-employees', 'Admin\EmployeeController@getIndex')->name('datatables.employees');
 Route::get('/datatables-items', 'Admin\ItemController@getIndex')->name('datatables.items');
 Route::get('/datatables-groups', 'Admin\GroupController@anyData')->name('datatables.groups');
-Route::get('/datatables-machinery_types', 'Admin\MachineryTypeController@getIndex')->name('datatables.machinery_types');
 Route::get('/datatables-machineries', 'Admin\MachineryController@getIndex')->name('datatables.machineries');
+Route::get('/datatables-machinery_types', 'Admin\MachineryTypeController@getIndex')->name('datatables.machinery_types');
+Route::get('/datatables-machinery_categories', 'Admin\MachineryCategoryController@getIndex')->name('datatables.machinery_categories');
+Route::get('/datatables-machinery_brands', 'Admin\MachineryBrandController@getIndex')->name('datatables.machinery_brands');
 Route::get('/datatables-departments', 'Admin\DepartmentController@anyData')->name('datatables.departments');
 Route::get('/datatables-documents', 'Admin\DocumentController@anyData')->name('datatables.documents');
 Route::get('/datatables-payment_methods', 'Admin\PaymentMethodController@anyData')->name('datatables.payment_methods');

@@ -111,7 +111,6 @@ class MachineryTypeController extends Controller
 
         $machineryType->save();
 
-//        return redirect()->intended(route('admin.machinery_types'));
         Session::flash('message', 'Berhasil mengubah data tipe alat berat!');
 
         return redirect()->route('admin.machinery_types.edit', ['machinery_type' => $machineryType]);

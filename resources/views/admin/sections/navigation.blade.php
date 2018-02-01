@@ -272,6 +272,20 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li><a>Merek Alat Berat<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.machinery_brands') }}">
+                                            Daftar Merek Alat Berat
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.machinery_brands.create') }}">
+                                            Tambah Merek Alat Berat
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
                     <li>
