@@ -7,6 +7,7 @@ use App\Models\Auth\User\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
@@ -56,10 +57,9 @@ class UserController extends Controller
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
-        $user = User::create([
-           'name'   => Input::get('name'),
-           'email'  => Input::get('email')
-        ]);
+        $user = new User();
+        $user->name = Input::get('name');
+        $user->email = Input::get('email');
 
         if ($request->has('password')) {
             $user->password = bcrypt($request->get('password'));
@@ -67,6 +67,10 @@ class UserController extends Controller
         }
 
         $user->roles()->attach($request->get('roles'));
+
+        Session::flash('message', 'Berhasil membuat data user baru!');
+
+        return redirect()->route('admin.users');
     }
 
     /**

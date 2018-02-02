@@ -157,10 +157,29 @@ class EmployeeController extends Controller
         return redirect()->route('admin.employees.edit', [ 'employee' => $employee->id]);
     }
 
+    /**
+     * @return mixed
+     * @throws \Exception
+     */
     public function getIndex(){
         $employees = Employee::all();
         return DataTables::of($employees)
             ->setTransformer(new EmployeeTransformer)
             ->make(true);
+    }
+
+    public function getEmployees(Request $request){
+        $term = trim($request->q);
+        $groups = Employee::where('name', 'LIKE', '%'. $term. '%')
+            ->whereOr('code', 'LIKE', '%'. $term. '%')
+            ->get();
+
+        $formatted_tags = [];
+
+        foreach ($groups as $group) {
+            $formatted_tags[] = ['id' => $group->id, 'text' => $group->name];
+        }
+
+        return Response::json($formatted_tags);
     }
 }
