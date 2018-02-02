@@ -9,6 +9,7 @@ use App\Transformer\MasterData\WarehouseTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
@@ -66,20 +67,21 @@ class WarehouseController extends Controller
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
-        $group = Warehouse::create([
+        $user = Auth::user();
+
+        $warehouse = Warehouse::create([
             'code'          => $request->get('code'),
             'name'          => $request->get('name'),
             'location'      => $request->get('location'),
             'phone'         => $request->get('phone'),
-            'updated_by'    => 1,
-            'created_by'    => 1,
+            'created_by'    => $user->id,
             'created_at'    => $dateTimeNow->toDateTimeString()
         ]);
 
 //        return redirect()->intended(route('admin.warehouses'));
         Session::flash('message', 'Berhasil membuat data gudang unit!');
 
-        return redirect()->route('admin.warehouses.create');
+        return redirect()->route('admin.warehouses');
     }
 
     /**

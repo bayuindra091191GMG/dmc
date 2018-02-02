@@ -1,15 +1,18 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Data Otorisasi Dokumen')
+@section('title', 'Daftar Otorisasi Dokumen')
 
 @section('content')
-    <div class="nav navbar-right">
-        <a href="{{ route('admin.permission_documents.create') }}" class="btn btn-app">
-            <i class="fa fa-plus"></i> Tambah
-        </a>
-    </div>
-    <div class="clearfix"></div>
 
+    <div class="row">
+        @include('partials._success')
+        <div class="nav navbar-right">
+            <a href="{{ route('admin.permission_documents.create') }}" class="btn btn-app">
+                <i class="fa fa-plus"></i> Tambah
+            </a>
+        </div>
+        <div class="clearfix"></div>
+    </div>
     <div class="row">
         <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
                width="100%" id="users-table">
@@ -65,7 +68,10 @@
                     { data: 'updated_by', name: 'updated_by' },
                     { data: 'updated_at', name: 'updated_at' },
                     { data: 'action', name:'action' }
-                ]
+                ],
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"
+                }
             });
         });
     </script>

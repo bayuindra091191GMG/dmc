@@ -20,4 +20,9 @@ Breadcrumbs::register('admin.users.edit', function (Generator $breadcrumbs, \App
     $breadcrumbs->push(__('views.admin.users.edit.title', ['name' => $user->name]));
 });
 
+Breadcrumbs::register('admin.machinery_categories', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Kategori Alat Berat');
+});
+
 

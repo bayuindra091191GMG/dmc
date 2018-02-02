@@ -45,7 +45,7 @@ class StatusController extends Controller
 
         Session::flash('message', 'Berhasil membuat data status baru!');
 
-        return redirect()->route('admin.statuses.create');
+        return redirect()->route('admin.statuses');
     }
 
     public function edit($status){

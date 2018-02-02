@@ -3,13 +3,16 @@
 @section('title', 'Data Status')
 
 @section('content')
-    <div class="nav navbar-right">
-        <a href="{{ route('admin.statuses.create') }}" class="btn btn-app">
-            <i class="fa fa-plus"></i> Tambah
-        </a>
-    </div>
-    <div class="clearfix"></div>
 
+    <div clas="row">
+        @include('partials._success')
+        <div class="nav navbar-right">
+            <a href="{{ route('admin.statuses.create') }}" class="btn btn-app">
+                <i class="fa fa-plus"></i> Tambah
+            </a>
+        </div>
+        <div class="clearfix"></div>
+    </div>
     <div class="row">
         <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
                width="100%" id="employees-table">
@@ -45,7 +48,10 @@
                     { data: 'DT_Row_Index', orderable: false, searchable: false},
                     { data: 'description', name: 'description' },
                     { data: 'action', name: 'action' }
-                ]
+                ],
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"
+                }
             });
         });
     </script>

@@ -43,6 +43,7 @@ class EmployeeController extends Controller
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
             'name'      => 'required|max:100',
+            'code'      => 'max:45',
             'email'     => 'email|max:45',
             'phone'     => 'max:45',
             'address'   => 'max:300'
@@ -69,6 +70,7 @@ class EmployeeController extends Controller
 
         $employee = Employee::create([
             'name'          => Input::get('name'),
+            'code'          => Input::get('code'),
             'email'         => Input::get('email'),
             'phone'         => Input::get('phone'),
             'address'       => Input::get('address'),
@@ -87,7 +89,7 @@ class EmployeeController extends Controller
 
         Session::flash('message', 'Berhasil membuat data karyawan baru!');
 
-        return redirect()->route('admin.employees.create');
+        return redirect()->route('admin.employees');
     }
 
     public function edit($employee){
@@ -133,6 +135,7 @@ class EmployeeController extends Controller
         $now = Carbon::now('Asia/Jakarta');
 
         $employee->name = Input::get('name');
+        $employee->code = Input::get('code');
         $employee->email = Input::get('email');
         $employee->phone = Input::get('phone');
         $employee->address = Input::get('address');

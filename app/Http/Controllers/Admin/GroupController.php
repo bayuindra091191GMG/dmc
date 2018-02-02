@@ -27,10 +27,12 @@ class GroupController extends Controller
     }
 
     //DataTables
+
     /**
      * Process datatables ajax request.
      *
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function anyData()
     {
@@ -76,9 +78,9 @@ class GroupController extends Controller
         ]);
 
 //        return redirect()->intended(route('admin.groups'));
-        Session::flash('message', 'Berhasil membuat data golongan baru!');
+        Session::flash('message', 'Berhasil membuat data grup item baru!');
 
-        return redirect()->route('admin.groups.create');
+        return redirect()->route('admin.groups');
     }
 
     /**

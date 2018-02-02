@@ -88,9 +88,9 @@ class PermissionMenuController extends Controller
             'updated_at'    => $dateTimeNow->toDateTimeString()
         ]);
 
-        Session::flash('message', 'Sukses membuat Otorisasi Menu Baru!');
+        Session::flash('message', 'Berhasil membuat data otorisasi menu baru!');
 
-        return redirect(route('admin.permission_menus.create'));
+        return redirect(route('admin.permission_menus'));
     }
 
     /**

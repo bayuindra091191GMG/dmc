@@ -1,16 +1,18 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Index Metode Pembayaran')
+@section('title', 'Daftar Metode Pembayaran')
 
 @section('content')
 
-    <div class="nav navbar-right">
-        <a href="{{ route('admin.payment_methods.create') }}" class="btn btn-app">
-            <i class="fa fa-plus"></i> Tambah
-        </a>
+    <div class="row">
+        @include('partials._success')
+        <div class="nav navbar-right">
+            <a href="{{ route('admin.payment_methods.create') }}" class="btn btn-app">
+                <i class="fa fa-plus"></i> Tambah
+            </a>
+        </div>
+        <div class="clearfix"></div>
     </div>
-    <div class="clearfix"></div>
-
     <div class="row">
         <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
                width="100%" id="payment_methods-table">
@@ -67,7 +69,10 @@
                     { data: 'fee', name: 'fee' },
                     { data: 'status', name: 'status' },
                     { data: 'action', name:'action' }
-                ]
+                ],
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"
+                }
             });
         });
     </script>

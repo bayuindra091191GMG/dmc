@@ -67,9 +67,9 @@ class SiteController extends Controller
             'location'  => $request->get('location')
         ]);
 
-        Session::flash('message', 'Sukses membuat Site Baru!');
+        Session::flash('message', 'Berhasil membuat Site Baru!');
 
-        return redirect(route('admin.sites.create'));
+        return redirect(route('admin.sites'));
     }
 
     /**

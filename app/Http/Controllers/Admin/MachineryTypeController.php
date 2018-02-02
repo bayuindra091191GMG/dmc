@@ -63,7 +63,7 @@ class MachineryTypeController extends Controller
 
         Session::flash('message', 'Berhasil membuat data tipe alat berat baru!');
 
-        return redirect()->route('admin.machinery_types.create');
+        return redirect()->route('admin.machinery_types');
     }
 
     /**

@@ -7,9 +7,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Session;
-use Validator;
 
 class RoleController extends Controller
 {
@@ -65,9 +65,9 @@ class RoleController extends Controller
             'description'   => $request->get('description')
         ]);
 
-        Session::flash('message', 'Sukses membuat Role Baru!');
+        Session::flash('message', 'berhasil membuat data role baru!');
 
-        return redirect(route('admin.roles.create'));
+        return redirect(route('admin.roles'));
     }
 
     /**

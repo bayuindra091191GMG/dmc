@@ -6,7 +6,8 @@ use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Validator;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
@@ -28,7 +29,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $roles = Role::all();
+        return View('admin.users.create', compact('roles'));
     }
 
     /**
@@ -39,7 +41,32 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255'
+        ]);
+
+        $validator->sometimes('email', 'unique:users', function ($input) use ($user) {
+            return strtolower($input->email) != strtolower($user->email);
+        });
+
+        $validator->sometimes('password', 'min:6|confirmed', function ($input) {
+            return $input->password;
+        });
+
+        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
+
+        $user = User::create([
+           'name'   => Input::get('name'),
+           'email'  => Input::get('email')
+        ]);
+
+        if ($request->has('password')) {
+            $user->password = bcrypt($request->get('password'));
+            $user->save();
+        }
+
+        $user->roles()->attach($request->get('roles'));
     }
 
     /**

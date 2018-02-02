@@ -124,9 +124,9 @@ class PermissionDocumentController extends Controller
             'updated_by'    => $user->id
         ]);
 
-        Session::flash('message', 'Sukses membuat Otorisasi Dokumen Baru!');
+        Session::flash('message', 'Berhasil membuat data otorisasi dokumen baru!');
 
-        return redirect(route('admin.permission_documents.create'));
+        return redirect(route('admin.permission_documents'));
     }
 
     /**

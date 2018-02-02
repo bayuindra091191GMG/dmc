@@ -1,16 +1,18 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Index Departemen')
+@section('title', 'Daftar Departemen')
 
 @section('content')
 
-    <div class="nav navbar-right">
-        <a href="{{ route('admin.departments.create') }}" class="btn btn-app">
-            <i class="fa fa-plus"></i> Tambah
-        </a>
+    <div class="row">
+        @include('partials._success')
+        <div class="nav navbar-right">
+            <a href="{{ route('admin.departments.create') }}" class="btn btn-app">
+                <i class="fa fa-plus"></i> Tambah
+            </a>
+        </div>
+        <div class="clearfix"></div>
     </div>
-    <div class="clearfix"></div>
-
     <div class="row">
         <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
                width="100%" id="departments-table">
@@ -27,27 +29,6 @@
             </tr>
             </thead>
             <tbody>
-            {{--@foreach($departments as $department)--}}
-                {{--<tr>--}}
-                    {{--<td>{{ $department->code }}</td>--}}
-                    {{--<td>{{ $department->name }}</td>--}}
-                    {{--<td>{{ $department->createdBy->email }}</td>--}}
-                    {{--<td>{{ $department->created_at }}</td>--}}
-                    {{--<td>{{ $department->updatedBy->email }}</td>--}}
-                    {{--<td>{{ $department->updated_at }}</td>--}}
-                    {{--<td>--}}
-                        {{--<a class="btn btn-xs btn-info" href="{{ route('admin.departments.edit', [$department->id]) }}" data-toggle="tooltip" data-placement="top" data-title="Ubah">--}}
-                            {{--<i class="fa fa-pencil"></i>--}}
-                        {{--</a>--}}
-                        {{--@if(!$user->hasRole('administrator'))--}}
-                            {{--<button class="btn btn-xs btn-danger user_destroy"--}}
-                                    {{--data-url="{{ route('admin.users.destroy', [$user->id]) }}" data-toggle="tooltip" data-placement="top" data-title="{{ __('views.admin.users.index.delete') }}">--}}
-                                {{--<i class="fa fa-trash"></i>--}}
-                            {{--</button>--}}
-                        {{--@endif--}}
-                    {{--</td>--}}
-                {{--</tr>--}}
-            {{--@endforeach--}}
             </tbody>
         </table>
     </div>
@@ -76,7 +57,10 @@
                     { data: 'updated_by', name: 'updated_by' },
                     { data: 'updated_at', name: 'updated_at' },
                     { data: 'action', name:'action' }
-                ]
+                ],
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"
+                }
             });
         });
     </script>

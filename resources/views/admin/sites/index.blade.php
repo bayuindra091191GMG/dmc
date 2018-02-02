@@ -49,7 +49,10 @@
                     { data: 'name', name: 'name' },
                     { data: 'location', name: 'location' },
                     { data: 'action', name:'action' }
-                ]
+                ],
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"
+                }
             });
         });
     </script>

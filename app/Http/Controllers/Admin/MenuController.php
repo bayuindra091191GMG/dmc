@@ -75,7 +75,7 @@ class MenuController extends Controller
 //        return redirect()->intended(route('admin.menus'));
         Session::flash('message', 'Berhasil membuat data menu baru!');
 
-        return redirect()->route('admin.menus.create');
+        return redirect()->route('admin.menus');
     }
 
     /**

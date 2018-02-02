@@ -56,8 +56,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     //Users
     Route::get('users', 'UserController@index')->name('users');
     Route::get('users/{user}', 'UserController@show')->name('users.show');
+    Route::get('users/tambah', 'UserController@create')->name('users.create');
+    Route::post('users/simpan', 'UserController@store')->name('users.store');
     Route::get('users/{user}/ubah', 'UserController@edit')->name('users.edit');
-    Route::put('users/{user}', 'UserController@update')->name('users.update');
+    Route::put('users/ubah/{user}', 'UserController@update')->name('users.update');
     Route::delete('users/{user}', 'UserController@destroy')->name('users.destroy');
     Route::get('permissions', 'PermissionController@index')->name('permissions');
     Route::get('permissions/{user}/repeat', 'PermissionController@repeat')->name('permissions.repeat');

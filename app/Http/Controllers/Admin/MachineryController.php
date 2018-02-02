@@ -108,7 +108,7 @@ class MachineryController extends Controller
 
         Session::flash('message', 'Berhasil membuat data alat berat baru!');
 
-        return redirect()->route('admin.machineries.create');
+        return redirect()->route('admin.machineries');
     }
 
     /**

@@ -89,9 +89,9 @@ class ApprovalRuleController extends Controller
             'updated_at'        => $dateTimeNow->toDateTimeString()
         ]);
 
-        Session::flash('message', 'Sukses membuat Pengaturan Approval Baru!');
+        Session::flash('message', 'Berhasil membuat data pengaturan approval baru!');
 
-        return redirect(route('admin.approval_rules.create'));
+        return redirect(route('admin.approval_rules'));
     }
 
     /**

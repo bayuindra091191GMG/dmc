@@ -22,7 +22,6 @@ use Kyslik\ColumnSortable\Sortable;
  * @property string $email
  * @property string $password
  * @property int $active
- * @property int $site_id
  * @property string $confirmation_code
  * @property bool $confirmed
  * @property string $remember_token
@@ -71,7 +70,6 @@ class User extends Authenticatable
     protected $casts = [
         'employee_id' => 'int',
         'active' => 'int',
-        'site_id' => 'int',
         'confirmed' => 'bool',
         'status_id' => 'int',
         'created_by' => 'int',
@@ -98,7 +96,6 @@ class User extends Authenticatable
         'confirmation_code',
         'confirmed',
         'username',
-        'site_id',
         'status_id',
         'created_by',
         'updated_by'];
@@ -116,4 +113,84 @@ class User extends Authenticatable
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    public function employee()
+    {
+        return $this->belongsTo(\App\Models\Employee::class);
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(\App\Models\Status::class);
+    }
+
+    public function approval_payment_requests()
+    {
+        return $this->hasMany(\App\Models\ApprovalPaymentRequest::class);
+    }
+
+    public function approval_purchase_requests()
+    {
+        return $this->hasMany(\App\Models\ApprovalPurchaseRequest::class);
+    }
+
+    public function approval_rules()
+    {
+        return $this->hasMany(\App\Models\ApprovalRule::class);
+    }
+
+    public function departments()
+    {
+        return $this->hasMany(\App\Models\Department::class, 'updated_by');
+    }
+
+    public function employees()
+    {
+        return $this->hasMany(\App\Models\Employee::class, 'updated_by');
+    }
+
+    public function items()
+    {
+        return $this->hasMany(\App\Models\Item::class, 'updated_by');
+    }
+
+    public function machineries()
+    {
+        return $this->hasMany(\App\Models\Machinery::class, 'updated_by');
+    }
+
+    public function payment_requests()
+    {
+        return $this->hasMany(\App\Models\PaymentRequest::class, 'updated_by');
+    }
+
+    public function permission_documents()
+    {
+        return $this->hasMany(\App\Models\PermissionDocument::class, 'updated_by');
+    }
+
+    public function purchase_order_headers()
+    {
+        return $this->hasMany(\App\Models\PurchaseOrderHeader::class, 'updated_by');
+    }
+
+    public function purchase_request_headers()
+    {
+        return $this->hasMany(\App\Models\PurchaseRequestHeader::class, 'updated_by');
+    }
+
+    public function serials()
+    {
+        return $this->hasMany(\App\Models\Serial::class, 'updated_by');
+    }
+
+    public function suppliers()
+    {
+        return $this->hasMany(\App\Models\Supplier::class, 'updated_by');
+    }
+
+    public function warehouses()
+    {
+        return $this->hasMany(\App\Models\Warehouse::class, 'updated_by');
+    }
 }

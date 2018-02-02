@@ -47,7 +47,7 @@ class MachineryCategoryController extends Controller
 
         Session::flash('message', 'Berhasil membuat data kategori alat berat baru!');
 
-        return redirect()->route('admin.machinery_categories.create');
+        return redirect()->route('admin.machinery_categories');
     }
 
     public function edit(MachineryCategory $machineryCategory){

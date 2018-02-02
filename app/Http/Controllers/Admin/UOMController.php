@@ -26,10 +26,12 @@ class UOMController extends Controller
     }
 
     //DataTables
+
     /**
      * Process datatables ajax request.
      *
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function anyData()
     {
@@ -72,7 +74,7 @@ class UOMController extends Controller
 //        return redirect()->intended(route('admin.uoms'));
         Session::flash('message', 'Berhasil membuat data alat satuan unit!');
 
-        return redirect()->route('admin.uoms.create');
+        return redirect()->route('admin.uoms');
     }
 
     /**

@@ -63,16 +63,14 @@ class DocumentController extends Controller
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
-        $dateTimeNow = Carbon::now('Asia/Jakarta');
 
         $group = Document::create([
             'description'          => $request->get('description')
         ]);
 
-//        return redirect()->intended(route('admin.documents'));
         Session::flash('message', 'Berhasil membuat data dokumen baru!');
 
-        return redirect()->route('admin.documents.create');
+        return redirect()->route('admin.documents');
     }
 
     /**

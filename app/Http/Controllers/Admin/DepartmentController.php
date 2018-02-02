@@ -76,7 +76,7 @@ class DepartmentController extends Controller
 
         Session::flash('message', 'Berhasil membuat data departemen baru!');
 
-        return redirect()->route('admin.departments.create');
+        return redirect()->route('admin.departments');
     }
 
     /**

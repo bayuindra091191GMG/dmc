@@ -95,9 +95,9 @@ class SupplierController extends Controller
             $supplier->save();
         }
 
-        Session::flash('message', 'Sukses membuat Supplier Baru!');
+        Session::flash('message', 'berhasil membuat data vendor baru!');
 
-        return redirect(route('admin.suppliers.create'));
+        return redirect(route('admin.suppliers'));
     }
 
     /**
@@ -168,7 +168,7 @@ class SupplierController extends Controller
             $supplier->save();
         }
 
-        Session::flash('message', 'Sukses mengubah data Supplier!');
+        Session::flash('message', 'Berhasil mengubah data vendor!');
 
         return redirect(route('admin.suppliers.edit', ['supplier' => $supplier->id]));
     }

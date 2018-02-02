@@ -47,7 +47,7 @@ class MachineryBrandController extends Controller
 
         Session::flash('message', 'Berhasil membuat data merek alat berat baru!');
 
-        return redirect()->route('admin.machinery_brand.create');
+        return redirect()->route('admin.machinery_brands');
     }
 
     public function edit(MachineryBrand $machineryBrand){

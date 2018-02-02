@@ -7,15 +7,6 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             {{ Form::open(['route'=>['admin.machinery_categories.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
 
-            @if(\Illuminate\Support\Facades\Session::has('message'))
-                <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        @include('partials._success')
-                    </div>
-                </div>
-            @endif
 
             @if(count($errors))
                 <div class="form-group">
@@ -48,7 +39,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
-                           name="code"  value="{{ old('code') }}" required>
+                           name="code"  value="{{ old('code') }}">
                 </div>
             </div>
 

@@ -80,7 +80,7 @@ class PaymentMethodController extends Controller
 
         Session::flash('message', 'Berhasil membuat data metode pembayaran baru!');
 
-        return redirect()->route('admin.payment_methods.create');
+        return redirect()->route('admin.payment_methods');
     }
 
     /**
