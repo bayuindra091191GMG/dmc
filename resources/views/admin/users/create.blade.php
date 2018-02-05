@@ -5,7 +5,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            {{ Form::open(['route'=>['admin.users.update', $user->id],'method' => 'put','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>'admin.users.store', 'method' => 'post','class'=>'form-horizontal form-label-left']) }}
 
             @if(\Illuminate\Support\Facades\Session::has('message'))
                 <div class="form-group">
@@ -33,7 +33,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name" >
-                    Nama
+                    Nama Lengkap
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -50,6 +50,16 @@
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="email" type="email" class="form-control col-md-7 col-xs-12 @if($errors->has('email')) parsley-error @endif"
                            name="email" value="{{ old('name') }}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="employee">
+                    Sambung ke karyawan
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="employee" name="employee" class="form-control col-md-7 col-xs-12">
+                    </select>
                 </div>
             </div>
 
@@ -74,11 +84,11 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="roles">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="role">
                     Jabatan
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="roles" name="roles" class="form-control col-md-7 col-xs-12">
+                    <select id="role" name="role" class="form-control col-md-7 col-xs-12">
                         <option value="-1"> - Pilih Role - </option>
                         @foreach($roles as $role)
                             <option value="{{ $role->id }}">{{ $role->name }}</option>
@@ -100,10 +110,33 @@
 
 @section('styles')
     @parent
-    {{ Html::style(mix('assets/admin/css/users/edit.css')) }}
+    {{ Html::style(mix('assets/admin/css/select2.css')) }}
 @endsection
 
 @section('scripts')
     @parent
-    {{ Html::script(mix('assets/admin/js/users/edit.js')) }}
+    {{ Html::script(mix('assets/admin/js/select2.js')) }}
+    <script>
+        $('#employee').select2({
+            placeholder: {
+                id: '-1',
+                text: 'Pilih Karyawan...'
+            },
+            minimumInputLength: 2,
+            ajax: {
+                url: '{{ route('select.employees') }}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: $.trim(params.term)
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+    </script>
 @endsection

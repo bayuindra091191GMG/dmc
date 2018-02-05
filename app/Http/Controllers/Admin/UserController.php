@@ -44,12 +44,12 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',
-            'email' => 'required|email|max:255'
+            'email' => 'required|email|unique:users|max:255'
         ]);
 
-        $validator->sometimes('email', 'unique:users', function ($input) use ($user) {
-            return strtolower($input->email) != strtolower($user->email);
-        });
+//        $validator->sometimes('email', 'unique:users', function ($input) use ($user) {
+//            return strtolower($input->email) != strtolower($user->email);
+//        });
 
         $validator->sometimes('password', 'min:6|confirmed', function ($input) {
             return $input->password;
@@ -60,13 +60,14 @@ class UserController extends Controller
         $user = new User();
         $user->name = Input::get('name');
         $user->email = Input::get('email');
+        if(!empty(Input::get('employee'))) $user->employee_id = Input::get('employee');
 
         if ($request->has('password')) {
             $user->password = bcrypt($request->get('password'));
             $user->save();
         }
 
-        $user->roles()->attach($request->get('roles'));
+        $user->roles()->attach($request->get('role'));
 
         Session::flash('message', 'Berhasil membuat data user baru!');
 
@@ -123,6 +124,11 @@ class UserController extends Controller
 
         $user->name = $request->get('name');
         $user->email = $request->get('email');
+        $user->employee_id = Input::get('employee');
+
+        if(!empty(Input::get('employee')) && Input::get('employee') !== '-1'){
+            $user->employee_id = Input::get('employee');
+        }
 
         if ($request->has('password')) {
             $user->password = bcrypt($request->get('password'));
@@ -134,11 +140,11 @@ class UserController extends Controller
         $user->save();
 
         //roles
-        if ($request->has('roles')) {
+        if ($request->has('role')) {
             $user->roles()->detach();
 
-            if ($request->get('roles')) {
-                $user->roles()->attach($request->get('roles'));
+            if ($request->get('role')) {
+                $user->roles()->attach($request->get('role'));
             }
         }
 

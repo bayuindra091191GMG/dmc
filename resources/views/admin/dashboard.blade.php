@@ -4,6 +4,9 @@
     <!-- page content -->
     <!-- top tiles -->
     <div class="row tile_count">
+        <h1>CONTOH DASHBOARD</h1>
+    </div>
+    <div class="row tile_count">
         <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-users"></i> {{ __('views.admin.dashboard.count_0') }}</span>
             <div class="count green">{{ $counts['users'] }}</div>
@@ -228,31 +231,31 @@
     </div>
 
     {{--Carousel--}}
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_panel">
-                <div class="row x_title">
-                    <div class="col-md-6">
-                        <h3>
-                            {!! __('views.admin.dashboard.sub_title_5',['href'=>'https://photolancer.zone']) !!}
-                        </h3>
-                    </div>
-                </div>
-                <div class="x_content">
-                    <div class="col-md-12">
-                        <div class="jcarousel">
-                            <div class="loading">{{ __('views.admin.dashboard.loading') }}</div>
-                        </div>
+    {{--<div class="row">--}}
+        {{--<div class="col-md-12 col-sm-12 col-xs-12">--}}
+            {{--<div class="x_panel">--}}
+                {{--<div class="row x_title">--}}
+                    {{--<div class="col-md-6">--}}
+                        {{--<h3>--}}
+                            {{--{!! __('views.admin.dashboard.sub_title_5',['href'=>'https://photolancer.zone']) !!}--}}
+                        {{--</h3>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+                {{--<div class="x_content">--}}
+                    {{--<div class="col-md-12">--}}
+                        {{--<div class="jcarousel">--}}
+                            {{--<div class="loading">{{ __('views.admin.dashboard.loading') }}</div>--}}
+                        {{--</div>--}}
 
-                    </div>
-                    <div class="col-md-12 text-center jcarousel-control">
-                        <a href="#" class="jcarousel-control-prev">&lsaquo;</a>
-                        <a href="#" class="jcarousel-control-next">&rsaquo;</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                    {{--</div>--}}
+                    {{--<div class="col-md-12 text-center jcarousel-control">--}}
+                        {{--<a href="#" class="jcarousel-control-prev">&lsaquo;</a>--}}
+                        {{--<a href="#" class="jcarousel-control-next">&rsaquo;</a>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
 @endsection
 
 @section('scripts')

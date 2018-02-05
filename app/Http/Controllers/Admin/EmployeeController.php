@@ -170,16 +170,16 @@ class EmployeeController extends Controller
 
     public function getEmployees(Request $request){
         $term = trim($request->q);
-        $groups = Employee::where('name', 'LIKE', '%'. $term. '%')
+        $employees= Employee::where('name', 'LIKE', '%'. $term. '%')
             ->whereOr('code', 'LIKE', '%'. $term. '%')
             ->get();
 
         $formatted_tags = [];
 
-        foreach ($groups as $group) {
-            $formatted_tags[] = ['id' => $group->id, 'text' => $group->name];
+        foreach ($employees as $employee) {
+            $formatted_tags[] = ['id' => $employee->id, 'text' => $employee->code. ' '. $employee->name];
         }
 
-        return Response::json($formatted_tags);
+        return \Response::json($formatted_tags);
     }
 }

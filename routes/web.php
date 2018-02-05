@@ -55,12 +55,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     //Users
     Route::get('users', 'UserController@index')->name('users');
-    Route::get('users/{user}', 'UserController@show')->name('users.show');
+//    Route::get('users/{user}', 'UserController@show')->name('users.show');
     Route::get('users/tambah', 'UserController@create')->name('users.create');
     Route::post('users/simpan', 'UserController@store')->name('users.store');
     Route::get('users/{user}/ubah', 'UserController@edit')->name('users.edit');
     Route::put('users/ubah/{user}', 'UserController@update')->name('users.update');
-    Route::delete('users/{user}', 'UserController@destroy')->name('users.destroy');
+    Route::delete('users/hapus/{user}', 'UserController@destroy')->name('users.destroy');
     Route::get('permissions', 'PermissionController@index')->name('permissions');
     Route::get('permissions/{user}/repeat', 'PermissionController@repeat')->name('permissions.repeat');
     Route::get('dashboard/log-chart', 'DashboardController@getLogChartData')->name('dashboard.log.chart');
@@ -223,6 +223,7 @@ Route::group(['as' => 'protection.'], function () {
  * Select2
  */
 
+Route::get('/select-employees', 'Admin\EmployeeController@getEmployees')->name('select.employees');
 Route::get('/select-warehouses', 'Admin\ItemController@getWarehouse')->name('select.warehouses');
 Route::get('/select-groups', 'Admin\GroupController@getGroups')->name('select.groups');
 Route::get('/select-machinery_types', 'Admin\MachineryTypeController@getMachineryTypes')->name('select.machinery_types');
