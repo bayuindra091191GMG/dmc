@@ -205,6 +205,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('menus/ubah/{menu}', 'MenuController@update')->name('menus.update');
     Route::get('menus/tambah', 'MenuController@create')->name('menus.create');
     Route::post('menus/simpan', 'MenuController@store')->name('menus.store');
+
+    //Purchase Requests
+    Route::get('purchase_requests', 'Purchasing\PurchaseRequestController@index')->name('purchase_requests');
+    Route::get('purchase_requests/{purchase_request}/ubah', 'Purchasing\PurchaseRequestController@edit')->name('purchase_requests.edit');
+    Route::put('purchase_requests/ubah/{purchase_request}', 'Purchasing\PurchaseRequestController@update')->name('purchase_requests.update');
+    Route::get('purchase_requests/tambah', 'Purchasing\PurchaseRequestController@create')->name('purchase_requests.create');
+    Route::post('purchase_requests/simpan', 'Purchasing\PurchaseRequestController@store')->name('purchase_requests.store');
 });
 
 
@@ -224,8 +231,10 @@ Route::group(['as' => 'protection.'], function () {
  */
 
 Route::get('/select-employees', 'Admin\EmployeeController@getEmployees')->name('select.employees');
+Route::get('/select-items', 'Admin\ItemController@getItems')->name('select.items');
 Route::get('/select-warehouses', 'Admin\ItemController@getWarehouse')->name('select.warehouses');
 Route::get('/select-groups', 'Admin\GroupController@getGroups')->name('select.groups');
+Route::get('/select-machineries', 'Admin\MachineryController@getMachineries')->name('select.machineries');
 Route::get('/select-machinery_types', 'Admin\MachineryTypeController@getMachineryTypes')->name('select.machinery_types');
 
 /**

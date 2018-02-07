@@ -341,6 +341,28 @@
                     </li>
                 </ul>
             </div>
+
+            <div class="menu_section">
+                <h3>Purchasing</h3>
+
+                <ul class="nav side-menu">
+                    <li>
+                        <a>Purchase Request<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="sub_menu">
+                                <a href="{{ route('admin.purchase_requests') }}">
+                                    Daftar PR
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.purchase_requests.create') }}">
+                                    Buat Baru
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
             {{--<div class="menu_section">--}}
                 {{--<h3>{{ __('views.backend.section.navigation.sub_header_2') }}</h3>--}}
 

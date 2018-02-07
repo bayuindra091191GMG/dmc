@@ -171,7 +171,7 @@ class EmployeeController extends Controller
     public function getEmployees(Request $request){
         $term = trim($request->q);
         $employees= Employee::where('name', 'LIKE', '%'. $term. '%')
-            ->whereOr('code', 'LIKE', '%'. $term. '%')
+            ->orWhere('code', 'LIKE', '%'. $term. '%')
             ->get();
 
         $formatted_tags = [];

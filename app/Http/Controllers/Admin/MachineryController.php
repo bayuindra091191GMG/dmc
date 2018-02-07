@@ -186,10 +186,24 @@ class MachineryController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function destroy($id)
     {
         //
+    }
+
+    public function getMachineries(Request $request){
+        $term = trim($request->q);
+        $machineries = Machinery::where('code', 'LIKE', '%'. $term. '%')
+            ->get();
+
+        $formatted_tags = [];
+
+        foreach ($machineries as $machinery) {
+            $formatted_tags[] = ['id' => $machinery->id, 'text' => $machinery->code];
+        }
+
+        return \Response::json($formatted_tags);
     }
 }

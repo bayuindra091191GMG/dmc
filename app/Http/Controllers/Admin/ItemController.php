@@ -118,4 +118,19 @@ class ItemController extends Controller
 
         return Response::json($formatted_tags);
     }
+
+    public function getItems(Request $request){
+        $term = trim($request->q);
+        $items = Item::where('code', 'LIKE', '%'. $term. '%')
+            ->orWhere('name', 'LIKE', '%'. $term. '%')
+            ->get();
+
+        $formatted_tags = [];
+
+        foreach ($items as $item) {
+            $formatted_tags[] = ['id' => $item->id, 'text' => $item->code. ' - '. $item->name];
+        }
+
+        return \Response::json($formatted_tags);
+    }
 }
