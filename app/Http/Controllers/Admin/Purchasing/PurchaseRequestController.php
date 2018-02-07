@@ -32,6 +32,12 @@ class PurchaseRequestController extends Controller
         return View('admin.purchasing.purchase_requests.create', compact('departments'));
     }
 
+    public function show(PurchaseRequestHeader $purchaseRequestHeader){
+        $header = $purchaseRequestHeader;
+
+        return View('admin.purchasing.purchase_requests.show', compact('header'));
+    }
+
     public function store(Request $request){
 
         $validator = Validator::make($request->all(),[
@@ -91,6 +97,6 @@ class PurchaseRequestController extends Controller
 
         Session::flash('message', 'Berhasil membuat purchase request!');
 
-        return redirect()->route('admin.purchase_requests');
+        return redirect()->route('admin.purchase_requests.show', ['purchase_request_header' => $prHeader]);
     }
 }
