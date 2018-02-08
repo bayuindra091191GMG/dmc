@@ -207,11 +207,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('menus/simpan', 'MenuController@store')->name('menus.store');
 
     //Purchase Requests
-    Route::get('purchase_requests', 'Purchasing\PurchaseRequestController@index')->name('purchase_requests');
-    Route::get('purchase_requests/{purchase_request}/ubah', 'Purchasing\PurchaseRequestController@edit')->name('purchase_requests.edit');
-    Route::put('purchase_requests/ubah/{purchase_request}', 'Purchasing\PurchaseRequestController@update')->name('purchase_requests.update');
-    Route::get('purchase_requests/tambah', 'Purchasing\PurchaseRequestController@create')->name('purchase_requests.create');
-    Route::post('purchase_requests/simpan', 'Purchasing\PurchaseRequestController@store')->name('purchase_requests.store');
+    Route::get('purchase_requests', 'Purchasing\PurchaseRequestHeaderController@index')->name('purchase_requests');
+    Route::get('purchase_requests/detil/{purchase_request}', 'Purchasing\PurchaseRequestHeaderController@show')->name('purchase_requests.show');
+    Route::get('purchase_requests/{purchase_request}/ubah', 'Purchasing\PurchaseRequestHeaderController@edit')->name('purchase_requests.edit');
+    Route::put('purchase_requests/ubah/{purchase_request}', 'Purchasing\PurchaseRequestHeaderController@update')->name('purchase_requests.update');
+    Route::get('purchase_requests/tambah', 'Purchasing\PurchaseRequestHeaderController@create')->name('purchase_requests.create');
+    Route::post('purchase_requests/simpan', 'Purchasing\PurchaseRequestHeaderController@store')->name('purchase_requests.store');
 });
 
 
@@ -255,15 +256,16 @@ Route::get('/datatables-documents', 'Admin\DocumentController@anyData')->name('d
 Route::get('/datatables-payment_methods', 'Admin\PaymentMethodController@anyData')->name('datatables.payment_methods');
 Route::get('/datatables-uoms', 'Admin\UOMController@anyData')->name('datatables.uoms');
 Route::get('/datatables-warehouses', 'Admin\WarehouseController@anyData')->name('datatables.warehouses');
-Route::get('/datatables-roles', 'Admin\RoleController@getIndex')->name('datatables.roles');
-Route::get('/datatables-permission-documents', 'Admin\PermissionDocumentController@getIndex')->name('datatables.permission_documents');
-Route::get('/datatables-permission-menus', 'Admin\PermissionMenuController@getIndex')->name('datatables.permission_menus');
-Route::get('/datatables-approval-rules', 'Admin\ApprovalRuleController@getIndex')->name('datatables.approval_rules');
 Route::get('/datatables-sites', 'Admin\SiteController@getIndex')->name('datatables.sites');
 Route::get('/datatables-suppliers', 'Admin\SupplierController@getIndex')->name('datatables.suppliers');
 
 // PURCHASING
+Route::get('/datatables-purchase_requests', 'Admin\Purchasing\PurchaseRequestHeaderController@getIndex')->name('datatables.purchase_requests');
 
 // AUTHORIZATION
+Route::get('/datatables-permission-documents', 'Admin\PermissionDocumentController@getIndex')->name('datatables.permission_documents');
+Route::get('/datatables-permission-menus', 'Admin\PermissionMenuController@getIndex')->name('datatables.permission_menus');
+Route::get('/datatables-approval-rules', 'Admin\ApprovalRuleController@getIndex')->name('datatables.approval_rules');
+Route::get('/datatables-roles', 'Admin\RoleController@getIndex')->name('datatables.roles');
 
 // STOCK

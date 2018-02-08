@@ -34,6 +34,7 @@
         "laravelcollective/html": "5.5.*",
         "reliese/laravel": "^0.0.13",
         "yajra/laravel-datatables": "1.0",
+        "yajra/laravel-datatables-editor": "1.0",
         "yajra/laravel-datatables-html": "3.0",
         "yajra/laravel-datatables-oracle": "8.0"
     },

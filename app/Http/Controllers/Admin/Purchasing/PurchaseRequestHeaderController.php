@@ -13,13 +13,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\PurchaseRequestDetail;
 use App\Models\PurchaseRequestHeader;
+use App\Transformer\Purchasing\PurchaseRequestHeaderTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\DataTables;
 
-class PurchaseRequestController extends Controller
+class PurchaseRequestHeaderController extends Controller
 {
     public function index(){
 
@@ -32,8 +34,10 @@ class PurchaseRequestController extends Controller
         return View('admin.purchasing.purchase_requests.create', compact('departments'));
     }
 
-    public function show(PurchaseRequestHeader $purchaseRequestHeader){
-        $header = $purchaseRequestHeader;
+    public function show(PurchaseRequestHeader $purchase_request){
+        $header = $purchase_request;
+
+//        dd($header->department->name);
 
         return View('admin.purchasing.purchase_requests.show', compact('header'));
     }
@@ -97,6 +101,26 @@ class PurchaseRequestController extends Controller
 
         Session::flash('message', 'Berhasil membuat purchase request!');
 
-        return redirect()->route('admin.purchase_requests.show', ['purchase_request_header' => $prHeader]);
+        return redirect()->route('admin.purchasing.purchase_requests.show', ['purchase_request_header' => $prHeader]);
+    }
+
+    public function edit(PurchaseRequestHeader $purchase_request){
+        $header = $purchase_request;
+        $departments = Department::all();
+
+        $data = [
+            'header'        => $header,
+            'departments'   => $departments
+        ];
+
+        return View('admin.purchasing.purchase_requests.edit')->with($data);
+    }
+
+    public function getIndex(){
+        $purchaseRequests = PurchaseRequestHeader::all();
+        return DataTables::of($purchaseRequests)
+            ->setTransformer(new PurchaseRequestHeaderTransformer)
+            ->addIndexColumn()
+            ->make(true);
     }
 }
