@@ -267,3 +267,8 @@ Route::get('/datatables-suppliers', 'Admin\SupplierController@getIndex')->name('
 // AUTHORIZATION
 
 // STOCK
+
+// DOCUMENTS
+Route::get('/documents/purchase-request', function (){
+   return view('documents.Victor23mega PR Example');
+});
