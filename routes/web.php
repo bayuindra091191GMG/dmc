@@ -269,3 +269,8 @@ Route::get('/datatables-approval-rules', 'Admin\ApprovalRuleController@getIndex'
 Route::get('/datatables-roles', 'Admin\RoleController@getIndex')->name('datatables.roles');
 
 // STOCK
+
+// DOCUMENTS
+Route::get('/documents/purchase-request', function (){
+   return view('documents.Victor23mega PR Example');
+});
