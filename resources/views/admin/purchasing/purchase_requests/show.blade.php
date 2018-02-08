@@ -14,6 +14,17 @@
     <div class="row">
         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
             <form class="form-horizontal form-label-left box-section">
+
+                @if(\Illuminate\Support\Facades\Session::has('message'))
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @include('partials._success')
+                        </div>
+                    </div>
+                @endif
+
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
                         Departemen

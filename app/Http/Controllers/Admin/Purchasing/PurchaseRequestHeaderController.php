@@ -101,7 +101,7 @@ class PurchaseRequestHeaderController extends Controller
 
         Session::flash('message', 'Berhasil membuat purchase request!');
 
-        return redirect()->route('admin.purchasing.purchase_requests.show', ['purchase_request_header' => $prHeader]);
+        return redirect()->route('admin.purchase_requests.show', ['purchase_request' => $prHeader]);
     }
 
     public function edit(PurchaseRequestHeader $purchase_request){

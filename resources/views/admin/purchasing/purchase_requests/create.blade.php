@@ -8,16 +8,6 @@
 
             {{ Form::open(['route'=>['admin.purchase_requests.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
 
-            @if(\Illuminate\Support\Facades\Session::has('message'))
-                <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        @include('partials._success')
-                    </div>
-                </div>
-            @endif
-
             @if(count($errors))
                 <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">
@@ -128,7 +118,7 @@
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                     <a class="btn btn-primary" href="{{ route('admin.purchase_requests') }}"> Batal</a>
-                    <button type="submit" class="btn btn-success"> </button>
+                    <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>
             {{ Form::close() }}
