@@ -86,7 +86,7 @@ class ItemController extends Controller
 
         Session::flash('message', 'Berhasil membuat data barang baru!');
 
-        return redirect()->route('admin.employees');
+        return redirect()->route('admin.items');
     }
 
     public function edit($item){

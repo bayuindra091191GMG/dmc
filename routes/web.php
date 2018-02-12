@@ -91,7 +91,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('items', 'ItemController@index')->name('items');
     Route::get('items/tambah', 'ItemController@create')->name('items.create');
     Route::post('items/simpan', 'ItemController@store')->name('items.store');
-    Route::get('items/{status}/ubah', 'Itemontroller@create')->name('items.edit');
+    Route::get('items/{status}/ubah', 'ItemController@create')->name('items.edit');
     Route::put('items/ubah/{status}', 'ItemController@update')->name('items.update');
 
     //Statuses
@@ -206,13 +206,20 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('menus/tambah', 'MenuController@create')->name('menus.create');
     Route::post('menus/simpan', 'MenuController@store')->name('menus.store');
 
-    //Purchase Requests
+    //Purchase Request Headers
     Route::get('purchase_requests', 'Purchasing\PurchaseRequestHeaderController@index')->name('purchase_requests');
     Route::get('purchase_requests/detil/{purchase_request}', 'Purchasing\PurchaseRequestHeaderController@show')->name('purchase_requests.show');
     Route::get('purchase_requests/{purchase_request}/ubah', 'Purchasing\PurchaseRequestHeaderController@edit')->name('purchase_requests.edit');
     Route::put('purchase_requests/ubah/{purchase_request}', 'Purchasing\PurchaseRequestHeaderController@update')->name('purchase_requests.update');
     Route::get('purchase_requests/tambah', 'Purchasing\PurchaseRequestHeaderController@create')->name('purchase_requests.create');
     Route::post('purchase_requests/simpan', 'Purchasing\PurchaseRequestHeaderController@store')->name('purchase_requests.store');
+
+    //Purchase Request Details
+    Route::get('purchase_request_details', 'Purchasing\PurchaseRequestDetailController@index')->name('purchase_request_details');
+    Route::get('purchase_request_details/{purchase_request_detail}/ubah', 'Purchasing\PurchaseRequestDetailController@edit')->name('purchase_request_details.edit');
+    Route::put('purchase_request_details/ubah/simpan', 'Purchasing\PurchaseRequestDetailController@update')->name('purchase_request_details.update');
+    Route::get('purchase_request_details/tambah', 'Purchasing\PurchaseRequestDetailController@create')->name('purchase_request_details.create');
+    Route::post('purchase_request_details/simpan', 'Purchasing\PurchaseRequestDetailController@store')->name('purchase_request_details.store');
 });
 
 

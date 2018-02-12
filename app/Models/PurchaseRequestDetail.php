@@ -7,6 +7,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -45,6 +46,10 @@ class PurchaseRequestDetail extends Eloquent
 		'remark',
 		'delivery_date'
 	];
+
+	public function getDeliveryDateAttribute(){
+        return Carbon::parse($this->attributes['delivery_date'])->format('d M Y');
+    }
 
 	public function item()
 	{

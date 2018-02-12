@@ -50,6 +50,8 @@ class Item extends Eloquent
 		'updated_by' => 'int'
 	];
 
+	protected $appends = array('uomDescription');
+
 	protected $fillable = [
 		'code',
 		'name',
@@ -63,6 +65,15 @@ class Item extends Eloquent
 		'created_by',
 		'updated_by'
 	];
+
+    // code for $this->mimeType attribute
+    public function getUomDescriptionAttribute($value) {
+        $uomDescription = null;
+        if ($this->uom) {
+            $uomDescription = $this->uom->description;
+        }
+        return $uomDescription;
+    }
 
 	public function user()
 	{

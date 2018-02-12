@@ -19,7 +19,7 @@ class PurchaseRequestHeaderTransformer extends TransformerAbstract
         $createdDate = Carbon::parse($header->created_at)->format('d M Y');
 
         $code = "<a href='purchase_requests/detil/" . $header->id. "'>". $header->code. "</a>";
-        $action = "<a class='btn btn-xs btn-info' href='items/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+        $action = "<a class='btn btn-xs btn-info' href='purchase_requests/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
         $machinery = '-';
         if(!empty($header->machinery_id)){

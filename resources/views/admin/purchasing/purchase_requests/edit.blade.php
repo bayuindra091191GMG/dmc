@@ -99,16 +99,16 @@
                         Nomor Part (Part Number)
                     </th>
                     <th clas="text-center">
-                        Satuan (UOM)
+                        Satuan
                     </th>
                     <th class="text-center">
-                        Jumlah (QTY)
+                        Jumlah
                     </th>
                     <th class="text-center">
                         Remark
                     </th>
                     <th class="text-center">
-                        Tanggal Penyerahan (Delivery Date)
+                        Tanggal Penyerahan
                     </th>
                     <th class="text-center">
                         Opsi
@@ -118,7 +118,7 @@
                 <tbody>
 
                 @foreach($header->purchase_request_details as $detail)
-                    <tr>
+                    <tr class="item{{ $detail->id }}">
                         <td class='field-item'>
                             {{ $detail->item->code }}
                         </td>
@@ -132,10 +132,10 @@
                             {{ $detail->remark ?? '-' }}
                         </td>
                         <td class='field-date'>
-                            {{ \Carbon\Carbon::parse($detail->delivery_date)->format('d M Y') }}
+                            {{ $detail->delivery_date }}
                         </td>
                         <td>
-                            <button class="edit-modal btn btn-info" data-code="{{ $detail->item->code }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}" data-date="{{ \Carbon\Carbon::parse($detail->delivery_date)->format('d M Y') }}">
+                            <button class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}" data-date="{{ $detail->delivery_date }}">
                                 <span class="glyphicon glyphicon-edit"></span> Edit</button>
                         </td>
                     </tr>
@@ -177,6 +177,13 @@
                                 <p class="errorContent text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="date_edit">Tanggal Penyerahan:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="date_edit" name="date">
+                                <p class="errorTitle text-center alert alert-danger hidden"></p>
+                            </div>
+                        </div>
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary edit" data-dismiss="modal">
@@ -196,6 +203,7 @@
     @parent
     {{ Html::style(mix('assets/admin/css/select2.css')) }}
     {{ Html::style(mix('assets/admin/css/bootstrap-datetimepicker.css')) }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <style>
         .box-section{
             background-color: #ffffff;
@@ -210,6 +218,7 @@
     @parent
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript">
         var i=1;
 
@@ -263,6 +272,10 @@
             format: "DD MMM Y"
         });
 
+        $('#date_edit').datetimepicker({
+            format: "DD MMM Y"
+        });
+
         var i=1;
         $("#add_row").click(function(){
             $('#addr'+i).html("<td class='field-item'><select id='select" + i + "' name='item[]' class='form-control'></select></td><td><input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/></td><td><input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/></td><td class='field-date'><input type='text' id='date" + i + "' name='date[]' placeholder='Tanggal Penyerahan' class='form-control'/></td>");
@@ -307,12 +320,80 @@
         });
 
         $(document).on('click', '.edit-modal', function() {
+            id = $(this).data('id');
+
             $('.modal-title').text('Ubah');
-            // $('#code_edit').val($(this).data('id'));
+
+            $('#item_edit').select2({
+                placeholder: {
+                    id: $(this).data('item-id'),
+                    text: $(this).data('item-text')
+                },
+                width: '100%',
+                minimumInputLength: 2,
+                ajax: {
+                    url: '{{ route('select.items') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            q: $.trim(params.term)
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+
             $('#qty_edit').val($(this).data('qty'));
             $('#remark_edit').val($(this).data('remark'));
             $('#date_edit').val($(this).data('date'));
             $('#editModal').modal('show');
+        });
+        $('.modal-footer').on('click', '.edit', function() {
+            $.ajax({
+                type: 'PUT',
+                url: '{{ route('admin.purchase_request_details.update') }}',
+                data: {
+                    '_token': $('input[name=_token]').val(),
+                    'id' : id,
+                    'item': $("#item_edit").val(),
+                    'qty': $('#qty_edit').val(),
+                    'remark': $('#remark_edit').val(),
+                    'date': $('#date_edit').val()
+                },
+                success: function(data) {
+                    $('.errorTitle').addClass('hidden');
+                    $('.errorContent').addClass('hidden');
+
+                    if ((data.errors)) {
+                        setTimeout(function () {
+                            $('#editModal').modal('show');
+                            toastr.error('Validation error!', 'Error Alert', {timeOut: 5000});
+                        }, 500);
+
+                        if (data.errors.title) {
+                            $('.errorTitle').removeClass('hidden');
+                            $('.errorTitle').text(data.errors.title);
+                        }
+                        if (data.errors.content) {
+                            $('.errorContent').removeClass('hidden');
+                            $('.errorContent').text(data.errors.content);
+                        }
+                    } else {
+                        toastr.success('Berhasil ubah data!', 'Sukses!', {timeOut: 5000});
+                        $remark = '-';
+                        if(data.remark !== null){
+                            $remark = data.remark;
+                        }
+                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + "</td><td>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + $remark + "</td><td class='field-date'>" + data.delivery_date + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark=" + data.remark +" data-date='" + data.delivery_date + "'><span class='glyphicon glyphicon-edit'></span> Edit</button></td></tr>");
+                        // $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td>" + data.id + "</td><td>" + data.title + "</td><td>" + data.content + "</td><td class='text-center'><input type='checkbox' class='edit_published' data-id='" + data.id + "'></td><td>Right now</td><td><button class='show-modal btn btn-success' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-eye-open'></span> Show</button> <button class='edit-modal btn btn-info' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-edit'></span> Edit</button> <button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-trash'></span> Delete</button></td></tr>");
+
+                    }
+                }
+            });
         });
     </script>
 @endsection

@@ -62,7 +62,7 @@
                     <select id="uom" name="uom" class="form-control col-md-7 col-xs-12 @if($errors->has('uom')) parsley-error @endif">
                         <option value="-1" @if(empty(old('uom'))) selected @endif> - Pilih satuan unit - </option>
                         @foreach($uoms as $uom)
-                            <option value="{{ $uom->id }}" {{ old('uom') == $uom->id ? "selected":"" }}>{{ $uom->name }}</option>
+                            <option value="{{ $uom->id }}" {{ old('uom') == $uom->id ? "selected":"" }}>{{ $uom->description }}</option>
                         @endforeach
                     </select>
                 </div>
