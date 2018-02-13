@@ -19,8 +19,34 @@ use Illuminate\Support\Facades\Validator;
 
 class PurchaseRequestDetailController extends Controller
 {
-    public function edit(){
+    public function store(Request $request){
+        $validator = Validator::make($request->all(),[
+            'item_add'      => 'required',
+            'qty_add'       => 'required',
+            'remark_add'    => 'max:200'
+        ]);
 
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $detail = new PurchaseRequestDetail();
+        $detail->header_id = Input::get('header_id');
+        $detail->item_id = Input::get('item_add');
+        $detail->quantity = Input::get('qty_add');
+
+        if(!empty(Input::get('remark_add'))) $detail->remark = Input::get('remark_add');
+        if(!empty(Input::get('date_Add'))){
+            $date = Carbon::createFromFormat('d M Y', Input::get('date_add'), 'Asia/Jakarta');
+            $detail->delivery_date = $date->toDateString();
+        }
+
+        $detail->save();
+
+        $json = PurchaseRequestDetail::with('item')->find($detail->id);
     }
 
     /**

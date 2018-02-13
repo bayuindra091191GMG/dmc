@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
+use App\Transformer\MasterData\UserTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
@@ -168,21 +169,26 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function anyData()
+    public function getIndex()
     {
         $users = User::all();
+//        return DataTables::of($users)
+//            ->addColumn('roles', function($user){
+//                if($user->roles != null) {
+//                    $name = $user->roles->pluck('name')->implode(',');
+//                    return $name;
+//                }
+//                else{
+//                    return "";
+//                }
+//            })->addColumn('action', function ($user) {
+//            return "<a class='btn btn-xs btn-primary' href='users/".$user->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>".
+//                "<a class='btn btn-xs btn-info' href='users/".$user->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+//        })->make(true);
+
         return DataTables::of($users)
-            ->addColumn('roles', function($user){
-                if($user->roles != null) {
-                    $name = $user->roles->pluck('name')->implode(',');
-                    return $name;
-                }
-                else{
-                    return "";
-                }
-            })->addColumn('action', function ($user) {
-            return "<a class='btn btn-xs btn-primary' href='users/".$user->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>".
-                "<a class='btn btn-xs btn-info' href='users/".$user->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
-        })->make(true);
+            ->setTransformer(new UserTransformer)
+            ->addIndexColumn()
+            ->make(true);
     }
 }

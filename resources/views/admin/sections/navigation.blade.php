@@ -76,16 +76,16 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li><a>Golongan<span class="fa fa-chevron-down"></span></a>
+                            <li><a>Group<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
                                         <a href="{{ route('admin.groups') }}">
-                                            Daftar Golongan
+                                            Daftar Group
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('admin.groups.create') }}">
-                                            Tambah Golongan
+                                            Tambah Group
                                         </a>
                                     </li>
                                 </ul>

@@ -250,7 +250,7 @@ Route::get('/select-machinery_types', 'Admin\MachineryTypeController@getMachiner
  */
 
 // MASTER DATA
-Route::get('/datatables-users', 'Admin\UserController@anyData')->name('datatables.users');
+Route::get('/datatables-users', 'Admin\UserController@getIndex')->name('datatables.users');
 Route::get('/datatables-employees', 'Admin\EmployeeController@getIndex')->name('datatables.employees');
 Route::get('/datatables-items', 'Admin\ItemController@getIndex')->name('datatables.items');
 Route::get('/datatables-groups', 'Admin\GroupController@anyData')->name('datatables.groups');

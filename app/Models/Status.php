@@ -65,6 +65,6 @@ class Status extends Eloquent
 
 	public function users()
 	{
-		return $this->hasMany(\App\Models\User::class);
+		return $this->hasMany(\App\Models\Auth\User\User::class);
 	}
 }

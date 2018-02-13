@@ -18,14 +18,10 @@
                width="100%" id="groups-table">
             <thead>
             <tr>
-                <th>No</th>
-                <th>Kode</th>
-                <th>Nama</th>
-                <th>Dibuat Oleh</th>
-                <th>Tanggal Dibuat</th>
-                <th>Diubah Oleh</th>
-                <th>Tanggal Diubah</th>
-                <th>Tindakan</th>
+                <th class="text-center">No</th>
+                <th class="text-center">Kode</th>
+                <th class="text-center">Nama</th>
+                <th class="text-center">Tindakan</th>
             </tr>
             </thead>
             <tbody>
@@ -52,10 +48,6 @@
                     { data: 'DT_Row_Index', orderable: false, searchable: false},
                     { data: 'code', name: 'code' },
                     { data: 'name', name: 'name' },
-                    { data: 'created_by', name: 'created_by' },
-                    { data: 'created_at', name: 'created_at' },
-                    { data: 'updated_by', name: 'updated_by' },
-                    { data: 'updated_at', name: 'updated_at' },
                     { data: 'action', name:'action' }
                 ],
                 language: {

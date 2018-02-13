@@ -147,7 +147,58 @@
         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-0"></div>
     </div>
 
-    <!-- Modal form to edit a form -->
+    <!-- Modal form to add new detail -->
+    <div id="addModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="item_add">Barang:</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="item_add" name="item_add"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="qty_add">Jumlah:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="qty_add" name="qty_add">
+                                <p class="errorQty text-center alert alert-danger hidden"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="remark_add">Remark:</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="remark_add" name="remark_add" cols="40" rows="5"></textarea>
+                                <p class="errorRemark text-center alert alert-danger hidden"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="date_add">Tanggal Penyerahan:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="date_add" name="date_add">
+                                <p class="errorDate text-center alert alert-danger hidden"></p>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success add" data-dismiss="modal">
+                            <span id="" class='glyphicon glyphicon-check'></span> Simpan
+                        </button>
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">
+                            <span class='glyphicon glyphicon-remove'></span> Batal
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal form to edit a detail -->
     <div id="editModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -167,21 +218,21 @@
                             <label class="control-label col-sm-2" for="qty_edit">Jumlah:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="qty_edit" name="qty">
-                                <p class="errorTitle text-center alert alert-danger hidden"></p>
+                                <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="remark_edit">Remark:</label>
                             <div class="col-sm-10">
                                 <textarea class="form-control" id="remark_edit" name="remark" cols="40" rows="5"></textarea>
-                                <p class="errorContent text-center alert alert-danger hidden"></p>
+                                <p class="errorRemark text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="date_edit">Tanggal Penyerahan:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="date_edit" name="date">
-                                <p class="errorTitle text-center alert alert-danger hidden"></p>
+                                <p class="errorDate text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
                     </form>
@@ -276,49 +327,6 @@
             format: "DD MMM Y"
         });
 
-        var i=1;
-        $("#add_row").click(function(){
-            $('#addr'+i).html("<td class='field-item'><select id='select" + i + "' name='item[]' class='form-control'></select></td><td><input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/></td><td><input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/></td><td class='field-date'><input type='text' id='date" + i + "' name='date[]' placeholder='Tanggal Penyerahan' class='form-control'/></td>");
-
-            $('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
-
-            $('#select' + i).select2({
-                placeholder: {
-                    id: '-1',
-                    text: 'Pilih barang...'
-                },
-                width: '100%',
-                minimumInputLength: 2,
-                ajax: {
-                    url: '{{ route('select.items') }}',
-                    dataType: 'json',
-                    data: function (params) {
-                        return {
-                            q: $.trim(params.term)
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: data
-                        };
-                    }
-                }
-            });
-
-            $('#date' + i).datetimepicker({
-                format: "DD MMM Y"
-            });
-
-            i++;
-        });
-
-        $("#delete_row").click(function(){
-            if(i>1){
-                $("#addr"+(i-1)).html('');
-                i--;
-            }
-        });
-
         $(document).on('click', '.edit-modal', function() {
             id = $(this).data('id');
 
@@ -365,8 +373,9 @@
                     'date': $('#date_edit').val()
                 },
                 success: function(data) {
-                    $('.errorTitle').addClass('hidden');
-                    $('.errorContent').addClass('hidden');
+                    $('.errorQty').addClass('hidden');
+                    $('.errorRemark').addClass('hidden');
+                    $('.errorDate').addClass('hidden');
 
                     if ((data.errors)) {
                         setTimeout(function () {
@@ -374,13 +383,17 @@
                             toastr.error('Validation error!', 'Error Alert', {timeOut: 5000});
                         }, 500);
 
-                        if (data.errors.title) {
-                            $('.errorTitle').removeClass('hidden');
-                            $('.errorTitle').text(data.errors.title);
+                        if (data.errors.qty) {
+                            $('.errorQty').removeClass('hidden');
+                            $('.errorQty').text(data.errors.title);
                         }
-                        if (data.errors.content) {
-                            $('.errorContent').removeClass('hidden');
-                            $('.errorContent').text(data.errors.content);
+                        if (data.errors.remark) {
+                            $('.errorRemark').removeClass('hidden');
+                            $('.errorRemark').text(data.errors.content);
+                        }
+                        if (data.errors.date) {
+                            $('.errorDate').removeClass('hidden');
+                            $('.errorDate').text(data.errors.content);
                         }
                     } else {
                         toastr.success('Berhasil ubah data!', 'Sukses!', {timeOut: 5000});

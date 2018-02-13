@@ -18,13 +18,10 @@
             <thead>
             <tr>
                 <th>Email</th>
-                <th>Name</th>
                 <th>Roles</th>
-                <th>Active</th>
-                <th>Confirmed</th>
-                <th>Created At</th>
-                <th>Updated At</th>
-                <th>Actions</th>
+                <th>Status</th>
+                <th>Tanggal Dibuat</th>
+                <th>Tindakan</th>
             </tr>
             </thead>
             <tbody>
@@ -50,12 +47,9 @@
                 ajax: '{!! route('datatables.users') !!}',
                 columns: [
                     { data: 'email', name: 'email' },
-                    { data: 'name', name: 'name' },
-                    { data: 'roles', name: 'roles' },
-                    { data: 'active', name: 'active' },
-                    { data: 'confirmed', name: 'confirmed' },
+                    { data: 'role', name: 'role' },
+                    { data: 'status', name: 'status' },
                     { data: 'created_at', name: 'created_at' },
-                    { data: 'updated_at', name: 'updated_at' },
                     { data: 'action', name:'action' }
                 ],
                 language: {
