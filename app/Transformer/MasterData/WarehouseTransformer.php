@@ -18,7 +18,14 @@ class WarehouseTransformer extends TransformerAbstract
     public function transform(Warehouse $warehouse){
 
         $createdDate = Carbon::parse($warehouse->created_at)->format('d M Y');
-        $updatedDate = Carbon::parse($warehouse->updated_at)->format('d M Y');
+        $updatedDate = '-';
+        if(!empty($warehouse->updated_at)){
+            $updatedDate = Carbon::parse($warehouse->updated_at)->format('d M Y');
+        }
+        $updatedBy = '-';
+        if(!empty($warehouse->updated_by)){
+            $warehouse->updatedBy->email;
+        }
         $action =
             "<a class='btn btn-xs btn-info' href='warehouses/".$warehouse->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
@@ -29,7 +36,7 @@ class WarehouseTransformer extends TransformerAbstract
             'phone'           => $warehouse->phone,
             'created_by'    => $warehouse->createdBy->email,
             'created_at'    => $createdDate,
-            'updated_by'    => $warehouse->updatedBy->email,
+            'updated_by'    => $updatedBy,
             'updated_at'    => $updatedDate,
             'action'        => $action
         ];

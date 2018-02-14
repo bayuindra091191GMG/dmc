@@ -71,10 +71,7 @@ class GroupController extends Controller
 
         $group = Group::create([
             'code'          => $request->get('code'),
-            'name'          => $request->get('name'),
-            'updated_by'    => 1,
-            'created_by'    => 1,
-            'created_at'    => $dateTimeNow->toDateTimeString()
+            'name'          => $request->get('name')
         ]);
 
 //        return redirect()->intended(route('admin.groups'));
@@ -125,8 +122,6 @@ class GroupController extends Controller
 
         $group->name = $request->get('name');
         $group->code = $request->get('code');
-        $group->updated_at = $dateTimeNow->toDateTimeString();
-        $group->updated_by = 1;
 
         $group->save();
 

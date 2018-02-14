@@ -264,6 +264,7 @@ Route::get('/datatables-uoms', 'Admin\UOMController@anyData')->name('datatables.
 Route::get('/datatables-warehouses', 'Admin\WarehouseController@anyData')->name('datatables.warehouses');
 Route::get('/datatables-sites', 'Admin\SiteController@getIndex')->name('datatables.sites');
 Route::get('/datatables-suppliers', 'Admin\SupplierController@getIndex')->name('datatables.suppliers');
+Route::get('/datatables-menus', 'Admin\MenuController@anyData')->name('datatables.menus');
 
 // PURCHASING
 Route::get('/datatables-purchase_requests', 'Admin\Purchasing\PurchaseRequestHeaderController@getIndex')->name('datatables.purchase_requests');
