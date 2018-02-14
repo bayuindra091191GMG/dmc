@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
 
-            {{ Form::open(['route'=>['admin.items.update'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.items.update', $item->id],'method' => 'put','class'=>'form-horizontal form-label-left']) }}
 
             @if(\Illuminate\Support\Facades\Session::has('message'))
                 <div class="form-group">
@@ -59,9 +59,23 @@
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="uom" name="uom" class="form-control col-md-7 col-xs-12 @if($errors->has('uoms')) parsley-error @endif">
+                    <select id="uom" name="uom" class="form-control col-md-7 col-xs-12 @if($errors->has('uom')) parsley-error @endif">
                         @foreach($uoms as $uom)
-                            <option value="{{ $uom->id }}" {{ $item->uom_id == $uom->id ? "selected":"" }}>{{ $uom->name }}</option>
+                            <option value="{{ $uom->id }}" {{ $item->uom_id == $uom->id ? "selected":"" }}>{{ $uom->description }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="group" >
+                    Group
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="group" name="group" class="form-control col-md-7 col-xs-12 @if($errors->has('group')) parsley-error @endif">
+                        @foreach($groups as $group)
+                            <option value="{{ $group->id }}" {{ $item->group_id == $group->id ? "selected":"" }}>{{ $group->name }}</option>
                         @endforeach
                     </select>
                 </div>

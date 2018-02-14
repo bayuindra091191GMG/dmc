@@ -143,13 +143,11 @@ class PermissionDocumentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param PermissionDocument $permissionDocument
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(PermissionDocument $permissionDocument)
     {
-        //
-        $permissionDocument = PermissionDocument::find($id);
         $roles = Role::all();
         $documents = Document::all();
 

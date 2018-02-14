@@ -23,13 +23,8 @@
                 <th>Kode</th>
                 <th>Email</th>
                 <th>Nomor Ponsel</th>
-                <th>Tanggal Kontrak Mulai</th>
-                <th>Tanggal Kontrak Berakhir</th>
                 <th>Tanggal Dibuat</th>
-                <th>Dibuat Oleh</th>
-                <th>Tanggal Diubah</th>
-                <th>Diubah Oleh</th>
-                <th>Opsi</th>
+                <th>Tindakan</th>
             </tr>
             </thead>
             <tbody>
@@ -59,12 +54,7 @@
                     { data: 'code', name: 'code' },
                     { data: 'email', name: 'email' },
                     { data: 'phone', name: 'phone' },
-                    { data: 'contract_start', name: 'contract_start' },
-                    { data: 'contract_finish', name: 'contract_finish' },
                     { data: 'created_at', name: 'created_at' },
-                    { data: 'created_by', name: 'created_by' },
-                    { data: 'updated_at', name: 'updated_at' },
-                    { data: 'updated_by', name: 'updated_by' },
                     { data: 'action', name: 'action' }
                 ],
                 language: {

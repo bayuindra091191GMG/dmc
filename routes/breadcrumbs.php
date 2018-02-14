@@ -229,10 +229,10 @@ Breadcrumbs::register('admin.machinery_types.create', function (Generator $bread
     $breadcrumbs->push('Tambah Kategori Alat Berat');
 });
 
-Breadcrumbs::register('admin.machinery_types.edit', function (Generator $breadcrumbs, \App\Models\MachineryCategory $machineryCategory) {
+Breadcrumbs::register('admin.machinery_types.edit', function (Generator $breadcrumbs, \App\Models\MachineryType $machineryType) {
     $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
     $breadcrumbs->push('Daftar Kategori Alat Berat', route('admin.machinery_types'));
-    $breadcrumbs->push('Ubah Kategori Alat Berat', route('admin.machinery_types.edit', ['machinery_type' => $machineryCategory]));
+    $breadcrumbs->push('Ubah Kategori Alat Berat', route('admin.machinery_types.edit', ['machinery_type' => $machineryType]));
 });
 
 // Machinery Brands
@@ -247,10 +247,10 @@ Breadcrumbs::register('admin.machinery_brands.create', function (Generator $brea
     $breadcrumbs->push('Tambah Kategori Alat Berat');
 });
 
-Breadcrumbs::register('admin.machinery_brands.edit', function (Generator $breadcrumbs, \App\Models\MachineryCategory $machineryCategory) {
+Breadcrumbs::register('admin.machinery_brands.edit', function (Generator $breadcrumbs, \App\Models\MachineryBrand $machineryBrand) {
     $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
     $breadcrumbs->push('Daftar Kategori Alat Berat', route('admin.machinery_brands'));
-    $breadcrumbs->push('Ubah Kategori Alat Berat', route('admin.machinery_brands.edit', ['machinery_brands' => $machineryCategory]));
+    $breadcrumbs->push('Ubah Kategori Alat Berat', route('admin.machinery_brands.edit', ['machinery_brand' => $machineryBrand]));
 });
 
 // Machinery Categories

@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Data Status')
+@section('title', 'Daftar Barang')
 
 @section('content')
 
@@ -27,7 +27,7 @@
                 <th>Stock</th>
                 <th>Deskripsi</th>
                 <th>Tanggal Dibuat</th>
-                <th>Opsi</th>
+                <th>Tindakan</th>
             </tr>
             </thead>
             <tbody>

@@ -92,16 +92,15 @@ class EmployeeController extends Controller
         return redirect()->route('admin.employees');
     }
 
-    public function edit($employee){
+    public function edit( Employee $employee){
         $departments = Department::all();
         $sites = Site::all();
-        $employeeEdit = Employee::find($employee);
-        $dob = Carbon::parse($employeeEdit->date_of_birth)->format('d M Y');
+        $dob = Carbon::parse($employee->date_of_birth)->format('d M Y');
 
         $data = [
             'departments'   => $departments,
             'sites'         => $sites,
-            'employee'      => $employeeEdit,
+            'employee'      => $employee,
             'dob'           => $dob
         ];
 

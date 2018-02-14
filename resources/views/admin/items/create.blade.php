@@ -75,6 +75,10 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="group" name="group" class="form-control col-md-7 col-xs-12 @if($errors->has('group')) parsley-error @endif">
+                        <option value="-1" @if(empty(old('group'))) selected @endif> - Pilih group - </option>
+                        @foreach($groups as $group)
+                            <option value="{{ $group->id }}" {{ old('group') == $group->id ? "selected":"" }}>{{ $group->name }}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -125,49 +129,10 @@
     </div>
 @endsection
 
-@section('styles')
-    @parent
-    {{ Html::style(mix('assets/admin/css/select2.css')) }}
-@endsection
-
 @section('scripts')
     @parent
-    {{ Html::script(mix('assets/admin/js/select2.js')) }}
     {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
     <script type="text/javascript">
-        var i=1;
-
-        $('#group').select2({
-            placeholder: {
-                id: '-1',
-                text: 'Pilih Group...'
-            },
-            minimumInputLength: 2,
-            ajax: {
-                url: '{{ route('select.groups') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                }
-            }
-        });
-
-        $('#add').click(function(){
-            i++;
-            $('#dynamic_field').append('<tr id="row'+i+'" class="dynamic-added"><td><input type="text" name="name[]" placeholder="Enter your Name" class="form-control name_list" /></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button></td></tr>');
-        });
-
-        $(document).on('click', '.btn_remove', function(){
-            var button_id = $(this).attr("id");
-            $('#row'+button_id+'').remove();
-        });
 
         // autoNumeric
         numberFormat = new AutoNumeric('.price-format > input', {

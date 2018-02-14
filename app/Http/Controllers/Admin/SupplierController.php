@@ -64,7 +64,7 @@ class SupplierController extends Controller
         $validator = Validator::make($request->all(), [
             'name'      => 'required',
             'code'      => 'required',
-            'email'     => 'email|max:45',
+            'email'     => 'nullable|email|max:45',
             'phone'     => 'max:45',
         ]);
 
@@ -114,13 +114,11 @@ class SupplierController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param Supplier $supplier
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Supplier $supplier)
     {
-        //
-        $supplier = Supplier::find($id);
         $contractStart = Carbon::parse($supplier->contract_start_date)->format('d M Y');
         $contractFinish = Carbon::parse($supplier->contract_finish_date)->format('d M Y');
         return view('admin.suppliers.edit', compact('supplier', 'contractStart', 'contractFinish'));
@@ -129,11 +127,11 @@ class SupplierController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param Supplier $supplier
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Supplier $supplier)
     {
         //
         $validator = Validator::make($request->all(), [
@@ -148,7 +146,6 @@ class SupplierController extends Controller
         $dateTimeNow = Carbon::now('Asia/Jakarta');
         $user = Auth::user();
 
-        $supplier = Supplier::find($id);
         $supplier->name = $request->get('name');
         $supplier->code = $request->get('code');
         $supplier->email = $request->get('email');

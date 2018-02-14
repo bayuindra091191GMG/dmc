@@ -27,10 +27,12 @@ class MenuController extends Controller
 
 
     //DataTables
+
     /**
      * Process datatables ajax request.
      *
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function anyData()
     {
@@ -92,7 +94,7 @@ class MenuController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Menu $machinery_type
+     * @param Menu $menu
      * @return \Illuminate\Http\Response
      */
     public function edit(Menu $menu)

@@ -91,8 +91,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('items', 'ItemController@index')->name('items');
     Route::get('items/tambah', 'ItemController@create')->name('items.create');
     Route::post('items/simpan', 'ItemController@store')->name('items.store');
-    Route::get('items/{status}/ubah', 'ItemController@create')->name('items.edit');
-    Route::put('items/ubah/{status}', 'ItemController@update')->name('items.update');
+    Route::get('items/{item}/ubah', 'ItemController@edit')->name('items.edit');
+    Route::put('items/ubah/{item}', 'ItemController@update')->name('items.update');
 
     //Statuses
     Route::get('statuses', 'StatusController@index')->name('statuses');
