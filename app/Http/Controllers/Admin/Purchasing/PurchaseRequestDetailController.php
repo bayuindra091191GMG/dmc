@@ -20,38 +20,42 @@ use Illuminate\Support\Facades\Validator;
 class PurchaseRequestDetailController extends Controller
 {
     public function store(Request $request){
-        $validator = Validator::make($request->all(),[
-            'item_add'      => 'required',
-            'qty_add'       => 'required',
-            'remark_add'    => 'max:200'
-        ]);
+        try{
+            $validator = Validator::make($request->all(),[
+                'item'      => 'required',
+                'qty'       => 'required',
+                'remark'    => 'max:200'
+            ]);
 
-        if ($validator->fails()) {
-            return redirect()
-                ->back()
-                ->withErrors($validator)
-                ->withInput();
+            if ($validator->fails()) {
+                return redirect()
+                    ->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+
+            $detail = new PurchaseRequestDetail();
+            $detail->header_id = Input::get('header_id');
+            $detail->item_id = Input::get('item');
+            $detail->quantity = Input::get('qty');
+
+            if(!empty(Input::get('remark'))) $detail->remark = Input::get('remark_add');
+
+            $detail->save();
+
+            error_log($detail->id);
+
+            $json = PurchaseRequestDetail::with('item')->find($detail->id);
+        }
+        catch(\Exception $ex){
+            error_log($ex);
         }
 
-        $detail = new PurchaseRequestDetail();
-        $detail->header_id = Input::get('header_id');
-        $detail->item_id = Input::get('item_add');
-        $detail->quantity = Input::get('qty_add');
-
-        if(!empty(Input::get('remark_add'))) $detail->remark = Input::get('remark_add');
-        if(!empty(Input::get('date_Add'))){
-            $date = Carbon::createFromFormat('d M Y', Input::get('date_add'), 'Asia/Jakarta');
-            $detail->delivery_date = $date->toDateString();
-        }
-
-        $detail->save();
-
-        $json = PurchaseRequestDetail::with('item')->find($detail->id);
+        return new JsonResponse($json);
     }
 
     /**
      * @param Request $request
-     * @param PurchaseRequestDetail $detail
      * @return JsonResponse
      */
     public function update(Request $request){
@@ -91,5 +95,17 @@ class PurchaseRequestDetailController extends Controller
         }
 
         return new JsonResponse($json);
+    }
+
+    public function delete(Request $request){
+        try{
+            $detail = PurchaseRequestDetail::find(Input::get('id'));
+            $detail->delete();
+
+            return new JsonResponse($detail);
+        }
+        catch (\Exception $ex){
+            error_log($ex);
+        }
     }
 }

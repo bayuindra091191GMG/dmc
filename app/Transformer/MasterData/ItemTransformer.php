@@ -26,6 +26,7 @@ class ItemTransformer extends TransformerAbstract
             'uom'           => $item->uom->description,
             'group'         => $item->group->name,
             'warehouse'     => $item->warehouse->name,
+            'stock'         => $item->stock ?? 0,
             'description'   => $item->description,
             'created_at'    => $createdDate,
             'action'        => $action

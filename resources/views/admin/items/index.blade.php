@@ -58,6 +58,7 @@
                     { data: 'uom', name: 'uom' },
                     { data: 'group', name: 'group' },
                     { data: 'warehouse', name: 'warehouse' },
+                    { data: 'stock', name: 'stock' },
                     { data: 'description', name: 'decription' },
                     { data: 'created_at', name: 'created_at' },
                     { data: 'action', name: 'action' }

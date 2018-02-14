@@ -92,26 +92,26 @@
         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-0"></div>
         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 box-section">
             <h3>Detil Barang</h3>
-            <table class="table table-bordered table-hover">
+            <button class="add-modal btn btn-info" data-header-id="{{ $header->id }}">
+                <span class="glyphicon glyphicon-plus-sign"></span> Tambah
+            </button>
+            <table class="table table-bordered table-hover" id="detailTable">
                 <thead>
                 <tr >
                     <th class="text-center">
-                        Nomor Part (Part Number)
+                        Nomor Part
                     </th>
-                    <th clas="text-center">
+                    <th class="text-center">
                         Satuan
                     </th>
                     <th class="text-center">
                         Jumlah
                     </th>
-                    <th class="text-center">
+                    <th class="text-center" style="width: 30%;">
                         Remark
                     </th>
-                    <th class="text-center">
-                        Tanggal Penyerahan
-                    </th>
-                    <th class="text-center">
-                        Opsi
+                    <th class="text-center" style="width: 20%;">
+                        Tindakan
                     </th>
                 </tr>
                 </thead>
@@ -120,7 +120,7 @@
                 @foreach($header->purchase_request_details as $detail)
                     <tr class="item{{ $detail->id }}">
                         <td class='field-item'>
-                            {{ $detail->item->code }}
+                            {{ $detail->item->code }} - {{ $detail->item->name }}
                         </td>
                         <td>
                             {{ $detail->item->uom->description }}
@@ -131,12 +131,13 @@
                         <td>
                             {{ $detail->remark ?? '-' }}
                         </td>
-                        <td class='field-date'>
-                            {{ $detail->delivery_date }}
-                        </td>
                         <td>
-                            <button class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}" data-date="{{ $detail->delivery_date }}">
-                                <span class="glyphicon glyphicon-edit"></span> Edit</button>
+                            <button class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}">
+                                <span class="glyphicon glyphicon-edit"></span> Ubah
+                            </button>
+                            <button class="delete-modal btn btn-danger" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
+                                <span class="glyphicon glyphicon-trash"></span> Hapus
+                            </button>
                         </td>
                     </tr>
                 @endforeach
@@ -161,12 +162,13 @@
                             <label class="control-label col-sm-2" for="item_add">Barang:</label>
                             <div class="col-sm-10">
                                 <select class="form-control" id="item_add" name="item_add"></select>
+                                <p class="errorItem text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="qty_add">Jumlah:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="qty_add" name="qty_add">
+                                <input type="number" class="form-control" id="qty_add" name="qty_add">
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -175,13 +177,6 @@
                             <div class="col-sm-10">
                                 <textarea class="form-control" id="remark_add" name="remark_add" cols="40" rows="5"></textarea>
                                 <p class="errorRemark text-center alert alert-danger hidden"></p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="date_add">Tanggal Penyerahan:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="date_add" name="date_add">
-                                <p class="errorDate text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
                     </form>
@@ -217,7 +212,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="qty_edit">Jumlah:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="qty_edit" name="qty">
+                                <input type="number" class="form-control" id="qty_edit" name="qty">
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -228,17 +223,48 @@
                                 <p class="errorRemark text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="date_edit">Tanggal Penyerahan:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="date_edit" name="date">
-                                <p class="errorDate text-center alert alert-danger hidden"></p>
-                            </div>
-                        </div>
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary edit" data-dismiss="modal">
                             <span class='glyphicon glyphicon-check'></span> Simpan
+                        </button>
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">
+                            <span class='glyphicon glyphicon-remove'></span> Batal
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal form to delete a form -->
+    <div id="deleteModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <h3 class="text-center">Apakah anda yakin ingin menghapus detail ini?</h3>
+                    <br />
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="item_delete">Barang:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="item_delete" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="qty_delete">Jumlah:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="qty_delete" disabled>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger delete" data-dismiss="modal">
+                            <span id="" class='glyphicon glyphicon-trash'></span> Hapus
                         </button>
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
                             <span class='glyphicon glyphicon-remove'></span> Batal
@@ -327,10 +353,86 @@
             format: "DD MMM Y"
         });
 
+        // Add new detail
+        $(document).on('click', '.add-modal', function() {
+            $('#item_add').select2({
+                placeholder: {
+                    id: '-1',
+                    text: 'Pilih barang...'
+                },
+                width: '100%',
+                minimumInputLength: 2,
+                ajax: {
+                    url: '{{ route('select.items') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            q: $.trim(params.term)
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+
+            $('.modal-title').text('Tambah Detail');
+            $('#addModal').modal('show');
+        });
+        $('.modal-footer').on('click', '.add', function() {
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('admin.purchase_request_details.store') }}',
+                data: {
+                    '_token': $('input[name=_token]').val(),
+                    'header_id': '{{ $header->id }}',
+                    'item': $('#item_add').val(),
+                    'qty': $('#qty_add').val(),
+                    'remark': $('#remark_add').val()
+                },
+                success: function(data) {
+                    $('.errorItem').addClass('hidden');
+                    $('.errorQty').addClass('hidden');
+                    $('.errorRemark').addClass('hidden');
+
+                    if ((data.errors)) {
+                        setTimeout(function () {
+                            $('#addModal').modal('show');
+                            toastr.error('Gagal simpan data!', 'Peringatan', {timeOut: 5000});
+                        }, 500);
+
+                        if (data.errors.item) {
+                            $('.errorItem').removeClass('hidden');
+                            $('.errorItem').text(data.errors.item);
+                        }
+                        if (data.errors.qty) {
+                            $('.errorQty').removeClass('hidden');
+                            $('.errorQty').text(data.errors.qty);
+                        }
+                        if (data.errors.remark_add) {
+                            $('.errorRemark').removeClass('hidden');
+                            $('.errorRemark').text(data.errors.remark);
+                        }
+                    } else {
+                        toastr.success('Berhasil simpan detail!', 'Sukses', {timeOut: 5000});
+                        var remarkAdd = '-';
+                        if (data.remark !== null) {
+                            remarkAdd = data.remark;
+                        }
+                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + remarkAdd + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span> Hapus</button></td></tr>");
+
+                    }
+                },
+            });
+        });
+
+        // Edit detail
         $(document).on('click', '.edit-modal', function() {
             id = $(this).data('id');
 
-            $('.modal-title').text('Ubah');
+            $('.modal-title').text('Ubah Detail');
 
             $('#item_edit').select2({
                 placeholder: {
@@ -369,42 +471,60 @@
                     'id' : id,
                     'item': $("#item_edit").val(),
                     'qty': $('#qty_edit').val(),
-                    'remark': $('#remark_edit').val(),
-                    'date': $('#date_edit').val()
+                    'remark': $('#remark_edit').val()
                 },
                 success: function(data) {
                     $('.errorQty').addClass('hidden');
                     $('.errorRemark').addClass('hidden');
-                    $('.errorDate').addClass('hidden');
 
                     if ((data.errors)) {
                         setTimeout(function () {
                             $('#editModal').modal('show');
-                            toastr.error('Validation error!', 'Error Alert', {timeOut: 5000});
+                            toastr.error('Gagal ubah data!', 'Peringatan', {timeOut: 5000});
                         }, 500);
 
                         if (data.errors.qty) {
                             $('.errorQty').removeClass('hidden');
-                            $('.errorQty').text(data.errors.title);
+                            $('.errorQty').text(data.errors.qty);
                         }
                         if (data.errors.remark) {
                             $('.errorRemark').removeClass('hidden');
-                            $('.errorRemark').text(data.errors.content);
-                        }
-                        if (data.errors.date) {
-                            $('.errorDate').removeClass('hidden');
-                            $('.errorDate').text(data.errors.content);
+                            $('.errorRemark').text(data.errors.remark);
                         }
                     } else {
-                        toastr.success('Berhasil ubah data!', 'Sukses!', {timeOut: 5000});
-                        $remark = '-';
-                        if(data.remark !== null){
-                            $remark = data.remark;
+                        toastr.success('Berhasil ubah data!', 'Sukses', {timeOut: 5000});
+                        var remarkEdit = '-';
+                        if (data.remark !== null) {
+                            remarkEdit = data.remark;
                         }
-                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + "</td><td>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + $remark + "</td><td class='field-date'>" + data.delivery_date + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark=" + data.remark +" data-date='" + data.delivery_date + "'><span class='glyphicon glyphicon-edit'></span> Edit</button></td></tr>");
+                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + remarkEdit + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark=" + data.remark + "><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span> hapus</button></td></tr>");
                         // $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td>" + data.id + "</td><td>" + data.title + "</td><td>" + data.content + "</td><td class='text-center'><input type='checkbox' class='edit_published' data-id='" + data.id + "'></td><td>Right now</td><td><button class='show-modal btn btn-success' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-eye-open'></span> Show</button> <button class='edit-modal btn btn-info' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-edit'></span> Edit</button> <button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-trash'></span> Delete</button></td></tr>");
 
                     }
+                }
+            });
+        });
+
+        // Delete detail
+        $(document).on('click', '.delete-modal', function() {
+            $('.modal-title').text('Hapus Detail');
+            $('#item_delete').val($(this).data('item-text'));
+            $('#qty_delete').val($(this).data('qty'));
+            $('#remark_delete').val($(this).data('remark'));
+            $('#deleteModal').modal('show');
+            deletedId = $(this).data('id')
+        });
+        $('.modal-footer').on('click', '.delete', function() {
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('admin.purchase_request_details.delete') }}',
+                data: {
+                    '_token': $('input[name=_token]').val(),
+                    'id': deletedId
+                },
+                success: function(data) {
+                    toastr.success('Berhasil menghapus detail!', 'Sukses', {timeOut: 5000});
+                    $('.item' + data['id']).remove();
                 }
             });
         });

@@ -127,7 +127,8 @@ class ItemController extends Controller
         $formatted_tags = [];
 
         foreach ($items as $item) {
-            $formatted_tags[] = ['id' => $item->id, 'text' => $item->code. ' - '. $item->name];
+            $createdDate = Carbon::parse($item->created_at)->format('d M Y');
+            $formatted_tags[] = ['id' => $item->id, 'text' => $item->code. ' - '. $item->name. ' - '. $createdDate];
         }
 
         return \Response::json($formatted_tags);

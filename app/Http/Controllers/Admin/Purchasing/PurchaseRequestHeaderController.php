@@ -81,21 +81,18 @@ class PurchaseRequestHeaderController extends Controller
         // Create purchase request detail
         $qty = Input::get('qty');
         $remark = Input::get('remark');
-        $deliveryDate = Input::get('date');
         $idx = 0;
         foreach(Input::get('item') as $item){
-            $prDetail = PurchaseRequestDetail::create([
-                'header_id'     => $prHeader->id,
-                'item_id'       => $item,
-                'quantity'      => $qty[$idx]
-            ]);
+            if(!empty($item)){
+                $prDetail = PurchaseRequestDetail::create([
+                    'header_id'     => $prHeader->id,
+                    'item_id'       => $item,
+                    'quantity'      => $qty[$idx]
+                ]);
 
-            if(!empty($remark[$idx])) $prDetail->remark = $remark[$idx];
-            if(!empty($deliveryDate[$idx])){
-                $date = Carbon::createFromFormat('d M Y', $deliveryDate[$idx], 'Asia/Jakarta');
-                $prDetail->delivery_date = $date->toDateString();
+                if(!empty($remark[$idx])) $prDetail->remark = $remark[$idx];
+                $prDetail->save();
             }
-            $prDetail->save();
             $idx++;
         }
 

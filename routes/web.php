@@ -216,10 +216,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     //Purchase Request Details
     Route::get('purchase_request_details', 'Purchasing\PurchaseRequestDetailController@index')->name('purchase_request_details');
-    Route::get('purchase_request_details/{purchase_request_detail}/ubah', 'Purchasing\PurchaseRequestDetailController@edit')->name('purchase_request_details.edit');
-    Route::put('purchase_request_details/ubah/simpan', 'Purchasing\PurchaseRequestDetailController@update')->name('purchase_request_details.update');
-    Route::get('purchase_request_details/tambah', 'Purchasing\PurchaseRequestDetailController@create')->name('purchase_request_details.create');
     Route::post('purchase_request_details/simpan', 'Purchasing\PurchaseRequestDetailController@store')->name('purchase_request_details.store');
+    Route::put('purchase_request_details/ubah', 'Purchasing\PurchaseRequestDetailController@update')->name('purchase_request_details.update');
+    Route::post('purchase_request_details/hapus', 'Purchasing\PurchaseRequestDetailController@delete')->name('purchase_request_details.delete');
 });
 
 

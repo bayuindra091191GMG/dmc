@@ -78,17 +78,14 @@
                     <table class="table table-bordered table-hover" id="tab_logic">
                         <thead>
                         <tr >
-                            <th class="text-center">
-                                Nomor Part (Part Number)
+                            <th class="text-center" style="width: 40%">
+                                Nomor Part
                             </th>
-                            <th class="text-center">
-                                Jumlah (QTY)
+                            <th class="text-center" style="width: 20%">
+                                Jumlah
                             </th>
-                            <th class="text-center">
+                            <th class="text-center" style="width: 40%">
                                 Remark
-                            </th>
-                            <th class="text-center">
-                                Tanggal Penyerahan (Delivery Date)
                             </th>
                         </tr>
                         </thead>
@@ -102,9 +99,6 @@
                             </td>
                             <td>
                                 <input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/>
-                            </td>
-                            <td class='field-date'>
-                                <input type='text' id='date0' name='date[]' placeholder='Tanggal Penyerahan' class='form-control'/>
                             </td>
                         </tr>
                         <tr id='addr1'></tr>
@@ -185,13 +179,9 @@
             }
         });
 
-        $('#date0').datetimepicker({
-            format: "DD MMM Y"
-        });
-
         var i=1;
         $("#add_row").click(function(){
-            $('#addr'+i).html("<td class='field-item'><select id='select" + i + "' name='item[]' class='form-control'></select></td><td><input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/></td><td><input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/></td><td class='field-date'><input type='text' id='date" + i + "' name='date[]' placeholder='Tanggal Penyerahan' class='form-control'/></td>");
+            $('#addr'+i).html("<td class='field-item'><select id='select" + i + "' name='item[]' class='form-control'></select></td><td><input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/></td><td><input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/></td>");
 
             $('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
 
@@ -216,10 +206,6 @@
                         };
                     }
                 }
-            });
-
-            $('#date' + i).datetimepicker({
-                format: "DD MMM Y"
             });
 
             i++;
