@@ -343,6 +343,43 @@
             </div>
 
             <div class="menu_section">
+                <h3>Stock</h3>
+
+                <ul class="nav side-menu">
+                    <li>
+                        <a>Stock Adjustment<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="sub_menu">
+                                <a href="{{ route('admin.stock_adjustments') }}">
+                                    Daftar
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.stock_adjustments.create') }}">
+                                    Buat Baru
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a>Stock In<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="sub_menu">
+                                <a href="{{ route('admin.stock_ins') }}">
+                                    Daftar
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.stock_ins.create') }}">
+                                    Buat Baru
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="menu_section">
                 <h3>Purchasing</h3>
 
                 <ul class="nav side-menu">

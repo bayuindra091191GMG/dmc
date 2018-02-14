@@ -219,6 +219,16 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('purchase_request_details/simpan', 'Purchasing\PurchaseRequestDetailController@store')->name('purchase_request_details.store');
     Route::put('purchase_request_details/ubah', 'Purchasing\PurchaseRequestDetailController@update')->name('purchase_request_details.update');
     Route::post('purchase_request_details/hapus', 'Purchasing\PurchaseRequestDetailController@delete')->name('purchase_request_details.delete');
+
+    //Stock Adjustment
+    Route::get('stock_adjustments', 'stock\StockAdjustmentController@index')->name('stock_adjustments');
+    Route::get('stock_adjustments/tambah', 'stock\StockAdjustmentController@create')->name('stock_adjustments.create');
+    Route::post('stock_adjustments/simpan', 'stock\StockAdjustmentController@store')->name('stock_adjustments.store');
+
+    //Stock In
+    Route::get('stock_ins', 'stock\StockInController@index')->name('stock_ins');
+    Route::get('stock_ins/tambah', 'stock\StockInController@create')->name('stock_ins.create');
+    Route::post('stock_ins/simpan', 'stock\StockInController@store')->name('stock_ins.store');
 });
 
 
@@ -268,6 +278,10 @@ Route::get('/datatables-menus', 'Admin\MenuController@anyData')->name('datatable
 
 // PURCHASING
 Route::get('/datatables-purchase_requests', 'Admin\Purchasing\PurchaseRequestHeaderController@getIndex')->name('datatables.purchase_requests');
+
+// STOCK
+Route::get('/datatables-stock_adjustments', 'Admin\stock\StockAdjustmentController@getIndex')->name('datatables.stock_adjustments');
+Route::get('/datatables-stock_ins', 'Admin\stock\StockInController@getIndex')->name('datatables.stock_ins');
 
 // AUTHORIZATION
 Route::get('/datatables-permission-documents', 'Admin\PermissionDocumentController@getIndex')->name('datatables.permission_documents');
