@@ -85,14 +85,11 @@ class SiteController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param Site $site
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Site $site)
     {
-        //
-        $site = Site::find($id);
-
         return view('admin.sites.edit', compact('site'));
     }
 

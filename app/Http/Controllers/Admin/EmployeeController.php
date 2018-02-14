@@ -44,7 +44,7 @@ class EmployeeController extends Controller
         $validator = Validator::make($request->all(),[
             'name'      => 'required|max:100',
             'code'      => 'max:45',
-            'email'     => 'email|max:45',
+            'email'     => 'nullable|email|max:45',
             'phone'     => 'max:45',
             'address'   => 'max:300'
         ]);
@@ -140,7 +140,7 @@ class EmployeeController extends Controller
         $employee->address = Input::get('address');
         $employee->department_id = Input::get('department');
         $employee->site_id = Input::get('site');
-        $employee->status_id = Input::get('statuses');
+        $employee->status_id = Input::get('status');
         $employee->updated_by = $user->id;
         $employee->updated_at = $now;
 
