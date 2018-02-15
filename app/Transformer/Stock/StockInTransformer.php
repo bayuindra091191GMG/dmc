@@ -16,7 +16,6 @@ use League\Fractal\TransformerAbstract;
 class StockInTransformer extends TransformerAbstract
 {
     public function transform(StockIn $stockIns){
-
         $createdDate = '-';
         if(!empty($stockIns->created_at)){
             $createdDate = Carbon::parse($stockIns->created_at)->format('d M Y');

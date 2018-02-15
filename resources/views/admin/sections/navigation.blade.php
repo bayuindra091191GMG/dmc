@@ -378,7 +378,6 @@
                     </li>
                 </ul>
             </div>
-
             <div class="menu_section">
                 <h3>Purchasing</h3>
 

@@ -78,6 +78,5 @@ class StockInController extends Controller
             ->setTransformer(new StockInTransformer())
             ->addIndexColumn()
             ->make(true);
-
     }
 }
