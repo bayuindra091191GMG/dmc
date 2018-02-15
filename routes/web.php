@@ -221,12 +221,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('purchase_request_details/hapus', 'Purchasing\PurchaseRequestDetailController@delete')->name('purchase_request_details.delete');
 
     //Issued Docket Headers
-    Route::get('issued_docket', 'Goods\DocketController@index')->name('issued_docket');
-    Route::get('issued_docket/detil/{issued_docket}', 'Goods\DocketController@show')->name('issued_docket.show');
-    Route::get('issued_docket/{purchase_request}/ubah', 'Goods\DocketController@edit')->name('issued_docket.edit');
-    Route::put('issued_docket/ubah/{issued_docket}', 'Goods\DocketController@update')->name('issued_docket.update');
-    Route::get('issued_docket/tambah', 'Goods\DocketController@create')->name('issued_docket.create');
-    Route::post('issued_docket/simpan', 'Goods\DocketController@store')->name('issued_docket.store');
+    Route::get('issued_dockets', 'Goods\DocketController@index')->name('issued_dockets');
+    Route::get('issued_dockets/detil/{issued_docket}', 'Goods\DocketController@show')->name('issued_dockets.show');
+    Route::get('issued_dockets/{issued_docket}/ubah', 'Goods\DocketController@edit')->name('issued_dockets.edit');
+    Route::put('issued_dockets/ubah/{issued_docket}', 'Goods\DocketController@update')->name('issued_dockets.update');
+    Route::get('issued_dockets/tambah', 'Goods\DocketController@create')->name('issued_dockets.create');
+    Route::post('issued_dockets/simpan', 'Goods\DocketController@store')->name('issued_dockets.store');
 
     //Issued Docket Details
     Route::get('issued_docket_details', 'Goods\DocketDetailController@index')->name('issued_docket_details');
@@ -305,7 +305,7 @@ Route::get('/datatables-approval-rules', 'Admin\ApprovalRuleController@getIndex'
 Route::get('/datatables-roles', 'Admin\RoleController@getIndex')->name('datatables.roles');
 
 // DOCKET
-Route::get('/datatables-issued-docket', 'Admin\Goods\DocketController@getIndex')->name('datatables.issued_docket');
+Route::get('/datatables-issued-dockets', 'Admin\Goods\DocketController@getIndex')->name('datatables.issued_dockets');
 
 // DOCUMENTS
 Route::get('/documents/purchase-request', function (){

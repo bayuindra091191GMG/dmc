@@ -6,10 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\IssuedDocketDetail;
 use App\Models\IssuedDocketHeader;
-use App\Models\Machinery;
-use App\Models\PurchaseRequestHeader;
 use App\Transformer\Docket\IssuedDocketTransformer;
-use App\Transformer\Purchasing\PurchaseRequestHeaderTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -110,14 +107,15 @@ class DocketController extends Controller
 
         Session::flash('message', 'Berhasil membuat Issued Docket!');
 
-        return redirect()->route('admin.issued_docket.show', ['issued_docket' => $docketHeader]);
+        return redirect()->route('admin.issued_dockets.show', ['issued_docket' => $docketHeader]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param IssuedDocketHeader $issued_docket
      * @return \Illuminate\Http\Response
+     * @internal param int $id
      */
     public function show(IssuedDocketHeader $issued_docket)
     {
@@ -130,12 +128,16 @@ class DocketController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param IssuedDocketHeader $issuedDocketHeader
      * @return \Illuminate\Http\Response
+     * @internal param PurchaseRequestHeader $purchase_request
+     * @internal param int $id
      */
-    public function edit($id)
-    {
-        //
+    public function edit($id){
+        $header = IssuedDocketHeader::find($id);
+        $departments = Department::all();
+
+        return View('admin.docket.edit', compact('header', 'departments'));
     }
 
     /**
@@ -147,7 +149,45 @@ class DocketController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'division'      => 'max:90'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        if(Input::get('department') === '-1'){
+            return redirect()->back()->withErrors('Pilih departemen!', 'default')->withInput($request->all());
+        }
+
+        $user = \Auth::user();
+        $now = Carbon::now('Asia/Jakarta');
+
+        $docketHeader = IssuedDocketHeader::find($id);
+        $docketHeader->department_id = Input::get('department');
+        $docketHeader->division = Input::get('division');
+        $docketHeader->updated_by = $user->id;
+        $docketHeader->updated_at = $now->toDateString();
+
+        $docketHeader->save();
+
+        if(!empty(Input::get('machinery'))){
+            $docketHeader->unit_id = Input::get('machinery');
+            $docketHeader->save();
+        }
+
+        if(!empty(Input::get('purchase_request_header'))){
+            $docketHeader->purchase_request_id = Input::get('purchase_request_header');
+            $docketHeader->save();
+        }
+
+        Session::flash('message', 'Berhasil mengubah Issued Docket!');
+
+        return redirect()->route('admin.issued_dockets.edit', ['issued_docket' => $docketHeader->id]);
     }
 
     /**

@@ -408,12 +408,12 @@
                         <a>Issued Docket<span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li class="sub_menu">
-                                <a href="{{ route('admin.issued_docket') }}">
+                                <a href="{{ route('admin.issued_dockets') }}">
                                     Daftar Issued Docket
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.issued_docket.create') }}">
+                                <a href="{{ route('admin.issued_dockets.create') }}">
                                     Buat Baru
                                 </a>
                             </li>

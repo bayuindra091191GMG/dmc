@@ -18,8 +18,8 @@ class IssuedDocketTransformer extends TransformerAbstract
     public function transform(IssuedDocketHeader $header){
         $createdDate = Carbon::parse($header->created_at)->format('d M Y');
 
-        $code = "<a href='issued_docket/detil/" . $header->id. "'>". $header->code. "</a>";
-        $action = "<a class='btn btn-xs btn-info' href='issued_docket/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+        $code = "<a href='issued_dockets/detil/" . $header->id. "'>". $header->code. "</a>";
+        $action = "<a class='btn btn-xs btn-info' href='issued_dockets/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
         $machinery = '-';
         if(!empty($header->unit_id)){

@@ -7,7 +7,7 @@
     <div class="row">
         @include('partials._success')
         <div class="nav navbar-right">
-            <a href="{{ route('admin.issued_docket.create') }}" class="btn btn-app">
+            <a href="{{ route('admin.issued_dockets.create') }}" class="btn btn-app">
                 <i class="fa fa-plus"></i> Tambah
             </a>
         </div>
@@ -49,7 +49,7 @@
             $('#pr-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('datatables.issued_docket') !!}',
+                ajax: '{!! route('datatables.issued_dockets') !!}',
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false},
                     { data: 'no_issued_docket', name: 'no_issued_docket' },

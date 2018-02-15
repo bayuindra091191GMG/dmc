@@ -1,12 +1,12 @@
 @extends('admin.layouts.admin')
 
-@section('title','Ubah Purchase Request '. $header->code)
+@section('title','Ubah Issued Docket '. $header->code)
 
 @section('content')
     <div class="row" style="margin-bottom: 10px;">
         <div class="col-md-12 col-sm-12 col-xs-12">
 
-            {{ Form::open(['route'=>['admin.purchase_requests.update', $header->id],'method' => 'put','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.issued_dockets.update', $header->id],'method' => 'put','class'=>'form-horizontal form-label-left']) }}
 
             @if(\Illuminate\Support\Facades\Session::has('message'))
                 <div class="form-group">
@@ -59,21 +59,21 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sn_chasis">
-                    S/N Chasis
+                    No PR
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="sn_chasis" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('sn_chasis')) parsley-error @endif"
-                           name="sn_chasis" value="{{ $header->sn_chasis }}">
+                    <select id="purchase_request_header" name="purchase_request_header" class="form-control col-md-7 col-xs-12 @if($errors->has('purchase_request_header')) parsley-error @endif">
+                    </select>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sn_engine">
-                    S/N Engine
+                    Divisi
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="sn_engine" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('sn_engine')) parsley-error @endif"
-                           name="sn_engine" value="{{ $header->sn_engine  }}">
+                    <input id="division" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('division')) parsley-error @endif"
+                           name="division" value="{{ $header->division }}">
                 </div>
             </div>
 
@@ -98,44 +98,44 @@
             <table class="table table-bordered table-hover" id="detailTable">
                 <thead>
                 <tr >
-                    <th class="text-center">
+                    <th>
                         Nomor Part
                     </th>
-                    <th class="text-center">
-                        Satuan
+                    <th>
+                        Time
                     </th>
-                    <th class="text-center">
+                    <th>
                         Jumlah
                     </th>
-                    <th class="text-center" style="width: 30%;">
+                    <th class="text-center" style="width: 30%">
                         Remark
                     </th>
-                    <th class="text-center" style="width: 20%;">
+                    <th class="text-center" style="width: 20%">
                         Tindakan
                     </th>
                 </tr>
                 </thead>
                 <tbody>
 
-                @foreach($header->purchase_request_details as $detail)
+                @foreach($header->issued_docket_details as $detail)
                     <tr class="item{{ $detail->id }}">
                         <td class='field-item'>
                             {{ $detail->item->code }} - {{ $detail->item->name }}
                         </td>
                         <td>
-                            {{ $detail->item->uom->description }}
+                            {{ $detail->time }}
                         </td>
                         <td>
                             {{ $detail->quantity }}
                         </td>
                         <td>
-                            {{ $detail->remark ?? '-' }}
+                            {{ $detail->remarks ?? '-' }}
                         </td>
                         <td>
-                            <button class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}">
+                            <button class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-time="{{ $detail->time }}" data-remark="{{ $detail->remarks }}">
                                 <span class="glyphicon glyphicon-edit"></span> Ubah
                             </button>
-                            <button class="delete-modal btn btn-danger" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
+                            <button class="delete-modal btn btn-danger" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-time="{{ $detail->time }}" data-qty="{{ $detail->quantity }}">
                                 <span class="glyphicon glyphicon-trash"></span> Hapus
                             </button>
                         </td>
@@ -163,6 +163,13 @@
                             <div class="col-sm-10">
                                 <select class="form-control" id="item_add" name="item_add"></select>
                                 <p class="errorItem text-center alert alert-danger hidden"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="time_add">Time:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="time_add" name="time_add">
+                                <p class="errorTime text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -207,6 +214,13 @@
                             <label class="control-label col-sm-2" for="item_edit">Barang:</label>
                             <div class="col-sm-10">
                                 <select class="form-control" id="item_edit" name="item"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="time_edit">Time:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="time_edit" name="time">
+                                <p class="errorTime text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -256,6 +270,13 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="control-label col-sm-2" for="time_delete">Time:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="time_delete" disabled>
+                                <p class="errorTime text-center alert alert-danger hidden"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="control-label col-sm-2" for="qty_delete">Jumlah:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="qty_delete" disabled>
@@ -298,6 +319,29 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript">
         var i=1;
+
+        $('#purchase_request_header').select2({
+            placeholder: {
+                id: '-1',
+                text: 'Pilih No PR...'
+            },
+            width: '100%',
+            minimumInputLength: 2,
+            ajax: {
+                url: '{{ route('select.purchase_requests') }}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: $.trim(params.term)
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
 
         $('#machinery').select2({
             placeholder: {
@@ -384,11 +428,12 @@
         $('.modal-footer').on('click', '.add', function() {
             $.ajax({
                 type: 'POST',
-                url: '{{ route('admin.purchase_request_details.store') }}',
+                url: '{{ route('admin.issued_docket_details.store') }}',
                 data: {
                     '_token': $('input[name=_token]').val(),
                     'header_id': '{{ $header->id }}',
                     'item': $('#item_add').val(),
+                    'time': $('#time_add').val(),
                     'qty': $('#qty_add').val(),
                     'remark': $('#remark_add').val()
                 },
@@ -396,6 +441,7 @@
                     $('.errorItem').addClass('hidden');
                     $('.errorQty').addClass('hidden');
                     $('.errorRemark').addClass('hidden');
+                    $('.errorTime').addClass('hidden');
 
                     if ((data.errors)) {
                         setTimeout(function () {
@@ -415,13 +461,17 @@
                             $('.errorRemark').removeClass('hidden');
                             $('.errorRemark').text(data.errors.remark);
                         }
+                        if (data.errors.time){
+                            $('.errorTime').removeClass('hidden');
+                            $('.errorTime').text(data.errors.time);
+                        }
                     } else {
                         toastr.success('Berhasil simpan detail!', 'Sukses', {timeOut: 5000});
                         var remarkAdd = '-';
                         if (data.remark !== null) {
                             remarkAdd = data.remark;
                         }
-                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + remarkAdd + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span> Hapus</button></td></tr>");
+                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.time + "</td><td>" + data.quantity + "</td><td>" + remarkAdd + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span> Hapus</button></td></tr>");
 
                     }
                 },
@@ -460,18 +510,20 @@
             $('#qty_edit').val($(this).data('qty'));
             $('#remark_edit').val($(this).data('remark'));
             $('#date_edit').val($(this).data('date'));
+            $('#time_edit').val($(this).data('time'));
             $('#editModal').modal('show');
         });
         $('.modal-footer').on('click', '.edit', function() {
             $.ajax({
                 type: 'PUT',
-                url: '{{ route('admin.purchase_request_details.update') }}',
+                url: '{{ route('admin.issued_docket_details.update') }}',
                 data: {
                     '_token': $('input[name=_token]').val(),
                     'id' : id,
                     'item': $("#item_edit").val(),
                     'qty': $('#qty_edit').val(),
-                    'remark': $('#remark_edit').val()
+                    'remark': $('#remark_edit').val(),
+                    'time': $('#time_edit').val()
                 },
                 success: function(data) {
                     $('.errorQty').addClass('hidden');
@@ -491,13 +543,17 @@
                             $('.errorRemark').removeClass('hidden');
                             $('.errorRemark').text(data.errors.remark);
                         }
+                        if (data.errors.time) {
+                            $('.errorTime').removeClass('hidden');
+                            $('.errorTime').text(data.errors.time);
+                        }
                     } else {
                         toastr.success('Berhasil ubah data!', 'Sukses', {timeOut: 5000});
                         var remarkEdit = '-';
-                        if (data.remark !== null) {
-                            remarkEdit = data.remark;
+                        if (data.remarks !== null) {
+                            remarkEdit = data.remarks;
                         }
-                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + remarkEdit + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark=" + data.remark + "><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span> hapus</button></td></tr>");
+                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.time + "</td><td>" + data.quantity + "</td><td>" + remarkEdit + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark=" + data.remark + "><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span> hapus</button></td></tr>");
                         // $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td>" + data.id + "</td><td>" + data.title + "</td><td>" + data.content + "</td><td class='text-center'><input type='checkbox' class='edit_published' data-id='" + data.id + "'></td><td>Right now</td><td><button class='show-modal btn btn-success' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-eye-open'></span> Show</button> <button class='edit-modal btn btn-info' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-edit'></span> Edit</button> <button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-trash'></span> Delete</button></td></tr>");
 
                     }
@@ -511,13 +567,14 @@
             $('#item_delete').val($(this).data('item-text'));
             $('#qty_delete').val($(this).data('qty'));
             $('#remark_delete').val($(this).data('remark'));
+            $('#time_delete').val($(this).data('time'));
             $('#deleteModal').modal('show');
             deletedId = $(this).data('id')
         });
         $('.modal-footer').on('click', '.delete', function() {
             $.ajax({
                 type: 'POST',
-                url: '{{ route('admin.purchase_request_details.delete') }}',
+                url: '{{ route('admin.issued_docket_details.delete') }}',
                 data: {
                     '_token': $('input[name=_token]').val(),
                     'id': deletedId
