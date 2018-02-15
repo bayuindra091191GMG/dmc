@@ -25,6 +25,7 @@ class StockAdjustmentTransformer extends TransformerAbstract
         if(!empty($stockAdjustments->created_by)){
             $createdBy = $stockAdjustments->createdBy->email;
         }
+
         return[
             'item_code'   => $stockAdjustments->item->code,
             'item'   => $stockAdjustments->item->name,

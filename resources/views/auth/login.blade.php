@@ -72,7 +72,6 @@
 
                                 {{--<div class="clearfix"></div>--}}
                                 {{--<br/>--}}
-
                                 <div>
                                     {{--<div class="h1">{{ config('app.name') }}</div>--}}
                                     {{--<p>&copy; {{ date('Y') }} {{ config('app.name') }}. {{ __('views.auth.login.copyright') }}</p>--}}

@@ -66,7 +66,6 @@ class StockInController extends Controller
 //        $itemDB = Item::find($selectedItem);
 //        $itemDB->stock = $newStock;
 //        $itemDB->save();
-
         Session::flash('message', 'Berhasil membuat data Stock In baru!');
 
         return redirect()->route('admin.stock_ins');

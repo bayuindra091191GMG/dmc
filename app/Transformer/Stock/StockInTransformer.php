@@ -24,6 +24,7 @@ class StockInTransformer extends TransformerAbstract
         if(!empty($stockIns->created_by)){
             $createdBy = $stockIns->createdBy->email;
         }
+
         return[
             'item_code'   => $stockIns->item->code,
             'item'   => $stockIns->item->name,

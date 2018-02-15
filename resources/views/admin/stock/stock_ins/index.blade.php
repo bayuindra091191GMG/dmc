@@ -31,7 +31,6 @@
             </tbody>
         </table>
     </div>
-
 @endsection
 
 @section('styles')
