@@ -6,7 +6,7 @@
  * Time: 10:45
  */
 
-namespace App\Transformer\MasterData;
+namespace App\Transformer\Stock;
 
 
 use App\Models\StockIn;
@@ -19,17 +19,18 @@ class StockInTransformer extends TransformerAbstract
 
 
         $createdDate = '-';
-        if(!empty($stockIns->updated_by)){
+        if(!empty($stockIns->created_at)){
             $createdDate = Carbon::parse($stockIns->created_at)->format('d M Y');
         }
         $createdBy = '-';
-        if(!empty($stockIns->updated_by)){
+        if(!empty($stockIns->created_by)){
             $createdBy = $stockIns->createdBy->email;
         }
         return[
-            'item'   => $stockIns->description,
-            'depreciation'   => $stockIns->description,
-            'new_stock'   => $stockIns->description,
+            'item_code'   => $stockIns->item->code,
+            'item'   => $stockIns->item->name,
+            'increase'   => $stockIns->increase,
+            'new_stock'   => $stockIns->new_stock,
             'created_by'    => $createdBy,
             'created_at'    => $createdDate
         ];

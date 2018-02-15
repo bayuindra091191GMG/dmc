@@ -12,7 +12,7 @@ namespace App\Http\Controllers\Admin\stock;
 use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\StockIn;
-use App\Transformer\MasterData\StockInTransformer;
+use App\Transformer\Stock\StockInTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,8 +34,9 @@ class StockInController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
-            'name'      => 'required|max:100',
-            'code'     => 'required|max:45'
+            'item'      => 'required',
+            'increase'      => 'required',
+            'new_stock'     => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -45,39 +46,30 @@ class StockInController extends Controller
                 ->withInput();
         }
 
-        if(Input::get('warehouse') === '-1'){
-            return redirect()->back()->withErrors('Pilih gudang!', 'default')->withInput($request->all());
-        }
-
-        if(Input::get('uom') === '-1'){
-            return redirect()->back()->withErrors('Pilih uom!', 'default')->withInput($request->all());
-        }
-
-        if(Input::get('group') === '-1'){
-            return redirect()->back()->withErrors('Pilih group!', 'default')->withInput($request->all());
-        }
-
+        //add to stock in table
         $user = Auth::user();
         $now = Carbon::now('Asia/Jakarta');
+        $increase = (int) str_replace('.','', Input::get('increase'));
+        $newStock = (int) str_replace('.','', Input::get('new_stock'));
+        $selectedItems = Input::get('item');
+        $selectedItem = $selectedItems[0];
 
-        $item = Item::create([
-            'name'          => Input::get('name'),
-            'code'          => Input::get('code'),
-            'uom_id'        => Input::get('uom'),
-            'warehouse_id'  => Input::get('warehouse'),
-            'group_id'      => Input::get('group'),
+        $item = StockIn::create([
+            'item_id'          => $selectedItem,
+            'increase'          => $increase,
+            'new_stock'        => $newStock,
             'created_by'    => $user->id,
             'created_at'    => $now
         ]);
 
-        if(!empty(Input::get('description'))){
-            $item->description = Input::get('description');
-            $item->save();
-        }
+        //edit item stock
+//        $itemDB = Item::find($selectedItem);
+//        $itemDB->stock = $newStock;
+//        $itemDB->save();
 
-        Session::flash('message', 'Berhasil membuat data barang baru!');
+        Session::flash('message', 'Berhasil membuat data Stock In baru!');
 
-        return redirect()->route('admin.items');
+        return redirect()->route('admin.stock_ins');
     }
 
     public function getIndex(){

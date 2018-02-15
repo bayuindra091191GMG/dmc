@@ -15,14 +15,15 @@
     </div>
     <div class="row">
         <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
-               width="100%" id="pr-table">
+               width="100%" id="stock-adjustment-table">
             <thead>
             <tr>
                 <th>No</th>
+                <th>Kode Item</th>
                 <th>Nama Item</th>
                 <th>Jumlah Pengurangan</th>
                 <th>Total Terbaru</th>
-                <th>Diubah Oleh</th>
+                <th>Dibuat Oleh</th>
                 <th>Tanggal Dibuat</th>
             </tr>
             </thead>
@@ -43,12 +44,13 @@
     {{ Html::script(mix('assets/admin/js/datatables.js')) }}
     <script>
         $(function() {
-            $('#pr-table').DataTable({
+            $('#stock-adjustment-table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: '{!! route('datatables.stock_adjustments') !!}',
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false},
+                    { data: 'item_code', name: 'item_code' },
                     { data: 'item', name: 'item' },
                     { data: 'depreciation', name: 'depreciation' },
                     { data: 'new_stock', name: 'new_stock' },

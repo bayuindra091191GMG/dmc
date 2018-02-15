@@ -23,11 +23,11 @@
             @endif
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="item">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="item[]">
                     Nama Part
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs- field-item">
-                    <select id="select0" name="item" class='form-control'></select>
+                    <select id="select0" name="item[]" class='form-control'></select>
                 </div>
             </div>
 
@@ -35,7 +35,7 @@
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="depreciation">
                     Jumlah Pengurangan
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12 price-format">
                     <input id="depreciation" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('depreciation')) parsley-error @endif"
                            name="depreciation" value="{{ old('depreciation') }}">
                 </div>
@@ -45,7 +45,7 @@
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="new_stock">
                     Total Stock Baru
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12 price-format">
                     <input id="new_stock" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('new_stock')) parsley-error @endif"
                            name="new_stock" value="{{ old('new_stock') }}">
                 </div>
@@ -73,6 +73,7 @@
     @parent
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
+    {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
     <script type="text/javascript">
         var i=1;
 
@@ -99,5 +100,11 @@
             }
         });
 
+        // autoNumeric
+        [numberFormat1, numberFormat2] = AutoNumeric.multiple('.price-format > input', {
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+            decimalPlaces: 0
+        });
     </script>
 @endsection

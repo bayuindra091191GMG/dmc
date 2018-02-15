@@ -12,7 +12,8 @@ namespace App\Http\Controllers\Admin\stock;
 use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\StockAdjustment;
-use App\Transformer\MasterData\StockAdjustmentTransformer;
+use App\Transformer\Stock\StockAdjustmentTransformer;
+use App\Transformer\Stock\StockInTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,8 +35,9 @@ class StockAdjustmentController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
-            'name'      => 'required|max:100',
-            'code'     => 'required|max:45'
+            'item'      => 'required',
+            'depreciation'      => 'required',
+            'new_stock'     => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -45,37 +47,29 @@ class StockAdjustmentController extends Controller
                 ->withInput();
         }
 
-        if(Input::get('warehouse') === '-1'){
-            return redirect()->back()->withErrors('Pilih gudang!', 'default')->withInput($request->all());
-        }
-
-        if(Input::get('uom') === '-1'){
-            return redirect()->back()->withErrors('Pilih uom!', 'default')->withInput($request->all());
-        }
-
-        if(Input::get('group') === '-1'){
-            return redirect()->back()->withErrors('Pilih group!', 'default')->withInput($request->all());
-        }
-
+        //add to stock adjustment table
         $user = Auth::user();
         $now = Carbon::now('Asia/Jakarta');
+        $depreciation = (int) str_replace('.','', Input::get('depreciation'));
+        $newStock = (int) str_replace('.','', Input::get('new_stock'));
+        $selectedItems = Input::get('item');
+        $selectedItem = $selectedItems[0];
 
-        $item = Item::create([
-            'name'          => Input::get('name'),
-            'code'          => Input::get('code'),
-            'uom_id'        => Input::get('uom'),
-            'warehouse_id'  => Input::get('warehouse'),
-            'group_id'      => Input::get('group'),
+        $item = StockAdjustment::create([
+            'item_id'          => $selectedItem,
+            'depreciation'          => $depreciation,
+            'new_stock'        => $newStock,
             'created_by'    => $user->id,
             'created_at'    => $now
         ]);
 
-        if(!empty(Input::get('description'))){
-            $item->description = Input::get('description');
-            $item->save();
-        }
+        //edit item stock
+//        $itemDB = Item::find($selectedItem);
+//        $itemDB->stock = $newStock;
+//        $itemDB->save();
 
-        Session::flash('message', 'Berhasil membuat data barang baru!');
+
+        Session::flash('message', 'Berhasil membuat data Stock Adjustment baru!');
 
         return redirect()->route('admin.stock_adjustments');
     }

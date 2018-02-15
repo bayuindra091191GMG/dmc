@@ -20,7 +20,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Carbon\Carbon $created_at
  * @property int $updated_by
  * @property \Carbon\Carbon $updated_at
- * 
+ *
+ * @property \App\Models\Auth\User\User $user
  * @property \App\Models\Item $item
  *
  * @package App\Models
@@ -34,13 +35,16 @@ class StockIn extends Eloquent
 		'created_by' => 'int',
 		'updated_by' => 'int'
 	];
+    protected $dates = [
+        'created_at'
+    ];
 
 	protected $fillable = [
 		'item_id',
 		'increase',
 		'new_stock',
 		'created_by',
-		'updated_by'
+        'created_at'
 	];
 
 	public function item()

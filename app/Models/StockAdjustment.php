@@ -20,7 +20,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Carbon\Carbon $created_at
  * @property int $updated_by
  * @property \Carbon\Carbon $updated_at
- * 
+ *
+ * @property \App\Models\Auth\User\User $user
  * @property \App\Models\Item $item
  *
  * @package App\Models
@@ -35,17 +36,20 @@ class StockAdjustment extends Eloquent
 		'updated_by' => 'int'
 	];
 
+    protected $dates = [
+        'created_at'
+    ];
 	protected $fillable = [
 		'item_id',
 		'depreciation',
 		'new_stock',
 		'created_by',
-		'updated_by'
+        'created_at'
 	];
 
 	public function item()
 	{
-		return $this->belongsTo(\App\Models\Item::class);
+        return $this->belongsTo(\App\Models\Item::class);
 	}
 
     public function createdBy()
