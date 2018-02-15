@@ -400,6 +400,28 @@
                     </li>
                 </ul>
             </div>
+
+            <div class="menu_section">
+                <h3>Goods</h3>
+
+                <ul class="nav side-menu">
+                    <li>
+                        <a>Issued Docket<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="sub_menu">
+                                <a href="{{ route('admin.issued_docket') }}">
+                                    Daftar Issued Docket
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.issued_docket.create') }}">
+                                    Buat Baru
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
             {{--<div class="menu_section">--}}
                 {{--<h3>{{ __('views.backend.section.navigation.sub_header_2') }}</h3>--}}
 

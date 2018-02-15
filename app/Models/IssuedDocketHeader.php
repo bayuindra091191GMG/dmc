@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 06 Feb 2018 06:32:38 +0000.
+ * Date: Thu, 15 Feb 2018 04:00:49 +0000.
  */
 
 namespace App\Models;
@@ -15,8 +15,10 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $id
  * @property string $code
  * @property \Carbon\Carbon $date
+ * @property int $unit_id
  * @property int $purchase_request_id
  * @property int $department_id
+ * @property string $division
  * @property int $status_id
  * @property int $created_by
  * @property \Carbon\Carbon $created_at
@@ -24,6 +26,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Carbon\Carbon $updated_at
  * 
  * @property \App\Models\Department $department
+ * @property \App\Models\Machinery $machinery
  * @property \App\Models\PurchaseRequestHeader $purchase_request_header
  * @property \App\Models\Status $status
  * @property \App\Models\User $user
@@ -34,6 +37,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 class IssuedDocketHeader extends Eloquent
 {
 	protected $casts = [
+		'unit_id' => 'int',
 		'purchase_request_id' => 'int',
 		'department_id' => 'int',
 		'status_id' => 'int',
@@ -48,8 +52,10 @@ class IssuedDocketHeader extends Eloquent
 	protected $fillable = [
 		'code',
 		'date',
+		'unit_id',
 		'purchase_request_id',
 		'department_id',
+		'division',
 		'status_id',
 		'created_by',
 		'updated_by'
@@ -58,6 +64,11 @@ class IssuedDocketHeader extends Eloquent
 	public function department()
 	{
 		return $this->belongsTo(\App\Models\Department::class);
+	}
+
+	public function machinery()
+	{
+		return $this->belongsTo(\App\Models\Machinery::class, 'unit_id');
 	}
 
 	public function purchase_request_header()
