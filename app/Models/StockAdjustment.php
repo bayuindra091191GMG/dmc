@@ -51,7 +51,6 @@ class StockAdjustment extends Eloquent
 	{
         return $this->belongsTo(\App\Models\Item::class);
 	}
-
     public function createdBy()
     {
         return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');

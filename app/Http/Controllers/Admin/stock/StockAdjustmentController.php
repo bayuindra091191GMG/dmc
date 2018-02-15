@@ -68,7 +68,6 @@ class StockAdjustmentController extends Controller
 //        $itemDB->stock = $newStock;
 //        $itemDB->save();
 
-
         Session::flash('message', 'Berhasil membuat data Stock Adjustment baru!');
 
         return redirect()->route('admin.stock_adjustments');
