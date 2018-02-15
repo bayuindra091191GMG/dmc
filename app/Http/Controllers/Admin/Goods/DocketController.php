@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Admin\Goods;
 
 use App\Http\Controllers\Controller;
+use App\Models\Department;
+use App\Models\IssuedDocketDetail;
 use App\Models\IssuedDocketHeader;
 use App\Models\Machinery;
+use App\Models\PurchaseRequestHeader;
 use App\Transformer\Docket\IssuedDocketTransformer;
 use App\Transformer\Purchasing\PurchaseRequestHeaderTransformer;
 use Carbon\Carbon;
@@ -33,9 +36,9 @@ class DocketController extends Controller
      */
     public function create()
     {
-        $units = Machinery::all();
+        $departments = Department::all();
 
-        return view('admin.docket.create');
+        return view('admin.docket.create', compact('departments'));
     }
 
     /**
@@ -46,7 +49,68 @@ class DocketController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'division'      => 'max:90'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        if(Input::get('department') === '-1'){
+            return redirect()->back()->withErrors('Pilih departemen!', 'default')->withInput($request->all());
+        }
+
+        $user = \Auth::user();
+        $now = Carbon::now('Asia/Jakarta');
+
+        $docketHeader = IssuedDocketHeader::create([
+            'department_id'     => Input::get('department'),
+            'division'          => Input::get('division'),
+            'status_id'         => 1,
+            'created_by'        => $user->id,
+            'updated_by'        => $user->id,
+            'created_at'        => $now->toDateString(),
+            'date'              => $now->toDateString(),
+        ]);
+
+        if(!empty(Input::get('machinery'))){
+            $docketHeader->unit_id = Input::get('machinery');
+            $docketHeader->save();
+        }
+
+        if(!empty(Input::get('purchase_request_header'))){
+            $docketHeader->purchase_request_id = Input::get('purchase_request_header');
+            $docketHeader->save();
+        }
+
+        // Create Issued Docket Detail
+        $qty = Input::get('qty');
+        $remark = Input::get('remark');
+        $time = Input::get('time');
+        $idx = 0;
+        foreach(Input::get('item') as $item){
+            if(!empty($item)){
+                $docketDetail = IssuedDocketDetail::create([
+                    'header_id'     => $docketHeader->id,
+                    'item_id'       => $item,
+                    'machinery_id'  => $docketHeader->machinery_id,
+                    'time'          => $time[$idx],
+                    'quantity'      => $qty[$idx]
+                ]);
+
+                if(!empty($remark[$idx])) $docketDetail->remarks = $remark[$idx];
+                $docketDetail->save();
+            }
+            $idx++;
+        }
+
+        Session::flash('message', 'Berhasil membuat Issued Docket!');
+
+        return redirect()->route('admin.issued_docket.show', ['issued_docket' => $docketHeader]);
     }
 
     /**

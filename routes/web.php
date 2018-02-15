@@ -267,6 +267,7 @@ Route::get('/select-warehouses', 'Admin\ItemController@getWarehouse')->name('sel
 Route::get('/select-groups', 'Admin\GroupController@getGroups')->name('select.groups');
 Route::get('/select-machineries', 'Admin\MachineryController@getMachineries')->name('select.machineries');
 Route::get('/select-machinery_types', 'Admin\MachineryTypeController@getMachineryTypes')->name('select.machinery_types');
+Route::get('/select-purchase_requests', 'Admin\Purchasing\PurchaseRequestHeaderController@getPurchaseRequests')->name('select.purchase_requests');
 
 /**
  * Datatables

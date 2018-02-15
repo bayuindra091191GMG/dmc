@@ -120,4 +120,18 @@ class PurchaseRequestHeaderController extends Controller
             ->addIndexColumn()
             ->make(true);
     }
+
+    public function getPurchaseRequests(Request $request){
+        $term = trim($request->q);
+        $purchase_requests = PurchaseRequestHeader::where('code', 'LIKE', '%'. $term. '%')
+            ->get();
+
+        $formatted_tags = [];
+
+        foreach ($purchase_requests as $purchase_request) {
+            $formatted_tags[] = ['id' => $purchase_request->id, 'text' => $purchase_request->code];
+        }
+
+        return \Response::json($formatted_tags);
+    }
 }

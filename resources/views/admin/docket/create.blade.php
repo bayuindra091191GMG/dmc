@@ -1,12 +1,12 @@
 @extends('admin.layouts.admin')
 
-@section('title','Buat Purchase Request Baru')
+@section('title','Buat Issued Docket Baru')
 
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
 
-            {{ Form::open(['route'=>['admin.purchase_requests.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.issued_docket.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
 
             @if(count($errors))
                 <div class="form-group">
@@ -50,21 +50,21 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sn_chasis">
-                    S/N Chasis
+                    No PR
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="sn_chasis" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('sn_chasis')) parsley-error @endif"
-                           name="sn_chasis" value="{{ old('sn_chasis') }}">
+                    <select id="purchase_request_header" name="purchase_request_header" class="form-control col-md-7 col-xs-12 @if($errors->has('purchase_request_header')) parsley-error @endif">
+                    </select>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sn_engine">
-                    S/N Engine
+                    Divisi
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="sn_engine" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('sn_engine')) parsley-error @endif"
-                           name="sn_engine" value="{{ old('sn_engine') }}">
+                    <input id="division" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('division')) parsley-error @endif"
+                           name="division" value="{{ old('division') }}">
                 </div>
             </div>
 
@@ -82,6 +82,9 @@
                                 Nomor Part
                             </th>
                             <th class="text-center" style="width: 20%">
+                                Time
+                            </th>
+                            <th class="text-center" style="width: 20%">
                                 Jumlah
                             </th>
                             <th class="text-center" style="width: 40%">
@@ -93,6 +96,9 @@
                         <tr id='addr0'>
                             <td class='field-item'>
                                 <select id="select0" name="item[]" class='form-control'></select>
+                            </td>
+                            <td>
+                                <input type='text' name='time[]'  placeholder='Time' class='form-control'/>
                             </td>
                             <td>
                                 <input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/>
@@ -156,6 +162,29 @@
             }
         });
 
+        $('#purchase_request_header').select2({
+            placeholder: {
+                id: '-1',
+                text: 'Pilih No PR...'
+            },
+            width: '100%',
+            minimumInputLength: 2,
+            ajax: {
+                url: '{{ route('select.purchase_requests') }}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: $.trim(params.term)
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+
         $('#select0').select2({
             placeholder: {
                 id: '-1',
@@ -181,7 +210,7 @@
 
         var i=1;
         $("#add_row").click(function(){
-            $('#addr'+i).html("<td class='field-item'><select id='select" + i + "' name='item[]' class='form-control'></select></td><td><input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/></td><td><input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/></td>");
+            $('#addr'+i).html("<td class='field-item'><select id='select" + i + "' name='item[]' class='form-control'></select></td><td><input type='text' name='time[]'  placeholder='Time' class='form-control'/></td><td><input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/></td><td><input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/></td>");
 
             $('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
 

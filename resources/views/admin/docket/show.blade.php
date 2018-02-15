@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
             <div class="navbar-right">
-                <a class="btn btn-default" href="{{ route('admin.issued_docket.edit',[ 'purchase_request' => $header->id]) }}">UBAH</a>
+                <a class="btn btn-default" href="{{ route('admin.issued_docket.edit',[ 'issued_docket' => $header->id]) }}">UBAH</a>
                 {{--<a class="btn btn-default" href="{{ route('admin.purchase_requests.edit',[ 'purchase_request' => $header->id]) }}">CETAK</a>--}}
             </div>
         </div>
@@ -129,7 +129,7 @@
                                         {{ $detail->quantity }}
                                     </td>
                                     <td>
-                                        {{ $detail->remark ?? '-' }}
+                                        {{ $detail->remarks ?? '-' }}
                                     </td>
                                 </tr>
                             @endforeach
