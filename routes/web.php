@@ -220,6 +220,20 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('purchase_request_details/ubah', 'Purchasing\PurchaseRequestDetailController@update')->name('purchase_request_details.update');
     Route::post('purchase_request_details/hapus', 'Purchasing\PurchaseRequestDetailController@delete')->name('purchase_request_details.delete');
 
+    //Issued Docket Headers
+    Route::get('issued_docket', 'Goods\DocketController@index')->name('issued_docket');
+    Route::get('issued_docket/detil/{issued_docket}', 'Goods\DocketController@show')->name('issued_docket.show');
+    Route::get('issued_docket/{purchase_request}/ubah', 'Goods\DocketController@edit')->name('issued_docket.edit');
+    Route::put('issued_docket/ubah/{issued_docket}', 'Goods\DocketController@update')->name('issued_docket.update');
+    Route::get('issued_docket/tambah', 'Goods\DocketController@create')->name('issued_docket.create');
+    Route::post('issued_docket/simpan', 'Goods\DocketController@store')->name('issued_docket.store');
+
+    //Issued Docket Details
+    Route::get('issued_docket_details', 'Goods\DocketDetailController@index')->name('issued_docket_details');
+    Route::post('issued_docket_details/simpan', 'Goods\DocketDetailController@store')->name('issued_docket_details.store');
+    Route::put('issued_docket_details/ubah', 'Goods\DocketDetailController@update')->name('issued_docket_details.update');
+    Route::post('issued_docket_details/hapus', 'Goods\DocketDetailController@delete')->name('issued_docket_details.delete');
+
     //Stock Adjustment
     Route::get('stock_adjustments', 'stock\StockAdjustmentController@index')->name('stock_adjustments');
     Route::get('stock_adjustments/tambah', 'stock\StockAdjustmentController@create')->name('stock_adjustments.create');
@@ -253,6 +267,7 @@ Route::get('/select-warehouses', 'Admin\ItemController@getWarehouse')->name('sel
 Route::get('/select-groups', 'Admin\GroupController@getGroups')->name('select.groups');
 Route::get('/select-machineries', 'Admin\MachineryController@getMachineries')->name('select.machineries');
 Route::get('/select-machinery_types', 'Admin\MachineryTypeController@getMachineryTypes')->name('select.machinery_types');
+Route::get('/select-purchase_requests', 'Admin\Purchasing\PurchaseRequestHeaderController@getPurchaseRequests')->name('select.purchase_requests');
 
 /**
  * Datatables
@@ -289,7 +304,8 @@ Route::get('/datatables-permission-menus', 'Admin\PermissionMenuController@getIn
 Route::get('/datatables-approval-rules', 'Admin\ApprovalRuleController@getIndex')->name('datatables.approval_rules');
 Route::get('/datatables-roles', 'Admin\RoleController@getIndex')->name('datatables.roles');
 
-// STOCK
+// DOCKET
+Route::get('/datatables-issued-docket', 'Admin\Goods\DocketController@getIndex')->name('datatables.issued_docket');
 
 // DOCUMENTS
 Route::get('/documents/purchase-request', function (){
