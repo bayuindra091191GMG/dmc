@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Goods;
+namespace App\Http\Controllers\Admin\Inventory;
 
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\IssuedDocketDetail;
 use App\Models\IssuedDocketHeader;
-use App\Transformer\Docket\IssuedDocketTransformer;
+use App\Transformer\Inventory\IssuedDocketTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -23,7 +23,7 @@ class DocketController extends Controller
      */
     public function index()
     {
-        return View('admin.docket.index');
+        return View('admin.inventory.docket.index');
     }
 
     /**
@@ -35,7 +35,7 @@ class DocketController extends Controller
     {
         $departments = Department::all();
 
-        return view('admin.docket.create', compact('departments'));
+        return view('admin.inventory.docket.create', compact('departments'));
     }
 
     /**
@@ -122,7 +122,7 @@ class DocketController extends Controller
         //
         $header = $issued_docket;
 
-        return View('admin.docket.show', compact('header'));
+        return View('admin.inventory.docket.show', compact('header'));
     }
 
     /**
@@ -137,7 +137,7 @@ class DocketController extends Controller
         $header = IssuedDocketHeader::find($id);
         $departments = Department::all();
 
-        return View('admin.docket.edit', compact('header', 'departments'));
+        return View('admin.inventory.docket.edit', compact('header', 'departments'));
     }
 
     /**
@@ -204,7 +204,7 @@ class DocketController extends Controller
     public function getIndex(){
         $purchaseRequests = IssuedDocketHeader::all();
         return DataTables::of($purchaseRequests)
-            ->setTransformer(new IssuedDocketTransformer())
+            ->setTransformer(new IssuedDocketTransformer)
             ->addIndexColumn()
             ->make(true);
     }

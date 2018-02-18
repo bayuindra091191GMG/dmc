@@ -221,28 +221,28 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('purchase_request_details/hapus', 'Purchasing\PurchaseRequestDetailController@delete')->name('purchase_request_details.delete');
 
     //Issued Docket Headers
-    Route::get('issued_dockets', 'Goods\DocketController@index')->name('issued_dockets');
-    Route::get('issued_dockets/detil/{issued_docket}', 'Goods\DocketController@show')->name('issued_dockets.show');
-    Route::get('issued_dockets/{issued_docket}/ubah', 'Goods\DocketController@edit')->name('issued_dockets.edit');
-    Route::put('issued_dockets/ubah/{issued_docket}', 'Goods\DocketController@update')->name('issued_dockets.update');
-    Route::get('issued_dockets/tambah', 'Goods\DocketController@create')->name('issued_dockets.create');
-    Route::post('issued_dockets/simpan', 'Goods\DocketController@store')->name('issued_dockets.store');
+    Route::get('issued_dockets', 'Inventory\DocketController@index')->name('issued_dockets');
+    Route::get('issued_dockets/detil/{issued_docket}', 'Inventory\DocketController@show')->name('issued_dockets.show');
+    Route::get('issued_dockets/{issued_docket}/ubah', 'Inventory\DocketController@edit')->name('issued_dockets.edit');
+    Route::put('issued_dockets/ubah/{issued_docket}', 'Inventory\DocketController@update')->name('issued_dockets.update');
+    Route::get('issued_dockets/tambah', 'Inventory\DocketController@create')->name('issued_dockets.create');
+    Route::post('issued_dockets/simpan', 'Inventory\DocketController@store')->name('issued_dockets.store');
 
     //Issued Docket Details
-    Route::get('issued_docket_details', 'Goods\DocketDetailController@index')->name('issued_docket_details');
-    Route::post('issued_docket_details/simpan', 'Goods\DocketDetailController@store')->name('issued_docket_details.store');
-    Route::put('issued_docket_details/ubah', 'Goods\DocketDetailController@update')->name('issued_docket_details.update');
-    Route::post('issued_docket_details/hapus', 'Goods\DocketDetailController@delete')->name('issued_docket_details.delete');
+    Route::get('issued_docket_details', 'Inventory\DocketDetailController@index')->name('issued_docket_details');
+    Route::post('issued_docket_details/simpan', 'Inventory\DocketDetailController@store')->name('issued_docket_details.store');
+    Route::put('issued_docket_details/ubah', 'Inventory\DocketDetailController@update')->name('issued_docket_details.update');
+    Route::post('issued_docket_details/hapus', 'Inventory\DocketDetailController@delete')->name('issued_docket_details.delete');
 
     //Stock Adjustment
-    Route::get('stock_adjustments', 'stock\StockAdjustmentController@index')->name('stock_adjustments');
-    Route::get('stock_adjustments/tambah', 'stock\StockAdjustmentController@create')->name('stock_adjustments.create');
-    Route::post('stock_adjustments/simpan', 'stock\StockAdjustmentController@store')->name('stock_adjustments.store');
+    Route::get('stock_adjustments', 'Inventory\StockAdjustmentController@index')->name('stock_adjustments');
+    Route::get('stock_adjustments/tambah', 'Inventory\StockAdjustmentController@create')->name('stock_adjustments.create');
+    Route::post('stock_adjustments/simpan', 'Inventory\StockAdjustmentController@store')->name('stock_adjustments.store');
 
     //Stock In
-    Route::get('stock_ins', 'stock\StockInController@index')->name('stock_ins');
-    Route::get('stock_ins/tambah', 'stock\StockInController@create')->name('stock_ins.create');
-    Route::post('stock_ins/simpan', 'stock\StockInController@store')->name('stock_ins.store');
+    Route::get('stock_ins', 'Inventory\StockInController@index')->name('stock_ins');
+    Route::get('stock_ins/tambah', 'Inventory\StockInController@create')->name('stock_ins.create');
+    Route::post('stock_ins/simpan', 'Inventory\StockInController@store')->name('stock_ins.store');
 });
 
 

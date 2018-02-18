@@ -6,7 +6,7 @@
  * Time: 9:33
  */
 
-namespace App\Transformer\Docket;
+namespace App\Transformer\Inventory;
 
 
 use App\Models\IssuedDocketHeader;

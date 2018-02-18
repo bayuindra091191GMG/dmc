@@ -6,14 +6,12 @@
  * Time: 10:15
  */
 
-namespace App\Http\Controllers\Admin\stock;
+namespace App\Http\Controllers\Admin\Inventory;
 
 
 use App\Http\Controllers\Controller;
-use App\Models\Item;
-use App\Models\StockAdjustment;
-use App\Transformer\Stock\StockAdjustmentTransformer;
-use App\Transformer\Stock\StockInTransformer;
+use App\Models\StockIn;
+use App\Transformer\Inventory\StockInTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,21 +20,21 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
-class StockAdjustmentController extends Controller
+class StockInController extends Controller
 {
     public function index(){
-        return View('admin.stock.stock_adjustments.index');
+        return View('admin.inventory.stock_ins.index');
     }
 
     public function create(){
-        return View('admin.stock.stock_adjustments.create');
+        return View('admin.inventory.stock_ins.create');
     }
 
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
             'item'      => 'required',
-            'depreciation'      => 'required',
+            'increase'      => 'required',
             'new_stock'     => 'required'
         ]);
 
@@ -47,17 +45,17 @@ class StockAdjustmentController extends Controller
                 ->withInput();
         }
 
-        //add to stock adjustment table
+        //add to stock in table
         $user = Auth::user();
         $now = Carbon::now('Asia/Jakarta');
-        $depreciation = (int) str_replace('.','', Input::get('depreciation'));
+        $increase = (int) str_replace('.','', Input::get('increase'));
         $newStock = (int) str_replace('.','', Input::get('new_stock'));
         $selectedItems = Input::get('item');
         $selectedItem = $selectedItems[0];
 
-        $item = StockAdjustment::create([
+        $item = StockIn::create([
             'item_id'          => $selectedItem,
-            'depreciation'          => $depreciation,
+            'increase'          => $increase,
             'new_stock'        => $newStock,
             'created_by'    => $user->id,
             'created_at'    => $now
@@ -67,17 +65,15 @@ class StockAdjustmentController extends Controller
 //        $itemDB = Item::find($selectedItem);
 //        $itemDB->stock = $newStock;
 //        $itemDB->save();
+        Session::flash('message', 'Berhasil membuat data Stock In baru!');
 
-
-        Session::flash('message', 'Berhasil membuat data Stock Adjustment baru!');
-
-        return redirect()->route('admin.stock_adjustments');
+        return redirect()->route('admin.stock_ins');
     }
 
     public function getIndex(){
-        $stockAdjustments = StockAdjustment::all();
-        return DataTables::of($stockAdjustments)
-            ->setTransformer(new StockAdjustmentTransformer())
+        $stockIns = StockIn::all();
+        return DataTables::of($stockIns)
+            ->setTransformer(new StockInTransformer)
             ->addIndexColumn()
             ->make(true);
     }

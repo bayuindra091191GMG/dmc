@@ -6,7 +6,7 @@
  * Time: 10:45
  */
 
-namespace App\Transformer\Stock;
+namespace App\Transformer\Inventory;
 
 
 use App\Models\StockAdjustment;
