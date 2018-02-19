@@ -22,7 +22,7 @@
                 <th>Kode</th>
                 <th>Nama</th>
                 <th>Lokasi</th>
-                <th>Nomoe Telepon</th>
+                <th>Nomor Telepon</th>
                 <th>Dibuat Oleh</th>
                 <th>Tanggal Dibuat</th>
                 <th>Diubah Oleh</th>

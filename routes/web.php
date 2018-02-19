@@ -295,8 +295,8 @@ Route::get('/datatables-menus', 'Admin\MenuController@anyData')->name('datatable
 Route::get('/datatables-purchase_requests', 'Admin\Purchasing\PurchaseRequestHeaderController@getIndex')->name('datatables.purchase_requests');
 
 // STOCK
-Route::get('/datatables-stock_adjustments', 'Admin\stock\StockAdjustmentController@getIndex')->name('datatables.stock_adjustments');
-Route::get('/datatables-stock_ins', 'Admin\stock\StockInController@getIndex')->name('datatables.stock_ins');
+Route::get('/datatables-stock_adjustments', 'Admin\Inventory\StockAdjustmentController@getIndex')->name('datatables.stock_adjustments');
+Route::get('/datatables-stock_ins', 'Admin\Inventory\StockInController@getIndex')->name('datatables.stock_ins');
 
 // AUTHORIZATION
 Route::get('/datatables-permission-documents', 'Admin\PermissionDocumentController@getIndex')->name('datatables.permission_documents');
