@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin\Inventory;
 
 use App\Http\Controllers\Controller;
+use App\Libs\Utilities;
 use App\Models\Department;
 use App\Models\IssuedDocketDetail;
 use App\Models\IssuedDocketHeader;
+use App\Models\NumberingSystem;
 use App\Transformer\Inventory\IssuedDocketTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -64,7 +66,14 @@ class DocketController extends Controller
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
+        //Generate AutoNumber
+        $sysNo = NumberingSystem::where('doc_id', '1')->first();
+        $docketNumber = Utilities::GenerateNumber('DOCKET', $sysNo->next_no);
+        $sysNo->next_no++;
+        $sysNo->save();
+
         $docketHeader = IssuedDocketHeader::create([
+            'code'              => $docketNumber,
             'department_id'     => Input::get('department'),
             'division'          => Input::get('division'),
             'status_id'         => 1,
