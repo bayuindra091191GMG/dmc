@@ -220,6 +220,33 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('purchase_request_details/ubah', 'Purchasing\PurchaseRequestDetailController@update')->name('purchase_request_details.update');
     Route::post('purchase_request_details/hapus', 'Purchasing\PurchaseRequestDetailController@delete')->name('purchase_request_details.delete');
 
+    //Purchase Order Headers
+    Route::get('purchase_orders', 'Purchasing\PurchaseOrderHeaderController@index')->name('purchase_orders');
+    Route::get('purchase_orders/detil/{purchase_order}', 'Purchasing\PurchaseOrderHeaderController@show')->name('purchase_orders.show');
+    Route::get('purchase_orders/{purchase_order}/ubah', 'Purchasing\PurchaseOrderHeaderController@edit')->name('purchase_orders.edit');
+    Route::put('purchase_orders/ubah/{purchase_request}', 'Purchasing\PurchaseOrderHeaderController@update')->name('purchase_orders.update');
+    Route::get('purchase_orders/tambah', 'Purchasing\PurchaseOrderHeaderController@create')->name('purchase_orders.create');
+    Route::post('purchase_orders/simpan', 'Purchasing\PurchaseOrderHeaderController@store')->name('purchase_orders.store');
+
+    //Purchase Order Details
+    Route::get('purchase_order_details', 'Purchasing\PurchaseOrderDetailController@index')->name('purchase_order_details');
+    Route::post('purchase_order_details/simpan', 'Purchasing\PurchaseOrderDetailController@store')->name('purchase_order_details.store');
+    Route::put('purchase_order_details/ubah', 'Purchasing\PurchaseOrderDetailController@update')->name('purchase_order_details.update');
+    Route::post('purchase_order_details/hapus', 'Purchasing\PurchaseOrderDetailController@delete')->name('purchase_order_details.delete');
+
+    //Quotation Headers
+    Route::get('quotations', 'Purchasing\QuotationHeaderController@index')->name('quotations');
+    Route::get('quotations/detil/{quotation}', 'Purchasing\QuotationHeaderController@show')->name('quotations.show');
+    Route::get('quotations/{quotation}/ubah', 'Purchasing\QuotationHeaderController@edit')->name('quotations.edit');
+    Route::put('quotations/ubah/{quotation}', 'Purchasing\QuotationHeaderController@update')->name('quotations.update');
+    Route::get('quotations/tambah', 'Purchasing\QuotationHeaderController@create')->name('quotations.create');
+    Route::post('quotations/simpan', 'Purchasing\QuotationHeaderController@store')->name('quotations.store');
+
+    //Quotation Details
+    Route::post('quotation_details/simpan', 'Purchasing\QuotationDetailController@store')->name('quotation_details.store');
+    Route::put('quotation_details/ubah', 'Purchasing\QuotationDetailController@update')->name('quotation_details.update');
+    Route::post('quotation_details/hapus', 'Purchasing\QuotationDetailController@delete')->name('quotation_details.delete');
+
     //Issued Docket Headers
     Route::get('issued_dockets', 'Inventory\DocketController@index')->name('issued_dockets');
     Route::get('issued_dockets/detil/{issued_docket}', 'Inventory\DocketController@show')->name('issued_dockets.show');
@@ -267,6 +294,7 @@ Route::get('/select-warehouses', 'Admin\ItemController@getWarehouse')->name('sel
 Route::get('/select-groups', 'Admin\GroupController@getGroups')->name('select.groups');
 Route::get('/select-machineries', 'Admin\MachineryController@getMachineries')->name('select.machineries');
 Route::get('/select-machinery_types', 'Admin\MachineryTypeController@getMachineryTypes')->name('select.machinery_types');
+Route::get('/select-suppliers', 'Admin\SupplierController@getSuppliers')->name('select.suppliers');
 Route::get('/select-purchase_requests', 'Admin\Purchasing\PurchaseRequestHeaderController@getPurchaseRequests')->name('select.purchase_requests');
 
 /**
@@ -293,6 +321,8 @@ Route::get('/datatables-menus', 'Admin\MenuController@anyData')->name('datatable
 
 // PURCHASING
 Route::get('/datatables-purchase_requests', 'Admin\Purchasing\PurchaseRequestHeaderController@getIndex')->name('datatables.purchase_requests');
+Route::get('/datatables-purchase_orders', 'Admin\Purchasing\PurchaseOrderHeaderController@getIndex')->name('datatables.purchase_orders');
+Route::get('/datatables-quotations', 'Admin\Purchasing\QuotationHeaderController@getIndex')->name('datatables.quotations');
 
 // STOCK
 Route::get('/datatables-stock_adjustments', 'Admin\Inventory\StockAdjustmentController@getIndex')->name('datatables.stock_adjustments');
