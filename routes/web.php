@@ -261,6 +261,20 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('issued_docket_details/ubah', 'Inventory\DocketDetailController@update')->name('issued_docket_details.update');
     Route::post('issued_docket_details/hapus', 'Inventory\DocketDetailController@delete')->name('issued_docket_details.delete');
 
+    //Item Receipts Headers
+    Route::get('item_receipts', 'Inventory\ItemReceiptController@index')->name('item_receipts');
+    Route::get('item_receipts/detil/{item_receipt}', 'Inventory\ItemReceiptController@show')->name('item_receipts.show');
+    Route::get('item_receipts/{item_receipt}/ubah', 'Inventory\ItemReceiptController@edit')->name('item_receipts.edit');
+    Route::put('item_receipts/ubah/{item_receipt}', 'Inventory\ItemReceiptController@update')->name('item_receipts.update');
+    Route::get('item_receipts/tambah', 'Inventory\ItemReceiptController@create')->name('item_receipts.create');
+    Route::post('item_receipts/simpan', 'Inventory\ItemReceiptController@store')->name('item_receipts.store');
+
+    //Item Receipts Details
+    Route::get('item_receipt_details', 'Inventory\ItemReceiptDetailController@index')->name('item_receipt_details');
+    Route::post('item_receipt_details/simpan', 'Inventory\ItemReceiptDetailController@store')->name('item_receipt_details.store');
+    Route::put('item_receipt_details/ubah', 'Inventory\ItemReceiptDetailController@update')->name('item_receipt_details.update');
+    Route::post('item_receipt_details/hapus', 'Inventory\ItemReceiptDetailController@delete')->name('item_receipt_details.delete');
+
     //Stock Adjustment
     Route::get('stock_adjustments', 'Inventory\StockAdjustmentController@index')->name('stock_adjustments');
     Route::get('stock_adjustments/tambah', 'Inventory\StockAdjustmentController@create')->name('stock_adjustments.create');
@@ -296,6 +310,7 @@ Route::get('/select-machineries', 'Admin\MachineryController@getMachineries')->n
 Route::get('/select-machinery_types', 'Admin\MachineryTypeController@getMachineryTypes')->name('select.machinery_types');
 Route::get('/select-suppliers', 'Admin\SupplierController@getSuppliers')->name('select.suppliers');
 Route::get('/select-purchase_requests', 'Admin\Purchasing\PurchaseRequestHeaderController@getPurchaseRequests')->name('select.purchase_requests');
+Route::get('/select-purchase_orders', 'Admin\Purchasing\PurchaseOrderHeaderController@getPurchaseOrders')->name('select.purchase_orders');
 
 /**
  * Datatables
@@ -336,6 +351,9 @@ Route::get('/datatables-roles', 'Admin\RoleController@getIndex')->name('datatabl
 
 // DOCKET
 Route::get('/datatables-issued-dockets', 'Admin\Inventory\DocketController@getIndex')->name('datatables.issued_dockets');
+
+// ITEM RECEIPT
+Route::get('/datatables-item-receipts', 'Admin\Inventory\ItemReceiptController@getIndex')->name('datatables.item_receipts');
 
 // DOCUMENTS
 Route::get('/documents/purchase-request', function (){

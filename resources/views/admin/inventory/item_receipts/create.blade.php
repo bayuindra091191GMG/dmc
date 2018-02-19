@@ -1,12 +1,12 @@
 @extends('admin.layouts.admin')
 
-@section('title','Buat Issued Docket Baru')
+@section('title','Buat Item Receipt Baru')
 
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
 
-            {{ Form::open(['route'=>['admin.issued_dockets.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.item_receipts.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
 
             @if(count($errors))
                 <div class="form-group">
@@ -23,48 +23,37 @@
             @endif
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="department" >
-                    Departemen
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="delivery" >
+                    Delivery Note
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="department" name="department" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">
-                        <option value="-1" @if(empty(old('uom'))) selected @endif> - Pilih departemen - </option>
-                        @foreach($departments as $department)
-                            <option value="{{ $department->id }}" {{ old('department') == $department->id ? "selected":"" }}>{{ $department->name }}</option>
+                    <select id="department" name="department" class="form-control col-md-7 col-xs-12 @if($errors->has('delivery_note')) parsley-error @endif">
+                        <option value="-1" @if(empty(old('delivery_note'))) selected @endif> - Pilih Delivery Note - </option>
+                        @foreach($deliveries as $delivery)
+                            <option value="{{ $delivery->id }}" {{ old('delivery_note') == $delivery->id ? "selected":"" }}>{{ $delivery->code }}</option>
                         @endforeach
                     </select>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="machinery" >
-                    Unit Alat Berat
-                    <span class="required">*</span>
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date" >
+                    Date
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="machinery" name="machinery" class="form-control col-md-7 col-xs-12 @if($errors->has('machinery')) parsley-error @endif">
-                    </select>
+                    <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
+                           name="date" value="{{ old('date') }}">
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sn_chasis">
-                    No PR
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="no_sj_spb">
+                    No SJ/SPB
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="purchase_request_header" name="purchase_request_header" class="form-control col-md-7 col-xs-12 @if($errors->has('purchase_request_header')) parsley-error @endif">
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sn_engine">
-                    Divisi
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="division" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('division')) parsley-error @endif"
-                           name="division" value="{{ old('division') }}">
+                    <input id="no_sj_spb" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('no_sj_spb')) parsley-error @endif"
+                           name="no_sj_spb" value="{{ old('no_sj_spb') }}">
                 </div>
             </div>
 
@@ -82,13 +71,13 @@
                                 Nomor Part
                             </th>
                             <th class="text-center" style="width: 20%">
-                                Time
+                                Nomor PO
                             </th>
                             <th class="text-center" style="width: 20%">
                                 Jumlah
                             </th>
                             <th class="text-center" style="width: 40%">
-                                Remark
+                                Keterangan
                             </th>
                         </tr>
                         </thead>
@@ -98,7 +87,7 @@
                                 <select id="select0" name="item[]" class='form-control'></select>
                             </td>
                             <td>
-                                <input type='text' name='time[]'  placeholder='Time' class='form-control'/>
+                                <input type='text' name='po[]'  placeholder='Time' class='form-control'/>
                             </td>
                             <td>
                                 <input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/>
@@ -117,7 +106,7 @@
 
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a class="btn btn-primary" href="{{ route('admin.purchase_requests') }}"> Batal</a>
+                    <a class="btn btn-primary" href="{{ route('admin.item_receipts') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>
@@ -136,64 +125,48 @@
     @parent
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
+
+    <script>
+        $('#date').datetimepicker({
+            format: "DD MMM Y"
+        });
+    </script>
+
     <script type="text/javascript">
         var i=1;
 
-        $('#machinery').select2({
-            placeholder: {
-                id: '-1',
-                text: 'Pilih Alat Berat...'
-            },
-            width: '100%',
-            minimumInputLength: 2,
-            ajax: {
-                url: '{{ route('select.machineries') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                }
-            }
-        });
-
-        $('#purchase_request_header').select2({
-            placeholder: {
-                id: '-1',
-                text: 'Pilih No PR...'
-            },
-            width: '100%',
-            minimumInputLength: 2,
-            ajax: {
-                url: '{{ route('select.purchase_requests') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                }
-            }
-        });
+        {{--$('#purchase_request_header').select2({--}}
+            {{--placeholder: {--}}
+                {{--id: '-1',--}}
+                {{--text: 'Pilih No PR...'--}}
+            {{--},--}}
+            {{--width: '100%',--}}
+            {{--minimumInputLength: 2,--}}
+            {{--ajax: {--}}
+                {{--url: '{{ route('select.purchase_requests') }}',--}}
+                {{--dataType: 'json',--}}
+                {{--data: function (params) {--}}
+                    {{--return {--}}
+                        {{--q: $.trim(params.term)--}}
+                    {{--};--}}
+                {{--},--}}
+                {{--processResults: function (data) {--}}
+                    {{--return {--}}
+                        {{--results: data--}}
+                    {{--};--}}
+                {{--}--}}
+            {{--}--}}
+        {{--});--}}
 
         $('#select0').select2({
             placeholder: {
                 id: '-1',
-                text: 'Pilih barang...'
+                text: 'Pilih Purchase Order...'
             },
             width: '100%',
             minimumInputLength: 2,
             ajax: {
-                url: '{{ route('select.items') }}',
+                url: '{{ route('select.purchase_orders') }}',
                 dataType: 'json',
                 data: function (params) {
                     return {
@@ -210,19 +183,19 @@
 
         var i=1;
         $("#add_row").click(function(){
-            $('#addr'+i).html("<td class='field-item'><select id='select" + i + "' name='item[]' class='form-control'></select></td><td><input type='text' name='time[]'  placeholder='Time' class='form-control'/></td><td><input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/></td><td><input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/></td>");
+            $('#addr'+i).html("<td class='field-item'><select id='select" + i + "' name='item[]' class='form-control'></select></td><td><input type='text' name='po[]'  placeholder='Purchase Order' class='form-control'/></td><td><input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/></td><td><input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/></td>");
 
             $('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
 
             $('#select' + i).select2({
                 placeholder: {
                     id: '-1',
-                    text: 'Pilih barang...'
+                    text: 'Pilih Purchase Order...'
                 },
                 width: '100%',
                 minimumInputLength: 2,
                 ajax: {
-                    url: '{{ route('select.items') }}',
+                    url: '{{ route('select.purchase_orders') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {

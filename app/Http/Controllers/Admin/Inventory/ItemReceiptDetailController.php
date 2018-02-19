@@ -7,15 +7,16 @@ use App\Models\ItemReceiptHeader;
 use App\Transformer\Inventory\ItemReceiptTransformer;
 use Illuminate\Http\Request;
 
-class GoodsReceiptController extends Controller
+class ItemReceiptDetailController extends Controller
 {
     //
     public function index(){
-        return View('admin.inventory.goods_receipts.index');
+        return View('admin.inventory.item_receipts.index');
     }
 
     public function create(){
 
+        return View('admin.inventory.item_receipts.create');
     }
 
     public function store(){
@@ -36,13 +37,5 @@ class GoodsReceiptController extends Controller
 
     public function print(){
 
-    }
-
-    public function getIndex(){
-        $purchaseRequests = ItemReceiptHeader::all();
-        return DataTables::of($purchaseRequests)
-            ->setTransformer(new ItemReceiptTransformer())
-            ->addIndexColumn()
-            ->make(true);
     }
 }

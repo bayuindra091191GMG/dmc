@@ -1,13 +1,13 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Daftar Issued Docket')
+@section('title', 'Daftar Item Receipt')
 
 @section('content')
 
     <div class="row">
         @include('partials._success')
         <div class="nav navbar-right">
-            <a href="{{ route('admin.issued_dockets.create') }}" class="btn btn-app">
+            <a href="{{ route('admin.item_receipts.create') }}" class="btn btn-app">
                 <i class="fa fa-plus"></i> Tambah
             </a>
         </div>
@@ -19,11 +19,11 @@
             <thead>
             <tr>
                 <th>No</th>
-                <th>No Issued Docket</th>
-                <th>No PR</th>
-                <th>No Unit</th>
-                <th>Department</th>
-                <th>Divisi</th>
+                <th>Code</th>
+                <th>No SJ/SPB</th>
+                <th>Date</th>
+                <th>Delivery Note</th>
+                <th>Remarks</th>
                 <th>Tanggal Dibuat</th>
                 <th>Dibuat Oleh</th>
                 <th>Opsi</th>
@@ -49,14 +49,14 @@
             $('#pr-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('datatables.issued_dockets') !!}',
+                ajax: '{!! route('datatables.item_receipts') !!}',
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false},
-                    { data: 'no_issued_docket', name: 'no_issued_docket' },
-                    { data: 'no_pr', name: 'no_pr' },
-                    { data: 'no_unit', name: 'no_unit' },
-                    { data: 'department', name: 'department' },
-                    { data: 'division', name: 'division' },
+                    { data: 'code', name: 'no_issued_docket' },
+                    { data: 'no_sj_spb', name: 'no_pr' },
+                    { data: 'date', name: 'no_unit' },
+                    { data: 'delivery_note', name: 'department' },
+                    { data: 'remarks', name: 'division' },
                     { data: 'created_at', name: 'created_at' },
                     { data: 'created_by', name: 'created_by' },
                     { data: 'action', name: 'action' }
