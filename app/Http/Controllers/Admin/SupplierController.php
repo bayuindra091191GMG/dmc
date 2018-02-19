@@ -189,4 +189,19 @@ class SupplierController extends Controller
             ->setTransformer(new SupplierTransformer())
             ->make(true);
     }
+
+    public function getSuppliers(Request $request){
+        $term = trim($request->q);
+        $vendors = Supplier::where('code', 'LIKE', '%'. $term. '%')
+            ->orWhere('name', 'LIKE', '%'. $term. '%')
+            ->get();
+
+        $formatted_tags = [];
+
+        foreach ($vendors as $vendor) {
+            $formatted_tags[] = ['id' => $vendor->id, 'text' => $vendor->name];
+        }
+
+        return \Response::json($formatted_tags);
+    }
 }

@@ -1,20 +1,18 @@
 @extends('admin.layouts.admin')
 
-@section('title','Data Purchase Request '. $header->code)
+@section('title','Data Quotation Vendor '. $header->code)
 
 @section('content')
     <div class="row">
         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
             <div class="navbar-right">
-                <a class="btn btn-default" href="{{ route('admin.purchase_requests.edit',[ 'purchase_request' => $header->id]) }}">UBAH</a>
-                {{--<a class="btn btn-default" href="{{ route('admin.purchase_requests.edit',[ 'purchase_request' => $header->id]) }}">CETAK</a>--}}
+                <a class="btn btn-default" href="{{ route('admin.quotations.edit',[ 'quotation' => $header->id]) }}">UBAH</a>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
             <form class="form-horizontal form-label-left box-section">
-
                 @if(\Illuminate\Support\Facades\Session::has('message'))
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">
@@ -27,39 +25,48 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Departemen
+                        Nomor Quotation
                         <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->department->name }}
+                        : {{ $header->code }}
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Unit Alat Berat
+                        Vendor
                         <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->machinery->code }}
+                        : <a href="{{ route('admin.suppliers.edit', ['supplier' => $header->supplier_id]) }}">{{ $header->vendor->name }}</a>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        S/N Chasis
+                        Total Harga
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->sn_chasis ?? '-' }}
+                        : {{ $header->total_price }}
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        S/N Engine
+                        Total Diskon
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->sn_engine ?? '-' }}
+                        : {{ $header->total_discount ?? '-' }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        Total Pembayaran
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ $header->total_payment ?? '-' }}
                     </div>
                 </div>
 
@@ -77,11 +84,20 @@
                                 <th class="text-center">
                                     Nomor Part (Part Number)
                                 </th>
-                                <th clas="text-center">
+                                <th class="text-center">
                                     Satuan (UOM)
                                 </th>
                                 <th class="text-center">
                                     Jumlah (QTY)
+                                </th>
+                                <th class="text-center">
+                                    Harga
+                                </th>
+                                <th class="text-center">
+                                    Diskon
+                                </th>
+                                <th class="text-center">
+                                    Subtotal
                                 </th>
                                 <th class="text-center">
                                     Remark
@@ -100,6 +116,15 @@
                                     </td>
                                     <td>
                                         {{ $detail->quantity }}
+                                    </td>
+                                    <td>
+                                        {{ $detail->price }}
+                                    </td>
+                                    <td>
+                                        {{ $detail->discount }}
+                                    </td>
+                                    <td>
+                                        {{ $detail->subtotal }}
                                     </td>
                                     <td>
                                         {{ $detail->remark ?? '-' }}

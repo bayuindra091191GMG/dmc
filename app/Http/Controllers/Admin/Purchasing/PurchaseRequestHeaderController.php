@@ -69,7 +69,7 @@ class PurchaseRequestHeaderController extends Controller
             'sn_engine'         => Input::get('sn_engine'),
             'status_id'         => 1,
             'created_by'        => $user->id,
-            'created_at'        => $now->toDateString()
+            'created_at'        => $now->toDateTimeString()
 
         ]);
 

@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Sun, 18 Feb 2018 09:43:04 +0000.
+ * Date: Mon, 19 Feb 2018 03:17:21 +0000.
  */
 
 namespace App\Models;
@@ -14,9 +14,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property int $id
  * @property string $code
- * @property string $quot_no
- * @property \Carbon\Carbon $quot_date
- * @property int $purchasing_request_id
+ * @property \Carbon\Carbon $date
+ * @property int $quotation_id
  * @property int $supplier_id
  * @property float $subtotal_price
  * @property float $delivery_charge
@@ -29,7 +28,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $updated_by
  * @property \Carbon\Carbon $updated_at
  * 
- * @property \App\Models\PurchaseRequestHeader $purchase_request_header
+ * @property \App\Models\QuotationHeader $quotation_header
  * @property \App\Models\Status $status
  * @property \App\Models\Supplier $supplier
  * @property \App\Models\User $user
@@ -42,7 +41,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 class PurchaseOrderHeader extends Eloquent
 {
 	protected $casts = [
-		'purchasing_request_id' => 'int',
+		'quotation_id' => 'int',
 		'supplier_id' => 'int',
 		'subtotal_price' => 'float',
 		'delivery_charge' => 'float',
@@ -55,14 +54,13 @@ class PurchaseOrderHeader extends Eloquent
 	];
 
 	protected $dates = [
-		'quot_date'
+		'date'
 	];
 
 	protected $fillable = [
 		'code',
-		'quot_no',
-		'quot_date',
-		'purchasing_request_id',
+		'date',
+		'quotation_id',
 		'supplier_id',
 		'subtotal_price',
 		'delivery_charge',
@@ -74,17 +72,9 @@ class PurchaseOrderHeader extends Eloquent
 		'updated_by'
 	];
 
-    public function getTotalPriceAttribute(){
-        return number_format($this->attributes['total_price'], 0, ",", ".");
-    }
-
-    public function getDeliveryChargeAttribute(){
-        return number_format($this->attributes['delivery_charge'], 0, ",", ".");
-    }
-
-	public function purchase_request_header()
+	public function quotation_header()
 	{
-		return $this->belongsTo(\App\Models\PurchaseRequestHeader::class, 'purchasing_request_id');
+		return $this->belongsTo(\App\Models\QuotationHeader::class, 'quotation_id');
 	}
 
 	public function status()
@@ -97,10 +87,15 @@ class PurchaseOrderHeader extends Eloquent
 		return $this->belongsTo(\App\Models\Supplier::class);
 	}
 
-	public function user()
-	{
-		return $this->belongsTo(\App\Models\User::class, 'updated_by');
-	}
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'updated_by');
+    }
 
 	public function item_receipt_details()
 	{

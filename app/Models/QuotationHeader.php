@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 06 Feb 2018 06:33:00 +0000.
+ * Date: Mon, 19 Feb 2018 03:21:14 +0000.
  */
 
 namespace App\Models;
@@ -29,6 +29,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\Status $status
  * @property \App\Models\Supplier $supplier
  * @property \App\Models\User $user
+ * @property \Illuminate\Database\Eloquent\Collection $purchase_order_headers
  * @property \Illuminate\Database\Eloquent\Collection $quotation_details
  *
  * @package App\Models
@@ -58,6 +59,18 @@ class QuotationHeader extends Eloquent
 		'updated_by'
 	];
 
+    public function getTotalPriceAttribute(){
+        return 'Rp '. number_format($this->attributes['total_price'], 0, ",", ".");
+    }
+
+    public function getTotalDiscountAttribute(){
+        return 'Rp '. number_format($this->attributes['total_discount'], 0, ",", ".");
+    }
+
+    public function getTotalPaymentAttribute(){
+        return 'Rp '. number_format($this->attributes['total_payment'], 0, ",", ".");
+    }
+
 	public function purchase_request_header()
 	{
 		return $this->belongsTo(\App\Models\PurchaseRequestHeader::class, 'purchase_request_id');
@@ -75,13 +88,18 @@ class QuotationHeader extends Eloquent
 
     public function createdBy()
     {
-        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
+        return $this->belongsTo(\App\Models\User::class, 'created_by');
     }
 
     public function updatedBy()
     {
-        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
+        return $this->belongsTo(\App\Models\User::class, 'updated_by');
     }
+
+	public function purchase_order_headers()
+	{
+		return $this->hasMany(\App\Models\PurchaseOrderHeader::class, 'quotation_id');
+	}
 
 	public function quotation_details()
 	{

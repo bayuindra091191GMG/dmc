@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 06 Feb 2018 06:33:09 +0000.
+ * Date: Mon, 19 Feb 2018 06:35:13 +0000.
  */
 
 namespace App\Models;
@@ -19,6 +19,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property float $price
  * @property int $discount
  * @property float $subtotal
+ * @property string $remark
  * 
  * @property \App\Models\Item $item
  * @property \App\Models\QuotationHeader $quotation_header
@@ -44,8 +45,21 @@ class QuotationDetail extends Eloquent
 		'quantity',
 		'price',
 		'discount',
-		'subtotal'
+		'subtotal',
+		'remark'
 	];
+
+    public function getPriceStringAttribute(){
+        return 'Rp '. number_format($this->attributes['price'], 0, ",", ".");
+    }
+
+    public function getDiscountStringAttribute(){
+        return $this->attributes['discount']. '%';
+    }
+
+    public function getSubtotalStringAttribute(){
+        return 'Rp '. number_format($this->attributes['subtotal'], 0, ",", ".");
+    }
 
 	public function item()
 	{
