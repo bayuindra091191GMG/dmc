@@ -459,7 +459,7 @@
                         }
                         if (data.errors.remark_add) {
                             $('.errorRemark').removeClass('hidden');
-                            $('.errorRemark').text(data.errors.remarks);
+                            $('.errorRemark').text(data.errors.remark);
                         }
                         if (data.errors.time){
                             $('.errorTime').removeClass('hidden');
@@ -468,10 +468,10 @@
                     } else {
                         toastr.success('Berhasil simpan detail!', 'Sukses', {timeOut: 5000});
                         var remarkAdd = '-';
-                        if (data.remarks !== null) {
-                            remarkAdd = data.remarks;
+                        if (data.remark !== null) {
+                            remarkAdd = data.remark;
                         }
-                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.time + "</td><td>" + data.quantity + "</td><td>" + remarkAdd + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remarks + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span> Hapus</button></td></tr>");
+                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.time + "</td><td>" + data.quantity + "</td><td>" + remarkAdd + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span> Hapus</button></td></tr>");
 
                     }
                 },

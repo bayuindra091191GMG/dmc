@@ -34,7 +34,7 @@ class DocketDetailController extends Controller
             $detail->quantity = Input::get('qty');
             $detail->time = Input::get('time');
 
-            if(!empty(Input::get('remark'))) $detail->remarks = Input::get('remark_add');
+            if(!empty(Input::get('remark'))) $detail->remarks = Input::get('remark');
 
             $detail->save();
 

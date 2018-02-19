@@ -305,7 +305,7 @@ Route::get('/datatables-approval-rules', 'Admin\ApprovalRuleController@getIndex'
 Route::get('/datatables-roles', 'Admin\RoleController@getIndex')->name('datatables.roles');
 
 // DOCKET
-Route::get('/datatables-issued-dockets', 'Admin\Goods\DocketController@getIndex')->name('datatables.issued_dockets');
+Route::get('/datatables-issued-dockets', 'Admin\Inventory\DocketController@getIndex')->name('datatables.issued_dockets');
 
 // DOCUMENTS
 Route::get('/documents/purchase-request', function (){

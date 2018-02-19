@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 06 Feb 2018 06:33:25 +0000.
+ * Date: Mon, 19 Feb 2018 03:27:43 +0000.
  */
 
 namespace App\Models;
@@ -14,6 +14,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property int $id
  * @property string $code
+ * @property string $no_sj_spb
+ * @property \Carbon\Carbon $date
  * @property int $delivery_note_id
  * @property string $remarks
  * @property int $status_id
@@ -38,8 +40,14 @@ class ItemReceiptHeader extends Eloquent
 		'updated_by' => 'int'
 	];
 
+	protected $dates = [
+		'date'
+	];
+
 	protected $fillable = [
 		'code',
+		'no_sj_spb',
+		'date',
 		'delivery_note_id',
 		'remarks',
 		'status_id',
