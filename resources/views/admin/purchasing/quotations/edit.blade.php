@@ -420,6 +420,8 @@
                 success: function(data) {
                     $('.errorItem').addClass('hidden');
                     $('.errorQty').addClass('hidden');
+                    $('.errorPrice').addClass('hidden');
+                    $('.errorDiscount').addClass('hidden');
                     $('.errorRemark').addClass('hidden');
 
                     if ((data.errors)) {
@@ -454,7 +456,7 @@
                         if (data.remark !== null) {
                             remarkAdd = data.remark;
                         }
-                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + remarkAdd + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span> Hapus</button></td></tr>");
+                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + remarkAdd + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span> Hapus</button></td></tr>");
 
                     }
                 },
@@ -492,31 +494,44 @@
 
             $('#qty_edit').val($(this).data('qty'));
             $('#remark_edit').val($(this).data('remark'));
-            $('#date_edit').val($(this).data('date'));
+            $('#price_edit').val($(this).data('price'));
+            $('#discount_edit').val($(this).data('discount'));
             $('#editModal').modal('show');
         });
         $('.modal-footer').on('click', '.edit', function() {
             $.ajax({
                 type: 'PUT',
-                url: '{{ route('admin.purchase_request_details.update') }}',
+                url: '{{ route('admin.quotation_details.update') }}',
                 data: {
                     '_token': $('input[name=_token]').val(),
                     'id' : id,
                     'item': $("#item_edit").val(),
                     'qty': $('#qty_edit').val(),
+                    'price': $('#price_edit').val(),
+                    'discount': $('#discount_edit').val(),
                     'remark': $('#remark_edit').val()
                 },
                 success: function(data) {
                     $('.errorQty').addClass('hidden');
                     $('.errorRemark').addClass('hidden');
+                    $('.errorPrice').addClass('hidden');
+                    $('.errorDiscount').addClass('hidden');
 
                     if ((data.errors)) {
                         setTimeout(function () {
                             $('#editModal').modal('show');
-                            toastr.error('Gagal ubah data!', 'Peringatan', {timeOut: 5000});
+                            toastr.error('Gagal ubah detail!', 'Peringatan', {timeOut: 5000});
                         }, 500);
 
                         if (data.errors.qty) {
+                            $('.errorQty').removeClass('hidden');
+                            $('.errorQty').text(data.errors.qty);
+                        }
+                        if (data.errors.price) {
+                            $('.errorQty').removeClass('hidden');
+                            $('.errorQty').text(data.errors.qty);
+                        }
+                        if (data.errors.discount) {
                             $('.errorQty').removeClass('hidden');
                             $('.errorQty').text(data.errors.qty);
                         }
@@ -530,7 +545,7 @@
                         if (data.remark !== null) {
                             remarkEdit = data.remark;
                         }
-                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + remarkEdit + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark=" + data.remark + "><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span> hapus</button></td></tr>");
+                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + remarkEdit + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark=" + data.remark + " data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span> hapus</button></td></tr>");
                         // $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td>" + data.id + "</td><td>" + data.title + "</td><td>" + data.content + "</td><td class='text-center'><input type='checkbox' class='edit_published' data-id='" + data.id + "'></td><td>Right now</td><td><button class='show-modal btn btn-success' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-eye-open'></span> Show</button> <button class='edit-modal btn btn-info' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-edit'></span> Edit</button> <button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-trash'></span> Delete</button></td></tr>");
 
                     }

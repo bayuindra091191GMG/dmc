@@ -39,11 +39,9 @@ class PurchaseRequestDetailController extends Controller
             $detail->item_id = Input::get('item');
             $detail->quantity = Input::get('qty');
 
-            if(!empty(Input::get('remark'))) $detail->remark = Input::get('remark_add');
+            if(!empty(Input::get('remark'))) $detail->remark = Input::get('remark');
 
             $detail->save();
-
-            error_log($detail->id);
 
             $json = PurchaseRequestDetail::with('item')->find($detail->id);
         }

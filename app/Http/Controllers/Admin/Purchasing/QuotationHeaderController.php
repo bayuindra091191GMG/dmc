@@ -17,6 +17,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class QuotationHeaderController extends Controller
@@ -30,7 +31,7 @@ class QuotationHeaderController extends Controller
     }
 
     public function store(Request $request){
-        $validator = \Validator::make($request->all(),[
+        $validator = Validator::make($request->all(),[
             'quot_code'     => 'required|max:40',
             'pr_code'       => 'required',
             'supplier'      => 'required'
