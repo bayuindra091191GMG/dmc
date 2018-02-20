@@ -137,8 +137,9 @@ class DocketController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param IssuedDocketHeader $issuedDocketHeader
+     * @param $id
      * @return \Illuminate\Http\Response
+     * @internal param IssuedDocketHeader $issuedDocketHeader
      * @internal param PurchaseRequestHeader $purchase_request
      * @internal param int $id
      */
@@ -208,6 +209,13 @@ class DocketController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function printDocument($id){
+        $issuedDocket = IssuedDocketHeader::find($id);
+        $issuedDocketDetails = IssuedDocketDetail::where('header_id', $issuedDocket->id)->get();
+
+        return view('documents.issued_dockets.issued_docket', compact('issuedDocket', 'issuedDocketDetails'));
     }
 
     public function getIndex(){
