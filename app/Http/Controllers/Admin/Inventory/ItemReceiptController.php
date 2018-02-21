@@ -92,8 +92,11 @@ class ItemReceiptController extends Controller
         return redirect()->route('admin.item_receipts.show', ['item_receipts' => $docketHeader]);
     }
 
-    public function edit(){
+    public function edit($id){
+        $header = ItemReceiptHeader::find($id);
+        $departments = Department::all();
 
+        return View('admin.inventory.docket.edit', compact('header', 'departments'));
     }
 
     public function update(){

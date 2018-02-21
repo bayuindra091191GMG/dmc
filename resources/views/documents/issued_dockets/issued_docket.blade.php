@@ -2,7 +2,7 @@
 
 <head>
 
-<link rel=Stylesheet href=stylesheet.css>
+{{--<link rel="stylesheet" href="/documents/issued_dockets/stylesheet.css">--}}
 <style>
 <!--table
 	{mso-displayed-decimal-separator:"\.";
@@ -12,6 +12,84 @@
 	mso-header-margin:.3in;
 	mso-footer-margin:.3in;}
 -->
+
+tr
+{mso-height-source:auto;}
+col
+{mso-width-source:auto;}
+br
+{mso-data-placement:same-cell;}
+.style0
+{mso-number-format:General;
+ text-align:general;
+ vertical-align:bottom;
+ white-space:nowrap;
+ mso-rotate:0;
+ mso-background-source:auto;
+ mso-pattern:auto;
+ color:black;
+ font-size:11.0pt;
+ font-weight:400;
+ font-style:normal;
+ text-decoration:none;
+ font-family:Calibri, sans-serif;
+ mso-font-charset:0;
+ border:none;
+ mso-protection:locked visible;
+ mso-style-name:Normal;
+ mso-style-id:0;}
+td
+{mso-style-parent:style0;
+ padding:0px;
+ mso-ignore:padding;
+ color:black;
+ font-size:11.0pt;
+ font-weight:400;
+ font-style:normal;
+ text-decoration:none;
+ font-family:Calibri, sans-serif;
+ mso-font-charset:0;
+ mso-number-format:General;
+ text-align:general;
+ vertical-align:bottom;
+ border:none;
+ mso-background-source:auto;
+ mso-pattern:auto;
+ mso-protection:locked visible;
+ white-space:nowrap;
+ mso-rotate:0;}
+.xl65
+{mso-style-parent:style0;
+ font-family:"Times New Roman", serif;
+ mso-font-charset:0;
+ vertical-align:middle;}
+.xl66
+{mso-style-parent:style0;
+ border:.5pt solid windowtext;}
+.xl67
+{mso-style-parent:style0;
+ font-weight:700;
+ font-family:"Times New Roman", serif;
+ mso-font-charset:0;
+ text-align:center;}
+.xl68
+{mso-style-parent:style0;
+ font-family:"Times New Roman", serif;
+ mso-font-charset:0;}
+.xl69
+{mso-style-parent:style0;
+ font-family:"Times New Roman", serif;
+ mso-font-charset:0;
+ text-align:center;
+ border:.5pt solid windowtext;}
+.xl70
+{mso-style-parent:style0;
+ font-family:"Times New Roman", serif;
+ mso-font-charset:0;
+ text-align:center;}
+
+
+ {{--{{ Html::style(mix('assets/documents/issued_docket/stylesheet.css')) }}--}}
 </style>
 </head>
 
@@ -31,7 +109,7 @@
   valign=top><span lang=EN-ID style='mso-ansi-language:EN-ID'>
     <span style='mso-ignore:vglayout;
   position:absolute;z-index:5;margin-left:0px;margin-top:16px;width:204px;
-  height:42px'><img width=204 height=42 src=image002.gif ></span><span
+  height:42px'><img width=204 height=42 src={{ asset('assets/images/image002.gif') }} ></span><span
   style='mso-ignore:vglayout2'>
   <table cellpadding=0 cellspacing=0>
    <tr>
@@ -55,25 +133,25 @@
  <tr height=20 style='height:15.0pt'>
   <td height=20 class=xl68 colspan=2 style='height:15.0pt;mso-ignore:colspan'><span
   lang=EN-ID style='mso-ansi-language:EN-ID'>Hari/Tgl/Bln/Thn</td>
-  <td class=xl68>:</td>
+  <td class=xl68>: {{ $issuedDocket->date }}</td>
   <td class=xl68></td>
   <td class=xl68 colspan=2 style='mso-ignore:colspan'>No. Issue Docket</td>
-  <td class=xl68>:</td>
+  <td class=xl68>: {{ $issuedDocket->code }}</td>
  </tr>
  <tr height=20 style='height:15.0pt'>
   <td height=20 class=xl68 colspan=2 style='height:15.0pt;mso-ignore:colspan'><span
   lang=EN-ID style='mso-ansi-language:EN-ID'>No. Unit</td>
   </span>
-  <td class=xl68>:</td>
+  <td class=xl68>: {{ $issuedDocket->machinery->code }}</td>
   <td class=xl68></td>
   <td class=xl68>No. PR</td>
   <td class=xl68></td>
-  <td class=xl68>:</td>
+  <td class=xl68>: {{ $issuedDocket->purchase_request_header->code }}</td>
  </tr>
  <tr height=20 style='height:15.0pt'>
   <td height=20 class=xl68 colspan=2 style='height:15.0pt;mso-ignore:colspan'><span
   lang=EN-ID style='mso-ansi-language:EN-ID'>Departemen</td>
-  <td class=xl68>:</td>
+  <td class=xl68>: {{ $issuedDocket->department->name }}</td>
   <td class=xl68></span></td>
   <td class=xl68></td>
   <td class=xl68></td>
@@ -81,7 +159,7 @@
  </tr>
  <tr height=20 style='height:15.0pt'>
   <td height=20 class=xl68 colspan=2 style='height:15.0pt;mso-ignore:colspan'>Divisi</td>
-  <td class=xl68>:</td>
+  <td class=xl68>: {{ $issuedDocket->division }}</td>
   <td class=xl68></td>
   <td class=xl68></td>
   <td class=xl68></td>
@@ -119,7 +197,7 @@
 
  @php($i = 1)
  @foreach($issuedDocketDetails as $item)
- <tr height=20 style='height:15.0pt;mso-yfti-irow:1'>
+ <tr height=20 style='text-align: center;height:15.0pt;mso-yfti-irow:1'>
   <td height=20 class=xl66 style='height:15.0pt;border-top:none'>
    <span lang=EN-ID style='mso-ansi-language:EN-ID'>
      {{ $i }}
@@ -203,12 +281,12 @@
    </tr>
    <tr>
     <td height=1></td>
-    <td align=left valign=top><img width=122 height=1 src=image005.gif v:shapes="Straight_x0020_Connector_x0020_3"></td>
+    <td align=left valign=top><img width=122 height=1 src={{ asset('assets/images/image005.gif') }} v:shapes="Straight_x0020_Connector_x0020_3"></td>
    </tr>
    <tr>
     <td height=2></td>
     <td colspan=2></td>
-    <td align=left valign=top><img width=126 height=2 src=image006.gif v:shapes="Straight_x0020_Connector_x0020_5"></td>
+    <td align=left valign=top><img width=126 height=2 src={{ asset('assets/images/image006.gif') }} v:shapes="Straight_x0020_Connector_x0020_5"></td>
    </tr>
   </table>
   </span><![endif]><span style='mso-ignore:vglayout2'>
@@ -221,7 +299,7 @@
   <td colspan=2 style='mso-ignore:colspan'></td>
   <td align=left valign=top><![if !vml]><span style='mso-ignore:vglayout;
   position:absolute;z-index:3;margin-left:16px;margin-top:18px;width:123px;
-  height:3px'><img width=123 height=3 src=image008.gif v:shapes="Straight_x0020_Connector_x0020_6"></span><![endif]><span
+  height:3px'><img width=123 height=3 src={{ asset('assets/images/image008.gif') }} v:shapes="Straight_x0020_Connector_x0020_6"></span><![endif]><span
   style='mso-ignore:vglayout2'>
   <table cellpadding=0 cellspacing=0>
    <tr>
@@ -237,7 +315,7 @@
    </tr>
    <tr>
     <td></td>
-    <td><img width=110 height=1 src=image010.gif v:shapes="Straight_x0020_Connector_x0020_7"></td>
+    <td><img width=110 height=1 src={{ asset('assets/images/image010.gif') }} v:shapes="Straight_x0020_Connector_x0020_7"></td>
     <td width=48></td>
    </tr>
    <tr>
