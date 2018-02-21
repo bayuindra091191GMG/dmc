@@ -74,10 +74,15 @@ class Employee extends Eloquent
 		return $this->belongsTo(\App\Models\Status::class);
 	}
 
-	public function user()
-	{
-		return $this->belongsTo(\App\Models\User::class, 'updated_by');
-	}
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'updated_by');
+    }
 
 	public function department()
 	{

@@ -37,8 +37,6 @@ class PurchaseRequestHeaderController extends Controller
     public function show(PurchaseRequestHeader $purchase_request){
         $header = $purchase_request;
 
-//        dd($header->department->name);
-
         return View('admin.purchasing.purchase_requests.show', compact('header'));
     }
 

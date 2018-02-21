@@ -37,8 +37,8 @@
                     Nomor PR
                     <span class="required">*</span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="pr_code" name="pr_code" class="form-control col-md-7 col-xs-12 @if($errors->has('pr_code')) parsley-error @endif">
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <select id="pr_code" name="pr_code" class="form-control col-md-12 col-xs-12 @if($errors->has('pr_code')) parsley-error @endif">
                     </select>
                 </div>
             </div>
@@ -215,13 +215,13 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="item_edit">Barang:</label>
                             <div class="col-sm-10">
-                                <select class="form-control" id="item_edit" name="item"></select>
+                                <select class="form-control" id="item_edit" name="item_edit"></select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="qty_edit">Jumlah:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="qty_edit" name="qty">
+                                <input type="number" class="form-control" id="qty_edit" name="qty_edit">
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -242,7 +242,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="remark_edit">Remark:</label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" id="remark_edit" name="remark" cols="40" rows="5"></textarea>
+                                <textarea class="form-control" id="remark_edit" name="remark_edit" cols="40" rows="5"></textarea>
                                 <p class="errorRemark text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -346,6 +346,30 @@
             }
         });
 
+        $('#supplier').select2({
+            placeholder: {
+                id: '{{ $header->supplier_id }}',
+                text: '{{ $header->supplier->name }}'
+            },
+            width: '100%',
+            minimumInputLength: 2,
+            ajax: {
+                url: '{{ route('select.suppliers') }}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: $.trim(params.term),
+                        _token: $('input[name=_token]').val()
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+
         $('#select0').select2({
             placeholder: {
                 id: '-1',
@@ -371,6 +395,12 @@
 
         // Add autonumeric
         numberFormat = new AutoNumeric('#price_add', {
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+            decimalPlaces: 0
+        });
+
+        numberFormat = new AutoNumeric('#price_edit', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
             decimalPlaces: 0
@@ -456,7 +486,7 @@
                         if (data.remark !== null) {
                             remarkAdd = data.remark;
                         }
-                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + remarkAdd + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span> Hapus</button></td></tr>");
+                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + data.priceString + "</td><td>" + data.discountString + "</td><td>" + data.subtotalString + "</td><td>" + remarkAdd + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span> Hapus</button></td></tr>");
 
                     }
                 },
@@ -494,9 +524,16 @@
 
             $('#qty_edit').val($(this).data('qty'));
             $('#remark_edit').val($(this).data('remark'));
-            $('#price_edit').val($(this).data('price'));
             $('#discount_edit').val($(this).data('discount'));
             $('#editModal').modal('show');
+
+            // Set autonumeric on price
+            var priceStr = AutoNumeric.format($(this).data('price'), {
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
+                decimalPlaces: 0
+            });
+            $('#price_edit').val(priceStr);
         });
         $('.modal-footer').on('click', '.edit', function() {
             $.ajax({
@@ -565,7 +602,7 @@
         $('.modal-footer').on('click', '.delete', function() {
             $.ajax({
                 type: 'POST',
-                url: '{{ route('admin.purchase_request_details.delete') }}',
+                url: '{{ route('admin.quotation_details.delete') }}',
                 data: {
                     '_token': $('input[name=_token]').val(),
                     'id': deletedId

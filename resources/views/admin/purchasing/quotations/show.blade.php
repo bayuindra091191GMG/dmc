@@ -26,7 +26,6 @@
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
                         Nomor Quotation
-                        <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         : {{ $header->code }}
@@ -36,10 +35,9 @@
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
                         Vendor
-                        <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : <a href="{{ route('admin.suppliers.edit', ['supplier' => $header->supplier_id]) }}">{{ $header->vendor->name }}</a>
+                        : <a href="{{ route('admin.suppliers.edit', ['supplier' => $header->supplier_id]) }}">{{ $header->supplier->name }}</a>
                     </div>
                 </div>
 
@@ -106,7 +104,7 @@
                             </thead>
                             <tbody>
 
-                            @foreach($header->purchase_request_details as $detail)
+                            @foreach($header->quotation_details as $detail)
                                 <tr>
                                     <td class='field-item'>
                                         {{ $detail->item->code }}
@@ -118,13 +116,13 @@
                                         {{ $detail->quantity }}
                                     </td>
                                     <td>
-                                        {{ $detail->price }}
+                                        {{ $detail->price_string }}
                                     </td>
                                     <td>
-                                        {{ $detail->discount }}
+                                        {{ $detail->discount_string }}
                                     </td>
                                     <td>
-                                        {{ $detail->subtotal }}
+                                        {{ $detail->subtotal_string }}
                                     </td>
                                     <td>
                                         {{ $detail->remark ?? '-' }}

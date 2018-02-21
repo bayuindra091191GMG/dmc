@@ -26,6 +26,12 @@ class QuotationHeaderController extends Controller
         return View('admin.purchasing.quotations.index');
     }
 
+    public function show(QuotationHeader $quotation){
+        $header = $quotation;
+
+        return View('admin.purchasing.quotations.show', compact('header'));
+    }
+
     public function create(){
         return View('admin.purchasing.quotations.create');
     }
@@ -68,6 +74,7 @@ class QuotationHeaderController extends Controller
         ]);
 
         // Create quotation detail
+        $totalPrice = 0;
         $totalDiscount = 0;
         $totalPayment = 0;
         $qtys = Input::get('qty');
@@ -77,21 +84,25 @@ class QuotationHeaderController extends Controller
         $idx = 0;
         foreach($items as $item){
             if(!empty($item)){
+                $priceStr = str_replace('.','', $prices[$idx]);
                 $quotDetail = QuotationDetail::create([
                     'header_id'     => $quotHeader->id,
                     'item_id'       => $item,
                     'quantity'      => $qtys[$idx],
-                    'price'         => $prices[$idx]
+                    'price'         => $priceStr
                 ]);
 
                 // Check discount
                 if(!empty($discounts[$idx]) && $discounts[$idx] !== '0'){
                     $quotDetail->discount = $discounts[$idx];
 
-                    $price = floatval($prices[$idx]);
+                    $price = floatval($priceStr);
                     $discount = floatval($discounts[$idx]);
                     $discountAmount = $price * $discount / 100;
                     $quotDetail->subtotal = $price - $discountAmount;
+
+                    // Accumulate total price
+                    $totalPrice += $price;
 
                     // Accumulate total discount
                     $totalDiscount += $discountAmount;
@@ -110,12 +121,29 @@ class QuotationHeaderController extends Controller
         }
 
         if($totalDiscount > 0) $quotHeader->total_discount = $totalDiscount;
+        $quotHeader->total_price = $totalPrice;
         $quotHeader->total_payment = $totalPayment;
         $quotHeader->save();
 
         Session::flash('message', 'Berhasil membuat quotation vendor!');
 
         return redirect()->route('admin.quotations.show', ['quotation' => $quotHeader]);
+    }
+
+    public function edit(QuotationHeader $quotation){
+        $header = $quotation;
+
+        return View('admin.purchasing.quotations.edit', compact('header'));
+    }
+
+    public function update(Request $request, QuotationHeader $quotation){
+        if(!empty(Input::get('pr_code'))) $quotation->purchase_request_id = Input::get('pr_code');
+        if(!empty(Input::get('supplier'))) $quotation->supplier_id = Input::get('supplier');
+        $quotation->save();
+
+        Session::flash('message', 'Berhasil ubah quotation vendor!');
+
+        return redirect()->route('admin.quotations.edit', ['quotation' => $quotation]);
     }
 
     public function getIndex(){

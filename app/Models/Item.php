@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Fri, 26 Jan 2018 02:05:09 +0000.
+ * Date: Wed, 21 Feb 2018 10:00:46 +0000.
  */
 
 namespace App\Models;
@@ -31,9 +31,15 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\Group $group
  * @property \App\Models\Uom $uom
  * @property \App\Models\Warehouse $warehouse
+ * @property \Illuminate\Database\Eloquent\Collection $delivery_note_details
+ * @property \Illuminate\Database\Eloquent\Collection $issued_docket_details
+ * @property \Illuminate\Database\Eloquent\Collection $item_receipt_details
  * @property \Illuminate\Database\Eloquent\Collection $purchase_order_details
  * @property \Illuminate\Database\Eloquent\Collection $purchase_request_details
+ * @property \Illuminate\Database\Eloquent\Collection $quotation_details
  * @property \Illuminate\Database\Eloquent\Collection $serials
+ * @property \Illuminate\Database\Eloquent\Collection $stock_adjustments
+ * @property \Illuminate\Database\Eloquent\Collection $stock_ins
  *
  * @package App\Models
  */
@@ -50,7 +56,7 @@ class Item extends Eloquent
 		'updated_by' => 'int'
 	];
 
-	protected $appends = array('uomDescription');
+    protected $appends = array('uomDescription');
 
 	protected $fillable = [
 		'code',
@@ -95,6 +101,21 @@ class Item extends Eloquent
 		return $this->belongsTo(\App\Models\Warehouse::class);
 	}
 
+	public function delivery_note_details()
+	{
+		return $this->hasMany(\App\Models\DeliveryNoteDetail::class);
+	}
+
+	public function issued_docket_details()
+	{
+		return $this->hasMany(\App\Models\IssuedDocketDetail::class);
+	}
+
+	public function item_receipt_details()
+	{
+		return $this->hasMany(\App\Models\ItemReceiptDetail::class);
+	}
+
 	public function purchase_order_details()
 	{
 		return $this->hasMany(\App\Models\PurchaseOrderDetail::class);
@@ -105,8 +126,23 @@ class Item extends Eloquent
 		return $this->hasMany(\App\Models\PurchaseRequestDetail::class);
 	}
 
+	public function quotation_details()
+	{
+		return $this->hasMany(\App\Models\QuotationDetail::class);
+	}
+
 	public function serials()
 	{
 		return $this->hasMany(\App\Models\Serial::class);
+	}
+
+	public function stock_adjustments()
+	{
+		return $this->hasMany(\App\Models\StockAdjustment::class);
+	}
+
+	public function stock_ins()
+	{
+		return $this->hasMany(\App\Models\StockIn::class);
 	}
 }

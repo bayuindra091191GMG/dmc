@@ -42,6 +42,9 @@
                     <select id="pr_code" name="pr_code" class="form-control col-md-7 col-xs-12 @if($errors->has('pr_code')) parsley-error @endif">
                     </select>
                 </div>
+                {{--<div id="check-pr-section" class="col-md-2 col-sm-2 col-xs-12">--}}
+                    {{--<button class="check-pr btn btn-info">Lihat PR</button>--}}
+                {{--</div>--}}
             </div>
 
             <div class="form-group">
@@ -60,20 +63,20 @@
             </div>
 
             <div class="form-group">
-                <div class="col-lg-2 col-md-2 col-xs-0"></div>
-                <div class="col-lg-8 col-md-8 col-xs-12 column">
+                <div class="col-lg-1 col-md-1 col-xs-0"></div>
+                <div class="col-lg-10 col-md-10 col-xs-12 column">
                     <table class="table table-bordered table-hover" id="tab_logic">
                         <thead>
                         <tr >
-                            <th class="text-center" style="width: 40%">
+                            <th class="text-center" style="width: 15%">
                                 Nomor Part
                             </th>
-                            <th class="text-center" style="width: 20%">
+                            <th class="text-center" style="width: 15%">
                                 Jumlah
                             </th><th class="text-center" style="width: 20%">
                                 Harga
-                            </th><th class="text-center" style="width: 20%">
-                                Diskon
+                            </th><th class="text-center" style="width: 10%">
+                                Diskon (%)
                             </th>
                             <th class="text-center" style="width: 40%">
                                 Remark
@@ -103,7 +106,7 @@
                     </table>
                     <a id="add_row" class="btn btn-default pull-left">Tambah</a><a id='delete_row' class="pull-right btn btn-default">Hapus</a>
                 </div>
-                <div class="col-lg-2 col-md-2 col-xs-0"></div>
+                <div class="col-lg-1 col-md-1 col-xs-0"></div>
             </div>
 
             <div class="form-group">
@@ -162,7 +165,8 @@
                 dataType: 'json',
                 data: function (params) {
                     return {
-                        q: $.trim(params.term)
+                        q: $.trim(params.term),
+                        _token: $('input[name=_token]').val()
                     };
                 },
                 processResults: function (data) {
@@ -205,7 +209,7 @@
 
         var i=1;
         $("#add_row").click(function(){
-            $('#addr'+i).html("<td class='field-item'><select id='select" + i + "' name='item[]' class='form-control'></select></td><td><input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/></td><td><input type='text' name='price[]'  placeholder='Harga' class='form-control'/></td><td><input type='number' name='discount[]'  placeholder='Diskon' class='form-control'/></td><td><input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/></td>");
+            $('#addr'+i).html("<td class='field-item'><select id='select" + i + "' name='item[]' class='form-control'></select></td><td><input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/></td><td><input type='text' id='price" + i + "' name='price[]'  placeholder='Harga' class='form-control'/></td><td><input type='number' name='discount[]'  placeholder='Diskon' class='form-control'/></td><td><input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/></td>");
 
             $('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
 

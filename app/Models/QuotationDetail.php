@@ -11,7 +11,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class QuotationDetail
- * 
+ *
  * @property int $id
  * @property int $header_id
  * @property int $item_id
@@ -20,7 +20,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $discount
  * @property float $subtotal
  * @property string $remark
- * 
+ *
  * @property \App\Models\Item $item
  * @property \App\Models\QuotationHeader $quotation_header
  *
@@ -54,7 +54,12 @@ class QuotationDetail extends Eloquent
     }
 
     public function getDiscountStringAttribute(){
-        return $this->attributes['discount']. '%';
+        if(!empty($this->attributes['discount']) && $this->attributes['discount'] !== 0){
+            return $this->attributes['discount']. '%';
+        }
+        else{
+            return '-';
+        }
     }
 
     public function getSubtotalStringAttribute(){
