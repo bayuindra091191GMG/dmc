@@ -269,6 +269,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('item_receipts/ubah/{item_receipt}', 'Inventory\ItemReceiptController@update')->name('item_receipts.update');
     Route::get('item_receipts/tambah', 'Inventory\ItemReceiptController@create')->name('item_receipts.create');
     Route::post('item_receipts/simpan', 'Inventory\ItemReceiptController@store')->name('item_receipts.store');
+    Route::get('item_receipts/print/{item_receipt}', 'Inventory\ItemReceiptController@printDocument')->name('item_receipts.print');
 
     //Item Receipts Details
     Route::get('item_receipt_details', 'Inventory\ItemReceiptDetailController@index')->name('item_receipt_details');
@@ -312,6 +313,7 @@ Route::get('/select-machinery_types', 'Admin\MachineryTypeController@getMachiner
 Route::get('/select-suppliers', 'Admin\SupplierController@getSuppliers')->name('select.suppliers');
 Route::get('/select-purchase_requests', 'Admin\Purchasing\PurchaseRequestHeaderController@getPurchaseRequests')->name('select.purchase_requests');
 Route::get('/select-purchase_orders', 'Admin\Purchasing\PurchaseOrderHeaderController@getPurchaseOrders')->name('select.purchase_orders');
+Route::get('/select-delivery_orders', 'Admin\Inventory\DeliveryOrderController@getDeliveryOrders')->name('select.delivery_orders');
 
 /**
  * Datatables

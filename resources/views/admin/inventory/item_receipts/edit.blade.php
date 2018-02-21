@@ -1,12 +1,12 @@
 @extends('admin.layouts.admin')
 
-@section('title','Ubah Issued Docket '. $header->code)
+@section('title','Ubah Item Receipt '. $header->code)
 
 @section('content')
     <div class="row" style="margin-bottom: 10px;">
         <div class="col-md-12 col-sm-12 col-xs-12">
 
-            {{ Form::open(['route'=>['admin.issued_dockets.update', $header->id],'method' => 'put','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.item_receipts.update', $header->id],'method' => 'put','class'=>'form-horizontal form-label-left']) }}
 
             @if(\Illuminate\Support\Facades\Session::has('message'))
                 <div class="form-group">
@@ -33,53 +33,61 @@
             @endif
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="department" >
-                    Departemen
-                    <span class="required">*</span>
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="delivery_order" >
+                    Delivery Orders
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="department" name="department" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">
-                        @foreach($departments as $department)
-                            <option value="{{ $department->id }}" {{ $header->department_id == $department->id ? "selected":"" }}>{{ $department->name }}</option>
-                        @endforeach
+                    <select id="delivery_order" name="delivery_order" class="form-control col-md-7 col-xs-12 @if($errors->has('delivery_order')) parsley-error @endif">
                     </select>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="machinery" >
-                    Unit Alat Berat
-                    <span class="required">*</span>
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date" >
+                    Date
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="machinery" name="machinery" class="form-control col-md-7 col-xs-12 @if($errors->has('machinery')) parsley-error @endif">
-                    </select>
+                    @php(
+                        $date = \Carbon\Carbon::parse($header->date)->format('d M Y')
+                    )
+                    <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
+                           name="date" value="{{ $date }}">
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sn_chasis">
-                    No PR
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="no_sj_spb">
+                    No SJ/SPB
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="purchase_request_header" name="purchase_request_header" class="form-control col-md-7 col-xs-12 @if($errors->has('purchase_request_header')) parsley-error @endif">
-                    </select>
+                    <input id="no_sj_spb" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('no_sj_spb')) parsley-error @endif"
+                           name="no_sj_spb" value="{{ $header->no_sj_spb }}">
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sn_engine">
-                    Divisi
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="delivered_from">
+                    Pengiriman Dari
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="division" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('division')) parsley-error @endif"
-                           name="division" value="{{ $header->division }}">
+                    <input id="delivered_from" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('delivered_from')) parsley-error @endif"
+                           name="delivered_from" value="{{ $header->delivered_from }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="angkutan">
+                    Angkutan
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="angkutan" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('angkutan')) parsley-error @endif"
+                           name="angkutan" value="{{ $header->angkutan }}">
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a class="btn btn-primary" href="{{ route('admin.purchase_requests') }}"> Batal</a>
+                    <a class="btn btn-primary" href="{{ route('admin.item_receipts') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>
@@ -99,16 +107,16 @@
                 <thead>
                 <tr >
                     <th>
-                        Nomor Part
+                        Nomor Barang
                     </th>
                     <th>
-                        Time
+                        Nomor PO
                     </th>
                     <th>
                         Jumlah
                     </th>
                     <th class="text-center" style="width: 30%">
-                        Remark
+                        Keterangan
                     </th>
                     <th class="text-center" style="width: 20%">
                         Tindakan
@@ -117,25 +125,25 @@
                 </thead>
                 <tbody>
 
-                @foreach($header->issued_docket_details as $detail)
+                @foreach($header->item_receipt_details as $detail)
                     <tr class="item{{ $detail->id }}">
                         <td class='field-item'>
                             {{ $detail->item->code }} - {{ $detail->item->name }}
                         </td>
                         <td>
-                            {{ $detail->time }}
+                            {{ $detail->purchase_order_header->code }}
                         </td>
                         <td>
                             {{ $detail->quantity }}
                         </td>
                         <td>
-                            {{ $detail->remarks ?? '-' }}
+                            {{ $detail->remark ?? '-' }}
                         </td>
                         <td>
-                            <button class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-time="{{ $detail->time }}" data-remark="{{ $detail->remarks }}">
+                            <button class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-po-id="{{ $detail->purchase_order_id }}" data-po-text="{{ $detail->purchase_order_header->code }}" data-remark="{{ $detail->remark }}">
                                 <span class="glyphicon glyphicon-edit"></span> Ubah
                             </button>
-                            <button class="delete-modal btn btn-danger" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-time="{{ $detail->time }}" data-qty="{{ $detail->quantity }}">
+                            <button class="delete-modal btn btn-danger" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-po-id="{{ $detail->purchase_order_id }}" data-po-text="{{ $detail->purchase_order_header->code }}" data-qty="{{ $detail->quantity }}">
                                 <span class="glyphicon glyphicon-trash"></span> Hapus
                             </button>
                         </td>
@@ -166,9 +174,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="time_add">Time:</label>
+                            <label class="control-label col-sm-2" for="po_add">Purchase Order:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="time_add" name="time_add">
+                                <select type="text" class="form-control" id="po_add" name="po_add"></select>
                                 <p class="errorTime text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -217,10 +225,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="time_edit">Time:</label>
+                            <label class="control-label col-sm-2" for="po_edit">Purchase Order:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="time_edit" name="time">
-                                <p class="errorTime text-center alert alert-danger hidden"></p>
+                                <select type="text" class="form-control" id="po_edit" name="po"></select>
                             </div>
                         </div>
                         <div class="form-group">
@@ -270,10 +277,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="time_delete">Time:</label>
+                            <label class="control-label col-sm-2" for="po_delete">Purchase Order:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="time_delete" disabled>
-                                <p class="errorTime text-center alert alert-danger hidden"></p>
+                                <input type="text" class="form-control" id="po_delete" disabled>
                             </div>
                         </div>
                         <div class="form-group">
@@ -316,42 +322,26 @@
     @parent
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
+
+    <script>
+        $('#date').datetimepicker({
+            format: "DD MMM Y"
+        });
+    </script>
+
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript">
         var i=1;
 
-        $('#purchase_request_header').select2({
+        $('#delivery_order').select2({
             placeholder: {
                 id: '-1',
-                text: 'Pilih No PR...'
+                text: 'Pilih Delivery Order...'
             },
             width: '100%',
             minimumInputLength: 2,
             ajax: {
-                url: '{{ route('select.purchase_requests') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                }
-            }
-        });
-
-        $('#machinery').select2({
-            placeholder: {
-                id: '{{ $header->machinery_id ?? '-1' }}',
-                text: '{{ $header->machinery_id !== null ? $header->machinery->code : 'Pilih alat berat...' }}'
-            },
-            width: '100%',
-            minimumInputLength: 2,
-            ajax: {
-                url: '{{ route('select.machineries') }}',
+                url: '{{ route('select.delivery_orders') }}',
                 dataType: 'json',
                 data: function (params) {
                     return {
@@ -422,18 +412,42 @@
                 }
             });
 
+            $('#po_add').select2({
+                placeholder: {
+                    id: '-1',
+                    text: 'Pilih Purchase Order...'
+                },
+                width: '100%',
+                minimumInputLength: 2,
+                ajax: {
+                    url: '{{ route('select.purchase_orders') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            q: $.trim(params.term)
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+
+
             $('.modal-title').text('Tambah Detail');
             $('#addModal').modal('show');
         });
         $('.modal-footer').on('click', '.add', function() {
             $.ajax({
                 type: 'POST',
-                url: '{{ route('admin.issued_docket_details.store') }}',
+                url: '{{ route('admin.item_receipt_details.store') }}',
                 data: {
                     '_token': $('input[name=_token]').val(),
                     'header_id': '{{ $header->id }}',
                     'item': $('#item_add').val(),
-                    'time': $('#time_add').val(),
+                    'po': $('#po_add').val(),
                     'qty': $('#qty_add').val(),
                     'remark': $('#remark_add').val()
                 },
@@ -441,7 +455,7 @@
                     $('.errorItem').addClass('hidden');
                     $('.errorQty').addClass('hidden');
                     $('.errorRemark').addClass('hidden');
-                    $('.errorTime').addClass('hidden');
+                    $('.errorPo').addClass('hidden');
 
                     if ((data.errors)) {
                         setTimeout(function () {
@@ -462,8 +476,8 @@
                             $('.errorRemark').text(data.errors.remark);
                         }
                         if (data.errors.time){
-                            $('.errorTime').removeClass('hidden');
-                            $('.errorTime').text(data.errors.time);
+                            $('.errorPo').removeClass('hidden');
+                            $('.errorPo').text(data.errors.po);
                         }
                     } else {
                         toastr.success('Berhasil simpan detail!', 'Sukses', {timeOut: 5000});
@@ -471,7 +485,7 @@
                         if (data.remark !== null) {
                             remarkAdd = data.remark;
                         }
-                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.time + "</td><td>" + data.quantity + "</td><td>" + remarkAdd + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span> Hapus</button></td></tr>");
+                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.poCode + "</td><td>" + data.quantity + "</td><td>" + remarkAdd + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-po-id='" + data.purchase_order_id + "' data-po-text='" + data.poCode + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-po-id='" + data.purchase_order_id + "' data-po-text='" + data.poCode + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span> Hapus</button></td></tr>");
 
                     }
                 },
@@ -507,23 +521,46 @@
                 }
             });
 
+            $('#po_edit').select2({
+                placeholder: {
+                    id: $(this).data('po-id'),
+                    text: $(this).data('po-text')
+                },
+                width: '100%',
+                minimumInputLength: 2,
+                ajax: {
+                    url: '{{ route('select.purchase_orders') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            q: $.trim(params.term)
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+
             $('#qty_edit').val($(this).data('qty'));
             $('#remark_edit').val($(this).data('remark'));
             $('#date_edit').val($(this).data('date'));
-            $('#time_edit').val($(this).data('time'));
+            $('#po_edit').val($(this).data('po'));
             $('#editModal').modal('show');
         });
         $('.modal-footer').on('click', '.edit', function() {
             $.ajax({
                 type: 'PUT',
-                url: '{{ route('admin.issued_docket_details.update') }}',
+                url: '{{ route('admin.item_receipt_details.update') }}',
                 data: {
                     '_token': $('input[name=_token]').val(),
                     'id' : id,
                     'item': $("#item_edit").val(),
                     'qty': $('#qty_edit').val(),
                     'remark': $('#remark_edit').val(),
-                    'time': $('#time_edit').val()
+                    'po': $('#po_edit').val()
                 },
                 success: function(data) {
                     $('.errorQty').addClass('hidden');
@@ -543,17 +580,13 @@
                             $('.errorRemark').removeClass('hidden');
                             $('.errorRemark').text(data.errors.remark);
                         }
-                        if (data.errors.time) {
-                            $('.errorTime').removeClass('hidden');
-                            $('.errorTime').text(data.errors.time);
-                        }
                     } else {
                         toastr.success('Berhasil ubah data!', 'Sukses', {timeOut: 5000});
                         var remarkEdit = '-';
                         if (data.remarks !== null) {
                             remarkEdit = data.remarks;
                         }
-                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.time + "</td><td>" + data.quantity + "</td><td>" + remarkEdit + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark=" + data.remark + "><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span> hapus</button></td></tr>");
+                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.purchase_order_header.code + "</td><td>" + data.quantity + "</td><td>" + remarkEdit + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-po-id='" + data.purchase_order_id + "' data-po-text='" + data.purchase_order_header.code + "' data-qty='" + data.quantity + "' data-remark=" + data.remark + "><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-po-id='" + data.purchase_order_id + "' data-po-text='" + data.purchase_order_header.code + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span> hapus</button></td></tr>");
                         // $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td>" + data.id + "</td><td>" + data.title + "</td><td>" + data.content + "</td><td class='text-center'><input type='checkbox' class='edit_published' data-id='" + data.id + "'></td><td>Right now</td><td><button class='show-modal btn btn-success' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-eye-open'></span> Show</button> <button class='edit-modal btn btn-info' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-edit'></span> Edit</button> <button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-trash'></span> Delete</button></td></tr>");
 
                     }
@@ -567,14 +600,14 @@
             $('#item_delete').val($(this).data('item-text'));
             $('#qty_delete').val($(this).data('qty'));
             $('#remark_delete').val($(this).data('remark'));
-            $('#time_delete').val($(this).data('time'));
+            $('#po_delete').val($(this).data('po-text'));
             $('#deleteModal').modal('show');
             deletedId = $(this).data('id')
         });
         $('.modal-footer').on('click', '.delete', function() {
             $.ajax({
                 type: 'POST',
-                url: '{{ route('admin.issued_docket_details.delete') }}',
+                url: '{{ route('admin.item_receipt_details.delete') }}',
                 data: {
                     '_token': $('input[name=_token]').val(),
                     'id': deletedId

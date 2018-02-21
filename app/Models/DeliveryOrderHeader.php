@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 06 Feb 2018 06:32:11 +0000.
+ * Date: Wed, 21 Feb 2018 06:50:05 +0000.
  */
 
 namespace App\Models;
@@ -10,7 +10,7 @@ namespace App\Models;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
- * Class DeliveryNoteHeader
+ * Class DeliveryOrderHeader
  * 
  * @property int $id
  * @property string $code
@@ -27,12 +27,12 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\Site $site
  * @property \App\Models\Status $status
  * @property \App\Models\User $user
- * @property \Illuminate\Database\Eloquent\Collection $delivery_note_details
+ * @property \Illuminate\Database\Eloquent\Collection $delivery_order_details
  * @property \Illuminate\Database\Eloquent\Collection $item_receipt_headers
  *
  * @package App\Models
  */
-class DeliveryNoteHeader extends Eloquent
+class DeliveryOrderHeader extends Eloquent
 {
 	protected $casts = [
 		'purchase_request_id' => 'int',
@@ -73,18 +73,18 @@ class DeliveryNoteHeader extends Eloquent
         return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
     }
 
-	public function updatedBy()
-	{
-		return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
-	}
+    public function updatedBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
+    }
 
-	public function delivery_note_details()
+	public function delivery_order_details()
 	{
-		return $this->hasMany(\App\Models\DeliveryNoteDetail::class, 'header_id');
+		return $this->hasMany(\App\Models\DeliveryOrderDetail::class, 'header_id');
 	}
 
 	public function item_receipt_headers()
 	{
-		return $this->hasMany(\App\Models\ItemReceiptHeader::class, 'delivery_note_id');
+		return $this->hasMany(\App\Models\ItemReceiptHeader::class, 'delivery_order_id');
 	}
 }

@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 06 Feb 2018 06:32:24 +0000.
+ * Date: Wed, 21 Feb 2018 06:50:13 +0000.
  */
 
 namespace App\Models;
@@ -10,19 +10,19 @@ namespace App\Models;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
- * Class DeliveryNoteDetail
+ * Class DeliveryOrderDetail
  * 
  * @property int $id
  * @property int $header_id
  * @property int $item_id
  * @property string $remarks
  * 
- * @property \App\Models\DeliveryNoteHeader $delivery_note_header
+ * @property \App\Models\DeliveryOrderHeader $delivery_order_header
  * @property \App\Models\Item $item
  *
  * @package App\Models
  */
-class DeliveryNoteDetail extends Eloquent
+class DeliveryOrderDetail extends Eloquent
 {
 	public $timestamps = false;
 
@@ -37,9 +37,9 @@ class DeliveryNoteDetail extends Eloquent
 		'remarks'
 	];
 
-	public function delivery_note_header()
+	public function delivery_order_header()
 	{
-		return $this->belongsTo(\App\Models\DeliveryNoteHeader::class, 'header_id');
+		return $this->belongsTo(\App\Models\DeliveryOrderHeader::class, 'header_id');
 	}
 
 	public function item()

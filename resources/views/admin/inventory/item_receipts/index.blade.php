@@ -23,7 +23,6 @@
                 <th>No SJ/SPB</th>
                 <th>Date</th>
                 <th>Delivery Note</th>
-                <th>Remarks</th>
                 <th>Tanggal Dibuat</th>
                 <th>Dibuat Oleh</th>
                 <th>Opsi</th>
@@ -52,11 +51,10 @@
                 ajax: '{!! route('datatables.item_receipts') !!}',
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false},
-                    { data: 'code', name: 'no_issued_docket' },
-                    { data: 'no_sj_spb', name: 'no_pr' },
-                    { data: 'date', name: 'no_unit' },
-                    { data: 'delivery_note', name: 'department' },
-                    { data: 'remarks', name: 'division' },
+                    { data: 'code', name: 'code' },
+                    { data: 'no_sj_spb', name: 'no_sj_spb' },
+                    { data: 'date', name: 'date' },
+                    { data: 'delivery_order', name: 'delivery_order' },
                     { data: 'created_at', name: 'created_at' },
                     { data: 'created_by', name: 'created_by' },
                     { data: 'action', name: 'action' }

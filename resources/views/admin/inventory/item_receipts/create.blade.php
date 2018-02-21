@@ -23,16 +23,35 @@
             @endif
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="delivery" >
-                    Delivery Note
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
+                    Item Receipt No
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
+                           name="code" value="{{ old('code') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
+
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" class="flat" id="auto_number" name="auto_number"> Auto Number
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="delivery_order" >
+                    Delivery Orders
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="department" name="department" class="form-control col-md-7 col-xs-12 @if($errors->has('delivery_note')) parsley-error @endif">
-                        <option value="-1" @if(empty(old('delivery_note'))) selected @endif> - Pilih Delivery Note - </option>
-                        @foreach($deliveries as $delivery)
-                            <option value="{{ $delivery->id }}" {{ old('delivery_note') == $delivery->id ? "selected":"" }}>{{ $delivery->code }}</option>
-                        @endforeach
+                    <select id="delivery_order" name="delivery_order" class="form-control col-md-7 col-xs-12 @if($errors->has('delivery_order')) parsley-error @endif">
                     </select>
                 </div>
             </div>
@@ -58,6 +77,26 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="delivered_from">
+                    Pengiriman Dari
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="delivered_from" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('delivered_from')) parsley-error @endif"
+                           name="delivered_from" value="{{ old('delivered_from') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="angkutan">
+                    Angkutan
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="angkutan" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('angkutan')) parsley-error @endif"
+                           name="angkutan" value="{{ old('angkutan') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="text-center col-md-12 col-xs-12">Detil Barang</label>
             </div>
 
@@ -68,7 +107,7 @@
                         <thead>
                         <tr >
                             <th class="text-center" style="width: 40%">
-                                Nomor Part
+                                Nomor Item
                             </th>
                             <th class="text-center" style="width: 20%">
                                 Nomor PO
@@ -84,10 +123,10 @@
                         <tbody>
                         <tr id='addr0'>
                             <td class='field-item'>
-                                <select id="select0" name="item[]" class='form-control'></select>
+                                <select id="selectItem0" name="item[]" class='form-control'></select>
                             </td>
                             <td>
-                                <input type='text' name='po[]'  placeholder='Time' class='form-control'/>
+                                <select id="selectPo0" name="po[]" class='form-control'></select>
                             </td>
                             <td>
                                 <input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/>
@@ -158,7 +197,39 @@
             {{--}--}}
         {{--});--}}
 
-        $('#select0').select2({
+        $('#auto_number').change(function(){
+            if(this.checked){
+                $('#code').prop('disabled', true);
+            }
+            else{
+                $('#code').prop('disabled', false);
+            }
+        });
+
+         $('#delivery_order').select2({
+            placeholder: {
+                id: '-1',
+                text: 'Pilih Delivery Order...'
+            },
+            width: '100%',
+            minimumInputLength: 2,
+            ajax: {
+                url: '{{ route('select.delivery_orders') }}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: $.trim(params.term)
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+
+        $('#selectPo0').select2({
             placeholder: {
                 id: '-1',
                 text: 'Pilih Purchase Order...'
@@ -181,13 +252,36 @@
             }
         });
 
+        $('#selectItem0').select2({
+            placeholder: {
+                id: '-1',
+                text: 'Pilih Barang...'
+            },
+            width: '100%',
+            minimumInputLength: 2,
+            ajax: {
+                url: '{{ route('select.items') }}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: $.trim(params.term)
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+
         var i=1;
         $("#add_row").click(function(){
-            $('#addr'+i).html("<td class='field-item'><select id='select" + i + "' name='item[]' class='form-control'></select></td><td><input type='text' name='po[]'  placeholder='Purchase Order' class='form-control'/></td><td><input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/></td><td><input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/></td>");
+            $('#addr'+i).html("<td class='field-item'><select id='selectItem" + i + "' name='item[]' class='form-control'></select></td><td><select id='selectPo" + i + "' name='po[]' class='form-control'></select></td><td><input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/></td><td><input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/></td>");
 
             $('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
 
-            $('#select' + i).select2({
+            $('#selectPo' + i).select2({
                 placeholder: {
                     id: '-1',
                     text: 'Pilih Purchase Order...'
@@ -196,6 +290,29 @@
                 minimumInputLength: 2,
                 ajax: {
                     url: '{{ route('select.purchase_orders') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            q: $.trim(params.term)
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+
+            $('#selectItem' + i).select2({
+                placeholder: {
+                    id: '-1',
+                    text: 'Pilih Barang...'
+                },
+                width: '100%',
+                minimumInputLength: 2,
+                ajax: {
+                    url: '{{ route('select.items') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {

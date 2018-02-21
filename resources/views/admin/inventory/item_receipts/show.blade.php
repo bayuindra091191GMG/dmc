@@ -1,13 +1,13 @@
 @extends('admin.layouts.admin')
 
-@section('title','Data Issued Docket '. $header->code)
+@section('title','Data Item Receipt '. $header->code)
 
 @section('content')
     <div class="row">
         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
             <div class="navbar-right">
-                <a class="btn btn-default" href="{{ route('admin.issued_docket.edit',[ 'issued_docket' => $header->id]) }}">UBAH</a>
-                {{--<a class="btn btn-default" href="{{ route('admin.purchase_requests.edit',[ 'purchase_request' => $header->id]) }}">CETAK</a>--}}
+                <a class="btn btn-default" href="{{ route('admin.item_receipts.edit',[ 'item_receipt' => $header->id]) }}">UBAH</a>
+                <a class="btn btn-default" href="{{ route('admin.item_receipts.print',[ 'item_receipts' => $header->id]) }}">CETAK</a>
             </div>
         </div>
     </div>
@@ -27,7 +27,7 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Hari/Tgl/Bln/Thn
+                        Tanggal
                     </label>
                     <div class="col-md-6 col-sm-3 col-xs-12">
                         : {{ \Carbon\Carbon::parse($header->date)->format('d M Y') }}
@@ -36,7 +36,7 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        No Issued Docket
+                        No Item Receipt
                     </label>
                     <div class="col-md-6 col-sm-3 col-xs-12">
                         : {{ $header->code }}
@@ -45,36 +45,27 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        No PR
+                        No. SJ / SPB
                     </label>
                     <div class="col-md-6 col-sm-3 col-xs-12">
-                        : {{ $header->purchase_request_header->code }}
+                        : {{ $header->no_sj_spb }}
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Unit Alat Berat
+                        Pengiriman Dari
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->machinery->code }}
+                        : {{ $header->delivered_from }}
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Departemen
+                        Angkutan
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->department->name }}
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-md-3 col-sm-3 col-xs-12" for="sn_chasis">
-                        Divisi
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->division ?? '-' }}
+                        : {{ $header->angkutan }}
                     </div>
                 </div>
 
@@ -90,48 +81,50 @@
                             <thead>
                             <tr >
                                 <th class="text-center">
-                                    Time
+                                    No
                                 </th>
                                 <th class="text-center">
-                                    Nama Barang
+                                    Kode Barang
                                 </th>
                                 <th class="text-center">
-                                    Nomor Part (Part Number)
+                                    Nama Barang / Nomor Barang
+                                </th>
+                                <th class="text-center">
+                                    Jumlah
                                 </th>
                                 <th clas="text-center">
-                                    Satuan (UOM)
+                                    No Purchase Order
                                 </th>
                                 <th class="text-center">
-                                    Jumlah (QTY)
-                                </th>
-                                <th class="text-center">
-                                    Remark
+                                    Keterangan
                                 </th>
                             </tr>
                             </thead>
                             <tbody>
 
-                            @foreach($header->issued_docket_details as $detail)
+                            @php($i = 1)
+                            @foreach($header->item_receipt_details as $detail)
                                 <tr>
-                                    <td>
-                                        {{ $detail->time }}
+                                    <td class="text-center">
+                                        {{ $i }}
                                     </td>
-                                    <td>
-                                        {{ $detail->item->name }}
-                                    </td>
-                                    <td class='field-item'>
+                                    <td class="text-center">
                                         {{ $detail->item->code }}
                                     </td>
-                                    <td>
-                                        {{ $detail->item->uom->description }}
+                                    <td class='field-item text-center'>
+                                        {{ $detail->item->name }}
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         {{ $detail->quantity }}
                                     </td>
-                                    <td>
+                                    <td class="text-center">
+                                        {{ $detail->purchase_order_header->code }}
+                                    </td>
+                                    <td class="text-center">
                                         {{ $detail->remarks ?? '-' }}
                                     </td>
                                 </tr>
+                                @php($i++)
                             @endforeach
 
                             </tbody>
