@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
+use Carbon\Carbon;
 
 class ItemReceiptDetailController extends Controller
 {
@@ -56,9 +57,7 @@ class ItemReceiptDetailController extends Controller
     public function update(Request $request){
         try{
             $validator = Validator::make($request->all(),[
-                'item'      => 'required',
                 'qty'       => 'required',
-                'po'        => 'required',
                 'remark'    => 'max:200'
             ]);
 
@@ -74,10 +73,12 @@ class ItemReceiptDetailController extends Controller
             if(!empty(Input::get('item'))){
                 $detail->item_id = Input::get('item');
             }
+            if(!empty(Input::get('po'))){
+                $detail->purchase_order_id = Input::get('po');
+            }
 
             $detail->quantity = Input::get('qty');
             $detail->remark = Input::get('remark');
-            $detail->purchase_order_id = Input::get('po');
 
             if(!empty(Input::get('date'))){
                 $date = Carbon::createFromFormat('d M Y', Input::get('date'), 'Asia/Jakarta');

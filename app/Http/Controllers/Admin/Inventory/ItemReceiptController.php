@@ -132,9 +132,13 @@ class ItemReceiptController extends Controller
         $formatedDate = Carbon::createFromFormat('d M Y', Input::get('date'), 'Asia/Jakarta');
 
         $itemReceiptHeader = ItemReceiptHeader::find($id);
+
+        if(!empty(Input::get('delivery_order'))){
+            $itemReceiptHeader->delivery_order_id = Input::get('delivery_order');
+        }
+
         $itemReceiptHeader->no_sj_spb = Input::get('no_sj_spb');
         $itemReceiptHeader->date = $formatedDate->toDateTimeString();
-        $itemReceiptHeader->delivery_order_id = Input::get('delivery_order');
         $itemReceiptHeader->delivered_from = Input::get('delivered_from');
         $itemReceiptHeader->angkutan = Input::get('angkutan');
         $itemReceiptHeader->updated_by = $user->id;
@@ -148,6 +152,18 @@ class ItemReceiptController extends Controller
 
     public function delete(){
 
+    }
+
+    public function printDocument($id){
+        $itemReceipt = ItemReceiptHeader::find($id);
+        $itemReceiptDetails = ItemReceiptDetail::where('header_id', $itemReceipt->id)->get();
+
+        $itemTotal = 0;
+        foreach($itemReceiptDetails as $detail){
+            $itemTotal += $detail->quantity;
+        }
+
+        return view('documents.item_receipts.item_receipts', compact('itemReceipt', 'itemReceiptDetails', 'itemTotal'));
     }
 
     public function getIndex(){

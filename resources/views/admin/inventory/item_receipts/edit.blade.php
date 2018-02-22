@@ -336,7 +336,7 @@
         $('#delivery_order').select2({
             placeholder: {
                 id: '-1',
-                text: 'Pilih Delivery Order...'
+                text: '{{ $header->delivery_order_header->code }}'
             },
             width: '100%',
             minimumInputLength: 2,
@@ -583,8 +583,8 @@
                     } else {
                         toastr.success('Berhasil ubah data!', 'Sukses', {timeOut: 5000});
                         var remarkEdit = '-';
-                        if (data.remarks !== null) {
-                            remarkEdit = data.remarks;
+                        if (data.remark !== null) {
+                            remarkEdit = data.remark;
                         }
                         $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.poCode + "</td><td>" + data.quantity + "</td><td>" + remarkEdit + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-po-id='" + data.purchase_order_id + "' data-po-text='" + data.poCode + "' data-qty='" + data.quantity + "' data-remark=" + data.remark + "><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-po-id='" + data.purchase_order_id + "' data-po-text='" + data.poCode + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span> hapus</button></td></tr>");
                         // $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td>" + data.id + "</td><td>" + data.title + "</td><td>" + data.content + "</td><td class='text-center'><input type='checkbox' class='edit_published' data-id='" + data.id + "'></td><td>Right now</td><td><button class='show-modal btn btn-success' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-eye-open'></span> Show</button> <button class='edit-modal btn btn-info' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-edit'></span> Edit</button> <button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-trash'></span> Delete</button></td></tr>");
