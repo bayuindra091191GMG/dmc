@@ -28,7 +28,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
-                           name="code" value="{{ old('code') }}">
+                           name="code" value="{{ $autoNumber }}" disabled="disabled">
                 </div>
             </div>
 
@@ -39,7 +39,7 @@
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" class="flat" id="auto_number" name="auto_number"> Auto Number
+                            <input type="checkbox" class="flat" id="auto_number" name="auto_number" checked="checked"> Auto Number
                         </label>
                     </div>
                 </div>
@@ -199,9 +199,11 @@
 
         $('#auto_number').change(function(){
             if(this.checked){
+                $('#code').val('{{ $autoNumber }}');
                 $('#code').prop('disabled', true);
             }
             else{
+                $('#code').val('');
                 $('#code').prop('disabled', false);
             }
         });

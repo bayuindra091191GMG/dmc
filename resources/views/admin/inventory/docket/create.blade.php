@@ -23,6 +23,29 @@
             @endif
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
+                    Issued Docket No
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
+                           name="code" value="{{ $autoNumber }}" disabled="disabled">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
+
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" class="flat" id="auto_number" name="auto_number" checked="checked"> Auto Number
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="department" >
                     Departemen
                     <span class="required">*</span>
@@ -138,6 +161,17 @@
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
     <script type="text/javascript">
         var i=1;
+
+        $('#auto_number').change(function(){
+            if(this.checked){
+                $('#code').val('{{ $autoNumber }}');
+                $('#code').prop('disabled', true);
+            }
+            else{
+                $('#code').val('');
+                $('#code').prop('disabled', false);
+            }
+        });
 
         $('#machinery').select2({
             placeholder: {

@@ -32,8 +32,10 @@ class ItemReceiptController extends Controller
 
     public function create(){
         $deliveries = DeliveryOrderHeader::all();
+        $sysNo = NumberingSystem::where('doc_id', '2')->first();
+        $autoNumber = Utilities::GenerateNumber('BTB', $sysNo->next_no);
 
-        return View('admin.inventory.item_receipts.create', compact('deliveries'));
+        return View('admin.inventory.item_receipts.create', compact('deliveries', 'autoNumber'));
     }
 
     public function store(Request $request){
@@ -52,16 +54,16 @@ class ItemReceiptController extends Controller
         //Generate AutoNumber
         if(Input::get('auto_number')){
             $sysNo = NumberingSystem::where('doc_id', '2')->first();
-            $docketNumber = Utilities::GenerateNumber('BTB', $sysNo->next_no);
+            $itemReceiptNumber = Utilities::GenerateNumber('BTB', $sysNo->next_no);
             $sysNo->next_no++;
             $sysNo->save();
         }
         else{
-            $docketNumber = Input::get('code');
+            $itemReceiptNumber = Input::get('code');
         }
 
         //Check Code
-        $check = ItemReceiptHeader::where('code', $docketNumber)->first();
+        $check = ItemReceiptHeader::where('code', $itemReceiptNumber)->first();
         if($check != null){
             return redirect()->back()->withErrors('Nomor Issued Docket Sudah terdaftar!', 'default')->withInput($request->all());
         }
@@ -70,7 +72,7 @@ class ItemReceiptController extends Controller
         $now = Carbon::now('Asia/Jakarta');
 
         $itemReceiptHeader = ItemReceiptHeader::create([
-            'code'              => $docketNumber,
+            'code'              => $itemReceiptNumber,
             'no_sj_spb'         => Input::get('no_sj_spb'),
             'date'              => $now->toDateTimeString(),
             'delivery_order_id' => Input::get('delivery_order'),

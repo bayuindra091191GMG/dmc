@@ -36,8 +36,10 @@ class DocketController extends Controller
     public function create()
     {
         $departments = Department::all();
+        $sysNo = NumberingSystem::where('doc_id', '1')->first();
+        $autoNumber = Utilities::GenerateNumber('DOCKET', $sysNo->next_no);
 
-        return view('admin.inventory.docket.create', compact('departments'));
+        return view('admin.inventory.docket.create', compact('departments', 'autoNumber'));
     }
 
     /**
@@ -67,10 +69,15 @@ class DocketController extends Controller
         $now = Carbon::now('Asia/Jakarta');
 
         //Generate AutoNumber
-        $sysNo = NumberingSystem::where('doc_id', '1')->first();
-        $docketNumber = Utilities::GenerateNumber('DOCKET', $sysNo->next_no);
-        $sysNo->next_no++;
-        $sysNo->save();
+        if(Input::get('auto_number')) {
+            $sysNo = NumberingSystem::where('doc_id', '1')->first();
+            $docketNumber = Utilities::GenerateNumber('DOCKET', $sysNo->next_no);
+            $sysNo->next_no++;
+            $sysNo->save();
+        }
+        else{
+            $docketNumber = Input::get('code');
+        }
 
         $docketHeader = IssuedDocketHeader::create([
             'code'              => $docketNumber,
