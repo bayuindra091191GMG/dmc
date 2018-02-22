@@ -90,11 +90,6 @@ class PurchaseRequestHeader extends Eloquent
 		return $this->hasMany(\App\Models\ApprovalPurchaseRequest::class, 'purchase_request_id');
 	}
 
-	public function delivery_note_headers()
-	{
-		return $this->hasMany(\App\Models\DeliveryNoteHeader::class, 'purchase_request_id');
-	}
-
 	public function issued_docket_headers()
 	{
 		return $this->hasMany(\App\Models\IssuedDocketHeader::class, 'purchase_request_id');

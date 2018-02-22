@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Mon, 19 Feb 2018 03:17:21 +0000.
+ * Date: Thu, 22 Feb 2018 16:36:17 +0700.
  */
 
 namespace App\Models;
@@ -15,19 +15,22 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $id
  * @property string $code
  * @property \Carbon\Carbon $date
+ * @property int $purchase_request_id
  * @property int $quotation_id
  * @property int $supplier_id
- * @property float $subtotal_price
- * @property float $delivery_charge
  * @property float $pph_ps_23
  * @property float $ppn
+ * @property float $delivery_fee
+ * @property float $total_discount
  * @property float $total_price
+ * @property float $total_payment
  * @property int $status_id
  * @property int $created_by
  * @property \Carbon\Carbon $created_at
  * @property int $updated_by
  * @property \Carbon\Carbon $updated_at
  * 
+ * @property \App\Models\PurchaseRequestHeader $purchase_request_header
  * @property \App\Models\QuotationHeader $quotation_header
  * @property \App\Models\Status $status
  * @property \App\Models\Supplier $supplier
@@ -41,13 +44,15 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 class PurchaseOrderHeader extends Eloquent
 {
 	protected $casts = [
+		'purchase_request_id' => 'int',
 		'quotation_id' => 'int',
 		'supplier_id' => 'int',
-		'subtotal_price' => 'float',
-		'delivery_charge' => 'float',
 		'pph_ps_23' => 'float',
 		'ppn' => 'float',
+		'delivery_fee' => 'float',
+		'total_discount' => 'float',
 		'total_price' => 'float',
+		'total_payment' => 'float',
 		'status_id' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
@@ -60,17 +65,24 @@ class PurchaseOrderHeader extends Eloquent
 	protected $fillable = [
 		'code',
 		'date',
+		'purchase_request_id',
 		'quotation_id',
 		'supplier_id',
-		'subtotal_price',
-		'delivery_charge',
 		'pph_ps_23',
 		'ppn',
+		'delivery_fee',
+		'total_discount',
 		'total_price',
+		'total_payment',
 		'status_id',
 		'created_by',
 		'updated_by'
 	];
+
+	public function purchase_request_header()
+	{
+		return $this->belongsTo(\App\Models\PurchaseRequestHeader::class, 'purchase_request_id');
+	}
 
 	public function quotation_header()
 	{
@@ -89,12 +101,12 @@ class PurchaseOrderHeader extends Eloquent
 
     public function createdBy()
     {
-        return $this->belongsTo(\App\Models\User::class, 'created_by');
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
     }
 
     public function updatedBy()
     {
-        return $this->belongsTo(\App\Models\User::class, 'updated_by');
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
     }
 
 	public function item_receipt_details()

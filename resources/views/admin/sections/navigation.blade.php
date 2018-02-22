@@ -412,6 +412,21 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a>Purchase Order<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="sub_menu">
+                                <a href="{{ route('admin.purchase_orders') }}">
+                                    Daftar PO
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.purchase_orders.create') }}">
+                                    Buat Baru
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
 

@@ -28,6 +28,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  */
 class QuotationDetail extends Eloquent
 {
+    public $timestamps = false;
+
 	protected $casts = [
 		'header_id' => 'int',
 		'item_id' => 'int',

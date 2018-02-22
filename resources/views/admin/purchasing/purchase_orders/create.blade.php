@@ -27,19 +27,24 @@
                     Nomor PO
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="po_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('sn_chasis')) parsley-error @endif"
+                    <input id="po_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('po_code')) parsley-error @endif"
                            name="po_code" value="{{ old('po_code') }}">
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="quot_code" >
-                    Nomor Quotation
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pr_code" >
+                    Nomor PR
                     <span class="required">*</span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="quot_code" name="quot_code" class="form-control col-md-7 col-xs-12 @if($errors->has('machinery')) parsley-error @endif">
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <select id="pr_code" name="pr_code" class="form-control col-md-7 col-xs-12 @if($errors->has('pr_code')) parsley-error @endif">
                     </select>
+                </div>
+                <div class="col-md-2 col-sm-2 col-xs-12">
+                    <button class="btn btn-info">
+                        Ambil Data
+                    </button>
                 </div>
             </div>
 
@@ -53,11 +58,16 @@
                     <table class="table table-bordered table-hover" id="tab_logic">
                         <thead>
                         <tr >
-                            <th class="text-center" style="width: 40%">
+                            <th class="text-center" style="width: 15%">
                                 Nomor Part
                             </th>
-                            <th class="text-center" style="width: 20%">
+                            <th class="text-center" style="width: 15%">
                                 Jumlah
+                            </th>
+                            <th class="text-center" style="width: 20%">
+                                Harga
+                            </th><th class="text-center" style="width: 10%">
+                                Diskon (%)
                             </th>
                             <th class="text-center" style="width: 40%">
                                 Remark
@@ -65,12 +75,41 @@
                         </tr>
                         </thead>
                         <tbody>
+                        @if(!empty($purchaseRequest))
+                            <?php $idx = 0; ?>
+                            @foreach($purchaseRequest->purchase_request_details as $detail)
+                                <tr id='addr{{ $idx }}'>
+                                    <td class='field-item'>
+                                        <select id="select{{ $idx }}" name="item[]" class='form-control'></select>
+                                    </td>
+                                    <td>
+                                        <input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/>
+                                    </td>
+                                    <td>
+                                        <input id="price{{ $idx }}" type='text' name='price[]'  placeholder='Harga' class='form-control'/>
+                                    </td>
+                                    <td>
+                                        <input type='number' name='discount[]'  placeholder='Diskon' class='form-control'/>
+                                    </td>
+                                    <td>
+                                        <input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/>
+                                    </td>
+                                </tr>
+                                <?php $idx++; ?>
+                            @endforeach
+                        @endif
                         <tr id='addr0'>
                             <td class='field-item'>
                                 <select id="select0" name="item[]" class='form-control'></select>
                             </td>
                             <td>
                                 <input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/>
+                            </td>
+                            <td>
+                                <input id="price0" type='text' name='price[]'  placeholder='Harga' class='form-control'/>
+                            </td>
+                            <td>
+                                <input type='number' name='discount[]'  placeholder='Diskon' class='form-control'/>
                             </td>
                             <td>
                                 <input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/>
@@ -98,25 +137,22 @@
 @section('styles')
     @parent
     {{ Html::style(mix('assets/admin/css/select2.css')) }}
-    {{ Html::style(mix('assets/admin/css/bootstrap-datetimepicker.css')) }}
 @endsection
 
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
-    {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
+    {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
     <script type="text/javascript">
-        var i=1;
-
-        $('#machinery').select2({
+        $('#pr_code').select2({
             placeholder: {
                 id: '-1',
-                text: 'Pilih Alat Berat...'
+                text: 'Pilih Nomor PR...'
             },
             width: '100%',
             minimumInputLength: 2,
             ajax: {
-                url: '{{ route('select.machineries') }}',
+                url: '{{ route('select.purchase_requests') }}',
                 dataType: 'json',
                 data: function (params) {
                     return {
@@ -129,6 +165,37 @@
                     };
                 }
             }
+        });
+
+        $('#supplier').select2({
+            placeholder: {
+                id: '-1',
+                text: 'Pilih Vendor...'
+            },
+            width: '100%',
+            minimumInputLength: 2,
+            ajax: {
+                url: '{{ route('select.suppliers') }}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: $.trim(params.term),
+                        _token: $('input[name=_token]').val()
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+
+        // autoNumeric
+        numberFormat = new AutoNumeric('#price0', {
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+            decimalPlaces: 0
         });
 
         $('#select0').select2({
@@ -156,7 +223,7 @@
 
         var i=1;
         $("#add_row").click(function(){
-            $('#addr'+i).html("<td class='field-item'><select id='select" + i + "' name='item[]' class='form-control'></select></td><td><input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/></td><td><input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/></td>");
+            $('#addr'+i).html("<td class='field-item'><select id='select" + i + "' name='item[]' class='form-control'></select></td><td><input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/></td><td><input type='text' id='price" + i + "' name='price[]'  placeholder='Harga' class='form-control'/></td><td><input type='number' name='discount[]'  placeholder='Diskon' class='form-control'/></td><td><input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/></td>");
 
             $('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
 
@@ -181,6 +248,13 @@
                         };
                     }
                 }
+            });
+
+            // autoNumeric
+            numberFormat = new AutoNumeric('#price' + i, {
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
+                decimalPlaces: 0
             });
 
             i++;

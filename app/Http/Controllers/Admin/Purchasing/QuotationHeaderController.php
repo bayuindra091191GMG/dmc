@@ -141,9 +141,6 @@ class QuotationHeaderController extends Controller
     public function update(Request $request, QuotationHeader $quotation){
         if(!empty(Input::get('pr_code'))) $quotation->purchase_request_id = Input::get('pr_code');
         if(!empty(Input::get('supplier'))) $quotation->supplier_id = Input::get('supplier');
-
-        $now = Carbon::now('Asia/Jakarta');
-        $quotation->updated_at = $now->toDateTimeString();
         $quotation->save();
 
         Session::flash('message', 'Berhasil ubah quotation vendor!');

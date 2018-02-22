@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Admin\Purchasing;
 
 use App\Http\Controllers\Controller;
 use App\Models\PurchaseOrderHeader;
+use App\Models\PurchaseRequestHeader;
 use App\Transformer\Purchasing\PurchaseOrderHeaderTransformer;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
@@ -20,6 +21,23 @@ class PurchaseOrderHeaderController extends Controller
     public function index(){
 
         return View('admin.purchasing.purchase_orders.index');
+    }
+
+    public function create(){
+
+        $purchaseRequest = null;
+        if(!empty(request()->pr)){
+            $purchaseRequest = PurchaseRequestHeader::find(request()->pr);
+        }
+
+        $quotation = null;
+
+        $data = [
+            'purchaseRequest'   => $purchaseRequest,
+            'quotation'         => $quotation
+        ];
+
+        return View('admin.purchasing.purchase_orders.create')->with($data);
     }
 
     public function getIndex(){
