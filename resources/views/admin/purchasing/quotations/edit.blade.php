@@ -400,7 +400,7 @@
             decimalPlaces: 0
         });
 
-        numberFormat = new AutoNumeric('#price_edit', {
+        priceEditFormat = new AutoNumeric('#price_edit', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
             decimalPlaces: 0
@@ -527,13 +527,14 @@
             $('#discount_edit').val($(this).data('discount'));
             $('#editModal').modal('show');
 
-            // Set autonumeric on price
-            var priceStr = AutoNumeric.format($(this).data('price'), {
+            priceEditFormat.clear();
+
+            priceEditFormat.set($(this).data('price'), {
                 decimalCharacter: ',',
                 digitGroupSeparator: '.',
                 decimalPlaces: 0
             });
-            $('#price_edit').val(priceStr);
+
         });
         $('.modal-footer').on('click', '.edit', function() {
             $.ajax({
@@ -582,7 +583,7 @@
                         if (data.remark !== null) {
                             remarkEdit = data.remark;
                         }
-                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + remarkEdit + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark=" + data.remark + " data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span> hapus</button></td></tr>");
+                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + data.priceString + "</td><td>" + data.discountString + "</td><td>" + data.subtotalString + "</td><td>" + remarkEdit + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span> hapus</button></td></tr>");
                         // $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td>" + data.id + "</td><td>" + data.title + "</td><td>" + data.content + "</td><td class='text-center'><input type='checkbox' class='edit_published' data-id='" + data.id + "'></td><td>Right now</td><td><button class='show-modal btn btn-success' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-eye-open'></span> Show</button> <button class='edit-modal btn btn-info' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-edit'></span> Edit</button> <button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-trash'></span> Delete</button></td></tr>");
 
                     }
@@ -605,11 +606,19 @@
                 url: '{{ route('admin.quotation_details.delete') }}',
                 data: {
                     '_token': $('input[name=_token]').val(),
-                    'id': deletedId
+                    'id': deletedId,
+                    'header_id': '{{ $header->id }}'
                 },
                 success: function(data) {
-                    toastr.success('Berhasil menghapus detail!', 'Sukses', {timeOut: 5000});
-                    $('.item' + data['id']).remove();
+                    if ((data.errors)){
+                        setTimeout(function () {
+                            toastr.error('Gagal hapus detail!', 'Peringatan', {timeOut: 5000});
+                        }, 500);
+                    }
+                    else{
+                        toastr.success('Berhasil menghapus detail!', 'Sukses', {timeOut: 5000});
+                        $('.item' + data['id']).remove();
+                    }
                 }
             });
         });

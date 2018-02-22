@@ -65,7 +65,7 @@ class PurchaseRequestHeaderController extends Controller
             'department_id'     => Input::get('department'),
             'sn_chasis'         => Input::get('sn_chasis'),
             'sn_engine'         => Input::get('sn_engine'),
-            'status_id'         => 1,
+            'status_id'         => 3,
             'created_by'        => $user->id,
             'created_at'        => $now->toDateTimeString()
 

@@ -34,6 +34,15 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
+                        Tanggal
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ \Carbon\Carbon::parse($header->created_at)->format('d M Y') }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
                         Vendor
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
@@ -46,7 +55,7 @@
                         Total Harga
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->total_price }}
+                        : {{ $header->total_price_string }}
                     </div>
                 </div>
 
@@ -55,7 +64,7 @@
                         Total Diskon
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->total_discount ?? '-' }}
+                        : {{ $header->total_discount_string ?? '-' }}
                     </div>
                 </div>
 
@@ -64,7 +73,7 @@
                         Total Pembayaran
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->total_payment ?? '-' }}
+                        : {{ $header->total_payment_string ?? '-' }}
                     </div>
                 </div>
 

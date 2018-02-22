@@ -68,7 +68,7 @@ class QuotationHeaderController extends Controller
             'code'      => Input::get('quot_code'),
             'purchase_request_id'   => Input::get('pr_code'),
             'supplier_id'           => Input::get('supplier'),
-            'status_id'             => 1,
+            'status_id'             => 3,
             'created_by'            => $user->id,
             'created_at'            => $now->toDateTimeString()
         ]);
@@ -85,10 +85,12 @@ class QuotationHeaderController extends Controller
         foreach($items as $item){
             if(!empty($item)){
                 $priceStr = str_replace('.','', $prices[$idx]);
+                $price = (double) $priceStr;
+                $qty = (double) $qtys[$idx];
                 $quotDetail = QuotationDetail::create([
                     'header_id'     => $quotHeader->id,
                     'item_id'       => $item,
-                    'quantity'      => $qtys[$idx],
+                    'quantity'      => $qty,
                     'price'         => $priceStr
                 ]);
 
@@ -96,19 +98,19 @@ class QuotationHeaderController extends Controller
                 if(!empty($discounts[$idx]) && $discounts[$idx] !== '0'){
                     $quotDetail->discount = $discounts[$idx];
 
-                    $price = floatval($priceStr);
-                    $discount = floatval($discounts[$idx]);
-                    $discountAmount = $price * $discount / 100;
-                    $quotDetail->subtotal = $price - $discountAmount;
+                    $discount = (double) $discounts[$idx];
+                    $discountAmount = ($qty * $price) * $discount / 100;
+                    $quotDetail->subtotal = ($qty * $price) - $discountAmount;
 
                     // Accumulate total price
-                    $totalPrice += $price;
+                    $totalPrice += $qty * $price;
 
                     // Accumulate total discount
                     $totalDiscount += $discountAmount;
                 }
                 else{
-                    $quotDetail->subtotal = $prices[$idx];
+                    $quotDetail->subtotal = $qty * $price;
+                    $totalPrice += $qty * $price;
                 }
 
                 if(!empty($remarks[$idx])) $quotDetail->remark = $remarks[$idx];
@@ -139,6 +141,9 @@ class QuotationHeaderController extends Controller
     public function update(Request $request, QuotationHeader $quotation){
         if(!empty(Input::get('pr_code'))) $quotation->purchase_request_id = Input::get('pr_code');
         if(!empty(Input::get('supplier'))) $quotation->supplier_id = Input::get('supplier');
+
+        $now = Carbon::now('Asia/Jakarta');
+        $quotation->updated_at = $now->toDateTimeString();
         $quotation->save();
 
         Session::flash('message', 'Berhasil ubah quotation vendor!');
@@ -147,10 +152,15 @@ class QuotationHeaderController extends Controller
     }
 
     public function getIndex(){
-        $quotationHeaders = QuotationHeader::all();
-        return DataTables::of($quotationHeaders)
-            ->setTransformer(new QuotationHeaderTransformer)
-            ->addIndexColumn()
-            ->make(true);
+        try{
+            $quotationHeaders = QuotationHeader::all();
+            return DataTables::of($quotationHeaders)
+                ->setTransformer(new QuotationHeaderTransformer)
+                ->addIndexColumn()
+                ->make(true);
+        }
+        catch(\Exception $ex){
+            error_log($ex);
+        }
     }
 }

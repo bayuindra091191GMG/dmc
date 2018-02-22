@@ -12,6 +12,7 @@ namespace App\Http\Controllers\Admin\Purchasing;
 use App\Http\Controllers\Controller;
 use App\Models\QuotationDetail;
 use App\Models\QuotationHeader;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -21,7 +22,6 @@ use Illuminate\Support\Facades\Validator;
 class QuotationDetailController extends Controller
 {
     public function store(Request $request){
-
         try{
             $validator = Validator::make($request->all(),[
                 'item'      => 'required',
@@ -37,7 +37,9 @@ class QuotationDetailController extends Controller
             $detail = new QuotationDetail();
             $detail->header_id = Input::get('header_id');
             $detail->item_id = Input::get('item');
-            $detail->quantity = Input::get('qty');
+
+            $qty = (double) Input::get('qty');
+            $detail->quantity = $qty;
 
             $priceStr = str_replace('.','', Input::get('price'));
             $price = (double) $priceStr;
@@ -49,12 +51,12 @@ class QuotationDetailController extends Controller
             if(!empty(Input::get('discount'))){
                 $discount = (double) Input::get('discount');
                 $detail->discount = $discount;
-                $discountAmount = $price * $discount/ 100;
-                $finalSubtotal = $price - $discountAmount;
-                $detail->subtotal = $price - $finalSubtotal;
+                $discountAmount = ($qty * $price) * $discount/ 100;
+                $finalSubtotal = ($qty * $price) - $discountAmount;
+                $detail->subtotal = $finalSubtotal;
             }
             else{
-                $finalSubtotal = $price;
+                $finalSubtotal = ($qty * $price);
                 $detail->subtotal = $finalSubtotal;
             }
 
@@ -64,7 +66,7 @@ class QuotationDetailController extends Controller
 
             // Accumulate total price, discount & payment
             $header = QuotationHeader::find(Input::get('header_id'));
-            $header->total_price = $header->total_price + $price;
+            $header->total_price = $header->total_price + ($qty * $price);
             $header->total_payment = $header->total_payment + $finalSubtotal;
             if(!empty(Input::get('discount'))){
                 $header->total_discount += $discountAmount;
@@ -82,7 +84,6 @@ class QuotationDetailController extends Controller
     public function update(Request $request){
         try{
             $validator = Validator::make($request->all(),[
-                'item'      => 'required',
                 'qty'       => 'required',
                 'price'     => 'required',
                 'remark'    => 'max:200'
@@ -98,11 +99,17 @@ class QuotationDetailController extends Controller
             $oldPrice = $detail->price;
             $oldDiscountAmount = 0;
             $oldSubtotal = $detail->subtotal;
+            $oldQty = $detail->quantity;
 
-            $detail->item_id = Input::get('item');
-            $detail->quantity = Input::get('qty');
+            if(!empty(Input::get('item'))){
+                $detail->item_id = Input::get('item');
+            }
+
+            $qty = (double) Input::get('qty');
+
+            $detail->quantity = $qty;
             $priceStr = str_replace('.','', Input::get('price'));
-            $price = doubleval($priceStr);
+            $price = (double) $priceStr;
             $detail->price = $price;
 
             // Check discount and subtotal
@@ -110,16 +117,16 @@ class QuotationDetailController extends Controller
             $discountAmount = 0;
             if(!empty(Input::get('discount'))){
                 // Get old discount
-                $oldDiscountAmount = $oldPrice * $detail->discount / 100;
+                $oldDiscountAmount = ($oldQty * $oldPrice) * $detail->discount / 100;
 
-                $discount = floatval(Input::get('discount'));
+                $discount = (double) Input::get('discount');
                 $detail->discount = $discount;
-                $discountAmount = $price * $discount/ 100;
-                $finalSubtotal = $price - $discountAmount;
-                $detail->subtotal = $price - $finalSubtotal;
+                $discountAmount = ($qty * $price) * $discount/ 100;
+                $finalSubtotal = ($qty * $price) - $discountAmount;
+                $detail->subtotal = ($qty * $price) - $finalSubtotal;
             }
             else{
-                $finalSubtotal = $price;
+                $finalSubtotal = ($qty * $price);
                 $detail->subtotal = $finalSubtotal;
             }
 
@@ -129,7 +136,7 @@ class QuotationDetailController extends Controller
 
             // Accumulate total price, discount & payment
             $header = QuotationHeader::find($detail->header_id);
-            $header->total_price = $header->total_price - $oldPrice + $price;
+            $header->total_price = $header->total_price - ($oldQty * $oldPrice) + ($qty * $price);
             $header->total_payment = $header->total_payment - $oldSubtotal + $finalSubtotal;
             if(!empty(Input::get('discount'))){
                 $header->total_discount = $header->total_discount - $oldDiscountAmount + $discountAmount;
@@ -146,7 +153,40 @@ class QuotationDetailController extends Controller
 
     public function delete(Request $request){
         try{
+
+            $details = QuotationDetail::where('header_id', Input::get('header_id'))->get();
+            if($details->count() == 1){
+                return Response::json(array('errors' => 'INVALID'));
+            }
+
             $detail = QuotationDetail::find(Input::get('id'));
+
+            // Get old value
+            $oldPrice = $detail->price;
+            $oldDiscountAmount = 0;
+            $oldSubtotal = $detail->subtotal;
+            $oldQty = $detail->quantity;
+
+            $oldSubtotal = 0;
+            if(!empty($detail->discount)){
+                $oldDiscountAmount = ($oldQty * $oldPrice) * $detail->discount / 100;
+                $oldSubtotal = ($oldQty * $oldPrice) - $oldDiscountAmount;
+            }
+            else{
+                $oldSubtotal = ($oldQty * $oldPrice);
+            }
+
+            // Minus header total values
+            $header = QuotationHeader::find($detail->header_id);
+            $header->total_price = $header->total_price - ($oldQty * $oldPrice);
+            $header->total_discount = $header->total_discount -  $oldDiscountAmount;
+            $header->total_payment = $header->total_payment - $oldSubtotal;
+
+            $now = Carbon::now('Asia/Jakarta');
+            $header->updated_at = $now->toDateTimeString();
+            $header->save();
+
+            // Delete quotation detail completely
             $detail->delete();
 
             return new JsonResponse($detail);

@@ -25,6 +25,7 @@
                 <th>Total Harga</th>
                 <th>Diskon</th>
                 <th>Total Pembayaran</th>
+                <th>Status</th>
                 <th>Tanggal Dibuat</th>
                 <th>Tindakan</th>
             </tr>
@@ -58,6 +59,7 @@
                     { data: 'total_price', name: 'total_price' },
                     { data: 'discount', name: 'discount' },
                     { data: 'total_payment', name: 'total_payment' },
+                    { data: 'status', name: 'status' },
                     { data: 'created_at', name: 'created_at' },
                     { data: 'action', name: 'action' }
                 ],

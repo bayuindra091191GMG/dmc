@@ -28,7 +28,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\PurchaseRequestHeader $purchase_request_header
  * @property \App\Models\Status $status
  * @property \App\Models\Supplier $supplier
- * @property \App\Models\User $user
+ * @property \App\Models\Auth\User\User $user
  * @property \Illuminate\Database\Eloquent\Collection $purchase_order_headers
  * @property \Illuminate\Database\Eloquent\Collection $quotation_details
  *
@@ -47,6 +47,12 @@ class QuotationHeader extends Eloquent
 		'updated_by' => 'int'
 	];
 
+	protected $appends = [
+	    'total_price_string',
+        'total_discount_string',
+        'total_payment_string'
+    ];
+
 	protected $fillable = [
 		'code',
 		'purchase_request_id',
@@ -59,15 +65,20 @@ class QuotationHeader extends Eloquent
 		'updated_by'
 	];
 
-    public function getTotalPriceAttribute(){
+    public function getTotalPriceStringAttribute(){
         return 'Rp '. number_format($this->attributes['total_price'], 0, ",", ".");
     }
 
-    public function getTotalDiscountAttribute(){
-        return 'Rp '. number_format($this->attributes['total_discount'], 0, ",", ".");
+    public function getTotalDiscountStringAttribute(){
+        if(!empty($this->attributes['total_discount']) && $this->attributes['total_discount'] != 0){
+            return 'Rp '. number_format($this->attributes['total_discount'], 0, ",", ".");
+        }
+        else{
+            return '-';
+        }
     }
 
-    public function getTotalPaymentAttribute(){
+    public function getTotalPaymentStringAttribute(){
         return 'Rp '. number_format($this->attributes['total_payment'], 0, ",", ".");
     }
 
@@ -88,12 +99,12 @@ class QuotationHeader extends Eloquent
 
     public function createdBy()
     {
-        return $this->belongsTo(\App\Models\User::class, 'created_by');
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
     }
 
     public function updatedBy()
     {
-        return $this->belongsTo(\App\Models\User::class, 'updated_by');
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
     }
 
 	public function purchase_order_headers()

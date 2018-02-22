@@ -28,8 +28,6 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  */
 class QuotationDetail extends Eloquent
 {
-	public $timestamps = false;
-
 	protected $casts = [
 		'header_id' => 'int',
 		'item_id' => 'int',
@@ -38,6 +36,12 @@ class QuotationDetail extends Eloquent
 		'discount' => 'int',
 		'subtotal' => 'float'
 	];
+
+	protected $appends = [
+	    'priceString',
+        'discountString',
+        'subtotalString'
+    ];
 
 	protected $fillable = [
 		'header_id',
@@ -68,7 +72,7 @@ class QuotationDetail extends Eloquent
 
 	public function item()
 	{
-		return $this->belongsTo(\App\Models\Item::class);
+		return $this->belongsTo(\App\Models\Item::class, 'item_id');
 	}
 
 	public function quotation_header()
