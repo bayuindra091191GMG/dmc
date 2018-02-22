@@ -34,7 +34,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\QuotationHeader $quotation_header
  * @property \App\Models\Status $status
  * @property \App\Models\Supplier $supplier
- * @property \App\Models\User $user
+ * @property \App\Models\Auth\User\User $user
  * @property \Illuminate\Database\Eloquent\Collection $item_receipt_details
  * @property \Illuminate\Database\Eloquent\Collection $payment_requests
  * @property \Illuminate\Database\Eloquent\Collection $purchase_order_details
