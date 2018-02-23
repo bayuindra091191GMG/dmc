@@ -81,7 +81,6 @@
                 <div class="form-group">
                     <label class="text-center col-lg-12 col-md-12 col-xs-12">Detil Barang</label>
                 </div>
-
                 <div class="form-group">
                     <div class="col-lg-12 col-md-12 col-xs-12 column">
                         <table class="table table-bordered table-hover">
