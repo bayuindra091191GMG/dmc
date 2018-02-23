@@ -610,11 +610,19 @@
                 url: '{{ route('admin.item_receipt_details.delete') }}',
                 data: {
                     '_token': $('input[name=_token]').val(),
-                    'id': deletedId
+                    'id': deletedId,
+                    'header_id': {{ $header->id }}
                 },
                 success: function(data) {
-                    toastr.success('Berhasil menghapus detail!', 'Sukses', {timeOut: 5000});
-                    $('.item' + data['id']).remove();
+                    if ((data.errors)){
+                        setTimeout(function () {
+                            toastr.error('Gagal hapus detail!', 'Peringatan', {timeOut: 5000});
+                        }, 500);
+                    }
+                    else{
+                        toastr.success('Berhasil menghapus detail!', 'Sukses', {timeOut: 5000});
+                        $('.item' + data['id']).remove();
+                    }
                 }
             });
         });
