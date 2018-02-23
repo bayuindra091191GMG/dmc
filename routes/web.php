@@ -292,6 +292,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('item_mutations', 'Inventory\ItemMutationController@index')->name('item_mutations');
     Route::get('item_mutations/tambah', 'Inventory\ItemMutationController@create')->name('item_mutations.create');
     Route::post('item_mutations/simpan', 'Inventory\ItemMutationController@store')->name('item_mutations.store');
+
+    //Interchanges
+    Route::get('interchanges', 'Inventory\InterchangeController@index')->name('interchanges');
+    Route::get('interchanges/tambah', 'Inventory\InterchangeController@create')->name('interchanges.create');
+    Route::post('interchanges/simpan', 'Inventory\InterchangeController@store')->name('interchanges.store');
 });
 
 
@@ -364,6 +369,9 @@ Route::get('/datatables-issued-dockets', 'Admin\Inventory\DocketController@getIn
 
 // ITEM RECEIPT
 Route::get('/datatables-item-receipts', 'Admin\Inventory\ItemReceiptController@getIndex')->name('datatables.item_receipts');
+
+// INTERCHANGES
+Route::get('/datatables-interchanges', 'Admin\Inventory\InterchangeController@getIndex')->name('datatables.interchanges');
 
 // DOCUMENTS
 Route::get('/documents/purchase-request', function (){
