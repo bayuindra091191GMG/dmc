@@ -89,6 +89,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     //Items
     Route::get('items', 'ItemController@index')->name('items');
+    Route::get('items/detil/{item}', 'ItemController@show')->name('items.show');
     Route::get('items/tambah', 'ItemController@create')->name('items.create');
     Route::post('items/simpan', 'ItemController@store')->name('items.store');
     Route::get('items/{item}/ubah', 'ItemController@edit')->name('items.edit');
@@ -286,6 +287,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('stock_ins', 'Inventory\StockInController@index')->name('stock_ins');
     Route::get('stock_ins/tambah', 'Inventory\StockInController@create')->name('stock_ins.create');
     Route::post('stock_ins/simpan', 'Inventory\StockInController@store')->name('stock_ins.store');
+
+    //Stock Item Mutation
+    Route::get('item_mutations', 'Inventory\ItemMutationController@index')->name('item_mutations');
+    Route::get('item_mutations/tambah', 'Inventory\ItemMutationController@create')->name('item_mutations.create');
+    Route::post('item_mutations/simpan', 'Inventory\ItemMutationController@store')->name('item_mutations.store');
 });
 
 
@@ -345,6 +351,7 @@ Route::get('/datatables-quotations', 'Admin\Purchasing\QuotationHeaderController
 // STOCK
 Route::get('/datatables-stock_adjustments', 'Admin\Inventory\StockAdjustmentController@getIndex')->name('datatables.stock_adjustments');
 Route::get('/datatables-stock_ins', 'Admin\Inventory\StockInController@getIndex')->name('datatables.stock_ins');
+Route::get('/datatables-item_mutations', 'Admin\Inventory\ItemMutationController@getIndex')->name('datatables.item_mutations');
 
 // AUTHORIZATION
 Route::get('/datatables-permission-documents', 'Admin\PermissionDocumentController@getIndex')->name('datatables.permission_documents');

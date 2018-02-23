@@ -30,6 +30,12 @@ class ItemController extends Controller
         return View('admin.items.index');
     }
 
+    public function show(Item $item){
+        $selectedItem = $item;
+
+        return View('admin.items.show', compact('selectedItem'));
+    }
+
     public function create(){
         $warehouses = Warehouse::all();
         $uoms = Uom::all();

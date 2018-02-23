@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Thu, 18 Jan 2018 07:30:31 +0000.
+ * Date: Fri, 23 Feb 2018 11:32:57 +0700.
  */
 
 namespace App\Models;
@@ -23,6 +23,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Carbon\Carbon $updated_at
  * 
  * @property \App\Models\Auth\User\User $user
+ * @property \Illuminate\Database\Eloquent\Collection $item_mutations
+ * @property \Illuminate\Database\Eloquent\Collection $item_stocks
  * @property \Illuminate\Database\Eloquent\Collection $items
  * @property \Illuminate\Database\Eloquent\Collection $serials
  *
@@ -53,6 +55,16 @@ class Warehouse extends Eloquent
     {
         return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
     }
+
+	public function item_mutations()
+	{
+		return $this->hasMany(\App\Models\ItemMutation::class, 'to_warehouse_id');
+	}
+
+	public function item_stocks()
+	{
+		return $this->hasMany(\App\Models\ItemStock::class);
+	}
 
 	public function items()
 	{

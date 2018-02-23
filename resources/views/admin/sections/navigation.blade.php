@@ -376,6 +376,21 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a>Mutasi Barang<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="sub_menu">
+                                <a href="{{ route('admin.item_mutations') }}">
+                                    Daftar Mutasi Barang
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.item_mutations.create') }}">
+                                    Buat Baru
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
             <div class="menu_section">
