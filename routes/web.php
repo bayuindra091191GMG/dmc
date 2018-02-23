@@ -317,6 +317,7 @@ Route::group(['as' => 'protection.'], function () {
 
 Route::get('/select-employees', 'Admin\EmployeeController@getEmployees')->name('select.employees');
 Route::get('/select-items', 'Admin\ItemController@getItems')->name('select.items');
+Route::get('/select-itemsforpo', 'Admin\ItemController@getItemsForPo')->name('select.items.po');
 Route::get('/select-warehouses', 'Admin\ItemController@getWarehouse')->name('select.warehouses');
 Route::get('/select-groups', 'Admin\GroupController@getGroups')->name('select.groups');
 Route::get('/select-machineries', 'Admin\MachineryController@getMachineries')->name('select.machineries');

@@ -176,6 +176,16 @@ mix.scripts([
     'node_modules/autonumeric/dist/autoNumeric.min.js'
 ], 'public/assets/admin/js/autonumeric.js').version();
 
+// STRING BUILDER
+mix.scripts([
+    'node_modules/strbuilder/dist/stringbuilder.js'
+], 'public/assets/admin/js/stringbuilder.js').version();
+
+// REQUIRE JS
+mix.scripts([
+    'node_modules/requirejs/bin/r.js'
+], 'public/assets/admin/js/r.js').version();
+
 /*
  |--------------------------------------------------------------------------
  | Frontend
