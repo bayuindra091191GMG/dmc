@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
 use Carbon\Carbon;
 
 class ItemReceiptDetailController extends Controller
@@ -23,10 +24,7 @@ class ItemReceiptDetailController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
+                return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
             }
 
             $detail = new ItemReceiptDetail();
@@ -62,10 +60,7 @@ class ItemReceiptDetailController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
+                return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
             }
 
             $detail = ItemReceiptDetail::find(Input::get('id'));
@@ -98,6 +93,12 @@ class ItemReceiptDetailController extends Controller
 
     public function delete(Request $request){
         try{
+            //Check for minimun 1 Detail
+            $details = ItemReceiptDetail::where('header_id', Input::get('header_id'))->get();
+            if($details->count() == 1){
+                return Response::json(array('errors' => 'INVALID'));
+            }
+
             $detail = ItemReceiptDetail::find(Input::get('id'));
             $detail->delete();
 

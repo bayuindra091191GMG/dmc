@@ -577,7 +577,8 @@
                 url: '{{ route('admin.issued_docket_details.delete') }}',
                 data: {
                     '_token': $('input[name=_token]').val(),
-                    'id': deletedId
+                    'id': deletedId,
+                    'header_id': '{{ $header->id }}'
                 },
                 success: function(data) {
                     toastr.success('Berhasil menghapus detail!', 'Sukses', {timeOut: 5000});
