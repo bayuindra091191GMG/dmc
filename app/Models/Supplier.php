@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Thu, 18 Jan 2018 07:30:31 +0000.
+ * Date: Mon, 26 Feb 2018 11:05:00 +0700.
  */
 
 namespace App\Models;
@@ -25,7 +25,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Carbon\Carbon $updated_at
  * 
  * @property \App\Models\Auth\User\User $user
- * @property \Illuminate\Database\Eloquent\Collection $purchase_order_details
+ * @property \Illuminate\Database\Eloquent\Collection $purchase_order_headers
+ * @property \Illuminate\Database\Eloquent\Collection $quotation_headers
  *
  * @package App\Models
  */
@@ -62,8 +63,13 @@ class Supplier extends Eloquent
         return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
     }
 
-	public function purchase_order_details()
+	public function purchase_order_headers()
 	{
-		return $this->hasMany(\App\Models\PurchaseOrderDetail::class);
+		return $this->hasMany(\App\Models\PurchaseOrderHeader::class);
+	}
+
+	public function quotation_headers()
+	{
+		return $this->hasMany(\App\Models\QuotationHeader::class);
 	}
 }

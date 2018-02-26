@@ -25,8 +25,9 @@
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="po_code">
                     Nomor PO
+                    <span class="required">*</span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-4 col-sm-4 col-xs-12">
                     <input id="po_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('po_code')) parsley-error @endif"
                            name="po_code" value="{{ old('po_code') }}">
                 </div>
@@ -42,47 +43,63 @@
                     </select>
                 </div>
                 <div class="col-md-2 col-sm-2 col-xs-12">
-                    <button class="btn btn-info">
+                    <a class="get-pr-data btn btn-info">
                         Ambil Data
-                    </button>
+                    </a>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="text-center col-md-12 col-xs-12">Detil Barang</label>
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="supplier" >
+                    Vendor
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <select id="supplier" name="supplier" class="form-control col-md-7 col-xs-12 @if($errors->has('supplier')) parsley-error @endif">
+                    </select>
+                </div>
             </div>
 
             <div class="form-group">
-                <div class="col-lg-2 col-md-2 col-xs-0"></div>
-                <div class="col-lg-8 col-md-8 col-xs-12 box-section">
-                    <a class="add-modal btn btn-info">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                    <b>Detil Barang</b>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-12 col-md-12 col-xs-12 box-section">
+                    <a class="add-modal btn btn-info" style="margin-bottom: 10px;">
                         <span class="glyphicon glyphicon-plus-sign"></span> Tambah
                     </a>
                     <table class="table table-bordered table-hover" id="detail_table">
                         <thead>
                         <tr >
-                            <th class="text-center" style="width: 15%">
+                            <th class="text-center" style="width: 20%">
                                 Nomor Part
                             </th>
-                            <th class="text-center" style="width: 15%">
+                            <th class="text-center" style="width: 10%">
                                 Jumlah
                             </th>
-                            <th class="text-center" style="width: 20%">
+                            <th class="text-center" style="width: 15%">
                                 Harga
-                            </th><th class="text-center" style="width: 10%">
-                                Diskon (%)
                             </th>
                             <th class="text-center" style="width: 10%">
+                                Diskon (%)
+                            </th>
+                            <th class="text-center" style="width: 15%">
                                 Subtotal
                             </th>
-                            <th class="text-center" style="width: 40%">
+                            <th class="text-center" style="width: 15%">
                                 Remark
+                            </th>
+                            <th class="text-center" style="width: 15%">
+                                Tindakan
                             </th>
                         </tr>
                         </thead>
                         <tbody>
+                        <?php $idx = 0; ?>
                         @if(!empty($purchaseRequest))
-                            <?php $idx = 0; ?>
                             @foreach($purchaseRequest->purchase_request_details as $detail)
                                 <tr id='item{{ $idx }}'>
                                     <td class='field-item'>
@@ -93,24 +110,24 @@
                                         <input type='text' name='qty[]' class='form-control' value='{{ $detail->quantity }}' readonly/>
                                     </td>
                                     <td>
-                                        <input type='text' name='price[]' class='form-control' placeholder='Klik ubah' readonly/>
+                                        <input type='text' name='price[]' class='form-control' value='0' readonly/>
                                     </td>
                                     <td>
-                                        <input type='text' name='discount[]' class='form-control' placeholder='Klik ubah' readonly/>
+                                        <input type='text' name='discount[]' class='form-control' value='0' readonly/>
                                     </td>
                                     <td>
-                                        <input type='text' name='subtotal[]' class='form-control' placeholder='Klik ubah' readonly/>
+                                        <input type='text' name='subtotal[]' class='form-control' value='0' readonly/>
                                     </td>
                                     <td>
                                         <input type='text' name='remark[]' class='form-control' value='{{ $detail->remark }}' readonly/>
                                     </td>
                                     <td>
-                                        <button class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}" data-price="" data-discount="">
+                                        <a class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}" data-price="0" data-discount="0">
                                             <span class="glyphicon glyphicon-edit"></span> Ubah
-                                        </button>
-                                        <button class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
+                                        </a>
+                                        <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
                                             <span class="glyphicon glyphicon-trash"></span> Hapus
-                                        </button>
+                                        </a>
                                     </td>
                                 </tr>
                                 <?php $idx++; ?>
@@ -119,14 +136,13 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="col-lg-2 col-md-2 col-xs-0"></div>
             </div>
 
             <input id="index_counter" type="hidden" value="{{ $idx }}"/>
 
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a class="btn btn-primary" href="{{ route('admin.purchase_requests') }}"> Batal</a>
+                    <a class="btn btn-primary" href="{{ route('admin.purchase_orders') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>
@@ -148,35 +164,30 @@
                             <label class="control-label col-sm-2" for="item_add">Barang:</label>
                             <div class="col-sm-10">
                                 <select class="form-control" id="item_add" name="item_add"></select>
-                                <p class="errorItem text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="qty_add">Jumlah:</label>
                             <div class="col-sm-10">
                                 <input type="number" class="form-control" id="qty_add" name="qty_add">
-                                <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="price_add">Harga:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="price_add" name="price_add">
-                                <p class="errorPrice text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="discount_add">Diskon(%):</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="discount_add" name="discount_add">
-                                <p class="errorDiscount text-center alert alert-danger hidden"></p>
+                                <input type="text" class="form-control" id="discount_add" name="discount_add">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="remark_add">Remark:</label>
                             <div class="col-sm-10">
                                 <textarea class="form-control" id="remark_add" name="remark_add" cols="40" rows="5"></textarea>
-                                <p class="errorRemark text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
                     </form>
@@ -207,34 +218,31 @@
                             <label class="control-label col-sm-2" for="item_edit">Barang:</label>
                             <div class="col-sm-10">
                                 <select class="form-control" id="item_edit" name="item_edit"></select>
+                                <input type="hidden" id="item_old_value"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="qty_edit">Jumlah:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="qty_edit" name="qty_edit">
-                                <p class="errorQty text-center alert alert-danger hidden"></p>
+                                <input type="text" class="form-control" id="qty_edit" name="qty_edit">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="price_edit">Harga:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="price_edit" name="price_edit">
-                                <p class="errorPrice text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="discount_edit">Diskon(%):</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="discount_edit" name="discount_edit">
-                                <p class="errorDiscount text-center alert alert-danger hidden"></p>
+                                <input type="text" class="form-control" id="discount_edit" name="discount_edit">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="remark_edit">Remark:</label>
                             <div class="col-sm-10">
                                 <textarea class="form-control" id="remark_edit" name="remark_edit" cols="40" rows="5"></textarea>
-                                <p class="errorRemark text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
                     </form>
@@ -275,6 +283,7 @@
                                 <input type="text" class="form-control" id="qty_delete" disabled>
                             </div>
                         </div>
+                        <input typ="hidden" value="deleted_id"/>
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger delete" data-dismiss="modal">
@@ -370,6 +379,26 @@
             decimalPlaces: 0
         });
 
+        discountAddFormat = new AutoNumeric('#discount_add', {
+            maximumValue: '100',
+            minimumValue: '0',
+            decimalPlaces: 0
+        });
+
+        discountEditFormat = new AutoNumeric('#discount_edit', {
+            maximumValue: '100',
+            minimumValue: '0',
+            decimalPlaces: 0
+        });
+
+        $(document).on('click', '.get-pr-data', function(){
+            if($('#pr_code').val() && $('#pr_code').val() !== ""){
+                var url = '{{ route('admin.purchase_orders.create') }}';
+                url += "?pr=" + $('#pr_code').val();
+                window.location = url;
+            }
+        });
+
         // Add new detail
         $(document).on('click', '.add-modal', function() {
             var id = $(this).data('id');
@@ -402,17 +431,40 @@
         });
         $('.modal-footer').on('click', '.add', function() {
             var qtyAdd = $('#qty_add').val();
+            var itemAdd = $('#item_add').val();
+
+            if(!itemAdd || itemAdd === ""){
+                alert('Mohon pilih barang...');
+                return false;
+            }
+
+            if(!qtyAdd || qtyAdd === "" || qtyAdd === "0"){
+                alert('Mohon isi jumlah...')
+                return false;
+            }
+
             var priceAdd = $('#price_add').val();
+
+            if(!priceAdd || priceAdd === "" || priceAdd === "0"){
+                alert('Mohon isi harga...')
+                return false;
+            }
+
             var discountAdd = $('#discount_add').val();
             var remarkAdd = $('#remark_add').val();
 
             // Split item value
-            var data = $('#item_add').val();
-            var splitted = data.split('#');
+            var splitted = itemAdd.split('#');
 
             // Filter variables
-            var price = parseFloat(priceAdd.replace('.',''));
+            var price = 0;
+            if(priceAdd && priceAdd !== "" && priceAdd !== "0"){
+                price = parseFloat(priceAdd.replace('.',''));
+            }
             var discount = 0;
+            if(discountAdd && discountAdd !== "" && discountAdd !== "0"){
+                discount = parseFloat(discountAdd);
+            }
             var qty = parseFloat(qtyAdd);
 
             // Increase idx
@@ -422,30 +474,29 @@
 
             var sbAdd = new stringbuilder();
 
-
             sbAdd.append("<tr class='item" + idx + "'>");
-            sbAdd.append("<td class='field-item'><input type='text' name='item_text[]' class='form-control' value='" + splitted[1] + splitted[2] + "' readonly/>")
+            sbAdd.append("<td class='field-item'><input type='text' name='item_text[]' class='form-control' value='" + splitted[1] + " - " + splitted[2] + "' readonly/>")
             sbAdd.append("<input type='hidden' name='item_value[]' value='" + splitted[0] + "'/></td>");
-            if(!qtyAdd && qtyAdd !== ""){
+            if(qtyAdd && qtyAdd !== ""){
                 sbAdd.append("<td><input type='text' name='qty[]' class='form-control' value='" + qtyAdd + "' readonly/></td>");
             }
             else{
                 sbAdd.append("<td><input type='text' name='qty[]' class='form-control' readonly/></td>");
             }
 
-            if(!priceAdd && priceAdd !== ""){
-                sbAdd.append("<td><input type='text' name='qty[]' class='form-control' value='" + priceAdd + "' readonly/></td>");
+            if(priceAdd && priceAdd !== "" && priceAdd !== "0"){
+                sbAdd.append("<td><input type='text' name='price[]' class='form-control' value='" + priceAdd + "' readonly/></td>");
             }
             else{
-                sbAdd.append("<td><input type='text' name='qty[]' class='form-control' readonly/></td>");
+                sbAdd.append("<td><input type='text' name='price[]' class='form-control' value='0' readonly/></td>");
             }
 
-            if(!discountAdd && discountAdd !== ""){
+            if(discountAdd && discountAdd !== "" && discountAdd !== "0"){
                 discount = parseFloat(discountAdd);
-                sbAdd.append("<td><input type='text' name='qty[]' class='form-control' value='" + discountAdd + "' readonly/></td>");
+                sbAdd.append("<td><input type='text' name='discount[]' class='form-control' value='" + discountAdd + "' readonly/></td>");
             }
             else{
-                sbAdd.append("<td><input type='text' name='qty[]' class='form-control' readonly/></td>");
+                sbAdd.append("<td><input type='text' name='discount[]' class='form-control' value='0' readonly/></td>");
             }
 
             var subtotal = 0;
@@ -456,22 +507,25 @@
             else{
                 subtotal = totalPrice;
             }
+            var subtotalString = rupiahFormat(subtotal);
 
-            sbAdd.append("<td><input type='text' class='form-control' value='" + subtotal + "' readonly/></td>")
-            sbAdd.append("<td><input type='text' class='form-control' value='" + remarkAdd + "' readonly/></td>")
+            sbAdd.append("<td><input type='text' class='form-control' value='" + subtotalString + "' readonly/></td>");
+            sbAdd.append("<td><input type='text' name='remark[]' class='form-control' value='" + remarkAdd + "' readonly/></td>");
 
-            sbAdd.append("<td>")
-            sbAdd.append("<button class='edit-modal btn btn-info' data-id='" + idx + "' data-item-id='" + splitted[0] + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd + "' data-price='" + data.price + "' data-discount='" + discountAdd + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button>")
+            sbAdd.append("<td>");
+            sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-edit'></span> Ubah</a>");
+            sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-trash'></span> Hapus</a>");
+            sbAdd.append("</td>");
+            sbAdd.append("</tr>");
 
+            $('#detail_table').append(sbAdd.toString());
 
-            // $('#detailTable').append("<tr class='item" + id + "'><td class='field-item'>" + splitted[1] + " - " + splitted[2] + "</td>
-            // <td>" + data.quantity + "</td>
-            // <td>Rp" + priceString + "</td>
-            // <td>" + data.discountString + "</td>
-            // <td>" + data.subtotalString + "</td>
-            // <td>" + remarkAdd + "</td>
-            // <td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span> Hapus</button></td></tr>");
-
+            // Reset add form modal
+            $('#qty_add').val('');
+            $('#price_add').val('');
+            $('#discount_add').val('');
+            $('#remark_add').val('');
+            $('#item_add').val(null).trigger('change');
         });
 
         // Edit detail
@@ -480,6 +534,7 @@
 
             $('.modal-title').text('Ubah Detail');
 
+            $('#item_old_value').val($(this).data('item-id'));
             $('#item_edit').select2({
                 placeholder: {
                     id: $(this).data('item-id'),
@@ -488,7 +543,7 @@
                 width: '100%',
                 minimumInputLength: 2,
                 ajax: {
-                    url: '{{ route('select.items') }}',
+                    url: '{{ route('select.items.po') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {
@@ -505,7 +560,7 @@
 
             $('#qty_edit').val($(this).data('qty'));
             $('#remark_edit').val($(this).data('remark'));
-            $('#discount_edit').val($(this).data('discount'));
+            // $('#discount_edit').val($(this).data('discount'));
             $('#editModal').modal('show');
 
             priceEditFormat.clear();
@@ -516,22 +571,114 @@
                 decimalPlaces: 0
             });
 
+            discountEditFormat.set($(this).data('discount'), {
+                maximumValue: '100',
+                minimumValue: '0',
+                decimalPlaces: 0
+            });
+
         });
         $('.modal-footer').on('click', '.edit', function() {
-            $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + data.priceString + "</td><td>" + data.discountString + "</td><td>" + data.subtotalString + "</td><td>" + remarkEdit + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span> hapus</button></td></tr>");
+            var itemEdit = $('#item_edit').val();
+            var qtyEdit = $('#qty_edit').val();
+            var priceEdit = $('#price_edit').val();
+            var discountEdit = $('#discount_edit').val();
+            var remarkEdit = $('#remark_edit').val();
+
+            if(!qtyEdit || qtyEdit === "" || qtyEdit === "0"){
+                alert('Mohon isi jumlah...')
+                return false;
+            }
+
+            if(!priceEdit || priceEdit === "" || priceEdit === "0"){
+                alert('Mohon isi harga...')
+                return false;
+            }
+
+            // Split item value
+            var data = "default";
+            if(itemEdit && itemEdit !== ''){
+                alert(itemEdit);
+                data = itemEdit;
+            }
+            else {
+                data = $('#item_old_value').val();
+            }
+
+            var splitted = data.split('#');
+
+            // Filter variables
+            var price = 0;
+            if(priceEdit && priceEdit !== "" && priceEdit !== "0"){
+                price = parseFloat(priceEdit.replace('.',''));
+            }
+            var discount = 0;
+            if(discountEdit && discountEdit !== "" && discountEdit !== "0"){
+                discount = parseFloat(discountEdit);
+            }
+            var qty = parseFloat(qtyEdit);
+
+            var sbEdit = new stringbuilder();
+
+            sbEdit.append("<tr class='item" + id + "'>");
+            sbEdit.append("<td class='field-item'><input type='text' name='item_text[]' class='form-control' value='" + splitted[1] + ' - ' + splitted[2] + "' readonly/>")
+            sbEdit.append("<input type='hidden' name='item_value[]' value='" + splitted[0] + "'/></td>");
+            if(qtyEdit && qtyEdit !== ""){
+                sbEdit.append("<td><input type='text' name='qty[]' class='form-control' value='" + qtyEdit + "' readonly/></td>");
+            }
+            else{
+                sbEdit.append("<td><input type='text' name='qty[]' class='form-control' readonly/></td>");
+            }
+
+            if(priceEdit && priceEdit !== "" && priceEdit !== "0"){
+                sbEdit.append("<td><input type='text' name='price[]' class='form-control' value='" + priceEdit + "' readonly/></td>");
+            }
+            else{
+                sbEdit.append("<td><input type='text' name='price[]' class='form-control' value='0' readonly/></td>");
+            }
+
+            if(discountEdit && discountEdit !== "" && discountEdit !== "0"){
+                discount = parseFloat(discountEdit);
+                sbEdit.append("<td><input type='text' name='discount[]' class='form-control' value='" + discountEdit + "' readonly/></td>");
+            }
+            else{
+                sbEdit.append("<td><input type='text' name='discount[]' class='form-control' value='0' readonly/></td>");
+            }
+
+            var subtotal = 0;
+            var totalPrice = price * qty;
+            if(discount > 0){
+                subtotal = totalPrice - (totalPrice * discount / 100);
+            }
+            else{
+                subtotal = totalPrice;
+            }
+            var subtotalString = rupiahFormat(subtotal);
+
+            sbEdit.append("<td><input type='text' class='form-control' value='" + subtotalString + "' readonly/></td>");
+            sbEdit.append("<td><input type='text' name='remark[]' class='form-control' value='" + remarkEdit + "' readonly/></td>");
+
+            sbEdit.append("<td>");
+            sbEdit.append("<a class='edit-modal btn btn-info' data-id='" + id + "' data-item-id='" + data + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-edit'></span> Ubah</a>");
+            sbEdit.append("<a class='delete-modal btn btn-danger' data-id='" + id + "' data-item-id='" + data + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-trash'></span> Hapus</a>");
+            sbEdit.append("</td>");
+            sbEdit.append("</tr>");
+
+            $('.item' + id).replaceWith(sbEdit.toString());
         });
 
         // Delete detail
+        var deletedId = "0";
         $(document).on('click', '.delete-modal', function() {
             $('.modal-title').text('Hapus Detail');
+            deletedId = $(this).data('id');
             $('#item_delete').val($(this).data('item-text'));
             $('#qty_delete').val($(this).data('qty'));
             $('#remark_delete').val($(this).data('remark'));
             $('#deleteModal').modal('show');
-            deletedId = $(this).data('id')
         });
         $('.modal-footer').on('click', '.delete', function() {
-            $('.item' + data['id']).remove();
+            $('.item' + deletedId).remove();
         });
 
         function rupiahFormat(nStr) {
