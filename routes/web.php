@@ -256,6 +256,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('issued_dockets/tambah', 'Inventory\DocketController@create')->name('issued_dockets.create');
     Route::post('issued_dockets/simpan', 'Inventory\DocketController@store')->name('issued_dockets.store');
     Route::get('issued_dockets/print/{issued_docket}', 'Inventory\DocketController@printDocument')->name('issued_dockets.print');
+    Route::get('issued_dockets/download/{issued_docket}', 'Inventory\DocketController@download')->name('issued_dockets.download');
 
     //Issued Docket Details
     Route::get('issued_docket_details', 'Inventory\DocketDetailController@index')->name('issued_docket_details');

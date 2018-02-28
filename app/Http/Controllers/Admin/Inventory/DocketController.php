@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades;
 use Yajra\DataTables\DataTables;
 
 class DocketController extends Controller
@@ -223,6 +224,53 @@ class DocketController extends Controller
         $issuedDocketDetails = IssuedDocketDetail::where('header_id', $issuedDocket->id)->get();
 
         return view('documents.issued_dockets.issued_docket', compact('issuedDocket', 'issuedDocketDetails'));
+    }
+
+    public function download($id){
+        $issuedDocket = IssuedDocketHeader::find($id);
+        $issuedDocketDetails = IssuedDocketDetail::where('header_id', $issuedDocket->id)->get();
+
+        try {
+            $newFileName = $issuedDocket->code.Carbon::now('Asia/Jakarta')->format('Ymdhms');
+            $filePath = '/Form Issued Docket.xlsx';
+
+            $path = public_path('documents/');
+            Facades\Excel::load($path . $filePath, function($reader) use($issuedDocket, $issuedDocketDetails)
+            {
+                $reader->sheet('Sheet1', function($sheet) use($issuedDocket, $issuedDocketDetails)
+                {
+                    //Set The field Data
+                    //Header
+                    $sheet->getCell('C4')->setValueExplicit(": ".$issuedDocket->date);
+                    $sheet->getCell('C5')->setValueExplicit(": ".$issuedDocket->machinery->code);
+                    $sheet->getCell('C6')->setValueExplicit(": ".$issuedDocket->department->name);
+                    $sheet->getCell('C7')->setValueExplicit(": ".$issuedDocket->division);
+                    $sheet->getCell('G4')->setValueExplicit(": ".$issuedDocket->code);
+                    $sheet->getCell('G5')->setValueExplicit(": ".$issuedDocket->purchase_request_header->code);
+
+                    //Details
+                    $i = 1;
+                    $start = 11;
+                    foreach ($issuedDocketDetails as $detail){
+                        $sheet->getCell('A'.$start)->setValueExplicit($i);
+                        $sheet->getCell('B'.$start)->setValueExplicit($detail->time);
+                        $sheet->getCell('C'.$start)->setValueExplicit($detail->item->name);
+                        $sheet->getCell('D'.$start)->setValueExplicit($detail->item->code);
+                        $sheet->getCell('E'.$start)->setValueExplicit($detail->item->uom->description);
+                        $sheet->getCell('F'.$start)->setValueExplicit($detail->quantity);
+                        $sheet->getCell('G'.$start)->setValueExplicit($detail->remarks);
+
+                        $start++;
+                        $i++;
+                    }
+                });
+            })->setFilename($newFileName)->download('xlsx');
+        }
+        catch (Exception $ex){
+            //Utilities::ExceptionLog($ex);
+            return response($ex, 500)
+                ->header('Content-Type', 'text/plain');
+        }
     }
 
     public function getIndex(){

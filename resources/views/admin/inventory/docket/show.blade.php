@@ -8,6 +8,7 @@
             <div class="navbar-right">
                 <a class="btn btn-default" href="{{ route('admin.issued_dockets.edit',[ 'issued_docket' => $header->id]) }}">UBAH</a>
                 <a class="btn btn-default" href="{{ route('admin.issued_dockets.print',[ 'issued_docket' => $header->id]) }}">CETAK</a>
+                <a class="btn btn-default" href="{{ route('admin.issued_dockets.download',[ 'issued_docket' => $header->id]) }}">DOWNLOAD</a>
             </div>
         </div>
     </div>
