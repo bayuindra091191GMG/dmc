@@ -39,6 +39,12 @@ class PurchaseOrderDetail extends Eloquent
 		'subtotal' => 'float'
 	];
 
+    protected $appends = [
+        'price_string',
+        'discount_string',
+        'subtotal_string'
+    ];
+
 	protected $fillable = [
 		'header_id',
 		'item_id',
@@ -48,6 +54,23 @@ class PurchaseOrderDetail extends Eloquent
 		'subtotal',
 		'remark'
 	];
+
+    public function getPriceStringAttribute(){
+        return 'Rp '. number_format($this->attributes['price'], 0, ",", ".");
+    }
+
+    public function getDiscountStringAttribute(){
+        if(!empty($this->attributes['discount']) && $this->attributes['discount'] !== 0){
+            return $this->attributes['discount']. '%';
+        }
+        else{
+            return '-';
+        }
+    }
+
+    public function getSubtotalStringAttribute(){
+        return 'Rp '. number_format($this->attributes['subtotal'], 0, ",", ".");
+    }
 
 	public function item()
 	{

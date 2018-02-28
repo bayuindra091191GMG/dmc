@@ -28,8 +28,13 @@ class PurchaseOrderHeaderController extends Controller
         return View('admin.purchasing.purchase_orders.index');
     }
 
-    public function create(){
+    public function show(PurchaseOrderHeader $purchase_order){
+        $header = $purchase_order;
 
+        return View('admin.purchasing.purchase_orders.show', compact('header'));
+    }
+
+    public function create(){
         $purchaseRequest = null;
         if(!empty(request()->pr)){
             $purchaseRequest = PurchaseRequestHeader::find(request()->pr);
@@ -47,8 +52,7 @@ class PurchaseOrderHeaderController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
-            'po_code'       => 'required',
-            'pr_code'       => 'required'
+            'po_code'       => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -58,15 +62,26 @@ class PurchaseOrderHeaderController extends Controller
                 ->withInput();
         }
 
-        // Check detail
+        // Validate PR code
+        if(empty(Input::get('pr_code')) && empty(Input::get('pr_id'))){
+            return redirect()->back()->withErrors('Kode PR wajib diisi!', 'default')->withInput($request->all());
+        }
+
+        // Validate details
         $items = Input::get('item_value');
-        $valid = false;
+        $qtys = Input::get('qty');
+        $prices = Input::get('price');
+        $valid = true;
+        $i = 0;
         foreach($items as $item){
-            if(!empty($item)) $valid = true;
+            if(empty($item)) $valid = false;
+            if(empty($qtys[$i]) || $qtys[$i] == '0') $valid = false;
+            if(empty($prices[$i]) || $prices[$i] == '0') $valid = false;
+            $i++;
         }
 
         if(!$valid){
-            return redirect()->back()->withErrors('Daftar barang wajib diisi!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Detail barang, jumlah dan harga wajib diisi!', 'default')->withInput($request->all());
         }
 
         $user = \Auth::user();
@@ -81,12 +96,26 @@ class PurchaseOrderHeaderController extends Controller
             'created_at'            => $now->toDateTimeString()
         ]);
 
+        $delivery = 0;
+        if(!empty(Input::get('delivery_fee')) && Input::get('delivery_fee') != '0'){
+            $deliveryFee = str_replace('.','', Input::get('delivery_fee'));
+            $delivery = (double) $deliveryFee;
+            $poHeader->delivery_fee = $deliveryFee;
+        }
+
+        if(!empty(Input::get('pr_code'))){
+            $poHeader->purchase_request_id = Input::get('pr_code');
+        }
+        else{
+            $poHeader->purchase_request_id = Input::get('pr_id');
+        }
+
+        $poHeader->save();
+
         // Create po detail
         $totalPrice = 0;
         $totalDiscount = 0;
         $totalPayment = 0;
-        $qtys = Input::get('qty');
-        $prices = Input::get('price');
         $discounts = Input::get('discount');
         $remarks = Input::get('remark');
         $idx = 0;
@@ -133,7 +162,7 @@ class PurchaseOrderHeaderController extends Controller
 
         if($totalDiscount > 0) $poHeader->total_discount = $totalDiscount;
         $poHeader->total_price = $totalPrice;
-        $poHeader->total_payment = $totalPayment;
+        $poHeader->total_payment = $totalPayment + $delivery;
         $poHeader->save();
 
         Session::flash('message', 'Berhasil membuat purchase order!');
@@ -141,12 +170,48 @@ class PurchaseOrderHeaderController extends Controller
         return redirect()->route('admin.purchase_orders.show', ['purchase_order' => $poHeader]);
     }
 
+    public function edit(PurchaseOrderHeader $purchase_order){
+        $header = $purchase_order;
+
+        return View('admin.purchasing.purchase_orders.edit', compact('header'));
+    }
+
+    public function update(Request $request, PurchaseOrderHeader $purchase_order){
+        if(!empty(Input::get('pr_code'))) $purchase_order->purchase_request_id = Input::get('pr_code');
+        if(!empty(Input::get('supplier'))) $purchase_order->supplier_id = Input::get('supplier');
+
+        $oldDelivery = 0;
+        $newDelivery = 0;
+        if(!empty(Input::get('delivery_fee')) && Input::get('delivery_fee') != '0'){
+            $oldDelivery = $purchase_order->delivery_fee;
+
+            $deliveryFee = str_replace('.','', Input::get('delivery_fee'));
+            $newDelivery = (double) $deliveryFee;
+            $purchase_order->delivery_fee = $deliveryFee;
+        }
+        else{
+            $oldDelivery = $purchase_order->delivery_fee;
+            $purchase_order->delivery_fee = null;
+        }
+        $purchase_order->total_payment = $purchase_order->total_payment - $oldDelivery + $newDelivery;
+        $purchase_order->save();
+
+        Session::flash('message', 'Berhasil ubah purchase order!');
+
+        return redirect()->route('admin.purchase_orders.edit', ['purchase_order' => $purchase_order]);
+    }
+
     public function getIndex(){
-        $purchaseOrders = PurchaseOrderHeader::all();
-        return DataTables::of($purchaseOrders)
-            ->setTransformer(new PurchaseOrderHeaderTransformer)
-            ->addIndexColumn()
-            ->make(true);
+        try{
+            $purchaseOrders = PurchaseOrderHeader::dateDescending()->get();
+            return DataTables::of($purchaseOrders)
+                ->setTransformer(new PurchaseOrderHeaderTransformer)
+                ->addIndexColumn()
+                ->make(true);
+        }
+        catch(\Exception $ex){
+            error_log($ex);
+        }
     }
 
     public function getPurchaseOrders(Request $request){

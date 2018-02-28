@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Wed, 07 Feb 2018 02:53:35 +0000.
+ * Date: Wed, 28 Feb 2018 14:47:14 +0700.
  */
 
 namespace App\Models;
@@ -14,7 +14,6 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property int $id
  * @property string $code
- * @property string $date
  * @property int $department_id
  * @property int $machinery_id
  * @property string $sn_chasis
@@ -28,9 +27,9 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\Department $department
  * @property \App\Models\Machinery $machinery
  * @property \App\Models\Status $status
- * @property \App\Models\User $user
+ * @property \App\Models\Auth\User\User $user
  * @property \Illuminate\Database\Eloquent\Collection $approval_purchase_requests
- * @property \Illuminate\Database\Eloquent\Collection $delivery_note_headers
+ * @property \Illuminate\Database\Eloquent\Collection $delivery_order_headers
  * @property \Illuminate\Database\Eloquent\Collection $issued_docket_headers
  * @property \Illuminate\Database\Eloquent\Collection $purchase_order_headers
  * @property \Illuminate\Database\Eloquent\Collection $purchase_request_details
@@ -50,7 +49,6 @@ class PurchaseRequestHeader extends Eloquent
 
 	protected $fillable = [
 		'code',
-		'date',
 		'department_id',
 		'machinery_id',
 		'sn_chasis',
@@ -77,17 +75,22 @@ class PurchaseRequestHeader extends Eloquent
 
     public function createdBy()
     {
-        return $this->belongsTo(\App\Models\User::class, 'created_by');
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
     }
 
     public function updatedBy()
     {
-        return $this->belongsTo(\App\Models\User::class, 'updated_by');
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
     }
 
 	public function approval_purchase_requests()
 	{
 		return $this->hasMany(\App\Models\ApprovalPurchaseRequest::class, 'purchase_request_id');
+	}
+
+	public function delivery_order_headers()
+	{
+		return $this->hasMany(\App\Models\DeliveryOrderHeader::class, 'purchase_request_id');
 	}
 
 	public function issued_docket_headers()
@@ -97,7 +100,7 @@ class PurchaseRequestHeader extends Eloquent
 
 	public function purchase_order_headers()
 	{
-		return $this->hasMany(\App\Models\PurchaseOrderHeader::class, 'purchasing_request_id');
+		return $this->hasMany(\App\Models\PurchaseOrderHeader::class, 'purchase_request_id');
 	}
 
 	public function purchase_request_details()

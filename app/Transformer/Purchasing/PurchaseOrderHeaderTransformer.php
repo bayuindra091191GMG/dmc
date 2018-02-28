@@ -11,27 +11,34 @@ namespace App\Transformer\Purchasing;
 
 use App\Models\PurchaseOrderHeader;
 use Carbon\Carbon;
+use League\Fractal\TransformerAbstract;
 
-class PurchaseOrderHeaderTransformer
+class PurchaseOrderHeaderTransformer extends TransformerAbstract
 {
     public function transform(PurchaseOrderHeader $header){
-        $createdDate = Carbon::parse($header->created_at)->format('d M Y');
+        try{
+            $createdDate = Carbon::parse($header->created_at)->format('d M Y');
 
-        $code = "<a href='purchase_orders/detil/" . $header->id. "'>". $header->code. "</a>";
-        $prCode =  "<a href='purchase_requests/detil/" . $header->purchasing_request_id. "'>". $header->purchase_request_header->code. "</a>";
-        $action = "<a class='btn btn-xs btn-info' href='purchase_orders/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+            $code = "<a href='purchase_orders/detil/" . $header->id. "'>". $header->code. "</a>";
+            $prCode =  "<a href='purchase_requests/detil/" . $header->purchase_request_id. "'>". $header->purchase_request_header->code. "</a>";
 
+            $action = "<a class='btn btn-xs btn-primary' href='purchase_orders/detil/". $header->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
+            $action .= "<a class='btn btn-xs btn-info' href='purchase_orders/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
-
-        return[
-            'code'              => $code,
-            'pr_code'           => $prCode,
-            'supplier'          => $header->supplier->name,
-            'delivery_charge'   => $header->delivery_charge ?? '-',
-            'total_price'       => $header->total_price ?? '-',
-            'created_at'        => $createdDate,
-            'status'            => $header->status_id == 1 ? 'open' : 'closed',
-            'action'            => $action
-        ];
+            return[
+                'code'              => $code,
+                'pr_code'           => $prCode,
+                'supplier'          => $header->supplier->name,
+                'total_price'       => $header->total_price_string,
+                'total_discount'    => $header->total_discount_string ?? '-',
+                'delivery_fee'      => $header->delivery_fee_string ?? '-',
+                'total_payment'     => $header->total_payment_string,
+                'created_at'        => $createdDate,
+                'status'            => $header->status_id == 3 ? 'open' : 'closed',
+                'action'            => $action
+            ];
+        }catch(\Exception $ex){
+            error_log($ex);
+        }
     }
 }

@@ -7,6 +7,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -62,6 +64,13 @@ class PurchaseOrderHeader extends Eloquent
 		'date'
 	];
 
+    protected $appends = [
+        'total_price_string',
+        'total_discount_string',
+        'total_payment_string',
+        'delivery_fee_string'
+    ];
+
 	protected $fillable = [
 		'code',
 		'date',
@@ -78,6 +87,37 @@ class PurchaseOrderHeader extends Eloquent
 		'created_by',
 		'updated_by'
 	];
+
+    public function getTotalPriceStringAttribute(){
+        return 'Rp '. number_format($this->attributes['total_price'], 0, ",", ".");
+    }
+
+    public function getTotalDiscountStringAttribute(){
+        if(!empty($this->attributes['total_discount']) && $this->attributes['total_discount'] != 0){
+            return 'Rp '. number_format($this->attributes['total_discount'], 0, ",", ".");
+        }
+        else{
+            return '-';
+        }
+    }
+
+    public function getTotalPaymentStringAttribute(){
+        return 'Rp '. number_format($this->attributes['total_payment'], 0, ",", ".");
+    }
+
+    public function getDeliveryFeeStringAttribute(){
+        if(!empty($this->attributes['total_discount']) && $this->attributes['delivery_fee'] != 0){
+            return 'Rp '. number_format($this->attributes['delivery_fee'], 0, ",", ".");
+        }
+        else{
+            return '-';
+        }
+    }
+
+    public function scopeDateDescending(Builder $query){
+        return $query->orderBy('created_at','DESC');
+    }
+
 
 	public function purchase_request_header()
 	{

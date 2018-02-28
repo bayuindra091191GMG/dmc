@@ -41,11 +41,17 @@
                 <div class="col-md-4 col-sm-4 col-xs-12">
                     <select id="pr_code" name="pr_code" class="form-control col-md-7 col-xs-12 @if($errors->has('pr_code')) parsley-error @endif">
                     </select>
+                    <input type="hidden" id="pr_id" name="pr_id" @if(!empty($purchaseRequest)) value="{{ $purchaseRequest->id }} @endif">
                 </div>
                 <div class="col-md-2 col-sm-2 col-xs-12">
                     <a class="get-pr-data btn btn-info">
                         Ambil Data
                     </a>
+                    @if(!empty($purchaseRequest))
+                        <a class="clear-pr-data btn btn-info">
+                            Set Ulang Data
+                        </a>
+                    @endif
                 </div>
             </div>
 
@@ -57,6 +63,17 @@
                 <div class="col-md-4 col-sm-4 col-xs-12">
                     <select id="supplier" name="supplier" class="form-control col-md-7 col-xs-12 @if($errors->has('supplier')) parsley-error @endif">
                     </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="delivery_fee">
+                    Ongkos Kirim
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <input id="delivery_fee" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('delivery_fee')) parsley-error @endif"
+                           name="delivery_fee" value="{{ old('delivery_fee') }}">
                 </div>
             </div>
 
@@ -101,7 +118,8 @@
                         <?php $idx = 0; ?>
                         @if(!empty($purchaseRequest))
                             @foreach($purchaseRequest->purchase_request_details as $detail)
-                                <tr id='item{{ $idx }}'>
+                                <?php $idx++; ?>
+                                <tr class='item{{ $idx }}'>
                                     <td class='field-item'>
                                         <input type='text' name='item_text[]' class='form-control' value='{{ $detail->item->code. ' - '. $detail->item->name }}' readonly/>
                                         <input type='hidden' name='item_value[]' value='{{ $detail->item_id }}'/>
@@ -122,15 +140,15 @@
                                         <input type='text' name='remark[]' class='form-control' value='{{ $detail->remark }}' readonly/>
                                     </td>
                                     <td>
-                                        <a class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}" data-price="0" data-discount="0">
+                                        <?php $itemId = $detail->item_id. "#". $detail->item->code. "#". $detail->item->name ?>
+                                        <a class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}" data-price="0" data-discount="0">
                                             <span class="glyphicon glyphicon-edit"></span> Ubah
                                         </a>
-                                        <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
+                                        <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
                                             <span class="glyphicon glyphicon-trash"></span> Hapus
                                         </a>
                                     </td>
                                 </tr>
-                                <?php $idx++; ?>
                             @endforeach
                         @endif
                         </tbody>
@@ -283,7 +301,7 @@
                                 <input type="text" class="form-control" id="qty_delete" disabled>
                             </div>
                         </div>
-                        <input typ="hidden" value="deleted_id"/>
+                        <input type="hidden" name="deleted_id"/>
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger delete" data-dismiss="modal">
@@ -319,28 +337,54 @@
     {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
     {{ Html::script(mix('assets/admin/js/stringbuilder.js')) }}
     <script type="text/javascript">
-        $('#pr_code').select2({
-            placeholder: {
-                id: '-1',
-                text: 'Pilih Nomor PR...'
-            },
-            width: '100%',
-            minimumInputLength: 2,
-            ajax: {
-                url: '{{ route('select.purchase_requests') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
+        @if(!empty($purchaseRequest))
+            $('#pr_code').select2({
+                placeholder: {
+                    id: '{{ $purchaseRequest->id }}',
+                    text: '{{ $purchaseRequest->code }}'
                 },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
+                width: '100%',
+                minimumInputLength: 2,
+                ajax: {
+                    url: '{{ route('select.purchase_requests') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            q: $.trim(params.term)
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
                 }
-            }
-        });
+            });
+        @else
+            $('#pr_code').select2({
+                placeholder: {
+                    id: '-1',
+                    text: 'Pilih Nomor PR...'
+                },
+                width: '100%',
+                minimumInputLength: 2,
+                ajax: {
+                    url: '{{ route('select.purchase_requests') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            q: $.trim(params.term)
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+        @endif
+
 
         $('#supplier').select2({
             placeholder: {
@@ -373,6 +417,12 @@
             decimalPlaces: 0
         });
 
+        deliveryFeeFormat = new AutoNumeric('#delivery_fee', {
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+            decimalPlaces: 0
+        });
+
         priceEditFormat = new AutoNumeric('#price_edit', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
@@ -391,18 +441,29 @@
             decimalPlaces: 0
         });
 
+        // Get selected PR data
         $(document).on('click', '.get-pr-data', function(){
+            var url = '{{ route('admin.purchase_orders.create') }}';
             if($('#pr_code').val() && $('#pr_code').val() !== ""){
-                var url = '{{ route('admin.purchase_orders.create') }}';
                 url += "?pr=" + $('#pr_code').val();
                 window.location = url;
             }
+            else{
+                if($('#pr_id').val() && $('#pr_id').val() !== ""){
+                    url += "?pr=" + $('#pr_id').val();
+                    window.location = url;
+                }
+            }
+        });
+
+        // Clear selected PR data
+        $(document).on('click', '.clear-pr-data', function(){
+            var url = '{{ route('admin.purchase_orders.create') }}';
+            window.location = url;
         });
 
         // Add new detail
         $(document).on('click', '.add-modal', function() {
-            var id = $(this).data('id');
-
             $('#item_add').select2({
                 placeholder: {
                     id: '-1',

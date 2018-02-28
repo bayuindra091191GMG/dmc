@@ -186,6 +186,8 @@ mix.scripts([
     'node_modules/requirejs/bin/r.js'
 ], 'public/assets/admin/js/r.js').version();
 
+mix.copyDirectory('resources/views/images', 'public/assets/admin/images');
+
 /*
  |--------------------------------------------------------------------------
  | Frontend
