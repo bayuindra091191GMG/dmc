@@ -52,7 +52,8 @@ class DocketController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'division'      => 'max:90'
+            'division'      => 'max:90',
+            'code'          => 'max:40'
         ]);
 
         if ($validator->fails()) {
@@ -77,6 +78,9 @@ class DocketController extends Controller
             $sysNo->save();
         }
         else{
+            if(empty(Input::get('code'))){
+                return redirect()->back()->withErrors('No Issued Docket Wajib Diisi!', 'default')->withInput($request->all());
+            }
             $docketNumber = Input::get('code');
         }
 
