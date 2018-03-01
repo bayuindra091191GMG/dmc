@@ -75,7 +75,7 @@
                                 <div>
                                     {{--<div class="h1">{{ config('app.name') }}</div>--}}
                                     {{--<p>&copy; {{ date('Y') }} {{ config('app.name') }}. {{ __('views.auth.login.copyright') }}</p>--}}
-                                    <div class="h1">Victor Dua Tiga Mega System</div>
+                                    <div class="h1">Inventory & Purchasing System</div>
                                     <p>&copy; {{ date('Y') }} PT Victor Dua Tiga Mega. {{ __('views.auth.login.copyright') }}</p>
                                 </div>
                             </div>

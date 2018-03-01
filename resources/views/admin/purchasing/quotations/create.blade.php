@@ -29,7 +29,18 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="quot_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('quot_code')) parsley-error @endif"
-                           name="quot_code" value="{{ old('quot_code') }}">
+                           name="quot_code" value="{{ $autoNumber}}" disabled>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="auto_number"></label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" class="flat" id="auto_number" name="auto_number" checked="checked"> Auto Number
+                        </label>
+                    </div>
                 </div>
             </div>
 
@@ -130,6 +141,18 @@
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
     {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
     <script type="text/javascript">
+        // Auto Numbering
+        $('#auto_number').change(function(){
+            if(this.checked){
+                $('#quot_code').val('{{ $autoNumber }}');
+                $('#quot_code').prop('disabled', true);
+            }
+            else{
+                $('#quot_code').val('');
+                $('#quot_code').prop('disabled', false);
+            }
+        });
+
         $('#pr_code').select2({
             placeholder: {
                 id: '-1',

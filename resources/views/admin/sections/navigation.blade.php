@@ -52,11 +52,9 @@
                 </ul>
             </div>
             <div class="menu_section">
-                <h3>Semua Data</h3>
-
                 <ul class="nav side-menu">
                     <li>
-                        <a>
+                        <a style="font-weight: bold;">
                             <i class="fa fa-list"></i>
                             Master Data
                             <span class="fa fa-chevron-down"></span>
@@ -289,9 +287,9 @@
                         </ul>
                     </li>
                     <li>
-                        <a>
+                        <a style="font-weight: bold;">
                             <i class="fa fa-list"></i>
-                            Data
+                            Basic Data
                             <span class="fa fa-chevron-down"></span>
                         </a>
                         <ul class="nav child_menu">
@@ -342,57 +340,6 @@
                 </ul>
             </div>
 
-            <div class="menu_section">
-                <h3>Stock</h3>
-
-                <ul class="nav side-menu">
-                    <li>
-                        <a>Stock Adjustment<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li class="sub_menu">
-                                <a href="{{ route('admin.stock_adjustments') }}">
-                                    Daftar
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.stock_adjustments.create') }}">
-                                    Buat Baru
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a>Stock In<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li class="sub_menu">
-                                <a href="{{ route('admin.stock_ins') }}">
-                                    Daftar
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.stock_ins.create') }}">
-                                    Buat Baru
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a>Mutasi Barang<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li class="sub_menu">
-                                <a href="{{ route('admin.item_mutations') }}">
-                                    Daftar Mutasi Barang
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.item_mutations.create') }}">
-                                    Buat Baru
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
             <div class="menu_section">
                 <h3>Purchasing</h3>
 
@@ -446,7 +393,7 @@
             </div>
 
             <div class="menu_section">
-                <h3>Goods</h3>
+                <h3>Inventory</h3>
 
                 <ul class="nav side-menu">
                     <li>
@@ -463,16 +410,14 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
-                </ul>
 
-                <ul class="nav side-menu">
+                    </li>
                     <li>
-                        <a>Item Receipt<span class="fa fa-chevron-down"></span></a>
+                        <a>Goods Receipt<span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li class="sub_menu">
                                 <a href="{{ route('admin.item_receipts') }}">
-                                    Daftar Item Receipt
+                                    Daftar Goods Receipt
                                 </a>
                             </li>
                             <li>
@@ -482,9 +427,6 @@
                             </li>
                         </ul>
                     </li>
-                </ul>
-
-                <ul class="nav side-menu">
                     <li>
                         <a>Interchanges<span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
@@ -495,6 +437,51 @@
                             </li>
                             <li>
                                 <a href="{{ route('admin.interchanges.create') }}">
+                                    Buat Baru
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a>Stock Adjustment<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="sub_menu">
+                                <a href="{{ route('admin.stock_adjustments') }}">
+                                    Daftar
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.stock_adjustments.create') }}">
+                                    Buat Baru
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a>Stock In<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="sub_menu">
+                                <a href="{{ route('admin.stock_ins') }}">
+                                    Daftar
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.stock_ins.create') }}">
+                                    Buat Baru
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a>Mutasi Barang<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="sub_menu">
+                                <a href="{{ route('admin.item_mutations') }}">
+                                    Daftar Mutasi Barang
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.item_mutations.create') }}">
                                     Buat Baru
                                 </a>
                             </li>

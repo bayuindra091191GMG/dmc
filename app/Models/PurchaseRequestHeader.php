@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Wed, 28 Feb 2018 14:47:14 +0700.
+ * Date: Thu, 01 Mar 2018 10:23:31 +0700.
  */
 
 namespace App\Models;
@@ -18,6 +18,9 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $machinery_id
  * @property string $sn_chasis
  * @property string $sn_engine
+ * @property string $priority
+ * @property string $km
+ * @property string $hm
  * @property int $status_id
  * @property int $created_by
  * @property \Carbon\Carbon $created_at
@@ -53,6 +56,9 @@ class PurchaseRequestHeader extends Eloquent
 		'machinery_id',
 		'sn_chasis',
 		'sn_engine',
+		'priority',
+		'km',
+		'hm',
 		'status_id',
 		'created_by',
 		'updated_by'

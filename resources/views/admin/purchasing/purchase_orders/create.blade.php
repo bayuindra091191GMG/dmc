@@ -29,7 +29,18 @@
                 </label>
                 <div class="col-md-4 col-sm-4 col-xs-12">
                     <input id="po_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('po_code')) parsley-error @endif"
-                           name="po_code" value="{{ old('po_code') }}">
+                           name="po_code" value="{{ $autoNumber }}" disabled>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="auto_number"></label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" class="flat" id="auto_number" name="auto_number" checked="checked"> Auto Number
+                        </label>
+                    </div>
                 </div>
             </div>
 
@@ -69,7 +80,6 @@
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="delivery_fee">
                     Ongkos Kirim
-                    <span class="required">*</span>
                 </label>
                 <div class="col-md-4 col-sm-4 col-xs-12">
                     <input id="delivery_fee" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('delivery_fee')) parsley-error @endif"
@@ -337,6 +347,18 @@
     {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
     {{ Html::script(mix('assets/admin/js/stringbuilder.js')) }}
     <script type="text/javascript">
+        // Auto Numbering
+        $('#auto_number').change(function(){
+            if(this.checked){
+                $('#po_code').val('{{ $autoNumber }}');
+                $('#po_code').prop('disabled', true);
+            }
+            else{
+                $('#po_code').val('');
+                $('#po_code').prop('disabled', false);
+            }
+        });
+
         @if(!empty($purchaseRequest))
             $('#pr_code').select2({
                 placeholder: {
@@ -488,7 +510,10 @@
             });
 
             $('.modal-title').text('Tambah Detail');
-            $('#addModal').modal('show');
+            $('#addModal').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
         });
         $('.modal-footer').on('click', '.add', function() {
             var qtyAdd = $('#qty_add').val();

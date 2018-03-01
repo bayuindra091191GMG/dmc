@@ -10,6 +10,8 @@ namespace App\Http\Controllers\Admin\Purchasing;
 
 
 use App\Http\Controllers\Controller;
+use App\Libs\Utilities;
+use App\Models\NumberingSystem;
 use App\Models\QuotationDetail;
 use App\Models\QuotationHeader;
 use App\Transformer\Purchasing\QuotationHeaderTransformer;
@@ -33,12 +35,16 @@ class QuotationHeaderController extends Controller
     }
 
     public function create(){
-        return View('admin.purchasing.quotations.create');
+        // Numbering System
+        $sysNo = NumberingSystem::where('doc_id', '5')->first();
+        $autoNumber = Utilities::GenerateNumber('QUOT', $sysNo->next_no);
+
+        return View('admin.purchasing.quotations.create', compact('autoNumber'));
     }
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
-            'quot_code'     => 'required|max:40',
+            'quot_code'     => 'max:40',
             'pr_code'       => 'required',
             'supplier'      => 'required'
         ]);
@@ -50,22 +56,51 @@ class QuotationHeaderController extends Controller
                 ->withInput();
         }
 
+        // Validate quotation number
+        if(empty(Input::get('auto_number')) && (empty(Input::get('quot_code'))) || Input::get('quot_code') == ""){
+            return redirect()->back()->withErrors('Nomor kuotasi vendor wajib diisi!', 'default')->withInput($request->all());
+        }
+
         // Check detail
         $items = Input::get('item');
-        $valid = false;
+        $qtys = Input::get('qty');
+        $prices = Input::get('price');
+        $valid = true;
+        $i = 0;
         foreach($items as $item){
-            if(!empty($item)) $valid = true;
+            if(empty($item)) $valid = false;
+            if(empty($qtys[$i]) || $qtys[$i] == '0') $valid = false;
+            if(empty($prices[$i]) || $prices[$i] == '0') $valid = false;
+            $i++;
         }
 
         if(!$valid){
-            return redirect()->back()->withErrors('Daftar barang wajib diisi!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Detail barang, jumlah dan harga wajib diisi!', 'default')->withInput($request->all());
+        }
+
+        // Generate auto number
+        $quotCode = 'default';
+        if(Input::get('auto_number')){
+            $sysNo = NumberingSystem::where('doc_id', '5')->first();
+            $quotCode = Utilities::GenerateNumberPurchaseOrder('QUOT', $sysNo->next_no);
+            $sysNo->next_no++;
+            $sysNo->save();
+        }
+        else{
+            $quotCode = Input::get('quot_code');
+        }
+
+        // Check existing number
+        $temp = QuotationHeader::where('code', $quotCode)->first();
+        if(!empty($temp)){
+            return redirect()->back()->withErrors('Nomor kuotasi vendor sudah terdaftar!', 'default')->withInput($request->all());
         }
 
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
         $quotHeader = QuotationHeader::create([
-            'code'      => Input::get('quot_code'),
+            'code'                  => $quotCode,
             'purchase_request_id'   => Input::get('pr_code'),
             'supplier_id'           => Input::get('supplier'),
             'status_id'             => 3,
@@ -77,8 +112,6 @@ class QuotationHeaderController extends Controller
         $totalPrice = 0;
         $totalDiscount = 0;
         $totalPayment = 0;
-        $qtys = Input::get('qty');
-        $prices = Input::get('price');
         $discounts = Input::get('discount');
         $remarks = Input::get('remark');
         $idx = 0;

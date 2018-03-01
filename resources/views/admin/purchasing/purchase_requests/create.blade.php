@@ -23,6 +23,28 @@
             @endif
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="po_code">
+                    Nomor PR
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <input id="pr_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('po_code')) parsley-error @endif"
+                           name="pr_code">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="auto_number"></label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" class="flat" id="auto_number" name="auto_number" checked="checked"> Auto Number
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="department" >
                     Departemen
                     <span class="required">*</span>
@@ -65,6 +87,36 @@
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="sn_engine" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('sn_engine')) parsley-error @endif"
                            name="sn_engine" value="{{ old('sn_engine') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="priority">
+                    Prioritas
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="priority" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('priority')) parsley-error @endif"
+                           name="priority" value="{{ old('priority') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="km">
+                    KM
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="km" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('km')) parsley-error @endif"
+                           name="km" value="{{ old('km') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="hm">
+                    HM
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="hm" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('hm')) parsley-error @endif"
+                           name="hm" value="{{ old('hm') }}">
                 </div>
             </div>
 
@@ -131,6 +183,18 @@
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
     <script type="text/javascript">
+        // Auto Numbering
+        $('#auto_number').change(function(){
+            if(this.checked){
+                $('#pr_code').val('{{ $autoNumber }}');
+                $('#pr_code').prop('disabled', true);
+            }
+            else{
+                $('#pr_code').val('');
+                $('#pr_code').prop('disabled', false);
+            }
+        });
+
         var i=1;
 
         $('#machinery').select2({

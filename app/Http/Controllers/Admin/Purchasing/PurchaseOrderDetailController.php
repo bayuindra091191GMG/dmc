@@ -123,7 +123,7 @@ class PurchaseOrderDetailController extends Controller
                 $detail->discount = $discount;
                 $discountAmount = ($qty * $price) * $discount/ 100;
                 $finalSubtotal = ($qty * $price) - $discountAmount;
-                $detail->subtotal = ($qty * $price) - $finalSubtotal;
+                $detail->subtotal = $finalSubtotal;
             }
             else{
                 $finalSubtotal = ($qty * $price);

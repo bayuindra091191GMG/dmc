@@ -10,6 +10,8 @@ namespace App\Http\Controllers\Admin\Purchasing;
 
 
 use App\Http\Controllers\Controller;
+use App\Libs\Utilities;
+use App\Models\NumberingSystem;
 use App\Models\PurchaseOrderDetail;
 use App\Models\PurchaseOrderHeader;
 use App\Models\PurchaseRequestHeader;
@@ -42,9 +44,14 @@ class PurchaseOrderHeaderController extends Controller
 
         $quotation = null;
 
+        // Numbering System
+        $sysNo = NumberingSystem::where('doc_id', '4')->first();
+        $autoNumber = Utilities::GenerateNumberPurchaseOrder('PO', $sysNo->next_no);
+
         $data = [
             'purchaseRequest'   => $purchaseRequest,
-            'quotation'         => $quotation
+            'quotation'         => $quotation,
+            'autoNumber'        => $autoNumber
         ];
 
         return View('admin.purchasing.purchase_orders.create')->with($data);
@@ -52,7 +59,7 @@ class PurchaseOrderHeaderController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
-            'po_code'       => 'required'
+            'po_code'       => 'max:40'
         ]);
 
         if ($validator->fails()) {
@@ -62,9 +69,32 @@ class PurchaseOrderHeaderController extends Controller
                 ->withInput();
         }
 
-        // Validate PR code
+        // Validate PO number
+        if(empty(Input::get('auto_number')) && (empty(Input::get('po_code'))) || Input::get('po_code') == ""){
+            return redirect()->back()->withErrors('Nomor PO wajib diisi!', 'default')->withInput($request->all());
+        }
+
+        // Validate PR number
         if(empty(Input::get('pr_code')) && empty(Input::get('pr_id'))){
-            return redirect()->back()->withErrors('Kode PR wajib diisi!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Nomor PR wajib diisi!', 'default')->withInput($request->all());
+        }
+
+        // Generate auto number
+        $poCode = 'default';
+        if(Input::get('auto_number')){
+            $sysNo = NumberingSystem::where('doc_id', '4')->first();
+            $poCode = Utilities::GenerateNumberPurchaseOrder('PO', $sysNo->next_no);
+            $sysNo->next_no++;
+            $sysNo->save();
+        }
+        else{
+            $poCode = Input::get('po_code');
+        }
+
+        // Check existing number
+        $temp = PurchaseOrderHeader::where('code', $poCode)->first();
+        if(!empty($temp)){
+            return redirect()->back()->withErrors('Nomor PO sudah terdaftar!', 'default')->withInput($request->all());
         }
 
         // Validate details
@@ -88,7 +118,7 @@ class PurchaseOrderHeaderController extends Controller
         $now = Carbon::now('Asia/Jakarta');
 
         $poHeader = PurchaseOrderHeader::create([
-            'code'                  => Input::get('po_code'),
+            'code'                  => $poCode,
             'purchase_request_id'   => Input::get('pr_code'),
             'supplier_id'           => Input::get('supplier'),
             'status_id'             => 3,
