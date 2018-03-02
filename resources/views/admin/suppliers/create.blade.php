@@ -65,23 +65,32 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="contract_start" >
-                    Tanggal Kontrak Mulai
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="contract_start" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('contract_start')) parsley-error @endif"
-                           name="contract_start" value="{{ old('contract_start') }}">
-                </div>
-            </div>
+            {{--<div class="form-group">--}}
+                {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="contract_start" >--}}
+                    {{--Tanggal Kontrak Mulai--}}
+                {{--</label>--}}
+                {{--<div class="col-md-6 col-sm-6 col-xs-12">--}}
+                    {{--<input id="contract_start" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('contract_start')) parsley-error @endif"--}}
+                           {{--name="contract_start" value="{{ old('contract_start') }}">--}}
+                {{--</div>--}}
+            {{--</div>--}}
+
+            {{--<div class="form-group">--}}
+                {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="contract_finish" >--}}
+                    {{--Tanggal Kontrak Berakhir--}}
+                {{--</label>--}}
+                {{--<div class="col-md-6 col-sm-6 col-xs-12">--}}
+                    {{--<input id="contract_finish" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('contract_finish')) parsley-error @endif"--}}
+                           {{--name="contract_finish" value="{{ old('contract_finish') }}">--}}
+                {{--</div>--}}
+            {{--</div>--}}
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="contract_finish" >
-                    Tanggal Kontrak Berakhir
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >
+                    Alamat Lengkap
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="contract_finish" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('contract_finish')) parsley-error @endif"
-                           name="contract_finish" value="{{ old('contract_finish') }}">
+                    <textarea id="address" name="address" rows="5" class="form-control col-md-7 col-xs-12 @if($errors->has('address')) parsley-error @endif" style="resize: vertical">{{ old('address') }}</textarea>
                 </div>
             </div>
 

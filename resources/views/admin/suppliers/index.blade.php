@@ -18,13 +18,14 @@
                width="100%" id="employees-table">
             <thead>
             <tr>
-                <th>No</th>
-                <th>Nama</th>
-                <th>Kode</th>
-                <th>Email</th>
-                <th>Nomor Ponsel</th>
-                <th>Tanggal Dibuat</th>
-                <th>Tindakan</th>
+                <th class="text-center">No</th>
+                <th class="text-center">Nama</th>
+                <th class="text-center">Kode</th>
+                <th class="text-center">Email</th>
+                <th class="text-center">Nomor Ponsel</th>
+                <th class="text-center">Alamat</th>
+                <th class="text-center">Tanggal Dibuat</th>
+                <th class="text-center">Tindakan</th>
             </tr>
             </thead>
             <tbody>
@@ -54,6 +55,7 @@
                     { data: 'code', name: 'code' },
                     { data: 'email', name: 'email' },
                     { data: 'phone', name: 'phone' },
+                    { data: 'address', name: 'address' },
                     { data: 'created_at', name: 'created_at' },
                     { data: 'action', name: 'action' }
                 ],

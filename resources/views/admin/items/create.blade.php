@@ -86,26 +86,50 @@
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="valuation" >
                     Nilai Awal per UOM
-                    <span class="required">*</span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12 price-format">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="valuation" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
                            name="valuation" value="{{ old('valuation') }}">
                 </div>
             </div>
 
+            {{--<div class="form-group">--}}
+                {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="warehouse" >--}}
+                    {{--Gudang--}}
+                    {{--<span class="required">*</span>--}}
+                {{--</label>--}}
+                {{--<div class="col-md-6 col-sm-6 col-xs-12">--}}
+                    {{--<select id="warehouse" name="warehouse" class="form-control col-md-7 col-xs-12 @if($errors->has('warehouse')) parsley-error @endif">--}}
+                    {{--</select>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="warehouse" >
-                    Gudang
-                    <span class="required">*</span>
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="warehouse" name="warehouse" class="form-control col-md-7 col-xs-12 @if($errors->has('warehouse')) parsley-error @endif">
-                        <option value="-1" @if(empty(old('warehouse'))) selected @endif> - Pilih gudang - </option>
-                        @foreach($warehouses as $warehouse)
-                            <option value="{{ $warehouse->id }}" {{ old('warehouse') == $warehouse->id ? "selected":"" }}>{{ $warehouse->name }}</option>
-                        @endforeach
-                    </select>
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Gudang dan Stok</label>
+                <div class="col-lg-4 col-md-4 col-xs-12 column">
+                    <table class="table table-bordered table-hover" id="tab_logic">
+                        <thead>
+                        <tr >
+                            <th class="text-center" style="width: 60%">
+                                Gudang
+                            </th>
+                            <th class="text-center" style="width: 40%">
+                                Stok
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr id='addr0'>
+                            {{--<td class='field-item'>--}}
+                            {{--<select id="warehouse0" name="warehouse[]" class='form-control'></select>--}}
+                            {{--</td>--}}
+                            {{--<td>--}}
+                            {{--<input type='number' name='qty[]'  placeholder='Stok' class='form-control'/>--}}
+                            {{--</td>--}}
+                        </tr>
+                        </tbody>
+                    </table>
+                    <a id="add_row" class="btn btn-default pull-left" style="margin-bottom: 10px;">Tambah</a><a id='delete_row' class="pull-right btn btn-default">Hapus</a>
                 </div>
             </div>
 
@@ -129,16 +153,83 @@
     </div>
 @endsection
 
+@section('styles')
+    @parent
+    {{ Html::style(mix('assets/admin/css/select2.css')) }}
+@endsection
+
 @section('scripts')
     @parent
+    {{ Html::script(mix('assets/admin/js/select2.js')) }}
     {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
     <script type="text/javascript">
 
         // autoNumeric
-        numberFormat = new AutoNumeric('.price-format > input', {
+        valuationFormat = new AutoNumeric('#valuation', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
             decimalPlaces: 0
+        });
+
+        // Select warehouses
+        $('#warehouse0').select2({
+            placeholder: {
+                id: '-1',
+                text: '- Pilih Gudang -'
+            },
+            width: '100%',
+            ajax: {
+                url: '{{ route('select.warehouses') }}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: $.trim(params.term)
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+
+        var i=0;
+        $("#add_row").click(function(){
+            $('#addr' + i).html("<td class='field-item'><select id='warehouse" + i + "' name='warehouse[]' class='form-control'></select></td><td><input type='number' name='qty[]'  placeholder='Stok' class='form-control'/></td>");
+
+            $('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
+
+            $('#warehouse' + i).select2({
+                placeholder: {
+                    id: '-1',
+                    text: '- Pilih Gudang -'
+                },
+                width: '100%',
+                ajax: {
+                    url: '{{ route('select.warehouses') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            q: $.trim(params.term)
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+
+            i++;
+        });
+
+        $("#delete_row").click(function(){
+            if(i>0){
+                $("#addr"+(i-1)).html('');
+                i--;
+            }
         });
     </script>
 @endsection

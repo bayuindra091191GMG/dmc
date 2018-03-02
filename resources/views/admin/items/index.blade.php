@@ -23,8 +23,6 @@
                 <th>Part Number</th>
                 <th>Satuan Unit</th>
                 <th>Group</th>
-                <th>Gudang</th>
-                <th>Stock</th>
                 <th>Deskripsi</th>
                 <th>Tanggal Dibuat</th>
                 <th>Tindakan</th>
@@ -57,8 +55,6 @@
                     { data: 'code', name: 'code' },
                     { data: 'uom', name: 'uom' },
                     { data: 'group', name: 'group' },
-                    { data: 'warehouse', name: 'warehouse' },
-                    { data: 'stock', name: 'stock' },
                     { data: 'description', name: 'decription' },
                     { data: 'created_at', name: 'created_at' },
                     { data: 'action', name: 'action' }

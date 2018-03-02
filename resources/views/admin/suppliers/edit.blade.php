@@ -66,6 +66,15 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >
+                    Alamat Lengkap
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <textarea id="address" name="address" rows="5" class="form-control col-md-7 col-xs-12 @if($errors->has('address')) parsley-error @endif" style="resize: vertical">{{ $supplier->address }}</textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                     <a class="btn btn-primary" href="{{ route('admin.suppliers') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>

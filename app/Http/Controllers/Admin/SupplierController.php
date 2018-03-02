@@ -78,6 +78,7 @@ class SupplierController extends Controller
             'code'          => $request->get('code'),
             'email'         => $request->get('email'),
             'phone'         => $request->get('phone'),
+            'address'         => $request->get('address'),
             'created_by'    => $user->id,
             'created_at'    => $dateTimeNow->toDateTimeString(),
             'updated_by'    => $user->id,
@@ -150,6 +151,7 @@ class SupplierController extends Controller
         $supplier->code = $request->get('code');
         $supplier->email = $request->get('email');
         $supplier->phone = $request->get('phone');
+        $supplier->address = $request->get('address');
         $supplier->updated_by = $user->id;
         $supplier->updated_at = $dateTimeNow->toDateTimeString();
         $supplier->save();

@@ -24,8 +24,9 @@ class SupplierTransformer extends TransformerAbstract
         return[
             'code'              => $supplier->code,
             'name'              => $supplier->name,
-            'email'             => $supplier->email,
-            'phone'             => $supplier->phone,
+            'email'             => $supplier->email ?? "-",
+            'phone'             => $supplier->phone ?? "-",
+            'address'           => $supplier->address ?? "-",
             'created_at'        => $createdDate,
             'action'            => $action
         ];

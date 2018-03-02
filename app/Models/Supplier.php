@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Mon, 26 Feb 2018 11:05:00 +0700.
+ * Date: Fri, 02 Mar 2018 09:49:28 +0700.
  */
 
 namespace App\Models;
@@ -19,6 +19,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $phone
  * @property \Carbon\Carbon $contract_start_date
  * @property \Carbon\Carbon $contract_finish_date
+ * @property string $address
  * @property int $created_by
  * @property \Carbon\Carbon $created_at
  * @property int $updated_by
@@ -49,6 +50,7 @@ class Supplier extends Eloquent
 		'phone',
 		'contract_start_date',
 		'contract_finish_date',
+		'address',
 		'created_by',
 		'updated_by'
 	];
