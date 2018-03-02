@@ -40,6 +40,7 @@ class ItemReceiptController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
+            'code'          => 'max:40',
             'date'          => 'required',
             'no_sj_spb'     => 'required'
         ]);
@@ -59,6 +60,9 @@ class ItemReceiptController extends Controller
             $sysNo->save();
         }
         else{
+            if(empty(Input::get('code'))){
+                return redirect()->back()->withErrors('No Item Receipt Wajib Diisi!', 'default')->withInput($request->all());
+            }
             $itemReceiptNumber = Input::get('code');
         }
 

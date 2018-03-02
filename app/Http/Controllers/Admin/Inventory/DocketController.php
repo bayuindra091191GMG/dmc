@@ -8,6 +8,7 @@ use App\Models\Department;
 use App\Models\IssuedDocketDetail;
 use App\Models\IssuedDocketHeader;
 use App\Models\NumberingSystem;
+use App\Models\PurchaseRequestHeader;
 use App\Transformer\Inventory\IssuedDocketTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -36,11 +37,16 @@ class DocketController extends Controller
      */
     public function create()
     {
+        $purchaseRequest = null;
+        if(!empty(request()->pr)){
+            $purchaseRequest = PurchaseRequestHeader::find(request()->pr);
+        }
+
         $departments = Department::all();
         $sysNo = NumberingSystem::where('doc_id', '1')->first();
         $autoNumber = Utilities::GenerateNumber('DOCKET', $sysNo->next_no);
 
-        return view('admin.inventory.docket.create', compact('departments', 'autoNumber'));
+        return view('admin.inventory.docket.create', compact('departments', 'autoNumber', 'purchaseRequest'));
     }
 
     /**
@@ -84,6 +90,24 @@ class DocketController extends Controller
             $docketNumber = Input::get('code');
         }
 
+        // Validate details
+        $items = Input::get('item_value');
+        $qtys = Input::get('qty');
+        $times = Input::get('time');
+        $valid = true;
+        $i = 0;
+        foreach($items as $item){
+            if(empty($item)) $valid = false;
+            if(empty($qtys[$i]) || $qtys[$i] == '0') $valid = false;
+            if(empty($times[$i])) $valid = false;
+            $i++;
+        }
+
+        if(!$valid){
+            return redirect()->back()->withErrors('Detail barang, Time dan Jumlah wajib diisi!', 'default')->withInput($request->all());
+        }
+
+
         $docketHeader = IssuedDocketHeader::create([
             'code'              => $docketNumber,
             'department_id'     => Input::get('department'),
@@ -102,15 +126,19 @@ class DocketController extends Controller
 
         if(!empty(Input::get('purchase_request_header'))){
             $docketHeader->purchase_request_id = Input::get('purchase_request_header');
-            $docketHeader->save();
         }
+        else{
+            $docketHeader->purchase_request_id = Input::get('pr_id');
+        }
+
+        $docketHeader->save();
 
         // Create Issued Docket Detail
         $qty = Input::get('qty');
         $remark = Input::get('remark');
         $time = Input::get('time');
         $idx = 0;
-        foreach(Input::get('item') as $item){
+        foreach($items as $item){
             if(!empty($item)){
                 $docketDetail = IssuedDocketDetail::create([
                     'header_id'     => $docketHeader->id,
