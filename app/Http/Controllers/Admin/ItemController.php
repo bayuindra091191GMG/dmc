@@ -10,8 +10,10 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
+use App\Libs\Utilities;
 use App\Models\Group;
 use App\Models\Item;
+use App\Models\ItemStock;
 use App\Models\Uom;
 use App\Models\Warehouse;
 use App\Transformer\MasterData\ItemTransformer;
@@ -63,9 +65,9 @@ class ItemController extends Controller
                 ->withInput();
         }
 
-        if(Input::get('warehouse') === '-1'){
-            return redirect()->back()->withErrors('Pilih gudang!', 'default')->withInput($request->all());
-        }
+//        if(Input::get('warehouse') === '-1'){
+//            return redirect()->back()->withErrors('Pilih gudang!', 'default')->withInput($request->all());
+//        }
 
         if(Input::get('uom') === '-1'){
             return redirect()->back()->withErrors('Pilih uom!', 'default')->withInput($request->all());
@@ -75,6 +77,29 @@ class ItemController extends Controller
             return redirect()->back()->withErrors('Pilih group!', 'default')->withInput($request->all());
         }
 
+        // Validate warehouse
+        $warehouses = Input::get('warehouse');
+        $qtys = Input::get('qty');
+        $valid = true;
+        if(count($warehouses) > 0){
+            $idx = 0;
+            foreach($warehouses as $warehouse){
+                if(empty($warehouse)) $valid = false;
+                if(empty($qtys[$idx])) $valid = false;
+                $idx++;
+            }
+
+            if(!$valid){
+                return redirect()->back()->withErrors('Detail gudang dan jumlah stok wajib diisi!', 'default')->withInput($request->all());
+            }
+        }
+
+        // Validate duplicated values
+        $valid = Utilities::arrayIsUnique($warehouses);
+        if(!$valid){
+            return redirect()->back()->withErrors('Detail gudang tidak boleh kembar!', 'default')->withInput($request->all());
+        }
+
         $user = Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
@@ -82,15 +107,34 @@ class ItemController extends Controller
             'name'          => Input::get('name'),
             'code'          => Input::get('code'),
             'uom_id'        => Input::get('uom'),
-            'warehouse_id'  => Input::get('warehouse'),
             'group_id'      => Input::get('group'),
             'created_by'    => $user->id,
-            'created_at'    => $now
+            'created_at'    => $now->toDateTimeString()
         ]);
+
+        if(!empty(Input::get('valuation')) && Input::get('valuation') != "0"){
+            $value = str_replace('.','', Input::get('valuation'));
+            $item->value = $value;
+        }
 
         if(!empty(Input::get('description'))){
             $item->description = Input::get('description');
             $item->save();
+        }
+
+        // Get stock
+        if(count($warehouses) > 0){
+            $idx = 0;
+            foreach($warehouses as $warehouse){
+                $stock = ItemStock::create([
+                    'item_id'       => $item->id,
+                    'warehouse_id'  => $warehouse,
+                    'stock'         => $qtys[$idx],
+                    'created_by'    => $user->id,
+                    'created_at'    => $now->toDateTimeString()
+                ]);
+                $idx++;
+            }
         }
 
         Session::flash('message', 'Berhasil membuat data barang baru!');
@@ -153,7 +197,7 @@ class ItemController extends Controller
             ->make(true);
     }
 
-    public function getWarehouse(Request $request){
+    public function getWarehouses(Request $request){
         $term = trim($request->q);
         $warehouses = Warehouse::where('name', 'LIKE', '%'. $term. '%')->get();
 

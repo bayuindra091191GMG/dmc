@@ -58,4 +58,8 @@ class Utilities
         $number = $code."/".$now->year."/".$modulus."/".$nextNumber;
         return $number;
     }
+
+    public static function arrayIsUnique($array){
+        return array_unique($array) == $array;
+    }
 }
