@@ -70,7 +70,7 @@ class PurchaseOrderHeaderController extends Controller
         }
 
         // Validate PO number
-        if(empty(Input::get('auto_number')) && (empty(Input::get('po_code'))) || Input::get('po_code') == ""){
+        if(empty(Input::get('auto_number')) && (empty(Input::get('po_code')) || Input::get('po_code') == "")){
             return redirect()->back()->withErrors('Nomor PO wajib diisi!', 'default')->withInput($request->all());
         }
 

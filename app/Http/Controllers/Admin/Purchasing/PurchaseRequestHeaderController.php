@@ -70,7 +70,7 @@ class PurchaseRequestHeaderController extends Controller
         }
 
         // Validate PR number
-        if(empty(Input::get('auto_number')) && (empty(Input::get('pr_code'))) || Input::get('pr_code') == ""){
+        if(empty(Input::get('auto_number')) && (empty(Input::get('pr_code')) || Input::get('pr_code') == "")){
             return redirect()->back()->withErrors('Nomor PR wajib diisi!', 'default')->withInput($request->all());
         }
 

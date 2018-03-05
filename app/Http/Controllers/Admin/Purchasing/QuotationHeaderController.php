@@ -57,7 +57,7 @@ class QuotationHeaderController extends Controller
         }
 
         // Validate quotation number
-        if(empty(Input::get('auto_number')) && (empty(Input::get('quot_code'))) || Input::get('quot_code') == ""){
+        if(empty(Input::get('auto_number')) && (empty(Input::get('quot_code')) || Input::get('quot_code') == "")){
             return redirect()->back()->withErrors('Nomor kuotasi vendor wajib diisi!', 'default')->withInput($request->all());
         }
 
