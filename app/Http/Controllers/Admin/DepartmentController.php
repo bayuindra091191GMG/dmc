@@ -9,8 +9,11 @@ use App\Transformer\MasterData\DepartmentTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
 
 class DepartmentController extends Controller
@@ -26,16 +29,18 @@ class DepartmentController extends Controller
     }
 
     //DataTables
+
     /**
      * Process datatables ajax request.
      *
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
-    public function anyData()
+    public function getIndex()
     {
-        $departments = Department::all();
+        $departments = Department::dateDescending()->get();
         return DataTables::of($departments)
-            ->setTransformer(new DepartmentTransformer())
+            ->setTransformer(new DepartmentTransformer)
             ->addIndexColumn()
             ->make(true);
     }
@@ -59,11 +64,16 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'code' => 'required|max:45',
+            'code' => 'required|unique:departments|max:45',
             'name' => 'required|max:45'
+        ],[
+            'code.required' => 'Kode wajib diisi',
+            'code.unique'   => 'Kode telah terdaftar',
+            'name.required' => 'Nama wajib diisi'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
+
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
         $department = Department::create([
@@ -110,9 +120,17 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, Department $department)
     {
+        $id = $department->id;
+
         $validator = Validator::make($request->all(), [
-            'code' => 'required|max:45',
+            'code' => [
+                'required',
+                'max:45',
+                Rule::unique('departments')->ignore($department->id)
+            ],
             'name' => 'required|max:45'
+        ],[
+            'code.unique'   => 'Kode telah terpakai!'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
@@ -135,11 +153,21 @@ class DepartmentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try{
+            error_log('ID = '. Input::get('id'));
+
+            $department = Department::find(Input::get('id'));
+            $department->delete();
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            error_log($ex);
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 }

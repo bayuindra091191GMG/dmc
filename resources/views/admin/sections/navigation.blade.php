@@ -78,12 +78,12 @@
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
                                         <a href="{{ route('admin.groups') }}">
-                                            Daftar Group
+                                            Daftar Kategori Inventory
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('admin.groups.create') }}">
-                                            Tambah Group
+                                            Tambah Kategori Inventory
                                         </a>
                                     </li>
                                 </ul>

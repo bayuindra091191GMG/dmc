@@ -23,8 +23,6 @@
                 <th>Nama</th>
                 <th>Dibuat Oleh</th>
                 <th>Tanggal Dibuat</th>
-                <th>Diubah Oleh</th>
-                <th>Tanggal Diubah</th>
                 <th>Tindakan</th>
             </tr>
             </thead>
@@ -32,16 +30,20 @@
             </tbody>
         </table>
     </div>
+
+    @include('partials._delete')
 @endsection
 
 @section('styles')
     @parent
     {{ Html::style(mix('assets/admin/css/datatables.css')) }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 @endsection
 
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/datatables.js')) }}
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         $(function() {
             $('#departments-table').DataTable({
@@ -54,8 +56,6 @@
                     { data: 'name', name: 'name' },
                     { data: 'created_by', name: 'created_by' },
                     { data: 'created_at', name: 'created_at' },
-                    { data: 'updated_by', name: 'updated_by' },
-                    { data: 'updated_at', name: 'updated_at' },
                     { data: 'action', name:'action' }
                 ],
                 language: {
@@ -63,5 +63,15 @@
                 }
             });
         });
+
+        $(document).on('click', '.delete-modal', function(){
+            $('#deleteModal').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+
+            $('#deleted-id').val($(this).data('id'));
+        });
     </script>
+    @include('partials._deleteJs', ['routeUrl' => 'admin.departments.destroy', 'redirectUrl' => 'admin.departments'])
 @endsection

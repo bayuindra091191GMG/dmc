@@ -171,6 +171,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('departments/ubah/{department}', 'DepartmentController@update')->name('departments.update');
     Route::get('departments/tambah', 'DepartmentController@create')->name('departments.create');
     Route::post('departments/simpan', 'DepartmentController@store')->name('departments.store');
+    Route::post('departments/hapus', 'DepartmentController@destroy')->name('departments.destroy');
 
     //Documents
     Route::get('documents', 'DocumentController@index')->name('documents');
@@ -340,7 +341,7 @@ Route::get('/datatables-machineries', 'Admin\MachineryController@getIndex')->nam
 Route::get('/datatables-machinery_types', 'Admin\MachineryTypeController@getIndex')->name('datatables.machinery_types');
 Route::get('/datatables-machinery_categories', 'Admin\MachineryCategoryController@getIndex')->name('datatables.machinery_categories');
 Route::get('/datatables-machinery_brands', 'Admin\MachineryBrandController@getIndex')->name('datatables.machinery_brands');
-Route::get('/datatables-departments', 'Admin\DepartmentController@anyData')->name('datatables.departments');
+Route::get('/datatables-departments', 'Admin\DepartmentController@getIndex')->name('datatables.departments');
 Route::get('/datatables-documents', 'Admin\DocumentController@anyData')->name('datatables.documents');
 Route::get('/datatables-payment_methods', 'Admin\PaymentMethodController@anyData')->name('datatables.payment_methods');
 Route::get('/datatables-uoms', 'Admin\UOMController@anyData')->name('datatables.uoms');

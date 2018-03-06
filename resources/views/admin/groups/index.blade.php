@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Daftar Grup Item')
+@section('title', 'Daftar Kategori Inventory')
 
 @section('content')
 

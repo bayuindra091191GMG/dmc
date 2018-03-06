@@ -7,6 +7,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -39,6 +40,10 @@ class Department extends Eloquent
 		'created_by',
 		'updated_by'
 	];
+
+    public function scopeDateDescending(Builder $query){
+        return $query->orderBy('created_at','DESC');
+    }
 
     public function createdBy()
     {
