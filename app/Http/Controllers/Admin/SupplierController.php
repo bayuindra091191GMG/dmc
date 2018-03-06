@@ -14,8 +14,10 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
 
 class SupplierController extends Controller
@@ -62,10 +64,22 @@ class SupplierController extends Controller
     {
         //
         $validator = Validator::make($request->all(), [
-            'name'      => 'required',
-            'code'      => 'required',
-            'email'     => 'nullable|email|max:45',
-            'phone'     => 'max:45',
+            'code'                  => 'required|unique:suppliers|max:30',
+            'name'                  => 'required|max:100',
+            'email'                 => 'nullable|email|max:45',
+            'phone'                 => 'required|max:30',
+            'fax'                   => 'max:30',
+            'cellphone'             => 'max:30',
+            'contact_person'        => 'max:30',
+            'address'               => 'max:150',
+            'city'                  => 'max:30',
+            'remark'                => 'max:150',
+            'npwp'                  => 'max:30',
+            'bank_name'             => 'max:30',
+            'bank_account_number'   => 'max:30',
+            'bank_account_name'     => 'max:30',
+        ],[
+            'code.unique'       => 'Kode telah terpakai!'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
@@ -74,27 +88,25 @@ class SupplierController extends Controller
         $user = Auth::user();
 
         $supplier = Supplier::create([
-            'name'          => $request->get('name'),
-            'code'          => $request->get('code'),
-            'email'         => $request->get('email'),
-            'phone'         => $request->get('phone'),
-            'address'         => $request->get('address'),
+            'name'                  => $request->input('name'),
+            'code'                  => $request->input('code'),
+            'email'                 => $request->input('email'),
+            'phone'                 => $request->input('phone'),
+            'fax'                   => $request->input('fax'),
+            'cellphone'             => $request->input('cellphone'),
+            'contact_person'        => $request->input('contact_person'),
+            'address'               => $request->input('address'),
+            'city'                  => $request->input('city'),
+            'remark'                => $request->input('remark'),
+            'npwp'                  => $request->input('npwp'),
+            'bank_name'             => $request->input('bank_name'),
+            'bank_account_number'   => $request->input('bank_account_number'),
+            'bank_account_name'     => $request->input('bank_account_name'),
             'created_by'    => $user->id,
             'created_at'    => $dateTimeNow->toDateTimeString(),
             'updated_by'    => $user->id,
             'updated_at'    => $dateTimeNow->toDateTimeString(),
         ]);
-
-        if(!empty(Input::get('contract_start'))){
-            $contractStart = Carbon::createFromFormat('d M Y', Input::get('contract_start'), 'Asia/Jakarta');
-            $supplier->contract_start_date = $contractStart->toDateString();
-            $supplier->save();
-        }
-        if(!empty(Input::get('contract_finish'))){
-            $contractFinish = Carbon::createFromFormat('d M Y', Input::get('contract_finish'), 'Asia/Jakarta');
-            $supplier->contract_finish_date = $contractFinish->toDateString();
-            $supplier->save();
-        }
 
         Session::flash('message', 'berhasil membuat data vendor baru!');
 
@@ -136,10 +148,25 @@ class SupplierController extends Controller
     {
         //
         $validator = Validator::make($request->all(), [
-            'name'      => 'required',
-            'code'      => 'required',
-            'email'     => 'email|max:45',
-            'phone'     => 'max:45',
+            'code'      => [
+                'required',
+                'max:30',
+                Rule::unique('suppliers')->ignore($supplier->id)],
+            'name'                  => 'required|max:100',
+            'email'                 => 'nullable|email|max:45',
+            'phone'                 => 'required|max:30',
+            'fax'                   => 'max:30',
+            'cellphone'             => 'max:30',
+            'contact_person'        => 'max:30',
+            'address'               => 'max:150',
+            'city'                  => 'max:30',
+            'remark'                => 'max:150',
+            'npwp'                  => 'max:30',
+            'bank_name'             => 'max:30',
+            'bank_account_number'   => 'max:30',
+            'bank_account_name'     => 'max:30',
+        ],[
+            'code.unique'       => 'Kode telah terpakai!'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
@@ -147,25 +174,23 @@ class SupplierController extends Controller
         $dateTimeNow = Carbon::now('Asia/Jakarta');
         $user = Auth::user();
 
-        $supplier->name = $request->get('name');
-        $supplier->code = $request->get('code');
-        $supplier->email = $request->get('email');
-        $supplier->phone = $request->get('phone');
-        $supplier->address = $request->get('address');
+        $supplier->name = $request->input('name');
+        $supplier->code = $request->input('code');
+        $supplier->email = $request->input('email');
+        $supplier->phone = $request->input('phone');
+        $supplier->fax = $request->input('fax');
+        $supplier->cellphone = $request->input('cellphone');
+        $supplier->contact_person = $request->input('contact_person');
+        $supplier->address = $request->input('address');
+        $supplier->city = $request->input('city');
+        $supplier->remark = $request->input('remark');
+        $supplier->npwp = $request->input('npwp');
+        $supplier->bank_name = $request->input('bank_name');
+        $supplier->bank_account_number = $request->input('bank_account_number');
+        $supplier->bank_account_name = $request->input('bank_account_name');
         $supplier->updated_by = $user->id;
         $supplier->updated_at = $dateTimeNow->toDateTimeString();
         $supplier->save();
-
-        if(!empty(Input::get('contract_start'))){
-            $contractStart = Carbon::createFromFormat('d M Y', Input::get('contract_start'), 'Asia/Jakarta');
-            $supplier->contract_start_date = $contractStart->toDateString();
-            $supplier->save();
-        }
-        if(!empty(Input::get('contract_finish'))){
-            $contractFinish = Carbon::createFromFormat('d M Y', Input::get('contract_finish'), 'Asia/Jakarta');
-            $supplier->contract_finish_date = $contractFinish->toDateString();
-            $supplier->save();
-        }
 
         Session::flash('message', 'Berhasil mengubah data vendor!');
 
@@ -175,12 +200,19 @@ class SupplierController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try{
+            $department = Department::find($request->input('id'));
+            $department->delete();
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 
     public function getIndex()
@@ -188,7 +220,7 @@ class SupplierController extends Controller
         $suppliers = Supplier::all();
         return DataTables::of($suppliers)
             ->addIndexColumn()
-            ->setTransformer(new SupplierTransformer())
+            ->setTransformer(new SupplierTransformer)
             ->make(true);
     }
 

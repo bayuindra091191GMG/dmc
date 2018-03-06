@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Daftar Suppliers')
+@section('title', 'Daftar Vendor')
 
 @section('content')
 
@@ -19,11 +19,12 @@
             <thead>
             <tr>
                 <th class="text-center">No</th>
-                <th class="text-center">Nama</th>
                 <th class="text-center">Kode</th>
+                <th class="text-center">Nama</th>
                 <th class="text-center">Email</th>
-                <th class="text-center">Nomor Ponsel</th>
-                <th class="text-center">Alamat</th>
+                <th class="text-center">Telpon</th>
+                <th class="text-center">Contact Person</th>
+                <th class="text-center">Kota</th>
                 <th class="text-center">Tanggal Dibuat</th>
                 <th class="text-center">Tindakan</th>
             </tr>
@@ -32,17 +33,19 @@
             </tbody>
         </table>
     </div>
-
+    @include('partials._delete')
 @endsection
 
 @section('styles')
     @parent
     {{ Html::style(mix('assets/admin/css/datatables.css')) }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 @endsection
 
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/datatables.js')) }}
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         $(function() {
             $('#employees-table').DataTable({
@@ -51,11 +54,12 @@
                 ajax: '{!! route('datatables.suppliers') !!}',
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false},
-                    { data: 'name', name: 'name' },
                     { data: 'code', name: 'code' },
+                    { data: 'name', name: 'name' },
                     { data: 'email', name: 'email' },
                     { data: 'phone', name: 'phone' },
-                    { data: 'address', name: 'address' },
+                    { data: 'contact_person', name: 'contact_person' },
+                    { data: 'city', name: 'city' },
                     { data: 'created_at', name: 'created_at' },
                     { data: 'action', name: 'action' }
                 ],
@@ -64,5 +68,15 @@
                 }
             });
         });
+
+        $(document).on('click', '.delete-modal', function(){
+            $('#deleteModal').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+
+            $('#deleted-id').val($(this).data('id'));
+        });
     </script>
+    @include('partials._deleteJs', ['routeUrl' => 'admin.suppliers.destroy', 'redirectUrl' => 'admin.suppliers'])
 @endsection

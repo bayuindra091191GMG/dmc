@@ -79,6 +79,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('suppliers/simpan', 'SupplierController@store')->name('suppliers.store');
     Route::get('suppliers/{supplier}/ubah/', 'SupplierController@edit')->name('suppliers.edit');
     Route::put('suppliers/ubah/{supplier}', 'SupplierController@update')->name('suppliers.update');
+    Route::post('suppliers/hapus', 'SupplierController@destroy')->name('suppliers.destroy');
 
     //Employees
     Route::get('employees', 'EmployeeController@index')->name('employees');

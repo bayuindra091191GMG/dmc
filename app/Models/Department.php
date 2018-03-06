@@ -41,8 +41,8 @@ class Department extends Eloquent
 		'updated_by'
 	];
 
-    public function scopeDateDescending(Builder $query){
-        return $query->orderBy('created_at','DESC');
+    public function scopeCodeAscending(Builder $query){
+        return $query->orderBy('code','ASC');
     }
 
     public function createdBy()

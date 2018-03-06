@@ -204,12 +204,12 @@
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
                                         <a href="{{ route('admin.suppliers') }}">
-                                            Daftar Supplier
+                                            Daftar Vendor
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('admin.suppliers.create') }}">
-                                            Tambah Supplier
+                                            Tambah Vendor
                                         </a>
                                     </li>
                                 </ul>

@@ -38,7 +38,7 @@ class DepartmentController extends Controller
      */
     public function getIndex()
     {
-        $departments = Department::dateDescending()->get();
+        $departments = Department::codeAscending()->get();
         return DataTables::of($departments)
             ->setTransformer(new DepartmentTransformer)
             ->addIndexColumn()
@@ -159,14 +159,11 @@ class DepartmentController extends Controller
     public function destroy(Request $request)
     {
         try{
-            error_log('ID = '. Input::get('id'));
-
-            $department = Department::find(Input::get('id'));
+            $department = Department::find($request->input('id'));
             $department->delete();
             return Response::json(array('success' => 'VALID'));
         }
         catch(\Exception $ex){
-            error_log($ex);
             return Response::json(array('errors' => 'INVALID'));
         }
     }
