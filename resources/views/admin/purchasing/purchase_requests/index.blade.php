@@ -22,8 +22,6 @@
                 <th>Nomor PR</th>
                 <th>Departemen</th>
                 <th>Kode Unit</th>
-                <th>S/N Chasis</th>
-                <th>S/N Engine</th>
                 <th>Tanggal Dibuat</th>
                 <th>Opsi</th>
             </tr>
@@ -54,8 +52,6 @@
                     { data: 'code', name: 'code' },
                     { data: 'department', name: 'department' },
                     { data: 'machinery', name: 'machinery' },
-                    { data: 'sn_chasis', name: 'sn_chasis' },
-                    { data: 'sn_engine', name: 'sn_engine' },
                     { data: 'created_at', name: 'created_at' },
                     { data: 'action', name: 'action' }
                 ],

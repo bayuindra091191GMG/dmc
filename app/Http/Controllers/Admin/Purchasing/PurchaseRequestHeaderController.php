@@ -48,18 +48,25 @@ class PurchaseRequestHeaderController extends Controller
     public function show(PurchaseRequestHeader $purchase_request){
         $header = $purchase_request;
 
-        return View('admin.purchasing.purchase_requests.show', compact('header'));
+        // Numbering System
+        $sysNo = NumberingSystem::where('doc_id', '4')->first();
+        $autoNumber = Utilities::GenerateNumberPurchaseOrder('PO', $sysNo->next_no);
+
+        $data = [
+            'header'        => $header,
+            'autoNumber'    => $autoNumber
+        ];
+
+        return View('admin.purchasing.purchase_requests.show')->with($data);
     }
 
     public function store(Request $request){
-
         $validator = Validator::make($request->all(),[
-            'pr_code'       => 'max:40',
-            'sn_chasis'     => 'max:90',
-            'sn_engine'     => 'max:90',
-            'priority'      => 'max:40',
-            'km'            => 'max:40',
-            'hm'            => 'max:40'
+            'pr_code'       => 'required|max:30|unique:purchase_request_headers',
+            'km'            => 'max:20',
+            'hm'            => 'max:20'
+        ],[
+            'pr_code.unique'    => 'Kode telah terpakai!'
         ]);
 
         if ($validator->fails()) {
@@ -102,12 +109,10 @@ class PurchaseRequestHeaderController extends Controller
 
         $prHeader = PurchaseRequestHeader::create([
             'code'              => $prCode,
-            'department_id'     => Input::get('department'),
-            'sn_chasis'         => Input::get('sn_chasis'),
-            'sn_engine'         => Input::get('sn_engine'),
-            'priority'          => Input::get('priority'),
-            'km'                => Input::get('km'),
-            'hm'                => Input::get('hm'),
+            'department_id'     => $request->input('department'),
+            'priority'          => $request->input('priority'),
+            'km'                => $request->input('km'),
+            'hm'                => $request->input('hm'),
             'status_id'         => 3,
             'created_by'        => $user->id,
             'created_at'        => $now->toDateTimeString()
@@ -152,6 +157,40 @@ class PurchaseRequestHeaderController extends Controller
         ];
 
         return View('admin.purchasing.purchase_requests.edit')->with($data);
+    }
+
+    public function update(Request $request, PurchaseRequestHeader $purchase_request){
+        $validator = Validator::make($request->all(),[
+            'km'            => 'max:20',
+            'hm'            => 'max:20'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Validate department
+        if($request->input('department') === '-1'){
+            return redirect()->back()->withErrors('Pilih departemen!', 'default')->withInput($request->all());
+        }
+
+        $user = \Auth::user();
+        $now = Carbon::now('Asia/Jakarta');
+
+        $purchase_request->department_id = $request->input('department');
+        $purchase_request->priority = $request->input('priority');
+        $purchase_request->km = $request->input('km');
+        $purchase_request->hm = $request->input('hm');
+        $purchase_request->updated_by = $user->id;
+        $purchase_request->updated_at = $now->toDateTimeString();
+        $purchase_request->save();
+
+        Session::flash('message', 'Berhasil ubah purchase request!');
+
+        return redirect()->route('admin.purchase_requests.show', ['purchase_request' => $purchase_request]);
     }
 
     public function getIndex(){

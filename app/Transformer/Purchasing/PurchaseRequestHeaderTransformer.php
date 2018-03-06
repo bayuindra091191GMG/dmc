@@ -30,8 +30,6 @@ class PurchaseRequestHeaderTransformer extends TransformerAbstract
             'code'          => $code,
             'department'    => $header->department->name,
             'machinery'     => $machinery,
-            'sn_chasis'     => $header->sn_chasis ?? '-',
-            'sn_engine'     => $header->sn_engine ?? '-',
             'created_at'    => $createdDate,
             'action'        => $action
         ];

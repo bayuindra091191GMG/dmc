@@ -58,22 +58,38 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sn_chasis">
-                    S/N Chasis
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="priority">
+                    Prioritas
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="sn_chasis" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('sn_chasis')) parsley-error @endif"
-                           name="sn_chasis" value="{{ $header->sn_chasis }}">
+                    <select id="priority" name="priority" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">
+                        <option value="-1" @if(empty($header->priority)) selected @endif> - Pilih prioritas - </option>
+                        <option value="1" {{ $header->priority == "1" ? "selected":"" }}>1</option>
+                        <option value="2" {{ $header->priority == "2" ? "selected":"" }}>2</option>
+                        <option value="3" {{ $header->priority == "3" ? "selected":"" }}>3</option>
+                        <option value="4" {{ $header->priority == "4" ? "selected":"" }}>4</option>
+                        <option value="5" {{ $header->priority == "5" ? "selected":"" }}>5</option>
+                    </select>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sn_engine">
-                    S/N Engine
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="km">
+                    KM
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="sn_engine" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('sn_engine')) parsley-error @endif"
-                           name="sn_engine" value="{{ $header->sn_engine  }}">
+                    <input id="km" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('km')) parsley-error @endif"
+                           name="km" value="{{ $header->km }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="hm">
+                    HM
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="hm" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('hm')) parsley-error @endif"
+                           name="hm" value="{{ $header->hm  }}">
                 </div>
             </div>
 

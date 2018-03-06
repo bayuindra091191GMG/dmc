@@ -16,8 +16,6 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $code
  * @property int $department_id
  * @property int $machinery_id
- * @property string $sn_chasis
- * @property string $sn_engine
  * @property string $priority
  * @property string $km
  * @property string $hm
@@ -54,8 +52,6 @@ class PurchaseRequestHeader extends Eloquent
 		'code',
 		'department_id',
 		'machinery_id',
-		'sn_chasis',
-		'sn_engine',
 		'priority',
 		'km',
 		'hm',

@@ -23,13 +23,13 @@
             @endif
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="po_code">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pr_code">
                     Nomor PR
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-4 col-sm-4 col-xs-12">
                     <input id="pr_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('po_code')) parsley-error @endif"
-                           name="pr_code">
+                           name="pr_code" value="{{ $autoNumber }}">
                 </div>
             </div>
 
@@ -71,32 +71,18 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sn_chasis">
-                    S/N Chasis
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="sn_chasis" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('sn_chasis')) parsley-error @endif"
-                           name="sn_chasis" value="{{ old('sn_chasis') }}">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sn_engine">
-                    S/N Engine
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="sn_engine" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('sn_engine')) parsley-error @endif"
-                           name="sn_engine" value="{{ old('sn_engine') }}">
-                </div>
-            </div>
-
-            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="priority">
                     Prioritas
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="priority" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('priority')) parsley-error @endif"
-                           name="priority" value="{{ old('priority') }}">
+                    <select id="priority" name="priority" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">
+                        <option value="-1" @if(empty(old('priority'))) selected @endif> - Pilih prioritas - </option>
+                        <option value="1" {{ old('priority') == "1" ? "selected":"" }}>1</option>
+                        <option value="2" {{ old('priority') == "2" ? "selected":"" }}>2</option>
+                        <option value="3" {{ old('priority') == "3" ? "selected":"" }}>3</option>
+                        <option value="4" {{ old('priority') == "4" ? "selected":"" }}>4</option>
+                        <option value="5" {{ old('priority') == "5" ? "selected":"" }}>5</option>
+                    </select>
                 </div>
             </div>
 
@@ -121,12 +107,9 @@
             </div>
 
             <div class="form-group">
-                <label class="text-center col-md-12 col-xs-12">Detil Barang</label>
-            </div>
-
-            <div class="form-group">
                 <div class="col-lg-2 col-md-2 col-xs-0"></div>
                 <div class="col-lg-8 col-md-8 col-xs-12 column">
+                    <h3>Detil Barang</h3>
                     <table class="table table-bordered table-hover" id="tab_logic">
                         <thead>
                         <tr >
