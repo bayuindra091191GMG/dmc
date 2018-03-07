@@ -249,6 +249,19 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('quotation_details/ubah', 'Purchasing\QuotationDetailController@update')->name('quotation_details.update');
     Route::post('quotation_details/hapus', 'Purchasing\QuotationDetailController@delete')->name('quotation_details.delete');
 
+    //Delivery Order Headers
+    Route::get('delivery_orders', 'Inventory\DeliveryOrderHeaderController@index')->name('delivery_orders');
+    Route::get('delivery_orders/detil/{delivery_order}', 'Inventory\DeliveryOrderHeaderController@show')->name('delivery_orders.show');
+    Route::get('delivery_orders/{delivery_order}/ubah', 'Inventory\DeliveryOrderHeaderController@edit')->name('delivery_orders.edit');
+    Route::put('delivery_orders/ubah/{delivery_order}', 'Inventory\DeliveryOrderHeaderController@update')->name('delivery_orders.update');
+    Route::get('delivery_orders/tambah', 'Inventory\DeliveryOrderHeaderController@create')->name('delivery_orders.create');
+    Route::post('delivery_orders/simpan', 'Inventory\DeliveryOrderHeaderController@store')->name('delivery_orders.store');
+
+    //Delivery Order Details
+    Route::post('delivery_order_details/simpan', 'Inventory\DeliveryOrderDetailController@store')->name('delivery_order_details.store');
+    Route::put('delivery_order_details/ubah', 'Inventory\DeliveryOrderDetailController@update')->name('delivery_order_details.update');
+    Route::post('delivery_order_details/hapus', 'Inventory\DeliveryOrderDetailController@delete')->name('delivery_order_details.delete');
+
     //Issued Docket Headers
     Route::get('issued_dockets', 'Inventory\DocketController@index')->name('issued_dockets');
     Route::get('issued_dockets/detil/{issued_docket}', 'Inventory\DocketController@show')->name('issued_dockets.show');
@@ -356,25 +369,20 @@ Route::get('/datatables-purchase_requests', 'Admin\Purchasing\PurchaseRequestHea
 Route::get('/datatables-purchase_orders', 'Admin\Purchasing\PurchaseOrderHeaderController@getIndex')->name('datatables.purchase_orders');
 Route::get('/datatables-quotations', 'Admin\Purchasing\QuotationHeaderController@getIndex')->name('datatables.quotations');
 
-// STOCK
+// INVENTORY
+Route::get('/datatables-delivery_orders', 'Admin\Inventory\DeliveryOrderHeaderController@getIndex')->name('datatables.delivery_orders');
+Route::get('/datatables-issued_dockets', 'Admin\Inventory\DocketController@getIndex')->name('datatables.issued_dockets');
+Route::get('/datatables-item_receipts', 'Admin\Inventory\ItemReceiptController@getIndex')->name('datatables.item_receipts');
 Route::get('/datatables-stock_adjustments', 'Admin\Inventory\StockAdjustmentController@getIndex')->name('datatables.stock_adjustments');
 Route::get('/datatables-stock_ins', 'Admin\Inventory\StockInController@getIndex')->name('datatables.stock_ins');
 Route::get('/datatables-item_mutations', 'Admin\Inventory\ItemMutationController@getIndex')->name('datatables.item_mutations');
+Route::get('/datatables-interchanges', 'Admin\Inventory\InterchangeController@getIndex')->name('datatables.interchanges');
 
 // AUTHORIZATION
 Route::get('/datatables-permission-documents', 'Admin\PermissionDocumentController@getIndex')->name('datatables.permission_documents');
 Route::get('/datatables-permission-menus', 'Admin\PermissionMenuController@getIndex')->name('datatables.permission_menus');
 Route::get('/datatables-approval-rules', 'Admin\ApprovalRuleController@getIndex')->name('datatables.approval_rules');
 Route::get('/datatables-roles', 'Admin\RoleController@getIndex')->name('datatables.roles');
-
-// DOCKET
-Route::get('/datatables-issued-dockets', 'Admin\Inventory\DocketController@getIndex')->name('datatables.issued_dockets');
-
-// ITEM RECEIPT
-Route::get('/datatables-item-receipts', 'Admin\Inventory\ItemReceiptController@getIndex')->name('datatables.item_receipts');
-
-// INTERCHANGES
-Route::get('/datatables-interchanges', 'Admin\Inventory\InterchangeController@getIndex')->name('datatables.interchanges');
 
 // DOCUMENTS
 Route::get('/documents/purchase-request', function (){

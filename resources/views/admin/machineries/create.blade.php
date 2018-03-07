@@ -59,7 +59,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="machinery_brand" >
-                    Merek Alat Berat
+                    Brand Alat Berat
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -79,6 +79,70 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="machinery_type" name="machinery_type" class="form-control col-md-7 col-xs-12 @if($errors->has('machinery_type')) parsley-error @endif">
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sn_chasis">
+                    S/N Chasis
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="sn_chasis" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('sn_chasis')) parsley-error @endif"
+                           name="sn_chasis" value="{{ old('sn_chasis') }}"  required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sn_engine">
+                    S/N Engine
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="sn_engine" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('sn_engine')) parsley-error @endif"
+                           name="sn_engine" value="{{ old('sn_engine') }}"  required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="production_year">
+                    Tahun Produksi
+                </label>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <input id="production_year" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('production_year')) parsley-error @endif"
+                           name="production_year" value="{{ old('production_year') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="purchase_date">
+                    Tanggal Pembelian
+                </label>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <input id="purchase_date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('purchase_date')) parsley-error @endif"
+                           name="purchase_date" value="{{ old('purchase_date') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="location">
+                    Lokasi
+                </label>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <input id="location" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('location')) parsley-error @endif"
+                           name="location" value="{{ old('location') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status" >
+                    Status
+                </label>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <select id="status" name="status" class="form-control col-md-7 col-xs-12 @if($errors->has('status')) parsley-error @endif">
+                        <option value="6" @if(empty(old('status')) || ( !empty(old('status')) && old('status') == "6")) selected @endif>Ready</option>
+                        <option value="7" {{ old('status') == "7" ? "selected":"" }}>Sedang dipakai</option>
+                        <option value="8" {{ old('status') == "8" ? "selected":"" }}>Dalam pemeliharaan</option>
+                        <option value="9" {{ old('status') == "9" ? "selected":"" }}>Rusak</option>
                     </select>
                 </div>
             </div>
@@ -106,11 +170,13 @@
 @section('styles')
     @parent
     {{ Html::style(mix('assets/admin/css/select2.css')) }}
+    {{ Html::style(mix('assets/admin/css/bootstrap-datetimepicker.css')) }}
 @endsection
 
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
+    {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
     <script>
         $('#machinery_type').select2({
             placeholder: {
@@ -132,6 +198,15 @@
                     };
                 }
             }
+        });
+
+        $('#production_year').datetimepicker({
+            format: "YYYY",
+            viewMode: "years"
+        });
+
+        $('#purchase_date').datetimepicker({
+            format: "DD MMM Y"
         });
     </script>
 @endsection

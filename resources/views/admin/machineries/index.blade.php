@@ -23,6 +23,7 @@
                 <th>Tipe</th>
                 <th>Merek</th>
                 <th>Kategori</th>
+                <th>Tanggal Pembelian</th>
                 <th>Status</th>
                 <th>Tanggal Dibuat</th>
                 <th>Tindakan</th>
@@ -33,11 +34,7 @@
         </table>
     </div>
 
-
-
-
 @endsection
-
 
 @section('styles')
     @parent
@@ -59,6 +56,7 @@
                     { data: 'type', name: 'type' },
                     { data: 'brand', name: 'brand' },
                     { data: 'category', name: 'category' },
+                    { data: 'purchase_date', name: 'purchase_date' },
                     { data: 'status', name: 'status' },
                     { data: 'created_at', name: 'created_at' },
                     { data: 'action', name:'action' }

@@ -397,6 +397,21 @@
 
                 <ul class="nav side-menu">
                     <li>
+                        <a>Surat Jalan<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="sub_menu">
+                                <a href="{{ route('admin.delivery_orders') }}">
+                                    Daftar Surat Jalan
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.delivery_orders.create') }}">
+                                    Buat Baru
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
                         <a>Issued Docket<span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li class="sub_menu">
@@ -410,7 +425,6 @@
                                 </a>
                             </li>
                         </ul>
-
                     </li>
                     <li>
                         <a>Goods Receipt<span class="fa fa-chevron-down"></span></a>

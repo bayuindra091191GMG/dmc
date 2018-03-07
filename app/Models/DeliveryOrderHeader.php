@@ -7,6 +7,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -59,6 +60,10 @@ class DeliveryOrderHeader extends Eloquent
 		'updated_by'
 	];
 
+	public function scopeDateDescending(Builder $query){
+        return $query->orderBy('created_at','DESC');
+    }
+
 	public function machinery()
 	{
 		return $this->belongsTo(\App\Models\Machinery::class);
@@ -69,10 +74,15 @@ class DeliveryOrderHeader extends Eloquent
 		return $this->belongsTo(\App\Models\PurchaseRequestHeader::class, 'purchase_request_id');
 	}
 
-	public function site()
+	public function toSite()
 	{
 		return $this->belongsTo(\App\Models\Site::class, 'to_site_id');
 	}
+
+    public function fromSite()
+    {
+        return $this->belongsTo(\App\Models\Site::class, 'from_site_id');
+    }
 
 	public function status()
 	{

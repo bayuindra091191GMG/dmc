@@ -118,7 +118,6 @@ class PurchaseOrderHeader extends Eloquent
         return $query->orderBy('created_at','DESC');
     }
 
-
 	public function purchase_request_header()
 	{
 		return $this->belongsTo(\App\Models\PurchaseRequestHeader::class, 'purchase_request_id');

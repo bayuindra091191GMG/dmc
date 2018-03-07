@@ -83,6 +83,70 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sn_chasis">
+                    S/N Chasis
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="sn_chasis" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('sn_chasis')) parsley-error @endif"
+                           name="sn_chasis" value="{{ $machinery->sn_chasis }}"  required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sn_engine">
+                    S/N Engine
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="sn_engine" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('sn_engine')) parsley-error @endif"
+                           name="sn_engine" value="{{ $machinery->sn_engine }}"  required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="production_year">
+                    Tahun Produksi
+                </label>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <input id="production_year" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('production_year')) parsley-error @endif"
+                           name="production_year" value="{{ $machinery->production_year }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="purchase_date">
+                    Tanggal Pembelian
+                </label>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <input id="purchase_date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('purchase_date')) parsley-error @endif"
+                           name="purchase_date" value="{{ $purchaseDate }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="location">
+                    Lokasi
+                </label>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <input id="location" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('location')) parsley-error @endif"
+                           name="location" value="{{ $machinery->location }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status" >
+                    Status
+                </label>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <select id="status" name="status" class="form-control col-md-7 col-xs-12 @if($errors->has('status')) parsley-error @endif">
+                        <option value="6" {{ $machinery->status_id == "6" ? "selected":"" }}>Ready</option>
+                        <option value="7" {{ $machinery->status_id == "7" ? "selected":"" }}>Sedang dipakai</option>
+                        <option value="8" {{ $machinery->status_id == "8" ? "selected":"" }}>Dalam pemeliharaan</option>
+                        <option value="9" {{ $machinery->status_id == "9" ? "selected":"" }}>Rusak</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description" >
                     Keterangan Tambahan
                 </label>
