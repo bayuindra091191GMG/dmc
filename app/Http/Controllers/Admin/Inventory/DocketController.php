@@ -8,7 +8,9 @@ use App\Models\Department;
 use App\Models\Document;
 use App\Models\IssuedDocketDetail;
 use App\Models\IssuedDocketHeader;
+use App\Models\Item;
 use App\Models\NumberingSystem;
+use App\Models\PurchaseRequestDetail;
 use App\Models\PurchaseRequestHeader;
 use App\Transformer\Inventory\IssuedDocketTransformer;
 use Carbon\Carbon;
@@ -79,6 +81,17 @@ class DocketController extends Controller
             return redirect()->back()->withErrors('Pilih alat berat!', 'default')->withInput($request->all());
         }
 
+        if(empty(Input::get('pr_id')) && empty(Input::get('purchase_request_header'))){
+            return redirect()->back()->withErrors('Pilih Purchase Request!', 'default')->withInput($request->all());
+        }
+
+        if(empty(Input::get('pr_id'))){
+            $prId = Input::get('purchase_request_header');
+        }
+        else{
+            $prId = Input::get('pr_id');
+        }
+
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
@@ -103,10 +116,15 @@ class DocketController extends Controller
         $times = Input::get('time');
         $valid = true;
         $i = 0;
+        //$prData = PurchaseRequestDetail::where('header_id', '')
+
         foreach($items as $item){
             if(empty($item)) $valid = false;
             if(empty($qtys[$i]) || $qtys[$i] == '0') $valid = false;
             if(empty($times[$i]) || $times[$i] == '00:00') $valid = false;
+
+            //Validate Details with PR Data
+
             $i++;
         }
 
@@ -114,28 +132,21 @@ class DocketController extends Controller
             return redirect()->back()->withErrors('Detail barang, Time dan Jumlah wajib diisi!', 'default')->withInput($request->all());
         }
 
-
         $docketHeader = IssuedDocketHeader::create([
-            'code'              => $docketNumber,
-            'department_id'     => Input::get('department'),
-            'division'          => Input::get('division'),
-            'status_id'         => 1,
-            'created_by'        => $user->id,
-            'updated_by'        => $user->id,
-            'created_at'        => $now->toDateString(),
-            'date'              => $now->toDateString(),
+            'code'                  => $docketNumber,
+            'department_id'         => Input::get('department'),
+            'division'              => Input::get('division'),
+            'status_id'             => 1,
+            'created_by'            => $user->id,
+            'updated_by'            => $user->id,
+            'created_at'            => $now->toDateString(),
+            'date'                  => $now->toDateString(),
+            'purchase_request_id'   => $prId
         ]);
 
         if(!empty(Input::get('machinery'))){
             $docketHeader->unit_id = Input::get('machinery');
             $docketHeader->save();
-        }
-
-        if(!empty(Input::get('purchase_request_header'))){
-            $docketHeader->purchase_request_id = Input::get('purchase_request_header');
-        }
-        else{
-            $docketHeader->purchase_request_id = Input::get('pr_id');
         }
 
         $docketHeader->save();
@@ -157,9 +168,15 @@ class DocketController extends Controller
 
                 if(!empty($remark[$idx])) $docketDetail->remarks = $remark[$idx];
                 $docketDetail->save();
+
+                //Update Stock
+                $itemData = Item::where('id', $item)->first();
+                $itemData->stock = $itemData->stock - $qty[$idx];
+                $itemData->save();
             }
             $idx++;
         }
+
 
         Session::flash('message', 'Berhasil membuat Issued Docket!');
 
