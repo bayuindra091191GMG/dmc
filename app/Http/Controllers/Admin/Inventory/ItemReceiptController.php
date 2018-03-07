@@ -58,7 +58,7 @@ class ItemReceiptController extends Controller
         if(Input::get('auto_number')){
             $sysNo = NumberingSystem::where('doc_id', '2')->first();
             $document = Document::where('id', '2')->first();
-            $docketNumber = Utilities::GenerateNumber($document->code, $sysNo->next_no);
+            $itemReceiptNumber = Utilities::GenerateNumber($document->code, $sysNo->next_no);
             $sysNo->next_no++;
             $sysNo->save();
         }
@@ -108,6 +108,11 @@ class ItemReceiptController extends Controller
 
                 if(!empty($remark[$idx])) $itemReceiptDetail->remark = $remark[$idx];
                 $itemReceiptDetail->save();
+
+                //Update Stock
+                $itemData = Item::where('id', $item)->first();
+                $itemData->stock = $itemData->stock + $qty[$idx];
+                $itemData->save();
             }
             $idx++;
         }
