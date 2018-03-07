@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Inventory;
 use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
 use App\Models\Department;
+use App\Models\Document;
 use App\Models\IssuedDocketDetail;
 use App\Models\IssuedDocketHeader;
 use App\Models\NumberingSystem;
@@ -44,7 +45,8 @@ class DocketController extends Controller
 
         $departments = Department::all();
         $sysNo = NumberingSystem::where('doc_id', '1')->first();
-        $autoNumber = Utilities::GenerateNumber('DOCKET', $sysNo->next_no);
+        $document = Document::where('id', '1')->first();
+        $autoNumber = Utilities::GenerateNumber($document->code, $sysNo->next_no);
 
         return view('admin.inventory.docket.create', compact('departments', 'autoNumber', 'purchaseRequest'));
     }
@@ -73,13 +75,18 @@ class DocketController extends Controller
             return redirect()->back()->withErrors('Pilih departemen!', 'default')->withInput($request->all());
         }
 
+        if(empty(Input::get('machinery'))){
+            return redirect()->back()->withErrors('Pilih alat berat!', 'default')->withInput($request->all());
+        }
+
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
         //Generate AutoNumber
         if(Input::get('auto_number')) {
             $sysNo = NumberingSystem::where('doc_id', '1')->first();
-            $docketNumber = Utilities::GenerateNumber('DOCKET', $sysNo->next_no);
+            $document = Document::where('id', '1')->first();
+            $docketNumber = Utilities::GenerateNumber($document->code, $sysNo->next_no);
             $sysNo->next_no++;
             $sysNo->save();
         }
@@ -99,7 +106,7 @@ class DocketController extends Controller
         foreach($items as $item){
             if(empty($item)) $valid = false;
             if(empty($qtys[$i]) || $qtys[$i] == '0') $valid = false;
-            if(empty($times[$i])) $valid = false;
+            if(empty($times[$i]) || $times[$i] == '00:00') $valid = false;
             $i++;
         }
 
@@ -296,7 +303,7 @@ class DocketController extends Controller
                         $i++;
                     }
                 });
-            })->setFilename($newFileName)->download('xlsx');
+            })->setFilename($newFileName)->export('xlsx');
         }
         catch (Exception $ex){
             //Utilities::ExceptionLog($ex);

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
 use App\Models\DeliveryNoteHeader;
 use App\Models\DeliveryOrderHeader;
+use App\Models\Document;
 use App\Models\ItemReceiptDetail;
 use App\Models\ItemReceiptHeader;
 use App\Models\NumberingSystem;
@@ -33,7 +34,8 @@ class ItemReceiptController extends Controller
     public function create(){
         $deliveries = DeliveryOrderHeader::all();
         $sysNo = NumberingSystem::where('doc_id', '2')->first();
-        $autoNumber = Utilities::GenerateNumber('BTB', $sysNo->next_no);
+        $document = Document::where('id', '2')->first();
+        $autoNumber = Utilities::GenerateNumber($document->code, $sysNo->next_no);
 
         return View('admin.inventory.item_receipts.create', compact('deliveries', 'autoNumber'));
     }
@@ -55,7 +57,8 @@ class ItemReceiptController extends Controller
         //Generate AutoNumber
         if(Input::get('auto_number')){
             $sysNo = NumberingSystem::where('doc_id', '2')->first();
-            $itemReceiptNumber = Utilities::GenerateNumber('BTB', $sysNo->next_no);
+            $document = Document::where('id', '2')->first();
+            $docketNumber = Utilities::GenerateNumber($document->code, $sysNo->next_no);
             $sysNo->next_no++;
             $sysNo->save();
         }

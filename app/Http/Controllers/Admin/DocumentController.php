@@ -60,11 +60,13 @@ class DocumentController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'description' => 'required|max:45',
+            'code'        => 'required|max:10'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
         $group = Document::create([
+            'code'                 => $request->get('code'),
             'description'          => $request->get('description')
         ]);
 
@@ -105,7 +107,8 @@ class DocumentController extends Controller
     public function update(Request $request, Document $document)
     {
         $validator = Validator::make($request->all(), [
-            'description' => 'required|max:45'
+            'description' => 'required|max:45',
+            'code'        => 'required|max:10'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
@@ -113,7 +116,7 @@ class DocumentController extends Controller
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
         $document->description = $request->get('description');
-
+        $document->code = $request->get('code');
         $document->save();
 
 //        return redirect()->intended(route('admin.documents'));

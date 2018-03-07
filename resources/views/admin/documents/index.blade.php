@@ -19,6 +19,7 @@
             <thead>
             <tr>
                 <th>No</th>
+                <th>Code</th>
                 <th>Deskripsi</th>
                 <th>Tindakan</th>
             </tr>
@@ -61,6 +62,7 @@
                 ajax: '{!! route('datatables.documents') !!}',
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false},
+                    { data: 'code', name: 'code' },
                     { data: 'description', name: 'description' },
                     { data: 'action', name:'action' }
                 ],
