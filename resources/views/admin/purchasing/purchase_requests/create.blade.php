@@ -29,7 +29,7 @@
                 </label>
                 <div class="col-md-4 col-sm-4 col-xs-12">
                     <input id="pr_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('po_code')) parsley-error @endif"
-                           name="pr_code" value="{{ $autoNumber }}">
+                           name="pr_code" value="{{ $autoNumber }}" disabled>
                 </div>
             </div>
 

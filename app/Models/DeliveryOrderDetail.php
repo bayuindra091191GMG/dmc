@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Wed, 21 Feb 2018 06:50:13 +0000.
+ * Date: Thu, 08 Mar 2018 14:21:50 +0700.
  */
 
 namespace App\Models;
@@ -15,7 +15,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $id
  * @property int $header_id
  * @property int $item_id
- * @property string $remarks
+ * @property int $quantity
+ * @property string $remark
  * 
  * @property \App\Models\DeliveryOrderHeader $delivery_order_header
  * @property \App\Models\Item $item
@@ -28,13 +29,15 @@ class DeliveryOrderDetail extends Eloquent
 
 	protected $casts = [
 		'header_id' => 'int',
-		'item_id' => 'int'
+		'item_id' => 'int',
+		'quantity' => 'int'
 	];
 
 	protected $fillable = [
 		'header_id',
 		'item_id',
-		'remarks'
+		'quantity',
+		'remark'
 	];
 
 	public function delivery_order_header()

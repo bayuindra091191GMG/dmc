@@ -221,10 +221,10 @@
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-success add" data-dismiss="modal">
-                            <span id="" class='glyphicon glyphicon-check'></span> Simpan
+                            <span id="" class='glyphicon glyphicon-check'></span> Batal
                         </button>
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
-                            <span class='glyphicon glyphicon-remove'></span> Batal
+                            <span class='glyphicon glyphicon-remove'></span> Simpan
                         </button>
                     </div>
                 </div>
@@ -276,10 +276,10 @@
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary edit" data-dismiss="modal">
-                            <span class='glyphicon glyphicon-check'></span> Simpan
+                            <span class='glyphicon glyphicon-check'></span> Batal
                         </button>
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
-                            <span class='glyphicon glyphicon-remove'></span> Batal
+                            <span class='glyphicon glyphicon-remove'></span> Simpan
                         </button>
                     </div>
                 </div>
@@ -315,10 +315,10 @@
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger delete" data-dismiss="modal">
-                            <span id="" class='glyphicon glyphicon-trash'></span> Hapus
+                            <span id="" class='glyphicon glyphicon-trash'></span> Batal
                         </button>
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
-                            <span class='glyphicon glyphicon-remove'></span> Batal
+                            <span class='glyphicon glyphicon-remove'></span> Hapus
                         </button>
                     </div>
                 </div>
@@ -494,7 +494,7 @@
                 width: '100%',
                 minimumInputLength: 2,
                 ajax: {
-                    url: '{{ route('select.items.po') }}',
+                    url: '{{ route('select.extended_items') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {
@@ -629,7 +629,7 @@
                 width: '100%',
                 minimumInputLength: 2,
                 ajax: {
-                    url: '{{ route('select.items.po') }}',
+                    url: '{{ route('select.extended_items') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {

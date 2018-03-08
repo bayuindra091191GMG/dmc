@@ -226,7 +226,7 @@ class ItemController extends Controller
         return \Response::json($formatted_tags);
     }
 
-    public function getItemsForPo(Request $request){
+    public function getExtendedItems(Request $request){
         $term = trim($request->q);
         $items = Item::where('code', 'LIKE', '%'. $term. '%')
             ->orWhere('name', 'LIKE', '%'. $term. '%')
@@ -236,7 +236,7 @@ class ItemController extends Controller
 
         foreach ($items as $item) {
             $createdDate = Carbon::parse($item->created_at)->format('d M Y');
-            $formatted_tags[] = ['id' => $item->id. '#'. $item->code. '#'. $item->name, 'text' => $item->code. ' - '. $item->name. ' - '. $createdDate];
+            $formatted_tags[] = ['id' => $item->id. '#'. $item->code. '#'. $item->name. '#'. $item->uomDescription, 'text' => $item->code. ' - '. $item->name. ' - '. $createdDate];
         }
 
         return \Response::json($formatted_tags);

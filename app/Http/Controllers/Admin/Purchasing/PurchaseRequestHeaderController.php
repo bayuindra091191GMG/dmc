@@ -12,6 +12,7 @@ namespace App\Http\Controllers\Admin\Purchasing;
 use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
 use App\Models\Department;
+use App\Models\Document;
 use App\Models\NumberingSystem;
 use App\Models\PurchaseRequestDetail;
 use App\Models\PurchaseRequestHeader;
@@ -49,8 +50,8 @@ class PurchaseRequestHeaderController extends Controller
         $header = $purchase_request;
 
         // Numbering System
-        $sysNo = NumberingSystem::where('doc_id', '4')->first();
-        $autoNumber = Utilities::GenerateNumberPurchaseOrder('PO', $sysNo->next_no);
+        $sysNo = NumberingSystem::where('doc_id', '3')->first();
+        $autoNumber = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
 
         $data = [
             'header'        => $header,
@@ -90,7 +91,7 @@ class PurchaseRequestHeaderController extends Controller
         $prCode = 'default';
         if(Input::get('auto_number')){
             $sysNo = NumberingSystem::where('doc_id', '3')->first();
-            $prCode = Utilities::GenerateNumber('PR', $sysNo->next_no);
+            $prCode = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
             $sysNo->next_no++;
             $sysNo->save();
         }
