@@ -24,6 +24,7 @@
         "albertcht/invisible-recaptcha": "^1.4",
         "arcanedev/log-viewer": "~4.0",
         "barryvdh/laravel-ide-helper": "^2.4",
+        "barryvdh/laravel-snappy": "^0.4.1",
         "creativeorange/gravatar": "~1.0",
         "davejamesmiller/laravel-breadcrumbs": "^3.0",
         "kyslik/column-sortable": "^5.4",
@@ -32,13 +33,12 @@
         "laravel/socialite": "^3.0",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "5.5.*",
+        "maatwebsite/excel": "~2.1.0",
         "reliese/laravel": "^0.0.13",
         "yajra/laravel-datatables": "1.0",
         "yajra/laravel-datatables-editor": "1.0",
         "yajra/laravel-datatables-html": "3.0",
-        "yajra/laravel-datatables-oracle": "8.0",
-        "maatwebsite/excel": "~2.1.0",
-        "dompdf/dompdf": "~0.6.2"
+        "yajra/laravel-datatables-oracle": "8.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

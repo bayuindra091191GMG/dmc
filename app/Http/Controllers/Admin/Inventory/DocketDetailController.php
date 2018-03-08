@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Inventory;
 
 use App\Http\Controllers\Controller;
 use App\Models\IssuedDocketDetail;
+use App\Models\Item;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,6 +27,13 @@ class DocketDetailController extends Controller
                 return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
             }
 
+            //Check and Update Stock
+            $item = Item::where('id', Input::get('item'))->first();
+            $qty = Input::get('qty');
+            if($item->stock < $qty){
+                return Response::json(array('errors' => ['Not Enough Stock!']));
+            }
+
             $detail = new IssuedDocketDetail();
             $detail->header_id = Input::get('header_id');
             $detail->item_id = Input::get('item');
@@ -35,6 +43,8 @@ class DocketDetailController extends Controller
             if(!empty(Input::get('remark'))) $detail->remarks = Input::get('remark');
 
             $detail->save();
+            $item->stock = $item->stock - $detail->quantity;
+            $item->save();
 
             error_log($detail->id);
 
@@ -69,9 +79,22 @@ class DocketDetailController extends Controller
                 $detail->item_id = Input::get('item');
             }
 
+            //Check and Update Stock
+            $item = Item::where('id', $detail->item_id)->first();
+
+            $qty = Input::get('qty');
+            if($item->stock < $qty){
+                return Response::json(array('errors' => ['Not Enough Stock!']));
+            }
+
+            $item->stock = $item->stock + $detail->quantity;
+
             $detail->quantity = Input::get('qty');
             $detail->remarks = Input::get('remark');
             $detail->time = Input::get('time');
+
+            //Update Stock
+            $item->stock = $item->stock - $detail->quantity;
 
             if(!empty(Input::get('date'))){
                 $date = Carbon::createFromFormat('d M Y', Input::get('date'), 'Asia/Jakarta');
@@ -79,6 +102,7 @@ class DocketDetailController extends Controller
             }
 
             $detail->save();
+            $item->save();
 
             $json = IssuedDocketDetail::with('item')->find($detail->id);
         }
