@@ -15,6 +15,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
@@ -75,26 +76,27 @@ class MachineryController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'code'              => 'required|max:45|unique:machineries',
+            'code'              => 'required|max:45|regex:/^\S*$/u|unique:machineries',
             'description'       => 'max:200',
             'sn_chasis'         => 'max:100',
             'sn_engine'         => 'max:100',
             'location'          => 'max:30'
         ],[
-            'code.unique'       => 'Kode telah terpakai!'
+            'code.unique'       => 'Kode alat berat telah terpakai!',
+            'code.regex'        => 'Kode alat berat harus tanpa spasi!'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
-        if(Input::get('machinery_category') === '-1'){
+        if($request->input('machinery_category') === '-1'){
             return redirect()->back()->withErrors('Pilih kategori alat berat!', 'default')->withInput($request->all());
         }
 
-        if(Input::get('machinery_brand') === '-1'){
+        if($request->input('machinery_brand') === '-1'){
             return redirect()->back()->withErrors('Pilih merek alat berat!', 'default')->withInput($request->all());
         }
 
-        if(empty(Input::get('machinery_type'))){
+        if(!$request->filled('machinery_type')){
             return redirect()->back()->withErrors('Pilih tipe alat berat!', 'default')->withInput($request->all());
         }
 
@@ -115,8 +117,8 @@ class MachineryController extends Controller
             'created_at'            => $dateTimeNow->toDateTimeString()
         ]);
 
-        if(!empty(Input::get('purchase_date'))){
-            $purchaseDate = Carbon::createFromFormat('d M Y', Input::get('purchase_date'), 'Asia/Jakarta');
+        if($request->filled('purchase_date')){
+            $purchaseDate = Carbon::createFromFormat('d M Y', $request->input('purchase_date'), 'Asia/Jakarta');
             $machinery->purchase_date = $purchaseDate->toDateString();
             $machinery->save();
         }
@@ -172,11 +174,11 @@ class MachineryController extends Controller
      */
     public function update(Request $request, Machinery $machinery)
     {
-//        dd(Input::get('machinery_type'));
-
         $validator = Validator::make($request->all(), [
-            'code' => 'required|max:45',
-            'description' => 'max:200'
+            'description'       => 'max:200',
+            'sn_chasis'         => 'max:100',
+            'sn_engine'         => 'max:100',
+            'location'          => 'max:30'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
@@ -184,17 +186,25 @@ class MachineryController extends Controller
         $user = Auth::user();
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
-        $machinery->code = Input::get('code');
-
         if(!empty(Input::get('machinery_type'))){
             $machinery->type_id = Input::get('machinery_type');
         }
 
-        $machinery->category_id = Input::get('machinery_category');
-        $machinery->brand_id = Input::get('machinery_brand');
-        $machinery->description = Input::get('description');
+        $machinery->category_id = $request->input('machinery_category');
+        $machinery->brand_id = $request->input('machinery_brand');
+        $machinery->description = $request->input('description');
+        $machinery->sn_chasis = $request->input('sn_chasis');
+        $machinery->sn_engine = $request->input('sn_engine');
+        $machinery->location = $request->input('location');
+        $machinery->production_year = $request->input('production_year');
         $machinery->updated_at = $dateTimeNow->toDateTimeString();
         $machinery->updated_by = $user->id;
+
+        if($request->filled('purchase_date')){
+            $purchaseDate = Carbon::createFromFormat('d M Y', $request->input('purchase_date'), 'Asia/Jakarta');
+            $machinery->purchase_date = $purchaseDate->toDateString();
+            $machinery->save();
+        }
 
         $machinery->save();
 
@@ -203,15 +213,19 @@ class MachineryController extends Controller
         return redirect()->route('admin.machineries.edit', ['machinery' => $machinery->id]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return void
-     */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try{
+            $machinery = Machinery::find($request->input('id'));
+            $machinery->delete();
+
+            Session::flash('message', 'Berhasil menghapus data alat berat '. $machinery->code);
+
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 
     public function getMachineries(Request $request){

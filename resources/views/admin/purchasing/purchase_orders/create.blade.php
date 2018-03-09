@@ -27,7 +27,7 @@
                     Nomor PO
                     <span class="required">*</span>
                 </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="po_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('po_code')) parsley-error @endif"
                            name="po_code" value="{{ $autoNumber }}" disabled>
                 </div>
@@ -35,7 +35,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="auto_number"></label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="checkbox">
                         <label>
                             <input type="checkbox" class="flat" id="auto_number" name="auto_number" checked="checked"> Auto Number
@@ -81,14 +81,14 @@
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="delivery_fee">
                     Ongkos Kirim
                 </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="delivery_fee" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('delivery_fee')) parsley-error @endif"
                            name="delivery_fee" value="{{ old('delivery_fee') }}">
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                <label class="col-md-12 col-sm12 col-xs-12 text-center">
                     <b>Detil Barang</b>
                 </label>
             </div>
@@ -168,9 +168,11 @@
 
             <input id="index_counter" type="hidden" value="{{ $idx }}"/>
 
+            <hr/>
+
             <div class="form-group">
-                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a class="btn btn-primary" href="{{ route('admin.purchase_orders') }}"> Batal</a>
+                <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+                    <a class="btn btn-danger" href="{{ route('admin.purchase_orders') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>

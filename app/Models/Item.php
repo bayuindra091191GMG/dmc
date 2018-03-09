@@ -15,6 +15,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $id
  * @property string $code
  * @property string $name
+ * @property string $part_number
  * @property int $stock
  * @property float $value
  * @property int $is_serial
@@ -62,6 +63,7 @@ class Item extends Eloquent
 	protected $fillable = [
 		'code',
 		'name',
+        'part_number',
 		'stock',
 		'value',
 		'is_serial',
@@ -73,7 +75,6 @@ class Item extends Eloquent
 		'updated_by'
 	];
 
-    // code for $this->mimeType attribute
     public function getUomDescriptionAttribute($value) {
         $uomDescription = null;
         if ($this->uom) {

@@ -120,9 +120,11 @@
                 <div class="col-lg-1 col-md-1 col-xs-0"></div>
             </div>
 
+            <hr/>
+
             <div class="form-group">
-                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a class="btn btn-primary" href="{{ route('admin.quotations') }}"> Batal</a>
+                <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+                    <a class="btn btn-danger" href="{{ route('admin.quotations') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>

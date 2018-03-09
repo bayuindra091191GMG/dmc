@@ -99,7 +99,7 @@
                     Nilai Awal per UOM
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="valuation" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
+                    <input id="valuation" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('valuation')) parsley-error @endif"
                            name="valuation" value="{{ old('valuation') }}">
                 </div>
             </div>

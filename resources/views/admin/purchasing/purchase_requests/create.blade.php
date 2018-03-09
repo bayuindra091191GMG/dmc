@@ -27,7 +27,7 @@
                     Nomor PR
                     <span class="required">*</span>
                 </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="pr_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('po_code')) parsley-error @endif"
                            name="pr_code" value="{{ $autoNumber }}" disabled>
                 </div>
@@ -144,9 +144,11 @@
                 <div class="col-lg-2 col-md-2 col-xs-0"></div>
             </div>
 
+            <hr/>
+
             <div class="form-group">
-                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a class="btn btn-primary" href="{{ route('admin.purchase_requests') }}"> Batal</a>
+                <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+                    <a class="btn btn-danger" href="{{ route('admin.purchase_requests') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>

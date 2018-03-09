@@ -14,6 +14,7 @@ use App\Libs\Utilities;
 use App\Models\DeliveryOrderDetail;
 use App\Models\DeliveryOrderHeader;
 use App\Models\NumberingSystem;
+use App\Models\PurchaseRequestHeader;
 use App\Models\Site;
 use App\Transformer\Inventory\DeliveryOrderHeaderTransformer;
 use Carbon\Carbon;
@@ -31,13 +32,20 @@ class DeliveryOrderHeaderController extends Controller
     public function create(){
         $sites = Site::all();
 
+        // Get PR data if exist
+        $purchaseRequest = null;
+        if(!empty(request()->pr)){
+            $purchaseRequest = PurchaseRequestHeader::find(request()->pr);
+        }
+
         // Numbering System
         $sysNo = NumberingSystem::where('doc_id', '8')->first();
         $autoNumber = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
 
         $data =[
-            'sites'          => $sites,
-            'autoNumber'    => $autoNumber
+            'sites'             => $sites,
+            'autoNumber'        => $autoNumber,
+            'purchaseRequest'   => $purchaseRequest
         ];
 
         return View('admin.inventory.delivery_orders.create')->with($data);
@@ -51,10 +59,10 @@ class DeliveryOrderHeaderController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
-            'do_code'           => 'max:30|regex:/^\S*$/u',
-            'remark'            => 'max:150',
+            'code'           => 'max:30|regex:/^\S*$/u|unique:delivery_order_headers',
+            'remark'         => 'max:150',
         ],[
-            'do_code.regex'     => 'Nomor Surat Jalan tidak boleh ada spasi'
+            'code.regex'     => 'Nomor Surat Jalan harus tanpa spasi'
         ]);
 
         if ($validator->fails()) {
@@ -67,6 +75,11 @@ class DeliveryOrderHeaderController extends Controller
         // Validate DO number
         if(empty($request->input('auto_number')) && (empty($request->input('do_code')) || $request->input('do_code') == "")){
             return redirect()->back()->withErrors('Nomor Surat Jalan wajib diisi!', 'default')->withInput($request->all());
+        }
+
+        // Validate PR number
+        if(empty($request->input('pr_code')) && empty($request->input('pr_id'))){
+            return redirect()->back()->withErrors('Nomor PR wajib diisi!', 'default')->withInput($request->all());
         }
 
         // Validate from & to site
@@ -84,6 +97,15 @@ class DeliveryOrderHeaderController extends Controller
         }
         else{
             $doCode = $request->input('do_code');
+        }
+
+        // Get PR id
+        $prId = '0';
+        if($request->filled('pr_code')){
+            $prId = $request->input('pr_code');
+        }
+        else{
+            $prId = $request->input('pr_id');
         }
 
         // Check existing number
@@ -111,13 +133,14 @@ class DeliveryOrderHeaderController extends Controller
         $now = Carbon::now('Asia/Jakarta');
 
         $doHeader = DeliveryOrderHeader::create([
-            'code'              => $doCode,
-            'from_site_id'         => $request->input('from_site'),
-            'to_site_id'           => $request->input('to_site'),
-            'status_id'         => 3,
-            'created_by'        => $user->id,
-            'created_at'        => $now->toDateTimeString(),
-            'updated_by'        => $user->id
+            'code'                  => $doCode,
+            'purchase_request_id'   => $prId,
+            'from_site_id'          => $request->input('from_site'),
+            'to_site_id'            => $request->input('to_site'),
+            'status_id'             => 3,
+            'created_by'            => $user->id,
+            'created_at'            => $now->toDateTimeString(),
+            'updated_by'            => $user->id
         ]);
 
         if($request->filled('pr_code')){

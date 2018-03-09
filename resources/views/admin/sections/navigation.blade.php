@@ -49,6 +49,48 @@
                             {{--{{ __('views.backend.section.navigation.menu_1_2') }}--}}
                         {{--</a>--}}
                     {{--</li>--}}
+                    <li><a>Barang<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="sub_menu">
+                                <a href="{{ route('admin.items') }}">
+                                    Daftar Barang
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.items.create') }}">
+                                    Tambah Barang
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    {{--<li><a>Karyawan<span class="fa fa-chevron-down"></span></a>--}}
+                        {{--<ul class="nav child_menu">--}}
+                            {{--<li class="sub_menu">--}}
+                                {{--<a href="{{ route('admin.employees') }}">--}}
+                                    {{--Daftar Karyawan--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
+                            {{--<li>--}}
+                                {{--<a href="{{ route('admin.employees.create') }}">--}}
+                                    {{--Tambah Karyawan--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
+                        {{--</ul>--}}
+                    {{--</li>--}}
+                    <li><a>Alat Berat<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="sub_menu">
+                                <a href="{{ route('admin.machineries') }}">
+                                    Daftar Alat Berat
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.machineries.create') }}">
+                                    Tambah Alat Berat
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
             <div class="menu_section">
@@ -158,34 +200,6 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li><a>Role<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li class="sub_menu">
-                                        <a href="{{ route('admin.roles') }}">
-                                            Daftar Role
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.roles.create') }}">
-                                            Tambah Role
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a>Pengaturan Approval<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li class="sub_menu">
-                                        <a href="{{ route('admin.approval_rules') }}">
-                                            Daftar Pengaturan Approval
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.approval_rules.create') }}">
-                                            Tambah Pengaturan Approval
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
                             <li><a>Site<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
@@ -214,34 +228,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li><a>Otorisasi Dokumen<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li class="sub_menu">
-                                        <a href="{{ route('admin.permission_documents') }}">
-                                            Daftar Otorisasi Dokumen
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.permission_documents.create') }}">
-                                            Tambah Otorisasi Dokumen
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a>Otorisasi Menu<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li class="sub_menu">
-                                        <a href="{{ route('admin.permission_menus') }}">
-                                            Daftar Otorisasi Menu
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.permission_menus.create') }}">
-                                            Tambah Otorisasi Menu
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+
                             <li><a>Tipe Alat Berat<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
@@ -289,48 +276,62 @@
                     <li>
                         <a style="font-weight: bold;">
                             <i class="fa fa-list"></i>
-                            Basic Data
+                            Otorisasi
                             <span class="fa fa-chevron-down"></span>
                         </a>
                         <ul class="nav child_menu">
-                            <li><a>Barang<span class="fa fa-chevron-down"></span></a>
+                            <li><a>Pengaturan Approval<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
-                                        <a href="{{ route('admin.items') }}">
-                                            Daftar Barang
+                                        <a href="{{ route('admin.approval_rules') }}">
+                                            Daftar Pengaturan Approval
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('admin.items.create') }}">
-                                            Tambah Barang
+                                        <a href="{{ route('admin.approval_rules.create') }}">
+                                            Tambah Pengaturan Approval
                                         </a>
                                     </li>
                                 </ul>
                             </li>
-                            <li><a>Karyawan<span class="fa fa-chevron-down"></span></a>
+                            <li><a>Otorisasi Dokumen<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
-                                        <a href="{{ route('admin.employees') }}">
-                                            Daftar Karyawan
+                                        <a href="{{ route('admin.permission_documents') }}">
+                                            Daftar Otorisasi Dokumen
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('admin.employees.create') }}">
-                                            Tambah Karyawan
+                                        <a href="{{ route('admin.permission_documents.create') }}">
+                                            Tambah Otorisasi Dokumen
                                         </a>
                                     </li>
                                 </ul>
                             </li>
-                            <li><a>Alat Berat<span class="fa fa-chevron-down"></span></a>
+                            <li><a>Otorisasi Menu<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
-                                        <a href="{{ route('admin.machineries') }}">
-                                            Daftar Alat Berat
+                                        <a href="{{ route('admin.permission_menus') }}">
+                                            Daftar Otorisasi Menu
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('admin.machineries.create') }}">
-                                            Tambah Alat Berat
+                                        <a href="{{ route('admin.permission_menus.create') }}">
+                                            Tambah Otorisasi Menu
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><a>Role<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.roles') }}">
+                                            Daftar Role
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.roles.create') }}">
+                                            Tambah Role
                                         </a>
                                     </li>
                                 </ul>

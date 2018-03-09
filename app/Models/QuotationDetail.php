@@ -56,7 +56,7 @@ class QuotationDetail extends Eloquent
 	];
 
     public function getPriceStringAttribute(){
-        return 'Rp '. number_format($this->attributes['price'], 0, ",", ".");
+        return number_format($this->attributes['price'], 0, ",", ".");
     }
 
     public function getDiscountStringAttribute(){
@@ -69,7 +69,7 @@ class QuotationDetail extends Eloquent
     }
 
     public function getSubtotalStringAttribute(){
-        return 'Rp '. number_format($this->attributes['subtotal'], 0, ",", ".");
+        return number_format($this->attributes['subtotal'], 0, ",", ".");
     }
 
 	public function item()

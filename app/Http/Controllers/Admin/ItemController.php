@@ -170,16 +170,9 @@ class ItemController extends Controller
 
     public function update(Request $request, Item $item){
         $validator = Validator::make($request->all(),[
-            'code' => [
-                'required',
-                'max:30',
-                'regex:/^\S*$/u',
-                Rule::unique('items')->ignore($item->id)
-            ],
-            'name'      => 'required|max:100'
-        ],[
-            'code.unique'   => 'Kode barang telah terpakai!',
-            'code.regex'    => 'Kode barang harus tanpa spasi'
+            'name'          => 'required|max:100',
+            'part_number'   => 'max:45',
+            'description'   => 'max:200'
         ]);
 
         if ($validator->fails()) {
@@ -193,7 +186,7 @@ class ItemController extends Controller
         $now = Carbon::now('Asia/Jakarta');
 
         $item->name = $request->input('name');
-        $item->code = $request->input('code');
+        $item->part_number = $request->input('part_number');
         $item->uom_id = $request->input('uom');
         $item->group_id = $request->input('group');
         $item->description = $request->input('description');

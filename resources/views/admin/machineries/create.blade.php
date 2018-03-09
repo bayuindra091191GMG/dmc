@@ -89,7 +89,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="sn_chasis" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('sn_chasis')) parsley-error @endif"
-                           name="sn_chasis" value="{{ old('sn_chasis') }}"  required>
+                           name="sn_chasis" value="{{ old('sn_chasis') }}">
                 </div>
             </div>
 
@@ -99,7 +99,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="sn_engine" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('sn_engine')) parsley-error @endif"
-                           name="sn_engine" value="{{ old('sn_engine') }}"  required>
+                           name="sn_engine" value="{{ old('sn_engine') }}" >
                 </div>
             </div>
 

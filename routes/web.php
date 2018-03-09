@@ -167,6 +167,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('machineries/ubah/{machinery}', 'MachineryController@update')->name('machineries.update');
     Route::get('machineries/tambah', 'MachineryController@create')->name('machineries.create');
     Route::post('machineries/simpan', 'MachineryController@store')->name('machineries.store');
+    Route::post('machineries/hapus', 'MachineryController@destroy')->name('machineries.destroy');
 
     //Departments
     Route::get('departments', 'DepartmentController@index')->name('departments');

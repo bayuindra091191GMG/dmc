@@ -33,6 +33,15 @@
             @endif
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
+                    Kode Barang
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="code" type="text" class="form-control col-md-7 col-xs-12" value="{{ $item->code }}" readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name" >
                     Nama Barang
                     <span class="required">*</span>
@@ -44,19 +53,18 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">
-                    Kode
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="part_number">
+                    Part Number
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
-                           name="code" value="{{ $item->code }}">
+                    <input id="part_number" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('part_number')) parsley-error @endif"
+                           name="part_number" value="{{ $item->part_number }}">
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="uom" >
                     Satuan Unit
-                    <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="uom" name="uom" class="form-control col-md-7 col-xs-12 @if($errors->has('uom')) parsley-error @endif">
@@ -69,8 +77,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="group" >
-                    Group
-                    <span class="required">*</span>
+                    Kategori Inventory
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="group" name="group" class="form-control col-md-7 col-xs-12 @if($errors->has('group')) parsley-error @endif">

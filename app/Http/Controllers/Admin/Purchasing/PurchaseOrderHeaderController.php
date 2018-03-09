@@ -91,6 +91,15 @@ class PurchaseOrderHeaderController extends Controller
             $poCode = Input::get('po_code');
         }
 
+        // Get PR id
+        $prId = '0';
+        if($request->filled('pr_code')){
+            $prId = $request->input('pr_code');
+        }
+        else{
+            $prId = $request->input('pr_id');
+        }
+
         // Check existing number
         $temp = PurchaseOrderHeader::where('code', $poCode)->first();
         if(!empty($temp)){
@@ -119,7 +128,7 @@ class PurchaseOrderHeaderController extends Controller
 
         $poHeader = PurchaseOrderHeader::create([
             'code'                  => $poCode,
-            'purchase_request_id'   => Input::get('pr_code'),
+            'purchase_request_id'   => $prId,
             'supplier_id'           => Input::get('supplier'),
             'status_id'             => 3,
             'created_by'            => $user->id,

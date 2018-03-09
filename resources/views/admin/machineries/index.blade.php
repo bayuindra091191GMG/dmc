@@ -34,16 +34,19 @@
         </table>
     </div>
 
+    @include('partials._delete')
 @endsection
 
 @section('styles')
     @parent
     {{ Html::style(mix('assets/admin/css/datatables.css')) }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 @endsection
 
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/datatables.js')) }}
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         $(function() {
             $('#machineries-table').DataTable({
@@ -66,5 +69,15 @@
                 }
             });
         });
+
+        $(document).on('click', '.delete-modal', function(){
+            $('#deleteModal').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+
+            $('#deleted-id').val($(this).data('id'));
+        });
     </script>
+    @include('partials._deleteJs', ['routeUrl' => 'admin.machineries.destroy', 'redirectUrl' => 'admin.machineries'])
 @endsection

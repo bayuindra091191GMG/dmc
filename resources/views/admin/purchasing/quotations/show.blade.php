@@ -4,14 +4,14 @@
 
 @section('content')
     <div class="row">
-        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="navbar-right">
                 <a class="btn btn-default" href="{{ route('admin.quotations.edit',[ 'quotation' => $header->id]) }}">UBAH</a>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <form class="form-horizontal form-label-left box-section">
                 @if(\Illuminate\Support\Facades\Session::has('message'))
                     <div class="form-group">
@@ -88,25 +88,28 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                             <tr >
-                                <th class="text-center">
-                                    Nomor Part (Part Number)
+                                <th class="text-center" style="width: 15%;">
+                                    Kode Barang
                                 </th>
-                                <th class="text-center">
-                                    Satuan (UOM)
+                                <th class="text-center" style="width: 15%;">
+                                    Nama Barang
                                 </th>
-                                <th class="text-center">
-                                    Jumlah (QTY)
+                                <th class="text-center" style="width: 10%;">
+                                    UOM
                                 </th>
-                                <th class="text-center">
+                                <th class="text-center" style="width: 10%;">
+                                    QTY
+                                </th>
+                                <th class="text-center" style="width: 10%;">
                                     Harga
                                 </th>
-                                <th class="text-center">
+                                <th class="text-center" style="width: 10%;">
                                     Diskon
                                 </th>
-                                <th class="text-center">
+                                <th class="text-center" style="width: 10%;">
                                     Subtotal
                                 </th>
-                                <th class="text-center">
+                                <th class="text-center" style="width: 20%;">
                                     Remark
                                 </th>
                             </tr>
@@ -115,22 +118,25 @@
 
                             @foreach($header->quotation_details as $detail)
                                 <tr>
-                                    <td class='field-item'>
+                                    <td class="text-center">
                                         {{ $detail->item->code }}
                                     </td>
-                                    <td>
+                                    <td class="text-center">
+                                        {{ $detail->item->name }}
+                                    </td>
+                                    <td class="text-center">
                                         {{ $detail->item->uom->description }}
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         {{ $detail->quantity }}
                                     </td>
-                                    <td>
+                                    <td class="text-right">
                                         {{ $detail->price_string }}
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         {{ $detail->discount_string }}
                                     </td>
-                                    <td>
+                                    <td class="text-right">
                                         {{ $detail->subtotal_string }}
                                     </td>
                                     <td>

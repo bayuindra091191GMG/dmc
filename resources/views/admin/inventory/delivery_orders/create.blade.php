@@ -23,13 +23,13 @@
             @endif
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="do_code">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
                     Nomor SJ
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-4 col-sm-4 col-xs-12">
-                    <input id="do_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('do_code')) parsley-error @endif"
-                           name="do_code" value="{{ $autoNumber }}" disabled>
+                    <input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
+                           name="code" value="{{ $autoNumber }}" disabled>
                 </div>
             </div>
 
@@ -352,12 +352,12 @@
         // Auto Numbering
         $('#auto_number').change(function(){
             if(this.checked){
-                $('#do_code').val('{{ $autoNumber }}');
-                $('#do_code').prop('disabled', true);
+                $('#code').val('{{ $autoNumber }}');
+                $('#code').prop('disabled', true);
             }
             else{
-                $('#do_code').val('');
-                $('#do_code').prop('disabled', false);
+                $('#code').val('');
+                $('#code').prop('disabled', false);
             }
         });
 
@@ -438,7 +438,7 @@
 
         // Get selected PR data
         $(document).on('click', '.get-pr-data', function(){
-            var url = '{{ route('admin.purchase_orders.create') }}';
+            var url = '{{ route('admin.delivery_orders.create') }}';
             if($('#pr_code').val() && $('#pr_code').val() !== ""){
                 url += "?pr=" + $('#pr_code').val();
                 window.location = url;
@@ -453,7 +453,7 @@
 
         // Clear selected PR data
         $(document).on('click', '.clear-pr-data', function(){
-            var url = '{{ route('admin.purchase_orders.create') }}';
+            var url = '{{ route('admin.delivery_orders.create') }}';
             window.location = url;
         });
 
