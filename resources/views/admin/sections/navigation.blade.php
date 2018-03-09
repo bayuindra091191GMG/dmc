@@ -424,6 +424,11 @@
                                     Buat Baru
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ route('admin.issued_dockets.report') }}">
+                                    Download Report
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li>

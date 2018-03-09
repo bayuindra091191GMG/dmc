@@ -17,10 +17,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-use Jimmyjs\ReportGenerator\ReportMedia\PdfReport;
-use Jimmyjs\ReportGenerator\Facades\PdfReportFacade;
+use Illuminate\View\View;
 use Maatwebsite\Excel\Facades;
 use Yajra\DataTables\DataTables;
+use PDF;
 
 class DocketController extends Controller
 {
@@ -330,71 +330,30 @@ class DocketController extends Controller
         }
     }
 
-    public function displayReport(Request $request) {
-        // Retrieve any filters
-        $fromDate = $request->input('from_date');
-        $toDate = $request->input('to_date');
-        $sortBy = $request->input('sort_by');
+    public function report(){
+        return View('admin.inventory.docket.report');
+    }
 
-        // Report title
-        $title = 'Issued Docket Report';
+    public function downloadReport(Request $request) {
+        //Get Data First
+        $tempStart = strtotime(Input::get('start_date'));
+        $start = date('Y-m-d', $tempStart);
+        $tempEnd = strtotime(Input::get('end_date'));
+        $end = date('Y-m-d', $tempEnd);
 
-        // For displaying filters description on header
-        $meta = [
-            'Registered on' => $fromDate . ' To ' . $toDate,
-            'Sort By' => $sortBy
-        ];
+        //Check date
+        if($start > $end){
+            return redirect()->back()->withErrors('Start Date Tidak boleh lebih besar dari Finish Date!', 'default')->withInput($request->all());
+        }
 
-        // Do some querying..
-//        $queryBuilder = User::select(['name', 'balance', 'registered_at'])
-//            ->whereBetween('registered_at', [$fromDate, $toDate])
-//            ->orderBy($sortBy);
-        $queryBuilder = IssuedDocketHeader::orderBy('id');
+        $data = IssuedDocketHeader::whereBetween('date', array($start, $end))->get();
 
-        // Set Column to be displayed
-        $columns = [
-            'Code' => 'code',
-            'Date' => 'date', // if no column_name specified, this will automatically seach for snake_case of column name (will be registered_at) column from query result
-            'Unit' => 'machinery.code',
-            'Department' => 'department.description',
-            'Division' => 'division',
-            'Status' => 'status.description',
-//            'Status' => function($result) { // You can do if statement or any action do you want inside this closure
-//                return ($result->balance > 100000) ? 'Rich Man' : 'Normal Guy';
-//            }
-        ];
+        $pdf = PDF::loadView('documents.issued_dockets.issued_docket_pdf', ['data' => $data, 'start_date' => Input::get('start_date'), 'finish_date' => Input::get('end_date')])
+            ->setPaper('a4', 'landscape');
+        $now = Carbon::now('Asia/Jakarta');
+        $filename = 'ISSUED_DOCKET_REPORT' . $now->toDateTimeString();
 
-        /*
-            Generate Report with flexibility to manipulate column class even manipulate column value (using Carbon, etc).
-
-            - of()         : Init the title, meta (filters description to show), query, column (to be shown)
-            - editColumn() : To Change column class or manipulate its data for displaying to report
-            - editColumns(): Mass edit column
-            - showTotal()  : Used to sum all value on specified column on the last table (except using groupBy method). 'point' is a type for displaying total with a thousand separator
-            - groupBy()    : Show total of value on specific group. Used with showTotal() enabled.
-            - limit()      : Limit record to be showed
-            - make()       : Will producing DomPDF / SnappyPdf instance so you could do any other DomPDF / snappyPdf method such as stream() or download()
-        */
-
-        return PdfReport::of($title, $meta, $queryBuilder, $columns)
-            ->editColumn('Registered At', [
-                'displayAs' => function($result) {
-                    return $result->registered_at->format('d M Y');
-                }
-            ])
-            ->editColumn('Total Balance', [
-                'displayAs' => function($result) {
-                    return thousandSeparator($result->balance);
-                }
-            ])
-            ->editColumns(['Total Balance', 'Status'], [
-                'class' => 'right bold'
-            ])
-            ->showTotal([
-                'Total Balance' => 'point' // if you want to show dollar sign ($) then use 'Total Balance' => '$'
-            ])
-            ->limit(20)
-            ->stream(); // or download('filename here..') to download pdf
+        return $pdf->download($filename.'.pdf');
     }
 
     public function getIndex(){

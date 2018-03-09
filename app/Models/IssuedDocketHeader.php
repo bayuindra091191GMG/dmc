@@ -7,6 +7,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -36,6 +37,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  */
 class IssuedDocketHeader extends Eloquent
 {
+    protected $appends = ['date_string'];
+
 	protected $casts = [
 		'unit_id' => 'int',
 		'purchase_request_id' => 'int',
@@ -60,6 +63,10 @@ class IssuedDocketHeader extends Eloquent
 		'created_by',
 		'updated_by'
 	];
+
+	public function getDateStringAttribute(){
+	    return Carbon::parse($this->attributes['date'])->format('d M Y');
+    }
 
 	public function department()
 	{

@@ -203,6 +203,7 @@ return [
         Kyslik\ColumnSortable\ColumnSortableServiceProvider::class,
         \App\Providers\ProtectionProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -268,6 +269,8 @@ return [
          * DataTables
          * */
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
+
+        'PDF'   => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

@@ -75,6 +75,22 @@ class ItemReceiptController extends Controller
             return redirect()->back()->withErrors('Nomor Issued Docket Sudah terdaftar!', 'default')->withInput($request->all());
         }
 
+        // Validate details
+        $items = Input::get('item_value');
+        $qtys = Input::get('qty');
+        $valid = true;
+        $i = 0;
+
+        foreach($items as $item){
+            if(empty($item)) $valid = false;
+            if(empty($qtys[$i]) || $qtys[$i] == '0') $valid = false;
+            $i++;
+        }
+
+        if(!$valid){
+            return redirect()->back()->withErrors('Detail barang, Jumlah wajib diisi!', 'default')->withInput($request->all());
+        }
+
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
