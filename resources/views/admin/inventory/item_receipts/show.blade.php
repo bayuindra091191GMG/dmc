@@ -48,7 +48,7 @@
                         No. SJ / SPB
                     </label>
                     <div class="col-md-6 col-sm-3 col-xs-12">
-                        : {{ $header->no_sj_spb }}
+                        : {{ $header->delivery_order_header->code }}
                     </div>
                 </div>
                 <div class="form-group">

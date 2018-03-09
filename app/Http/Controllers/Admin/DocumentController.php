@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
 use App\Models\Document;
+use App\Models\NumberingSystem;
 use App\Transformer\MasterData\DocumentTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -72,9 +73,15 @@ class DocumentController extends Controller
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
-        $group = Document::create([
+        $doc = Document::create([
             'code'                 => $request->input('code'),
             'description'          => $request->input('description')
+        ]);
+
+        //Add Numbering System
+        NumberingSystem::create([
+            'doc_id'                => $doc->id,
+            'next_no'               => 1
         ]);
 
         Session::flash('message', 'Berhasil membuat data dokumen baru!');

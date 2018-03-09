@@ -7,9 +7,12 @@ use App\Libs\Utilities;
 use App\Models\DeliveryNoteHeader;
 use App\Models\DeliveryOrderHeader;
 use App\Models\Document;
+use App\Models\Item;
 use App\Models\ItemReceiptDetail;
 use App\Models\ItemReceiptHeader;
 use App\Models\NumberingSystem;
+use App\Models\PurchaseOrderDetail;
+use App\Models\PurchaseOrderHeader;
 use App\Transformer\Inventory\ItemReceiptTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -17,6 +20,7 @@ use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
+use PDF;
 
 class ItemReceiptController extends Controller
 {
@@ -43,8 +47,7 @@ class ItemReceiptController extends Controller
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
             'code'          => 'max:40',
-            'date'          => 'required',
-            'no_sj_spb'     => 'required'
+            'date'          => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -52,6 +55,10 @@ class ItemReceiptController extends Controller
                 ->back()
                 ->withErrors($validator)
                 ->withInput();
+        }
+
+        if(empty(Input::get('delivery_order'))){
+            return redirect()->back()->withErrors('Pilih Delivery Order!', 'default')->withInput($request->all());
         }
 
         //Generate AutoNumber
@@ -76,14 +83,17 @@ class ItemReceiptController extends Controller
         }
 
         // Validate details
-        $items = Input::get('item_value');
+        $items = Input::get('item');
         $qtys = Input::get('qty');
         $valid = true;
         $i = 0;
+        $purchaseOrderId = Input::get('po');
+        $qty = Input::get('qty');
 
         foreach($items as $item){
             if(empty($item)) $valid = false;
             if(empty($qtys[$i]) || $qtys[$i] == '0') $valid = false;
+
             $i++;
         }
 
@@ -91,13 +101,43 @@ class ItemReceiptController extends Controller
             return redirect()->back()->withErrors('Detail barang, Jumlah wajib diisi!', 'default')->withInput($request->all());
         }
 
+        $validPo = true;
+        $validQtyPo = true;
+        $i = 0;
+
+        foreach ($items as $item){
+            //Check Data
+            //Data Check with PO
+            $purchaseOrder = PurchaseOrderHeader::where('id', $purchaseOrderId[$i])->first();
+            $details = $purchaseOrder->purchase_order_details->where('item_id', $item);
+
+            if($details == null || $details->count() == 0){
+                $validPo = false;
+            }
+            else{
+                foreach ($details as $detail){
+                    if($qty[$i] > $detail->quantity){
+                        $validQtyPo = false;
+                    }
+                }
+            }
+
+            $i++;
+        }
+
+        if(!$validPo){
+            return redirect()->back()->withErrors('Detail barang, Barang Tidak ada Dalam PO!', 'default')->withInput($request->all());
+        }
+        if(!$validQtyPo){
+            return redirect()->back()->withErrors('Detail barang, Jumlah Barang Melebihi Jumlah Barang Dalam PO!', 'default')->withInput($request->all());
+        }
+
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
         $itemReceiptHeader = ItemReceiptHeader::create([
             'code'              => $itemReceiptNumber,
-            'no_sj_spb'         => Input::get('no_sj_spb'),
-            'date'              => $now->toDateTimeString(),
+            'date'              => $now->toDateString(),
             'delivery_order_id' => Input::get('delivery_order'),
             'delivered_from'    => Input::get('delivered_from'),
             'angkutan'          => Input::get('angkutan'),
@@ -108,9 +148,7 @@ class ItemReceiptController extends Controller
         ]);
 
         // Create Item Receipt Detail
-        $qty = Input::get('qty');
         $remark = Input::get('remark');
-        $purchaseOrderId = Input::get('po');
         $idx = 0;
         foreach(Input::get('item') as $item){
             if(!empty($item)){
@@ -167,7 +205,6 @@ class ItemReceiptController extends Controller
             $itemReceiptHeader->delivery_order_id = Input::get('delivery_order');
         }
 
-        $itemReceiptHeader->no_sj_spb = Input::get('no_sj_spb');
         $itemReceiptHeader->date = $formatedDate->toDateTimeString();
         $itemReceiptHeader->delivered_from = Input::get('delivered_from');
         $itemReceiptHeader->angkutan = Input::get('angkutan');
@@ -194,6 +231,37 @@ class ItemReceiptController extends Controller
         }
 
         return view('documents.item_receipts.item_receipts', compact('itemReceipt', 'itemReceiptDetails', 'itemTotal'));
+    }
+
+    public function report(){
+        return View('admin.inventory.item_receipts.report');
+    }
+
+    public function downloadReport(Request $request) {
+        //Get Data First
+        $tempStart = strtotime(Input::get('start_date'));
+        $start = date('Y-m-d', $tempStart);
+        $tempEnd = strtotime(Input::get('end_date'));
+        $end = date('Y-m-d', $tempEnd);
+
+        //Check date
+        if($start > $end){
+            return redirect()->back()->withErrors('Start Date Tidak boleh lebih besar dari Finish Date!', 'default')->withInput($request->all());
+        }
+
+        $data = ItemReceiptHeader::whereBetween('date', array($start, $end))->get();
+
+        //Check Data
+        if($data == null || $data->count() == 0){
+            return redirect()->back()->withErrors('Data Tidak Ditemukan!', 'default')->withInput($request->all());
+        }
+
+        $pdf = PDF::loadView('documents.item_receipts.item_receipts_pdf', ['data' => $data, 'start_date' => Input::get('start_date'), 'finish_date' => Input::get('end_date')])
+            ->setPaper('a4', 'landscape');
+        $now = Carbon::now('Asia/Jakarta');
+        $filename = 'ITEM_RECEIPT_REPORT' . $now->toDateTimeString();
+
+        return $pdf->download($filename.'.pdf');
     }
 
     public function getIndex(){

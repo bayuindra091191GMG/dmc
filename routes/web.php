@@ -291,6 +291,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('item_receipts/tambah', 'Inventory\ItemReceiptController@create')->name('item_receipts.create');
     Route::post('item_receipts/simpan', 'Inventory\ItemReceiptController@store')->name('item_receipts.store');
     Route::get('item_receipts/print/{item_receipt}', 'Inventory\ItemReceiptController@printDocument')->name('item_receipts.print');
+    Route::get('item_receipts/report', 'Inventory\ItemReceiptController@report')->name('item_receipts.report');
+    Route::post('item_receipts/download_report', 'Inventory\ItemReceiptController@downloadReport')->name('item_receipts.download-report');
 
     //Item Receipts Details
     Route::get('item_receipt_details', 'Inventory\ItemReceiptDetailController@index')->name('item_receipt_details');

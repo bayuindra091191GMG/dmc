@@ -348,6 +348,11 @@ class DocketController extends Controller
 
         $data = IssuedDocketHeader::whereBetween('date', array($start, $end))->get();
 
+        //Check Data
+        if($data == null || $data->count() == 0){
+            return redirect()->back()->withErrors('Data Tidak Ditemukan!', 'default')->withInput($request->all());
+        }
+
         $pdf = PDF::loadView('documents.issued_dockets.issued_docket_pdf', ['data' => $data, 'start_date' => Input::get('start_date'), 'finish_date' => Input::get('end_date')])
             ->setPaper('a4', 'landscape');
         $now = Carbon::now('Asia/Jakarta');

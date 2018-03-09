@@ -1102,7 +1102,7 @@
   <td colspan=5 class=xl123 style='border-right:.5pt solid black;border-left:
   none'>{{ $itemReceipt->angkutan }}</td>
   <td colspan=6 class=xl128 style='border-right:2.0pt double black;border-left:
-  none'>{{ $itemReceipt->no_sj_spb }}</td>
+  none'>{{ $itemReceipt->delivery_order_header->code }}</td>
  </tr>
  <tr height=20 style='height:15.0pt'>
   <td height=20 class=xl71 style='height:15.0pt;border-top:none'><span

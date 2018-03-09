@@ -7,6 +7,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -34,6 +35,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  */
 class ItemReceiptHeader extends Eloquent
 {
+    protected $appends = ['date_string'];
+
 	protected $casts = [
 		'delivery_order_id' => 'int',
 		'status_id' => 'int',
@@ -56,6 +59,10 @@ class ItemReceiptHeader extends Eloquent
 		'created_by',
 		'updated_by'
 	];
+
+    public function getDateStringAttribute(){
+        return Carbon::parse($this->attributes['date'])->format('d M Y');
+    }
 
 	public function delivery_order_header()
 	{

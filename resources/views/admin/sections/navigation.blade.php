@@ -444,6 +444,11 @@
                                     Buat Baru
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ route('admin.item_receipts.report') }}">
+                                    Download Report
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li>
