@@ -9,8 +9,10 @@ use App\Transformer\MasterData\DocumentTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
 
 class DocumentController extends Controller
@@ -26,10 +28,12 @@ class DocumentController extends Controller
     }
 
     //DataTables
+
     /**
      * Process datatables ajax request.
      *
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function anyData()
     {
@@ -59,15 +63,18 @@ class DocumentController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'description' => 'required|max:45',
-            'code'        => 'required|max:10'
+            'description'   => 'required|max:45',
+            'code'          => 'required|max:30|regex:/^\S*$/u|unique:documents'
+        ],[
+            'code.unique'   => 'Kode dokumen telah terpakai',
+            'code.regex'    => 'Kode dokumen harus tanpa spasi'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
         $group = Document::create([
-            'code'                 => $request->get('code'),
-            'description'          => $request->get('description')
+            'code'                 => $request->input('code'),
+            'description'          => $request->input('description')
         ]);
 
         Session::flash('message', 'Berhasil membuat data dokumen baru!');
@@ -101,22 +108,28 @@ class DocumentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param Document $group
+     * @param Document $document
      * @return mixed
      */
     public function update(Request $request, Document $document)
     {
         $validator = Validator::make($request->all(), [
-            'description' => 'required|max:45',
-            'code'        => 'required|max:10'
+            'description'   => 'required|max:45',
+            'code'          => [
+                'required',
+                'max:45',
+                'regex:/^\S*$/u',
+                Rule::unique('documents')->ignore($document->id)
+            ],
+        ],[
+            'code.unique'   => 'Kode dokumen telah terpakai',
+            'code.regex'    => 'Kode dokumen harus tanpa spasi'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
-        $dateTimeNow = Carbon::now('Asia/Jakarta');
-
-        $document->description = $request->get('description');
-        $document->code = $request->get('code');
+        $document->description = $request->input('description');
+        $document->code = $request->input('code');
         $document->save();
 
 //        return redirect()->intended(route('admin.documents'));
@@ -128,11 +141,21 @@ class DocumentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try{
+            $document = Document::find($request->input('id'));
+            $document->delete();
+
+            Session::flash('message', 'Berhasil menghapus data dokumen '. $document->description);
+
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 }

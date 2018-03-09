@@ -33,6 +33,17 @@
             @endif
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code" >
+                    Kode Barang
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
+                           name="code" value="{{ old('code') }}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name" >
                     Nama Barang
                     <span class="required">*</span>
@@ -44,12 +55,12 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="part_number">
                     Part Number
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
-                           name="code" value="{{ old('code') }}">
+                    <input id="part_number" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('part_number')) parsley-error @endif"
+                           name="part_number" value="{{ old('part_number') }}">
                 </div>
             </div>
 
@@ -70,7 +81,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="group" >
-                    Group
+                    Kategori Inventory
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -120,14 +131,15 @@
                         </thead>
                         <tbody>
                         <tr id='addr0'>
-                            {{--<td class='field-item'>--}}
-                            {{--<select id="warehouse0" name="warehouse[]" class='form-control'></select>--}}
-                            {{--</td>--}}
-                            {{--<td>--}}
-                            {{--<input type='number' name='qty[]'  placeholder='Stok' class='form-control'/>--}}
-                            {{--</td>--}}
+                            <td class='field-item'>
+                            <select id="warehouse0" name="warehouse[]" class='form-control'></select>
+                            </td>
+                            <td>
+                            <input type='number' name='qty[]'  placeholder='Stok' class='form-control'/>
+                            </td>
                         </tr>
                         </tbody>
+                        <tr id='addr1'></tr>
                     </table>
                     <a id="add_row" class="btn btn-default pull-left" style="margin-bottom: 10px;">Tambah</a><a id='delete_row' class="pull-right btn btn-default">Hapus</a>
                 </div>
@@ -194,7 +206,7 @@
             }
         });
 
-        var i=0;
+        var i=1;
         $("#add_row").click(function(){
             $('#addr' + i).html("<td class='field-item'><select id='warehouse" + i + "' name='warehouse[]' class='form-control'></select></td><td><input type='number' name='qty[]'  placeholder='Stok' class='form-control'/></td>");
 
@@ -226,7 +238,7 @@
         });
 
         $("#delete_row").click(function(){
-            if(i>0){
+            if(i>1){
                 $("#addr"+(i-1)).html('');
                 i--;
             }

@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
 
 class ItemController extends Controller
@@ -54,8 +55,13 @@ class ItemController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
-            'name'      => 'required|max:100',
-            'code'     => 'required|max:45'
+            'code'          => 'required|max:45|regex:/^\S*$/u|unique:items',
+            'name'          => 'required|max:100',
+            'part_number'   => 'max:45',
+            'description'   => 'max:200'
+        ],[
+            'code.unique'   => 'Kode barang telah terpakai',
+            'code.regex'    => 'Kode barang harus tanpa spasi'
         ]);
 
         if ($validator->fails()) {
@@ -64,10 +70,6 @@ class ItemController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-
-//        if(Input::get('warehouse') === '-1'){
-//            return redirect()->back()->withErrors('Pilih gudang!', 'default')->withInput($request->all());
-//        }
 
         if(Input::get('uom') === '-1'){
             return redirect()->back()->withErrors('Pilih uom!', 'default')->withInput($request->all());
@@ -78,14 +80,19 @@ class ItemController extends Controller
         }
 
         // Validate warehouse
-        $warehouses = Input::get('warehouse');
-        $qtys = Input::get('qty');
+        $warehouses = $request->input('warehouse');
+        $qtys = $request->input('qty');
         $valid = true;
+        $isStock = false;
         if(count($warehouses) > 0){
             $idx = 0;
             foreach($warehouses as $warehouse){
-                if(empty($warehouse)) $valid = false;
-                if(empty($qtys[$idx])) $valid = false;
+                if(empty($qtys[$idx])){
+                    $valid = false;
+                }
+                else{
+                    $isStock = true;
+                }
                 $idx++;
             }
 
@@ -95,19 +102,21 @@ class ItemController extends Controller
         }
 
         // Validate duplicated values
-        $valid = Utilities::arrayIsUnique($warehouses);
-        if(!$valid){
-            return redirect()->back()->withErrors('Detail gudang tidak boleh kembar!', 'default')->withInput($request->all());
+        if($isStock){
+            $valid = Utilities::arrayIsUnique($warehouses);
+            if(!$valid){
+                return redirect()->back()->withErrors('Detail gudang tidak boleh kembar!', 'default')->withInput($request->all());
+            }
         }
 
         $user = Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
         $item = Item::create([
-            'name'          => Input::get('name'),
-            'code'          => Input::get('code'),
-            'uom_id'        => Input::get('uom'),
-            'group_id'      => Input::get('group'),
+            'name'          => $request->input('name'),
+            'code'          => $request->input('code'),
+            'uom_id'        => $request->input('uom'),
+            'group_id'      => $request->input('group'),
             'created_by'    => $user->id,
             'created_at'    => $now->toDateTimeString()
         ]);
@@ -126,13 +135,15 @@ class ItemController extends Controller
         if(count($warehouses) > 0){
             $idx = 0;
             foreach($warehouses as $warehouse){
-                $stock = ItemStock::create([
-                    'item_id'       => $item->id,
-                    'warehouse_id'  => $warehouse,
-                    'stock'         => $qtys[$idx],
-                    'created_by'    => $user->id,
-                    'created_at'    => $now->toDateTimeString()
-                ]);
+                if(!empty($warehouse)){
+                    $stock = ItemStock::create([
+                        'item_id'       => $item->id,
+                        'warehouse_id'  => $warehouse,
+                        'stock'         => $qtys[$idx],
+                        'created_by'    => $user->id,
+                        'created_at'    => $now->toDateTimeString()
+                    ]);
+                }
                 $idx++;
             }
         }
@@ -159,8 +170,16 @@ class ItemController extends Controller
 
     public function update(Request $request, Item $item){
         $validator = Validator::make($request->all(),[
-            'name'      => 'required|max:100',
-            'code'     => 'required|max:45'
+            'code' => [
+                'required',
+                'max:30',
+                'regex:/^\S*$/u',
+                Rule::unique('items')->ignore($item->id)
+            ],
+            'name'      => 'required|max:100'
+        ],[
+            'code.unique'   => 'Kode barang telah terpakai!',
+            'code.regex'    => 'Kode barang harus tanpa spasi'
         ]);
 
         if ($validator->fails()) {
@@ -173,12 +192,11 @@ class ItemController extends Controller
         $user = Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
-        $item->name = Input::get('name');
-        $item->code = Input::get('code');
-        $item->uom_id = Input::get('uom');
-//        $item->warehouse_id = Input::get('warehouse');
-        $item->group_id = Input::get('group');
-        $item->description = Input::get('description');
+        $item->name = $request->input('name');
+        $item->code = $request->input('code');
+        $item->uom_id = $request->input('uom');
+        $item->group_id = $request->input('group');
+        $item->description = $request->input('description');
         $item->updated_by = $user->id;
         $item->updated_at = $now;
 
@@ -187,6 +205,20 @@ class ItemController extends Controller
         Session::flash('message', 'Berhasil mengubah data barang!');
 
         return redirect()->route('admin.items.edit', ['item' => $item]);
+    }
+
+    public function destroy(Request $request)
+    {
+        try{
+            $item = Item::find($request->input('id'));
+            $item->delete();
+
+            Session::flash('message', 'Berhasil menghapus data barang '. $item->code. ' - '. $item->name);
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 
     public function getIndex(){

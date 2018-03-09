@@ -74,16 +74,16 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li><a>Group<span class="fa fa-chevron-down"></span></a>
+                            <li><a>Kategori Inventory<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
                                         <a href="{{ route('admin.groups') }}">
-                                            Daftar Kategori Inventory
+                                            Daftar Kategori
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('admin.groups.create') }}">
-                                            Tambah Kategori Inventory
+                                            Tambah Kategori
                                         </a>
                                     </li>
                                 </ul>

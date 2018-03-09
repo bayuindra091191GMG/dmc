@@ -95,6 +95,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('items/simpan', 'ItemController@store')->name('items.store');
     Route::get('items/{item}/ubah', 'ItemController@edit')->name('items.edit');
     Route::put('items/ubah/{item}', 'ItemController@update')->name('items.update');
+    Route::post('items/hapus', 'ItemController@destroy')->name('items.destroy');
 
     //Statuses
     Route::get('statuses', 'StatusController@index')->name('statuses');
@@ -137,6 +138,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('groups/ubah/{group}', 'GroupController@update')->name('groups.update');
     Route::get('groups/tambah', 'GroupController@create')->name('groups.create');
     Route::post('groups/simpan', 'GroupController@store')->name('groups.store');
+    Route::post('groups/hapus', 'GroupController@destroy')->name('groups.destroy');
 
     //Machinery Types
     Route::get('machinery_types', 'MachineryTypeController@index')->name('machinery_types');
@@ -180,6 +182,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('documents/ubah/{document}', 'DocumentController@update')->name('documents.update');
     Route::get('documents/tambah', 'DocumentController@create')->name('documents.create');
     Route::post('documents/simpan', 'DocumentController@store')->name('documents.store');
+    Route::post('documents/hapus', 'DocumentController@destroy')->name('documents.destroy');
 
     //Payment Methods
     Route::get('payment_methods', 'PaymentMethodController@index')->name('payment_methods');

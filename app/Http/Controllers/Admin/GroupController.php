@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
 
 class GroupController extends Controller
@@ -21,7 +22,7 @@ class GroupController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         return view('admin.groups.index');
     }
@@ -38,7 +39,7 @@ class GroupController extends Controller
     {
         $groups = Group::all();
         return DataTables::of($groups)
-            ->setTransformer(new GroupTransformer())
+            ->setTransformer(new GroupTransformer)
             ->addIndexColumn()
             ->make(true);
     }
@@ -62,20 +63,21 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'code' => 'required|max:45',
+            'code' => 'required|max:30|unique:groups|regex:/^\S*$/u',
             'name' => 'required|max:45'
+        ],[
+            'code.unique'   => 'Kode kategori inventory telah terpakai',
+            'code.regex'    => 'Kode kategori inventory harus tanpa spasi'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
-        $dateTimeNow = Carbon::now('Asia/Jakarta');
 
         $group = Group::create([
-            'code'          => $request->get('code'),
-            'name'          => $request->get('name')
+            'code'          => $request->input('code'),
+            'name'          => $request->input('name')
         ]);
 
-//        return redirect()->intended(route('admin.groups'));
-        Session::flash('message', 'Berhasil membuat data grup item baru!');
+        Session::flash('message', 'Berhasil membuat data kategori inventory baru!');
 
         return redirect()->route('admin.groups');
     }
@@ -112,23 +114,42 @@ class GroupController extends Controller
     public function update(Request $request, Group $group)
     {
         $validator = Validator::make($request->all(), [
-            'code' => 'required|max:45',
-            'name' => 'required|max:45'
+            'code'          => [
+                'required',
+                'max:30',
+                'regex:/^\S*$/u',
+                Rule::unique('groups')->ignore($group->id)
+            ],
+            'name'          => 'required|max:45'
+        ],[
+            'code.unique'   => 'Kode kategori inventory telah terpakai',
+            'code.regex'    => 'Kode kategori inventory harus tanpa spasi'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
-        $dateTimeNow = Carbon::now('Asia/Jakarta');
-
-        $group->name = $request->get('name');
-        $group->code = $request->get('code');
+        $group->name = $request->input('name');
+        $group->code = $request->input('code');
 
         $group->save();
 
-//        return redirect()->intended(route('admin.groups'));
-        Session::flash('message', 'Berhasil mengubah data golongan!');
+        Session::flash('message', 'Berhasil mengubah data kategori inventory!');
 
         return redirect()->route('admin.groups.edit', ['group' => $group]);
+    }
+
+    public function destroy(Request $request)
+    {
+        try{
+            $group = Group::find($request->input('id'));
+            $group->delete();
+
+            Session::flash('message', 'Berhasil menghapus data kategori inventory '. $group->name);
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 
     public function getGroups(Request $request){

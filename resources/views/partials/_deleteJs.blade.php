@@ -1,6 +1,5 @@
 <script>
     $('.modal-footer').on('click', '.delete', function() {
-        alert($('#deleted-id').val());
         $.ajax({
             type: 'POST',
             url: '{{ route($routeUrl) }}',

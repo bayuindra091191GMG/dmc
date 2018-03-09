@@ -64,12 +64,11 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'code' => 'required|unique:departments|max:45',
+            'code' => 'required|max:30|regex:/^\S*$/u|unique:departments',
             'name' => 'required|max:45'
         ],[
-            'code.required' => 'Kode wajib diisi',
-            'code.unique'   => 'Kode telah terdaftar',
-            'name.required' => 'Nama wajib diisi'
+            'code.unique'   => 'Kode departemen telah terpakai',
+            'code.regex'    => 'Kode departemen harus tanpa spasi'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
@@ -77,8 +76,8 @@ class DepartmentController extends Controller
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
         $department = Department::create([
-            'code'          => $request->get('code'),
-            'name'          => $request->get('name'),
+            'code'          => $request->input('code'),
+            'name'          => $request->input('name'),
             'updated_by'    => 1,
             'created_by'    => 1,
             'created_at'    => $dateTimeNow->toDateTimeString()
@@ -125,20 +124,22 @@ class DepartmentController extends Controller
         $validator = Validator::make($request->all(), [
             'code' => [
                 'required',
-                'max:45',
+                'max:30',
+                'regex:/^\S*$/u',
                 Rule::unique('departments')->ignore($department->id)
             ],
             'name' => 'required|max:45'
         ],[
-            'code.unique'   => 'Kode telah terpakai!'
+            'code.unique'   => 'Kode departemen telah terpakai!',
+            'code.regex'    => 'Kode departemen harus tanpa spasi'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
-        $department->name = $request->get('name');
-        $department->code = $request->get('code');
+        $department->name = $request->input('name');
+        $department->code = $request->input('code');
         $department->updated_at = $dateTimeNow->toDateTimeString();
         $department->updated_by = 1;
 
@@ -161,6 +162,8 @@ class DepartmentController extends Controller
         try{
             $department = Department::find($request->input('id'));
             $department->delete();
+
+            Session::flash('message', 'Berhasil menghapus data departemen '. $department->name);
             return Response::json(array('success' => 'VALID'));
         }
         catch(\Exception $ex){

@@ -184,19 +184,19 @@ Breadcrumbs::register('admin.permission_documents.edit', function (Generator $br
 // Groups
 Breadcrumbs::register('admin.groups', function (Generator $breadcrumbs) {
     $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
-    $breadcrumbs->push('Daftar Group');
+    $breadcrumbs->push('Daftar Kategori Inventory');
 });
 
 Breadcrumbs::register('admin.groups.create', function (Generator $breadcrumbs) {
     $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
-    $breadcrumbs->push('Daftar Group', route('admin.groups'));
-    $breadcrumbs->push('Tambah Group');
+    $breadcrumbs->push('Daftar Kategori Inventory', route('admin.groups'));
+    $breadcrumbs->push('Tambah Kategori Inventory');
 });
 
 Breadcrumbs::register('admin.groups.edit', function (Generator $breadcrumbs, \App\Models\Group $group) {
     $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
-    $breadcrumbs->push('Daftar Group', route('admin.groups'));
-    $breadcrumbs->push('Ubah Group', route('admin.groups.edit', ['group' => $group]));
+    $breadcrumbs->push('Daftar Kategori Inventory', route('admin.groups'));
+    $breadcrumbs->push('Ubah Kategori Inventory', route('admin.groups.edit', ['group' => $group]));
 });
 
 // Machineries
