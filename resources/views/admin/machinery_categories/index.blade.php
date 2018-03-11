@@ -18,11 +18,11 @@
                width="100%" id="machinery-types-table">
             <thead>
             <tr>
-                <th>No</th>
-                <th>Nama</th>
-                <th>Kode</th>
-                <th>Deskripsi</th>
-                <th>Tindakan</th>
+                <th class="text-center" style="width: 10%;">No</th>
+                <th class="text-center" style="width: 20%;">Kode</th>
+                <th class="text-center" style="width: 25%;">Nama</th>
+                <th class="text-center" style="width: 35%;">Deskripsi</th>
+                <th class="text-center" style="width: 10%;">Tindakan</th>
             </tr>
             </thead>
             <tbody>
@@ -30,16 +30,19 @@
         </table>
     </div>
 
+    @include('partials._delete')
 @endsection
 
 @section('styles')
     @parent
     {{ Html::style(mix('assets/admin/css/datatables.css')) }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 @endsection
 
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/datatables.js')) }}
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         $(function() {
             $('#machinery-types-table').DataTable({
@@ -47,16 +50,26 @@
                 serverSide: true,
                 ajax: '{!! route('datatables.machinery_categories') !!}',
                 columns: [
-                    { data: 'DT_Row_Index', orderable: false, searchable: false},
+                    { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
+                    { data: 'code', name: 'code', class: 'text-center'},
                     { data: 'name', name: 'name' },
-                    { data: 'code', name: 'code' },
                     { data: 'description', name: 'description' },
-                    { data: 'action', name:'action' }
+                    { data: 'action', name:'action', orderable: false, searchable: false, class: 'text-center'}
                 ],
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"
                 }
             });
         });
+
+        $(document).on('click', '.delete-modal', function(){
+            $('#deleteModal').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+
+            $('#deleted-id').val($(this).data('id'));
+        });
     </script>
+    @include('partials._deleteJs', ['routeUrl' => 'admin.machinery_categories.destroy', 'redirectUrl' => 'admin.machinery_categories'])
 @endsection

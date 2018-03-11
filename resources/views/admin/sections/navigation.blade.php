@@ -102,6 +102,20 @@
                             <span class="fa fa-chevron-down"></span>
                         </a>
                         <ul class="nav child_menu">
+                            <li><a>Status<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.statuses') }}">
+                                            Daftar Status
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.statuses.create') }}">
+                                            Tambah Status
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                             <li><a>Menu<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
@@ -214,7 +228,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li><a>Supplier<span class="fa fa-chevron-down"></span></a>
+                            <li><a>Vendor<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
                                         <a href="{{ route('admin.suppliers') }}">

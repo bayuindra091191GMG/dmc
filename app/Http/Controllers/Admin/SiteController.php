@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Site;
+use App\Transformer\MasterData\SiteTransformer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Session;
 use Validator;
@@ -53,20 +56,23 @@ class SiteController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'code'      => 'required|max:30|regex:/^\S*$/u|unique:sites',
             'name'      => 'required',
-            'code'      => 'required',
             'location'  => 'required'
+        ],[
+            'code.unique'   => 'Kode site telah terpakai!',
+            'code.regex'    => 'Kode site harus tanpa spasi'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
         Site::create([
-            'name'      => $request->get('name'),
-            'code'      => $request->get('code'),
-            'location'  => $request->get('location')
+            'name'      => $request->input('name'),
+            'code'      => $request->input('code'),
+            'location'  => $request->input('location')
         ]);
 
-        Session::flash('message', 'Berhasil membuat Site Baru!');
+        Session::flash('message', 'Berhasil membuat site baru!');
 
         return redirect(route('admin.sites'));
     }
@@ -100,25 +106,32 @@ class SiteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Site $site)
     {
         //
         $validator = Validator::make($request->all(), [
+            'code' => [
+                'required',
+                'max:30',
+                'regex:/^\S*$/u',
+                Rule::unique('sites')->ignore($site->id)
+            ],
             'name'      => 'required',
-            'code'      => 'required',
             'location'  => 'required'
+        ],[
+            'code.unique'   => 'Kode site telah terpakai!',
+            'code.regex'    => 'Kode site harus tanpa spasi'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
-        $site = Site::find($id);
-        $site->name = $request->get('name');
-        $site->code = $request->get('code');
-        $site->location = $request->get('location');
+        $site->name = $request->input('name');
+        $site->code = $request->input('code');
+        $site->location = $request->input('location');
 
         $site->save();
 
-        Session::flash('message', 'Sukses mengubah data!');
+        Session::flash('message', 'Sukses mengubah data site!');
 
         return redirect(route('admin.sites.edit', ['site' => $site->id]));
     }
@@ -129,19 +142,30 @@ class SiteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try{
+            $site = Site::find($request->input('id'));
+            $site->delete();
+
+            Session::flash('message', 'Berhasil menghapus data site '. $site->name);
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 
+    /**
+     * @return mixed
+     * @throws \Exception
+     */
     public function getIndex()
     {
         $sites = Site::all();
         return DataTables::of($sites)
+            ->setTransformer(new SiteTransformer)
             ->addIndexColumn()
-            ->addColumn('action', function($site){
-                return '<a class="btn btn-xs btn-info" href="sites/'.$site->id.'/ubah" data-toggle="tooltip" data-placement="top"><i class="fa fa-pencil"></i></a>';
-            })
             ->make(true);
     }
 }

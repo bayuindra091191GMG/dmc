@@ -7,6 +7,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -31,6 +32,10 @@ class Site extends Eloquent
 		'name',
 		'location'
 	];
+
+    public function scopeCodeAscending(Builder $query){
+        return $query->orderBy('code','ASC');
+    }
 
 	public function employees()
 	{

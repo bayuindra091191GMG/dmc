@@ -17,8 +17,8 @@ class MachineryTypeTransformer extends TransformerAbstract
 {
     public function transform(MachineryType $machineryType){
 
-        $action =
-            "<a class='btn btn-xs btn-info' href='machinery_types/".$machineryType->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+        $action = "<a class='btn btn-xs btn-info' href='machinery_types/".$machineryType->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+        $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $machineryType->id ."' ><i class='fa fa-trash'></i></a>";
 
         return[
             'name'          => $machineryType->name,

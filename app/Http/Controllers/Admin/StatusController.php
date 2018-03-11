@@ -11,10 +11,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Status;
+use App\Transformer\MasterData\StatusTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
 
 class StatusController extends Controller
@@ -29,7 +32,9 @@ class StatusController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
-            'description'   => 'required|max:45'
+            'description'   => 'required|max:45|unique:statuses'
+        ],[
+            'description.unique'   => 'Status telah terpakai'
         ]);
 
         if ($validator->fails()) {
@@ -48,19 +53,19 @@ class StatusController extends Controller
         return redirect()->route('admin.statuses');
     }
 
-    public function edit($status){
-        $statusEdit = Status::all();
-
-        $data = [
-            'status'    => $statusEdit
-        ];
-
-        return View('admin.statuses.create')->with($data);
+    public function edit(Status $status){
+        return View('admin.statuses.edit', compact('status'));
     }
 
     public function update(Request $request, Status $status){
         $validator = Validator::make($request->all(), [
-            'description'   => 'required|max:45'
+            'description' => [
+                'required',
+                'max:45',
+                Rule::unique('statuses')->ignore($status->id)
+            ]
+        ],[
+            'description.unique'   => 'Status telah terpakai'
         ]);
 
         if ($validator->fails()) {
@@ -77,13 +82,24 @@ class StatusController extends Controller
         return redirect()->route('admin.statuses.edit');
     }
 
+    public function destroy(Request $request)
+    {
+        try{
+            $status = Status::find($request->input('id'));
+            $status->delete();
+
+            Session::flash('message', 'Berhasil menghapus data status '. $status->description);
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
+    }
+
     public function getIndex(){
         $statuses = Status::all();
         return DataTables::of($statuses)
-            ->addColumn('action', function ($status){
-                return "<a class='btn btn-xs btn-info' href='statuses/".$status->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
-            })
-            ->addIndexColumn()
+            ->setTransformer(new StatusTransformer)
             ->make(true);
     }
 }

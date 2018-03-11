@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
 
 class UOMController extends Controller
@@ -33,11 +34,11 @@ class UOMController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function anyData()
+    public function getIndex()
     {
         $uoms = Uom::all();
         return DataTables::of($uoms)
-            ->setTransformer(new UOMTransformer())
+            ->setTransformer(new UOMTransformer)
             ->addIndexColumn()
             ->make(true);
     }
@@ -61,7 +62,9 @@ class UOMController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'description' => 'required|max:45'
+            'description' => 'required|max:45|unique:uoms'
+        ],[
+            'description.unique'    => 'UOM telah terpakai!'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
@@ -109,7 +112,13 @@ class UOMController extends Controller
     public function update(Request $request, Uom $uom)
     {
         $validator = Validator::make($request->all(), [
-            'description' => 'required|max:45'
+            'description' => [
+                'required',
+                'max:45',
+                Rule::unique('uoms')->ignore($uom->id)
+            ],
+        ],[
+            'description.unique'    => 'UOM telah terpakai!'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
@@ -132,8 +141,17 @@ class UOMController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try{
+            $uom = Uom::find($request->input('id'));
+            $uom->delete();
+
+            Session::flash('message', 'Berhasil menghapus data satuan unit '. $uom->description);
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 }

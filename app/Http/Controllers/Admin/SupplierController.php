@@ -64,7 +64,7 @@ class SupplierController extends Controller
     {
         //
         $validator = Validator::make($request->all(), [
-            'code'                  => 'required|unique:suppliers|max:30',
+            'code'                  => 'required|max:30|regex:/^\S*$/u|unique:suppliers',
             'name'                  => 'required|max:100',
             'email'                 => 'nullable|email|max:45',
             'phone'                 => 'required|max:30',
@@ -79,7 +79,8 @@ class SupplierController extends Controller
             'bank_account_number'   => 'max:30',
             'bank_account_name'     => 'max:30',
         ],[
-            'code.unique'       => 'Kode telah terpakai!'
+            'code.unique'       => 'Kode telah terpakai!',
+            'code.regex'        => 'Kode vendor harus tanpa spasi!'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
@@ -151,6 +152,7 @@ class SupplierController extends Controller
             'code'      => [
                 'required',
                 'max:30',
+                'regex:/^\S*$/u',
                 Rule::unique('suppliers')->ignore($supplier->id)],
             'name'                  => 'required|max:100',
             'email'                 => 'nullable|email|max:45',
@@ -166,7 +168,8 @@ class SupplierController extends Controller
             'bank_account_number'   => 'max:30',
             'bank_account_name'     => 'max:30',
         ],[
-            'code.unique'       => 'Kode telah terpakai!'
+            'code.unique'       => 'Kode vendor telah terpakai!',
+            'code.regex'        => 'Kode vendor harus tanpa spasi!'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());

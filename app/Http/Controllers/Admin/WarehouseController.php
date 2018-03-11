@@ -10,8 +10,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
 
 class WarehouseController extends Controller
@@ -24,21 +26,6 @@ class WarehouseController extends Controller
     public function index(Request $request)
     {
         return view('admin.warehouses.index');
-    }
-
-    //DataTables
-    /**
-     * Process datatables ajax request.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function anyData()
-    {
-        $warehouses= Warehouse::all();
-        return DataTables::of($warehouses)
-            ->setTransformer(new WarehouseTransformer())
-            ->addIndexColumn()
-            ->make(true);
     }
 
     /**
@@ -60,8 +47,11 @@ class WarehouseController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'code' => 'required|max:45',
+            'code' => 'required|max:30|regex:/^\S*$/u|unique:warehouses',
             'name' => 'required|max:45'
+        ],[
+            'code.unique'   => 'Kode gudang telah terpakai!',
+            'code.regex'    => 'Kode gudang harus tanpa spasi'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
@@ -70,30 +60,18 @@ class WarehouseController extends Controller
         $user = Auth::user();
 
         $warehouse = Warehouse::create([
-            'code'          => $request->get('code'),
-            'name'          => $request->get('name'),
-            'location'      => $request->get('location'),
-            'phone'         => $request->get('phone'),
+            'code'          => $request->input('code'),
+            'name'          => $request->input('name'),
+            'location'      => $request->input('location'),
+            'phone'         => $request->input('phone'),
             'created_by'    => $user->id,
             'created_at'    => $dateTimeNow->toDateTimeString()
         ]);
 
-//        return redirect()->intended(route('admin.warehouses'));
         Session::flash('message', 'Berhasil membuat data gudang unit!');
 
         return redirect()->route('admin.warehouses');
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param User $user
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-//    public function show(User $user)
-//    {
-//        return view('admin.users.show', ['user' => $user]);
-//    }
 
     /**
      * Show the form for editing the specified resource.
@@ -116,18 +94,26 @@ class WarehouseController extends Controller
     public function update(Request $request, Warehouse $warehouse)
     {
         $validator = Validator::make($request->all(), [
-            'code' => 'required|max:45',
+            'code' => [
+                'required',
+                'max:30',
+                'regex:/^\S*$/u',
+                Rule::unique('warehouses')->ignore($warehouse->id)
+            ],
             'name' => 'required|max:45'
+        ],[
+            'code.unique'   => 'Kode gudang telah terpakai!',
+            'code.regex'    => 'Kode gudang harus tanpa spasi'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
-        $warehouse->name = $request->get('name');
-        $warehouse->code = $request->get('code');
-        $warehouse->location = $request->get('location');
-        $warehouse->phone = $request->get('phone');
+        $warehouse->name = $request->input('name');
+        $warehouse->code = $request->input('code');
+        $warehouse->location = $request->input('location');
+        $warehouse->phone = $request->input('phone');
         $warehouse->updated_at = $dateTimeNow->toDateTimeString();
         $warehouse->updated_by = 1;
 
@@ -145,8 +131,31 @@ class WarehouseController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try{
+            $warehouse = Warehouse::find($request->input('id'));
+            $warehouse->delete();
+
+            Session::flash('message', 'Berhasil menghapus data gudang '. $warehouse->name);
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
+    }
+
+    /**
+     * Process datatables ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getIndex()
+    {
+        $warehouses= Warehouse::all();
+        return DataTables::of($warehouses)
+            ->setTransformer(new WarehouseTransformer)
+            ->addIndexColumn()
+            ->make(true);
     }
 }

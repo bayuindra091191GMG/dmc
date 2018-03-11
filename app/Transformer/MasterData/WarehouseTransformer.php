@@ -26,14 +26,14 @@ class WarehouseTransformer extends TransformerAbstract
         if(!empty($warehouse->updated_by)){
             $warehouse->updatedBy->email;
         }
-        $action =
-            "<a class='btn btn-xs btn-info' href='warehouses/".$warehouse->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+        $action = "<a class='btn btn-xs btn-info' href='warehouses/".$warehouse->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+        $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $warehouse->id ."' ><i class='fa fa-trash'></i></a>";
 
         return[
-            'code'         => $warehouse->code,
+            'code'          => $warehouse->code,
             'name'          => $warehouse->name,
-            'location'         => $warehouse->location,
-            'phone'           => $warehouse->phone,
+            'location'      => $warehouse->location,
+            'phone'         => $warehouse->phone,
             'created_by'    => $warehouse->createdBy->email,
             'created_at'    => $createdDate,
             'updated_by'    => $updatedBy,

@@ -18,9 +18,9 @@
                width="100%" id="employees-table">
             <thead>
             <tr>
-                <th>No</th>
-                <th>Status</th>
-                <th>Opsi</th>
+                <th class="text-center" style="width: 25%;">ID</th>
+                <th class="text-center" style="width: 50%;">Status</th>
+                <th class="text-center" style="width: 25%;">Tindakan</th>
             </tr>
             </thead>
             <tbody>
@@ -28,16 +28,19 @@
         </table>
     </div>
 
+    @include('partials._delete')
 @endsection
 
 @section('styles')
     @parent
     {{ Html::style(mix('assets/admin/css/datatables.css')) }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 @endsection
 
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/datatables.js')) }}
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         $(function() {
             $('#employees-table').DataTable({
@@ -45,14 +48,24 @@
                 serverSide: true,
                 ajax: '{!! route('datatables.statuses') !!}',
                 columns: [
-                    { data: 'DT_Row_Index', orderable: false, searchable: false},
-                    { data: 'description', name: 'description' },
-                    { data: 'action', name: 'action' }
+                    { data: 'ID', class: 'text-center'},
+                    { data: 'description', name: 'description', class: 'text-center'},
+                    { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'}
                 ],
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"
                 }
             });
         });
+
+        $(document).on('click', '.delete-modal', function(){
+            $('#deleteModal').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+
+            $('#deleted-id').val($(this).data('id'));
+        });
     </script>
+    @include('partials._deleteJs', ['routeUrl' => 'admin.statuses.destroy', 'redirectUrl' => 'admin.statuses'])
 @endsection

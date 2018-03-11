@@ -14,8 +14,10 @@ use App\Models\MachineryBrand;
 use App\Transformer\MasterData\MachineryBrandTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
 
 class MachineryBrandController extends Controller
@@ -30,9 +32,12 @@ class MachineryBrandController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
+            'code'          => 'required|max:30|regex:/^\S*$/u|unique:machinery_brands',
             'name'          => 'required|max:45',
-            'code'          => 'max:45',
             'description'   => 'max:200'
+        ],[
+            'code.unique'   => 'Kode merek alat berat telah terpakai',
+            'code.regex'    => 'Kode merek alat berat harus tanpa spasi'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
@@ -56,9 +61,17 @@ class MachineryBrandController extends Controller
 
     public function update(Request $request, MachineryBrand $machineryBrand){
         $validator = Validator::make($request->all(), [
+            'code' => [
+                'required',
+                'max:30',
+                'regex:/^\S*$/u',
+                Rule::unique('machinery_brands')->ignore($machineryBrand->id)
+            ],
             'name'          => 'required|max:45',
-            'code'          => 'max:45',
             'description'   => 'max:200'
+        ],[
+            'code.unique'   => 'Kode merek alat berat telah terpakai',
+            'code.regex'    => 'Kode merek alat berat harus tanpa spasi'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
@@ -72,6 +85,20 @@ class MachineryBrandController extends Controller
         Session::flash('message', 'Berhasil mengubah data merek alat berat!');
 
         return redirect()->route('admin.machinery_brands.edit', ['machinery_brand' => $machineryBrand]);
+    }
+
+    public function destroy(Request $request)
+    {
+        try{
+            $machineryBrand = MachineryBrand::find($request->input('id'));
+            $machineryBrand->delete();
+
+            Session::flash('message', 'Berhasil menghapus data merek alat berat '. $machineryBrand->name);
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 
     /**

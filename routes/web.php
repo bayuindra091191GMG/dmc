@@ -72,6 +72,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('sites/simpan', 'SiteController@store')->name('sites.store');
     Route::get('sites/{site}/ubah/', 'SiteController@edit')->name('sites.edit');
     Route::put('sites/ubah/{site}', 'SiteController@update')->name('sites.update');
+    Route::post('sites/hapus', 'SiteController@destroy')->name('sites.destroy');
 
     //Suppliers
     Route::get('suppliers', 'SupplierController@index')->name('suppliers');
@@ -101,8 +102,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('statuses', 'StatusController@index')->name('statuses');
     Route::get('statuses/tambah', 'StatusController@create')->name('statuses.create');
     Route::post('statuses/simpan', 'StatusController@store')->name('statuses.store');
-    Route::get('statuses/{status}/ubah', 'StatusController@create')->name('statuses.edit');
+    Route::get('statuses/{status}/ubah', 'StatusController@edit')->name('statuses.edit');
     Route::put('statuses/ubah/{status}', 'StatusController@update')->name('statuses.update');
+    Route::post('statuses/hapus', 'StatusController@destroy')->name('statuses.destroy');
 
     //Roles
     Route::get('roles', 'RoleController@index')->name('roles');
@@ -146,6 +148,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('machinery_types/ubah/{machinery_type}', 'MachineryTypeController@update')->name('machinery_types.update');
     Route::get('machinery_types/tambah', 'MachineryTypeController@create')->name('machinery_types.create');
     Route::post('machinery_types/simpan', 'MachineryTypeController@store')->name('machinery_types.store');
+    Route::post('machinery_types/hapus', 'MachineryTypeController@destroy')->name('machinery_types.destroy');
 
     //Machinery Categories
     Route::get('machinery_categories', 'MachineryCategoryController@index')->name('machinery_categories');
@@ -153,6 +156,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('machinery_categories/ubah/{machinery_category}', 'MachineryCategoryController@update')->name('machinery_categories.update');
     Route::get('machinery_categories/tambah', 'MachineryCategoryController@create')->name('machinery_categories.create');
     Route::post('machinery_categories/simpan', 'MachineryCategoryController@store')->name('machinery_categories.store');
+    Route::post('machinery_categories/hapus', 'MachineryCategoryController@destroy')->name('machinery_categories.destroy');
 
     //Machinery Brands
     Route::get('machinery_brands', 'MachineryBrandController@index')->name('machinery_brands');
@@ -160,6 +164,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('machinery_brands/ubah/{machinery_brand}', 'MachineryBrandController@update')->name('machinery_brands.update');
     Route::get('machinery_brands/tambah', 'MachineryBrandController@create')->name('machinery_brands.create');
     Route::post('machinery_brands/simpan', 'MachineryBrandController@store')->name('machinery_brands.store');
+    Route::post('machinery_brands/hapus', 'MachineryBrandController@destroy')->name('machinery_brands.destroy');
 
     //Machineries
     Route::get('machineries', 'MachineryController@index')->name('machineries');
@@ -198,6 +203,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('uoms/ubah/{uom}', 'UOMController@update')->name('uoms.update');
     Route::get('uoms/tambah', 'UOMController@create')->name('uoms.create');
     Route::post('uoms/simpan', 'UOMController@store')->name('uoms.store');
+    Route::post('uoms/hapus', 'UOMController@destroy')->name('uoms.destroy');
 
     //Warehouses
     Route::get('warehouses', 'WarehouseController@index')->name('warehouses');
@@ -205,6 +211,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('warehouses/ubah/{warehouse}', 'WarehouseController@update')->name('warehouses.update');
     Route::get('warehouses/tambah', 'WarehouseController@create')->name('warehouses.create');
     Route::post('warehouses/simpan', 'WarehouseController@store')->name('warehouses.store');
+    Route::post('warehouses/hapus', 'WarehouseController@destroy')->name('warehouses.destroy');
 
     //Menus
     Route::get('menus', 'MenuController@index')->name('menus');
@@ -366,11 +373,12 @@ Route::get('/datatables-machinery_brands', 'Admin\MachineryBrandController@getIn
 Route::get('/datatables-departments', 'Admin\DepartmentController@getIndex')->name('datatables.departments');
 Route::get('/datatables-documents', 'Admin\DocumentController@anyData')->name('datatables.documents');
 Route::get('/datatables-payment_methods', 'Admin\PaymentMethodController@anyData')->name('datatables.payment_methods');
-Route::get('/datatables-uoms', 'Admin\UOMController@anyData')->name('datatables.uoms');
-Route::get('/datatables-warehouses', 'Admin\WarehouseController@anyData')->name('datatables.warehouses');
+Route::get('/datatables-uoms', 'Admin\UOMController@getIndex')->name('datatables.uoms');
+Route::get('/datatables-warehouses', 'Admin\WarehouseController@getIndex')->name('datatables.warehouses');
 Route::get('/datatables-sites', 'Admin\SiteController@getIndex')->name('datatables.sites');
 Route::get('/datatables-suppliers', 'Admin\SupplierController@getIndex')->name('datatables.suppliers');
 Route::get('/datatables-menus', 'Admin\MenuController@anyData')->name('datatables.menus');
+Route::get('/datatables-statuses', 'Admin\StatusController@getIndex')->name('datatables.statuses');
 
 // PURCHASING
 Route::get('/datatables-purchase_requests', 'Admin\Purchasing\PurchaseRequestHeaderController@getIndex')->name('datatables.purchase_requests');

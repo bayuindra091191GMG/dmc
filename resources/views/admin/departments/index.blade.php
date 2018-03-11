@@ -51,12 +51,12 @@
                 serverSide: true,
                 ajax: '{!! route('datatables.departments') !!}',
                 columns: [
-                    { data: 'DT_Row_Index', orderable: false, searchable: false},
-                    { data: 'code', name: 'code' },
+                    { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
+                    { data: 'code', name: 'code', class: 'text-center'},
                     { data: 'name', name: 'name' },
                     { data: 'created_by', name: 'created_by' },
                     { data: 'created_at', name: 'created_at' },
-                    { data: 'action', name:'action' }
+                    { data: 'action', name:'action', orderable: false, searchable: false, class: 'text-center'}
                 ],
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
 
 class MachineryTypeController extends Controller
@@ -46,9 +47,12 @@ class MachineryTypeController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'code'          => 'required|max:30|regex:/^\S*$/u|unique:machinery_types',
             'name'          => 'required|max:45',
-            'code'          => 'max:45',
             'description'   => 'max:200'
+        ],[
+            'code.unique'   => 'Kode tipe alat berat telah terpakai!',
+            'code.regex'    => 'Kode tipe alat berat harus tanpa spasi'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
@@ -98,9 +102,17 @@ class MachineryTypeController extends Controller
     public function update(Request $request, MachineryType $machineryType)
     {
         $validator = Validator::make($request->all(), [
+            'code' => [
+                'required',
+                'max:30',
+                'regex:/^\S*$/u',
+                Rule::unique('machinery_types')->ignore($machineryType->id)
+            ],
             'name'          => 'required|max:45',
-            'code'          => 'max:45',
             'description'   => 'max:200'
+        ],[
+            'code.unique'   => 'Kode tipe alat berat telah terpakai!',
+            'code.regex'    => 'Kode tipe alat berat harus tanpa spasi'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
@@ -122,9 +134,18 @@ class MachineryTypeController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try{
+            $machineryType = MachineryType::find($request->input('id'));
+            $machineryType->delete();
+
+            Session::flash('message', 'Berhasil menghapus data tipe alat berat '. $machineryType->name);
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 
     /**

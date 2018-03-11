@@ -17,8 +17,8 @@ class UOMTransformer extends TransformerAbstract
 {
     public function transform(Uom $uom){
 
-        $action =
-            "<a class='btn btn-xs btn-info' href='uoms/".$uom->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+        $action = "<a class='btn btn-xs btn-info' href='uoms/".$uom->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+        $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $uom->id ."' ><i class='fa fa-trash'></i></a>";
 
         return[
             'description'   => $uom->description,
