@@ -196,7 +196,7 @@
 
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a class="btn btn-primary" href="{{ route('admin.delivery_orders') }}"> Batal</a>
+                    <a class="btn btn-danger" href="{{ route('admin.delivery_orders') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>
@@ -234,11 +234,11 @@
                         </div>
                     </form>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success add" data-dismiss="modal">
-                            <span id="" class='glyphicon glyphicon-check'></span> Simpan
-                        </button>
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
                             <span class='glyphicon glyphicon-remove'></span> Batal
+                        </button>
+                        <button type="button" class="btn btn-success add" data-dismiss="modal">
+                            <span id="" class='glyphicon glyphicon-check'></span> Simpan
                         </button>
                     </div>
                 </div>
@@ -277,11 +277,11 @@
                         </div>
                     </form>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary edit" data-dismiss="modal">
-                            <span class='glyphicon glyphicon-check'></span> Simpan
-                        </button>
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
                             <span class='glyphicon glyphicon-remove'></span> Batal
+                        </button>
+                        <button type="button" class="btn btn-primary edit" data-dismiss="modal">
+                            <span class='glyphicon glyphicon-check'></span> Simpan
                         </button>
                     </div>
                 </div>
