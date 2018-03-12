@@ -70,7 +70,8 @@ class PurchaseOrderHeader extends Eloquent
         'total_discount_string',
         'total_payment_string',
         'delivery_fee_string',
-        'date_string'
+        'date_string',
+        'closing_date_string'
     ];
 
 	protected $fillable = [
@@ -85,10 +86,15 @@ class PurchaseOrderHeader extends Eloquent
 		'total_discount',
 		'total_price',
 		'total_payment',
+        'closing_date',
 		'status_id',
 		'created_by',
 		'updated_by'
 	];
+
+    public function getClosingDateStringAttribute(){
+        return Carbon::parse($this->attributes['closing_date'])->format('d M Y');
+    }
 
     public function getDateStringAttribute(){
         return Carbon::parse($this->attributes['created_at'])->format('d M Y');

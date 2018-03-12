@@ -271,6 +271,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('delivery_orders/ubah/{delivery_order}', 'Inventory\DeliveryOrderHeaderController@update')->name('delivery_orders.update');
     Route::get('delivery_orders/tambah', 'Inventory\DeliveryOrderHeaderController@create')->name('delivery_orders.create');
     Route::post('delivery_orders/simpan', 'Inventory\DeliveryOrderHeaderController@store')->name('delivery_orders.store');
+    Route::get('delivery_orders/report', 'Inventory\DeliveryOrderHeaderController@report')->name('delivery_orders.report');
+    Route::post('delivery_orders/download_report', 'Inventory\DeliveryOrderHeaderController@downloadReport')->name('delivery_orders.download-report');
 
     //Delivery Order Details
     Route::post('delivery_order_details/simpan', 'Inventory\DeliveryOrderDetailController@store')->name('delivery_order_details.store');

@@ -193,6 +193,7 @@ class ItemReceiptController extends Controller
 
                 if($poCount == 1){
                     $purchaseOrder->status_id = 4;
+                    $purchaseOrder->closing_date = $now->toDateString();
                     $purchaseOrder->save();
                 }
             }

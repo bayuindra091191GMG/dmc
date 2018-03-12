@@ -7,6 +7,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
@@ -38,6 +39,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  */
 class DeliveryOrderHeader extends Eloquent
 {
+    protected $appends = ['date_string'];
+
 	protected $casts = [
 		'purchase_request_id' => 'int',
 		'from_site_id' => 'int',
@@ -59,6 +62,10 @@ class DeliveryOrderHeader extends Eloquent
 		'created_by',
 		'updated_by'
 	];
+
+    public function getDateStringAttribute(){
+        return Carbon::parse($this->attributes['created_at'])->format('d M Y');
+    }
 
 	public function scopeDateDescending(Builder $query){
         return $query->orderBy('created_at','DESC');

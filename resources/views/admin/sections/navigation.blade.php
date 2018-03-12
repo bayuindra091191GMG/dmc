@@ -434,6 +434,11 @@
                                     Buat Baru
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ route('admin.delivery_orders.report') }}">
+                                    Download Report
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li>

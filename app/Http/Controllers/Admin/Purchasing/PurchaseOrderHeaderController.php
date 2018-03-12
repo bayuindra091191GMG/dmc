@@ -264,7 +264,13 @@ class PurchaseOrderHeaderController extends Controller
             return redirect()->back()->withErrors('Data Tidak Ditemukan!', 'default')->withInput($request->all());
         }
 
-        $pdf = PDF::loadView('documents.purchase_orders.purchase_orders_pdf', ['data' => $data, 'start_date' => Input::get('start_date'), 'finish_date' => Input::get('end_date')])
+        $total = 0;
+        foreach ($data as $item){
+            $total += $item->total_payment;
+        }
+        $totalStr = 'Rp '. number_format($total, 0, ",", ".");
+
+        $pdf = PDF::loadView('documents.purchase_orders.purchase_orders_pdf', ['data' => $data, 'start_date' => Input::get('start_date'), 'finish_date' => Input::get('end_date'), 'total' => $totalStr])
             ->setPaper('a4', 'landscape');
         $now = Carbon::now('Asia/Jakarta');
         $filename = 'PURCHASE_ORDER_REPORT_' . $now->toDateTimeString();

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <title>Purchase Order Report</title>
+ <title>Delivery Order Report</title>
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
@@ -32,21 +32,22 @@
 <body>
 
 <div class="container">
- <h2>Purchase Order Report</h2>
+ <h2>Delivery Order Report</h2>
  <p>Date: {{ $start_date }} - {{ $finish_date }}</p>
-    <p>Total PO : {{ $data->count() }}</p>
+    <p>Total Delivery Order : {{ $data->count() }}</p>
  <table class="table">
   <thead>
   <tr>
        <th>No</th>
        <th>Code</th>
        <th>No PR</th>
-       <th>No Kuotasi</th>
-       <th>Vendor</th>
+       <th>From</th>
+       <th>To</th>
+       <th>Alat Berat</th>
+       <th>Keterangan</th>
        <th>Status</th>
-       <th width="10%">Open Date</th>
-       <th width="10%">Closed Date</th>
-       <th>Total Pembayaran</th>
+       <th width="10%">Date</th>
+       <th width="10%">Dibuat Oleh</th>
   </tr>
   </thead>
   <tbody>
@@ -56,35 +57,28 @@
             <td>{{ $i }}</td>
             <td>{{ $item->code }}</td>
             <td>{{ $item->purchase_request_header->code }}</td>
+            <td>{{ $item->fromSite->name }}</td>
+            <td>{{ $item->toSite->name }}</td>
             <td>
-                @if($item->quotation_id != null)
-                    {{ $item->quotation_header->code }}
+                @if($item->machinery_id != null)
+                    {{ $item->machinery->code }}
                 @else
                     -
                 @endif
             </td>
-            <td>{{ $item->supplier->name }}</td>
+            <td>
+                @if($item->remark != null)
+                    {{ $item->remark }}
+                @else
+                    -
+                @endif
+            </td>
             <td>{{ $item->status->description }}</td>
             <td>{{ $item->date_string }}</td>
-            <td>
-                @if($item->closing_date != null)
-                    {{ $item->closing_date_string }}
-                @else
-                    -
-                @endif
-            </td>
-            <td>{{ $item->total_payment_string }}</td>
+            <td>{{ $item->createdBy->name }}</td>
         </tr>
         @php($i++)
     @endforeach
-    <tr>
-        <td colspan="8" align="right">
-            <b>Total</b>
-        </td>
-        <td>
-            {{ $total }}
-        </td>
-    </tr>
   </tbody>
  </table>
 </div>

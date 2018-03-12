@@ -19,9 +19,11 @@ use App\Models\Site;
 use App\Transformer\Inventory\DeliveryOrderHeaderTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
+use PDF;
 
 class DeliveryOrderHeaderController extends Controller
 {
@@ -219,6 +221,37 @@ class DeliveryOrderHeaderController extends Controller
         Session::flash('message', 'Berhasil ubah Surat Jalan!');
 
         return redirect()->route('admin.delivery_orders.show', ['delivery_order' => $delivery_order]);
+    }
+
+    public function report(){
+        return View('admin.inventory.delivery_orders.report');
+    }
+
+    public function downloadReport(Request $request) {
+        //Get Data First
+        $tempStart = strtotime(Input::get('start_date'));
+        $start = date('Y-m-d', $tempStart);
+        $tempEnd = strtotime(Input::get('end_date'));
+        $end = date('Y-m-d', $tempEnd);
+
+        //Check date
+        if($start > $end){
+            return redirect()->back()->withErrors('Start Date Tidak boleh lebih besar dari Finish Date!', 'default')->withInput($request->all());
+        }
+
+        $data = DeliveryOrderHeader::whereBetween('created_at', array($start, $end))->get();
+
+        //Check Data
+        if($data == null || $data->count() == 0){
+            return redirect()->back()->withErrors('Data Tidak Ditemukan!', 'default')->withInput($request->all());
+        }
+
+        $pdf = PDF::loadView('documents.delivery_orders.delivery_orders_pdf', ['data' => $data, 'start_date' => Input::get('start_date'), 'finish_date' => Input::get('end_date')])
+            ->setPaper('a4', 'landscape');
+        $now = Carbon::now('Asia/Jakarta');
+        $filename = 'DELIVERY_ORDER_REPORT_' . $now->toDateTimeString();
+
+        return $pdf->download($filename.'.pdf');
     }
 
     public function getIndex(){
