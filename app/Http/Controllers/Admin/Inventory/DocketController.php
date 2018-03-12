@@ -356,7 +356,7 @@ class DocketController extends Controller
         $pdf = PDF::loadView('documents.issued_dockets.issued_docket_pdf', ['data' => $data, 'start_date' => Input::get('start_date'), 'finish_date' => Input::get('end_date')])
             ->setPaper('a4', 'landscape');
         $now = Carbon::now('Asia/Jakarta');
-        $filename = 'ISSUED_DOCKET_REPORT' . $now->toDateTimeString();
+        $filename = 'ISSUED_DOCKET_REPORT_' . $now->toDateTimeString();
 
         return $pdf->download($filename.'.pdf');
     }

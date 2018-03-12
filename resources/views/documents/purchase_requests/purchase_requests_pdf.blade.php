@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <title>Issued Docket Report</title>
+ <title>Purchase Request Report</title>
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
@@ -32,18 +32,21 @@
 <body>
 
 <div class="container">
- <h2>Issued Docket Report</h2>
+ <h2>Purchase Request Report</h2>
  <p>Date: {{ $start_date }} - {{ $finish_date }}</p>
+    <p>Total PR : {{ $data->count() }}</p>
  <table class="table">
   <thead>
   <tr>
        <th>No</th>
        <th>Code</th>
-       <th>Date</th>
-       <th>PR Code</th>
+       <th width="15%">Date</th>
+       <th>Alat Berat</th>
        <th>Department</th>
-       <th>Division</th>
-       <th>Dibuat Oleh</th>
+       <th>SN Chasis</th>
+       <th>SN Engine</th>
+       <th>Status</th>
+       <th width="15%">Dibuat Oleh</th>
   </tr>
   </thead>
   <tbody>
@@ -53,9 +56,11 @@
             <td>{{ $i }}</td>
             <td>{{ $item->code }}</td>
             <td>{{ $item->date_string }}</td>
-            <td>{{ $item->purchase_request_header->code }}</td>
+            <td>{{ $item->machinery->code }}</td>
             <td>{{ $item->department->name }}</td>
-            <td>{{ $item->division }}</td>
+            <td>{{ $item->sn_chasis }}</td>
+            <td>{{ $item->sn_engine }}</td>
+            <td>{{ $item->status->description }}</td>
             <td>{{ $item->createdBy->name }}</td>
         </tr>
         @php($i++)

@@ -372,6 +372,11 @@
                                     Buat Baru
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ route('admin.purchase_requests.report') }}">
+                                    Download Report
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li>
@@ -400,6 +405,11 @@
                             <li>
                                 <a href="{{ route('admin.purchase_orders.create') }}">
                                     Buat Baru
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.purchase_orders.report') }}">
+                                    Download Report
                                 </a>
                             </li>
                         </ul>

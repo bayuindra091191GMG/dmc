@@ -7,6 +7,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Reliese\Database\Eloquent\Model as Eloquent;
@@ -68,7 +69,8 @@ class PurchaseOrderHeader extends Eloquent
         'total_price_string',
         'total_discount_string',
         'total_payment_string',
-        'delivery_fee_string'
+        'delivery_fee_string',
+        'date_string'
     ];
 
 	protected $fillable = [
@@ -87,6 +89,10 @@ class PurchaseOrderHeader extends Eloquent
 		'created_by',
 		'updated_by'
 	];
+
+    public function getDateStringAttribute(){
+        return Carbon::parse($this->attributes['created_at'])->format('d M Y');
+    }
 
     public function getTotalPriceStringAttribute(){
         return 'Rp '. number_format($this->attributes['total_price'], 0, ",", ".");

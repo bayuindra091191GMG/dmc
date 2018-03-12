@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
+use PDF;
 
 class PurchaseOrderHeaderController extends Controller
 {
@@ -238,6 +239,37 @@ class PurchaseOrderHeaderController extends Controller
         Session::flash('message', 'Berhasil ubah purchase order!');
 
         return redirect()->route('admin.purchase_orders.edit', ['purchase_order' => $purchase_order]);
+    }
+
+    public function report(){
+        return View('admin.purchasing.purchase_orders.report');
+    }
+
+    public function downloadReport(Request $request) {
+        //Get Data First
+        $tempStart = strtotime(Input::get('start_date'));
+        $start = date('Y-m-d', $tempStart);
+        $tempEnd = strtotime(Input::get('end_date'));
+        $end = date('Y-m-d', $tempEnd);
+
+        //Check date
+        if($start > $end){
+            return redirect()->back()->withErrors('Start Date Tidak boleh lebih besar dari Finish Date!', 'default')->withInput($request->all());
+        }
+
+        $data = PurchaseOrderHeader::whereBetween('created_at', array($start, $end))->get();
+
+        //Check Data
+        if($data == null || $data->count() == 0){
+            return redirect()->back()->withErrors('Data Tidak Ditemukan!', 'default')->withInput($request->all());
+        }
+
+        $pdf = PDF::loadView('documents.purchase_orders.purchase_orders_pdf', ['data' => $data, 'start_date' => Input::get('start_date'), 'finish_date' => Input::get('end_date')])
+            ->setPaper('a4', 'landscape');
+        $now = Carbon::now('Asia/Jakarta');
+        $filename = 'PURCHASE_ORDER_REPORT_' . $now->toDateTimeString();
+
+        return $pdf->download($filename.'.pdf');
     }
 
     public function getIndex(){

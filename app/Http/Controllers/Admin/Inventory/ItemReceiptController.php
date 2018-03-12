@@ -287,7 +287,7 @@ class ItemReceiptController extends Controller
         $pdf = PDF::loadView('documents.item_receipts.item_receipts_pdf', ['data' => $data, 'start_date' => Input::get('start_date'), 'finish_date' => Input::get('end_date')])
             ->setPaper('a4', 'landscape');
         $now = Carbon::now('Asia/Jakarta');
-        $filename = 'ITEM_RECEIPT_REPORT' . $now->toDateTimeString();
+        $filename = 'ITEM_RECEIPT_REPORT_' . $now->toDateTimeString();
 
         return $pdf->download($filename.'.pdf');
     }

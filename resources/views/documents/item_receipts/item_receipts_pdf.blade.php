@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <title>Bootstrap Example</title>
+ <title>Good Receipt Report</title>
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
@@ -32,7 +32,7 @@
 <body>
 
 <div class="container">
- <h2>Issued Docket Report</h2>
+ <h2>Good Receipt Report</h2>
  <p>Date: {{ $start_date }} - {{ $finish_date }}</p>
  <table class="table">
   <thead>

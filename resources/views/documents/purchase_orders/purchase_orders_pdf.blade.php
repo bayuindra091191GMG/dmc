@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <title>Issued Docket Report</title>
+ <title>Purchase Order Report</title>
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
@@ -32,18 +32,21 @@
 <body>
 
 <div class="container">
- <h2>Issued Docket Report</h2>
+ <h2>Purchase Order Report</h2>
  <p>Date: {{ $start_date }} - {{ $finish_date }}</p>
+    <p>Total PO : {{ $data->count() }}</p>
  <table class="table">
   <thead>
   <tr>
        <th>No</th>
        <th>Code</th>
-       <th>Date</th>
        <th>PR Code</th>
-       <th>Department</th>
-       <th>Division</th>
-       <th>Dibuat Oleh</th>
+       <th>Quotation Code</th>
+       <th>Supplier</th>
+       <th>Total Payment</th>
+       <th>Status</th>
+       <th width="10%">Date</th>
+       <th width="10%">Dibuat Oleh</th>
   </tr>
   </thead>
   <tbody>
@@ -52,10 +55,18 @@
         <tr>
             <td>{{ $i }}</td>
             <td>{{ $item->code }}</td>
-            <td>{{ $item->date_string }}</td>
             <td>{{ $item->purchase_request_header->code }}</td>
-            <td>{{ $item->department->name }}</td>
-            <td>{{ $item->division }}</td>
+            <td>
+                @if($item->quotation_id != null)
+                    {{ $item->quotation_header->code }}
+                @else
+                    -
+                @endif
+            </td>
+            <td>{{ $item->supplier->name }}</td>
+            <td>{{ $item->total_payment_string }}</td>
+            <td>{{ $item->status->description }}</td>
+            <td>{{ $item->date_string }}</td>
             <td>{{ $item->createdBy->name }}</td>
         </tr>
         @php($i++)
