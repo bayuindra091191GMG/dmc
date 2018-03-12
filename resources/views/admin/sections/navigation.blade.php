@@ -32,6 +32,12 @@
                             {{ __('views.backend.section.navigation.menu_0_1') }}
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('admin.settings.preference') }}">
+                            <i class="fa fa-home"></i>
+                            Preferensi Perusahaan
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="menu_section">

@@ -333,6 +333,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('interchanges', 'Inventory\InterchangeController@index')->name('interchanges');
     Route::get('interchanges/tambah', 'Inventory\InterchangeController@create')->name('interchanges.create');
     Route::post('interchanges/simpan', 'Inventory\InterchangeController@store')->name('interchanges.store');
+
+    //Settings
+    Route::get('settings/ubah', 'Setting\SettingController@edit')->name('settings.edit');
+    Route::put('settings/ubah/{id}', 'Setting\SettingController@update')->name('settings.update');
+    Route::get('settings/perusahaan/ubah', 'Setting\SettingController@preference')->name('settings.preference');
+    Route::put('settings/perusahaan/ubah/{preference}', 'Setting\SettingController@preferenceUpdate')->name('settings.preference-update');
 });
 
 

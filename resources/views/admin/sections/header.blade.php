@@ -14,6 +14,11 @@
                     </a>
                     <ul class="dropdown-menu dropdown-usermenu pull-right">
                         <li>
+                            <a href="{{ route('admin.settings.edit') }}">
+                                Setting
+                            </a>
+                        </li>
+                        <li>
                             <a href="{{ route('logout') }}">
                                 <i class="fa fa-sign-out pull-right"></i> {{ __('views.backend.section.header.menu_0') }}
                             </a>
