@@ -13,6 +13,8 @@ use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
 use App\Models\DeliveryOrderDetail;
 use App\Models\DeliveryOrderHeader;
+use App\Models\Item;
+use App\Models\ItemStock;
 use App\Models\NumberingSystem;
 use App\Models\PurchaseRequestHeader;
 use App\Models\Site;
@@ -62,7 +64,7 @@ class DeliveryOrderHeaderController extends Controller
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
             'code'           => 'max:30|regex:/^\S*$/u|unique:delivery_order_headers',
-            'remark'         => 'max:150',
+            'remark_header'  => 'max:150',
         ],[
             'code.regex'     => 'Nomor Surat Jalan harus tanpa spasi'
         ]);
@@ -131,6 +133,26 @@ class DeliveryOrderHeaderController extends Controller
             return redirect()->back()->withErrors('Detail barang dan jumlah wajib diisi!', 'default')->withInput($request->all());
         }
 
+        $valid = true;
+        // Validate stock
+        $site = Site::find($request->input('from_site'));
+        $i = 0;
+        foreach($items as $item){
+            if(!empty($item)){
+                $valid = ItemStock::where('warehouse_id', $site->warehouse_id)
+                    ->where('item_id', $item)
+                    ->where('stock', '>', $qtys[$i])
+                    ->exists();
+            }
+            $i++;
+        }
+
+        if(!$valid){
+            return redirect()->back()->withErrors('Stok barang kosong atau tidak ada!', 'default')->withInput($request->all());
+        }
+
+        dd($valid);
+
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
@@ -139,6 +161,7 @@ class DeliveryOrderHeaderController extends Controller
             'purchase_request_id'   => $prId,
             'from_site_id'          => $request->input('from_site'),
             'to_site_id'            => $request->input('to_site'),
+            'remark'                => $request->input('remark_header'),
             'status_id'             => 3,
             'created_by'            => $user->id,
             'created_at'            => $now->toDateTimeString(),
@@ -176,6 +199,35 @@ class DeliveryOrderHeaderController extends Controller
                 if(!empty($remarks[$idx])) {
                     $doDetail->remark = $remarks[$idx];
                     $doDetail->save();
+                }
+
+                // Change stock
+                $stock = ItemStock::where('warehouse_id', $site->warehouse_id)
+                    ->where('item_id', $item)
+                    ->where('stock', '>', $qtys[$idx])
+                    ->first();
+                $stock->stock -= intval($qtys[$idx]);
+                $stock->save();
+
+                // Entry to Transport Warehouse
+                $transportStock = ItemStock::where('warehouse_id', 0)
+                    ->where('item_id', $item)
+                    ->first();
+                if(!empty($transportStock)){
+                    $transportStock->stock += intval($qtys[$idx]);
+                    $transportStock->updated_by = $user->id;
+                    $transportStock->updated_at = $now->toDateTimeString();
+                    $transportStock->save();
+                }
+                else{
+                    $newTransportStock = ItemStock::create([
+                        'item_id'       => $item,
+                        'warehouse_id'  => 0,
+                        'stock'         => $qtys[$idx],
+                        'created_by'    => $user->id,
+                        'created_at'    => $now->toDateTimeString(),
+                        'updated_by'    => $user->id
+                    ]);
                 }
             }
             $idx++;

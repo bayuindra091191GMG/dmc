@@ -48,11 +48,52 @@
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="location" >
                     Lokasi
-                    <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="location" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('location')) parsley-error @endif"
-                           name="location" value="{{ old('description') }}" required>
+                           name="location" value="{{ old('location') }}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone" >
+                    Nomor Telpon
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="phone" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('phone')) parsley-error @endif"
+                           name="phone" value="{{ old('phone') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pic" >
+                    PIC
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="pic" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('pic')) parsley-error @endif"
+                           name="pic" value="{{ old('pic') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="warehouse_code" >
+                    Kode Gudang
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="warehouse_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('warehouse_code')) parsley-error @endif"
+                           name="warehouse_code" value="{{ old('warehouse_code') }}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="warehouse_name" >
+                    Nama Gudang
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="warehouse_name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('warehouse_name')) parsley-error @endif"
+                           name="warehouse_name" value="{{ old('warehouse_name') }}" required>
                 </div>
             </div>
 

@@ -15,14 +15,20 @@ use League\Fractal\TransformerAbstract;
 class SiteTransformer extends TransformerAbstract
 {
     public function transform(Site $site){
+
+
         $action = "<a class='btn btn-xs btn-info' href='sites/".$site->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
         $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $site->id ."' ><i class='fa fa-trash'></i></a>";
 
         return[
-            'code'          => $site->code,
-            'name'          => $site->name,
-            'location'      => $site->location,
-            'action'        => $action
+            'code'              => $site->code,
+            'name'              => $site->name,
+            'location'          => $site->location ?? '-',
+            'phone'             => $site->phone ?? '-',
+            'pic'               => $site->pic ?? '-',
+            'warehouse_code'    => $site->warehouse->code,
+            'warehouse_name'    => $site->warehouse->name,
+            'action'            => $action
         ];
     }
 }

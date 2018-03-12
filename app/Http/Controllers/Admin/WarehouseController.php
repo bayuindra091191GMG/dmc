@@ -149,10 +149,11 @@ class WarehouseController extends Controller
      * Process datatables ajax request.
      *
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function getIndex()
     {
-        $warehouses= Warehouse::all();
+        $warehouses= Warehouse::where('id', '>', 0)->get();
         return DataTables::of($warehouses)
             ->setTransformer(new WarehouseTransformer)
             ->addIndexColumn()

@@ -12,6 +12,7 @@ class VerifyCsrfToken extends BaseVerifier
      * @var array
      */
     protected $except = [
-        'datatables-suppliers'
+        'datatables-suppliers',
+        'datatables-sites'
     ];
 }

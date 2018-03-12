@@ -19,10 +19,14 @@
             <thead>
                 <tr>
                     <th class="text-center" style="width: 10%;">No</th>
-                    <th class="text-center" style="width: 25%;">Kode</th>
-                    <th class="text-center" style="width: 25%;">Nama</th>
-                    <th class="text-center" style="width: 25%;">Lokasi</th>
-                    <th class="text-center" style="width: 10%;">Tindakan</th>
+                    <th class="text-center" style="width: 10%;">Kode</th>
+                    <th class="text-center" style="width: 15%;">Nama</th>
+                    <th class="text-center" style="width: 10%;">Lokasi</th>
+                    <th class="text-center" style="width: 10%;">Telpon</th>
+                    <th class="text-center" style="width: 10%;">PIC</th>
+                    <th class="text-center" style="width: 10%;">Kode Gudang</th>
+                    <th class="text-center" style="width: 10%;">Nama Gudang</th>
+                    <th class="text-center" style="width: 15%;">Tindakan</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,8 +56,12 @@
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
                     { data: 'code', name: 'code', class: 'text-center'},
-                    { data: 'name', name: 'name' },
-                    { data: 'location', name: 'location' },
+                    { data: 'name', name: 'name', class: 'text-center'},
+                    { data: 'location', name: 'location', class: 'text-center'},
+                    { data: 'phone', name: 'phone', class: 'text-center'},
+                    { data: 'pic', name: 'pic', class: 'text-center'},
+                    { data: 'warehouse_code', name: 'warehouse_code', class: 'text-center'},
+                    { data: 'warehouse_name', name: 'warehouse_name', class: 'text-center'},
                     { data: 'action', name:'action', orderable: false, searchable: false, class: 'text-center'}
                 ],
                 language: {

@@ -106,11 +106,11 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="remark" >
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="remark_header" >
                     Keterangan
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <textarea id="remark" name="remark" rows="5" class="form-control col-md-7 col-xs-12 @if($errors->has('remark')) parsley-error @endif" style="resize: vertical">{{ old('remark') }}</textarea>
+                    <textarea id="remark_header" name="remark_header" rows="5" style="resize: vertical;" class="form-control col-md-7 col-xs-12">{{ old('remark_header') }}</textarea>
                 </div>
             </div>
 

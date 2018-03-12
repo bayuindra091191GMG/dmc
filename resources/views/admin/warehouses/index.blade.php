@@ -6,12 +6,12 @@
 
     <div class="row">
         @include('partials._success')
-        <div class="nav navbar-right">
-            <a href="{{ route('admin.warehouses.create') }}" class="btn btn-app">
-                <i class="fa fa-plus"></i> Tambah
-            </a>
-        </div>
-        <div class="clearfix"></div>
+        {{--<div class="nav navbar-right">--}}
+            {{--<a href="{{ route('admin.warehouses.create') }}" class="btn btn-app">--}}
+                {{--<i class="fa fa-plus"></i> Tambah--}}
+            {{--</a>--}}
+        {{--</div>--}}
+        {{--<div class="clearfix"></div>--}}
     </div>
     <div class="row">
         <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
@@ -21,12 +21,6 @@
                 <th class="text-center">No</th>
                 <th class="text-center">Kode</th>
                 <th class="text-center">Nama</th>
-                <th class="text-center">Lokasi</th>
-                <th class="text-center">Nomor Telepon</th>
-                <th class="text-center">Dibuat Oleh</th>
-                <th class="text-center">Tanggal Dibuat</th>
-                <th class="text-center">Diubah Oleh</th>
-                <th class="text-center">Tanggal Diubah</th>
                 <th class="text-center">Tindakan</th>
             </tr>
             </thead>
@@ -58,12 +52,6 @@
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
                     { data: 'code', name: 'code', class: 'text-center'},
                     { data: 'name', name: 'name', class: 'text-center'},
-                    { data: 'location', name: 'location', class: 'text-center'},
-                    { data: 'phone', name: 'phone', class: 'text-center'},
-                    { data: 'created_by', name: 'created_by', class: 'text-center'},
-                    { data: 'created_at', name: 'created_at', class: 'text-center'},
-                    { data: 'updated_by', name: 'updated_by', class: 'text-center'},
-                    { data: 'updated_at', name: 'updated_at', class: 'text-center'},
                     { data: 'action', name:'action', orderable: false, searchable: false, class: 'text-center'}
                 ],
                 language: {

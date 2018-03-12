@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Fri, 23 Feb 2018 11:32:57 +0700.
+ * Date: Mon, 12 Mar 2018 15:14:13 +0700.
  */
 
 namespace App\Models;
@@ -15,46 +15,23 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $id
  * @property string $code
  * @property string $name
- * @property string $location
- * @property string $phone
- * @property int $created_by
- * @property \Carbon\Carbon $created_at
- * @property int $updated_by
- * @property \Carbon\Carbon $updated_at
  * 
- * @property \App\Models\Auth\User\User $user
  * @property \Illuminate\Database\Eloquent\Collection $item_mutations
  * @property \Illuminate\Database\Eloquent\Collection $item_stocks
  * @property \Illuminate\Database\Eloquent\Collection $items
  * @property \Illuminate\Database\Eloquent\Collection $serials
+ * @property \Illuminate\Database\Eloquent\Collection $sites
  *
  * @package App\Models
  */
 class Warehouse extends Eloquent
 {
-	protected $casts = [
-		'created_by' => 'int',
-		'updated_by' => 'int'
-	];
+	public $timestamps = false;
 
 	protected $fillable = [
 		'code',
-		'name',
-		'location',
-		'phone',
-		'created_by',
-		'updated_by'
+		'name'
 	];
-
-    public function createdBy()
-    {
-        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
-    }
-
-    public function updatedBy()
-    {
-        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
-    }
 
 	public function item_mutations()
 	{
@@ -74,5 +51,10 @@ class Warehouse extends Eloquent
 	public function serials()
 	{
 		return $this->hasMany(\App\Models\Serial::class);
+	}
+
+	public function sites()
+	{
+		return $this->hasMany(\App\Models\Site::class);
 	}
 }

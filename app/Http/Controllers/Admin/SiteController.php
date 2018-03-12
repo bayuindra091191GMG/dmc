@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Site;
+use App\Models\Warehouse;
 use App\Transformer\MasterData\SiteTransformer;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\Rule;
@@ -56,20 +58,40 @@ class SiteController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'code'      => 'required|max:30|regex:/^\S*$/u|unique:sites',
-            'name'      => 'required',
-            'location'  => 'required'
+            'code'              => 'required|max:30|regex:/^\S*$/u|unique:sites',
+            'name'              => 'required|max:45',
+            'location'          => 'max:30',
+            'phone'             => 'max:20',
+            'pic'               => 'max:45',
+            'warehouse_code'    => 'required|max:30|regex:/^\S*$/u|unique:warehouses,code',
+            'warehouse_name'    => 'required|max:45',
         ],[
-            'code.unique'   => 'Kode site telah terpakai!',
-            'code.regex'    => 'Kode site harus tanpa spasi'
+            'code.unique'           => 'Kode site telah terpakai!',
+            'code.regex'            => 'Kode site harus tanpa spasi',
+            'warehouse_code.unique' => 'Kode gudang telah terpakai',
+            'warehouse_code.regex'  => 'Kode gudang harus tanpa spasi'
         ]);
 
-        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
+        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
+
+        $warehouse = Warehouse::create([
+            'code'      => $request->input('warehouse_code'),
+            'name'      => $request->input('warehouse_name')
+        ]);
+
+        $user = \Auth::user();
+        $now = Carbon::now('Asia/Jakarta');
 
         Site::create([
-            'name'      => $request->input('name'),
-            'code'      => $request->input('code'),
-            'location'  => $request->input('location')
+            'name'          => $request->input('name'),
+            'code'          => $request->input('code'),
+            'location'      => $request->input('location'),
+            'phone'         => $request->input('phone'),
+            'pic'           => $request->input('pic'),
+            'warehouse_id'  => $warehouse->id,
+            'created_by'    => $user->id,
+            'created_at'    => $now->toDateTimeString(),
+            'updated_by'    => $user->id,
         ]);
 
         Session::flash('message', 'Berhasil membuat site baru!');
@@ -116,20 +138,40 @@ class SiteController extends Controller
                 'regex:/^\S*$/u',
                 Rule::unique('sites')->ignore($site->id)
             ],
-            'name'      => 'required',
-            'location'  => 'required'
+            'name'              => 'required|max:45',
+            'location'          => 'max:30',
+            'phone'             => 'max:20',
+            'pic'               => 'max:45',
+            'warehouse_code'    => [
+                'required',
+                'max:30',
+                'regex:/^\S*$/u',
+                Rule::unique('warehouses','code')->ignore($site->warehouse->id)
+            ],
+            'warehouse_name'    => 'required|max:45',
         ],[
-            'code.unique'   => 'Kode site telah terpakai!',
-            'code.regex'    => 'Kode site harus tanpa spasi'
+            'code.unique'           => 'Kode site telah terpakai!',
+            'code.regex'            => 'Kode site harus tanpa spasi',
+            'warehouse_code.unique' => 'Kode gudang telah terpakai',
+            'warehouse_code.regex'  => 'Kode gudang harus tanpa spasi'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
+        // Update site
         $site->name = $request->input('name');
         $site->code = $request->input('code');
         $site->location = $request->input('location');
+        $site->phone = $request->input('phone');
+        $site->pic = $request->input('pic');
 
         $site->save();
+
+        // Update warehouse
+        $warehouse = Warehouse::find($site->warehouse_id);
+        $warehouse->code = $request->input('warehouse_code');
+        $warehouse->name = $request->input('warehouse_name');
+        $warehouse->save();
 
         Session::flash('message', 'Sukses mengubah data site!');
 
