@@ -37,18 +37,32 @@
             <div class="menu_section">
                 <h3>{{ __('views.backend.section.navigation.sub_header_1') }}</h3>
                 <ul class="nav side-menu">
-                    <li>
-                        <a href="{{ route('admin.users') }}">
-                            <i class="fa fa-users" aria-hidden="true"></i>
-                            {{ __('views.backend.section.navigation.menu_1_1') }}
-                        </a>
-                    </li>
+                    {{--<li>--}}
+                        {{--<a href="{{ route('admin.users') }}">--}}
+                            {{--<i class="fa fa-users" aria-hidden="true"></i>--}}
+                            {{--{{ __('views.backend.section.navigation.menu_1_1') }}--}}
+                        {{--</a>--}}
+                    {{--</li>--}}
                     {{--<li>--}}
                         {{--<a href="{{ route('admin.permissions') }}">--}}
                             {{--<i class="fa fa-key" aria-hidden="true"></i>--}}
                             {{--{{ __('views.backend.section.navigation.menu_1_2') }}--}}
                         {{--</a>--}}
                     {{--</li>--}}
+                    <li><a>User<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="sub_menu">
+                                <a href="{{ route('admin.users') }}">
+                                    Daftar User
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.users.create') }}">
+                                    Tambah User
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     <li><a>Barang<span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li class="sub_menu">

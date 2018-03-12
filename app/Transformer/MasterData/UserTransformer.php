@@ -22,7 +22,12 @@ class UserTransformer extends TransformerAbstract
         $action = "<a class='btn btn-xs btn-info' href='users/".$user->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
         return[
-            'email'         => $user->name,
+            'code'          => $user->employee->code,
+            'email'         => $user->email,
+            'name'          => $user->employee->name,
+            'phone'         => $user->employee->phone ?? '-',
+            'department'    => $user->employee->department->name,
+            'site'          => $user->employee->site->name,
             'role'          => $user->roles->pluck('name')->implode(','),
             'status'        => $user->status->description,
             'created_at'    => $createdDate,

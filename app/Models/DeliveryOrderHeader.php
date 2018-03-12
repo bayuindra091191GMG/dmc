@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Fri, 02 Mar 2018 16:09:30 +0700.
+ * Date: Mon, 12 Mar 2018 14:39:06 +0700.
  */
 
 namespace App\Models;
@@ -21,6 +21,10 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $to_site_id
  * @property int $machinery_id
  * @property string $remark
+ * @property int $confirm_by
+ * @property \Carbon\Carbon $confirm_date
+ * @property int $cancel_by
+ * @property \Carbon\Carbon $cancel_date
  * @property int $status_id
  * @property int $created_by
  * @property \Carbon\Carbon $created_at
@@ -31,7 +35,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\PurchaseRequestHeader $purchase_request_header
  * @property \App\Models\Site $site
  * @property \App\Models\Status $status
- * @property \App\Models\Auth\User\User $user
+ * @property \App\Models\User $user
  * @property \Illuminate\Database\Eloquent\Collection $delivery_order_details
  * @property \Illuminate\Database\Eloquent\Collection $item_receipt_headers
  *
@@ -39,16 +43,21 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  */
 class DeliveryOrderHeader extends Eloquent
 {
-    protected $appends = ['date_string'];
-
 	protected $casts = [
 		'purchase_request_id' => 'int',
 		'from_site_id' => 'int',
 		'to_site_id' => 'int',
 		'machinery_id' => 'int',
+		'confirm_by' => 'int',
+		'cancel_by' => 'int',
 		'status_id' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
+	];
+
+	protected $dates = [
+		'confirm_date',
+		'cancel_date'
 	];
 
 	protected $fillable = [
@@ -58,6 +67,10 @@ class DeliveryOrderHeader extends Eloquent
 		'to_site_id',
 		'machinery_id',
 		'remark',
+		'confirm_by',
+		'confirm_date',
+		'cancel_by',
+		'cancel_date',
 		'status_id',
 		'created_by',
 		'updated_by'
@@ -67,7 +80,7 @@ class DeliveryOrderHeader extends Eloquent
         return Carbon::parse($this->attributes['created_at'])->format('d M Y');
     }
 
-	public function scopeDateDescending(Builder $query){
+    public function scopeDateDescending(Builder $query){
         return $query->orderBy('created_at','DESC');
     }
 
@@ -81,10 +94,10 @@ class DeliveryOrderHeader extends Eloquent
 		return $this->belongsTo(\App\Models\PurchaseRequestHeader::class, 'purchase_request_id');
 	}
 
-	public function toSite()
-	{
-		return $this->belongsTo(\App\Models\Site::class, 'to_site_id');
-	}
+    public function toSite()
+    {
+        return $this->belongsTo(\App\Models\Site::class, 'to_site_id');
+    }
 
     public function fromSite()
     {
@@ -94,6 +107,16 @@ class DeliveryOrderHeader extends Eloquent
 	public function status()
 	{
 		return $this->belongsTo(\App\Models\Status::class);
+	}
+
+	public function delivery_order_details()
+	{
+		return $this->hasMany(\App\Models\DeliveryOrderDetail::class, 'header_id');
+	}
+
+	public function item_receipt_headers()
+	{
+		return $this->hasMany(\App\Models\ItemReceiptHeader::class, 'delivery_order_id');
 	}
 
     public function createdBy()
@@ -106,13 +129,13 @@ class DeliveryOrderHeader extends Eloquent
         return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
     }
 
-	public function delivery_order_details()
-	{
-		return $this->hasMany(\App\Models\DeliveryOrderDetail::class, 'header_id');
-	}
+    public function confirmBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'confirm_by');
+    }
 
-	public function item_receipt_headers()
-	{
-		return $this->hasMany(\App\Models\ItemReceiptHeader::class, 'delivery_order_id');
-	}
+    public function cancelBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'cancel_by');
+    }
 }

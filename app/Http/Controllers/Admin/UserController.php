@@ -4,12 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
+use App\Models\Department;
+use App\Models\Employee;
+use App\Models\Site;
 use App\Transformer\MasterData\UserTransformer;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
@@ -31,8 +37,17 @@ class UserController extends Controller
      */
     public function create()
     {
+        $departments = Department::all();
+        $sites = Site::all();
         $roles = Role::all();
-        return View('admin.users.create', compact('roles'));
+
+        $data = [
+          'departments'     => $departments,
+          'sites'           => $sites,
+          'roles'           => $roles
+        ];
+
+        return View('admin.users.create')->with($data);
     }
 
     /**
@@ -44,13 +59,16 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|max:255',
-            'email' => 'required|email|unique:users|max:255'
+            'code'      => 'required|max:30|regex:/^\S*$/u|unique:employees',
+            'name'      => 'required|max:100',
+            'email'     => 'required|email|unique:users|max:100',
+            'phone'     => 'max:20',
+            'address'   => 'max:200'
+        ],[
+            'code.unique'       => 'Kode karyawan telah terpakai!',
+            'code.regex'        => 'Kode karyawan harus tanpa spasi!',
+            'email.unique'      => 'Email telah terdaftar!',
         ]);
-
-//        $validator->sometimes('email', 'unique:users', function ($input) use ($user) {
-//            return strtolower($input->email) != strtolower($user->email);
-//        });
 
         $validator->sometimes('password', 'min:6|confirmed', function ($input) {
             return $input->password;
@@ -58,15 +76,50 @@ class UserController extends Controller
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
+        if($request->input('department') === '-1'){
+            return redirect()->back()->withErrors('Pilih departemen!', 'default')->withInput($request->all());
+        }
+
+        if($request->input('site') === '-1'){
+            return redirect()->back()->withErrors('Pilih site!', 'default')->withInput($request->all());
+        }
+
+        $user = Auth::user();
+        $now = Carbon::now('Asia/Jakarta');
+
+        // Create new employee
+        $employee = Employee::create([
+            'name'          => $request->input('name'),
+            'code'          => $request->input('code'),
+            'email'         => $request->input('email'),
+            'phone'         => $request->input('phone'),
+            'address'       => $request->input('address'),
+            'department_id' => $request->input('department'),
+            'site_id'       => $request->input('site'),
+            'status_id'     => 1,
+            'created_by'    => $user->id,
+            'created_at'    => $now
+        ]);
+
+        if($request->filled('dob')){
+            $dob = Carbon::createFromFormat('d M Y', Input::get('dob'), 'Asia/Jakarta');
+            $employee->date_of_birth = $dob->toDateString();
+            $employee->save();
+        }
+
+        // Create new user
         $user = new User();
-        $user->name = Input::get('name');
-        $user->email = Input::get('email');
-        if(!empty(Input::get('employee'))) $user->employee_id = Input::get('employee');
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->employee_id = $employee->id;
 
         if ($request->has('password')) {
-            $user->password = bcrypt($request->get('password'));
-            $user->save();
+            $user->password = bcrypt($request->input('password'));
         }
+
+        $user->created_by = $user->id;
+        $user->updated_by = $user->id;
+        $user->save();
 
         $user->roles()->attach($request->get('role'));
 
@@ -94,7 +147,22 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('admin.users.edit', ['user' => $user, 'roles' => Role::get()]);
+        $employee = $user->employee;
+        $departments = Department::all();
+        $sites = Site::all();
+        $roles = Role::all();
+        $dob = Carbon::parse($employee->date_of_birth)->format('d M Y');
+
+        $data = [
+            'user'          => $user,
+            'employee'      => $employee,
+            'departments'   => $departments,
+            'sites'         => $sites,
+            'dob'           => $dob,
+            'roles'         => $roles
+        ];
+
+        return view('admin.users.edit')->with($data);
     }
 
     /**
@@ -106,16 +174,22 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255',
-            'active' => 'sometimes|boolean',
-            'confirmed' => 'sometimes|boolean',
-        ]);
+        dd($user->id);
 
-        $validator->sometimes('email', 'unique:users', function ($input) use ($user) {
-            return strtolower($input->email) != strtolower($user->email);
-        });
+        $employeeId = $request->input('employee_id');
+        $validator = Validator::make($request->all(), [
+            'name'      => 'required|max:100',
+            'email' => [
+                'required',
+                'max:100',
+                'email',
+                Rule::unique('users')->ignore($user->id)
+            ],
+            'phone'     => 'max:20',
+            'address'   => 'max:200'
+        ],[
+            'email.unique'      => 'Email telah terdaftar!',
+        ]);
 
         $validator->sometimes('password', 'min:6|confirmed', function ($input) {
             return $input->password;
@@ -123,33 +197,52 @@ class UserController extends Controller
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
-        $user->name = $request->get('name');
-        $user->email = $request->get('email');
-        $user->employee_id = Input::get('employee');
+        // Update employee
+        $user = Auth::user();
+        $now = Carbon::now('Asia/Jakarta');
 
-        if(!empty(Input::get('employee')) && Input::get('employee') !== '-1'){
-            $user->employee_id = Input::get('employee');
+        $employee = Employee::find($employeeId);
+        $employee->name = $request->input('name');
+        $employee->email = $request->input('email');
+        $employee->phone = $request->input('phone');
+        $employee->address = $request->input('address');
+        $employee->department_id = $request->input('department');
+        $employee->site_id = $request->input('site');
+        $employee->status_id = $request->input('status');
+        $employee->updated_by = $user->id;
+        $employee->updated_at = $now;
+
+        if($request->filled('dob')){
+            $dob = Carbon::createFromFormat('d M Y', Input::get('dob'), 'Asia/Jakarta');
+            $employee->date_of_birth = $dob->toDateString();
         }
+
+        $employee->save();
+
+        // Update user
+        $user->name = $request->input('name');
+        if($user->email != $request->input('email')) $user->email = $request->input('email');
 
         if ($request->has('password')) {
-            $user->password = bcrypt($request->get('password'));
+            $user->password = bcrypt($request->input('password'));
         }
 
-        $user->active = $request->get('active', 0);
-        $user->confirmed = $request->get('confirmed', 0);
-
+        $user->created_by = $user->id;
+        $user->updated_by = $user->id;
         $user->save();
 
         //roles
         if ($request->has('role')) {
             $user->roles()->detach();
 
-            if ($request->get('role')) {
+            if ($request->input('role')) {
                 $user->roles()->attach($request->get('role'));
             }
         }
 
-        return redirect()->intended(route('admin.users'));
+        Session::flash('message', 'Berhasil mengubah data user!');
+
+        return redirect()->intended(route('admin.users.edit',['user' => $user]));
     }
 
     /**
@@ -173,24 +266,15 @@ class UserController extends Controller
      */
     public function getIndex()
     {
-        $users = User::all();
-//        return DataTables::of($users)
-//            ->addColumn('roles', function($user){
-//                if($user->roles != null) {
-//                    $name = $user->roles->pluck('name')->implode(',');
-//                    return $name;
-//                }
-//                else{
-//                    return "";
-//                }
-//            })->addColumn('action', function ($user) {
-//            return "<a class='btn btn-xs btn-primary' href='users/".$user->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>".
-//                "<a class='btn btn-xs btn-info' href='users/".$user->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
-//        })->make(true);
-
-        return DataTables::of($users)
-            ->setTransformer(new UserTransformer)
-            ->addIndexColumn()
-            ->make(true);
+        try{
+            $users = User::all();
+            return DataTables::of($users)
+                ->setTransformer(new UserTransformer)
+                ->addIndexColumn()
+                ->make(true);
+        }
+        catch (\Exception $ex){
+            error_log($ex);
+        }
     }
 }

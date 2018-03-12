@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title',__('views.admin.users.edit.title', ['name' => $user->name]) )
+@section('title', 'Ubah data user ', $employee->code )
 
 @section('content')
     <div class="row">
@@ -38,7 +38,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('name')) parsley-error @endif"
-                           name="name" value="{{ old('name') }}" required>
+                           name="name" value="{{ $employee->name }}" required>
                 </div>
             </div>
 
@@ -49,19 +49,19 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="email" type="email" class="form-control col-md-7 col-xs-12 @if($errors->has('email')) parsley-error @endif"
-                           name="email" value="{{ old('name') }}" required>
+                           name="email" value="{{ $user->email }}" required>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="employee">
-                    Sambung ke karyawan
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="employee" name="employee" class="form-control col-md-7 col-xs-12">
-                    </select>
-                </div>
-            </div>
+            {{--<div class="form-group">--}}
+                {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="employee">--}}
+                    {{--Sambung ke karyawan--}}
+                {{--</label>--}}
+                {{--<div class="col-md-6 col-sm-6 col-xs-12">--}}
+                    {{--<select id="employee" name="employee" class="form-control col-md-7 col-xs-12">--}}
+                    {{--</select>--}}
+                {{--</div>--}}
+            {{--</div>--}}
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="password">
@@ -89,13 +89,81 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="role" name="role" class="form-control col-md-7 col-xs-12">
-                        <option value="-1"> - Pilih Role - </option>
                         @foreach($roles as $role)
-                            <option value="{{ $role->id }}">{{ $role->name }}</option>
+                            <option value="{{ $role->id }}" @if($user->roles->pluck('id')[0] == $role->id) @endif>{{ $role->name }}</option>
                         @endforeach
                     </select>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone" >
+                    Nomor Ponsel
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="phone" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('name')) parsley-error @endif"
+                           name="phone" value="{{ $employee->phone }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="department" >
+                    Departemen
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="department" name="department" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">
+                        @foreach($departments as $dep)
+                            <option value="{{ $dep->id }}" {{ $employee->department_id == $dep->id ? "selected":"" }}>{{ $dep->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="site" >
+                    Site
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="site" name="site" class="form-control col-md-7 col-xs-12 @if($errors->has('site')) parsley-error @endif">
+                        @foreach($sites as $site)
+                            <option value="{{ $site->id }}" {{ $employee->site_id == $site->id ? "selected":"" }}>{{ $site->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dob" >
+                    Tanggal Lahir
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="dob" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('dob')) parsley-error @endif"
+                           name="dob" value="{{ $dob }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >
+                    Alamat
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <textarea id="address" name="address" rows="5" class="form-control col-md-7 col-xs-12 @if($errors->has('address')) parsley-error @endif" style="resize: vertical">{{ $employee->address }}</textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status" >
+                    Status
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="status" name="status" class="form-control col-md-7 col-xs-12">
+                        <option value="1" @if($user->status_id == 1) selected @endif>Aktif</option>
+                        <option value="2" @if($user->status_id == 2) selected @endif>Non Aktif</option>
+                    </select>
+                </div>
+            </div>
+
+            <input type="hidden" id="employee_id" name="employee_id" value="{{ $employee->id }}"/>
 
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
@@ -103,6 +171,7 @@
                     <button type="submit" class="btn btn-success">Simpan</button>
                 </div>
             </div>
+
             {{ Form::close() }}
         </div>
     </div>
@@ -111,9 +180,17 @@
 @section('styles')
     @parent
     {{ Html::style(mix('assets/admin/css/users/edit.css')) }}
+    {{ Html::style(mix('assets/admin/css/bootstrap-datetimepicker.css')) }}
 @endsection
 
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/users/edit.js')) }}
+    {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
+
+    <script>
+        $('#dob').datetimepicker({
+            format: "DD MMM Y"
+        });
+    </script>
 @endsection
