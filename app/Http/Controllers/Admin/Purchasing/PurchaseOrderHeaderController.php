@@ -255,7 +255,8 @@ class PurchaseOrderHeaderController extends Controller
 
     public function getPurchaseOrders(Request $request){
         $term = trim($request->q);
-        $purchase_requests = PurchaseOrderHeader::where('code', 'LIKE', '%'. $term. '%')
+        $purchase_requests = PurchaseOrderHeader::where('status_id', 3)
+            ->where('code', 'LIKE', '%'. $term. '%')
             ->get();
 
         $formatted_tags = [];

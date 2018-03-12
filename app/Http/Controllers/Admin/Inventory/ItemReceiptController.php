@@ -167,6 +167,34 @@ class ItemReceiptController extends Controller
                 $itemData = Item::where('id', $item)->first();
                 $itemData->stock = $itemData->stock + $qty[$idx];
                 $itemData->save();
+
+                //Update PO
+                $purchaseOrder = PurchaseOrderHeader::where('id', $purchaseOrderId[$idx])->first();
+                $detail = $purchaseOrder->purchase_order_details->where('item_id', $item)->first();
+                $detail->received_quantity = $detail->received_quantity + $qty[$idx];
+                $detail->save();
+            }
+            $idx++;
+        }
+
+        //Check PO
+        $idx = 0;
+        foreach(Input::get('item') as $item){
+            if(!empty($item)){
+                //Update PO
+                $purchaseOrder = PurchaseOrderHeader::where('id', $purchaseOrderId[$idx])->first();
+                $poCount = 1;
+
+                foreach($purchaseOrder->purchase_order_details as $detail){
+                    if($detail->quantity != $detail->received_quantity){
+                        $poCount = 0;
+                    }
+                }
+
+                if($poCount == 1){
+                    $purchaseOrder->status_id = 4;
+                    $purchaseOrder->save();
+                }
             }
             $idx++;
         }
