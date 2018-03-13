@@ -293,6 +293,17 @@ class ItemReceiptController extends Controller
         return $pdf->download($filename.'.pdf');
     }
 
+    public function download($id){
+        $itemReceipt = ItemReceiptHeader::find($id);
+        $itemReceiptDetails = ItemReceiptDetail::where('header_id', $itemReceipt->id)->get();
+
+        $pdf = PDF::loadView('documents.item_receipts.item_receipts_doc', ['itemReceipt' => $itemReceipt, 'itemReceiptDetails' => $itemReceiptDetails])->setPaper('A4');
+        $now = Carbon::now('Asia/Jakarta');
+        $filename = $itemReceipt->code. '_' . $now->toDateTimeString();
+
+        return $pdf->download($filename.'.pdf');
+    }
+
     public function getIndex(){
         $itemReceipts = ItemReceiptHeader::all();
         return DataTables::of($itemReceipts)

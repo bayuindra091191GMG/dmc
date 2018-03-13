@@ -8,6 +8,7 @@
             <div class="navbar-right">
                 <a class="btn btn-default" href="{{ route('admin.item_receipts.edit',[ 'item_receipt' => $header->id]) }}">UBAH</a>
                 <a class="btn btn-default" href="{{ route('admin.item_receipts.print',[ 'item_receipts' => $header->id]) }}">CETAK</a>
+                <a class="btn btn-default" href="{{ route('admin.item_receipts.download',[ 'item_receipts' => $header->id]) }}">DOWNLOAD</a>
             </div>
         </div>
     </div>

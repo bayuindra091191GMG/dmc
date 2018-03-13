@@ -1176,7 +1176,7 @@
   none'>DISETUJUI</td>
  </tr>
  <tr height=20 style='height:15.0pt'>
-  <td colspan=2 rowspan=4 height=80 class=xl138 style='height:60.0pt'>ARDY</td>
+  <td colspan=2 rowspan=4 height=80 class=xl138 style='height:60.0pt'></td>
   <td class=xl93></td>
   <td class=xl94></td>
   <td class=xl94></td>
@@ -1186,7 +1186,7 @@
   <td class=xl95></td>
   <td class=xl96>&nbsp;</td>
   <td colspan=3 rowspan=4 class=xl139 style='border-right:1.5pt solid black;
-  border-bottom:.5pt solid black'>BUDI RAHMAT</td>
+  border-bottom:.5pt solid black'></td>
  </tr>
  <tr height=20 style='height:15.0pt'>
   <td height=20 class=xl93 style='height:15.0pt'></td>
