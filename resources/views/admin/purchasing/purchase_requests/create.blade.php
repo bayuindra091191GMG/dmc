@@ -106,6 +106,8 @@
                 </div>
             </div>
 
+            <hr/>
+
             <div class="form-group">
                 <div class="col-lg-2 col-md-2 col-xs-0"></div>
                 <div class="col-lg-8 col-md-8 col-xs-12 column">

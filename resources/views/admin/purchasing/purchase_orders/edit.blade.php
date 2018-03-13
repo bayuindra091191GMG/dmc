@@ -74,8 +74,32 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="ppn">
+                    Tambah PPN
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" class="flat" id="ppn" name="ppn" @if(!empty($header->ppn_percent) && $header->ppn_percent > 0) checked @endif>
+                            PPN sekarang: 15%@if(!empty($header->ppn_percent) && $header->ppn_percent > 0), PPN tersimpan: {{ $header->ppn_percent }}% @endif
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pph">
+                    Tambah PPh (%)
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="pph" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('pph')) parsley-error @endif"
+                           name="pph">
+                </div>
+            </div>
+
+            <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a class="btn btn-primary" href="{{ route('admin.purchase_orders') }}"> Batal</a>
+                    <a class="btn btn-danger" href="{{ route('admin.purchase_orders.show', ['purchase_order' => $header->id]) }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>
@@ -84,6 +108,9 @@
 
         </div>
     </div>
+
+    <hr/>
+
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 box-section">
             <h3>Detil Barang</h3>
@@ -411,6 +438,22 @@
         });
 
         // Add autonumeric
+        pphFormat = new AutoNumeric('#pph', {
+            maximumValue: '100',
+            minimumValue: '0',
+            decimalPlaces: 0
+        });
+
+        @if(!empty($header->pph_percent) && $header->pph_percent > 0)
+            pphFormat.clear();
+
+            pphFormat.set('{{ $header->pph_percent }}', {
+                maximumValue: '100',
+                minimumValue: '0',
+                decimalPlaces: 0
+            });
+        @endif
+
         numberFormat = new AutoNumeric('#price_add', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',

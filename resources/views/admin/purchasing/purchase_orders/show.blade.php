@@ -70,6 +70,33 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
+                        Ongkos Kirim
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ !empty($header->delivery_fee) && $header->delivery_fee > 0 ? $header->delivery_fee_string : '-' }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        PPN {{ !empty($header->ppn_percent) && $header->ppn_percent > 0 ? $header->ppn_percent. '%' : '' }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ !empty($header->ppn_percent) && $header->ppn_percent > 0 ? $header->ppn_string : '-' }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        PPh {{ !empty($header->pph_percent) && $header->pph_percent > 0 ? $header->pph_percent. '%' : '' }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ !empty($header->pph_percent) && $header->pph_percent > 0 ? $header->pph_string : '-' }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
                         Total Pembayaran
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
@@ -140,7 +167,7 @@
                                         {{ $detail->subtotal_string }}
                                     </td>
                                     <td>
-                                        {{ $detail->remark ?? '-' }}
+                                        {{ $detail->remark }}
                                     </td>
                                 </tr>
                             @endforeach

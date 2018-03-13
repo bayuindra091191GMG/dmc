@@ -88,6 +88,31 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="ppn">
+                    Tambah PPN
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" class="flat" id="ppn" name="ppn"> PPN sekarang: 10%
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pph">
+                    Tambah PPh (%)
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="pph" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('pph')) parsley-error @endif"
+                           name="pph" value="{{ old('pph') }}">
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="form-group">
                 <label class="col-md-12 col-sm12 col-xs-12 text-center">
                     <b>Detil Barang</b>
                 </label>
@@ -100,7 +125,7 @@
                     </a>
                     <table class="table table-bordered table-hover" id="detail_table">
                         <thead>
-                        <tr >
+                        <tr>
                             <th class="text-center" style="width: 20%">
                                 Nomor Part
                             </th>
@@ -222,11 +247,11 @@
                         </div>
                     </form>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success add" data-dismiss="modal">
-                            <span id="" class='glyphicon glyphicon-check'></span> Batal
-                        </button>
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
-                            <span class='glyphicon glyphicon-remove'></span> Simpan
+                            <span class='glyphicon glyphicon-remove'></span> Batal
+                        </button>
+                        <button type="button" class="btn btn-success add" data-dismiss="modal">
+                            <span id="" class='glyphicon glyphicon-check'></span> Simpan
                         </button>
                     </div>
                 </div>
@@ -277,11 +302,11 @@
                         </div>
                     </form>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary edit" data-dismiss="modal">
-                            <span class='glyphicon glyphicon-check'></span> Batal
-                        </button>
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
-                            <span class='glyphicon glyphicon-remove'></span> Simpan
+                            <span class='glyphicon glyphicon-remove'></span> Batal
+                        </button>
+                        <button type="button" class="btn btn-primary edit" data-dismiss="modal">
+                            <span class='glyphicon glyphicon-check'></span> Simpan
                         </button>
                     </div>
                 </div>
@@ -316,11 +341,11 @@
                         <input type="hidden" name="deleted_id"/>
                     </form>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger delete" data-dismiss="modal">
-                            <span id="" class='glyphicon glyphicon-trash'></span> Batal
-                        </button>
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
-                            <span class='glyphicon glyphicon-remove'></span> Hapus
+                            <span class='glyphicon glyphicon-remove'></span> Batal
+                        </button>
+                        <button type="button" class="btn btn-danger delete" data-dismiss="modal">
+                            <span id="" class='glyphicon glyphicon-trash'></span> Hapus
                         </button>
                     </div>
                 </div>
@@ -435,6 +460,12 @@
         });
 
         // Add autonumeric
+        pphFormat = new AutoNumeric('#pph', {
+            maximumValue: '100',
+            minimumValue: '0',
+            decimalPlaces: 0
+        });
+
         numberFormat = new AutoNumeric('#price_add', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',

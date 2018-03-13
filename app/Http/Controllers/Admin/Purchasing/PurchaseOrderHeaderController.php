@@ -201,8 +201,28 @@ class PurchaseOrderHeaderController extends Controller
         }
 
         if($totalDiscount > 0) $poHeader->total_discount = $totalDiscount;
+        $totalPayment += $delivery;
         $poHeader->total_price = $totalPrice;
-        $poHeader->total_payment = $totalPayment + $delivery;
+
+        // Save total payment without tax
+        $poHeader->total_payment_before_tax = $totalPayment;
+
+        // Get PPN & PPh
+        $ppnAmount = 0;
+        if($request->filled('ppn')){
+            $ppnAmount = $totalPayment * (10 / 100);
+            $poHeader->ppn_percent = 10;
+            $poHeader->ppn_amount = $ppnAmount;
+        }
+        $pphAmount = 0;
+        if($request->filled('pph')){
+            $pph = intval($request->input('pph'));
+            $pphAmount = $totalPayment * ($pph / 100);
+            $poHeader->pph_percent = $pph;
+            $poHeader->pph_amount = $pphAmount;
+        }
+
+        $poHeader->total_payment = $totalPayment + $ppnAmount + $pphAmount;
         $poHeader->save();
 
         Session::flash('message', 'Berhasil membuat purchase order!');
@@ -220,25 +240,51 @@ class PurchaseOrderHeaderController extends Controller
         if(!empty(Input::get('pr_code'))) $purchase_order->purchase_request_id = Input::get('pr_code');
         if(!empty(Input::get('supplier'))) $purchase_order->supplier_id = Input::get('supplier');
 
-        $oldDelivery = 0;
+        $totalPaymentWithoutTax = $purchase_order->total_payment_before_tax;
+
+        $oldDelivery = $purchase_order->delivery_fee ?? 0;
         $newDelivery = 0;
         if(!empty(Input::get('delivery_fee')) && Input::get('delivery_fee') != '0'){
-            $oldDelivery = $purchase_order->delivery_fee;
-
             $deliveryFee = str_replace('.','', Input::get('delivery_fee'));
             $newDelivery = (double) $deliveryFee;
             $purchase_order->delivery_fee = $deliveryFee;
         }
         else{
-            $oldDelivery = $purchase_order->delivery_fee;
             $purchase_order->delivery_fee = null;
         }
-        $purchase_order->total_payment = $purchase_order->total_payment - $oldDelivery + $newDelivery;
+        $totalPayment = $totalPaymentWithoutTax - $oldDelivery + $newDelivery;
+        $purchase_order->total_payment_before_tax = $totalPayment;
+
+        // Get PPN & PPh
+        $ppnAmount = 0;
+        if($request->filled('ppn')){
+            $ppnAmount = $totalPayment * (10 / 100);
+            $purchase_order->ppn_percent = 10;
+            $purchase_order->ppn_amount = $ppnAmount;
+        }
+        else{
+            $purchase_order->ppn_percent = null;
+            $purchase_order->ppn_amount = null;
+        }
+
+        $pphAmount = 0;
+        if($request->filled('pph')){
+            $pph = intval($request->input('pph'));
+            $pphAmount = $totalPayment * ($pph / 100);
+            $purchase_order->pph_percent = $pph;
+            $purchase_order->pph_amount = $pphAmount;
+        }
+        else{
+            $purchase_order->pph_percent = null;
+            $purchase_order->pph_amount = null;
+        }
+
+        $purchase_order->total_payment = $totalPayment + $ppnAmount + $pphAmount;
         $purchase_order->save();
 
         Session::flash('message', 'Berhasil ubah purchase order!');
 
-        return redirect()->route('admin.purchase_orders.edit', ['purchase_order' => $purchase_order]);
+        return redirect()->route('admin.purchase_orders.show', ['purchase_order' => $purchase_order]);
     }
 
     public function report(){

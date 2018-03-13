@@ -2,14 +2,13 @@
 
 /**
  * Created by Reliese Model.
- * Date: Thu, 22 Feb 2018 16:36:17 +0700.
+ * Date: Tue, 13 Mar 2018 10:12:54 +0700.
  */
 
 namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -17,16 +16,19 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property int $id
  * @property string $code
- * @property \Carbon\Carbon $date
  * @property int $purchase_request_id
  * @property int $quotation_id
  * @property int $supplier_id
- * @property float $pph_ps_23
- * @property float $ppn
  * @property float $delivery_fee
- * @property float $total_discount
  * @property float $total_price
+ * @property float $total_discount
+ * @property float $total_payment_before_tax
+ * @property int $pph_percent
+ * @property int $ppn_percent
+ * @property float $pph_amount
+ * @property float $ppn_amount
  * @property float $total_payment
+ * @property \Carbon\Carbon $closing_date
  * @property int $status_id
  * @property int $created_by
  * @property \Carbon\Carbon $created_at
@@ -50,24 +52,25 @@ class PurchaseOrderHeader extends Eloquent
 		'purchase_request_id' => 'int',
 		'quotation_id' => 'int',
 		'supplier_id' => 'int',
-		'pph_ps_23' => 'float',
-		'ppn' => 'float',
 		'delivery_fee' => 'float',
 		'total_discount' => 'float',
 		'total_price' => 'float',
+        'total_payment_before_tax' => 'float',
+		'pph_percent' => 'int',
+		'ppn_percent' => 'int',
+		'pph_amount' => 'float',
+		'ppn_amount' => 'float',
 		'total_payment' => 'float',
 		'status_id' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
 	];
 
-	protected $dates = [
-		'date'
-	];
-
     protected $appends = [
         'total_price_string',
         'total_discount_string',
+        'ppn_string',
+        'pph_string',
         'total_payment_string',
         'delivery_fee_string',
         'date_string',
@@ -76,15 +79,17 @@ class PurchaseOrderHeader extends Eloquent
 
 	protected $fillable = [
 		'code',
-		'date',
 		'purchase_request_id',
 		'quotation_id',
 		'supplier_id',
-		'pph_ps_23',
-		'ppn',
 		'delivery_fee',
 		'total_discount',
 		'total_price',
+        'total_payment_before_tax',
+		'pph_percent',
+		'ppn_percent',
+		'pph_amount',
+		'ppn_amount',
 		'total_payment',
         'closing_date',
 		'status_id',
@@ -113,17 +118,20 @@ class PurchaseOrderHeader extends Eloquent
         }
     }
 
+    public function getPpnStringAttribute(){
+        return 'Rp '. number_format($this->attributes['ppn_amount'], 0, ",", ".");
+    }
+
+    public function getPphStringAttribute(){
+        return 'Rp '. number_format($this->attributes['pph_amount'], 0, ",", ".");
+    }
+
     public function getTotalPaymentStringAttribute(){
         return 'Rp '. number_format($this->attributes['total_payment'], 0, ",", ".");
     }
 
     public function getDeliveryFeeStringAttribute(){
-        if(!empty($this->attributes['total_discount']) && $this->attributes['delivery_fee'] != 0){
-            return 'Rp '. number_format($this->attributes['delivery_fee'], 0, ",", ".");
-        }
-        else{
-            return '-';
-        }
+        return 'Rp '. number_format($this->attributes['delivery_fee'], 0, ",", ".");
     }
 
     public function scopeDateDescending(Builder $query){
