@@ -86,11 +86,21 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="group" name="group" class="form-control col-md-7 col-xs-12 @if($errors->has('group')) parsley-error @endif">
-                        <option value="-1" @if(empty(old('group'))) selected @endif> - Pilih group - </option>
+                        <option value="-1" @if(empty(old('group'))) selected @endif> - Pilih kategori inventory - </option>
                         @foreach($groups as $group)
                             <option value="{{ $group->id }}" {{ old('group') == $group->id ? "selected":"" }}>{{ $group->name }}</option>
                         @endforeach
                     </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="machinery_type" >
+                    Tipe Alat Berat
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="machinery_type0" name="machinery_type" class='form-control'></select>
                 </div>
             </div>
 
@@ -192,6 +202,29 @@
             width: '100%',
             ajax: {
                 url: '{{ route('select.warehouses') }}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: $.trim(params.term)
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+
+        // Select machinery type
+        $('#machinery_type0').select2({
+            placeholder: {
+                id: '-1',
+                text: '- Pilih tipe alat berat -'
+            },
+            width: '100%',
+            ajax: {
+                url: '{{ route('select.machinery_types') }}',
                 dataType: 'json',
                 data: function (params) {
                     return {

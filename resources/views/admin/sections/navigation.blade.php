@@ -34,7 +34,7 @@
                     </li>
                     <li>
                         <a href="{{ route('admin.settings.preference') }}">
-                            <i class="fa fa-home"></i>
+                            <i class="fa fa-building"></i>
                             Preferensi Perusahaan
                         </a>
                     </li>
@@ -314,20 +314,20 @@
                             <span class="fa fa-chevron-down"></span>
                         </a>
                         <ul class="nav child_menu">
-                            <li><a>Pengaturan Approval<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li class="sub_menu">
-                                        <a href="{{ route('admin.approval_rules') }}">
-                                            Daftar Pengaturan Approval
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.approval_rules.create') }}">
-                                            Tambah Pengaturan Approval
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+                            {{--<li><a>Pengaturan Approval<span class="fa fa-chevron-down"></span></a>--}}
+                                {{--<ul class="nav child_menu">--}}
+                                    {{--<li class="sub_menu">--}}
+                                        {{--<a href="{{ route('admin.approval_rules') }}">--}}
+                                            {{--Daftar Pengaturan Approval--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.approval_rules.create') }}">--}}
+                                            {{--Tambah Pengaturan Approval--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                {{--</ul>--}}
+                            {{--</li>--}}
                             <li><a>Otorisasi Dokumen<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
