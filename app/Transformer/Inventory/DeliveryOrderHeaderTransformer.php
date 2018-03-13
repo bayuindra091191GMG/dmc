@@ -27,7 +27,9 @@ class DeliveryOrderHeaderTransformer extends TransformerAbstract
             }
 
             $action = "<a class='btn btn-xs btn-primary' href='delivery_orders/detil/". $header->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
-            $action .= "<a class='btn btn-xs btn-info' href='delivery_orders/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+//            $action .= "<a class='btn btn-xs btn-info' href='delivery_orders/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+            $action .= "<a class='confirm-modal btn btn-xs btn-success' data-id='". $header->id ."' ><i class='fa fa-check-square'></i></a>";
+            $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $header->id ."' ><i class='fa fa-times-circle'></i></a>";
 
             return[
                 'code'              => $code,
@@ -37,7 +39,7 @@ class DeliveryOrderHeaderTransformer extends TransformerAbstract
                 'pr_code'           => $prCode,
                 'remark'            => $header->remark ?? "-",
                 'created_at'        => $createdDate,
-                'status'            => $header->status_id == 3 ? 'open' : 'closed',
+                'status'            => $header->status->description,
                 'action'            => $action
             ];
         }catch(\Exception $ex){

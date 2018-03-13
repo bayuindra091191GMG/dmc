@@ -1,12 +1,12 @@
 @extends('admin.layouts.admin')
 
-@section('title','Buat Purchase Order Baru')
+@section('title','Buat Payment Request Baru')
 
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
 
-            {{ Form::open(['route'=>['admin.purchase_orders.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.payment_requests.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
 
             @if(count($errors))
                 <div class="form-group">
@@ -23,19 +23,19 @@
             @endif
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="po_code">
-                    Nomor PO
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
+                    Nomor Payment Request
                     <span class="required">*</span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="po_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('po_code')) parsley-error @endif"
-                           name="po_code" value="{{ $autoNumber }}" disabled>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
+                           name="code" value="{{ $autoNumber }}" disabled>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="auto_number"></label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-4 col-sm-4 col-xs-12">
                     <div class="checkbox">
                         <label>
                             <input type="checkbox" class="flat" id="auto_number" name="auto_number" checked="checked"> Auto Number
@@ -45,9 +45,38 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="from_site" >
+                    Site Keberangkatan
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <select id="from_site" name="from_site" class="form-control col-md-7 col-xs-12 @if($errors->has('from_site')) parsley-error @endif">
+                        <option value="-1" @if(empty(old('from_site'))) selected @endif> - Pilih site - </option>
+                        @foreach($sites as $site)
+                            <option value="{{ $site->id }}" {{ old('from_site') == $site->id ? "selected":"" }}>{{ $site->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="to_site" >
+                    Site Tujuan
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <select id="to_site" name="to_site" class="form-control col-md-7 col-xs-12 @if($errors->has('from_site')) parsley-error @endif">
+                        <option value="-1" @if(empty(old('to_site'))) selected @endif> - Pilih site - </option>
+                        @foreach($sites as $site)
+                            <option value="{{ $site->id }}" {{ old('to_site') == $site->id ? "selected":"" }}>{{ $site->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pr_code" >
                     Nomor PR
-                    <span class="required">*</span>
                 </label>
                 <div class="col-md-4 col-sm-4 col-xs-12">
                     <select id="pr_code" name="pr_code" class="form-control col-md-7 col-xs-12 @if($errors->has('pr_code')) parsley-error @endif">
@@ -67,53 +96,26 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="supplier" >
-                    Vendor
-                    <span class="required">*</span>
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="machinery" >
+                    Unit Alat Berat
                 </label>
                 <div class="col-md-4 col-sm-4 col-xs-12">
-                    <select id="supplier" name="supplier" class="form-control col-md-7 col-xs-12 @if($errors->has('supplier')) parsley-error @endif">
+                    <select id="machinery" name="machinery" class="form-control col-md-7 col-xs-12 @if($errors->has('machinery')) parsley-error @endif">
                     </select>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="delivery_fee">
-                    Ongkos Kirim
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="remark_header" >
+                    Keterangan
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="delivery_fee" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('delivery_fee')) parsley-error @endif"
-                           name="delivery_fee" value="{{ old('delivery_fee') }}">
+                    <textarea id="remark_header" name="remark_header" rows="5" style="resize: vertical;" class="form-control col-md-7 col-xs-12">{{ old('remark_header') }}</textarea>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="ppn">
-                    Tambah PPN
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" class="flat" id="ppn" name="ppn"> PPN sekarang: 10%
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pph">
-                    PPh
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="pph" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('pph')) parsley-error @endif"
-                           name="pph" value="{{ old('pph') }}">
-                </div>
-            </div>
-
-            <hr/>
-
-            <div class="form-group">
-                <label class="col-md-12 col-sm12 col-xs-12 text-center">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">
                     <b>Detil Barang</b>
                 </label>
             </div>
@@ -125,24 +127,21 @@
                     </a>
                     <table class="table table-bordered table-hover" id="detail_table">
                         <thead>
-                        <tr>
+                        <tr >
+                            <th class="text-center">
+                                No
+                            </th>
+                            <th class="text-center" style="width: 15%">
+                                Part Number
+                            </th>
                             <th class="text-center" style="width: 20%">
-                                Nomor Part
+                                Part Name
                             </th>
-                            <th class="text-center" style="width: 10%">
-                                Jumlah
+                            <th class="text-center" colspan="2" style="width: 20%">
+                                QTY
                             </th>
-                            <th class="text-center" style="width: 15%">
-                                Harga
-                            </th>
-                            <th class="text-center" style="width: 10%">
-                                Diskon (%)
-                            </th>
-                            <th class="text-center" style="width: 15%">
-                                Subtotal
-                            </th>
-                            <th class="text-center" style="width: 15%">
-                                Remark
+                            <th class="text-center" style="width: 30%">
+                                Remarks
                             </th>
                             <th class="text-center" style="width: 15%">
                                 Tindakan
@@ -155,28 +154,30 @@
                             @foreach($purchaseRequest->purchase_request_details as $detail)
                                 <?php $idx++; ?>
                                 <tr class='item{{ $idx }}'>
-                                    <td class='field-item'>
-                                        <input type='text' name='item_text[]' class='form-control' value='{{ $detail->item->code. ' - '. $detail->item->name }}' readonly/>
-                                        <input type='hidden' name='item_value[]' value='{{ $detail->item_id }}'/>
-                                    </td>
-                                    <td>
-                                        <input type='text' name='qty[]' class='form-control' value='{{ $detail->quantity }}' readonly/>
-                                    </td>
-                                    <td>
-                                        <input type='text' name='price[]' class='form-control' value='0' readonly/>
-                                    </td>
-                                    <td>
-                                        <input type='text' name='discount[]' class='form-control' value='0' readonly/>
-                                    </td>
-                                    <td>
-                                        <input type='text' name='subtotal[]' class='form-control' value='0' readonly/>
-                                    </td>
-                                    <td>
-                                        <input type='text' name='remark[]' class='form-control' value='{{ $detail->remark }}' readonly/>
+                                    <td class='text-center'>
+                                        {{ $idx }}
                                     </td>
                                     <td class='text-center'>
+                                        {{ $detail->item->code }}
+                                        <input type='hidden' name='item[]' value='{{ $detail->item_id }}'/>
+                                    </td>
+                                    <td class='text-center'>
+                                        {{ $detail->item->name }}
+                                    </td>
+                                    <td class='text-center'>
+                                        {{ $detail->quantity }}
+                                        <input type='hidden' name='qty[]' value='{{ $detail->quantity }}'/>
+                                    </td>
+                                    <td class='text-center'>
+                                        {{ $detail->item->uomDescription }}
+                                    </td>
+                                    <td>
+                                        {{ $detail->remark }}
+                                        <input type='hidden' name='remark[]' value='$detail->remark'/>
+                                    </td>
+                                    <td>
                                         <?php $itemId = $detail->item_id. "#". $detail->item->code. "#". $detail->item->name ?>
-                                        <a class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}" data-price="0" data-discount="0">
+                                        <a class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}">
                                             <span class="glyphicon glyphicon-edit"></span>
                                         </a>
                                         <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
@@ -193,11 +194,9 @@
 
             <input id="index_counter" type="hidden" value="{{ $idx }}"/>
 
-            <hr/>
-
             <div class="form-group">
-                <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                    <a class="btn btn-danger" href="{{ route('admin.purchase_orders') }}"> Batal</a>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <a class="btn btn-danger" href="{{ route('admin.delivery_orders') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>
@@ -225,18 +224,6 @@
                             <label class="control-label col-sm-2" for="qty_add">Jumlah:</label>
                             <div class="col-sm-10">
                                 <input type="number" class="form-control" id="qty_add" name="qty_add">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="price_add">Harga:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="price_add" name="price_add">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="discount_add">Diskon(%):</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="discount_add" name="discount_add">
                             </div>
                         </div>
                         <div class="form-group">
@@ -280,18 +267,6 @@
                             <label class="control-label col-sm-2" for="qty_edit">Jumlah:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="qty_edit" name="qty_edit">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="price_edit">Harga:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="price_edit" name="price_edit">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="discount_edit">Diskon(%):</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="discount_edit" name="discount_edit">
                             </div>
                         </div>
                         <div class="form-group">
@@ -341,11 +316,11 @@
                         <input type="hidden" name="deleted_id"/>
                     </form>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-warning" data-dismiss="modal">
-                            <span class='glyphicon glyphicon-remove'></span> Batal
-                        </button>
                         <button type="button" class="btn btn-danger delete" data-dismiss="modal">
                             <span id="" class='glyphicon glyphicon-trash'></span> Hapus
+                        </button>
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">
+                            <span class='glyphicon glyphicon-remove'></span> Batal
                         </button>
                     </div>
                 </div>
@@ -377,78 +352,80 @@
         // Auto Numbering
         $('#auto_number').change(function(){
             if(this.checked){
-                $('#po_code').val('{{ $autoNumber }}');
-                $('#po_code').prop('disabled', true);
+                $('#code').val('{{ $autoNumber }}');
+                $('#code').prop('disabled', true);
             }
             else{
-                $('#po_code').val('');
-                $('#po_code').prop('disabled', false);
+                $('#code').val('');
+                $('#code').prop('disabled', false);
             }
         });
 
         @if(!empty($purchaseRequest))
-            $('#pr_code').select2({
-                placeholder: {
-                    id: '{{ $purchaseRequest->id }}',
-                    text: '{{ $purchaseRequest->code }}'
-                },
-                width: '100%',
-                minimumInputLength: 1,
-                ajax: {
-                    url: '{{ route('select.purchase_requests') }}',
-                    dataType: 'json',
-                    data: function (params) {
-                        return {
-                            q: $.trim(params.term)
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: data
-                        };
-                    }
-                }
-            });
-        @else
-            $('#pr_code').select2({
-                placeholder: {
-                    id: '-1',
-                    text: 'Pilih Nomor PR...'
-                },
-                width: '100%',
-                minimumInputLength: 1,
-                ajax: {
-                    url: '{{ route('select.purchase_requests') }}',
-                    dataType: 'json',
-                    data: function (params) {
-                        return {
-                            q: $.trim(params.term)
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: data
-                        };
-                    }
-                }
-            });
-        @endif
-
-
-        $('#supplier').select2({
+        $('#pr_code').select2({
             placeholder: {
-                id: '-1',
-                text: 'Pilih Vendor...'
+                id: '{{ $purchaseRequest->id }}',
+                text: '{{ $purchaseRequest->code }}'
             },
             width: '100%',
             minimumInputLength: 1,
+            allowClear: true,
             ajax: {
-                url: '{{ route('select.suppliers') }}',
+                url: '{{ route('select.purchase_requests') }}',
                 dataType: 'json',
                 data: function (params) {
                     return {
-                        q: $.trim(params.term),
-                        _token: $('input[name=_token]').val()
+                        q: $.trim(params.term)
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+        @else
+        $('#pr_code').select2({
+            placeholder: {
+                id: '-1',
+                text: 'Pilih Nomor PR...'
+            },
+            width: '100%',
+            minimumInputLength: 1,
+            allowClear: true,
+            ajax: {
+                url: '{{ route('select.purchase_requests') }}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: $.trim(params.term)
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+        @endif
+
+        // Get machinery data
+        $('#machinery').select2({
+            placeholder: {
+                id: '-1',
+                text: 'Pilih Alat Berat...'
+            },
+            width: '100%',
+            minimumInputLength: 1,
+            allowClear: true,
+            ajax: {
+                url: '{{ route('select.machineries') }}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: $.trim(params.term)
                     };
                 },
                 processResults: function (data) {
@@ -459,46 +436,9 @@
             }
         });
 
-        // Add autonumeric
-        pphFormat = new AutoNumeric('#pph', {
-            decimalCharacter: ',',
-            digitGroupSeparator: '.',
-            decimalPlaces: 0
-        });
-
-        numberFormat = new AutoNumeric('#price_add', {
-            decimalCharacter: ',',
-            digitGroupSeparator: '.',
-            decimalPlaces: 0
-        });
-
-        deliveryFeeFormat = new AutoNumeric('#delivery_fee', {
-            decimalCharacter: ',',
-            digitGroupSeparator: '.',
-            decimalPlaces: 0
-        });
-
-        priceEditFormat = new AutoNumeric('#price_edit', {
-            decimalCharacter: ',',
-            digitGroupSeparator: '.',
-            decimalPlaces: 0
-        });
-
-        discountAddFormat = new AutoNumeric('#discount_add', {
-            maximumValue: '100',
-            minimumValue: '0',
-            decimalPlaces: 0
-        });
-
-        discountEditFormat = new AutoNumeric('#discount_edit', {
-            maximumValue: '100',
-            minimumValue: '0',
-            decimalPlaces: 0
-        });
-
         // Get selected PR data
         $(document).on('click', '.get-pr-data', function(){
-            var url = '{{ route('admin.purchase_orders.create') }}';
+            var url = '{{ route('admin.delivery_orders.create') }}';
             if($('#pr_code').val() && $('#pr_code').val() !== ""){
                 url += "?pr=" + $('#pr_code').val();
                 window.location = url;
@@ -513,7 +453,7 @@
 
         // Clear selected PR data
         $(document).on('click', '.clear-pr-data', function(){
-            var url = '{{ route('admin.purchase_orders.create') }}';
+            var url = '{{ route('admin.delivery_orders.create') }}';
             window.location = url;
         });
 
@@ -562,29 +502,10 @@
                 return false;
             }
 
-            var priceAdd = $('#price_add').val();
-
-            if(!priceAdd || priceAdd === "" || priceAdd === "0"){
-                alert('Mohon isi harga...')
-                return false;
-            }
-
-            var discountAdd = $('#discount_add').val();
             var remarkAdd = $('#remark_add').val();
 
             // Split item value
             var splitted = itemAdd.split('#');
-
-            // Filter variables
-            var price = 0;
-            if(priceAdd && priceAdd !== "" && priceAdd !== "0"){
-                price = parseFloat(priceAdd.replace('.',''));
-            }
-            var discount = 0;
-            if(discountAdd && discountAdd !== "" && discountAdd !== "0"){
-                discount = parseFloat(discountAdd);
-            }
-            var qty = parseFloat(qtyAdd);
 
             // Increase idx
             var idx = $('#index_counter').val();
@@ -594,46 +515,24 @@
             var sbAdd = new stringbuilder();
 
             sbAdd.append("<tr class='item" + idx + "'>");
-            sbAdd.append("<td class='field-item'><input type='text' name='item_text[]' class='form-control' value='" + splitted[1] + " - " + splitted[2] + "' readonly/>")
-            sbAdd.append("<input type='hidden' name='item_value[]' value='" + splitted[0] + "'/></td>");
-            if(qtyAdd && qtyAdd !== ""){
-                sbAdd.append("<td><input type='text' name='qty[]' class='form-control' value='" + qtyAdd + "' readonly/></td>");
-            }
-            else{
-                sbAdd.append("<td><input type='text' name='qty[]' class='form-control' readonly/></td>");
-            }
+            sbAdd.append("<td class='text-center'>" + idx + "</td>");
 
-            if(priceAdd && priceAdd !== "" && priceAdd !== "0"){
-                sbAdd.append("<td><input type='text' name='price[]' class='form-control' value='" + priceAdd + "' readonly/></td>");
-            }
-            else{
-                sbAdd.append("<td><input type='text' name='price[]' class='form-control' value='0' readonly/></td>");
-            }
+            sbAdd.append("<td class='text-center'>" + splitted[1]);
+            sbAdd.append("<input type='hidden' name='item[]' value='" + splitted[0] + "'/></td>");
 
-            if(discountAdd && discountAdd !== "" && discountAdd !== "0"){
-                discount = parseFloat(discountAdd);
-                sbAdd.append("<td><input type='text' name='discount[]' class='form-control' value='" + discountAdd + "' readonly/></td>");
-            }
-            else{
-                sbAdd.append("<td><input type='text' name='discount[]' class='form-control' value='0' readonly/></td>");
-            }
+            sbAdd.append("<td class='text-center'>" + splitted[2] + "</td>");
 
-            var subtotal = 0;
-            var totalPrice = price * qty;
-            if(discount > 0){
-                subtotal = totalPrice - (totalPrice * discount / 100);
-            }
-            else{
-                subtotal = totalPrice;
-            }
-            var subtotalString = rupiahFormat(subtotal);
+            sbAdd.append("<td class='text-center'>" + qtyAdd);
+            sbAdd.append("<input type='hidden' name='qty[]' value='" + qtyAdd + "'/></td>");
 
-            sbAdd.append("<td><input type='text' class='form-control' value='" + subtotalString + "' readonly/></td>");
-            sbAdd.append("<td><input type='text' name='remark[]' class='form-control' value='" + remarkAdd + "' readonly/></td>");
+            sbAdd.append("<td class='text-center'>" + splitted[3] + "</td>");
 
-            sbAdd.append("<td class='text-center'>");
-            sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-edit'></span></a>");
-            sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-trash'></span></a>");
+            sbAdd.append("<td>" + remarkAdd);
+            sbAdd.append("<input type='hidden' name='remark[]' value='" + remarkAdd + "'/></td>");
+
+            sbAdd.append("<td>");
+            sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd + "'><span class='glyphicon glyphicon-edit'></span></a>");
+            sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd + "'><span class='glyphicon glyphicon-trash'></span></a>");
             sbAdd.append("</td>");
             sbAdd.append("</tr>");
 
@@ -641,8 +540,6 @@
 
             // Reset add form modal
             $('#qty_add').val('');
-            $('#price_add').val('');
-            $('#discount_add').val('');
             $('#remark_add').val('');
             $('#item_add').val(null).trigger('change');
         });
@@ -679,45 +576,16 @@
 
             $('#qty_edit').val($(this).data('qty'));
             $('#remark_edit').val($(this).data('remark'));
-            // $('#discount_edit').val($(this).data('discount'));
             $('#editModal').modal('show');
-
-            priceEditFormat.clear();
-
-            priceEditFormat.set($(this).data('price'), {
-                decimalCharacter: ',',
-                digitGroupSeparator: '.',
-                decimalPlaces: 0
-            });
-
-            discountEditFormat.set($(this).data('discount'), {
-                maximumValue: '100',
-                minimumValue: '0',
-                decimalPlaces: 0
-            });
-
         });
         $('.modal-footer').on('click', '.edit', function() {
             var itemEdit = $('#item_edit').val();
             var qtyEdit = $('#qty_edit').val();
-            var priceEdit = $('#price_edit').val();
-            var discountEdit = $('#discount_edit').val();
             var remarkEdit = $('#remark_edit').val();
-
-            if(!qtyEdit || qtyEdit === "" || qtyEdit === "0"){
-                alert('Mohon isi jumlah...')
-                return false;
-            }
-
-            if(!priceEdit || priceEdit === "" || priceEdit === "0"){
-                alert('Mohon isi harga...')
-                return false;
-            }
 
             // Split item value
             var data = "default";
             if(itemEdit && itemEdit !== ''){
-                alert(itemEdit);
                 data = itemEdit;
             }
             else {
@@ -726,60 +594,27 @@
 
             var splitted = data.split('#');
 
-            // Filter variables
-            var price = 0;
-            if(priceEdit && priceEdit !== "" && priceEdit !== "0"){
-                price = parseFloat(priceEdit.replace('.',''));
-            }
-            var discount = 0;
-            if(discountEdit && discountEdit !== "" && discountEdit !== "0"){
-                discount = parseFloat(discountEdit);
-            }
-            var qty = parseFloat(qtyEdit);
-
             var sbEdit = new stringbuilder();
 
             sbEdit.append("<tr class='item" + id + "'>");
-            sbEdit.append("<td class='field-item'><input type='text' name='item_text[]' class='form-control' value='" + splitted[1] + ' - ' + splitted[2] + "' readonly/>")
-            sbEdit.append("<input type='hidden' name='item_value[]' value='" + splitted[0] + "'/></td>");
-            if(qtyEdit && qtyEdit !== ""){
-                sbEdit.append("<td><input type='text' name='qty[]' class='form-control' value='" + qtyEdit + "' readonly/></td>");
-            }
-            else{
-                sbEdit.append("<td><input type='text' name='qty[]' class='form-control' readonly/></td>");
-            }
+            sbEdit.append("<td class='text-center'>" + id + "</td>");
 
-            if(priceEdit && priceEdit !== "" && priceEdit !== "0"){
-                sbEdit.append("<td><input type='text' name='price[]' class='form-control' value='" + priceEdit + "' readonly/></td>");
-            }
-            else{
-                sbEdit.append("<td><input type='text' name='price[]' class='form-control' value='0' readonly/></td>");
-            }
+            sbEdit.append("<td class='text-center'>" + splitted[1]);
+            sbEdit.append("<input type='hidden' name='item[]' value='" + splitted[0] + "'/></td>");
 
-            if(discountEdit && discountEdit !== "" && discountEdit !== "0"){
-                discount = parseFloat(discountEdit);
-                sbEdit.append("<td><input type='text' name='discount[]' class='form-control' value='" + discountEdit + "' readonly/></td>");
-            }
-            else{
-                sbEdit.append("<td><input type='text' name='discount[]' class='form-control' value='0' readonly/></td>");
-            }
+            sbEdit.append("<td class='text-center'>" + splitted[2] + "</td>");
 
-            var subtotal = 0;
-            var totalPrice = price * qty;
-            if(discount > 0){
-                subtotal = totalPrice - (totalPrice * discount / 100);
-            }
-            else{
-                subtotal = totalPrice;
-            }
-            var subtotalString = rupiahFormat(subtotal);
+            sbEdit.append("<td class='text-center'>" + qtyEdit);
+            sbEdit.append("<input type='hidden' name='qty[]' value='" + qtyEdit + "'/></td>");
 
-            sbEdit.append("<td><input type='text' class='form-control' value='" + subtotalString + "' readonly/></td>");
-            sbEdit.append("<td><input type='text' name='remark[]' class='form-control' value='" + remarkEdit + "' readonly/></td>");
+            sbEdit.append("<td class='text-center'>" + splitted[3] + "</td>");
 
-            sbEdit.append("<td class='text-center'>");
-            sbEdit.append("<a class='edit-modal btn btn-info' data-id='" + id + "' data-item-id='" + data + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-edit'></span></a>");
-            sbEdit.append("<a class='delete-modal btn btn-danger' data-id='" + id + "' data-item-id='" + data + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-trash'></span></a>");
+            sbEdit.append("<td>" + remarkEdit);
+            sbEdit.append("<input type='hidden' name='remark[]' value='" + remarkEdit + "'/></td>");
+
+            sbEdit.append("<td>");
+            sbEdit.append("<a class='edit-modal btn btn-info' data-id='" + id + "' data-item-id='" + itemEdit + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "'><span class='glyphicon glyphicon-edit'></span></a>");
+            sbEdit.append("<a class='delete-modal btn btn-danger' data-id='" + id + "' data-item-id='" + itemEdit + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "'><span class='glyphicon glyphicon-trash'></span></a>");
             sbEdit.append("</td>");
             sbEdit.append("</tr>");
 
@@ -799,17 +634,5 @@
         $('.modal-footer').on('click', '.delete', function() {
             $('.item' + deletedId).remove();
         });
-
-        function rupiahFormat(nStr) {
-            nStr += '';
-            x = nStr.split(',');
-            x1 = x[0];
-            x2 = x.length > 1 ? '.' + x[1] : '';
-            var rgx = /(\d+)(\d{3})/;
-            while (rgx.test(x1)) {
-                x1 = x1.replace(rgx, '$1' + '.' + '$2');
-            }
-            return x1 + x2;
-        }
     </script>
 @endsection

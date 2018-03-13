@@ -209,20 +209,19 @@ class PurchaseOrderHeaderController extends Controller
 
         // Get PPN & PPh
         $ppnAmount = 0;
-        if($request->filled('ppn')){
+        if($request->filled('ppn') && $request->input('ppn') != '0'){
             $ppnAmount = $totalPayment * (10 / 100);
             $poHeader->ppn_percent = 10;
             $poHeader->ppn_amount = $ppnAmount;
         }
         $pphAmount = 0;
-        if($request->filled('pph')){
-            $pph = intval($request->input('pph'));
-            $pphAmount = $totalPayment * ($pph / 100);
-            $poHeader->pph_percent = $pph;
+        if($request->filled('pph') && $request->input('pph') != '0'){
+            $pph = str_replace('.','', $request->input('pph'));
+            $pphAmount = (double) $pph;
             $poHeader->pph_amount = $pphAmount;
         }
 
-        $poHeader->total_payment = $totalPayment + $ppnAmount + $pphAmount;
+        $poHeader->total_payment = $totalPayment + $ppnAmount - $pphAmount;
         $poHeader->save();
 
         Session::flash('message', 'Berhasil membuat purchase order!');
@@ -244,8 +243,8 @@ class PurchaseOrderHeaderController extends Controller
 
         $oldDelivery = $purchase_order->delivery_fee ?? 0;
         $newDelivery = 0;
-        if(!empty(Input::get('delivery_fee')) && Input::get('delivery_fee') != '0'){
-            $deliveryFee = str_replace('.','', Input::get('delivery_fee'));
+        if($request->filled('delivery_fee') && $request->input('delivery_fee') != '0'){
+            $deliveryFee = str_replace('.','', $request->input('delivery_fee'));
             $newDelivery = (double) $deliveryFee;
             $purchase_order->delivery_fee = $deliveryFee;
         }
@@ -269,9 +268,8 @@ class PurchaseOrderHeaderController extends Controller
 
         $pphAmount = 0;
         if($request->filled('pph')){
-            $pph = intval($request->input('pph'));
-            $pphAmount = $totalPayment * ($pph / 100);
-            $purchase_order->pph_percent = $pph;
+            $pph = str_replace('.','', $request->input('pph'));
+            $pphAmount = (double) $pph;
             $purchase_order->pph_amount = $pphAmount;
         }
         else{
@@ -279,7 +277,7 @@ class PurchaseOrderHeaderController extends Controller
             $purchase_order->pph_amount = null;
         }
 
-        $purchase_order->total_payment = $totalPayment + $ppnAmount + $pphAmount;
+        $purchase_order->total_payment = $totalPayment + $ppnAmount - $pphAmount;
         $purchase_order->save();
 
         Session::flash('message', 'Berhasil ubah purchase order!');

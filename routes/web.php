@@ -271,6 +271,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('delivery_orders/ubah/{delivery_order}', 'Inventory\DeliveryOrderHeaderController@update')->name('delivery_orders.update');
     Route::get('delivery_orders/tambah', 'Inventory\DeliveryOrderHeaderController@create')->name('delivery_orders.create');
     Route::post('delivery_orders/simpan', 'Inventory\DeliveryOrderHeaderController@store')->name('delivery_orders.store');
+    Route::post('delivery_orders/konfirmasi', 'Inventory\DeliveryOrderHeaderController@confirm')->name('delivery_orders.confirm');
+    Route::post('delivery_orders/batal', 'Inventory\DeliveryOrderHeaderController@cancel')->name('delivery_orders.cancel');
     Route::get('delivery_orders/report', 'Inventory\DeliveryOrderHeaderController@report')->name('delivery_orders.report');
     Route::post('delivery_orders/download_report', 'Inventory\DeliveryOrderHeaderController@downloadReport')->name('delivery_orders.download-report');
 
@@ -361,7 +363,7 @@ Route::group(['as' => 'protection.'], function () {
 Route::get('/select-employees', 'Admin\EmployeeController@getEmployees')->name('select.employees');
 Route::get('/select-items', 'Admin\ItemController@getItems')->name('select.items');
 Route::get('/select-extended_items', 'Admin\ItemController@getExtendedItems')->name('select.extended_items');
-Route::get('/select-warehouses', 'Admin\ItemController@getWarehouses')->name('select.warehouses');
+Route::get('/select-warehouses', 'Admin\WarehouseController@getWarehouses')->name('select.warehouses');
 Route::get('/select-groups', 'Admin\GroupController@getGroups')->name('select.groups');
 Route::get('/select-machineries', 'Admin\MachineryController@getMachineries')->name('select.machineries');
 Route::get('/select-machinery_types', 'Admin\MachineryTypeController@getMachineryTypes')->name('select.machinery_types');

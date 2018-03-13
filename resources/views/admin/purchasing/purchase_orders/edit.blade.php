@@ -89,7 +89,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pph">
-                    Tambah PPh (%)
+                    PPh
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="pph" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('pph')) parsley-error @endif"
@@ -171,12 +171,12 @@
                         <td>
                             {{ $detail->remark ?? '-' }}
                         </td>
-                        <td>
+                        <td class='text-center'>
                             <button class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}" data-price="{{ $detail->price }}" data-discount="{{ $detail->discount }}">
-                                <span class="glyphicon glyphicon-edit"></span> Ubah
+                                <span class="glyphicon glyphicon-edit"></span>
                             </button>
                             <button class="delete-modal btn btn-danger" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
-                                <span class="glyphicon glyphicon-trash"></span> Hapus
+                                <span class="glyphicon glyphicon-trash"></span>
                             </button>
                         </td>
                     </tr>
@@ -373,7 +373,7 @@
                 text: '{{ $header->purchase_request_header->code }}'
             },
             width: '100%',
-            minimumInputLength: 2,
+            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('select.purchase_requests') }}',
                 dataType: 'json',
@@ -396,7 +396,7 @@
                 text: '{{ $header->supplier->name }}'
             },
             width: '100%',
-            minimumInputLength: 2,
+            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('select.suppliers') }}',
                 dataType: 'json',
@@ -420,7 +420,7 @@
                 text: 'Pilih barang...'
             },
             width: '100%',
-            minimumInputLength: 2,
+            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('select.items') }}',
                 dataType: 'json',
@@ -439,17 +439,17 @@
 
         // Add autonumeric
         pphFormat = new AutoNumeric('#pph', {
-            maximumValue: '100',
-            minimumValue: '0',
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
             decimalPlaces: 0
         });
 
-        @if(!empty($header->pph_percent) && $header->pph_percent > 0)
+        @if(!empty($header->pph_amount) && $header->pph_amount > 0)
             pphFormat.clear();
 
-            pphFormat.set('{{ $header->pph_percent }}', {
-                maximumValue: '100',
-                minimumValue: '0',
+            pphFormat.set('{{ $header->pph_amount }}', {
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
                 decimalPlaces: 0
             });
         @endif
@@ -490,7 +490,7 @@
                     text: 'Pilih barang...'
                 },
                 width: '100%',
-                minimumInputLength: 2,
+                minimumInputLength: 1,
                 ajax: {
                     url: '{{ route('select.items') }}',
                     dataType: 'json',
@@ -562,7 +562,7 @@
                         if (data.remark !== null) {
                             remarkAdd = data.remark;
                         }
-                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td class='text-center'>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + data.price_string + "</td><td class='text-center'>" + data.discount_string + "</td><td>" + data.subtotal_string + "</td><td>" + remarkAdd + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span> Hapus</button></td></tr>");
+                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td class='text-center'>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + data.price_string + "</td><td class='text-center'>" + data.discount_string + "</td><td>" + data.subtotal_string + "</td><td>" + remarkAdd + "</td><td class='text-center'>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
 
                         // Reset add form modal
                         $('#qty_add').val('');
@@ -587,7 +587,7 @@
                     text: $(this).data('item-text')
                 },
                 width: '100%',
-                minimumInputLength: 2,
+                minimumInputLength: 1,
                 ajax: {
                     url: '{{ route('select.items') }}',
                     dataType: 'json',
@@ -665,7 +665,7 @@
                         if (data.remark !== null) {
                             remarkEdit = data.remark;
                         }
-                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td class='text-center'>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + data.price_string + "</td><td class='text-center'>" + data.discount_string + "</td><td>" + data.subtotal_string + "</td><td>" + remarkEdit + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span> Ubah</button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span> hapus</button></td></tr>");
+                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td class='text-center'>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + data.price_string + "</td><td class='text-center'>" + data.discount_string + "</td><td>" + data.subtotal_string + "</td><td>" + remarkEdit + "</td><td class='text-center'>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
                     }
                 }
             });

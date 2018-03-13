@@ -141,6 +141,7 @@ class ItemController extends Controller
         // Get stock
         if(count($warehouses) > 0){
             $idx = 0;
+            $totalStock = 0;
             foreach($warehouses as $warehouse){
                 if(!empty($warehouse)){
                     $stock = ItemStock::create([
@@ -150,9 +151,14 @@ class ItemController extends Controller
                         'created_by'    => $user->id,
                         'created_at'    => $now->toDateTimeString()
                     ]);
+
+                    $totalStock = $totalStock + (int) $qtys[$idx];
                 }
                 $idx++;
             }
+
+            $item->stock = $totalStock;
+            $item->save();
         }
 
         Session::flash('message', 'Berhasil membuat data barang baru!');
@@ -227,19 +233,6 @@ class ItemController extends Controller
             ->setTransformer(new ItemTransformer)
             ->addIndexColumn()
             ->make(true);
-    }
-
-    public function getWarehouses(Request $request){
-        $term = trim($request->q);
-        $warehouses = Warehouse::where('name', 'LIKE', '%'. $term. '%')->get();
-
-        $formatted_tags = [];
-
-        foreach ($warehouses as $warehouse) {
-            $formatted_tags[] = ['id' => $warehouse->id, 'text' => $warehouse->name];
-        }
-
-        return Response::json($formatted_tags);
     }
 
     public function getItems(Request $request){

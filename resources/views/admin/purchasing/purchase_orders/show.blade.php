@@ -88,10 +88,10 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        PPh {{ !empty($header->pph_percent) && $header->pph_percent > 0 ? $header->pph_percent. '%' : '' }}
+                        PPh
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ !empty($header->pph_percent) && $header->pph_percent > 0 ? $header->pph_string : '-' }}
+                        : {{ !empty($header->pph_amount) && $header->pph_amount > 0 ? $header->pph_string : '-' }}
                     </div>
                 </div>
 

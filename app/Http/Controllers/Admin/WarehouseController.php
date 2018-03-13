@@ -159,4 +159,18 @@ class WarehouseController extends Controller
             ->addIndexColumn()
             ->make(true);
     }
+
+    public function getWarehouses(Request $request){
+        $term = trim($request->q);
+        $warehouses = Warehouse::where('name', 'LIKE', '%'. $term. '%')
+            ->where('id', '>', 0)->get();
+
+        $formatted_tags = [];
+
+        foreach ($warehouses as $warehouse) {
+            $formatted_tags[] = ['id' => $warehouse->id, 'text' => $warehouse->name];
+        }
+
+        return Response::json($formatted_tags);
+    }
 }

@@ -22,6 +22,7 @@ use App\Transformer\Inventory\DeliveryOrderHeaderTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
@@ -91,6 +92,10 @@ class DeliveryOrderHeaderController extends Controller
             return redirect()->back()->withErrors('Pilih site keberangkatan & tujuan!', 'default')->withInput($request->all());
         }
 
+        if($request->input('from_site') === $request->input('to_site')){
+            return redirect()->back()->withErrors('Site keberangkatan & tujuan harus berbeda!', 'default')->withInput($request->all());
+        }
+
         // Generate auto number
         $doCode = 'default';
         if($request->input('auto_number')){
@@ -120,6 +125,11 @@ class DeliveryOrderHeaderController extends Controller
 
         // Validate details
         $items = $request->input('item');
+
+        if(count($items) == 0){
+            return redirect()->back()->withErrors('Detail barang wajib diisi!', 'default')->withInput($request->all());
+        }
+
         $qtys = $request->input('qty');
         $valid = true;
         $i = 0;
@@ -151,8 +161,6 @@ class DeliveryOrderHeaderController extends Controller
             return redirect()->back()->withErrors('Stok barang kosong atau tidak ada!', 'default')->withInput($request->all());
         }
 
-        dd($valid);
-
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
@@ -161,7 +169,6 @@ class DeliveryOrderHeaderController extends Controller
             'purchase_request_id'   => $prId,
             'from_site_id'          => $request->input('from_site'),
             'to_site_id'            => $request->input('to_site'),
-            'remark'                => $request->input('remark_header'),
             'status_id'             => 3,
             'created_by'            => $user->id,
             'created_at'            => $now->toDateTimeString(),
@@ -180,7 +187,7 @@ class DeliveryOrderHeaderController extends Controller
         }
 
         if($request->filled('remark')){
-            $doHeader->remark = $request->input('remark');
+            $doHeader->remark = $request->input('remark_header');
         }
 
         $doHeader->save();
@@ -273,6 +280,112 @@ class DeliveryOrderHeaderController extends Controller
         Session::flash('message', 'Berhasil ubah Surat Jalan!');
 
         return redirect()->route('admin.delivery_orders.show', ['delivery_order' => $delivery_order]);
+    }
+
+    public function confirm(Request $request){
+        try{
+            $user = \Auth::user();
+            $now = Carbon::now('Asia/Jakarta');
+
+            $header = DeliveryOrderHeader::find($request->input('id'));
+
+            foreach($header->delivery_order_details as $detail){
+
+
+                // Decrease transport warehouse stock
+                $stockTransport = ItemStock::where('warehouse_id', 0)
+                    ->where('item_id', $detail->item_id)
+                    ->first();
+                $stockTransport->stock -= $detail->quantity;
+                $stockTransport->save();
+
+                // Increase arrival warehouse stock
+                $stockArrival = ItemStock::where('warehouse_id', $header->toSite->warehouse_id)
+                    ->where('item_id', $detail->item_id)
+                    ->first();
+                if(!empty($stockArrival)){
+                    $stockArrival->stock += $detail->quantity;
+                    $stockArrival->updated_at = $now->toDateTimeString();
+                    $stockArrival->updated_by = $user->id;
+                }
+                else{
+                    $newStock = new ItemStock();
+                    $newStock->warehouse_id = $header->toSite->warehouse_id;
+                    $newStock->item_id = $detail->item_id;
+                    $newStock->stock = $detail->quantity;
+                    $newStock->created_by = $user->id;
+                    $newStock->created_at = $now->toDateTimeString();
+                    $newStock->updated_by = $user->id;
+                    $newStock->save();
+                }
+            }
+
+            $header->status_id = 4;
+            $header->confirm_by = $user->id;
+            $header->confirm_date = $now->toDateTimeString();
+            $header->updated_by = $user->id;
+            $header->updated_at = $now->toDateTimeString();
+            $header->save();
+
+            Session::flash('message', 'Berhasil konfirmasi barang datang pada Surat Jalan '. $header->code);
+
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
+    }
+
+    public function cancel(Request $request){
+        try{
+            $user = \Auth::user();
+            $now = Carbon::now('Asia/Jakarta');
+
+            $header = DeliveryOrderHeader::find($request->input('id'));
+
+            foreach($header->delivery_order_details as $detail){
+                // Decrease transport warehouse stock
+                $stockTransport = ItemStock::where('warehouse_id', 0)
+                    ->where('item_id', $detail->item_id)
+                    ->first();
+                $stockTransport->stock -= $detail->quantity;
+                $stockTransport->save();
+
+                // Restore departure warehouse stock
+                $stockArrival = ItemStock::where('warehouse_id', $header->fromSite->warehouse_id)
+                    ->where('item_id', $detail->item_id)
+                    ->first();
+                if(!empty($stockArrival)){
+                    $stockArrival->stock += $detail->quantity;
+                    $stockArrival->updated_at = $now->toDateTimeString();
+                    $stockArrival->updated_by = $user->id;
+                }
+                else{
+                    $newStock = new ItemStock();
+                    $newStock->warehouse_id = $header->toSite->warehouse_id;
+                    $newStock->item_id = $detail->item_id;
+                    $newStock->stock = $detail->quantity;
+                    $newStock->created_by = $user->id;
+                    $newStock->created_at = $now->toDateTimeString();
+                    $newStock->updated_by = $user->id;
+                    $newStock->save();
+                }
+            }
+
+            $header->status_id = 4;
+            $header->confirm_by = $user->id;
+            $header->confirm_date = $now->toDateTimeString();
+            $header->updated_by = $user->id;
+            $header->updated_at = $now->toDateTimeString();
+            $header->save();
+
+            Session::flash('message', 'Berhasil konfirmasi barang datang pada Surat Jalan '. $header->code);
+
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 
     public function report(){

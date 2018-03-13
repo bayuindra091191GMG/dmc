@@ -64,7 +64,7 @@ class PurchaseRequestHeaderController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
-            'pr_code'       => 'required|max:30|unique:purchase_request_headers',
+            'pr_code'       => 'max:30|unique:purchase_request_headers',
             'km'            => 'max:20',
             'hm'            => 'max:20'
         ],[
@@ -104,6 +104,26 @@ class PurchaseRequestHeaderController extends Controller
         $temp = PurchaseRequestHeader::where('code', $prCode)->first();
         if(!empty($temp)){
             return redirect()->back()->withErrors('Nomor PR sudah terdaftar!', 'default')->withInput($request->all());
+        }
+
+        // Validate details
+        $items = $request->input('item');
+
+        if(count($items) == 0){
+            return redirect()->back()->withErrors('Detail barang wajib diisi!', 'default')->withInput($request->all());
+        }
+
+        $qtys = $request->input('qty');
+        $valid = true;
+        $i = 0;
+        foreach($items as $item){
+            if(empty($item)) $valid = false;
+            if(empty($qtys[$i]) || $qtys[$i] == '0') $valid = false;
+            $i++;
+        }
+
+        if(!$valid){
+            return redirect()->back()->withErrors('Detail barang dan jumlah wajib diisi!', 'default')->withInput($request->all());
         }
 
         $user = \Auth::user();

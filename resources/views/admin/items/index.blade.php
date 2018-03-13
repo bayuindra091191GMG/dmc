@@ -22,6 +22,7 @@
                 <th>Nama Barang</th>
                 <th>Part Number</th>
                 <th>Satuan Unit</th>
+                <th>Total Stock</th>
                 <th>Group</th>
                 <th>Tipe Alat Berat</th>
                 <th>Deskripsi</th>
@@ -58,6 +59,7 @@
                     { data: 'name', name: 'name' },
                     { data: 'code', name: 'code' },
                     { data: 'uom', name: 'uom' },
+                    { data: 'stock', name: 'stock' },
                     { data: 'group', name: 'group' },
                     { data: 'machinery_type', name: 'machinery_type' },
                     { data: 'description', name: 'decription' },

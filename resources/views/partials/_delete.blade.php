@@ -14,10 +14,10 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-warning" data-dismiss="modal">
-                        <span class='glyphicon glyphicon-remove'></span> Batal
+                        <span class='glyphicon glyphicon-remove'></span> Tidak
                     </button>
                     <button type="submit" class="btn btn-danger delete">
-                        <span class='glyphicon glyphicon-trash'></span> Hapus
+                        <span class='glyphicon glyphicon-trash'></span> Ya
                     </button>
                 </div>
             </div>
