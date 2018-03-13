@@ -15,7 +15,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $id
  * @property int $item_id
  * @property int $increase
- * @property int $new_stock
+ * @property int $warehouse_id
  * @property int $created_by
  * @property \Carbon\Carbon $created_at
  * @property int $updated_by
@@ -23,6 +23,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @property \App\Models\Auth\User\User $user
  * @property \App\Models\Item $item
+ * @property \App\Models\Warehouse $warehouse
  *
  * @package App\Models
  */
@@ -30,8 +31,8 @@ class StockIn extends Eloquent
 {
 	protected $casts = [
 		'item_id' => 'int',
+		'warehouse_id' => 'int',
 		'increase' => 'int',
-		'new_stock' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
 	];
@@ -42,7 +43,7 @@ class StockIn extends Eloquent
 	protected $fillable = [
 		'item_id',
 		'increase',
-		'new_stock',
+		'warehouse_id',
 		'created_by',
         'created_at'
 	];
@@ -50,6 +51,10 @@ class StockIn extends Eloquent
 	public function item()
 	{
 		return $this->belongsTo(\App\Models\Item::class);
+	}
+	public function warehouse()
+	{
+		return $this->belongsTo(\App\Models\Warehouse::class);
 	}
     public function createdBy()
     {

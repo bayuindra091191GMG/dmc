@@ -32,22 +32,37 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="warehouse" >
+                    Gudang
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="warehouse" name="warehouse" class="form-control col-md-7 col-xs-12 @if($errors->has('warehouse')) parsley-error @endif">
+                        <option value="-1" @if(empty(old('warehouse'))) selected @endif> - Pilih gudang - </option>
+                        @foreach($warehouses as $warehouse)
+                            <option value="{{ $warehouse->id }}" {{ old('warehouse') == $warehouse->id ? "selected":"" }}>{{ $warehouse->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            {{--<div class="form-group">--}}
+                {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="increase">--}}
+                    {{--Jumlah Penambahan--}}
+                {{--</label>--}}
+                {{--<div class="col-md-6 col-sm-6 col-xs-12 price-format">--}}
+                    {{--<input id="increase" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('increase')) parsley-error @endif"--}}
+                           {{--name="increase" value="{{ old('increase') }}">--}}
+                {{--</div>--}}
+            {{--</div>--}}
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="increase">
                     Jumlah Penambahan
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12 price-format">
                     <input id="increase" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('increase')) parsley-error @endif"
                            name="increase" value="{{ old('increase') }}">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="new_stock">
-                    Total Stock Baru
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12 price-format">
-                    <input id="new_stock" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('new_stock')) parsley-error @endif"
-                           name="new_stock" value="{{ old('new_stock') }}">
                 </div>
             </div>
 

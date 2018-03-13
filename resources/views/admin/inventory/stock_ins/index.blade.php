@@ -22,7 +22,7 @@
                 <th>Kode Item</th>
                 <th>Nama Item</th>
                 <th>Jumlah Penambahan</th>
-                <th>Total Terbaru</th>
+                <th>Gudang</th>
                 <th>Dibuat Oleh</th>
                 <th>Tanggal Dibuat</th>
             </tr>
@@ -52,7 +52,7 @@
                     { data: 'item_code', name: 'item_code' },
                     { data: 'item', name: 'item' },
                     { data: 'increase', name: 'increase' },
-                    { data: 'new_stock', name: 'new_stock' },
+                    { data: 'warehouse', name: 'warehouse' },
                     { data: 'created_by', name: 'created_by' },
                     { data: 'created_at', name: 'created_at' }
                 ],
