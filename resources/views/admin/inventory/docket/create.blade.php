@@ -349,6 +349,15 @@
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
     {{ Html::script(mix('assets/admin/js/stringbuilder.js')) }}
 
+    <script>
+        $('#time_add').datetimepicker({
+            format: "HH:mm"
+        });
+        $('#time_edit').datetimepicker({
+            format: "HH:mm"
+        });
+    </script>
+
     <script type="text/javascript">
         var i=1;
 
@@ -488,7 +497,7 @@
                 width: '100%',
                 minimumInputLength: 2,
                 ajax: {
-                    url: '{{ route('select.items.po') }}',
+                    url: '{{ route('select.items') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {
@@ -590,7 +599,7 @@
                 width: '100%',
                 minimumInputLength: 2,
                 ajax: {
-                    url: '{{ route('select.items.po') }}',
+                    url: '{{ route('select.items') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {
