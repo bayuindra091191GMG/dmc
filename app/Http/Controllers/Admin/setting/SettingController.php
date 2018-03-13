@@ -62,15 +62,17 @@ class SettingController extends Controller
             'phone'     => 'required|max:45',
             'fax' => 'required|max:45',
             'email' => 'required|email|max:255',
+            'ppn' => 'required',
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
 
-        $preference->address =$request->input('email');
+        $preference->address =$request->input('address');
         $preference->phone = $request->input('phone');
-        $preference->fax = $request->input('email');
+        $preference->fax = $request->input('fax');
         $preference->email = $request->input('email');
+        $preference->ppn = $request->input('ppn');
         $preference->save();
 
         Session::flash('message', 'Berhasil mengganti data preferensi perusahaan!');

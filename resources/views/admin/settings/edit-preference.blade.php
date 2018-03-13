@@ -71,6 +71,16 @@
                            name="email" value="{{ $preference->email }}" required>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="ppn" >
+                    Nilai PPN
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="ppn" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('ppn')) parsley-error @endif"
+                           name="ppn" value="{{ $preference->ppn }}" required>
+                </div>
+            </div>
 
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">

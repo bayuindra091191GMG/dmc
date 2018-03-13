@@ -19,7 +19,7 @@
             <thead>
             <tr>
                 <th>No</th>
-                <th>Code</th>
+                <th>Kode</th>
                 <th>Deskripsi</th>
                 <th>Tindakan</th>
             </tr>

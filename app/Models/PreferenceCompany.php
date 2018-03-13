@@ -17,6 +17,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $phone
  * @property string $fax
  * @property string $email
+ * @property int $ppn
  * @property \Carbon\Carbon $created_at
  * @property int $created_by
  * @property \Carbon\Carbon $updated_at
@@ -36,6 +37,7 @@ class PreferenceCompany extends Eloquent
 		'phone',
 		'fax',
 		'email',
+		'ppn',
 		'created_by',
 		'updated_by'
 	];
