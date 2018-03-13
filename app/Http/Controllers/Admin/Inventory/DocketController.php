@@ -283,7 +283,7 @@ class DocketController extends Controller
         return view('documents.issued_dockets.issued_docket', compact('issuedDocket', 'issuedDocketDetails'));
     }
 
-    public function download($id){
+    public function downloadExcel($id){
         $issuedDocket = IssuedDocketHeader::find($id);
         $issuedDocketDetails = IssuedDocketDetail::where('header_id', $issuedDocket->id)->get();
 
@@ -357,6 +357,17 @@ class DocketController extends Controller
             ->setPaper('a4', 'landscape');
         $now = Carbon::now('Asia/Jakarta');
         $filename = 'ISSUED_DOCKET_REPORT_' . $now->toDateTimeString();
+
+        return $pdf->download($filename.'.pdf');
+    }
+
+    public function download($id){
+        $issuedDocket = IssuedDocketHeader::find($id);
+        $issuedDocketDetails = IssuedDocketDetail::where('header_id', $issuedDocket->id)->get();
+
+        $pdf = PDF::loadView('documents.issued_dockets.issued_docket_doc', ['issuedDocket' => $issuedDocket, 'issuedDocketDetails' => $issuedDocketDetails])->setPaper('A4');
+        $now = Carbon::now('Asia/Jakarta');
+        $filename = $issuedDocket->code. '_' . $now->toDateTimeString();
 
         return $pdf->download($filename.'.pdf');
     }
