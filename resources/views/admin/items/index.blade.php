@@ -23,6 +23,7 @@
                 <th>Part Number</th>
                 <th>Satuan Unit</th>
                 <th>Group</th>
+                <th>Tipe Alat Berat</th>
                 <th>Deskripsi</th>
                 <th>Tanggal Dibuat</th>
                 <th>Tindakan</th>
@@ -58,6 +59,7 @@
                     { data: 'code', name: 'code' },
                     { data: 'uom', name: 'uom' },
                     { data: 'group', name: 'group' },
+                    { data: 'machinery_type', name: 'machinery_type' },
                     { data: 'description', name: 'decription' },
                     { data: 'created_at', name: 'created_at' },
                     { data: 'action', name: 'action' }

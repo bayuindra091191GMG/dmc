@@ -78,6 +78,12 @@ class ItemController extends Controller
         if(Input::get('group') === '-1'){
             return redirect()->back()->withErrors('Pilih group!', 'default')->withInput($request->all());
         }
+        // Validate machinery type
+
+        $machinery_types = $request->input('machinery_type');
+        if(count($machinery_types) == 0) {
+            return redirect()->back()->withErrors('Tipe alat berat harus diisi!', 'default')->withInput($request->all());
+        }
 
         // Validate warehouse
         $warehouses = $request->input('warehouse');
@@ -117,6 +123,7 @@ class ItemController extends Controller
             'code'          => $request->input('code'),
             'uom_id'        => $request->input('uom'),
             'group_id'      => $request->input('group'),
+            'machinery_type_id'      => $machinery_types[0],
             'created_by'    => $user->id,
             'created_at'    => $now->toDateTimeString()
         ]);

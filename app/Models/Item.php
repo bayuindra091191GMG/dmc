@@ -22,6 +22,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $uom_id
  * @property int $group_id
  * @property int $warehouse_id
+ * @property int $machinery_type_id
  * @property string $description
  * @property int $created_by
  * @property \Carbon\Carbon $created_at
@@ -32,6 +33,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\Group $group
  * @property \App\Models\Uom $uom
  * @property \App\Models\Warehouse $warehouse
+ * @property \App\Models\MachineryType $machinery_type
  * @property \Illuminate\Database\Eloquent\Collection $delivery_note_details
  * @property \Illuminate\Database\Eloquent\Collection $issued_docket_details
  * @property \Illuminate\Database\Eloquent\Collection $item_receipt_details
@@ -54,6 +56,7 @@ class Item extends Eloquent
 		'uom_id' => 'int',
 		'group_id' => 'int',
 		'warehouse_id' => 'int',
+		'machinery_type_id' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
 	];
@@ -70,6 +73,7 @@ class Item extends Eloquent
 		'uom_id',
 		'group_id',
 		'warehouse_id',
+		'machinery_type_id',
 		'description',
 		'created_by',
 		'updated_by'
@@ -106,6 +110,11 @@ class Item extends Eloquent
 	public function warehouse()
 	{
 		return $this->belongsTo(\App\Models\Warehouse::class);
+	}
+
+	public function machinery_type()
+	{
+		return $this->belongsTo(\App\Models\MachineryType::class);
 	}
 
 	public function delivery_note_details()
