@@ -10,7 +10,8 @@
             </div>
             <div class="navbar-right">
                 <a class="btn btn-default" href="{{ route('admin.purchase_requests.edit',[ 'purchase_request' => $header->id]) }}">UBAH</a>
-                {{--<a class="btn btn-default" href="{{ route('admin.purchase_requests.edit',[ 'purchase_request' => $header->id]) }}">CETAK</a>--}}
+                <a class="btn btn-default" href="{{ route('admin.purchase_requests.print',[ 'purchase_request' => $header->id]) }}">CETAK</a>
+                <a class="btn btn-default" href="{{ route('admin.purchase_requests.download',[ 'purchase_request' => $header->id]) }}">DOWNLOAD</a>
             </div>
         </div>
     </div>

@@ -227,6 +227,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('purchase_requests/ubah/{purchase_request}', 'Purchasing\PurchaseRequestHeaderController@update')->name('purchase_requests.update');
     Route::get('purchase_requests/tambah', 'Purchasing\PurchaseRequestHeaderController@create')->name('purchase_requests.create');
     Route::post('purchase_requests/simpan', 'Purchasing\PurchaseRequestHeaderController@store')->name('purchase_requests.store');
+    Route::get('purchase_requests/print/{purchase_request}', 'Purchasing\PurchaseRequestHeaderController@printDocument')->name('purchase_requests.print');
+    Route::get('purchase_requests/download/{purchase_request}', 'Purchasing\PurchaseRequestHeaderController@download')->name('purchase_requests.download');
     Route::get('purchase_requests/report', 'Purchasing\PurchaseRequestHeaderController@report')->name('purchase_requests.report');
     Route::post('purchase_requests/download_report', 'Purchasing\PurchaseRequestHeaderController@downloadReport')->name('purchase_requests.download-report');
 

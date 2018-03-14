@@ -246,6 +246,24 @@ class PurchaseRequestHeaderController extends Controller
         return $pdf->download($filename.'.pdf');
     }
 
+    public function download($id){
+        $purchaseRequest = PurchaseRequestHeader::find($id);
+        $purchaseRequestDetails = PurchaseRequestDetail::where('header_id', $purchaseRequest->id)->get();
+
+        $pdf = PDF::loadView('documents.purchase_requests.purchase_requests_doc', ['purchaseRequest' => $purchaseRequest, 'purchaseRequestDetails' => $purchaseRequestDetails])->setPaper('A4');
+        $now = Carbon::now('Asia/Jakarta');
+        $filename = $purchaseRequest->code. '_' . $now->toDateTimeString();
+
+        return $pdf->download($filename.'.pdf');
+    }
+
+    public function printDocument($id){
+        $purchaseRequest = PurchaseRequestHeader::find($id);
+        $purchaseRequestDetails = PurchaseRequestDetail::where('header_id', $purchaseRequest->id)->get();
+
+        return view('documents.purchase_requests.purchase_requests_doc', compact('purchaseRequest', 'purchaseRequestDetails'));
+    }
+
     public function getIndex(){
         $purchaseRequests = PurchaseRequestHeader::all();
         return DataTables::of($purchaseRequests)
