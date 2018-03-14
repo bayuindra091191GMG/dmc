@@ -33,7 +33,7 @@
 </head>
 <body>
 
-<div class="container" style="font-family: 'Times New Roman', Times, serif;">
+<div class="container" style="font-family: 'Times New Roman', Times, serif; width: 800px;">
 		<span style='position:absolute;z-index:5;margin-left:0px;margin-top:16px;width:204px;
 		height:42px'>
 			<img width=204 height=42 src="http://bayu159753.com/public/assets/images/image001.png">
