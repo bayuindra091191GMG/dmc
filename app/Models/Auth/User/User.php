@@ -139,6 +139,11 @@ class User extends Authenticatable
         return $this->hasMany(\App\Models\ApprovalRule::class);
     }
 
+    public function delivery_order_headers()
+    {
+        return $this->hasMany(\App\Models\DeliveryOrderHeader::class, 'confirm_by');
+    }
+
     public function departments()
     {
         return $this->hasMany(\App\Models\Department::class, 'updated_by');
@@ -147,6 +152,31 @@ class User extends Authenticatable
     public function employees()
     {
         return $this->hasMany(\App\Models\Employee::class, 'updated_by');
+    }
+
+    public function interchanges()
+    {
+        return $this->hasMany(\App\Models\Interchange::class, 'created_by');
+    }
+
+    public function issued_docket_headers()
+    {
+        return $this->hasMany(\App\Models\IssuedDocketHeader::class, 'updated_by');
+    }
+
+    public function item_mutations()
+    {
+        return $this->hasMany(\App\Models\ItemMutation::class, 'updated_by');
+    }
+
+    public function item_receipt_headers()
+    {
+        return $this->hasMany(\App\Models\ItemReceiptHeader::class, 'updated_by');
+    }
+
+    public function item_stocks()
+    {
+        return $this->hasMany(\App\Models\ItemStock::class, 'updated_by');
     }
 
     public function items()
@@ -169,6 +199,11 @@ class User extends Authenticatable
         return $this->hasMany(\App\Models\PermissionDocument::class, 'updated_by');
     }
 
+    public function purchase_invoice_headers()
+    {
+        return $this->hasMany(\App\Models\PurchaseInvoiceHeader::class, 'updated_by');
+    }
+
     public function purchase_order_headers()
     {
         return $this->hasMany(\App\Models\PurchaseOrderHeader::class, 'updated_by');
@@ -179,18 +214,33 @@ class User extends Authenticatable
         return $this->hasMany(\App\Models\PurchaseRequestHeader::class, 'updated_by');
     }
 
+    public function quotation_headers()
+    {
+        return $this->hasMany(\App\Models\QuotationHeader::class, 'updated_by');
+    }
+
     public function serials()
     {
         return $this->hasMany(\App\Models\Serial::class, 'updated_by');
     }
 
+    public function sites()
+    {
+        return $this->hasMany(\App\Models\Site::class, 'updated_by');
+    }
+
+    public function stock_adjustments()
+    {
+        return $this->hasMany(\App\Models\StockAdjustment::class, 'updated_by');
+    }
+
+    public function stock_ins()
+    {
+        return $this->hasMany(\App\Models\StockIn::class, 'updated_by');
+    }
+
     public function suppliers()
     {
         return $this->hasMany(\App\Models\Supplier::class, 'updated_by');
-    }
-
-    public function warehouses()
-    {
-        return $this->hasMany(\App\Models\Warehouse::class, 'updated_by');
     }
 }

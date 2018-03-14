@@ -8,11 +8,11 @@
             <div class="animate form login_form">
                 <section class="login_content">
                     {{ Form::open(['route' => 'login']) }}
-                        <h1>{{ __('views.auth.login.header') }}</h1>
+                        <h1>FORM MASUK</h1>
 
                         <div>
                             <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}"
-                                   placeholder="{{ __('views.auth.login.input_0') }}" required autofocus>
+                                   placeholder="Alamat Email" required autofocus>
                         </div>
                         <div>
                             <input id="password" type="password" class="form-control" name="password"
@@ -21,7 +21,7 @@
                         <div class="checkbox al_left">
                             <label>
                                 <input type="checkbox"
-                                       name="remember" {{ old('remember') ? 'checked' : '' }}> {{ __('views.auth.login.input_2') }}
+                                       name="remember" {{ old('remember') ? 'checked' : '' }}> Ingat Saya
                             </label>
                         </div>
 
@@ -38,7 +38,8 @@
                         @endif
 
                         <div>
-                            <button class="btn btn-default submit" type="submit">{{ __('views.auth.login.action_0') }}</button>
+                            {{--<button class="btn btn-default submit" type="submit">{{ __('views.auth.login.action_0') }}</button>--}}
+                            <button class="btn btn-default submit" type="submit">Masuk</button>
                             {{--<a class="reset_pass" href="{{ route('password.request') }}">--}}
                                 {{--{{ __('views.auth.login.action_1') }}--}}
                             {{--</a>--}}

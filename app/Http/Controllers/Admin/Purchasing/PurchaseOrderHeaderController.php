@@ -60,7 +60,9 @@ class PurchaseOrderHeaderController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
-            'po_code'       => 'max:40'
+            'po_code'       => 'max:45|regex:/^\S*$/u'
+        ],[
+            'po_code.regex'     => 'Nomor PO harus tanpa spasi!'
         ]);
 
         if ($validator->fails()) {
@@ -84,7 +86,7 @@ class PurchaseOrderHeaderController extends Controller
         $poCode = 'default';
         if(Input::get('auto_number')){
             $sysNo = NumberingSystem::where('doc_id', '4')->first();
-            $poCode = Utilities::GenerateNumberPurchaseOrder('PO', $sysNo->next_no);
+            $poCode = Utilities::GenerateNumberPurchaseOrder($sysNo->document->code, $sysNo->next_no);
             $sysNo->next_no++;
             $sysNo->save();
         }

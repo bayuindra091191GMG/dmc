@@ -266,6 +266,21 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('quotation_details/ubah', 'Purchasing\QuotationDetailController@update')->name('quotation_details.update');
     Route::post('quotation_details/hapus', 'Purchasing\QuotationDetailController@delete')->name('quotation_details.delete');
 
+    //Purchase Invoice Headers
+    Route::get('purchase_invoices', 'Purchasing\PurchaseInvoiceHeaderController@index')->name('purchase_invoices');
+    Route::get('purchase_invoices/detil/{purchase_invoice}', 'Purchasing\PurchaseInvoiceHeaderController@show')->name('purchase_invoices.show');
+    Route::get('purchase_invoices/{purchase_invoice}/ubah', 'Purchasing\PurchaseInvoiceHeaderController@edit')->name('purchase_invoices.edit');
+    Route::put('purchase_invoices/ubah/{purchase_invoice}', 'Purchasing\PurchaseInvoiceHeaderController@update')->name('purchase_invoices.update');
+    Route::get('purchase_invoices/tambah', 'Purchasing\PurchaseInvoiceHeaderController@create')->name('purchase_invoices.create');
+    Route::post('purchase_invoices/simpan', 'Purchasing\PurchaseInvoiceHeaderController@store')->name('purchase_invoices.store');
+    Route::get('purchase_invoices/report', 'Purchasing\PurchaseInvoiceHeaderController@report')->name('purchase_invoices.report');
+    Route::post('purchase_invoices/download_report', 'Purchasing\PurchaseInvoiceHeaderController@downloadReport')->name('purchase_invoices.download-report');
+
+    //Purchase Invoice Details
+    Route::post('purchase_invoice_details/simpan', 'Purchasing\PurchaseInvoiceDetailController@store')->name('purchase_invoice_details.store');
+    Route::put('purchase_invoice_details/ubah', 'Purchasing\PurchaseInvoiceDetailController@update')->name('purchase_invoice_details.update');
+    Route::post('purchase_invoice_details/hapus', 'Purchasing\PurchaseInvoiceDetailController@delete')->name('purchase_invoice_details.delete');
+
     //Delivery Order Headers
     Route::get('delivery_orders', 'Inventory\DeliveryOrderHeaderController@index')->name('delivery_orders');
     Route::get('delivery_orders/detil/{delivery_order}', 'Inventory\DeliveryOrderHeaderController@show')->name('delivery_orders.show');
@@ -399,8 +414,9 @@ Route::get('/datatables-statuses', 'Admin\StatusController@getIndex')->name('dat
 
 // PURCHASING
 Route::get('/datatables-purchase_requests', 'Admin\Purchasing\PurchaseRequestHeaderController@getIndex')->name('datatables.purchase_requests');
-Route::get('/datatables-purchase_orders', 'Admin\Purchasing\PurchaseOrderHeaderController@getIndex')->name('datatables.purchase_orders');
 Route::get('/datatables-quotations', 'Admin\Purchasing\QuotationHeaderController@getIndex')->name('datatables.quotations');
+Route::get('/datatables-purchase_orders', 'Admin\Purchasing\PurchaseOrderHeaderController@getIndex')->name('datatables.purchase_orders');
+Route::get('/datatables-purchase_invoices', 'Admin\Purchasing\PurchaseInvoiceHeaderController@getIndex')->name('datatables.purchase_invoices');
 
 // INVENTORY
 Route::get('/datatables-delivery_orders', 'Admin\Inventory\DeliveryOrderHeaderController@getIndex')->name('datatables.delivery_orders');

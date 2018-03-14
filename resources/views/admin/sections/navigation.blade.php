@@ -24,212 +24,24 @@
         <!-- sidebar menu -->
         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
             <div class="menu_section">
-                <h3>{{ __('views.backend.section.navigation.sub_header_0') }}</h3>
-                <ul class="nav side-menu">
-                    <li>
-                        <a href="{{ route('admin.dashboard') }}">
-                            <i class="fa fa-home" aria-hidden="true"></i>
-                            {{ __('views.backend.section.navigation.menu_0_1') }}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('admin.settings.preference') }}">
-                            <i class="fa fa-building"></i>
-                            Preferensi Perusahaan
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="menu_section">
-                <h3>{{ __('views.backend.section.navigation.sub_header_1') }}</h3>
-                <ul class="nav side-menu">
-                    {{--<li>--}}
-                        {{--<a href="{{ route('admin.users') }}">--}}
-                            {{--<i class="fa fa-users" aria-hidden="true"></i>--}}
-                            {{--{{ __('views.backend.section.navigation.menu_1_1') }}--}}
-                        {{--</a>--}}
-                    {{--</li>--}}
-                    {{--<li>--}}
-                        {{--<a href="{{ route('admin.permissions') }}">--}}
-                            {{--<i class="fa fa-key" aria-hidden="true"></i>--}}
-                            {{--{{ __('views.backend.section.navigation.menu_1_2') }}--}}
-                        {{--</a>--}}
-                    {{--</li>--}}
-                    <li><a>User<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li class="sub_menu">
-                                <a href="{{ route('admin.users') }}">
-                                    Daftar User
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.users.create') }}">
-                                    Tambah User
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li><a>Barang<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li class="sub_menu">
-                                <a href="{{ route('admin.items') }}">
-                                    Daftar Barang
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.items.create') }}">
-                                    Tambah Barang
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    {{--<li><a>Karyawan<span class="fa fa-chevron-down"></span></a>--}}
-                        {{--<ul class="nav child_menu">--}}
-                            {{--<li class="sub_menu">--}}
-                                {{--<a href="{{ route('admin.employees') }}">--}}
-                                    {{--Daftar Karyawan--}}
-                                {{--</a>--}}
-                            {{--</li>--}}
-                            {{--<li>--}}
-                                {{--<a href="{{ route('admin.employees.create') }}">--}}
-                                    {{--Tambah Karyawan--}}
-                                {{--</a>--}}
-                            {{--</li>--}}
-                        {{--</ul>--}}
-                    {{--</li>--}}
-                    <li><a>Alat Berat<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li class="sub_menu">
-                                <a href="{{ route('admin.machineries') }}">
-                                    Daftar Alat Berat
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.machineries.create') }}">
-                                    Tambah Alat Berat
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-            <div class="menu_section">
                 <ul class="nav side-menu">
                     <li>
                         <a style="font-weight: bold;">
                             <i class="fa fa-list"></i>
-                            Master Data
+                            Management
                             <span class="fa fa-chevron-down"></span>
                         </a>
                         <ul class="nav child_menu">
-                            <li><a>Status<span class="fa fa-chevron-down"></span></a>
+                            <li><a>User<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
-                                        <a href="{{ route('admin.statuses') }}">
-                                            Daftar Status
+                                        <a href="{{ route('admin.users') }}">
+                                            Daftar User
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('admin.statuses.create') }}">
-                                            Tambah Status
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a>Menu<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li class="sub_menu">
-                                        <a href="{{ route('admin.menus') }}">
-                                            Daftar Menu
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.menus.create') }}">
-                                            Tambah Menu
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a>Kategori Inventory<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li class="sub_menu">
-                                        <a href="{{ route('admin.groups') }}">
-                                            Daftar Kategori
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.groups.create') }}">
-                                            Tambah Kategori
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a>Departemen<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li class="sub_menu">
-                                        <a href="{{ route('admin.departments') }}">
-                                            Daftar Departemen
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.departments.create') }}">
-                                            Tambah Departemen
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a>Gudang<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li class="sub_menu">
-                                        <a href="{{ route('admin.warehouses') }}">
-                                            Daftar Gudang
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.warehouses.create') }}">
-                                            Tambah Gudang
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a>Jenis Dokumen<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li class="sub_menu">
-                                        <a href="{{ route('admin.documents') }}">
-                                            Daftar Jenis Dokumen
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.documents.create') }}">
-                                            Tambah Jenis Dokumen
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a>Satuan Unit<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li class="sub_menu">
-                                        <a href="{{ route('admin.uoms') }}">
-                                            Daftar Satuan Unit
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.uoms.create') }}">
-                                            Tambah Satuan Unit
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a>Metode Pembayaran<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li class="sub_menu">
-                                        <a href="{{ route('admin.payment_methods') }}">
-                                            Daftar Metode Pembayaran
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.payment_methods.create') }}">
-                                            Tambah Metode Pembayaran
+                                        <a href="{{ route('admin.users.create') }}">
+                                            Tambah User
                                         </a>
                                     </li>
                                 </ul>
@@ -248,59 +60,30 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li><a>Vendor<span class="fa fa-chevron-down"></span></a>
+                            <li><a>Departemen<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
-                                        <a href="{{ route('admin.suppliers') }}">
-                                            Daftar Vendor
+                                        <a href="{{ route('admin.departments') }}">
+                                            Daftar Departemen
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('admin.suppliers.create') }}">
-                                            Tambah Vendor
+                                        <a href="{{ route('admin.departments.create') }}">
+                                            Tambah Departemen
                                         </a>
                                     </li>
                                 </ul>
                             </li>
-
-                            <li><a>Tipe Alat Berat<span class="fa fa-chevron-down"></span></a>
+                            <li><a>Metode Pembayaran<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
-                                        <a href="{{ route('admin.machinery_types') }}">
-                                            Daftar Tipe Alat Berat
+                                        <a href="{{ route('admin.payment_methods') }}">
+                                            Daftar Metode Pembayaran
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('admin.machinery_types.create') }}">
-                                            Tambah Tipe Alat Berat
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a>Kategori Alat Berat<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li class="sub_menu">
-                                        <a href="{{ route('admin.machinery_categories') }}">
-                                            Daftar Kategori Alat Berat
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.machinery_categories.create') }}">
-                                            Tambah Kategori Alat Berat
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a>Merek Alat Berat<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li class="sub_menu">
-                                        <a href="{{ route('admin.machinery_brands') }}">
-                                            Daftar Merek Alat Berat
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.machinery_brands.create') }}">
-                                            Tambah Merek Alat Berat
+                                        <a href="{{ route('admin.payment_methods.create') }}">
+                                            Tambah Metode Pembayaran
                                         </a>
                                     </li>
                                 </ul>
@@ -315,18 +98,18 @@
                         </a>
                         <ul class="nav child_menu">
                             {{--<li><a>Pengaturan Approval<span class="fa fa-chevron-down"></span></a>--}}
-                                {{--<ul class="nav child_menu">--}}
-                                    {{--<li class="sub_menu">--}}
-                                        {{--<a href="{{ route('admin.approval_rules') }}">--}}
-                                            {{--Daftar Pengaturan Approval--}}
-                                        {{--</a>--}}
-                                    {{--</li>--}}
-                                    {{--<li>--}}
-                                        {{--<a href="{{ route('admin.approval_rules.create') }}">--}}
-                                            {{--Tambah Pengaturan Approval--}}
-                                        {{--</a>--}}
-                                    {{--</li>--}}
-                                {{--</ul>--}}
+                            {{--<ul class="nav child_menu">--}}
+                            {{--<li class="sub_menu">--}}
+                            {{--<a href="{{ route('admin.approval_rules') }}">--}}
+                            {{--Daftar Pengaturan Approval--}}
+                            {{--</a>--}}
+                            {{--</li>--}}
+                            {{--<li>--}}
+                            {{--<a href="{{ route('admin.approval_rules.create') }}">--}}
+                            {{--Tambah Pengaturan Approval--}}
+                            {{--</a>--}}
+                            {{--</li>--}}
+                            {{--</ul>--}}
                             {{--</li>--}}
                             <li><a>Otorisasi Dokumen<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
@@ -372,233 +155,535 @@
                             </li>
                         </ul>
                     </li>
-                </ul>
-            </div>
-
-            <div class="menu_section">
-                <h3>Purchasing</h3>
-
-                <ul class="nav side-menu">
                     <li>
-                        <a>Purchase Request<span class="fa fa-chevron-down"></span></a>
+                        <a style="font-weight: bold;">
+                            <i class="fa fa-list"></i>
+                            Logistik
+                            <span class="fa fa-chevron-down"></span>
+                        </a>
                         <ul class="nav child_menu">
-                            <li class="sub_menu">
-                                <a href="{{ route('admin.purchase_requests') }}">
-                                    Daftar PR
-                                </a>
+                            <li>
+                                <a>Master<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.warehouses') }}">
+                                            Gudang
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.groups') }}">
+                                            Kategori Inventory
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                             <li>
-                                <a href="{{ route('admin.purchase_requests.create') }}">
-                                    Buat Baru
-                                </a>
+                                <a>Inventory<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.items') }}">
+                                            Daftar Inventory
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.items.create') }}">
+                                            Tambah Inventory
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                             <li>
-                                <a href="{{ route('admin.purchase_requests.report') }}">
-                                    Download Report
-                                </a>
+                                <a>Interchanges<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.interchanges') }}">
+                                            Daftar Interchange
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.interchanges.create') }}">
+                                            Buat Baru
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a>Issued Docket (ID)<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.issued_dockets') }}">
+                                            Daftar Issued Docket
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.issued_dockets.create') }}">
+                                            Buat Baru
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.issued_dockets.report') }}">
+                                            Report
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a>Goods Receipt (GR)<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.item_receipts') }}">
+                                            Daftar Goods Receipt
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.item_receipts.create') }}">
+                                            Buat Baru
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.item_receipts.report') }}">
+                                            Report
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a>Surat Jalan<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.delivery_orders') }}">
+                                            Daftar Surat Jalan
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.delivery_orders.create') }}">
+                                            Buat Baru
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.delivery_orders.report') }}">
+                                            Report
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a>Stock Adjustment (SA)<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.stock_adjustments') }}">
+                                            Daftar
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.stock_adjustments.create') }}">
+                                            Buat Baru
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a>Stock In<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.stock_ins') }}">
+                                            Daftar
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.stock_ins.create') }}">
+                                            Buat Baru
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a>Mutasi<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.item_mutations') }}">
+                                            Daftar Mutasi
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.item_mutations.create') }}">
+                                            Buat Baru
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <a>Quotation Vendor<span class="fa fa-chevron-down"></span></a>
+                        <a style="font-weight: bold;">
+                            <i class="fa fa-list"></i>
+                            Purchasing
+                            <span class="fa fa-chevron-down"></span>
+                        </a>
                         <ul class="nav child_menu">
-                            <li class="sub_menu">
-                                <a href="{{ route('admin.quotations') }}">
-                                    Daftar Quotation
-                                </a>
+                            <li>
+                                <a>Vendor<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.suppliers') }}">
+                                            Daftar Vendor
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.suppliers.create') }}">
+                                            Tambah Vendor
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                             <li>
-                                <a href="{{ route('admin.quotations.create') }}">
-                                    Buat Baru
-                                </a>
+                                <a>Purchase Request (PR)<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.purchase_requests') }}">
+                                            Daftar PR
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.purchase_requests.create') }}">
+                                            Buat Baru
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.purchase_requests.report') }}">
+                                            Report
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a>Request For Quotation (RFQ)<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.quotations') }}">
+                                            Daftar Quotation
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.quotations.create') }}">
+                                            Buat Baru
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a>Purchase Order (PO)<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.purchase_orders') }}">
+                                            Daftar PO
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.purchase_orders.create') }}">
+                                            Buat Baru
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.purchase_orders.report') }}">
+                                            Report
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a>Purchase Invoice (PI)<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.purchase_invoices') }}">
+                                            Daftar Purchase Invoice
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.purchase_invoices.create') }}">
+                                            Buat Baru
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            Report
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a>Request For Payment (RFP)<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="#">
+                                            Daftar Request For Payment
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#}">
+                                            Buat Baru
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            Report
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <a>Purchase Order<span class="fa fa-chevron-down"></span></a>
+                        <a style="font-weight: bold;">
+                            <i class="fa fa-list"></i>
+                            Equipment
+                            <span class="fa fa-chevron-down"></span>
+                        </a>
                         <ul class="nav child_menu">
-                            <li class="sub_menu">
-                                <a href="{{ route('admin.purchase_orders') }}">
-                                    Daftar PO
-                                </a>
+                            <li><a>Master<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.machinery_categories') }}">
+                                            Kategori Alat
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.machinery_brands') }}">
+                                            Merek Alat
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.machinery_types') }}">
+                                            Tipe Alat
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
-                            <li>
-                                <a href="{{ route('admin.purchase_orders.create') }}">
-                                    Buat Baru
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.purchase_orders.report') }}">
-                                    Download Report
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="menu_section">
-                <h3>Inventory</h3>
-
-                <ul class="nav side-menu">
-                    <li>
-                        <a>Surat Jalan<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li class="sub_menu">
-                                <a href="{{ route('admin.delivery_orders') }}">
-                                    Daftar Surat Jalan
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.delivery_orders.create') }}">
-                                    Buat Baru
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.delivery_orders.report') }}">
-                                    Download Report
-                                </a>
+                            <li><a>Alat Berat<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.machineries') }}">
+                                            Daftar Alat Berat
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.machineries.create') }}">
+                                            Tambah Alat Berat
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <a>Issued Docket<span class="fa fa-chevron-down"></span></a>
+                        <a style="font-weight: bold;">
+                            <i class="fa fa-list"></i>
+                            Utility
+                            <span class="fa fa-chevron-down"></span>
+                        </a>
                         <ul class="nav child_menu">
-                            <li class="sub_menu">
-                                <a href="{{ route('admin.issued_dockets') }}">
-                                    Daftar Issued Docket
-                                </a>
-                            </li>
                             <li>
-                                <a href="{{ route('admin.issued_dockets.create') }}">
-                                    Buat Baru
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.issued_dockets.report') }}">
-                                    Download Report
+                                <a href="{{ route('admin.settings.preference') }}">
+                                    Preferensi Perusahaan
                                 </a>
                             </li>
                         </ul>
                     </li>
-                    <li>
-                        <a>Goods Receipt<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li class="sub_menu">
-                                <a href="{{ route('admin.item_receipts') }}">
-                                    Daftar Goods Receipt
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.item_receipts.create') }}">
-                                    Buat Baru
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.item_receipts.report') }}">
-                                    Download Report
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a>Interchanges<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li class="sub_menu">
-                                <a href="{{ route('admin.interchanges') }}">
-                                    Daftar Interchange
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.interchanges.create') }}">
-                                    Buat Baru
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a>Stock Adjustment<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li class="sub_menu">
-                                <a href="{{ route('admin.stock_adjustments') }}">
-                                    Daftar
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.stock_adjustments.create') }}">
-                                    Buat Baru
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a>Stock In<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li class="sub_menu">
-                                <a href="{{ route('admin.stock_ins') }}">
-                                    Daftar
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.stock_ins.create') }}">
-                                    Buat Baru
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a>Mutasi Barang<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li class="sub_menu">
-                                <a href="{{ route('admin.item_mutations') }}">
-                                    Daftar Mutasi Barang
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.item_mutations.create') }}">
-                                    Buat Baru
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-            {{--<div class="menu_section">--}}
-                {{--<h3>{{ __('views.backend.section.navigation.sub_header_2') }}</h3>--}}
-
-                {{--<ul class="nav side-menu">--}}
                     {{--<li>--}}
-                        {{--<a>--}}
+                        {{--<a style="font-weight: bold;">--}}
                             {{--<i class="fa fa-list"></i>--}}
-                            {{--{{ __('views.backend.section.navigation.menu_2_1') }}--}}
+                            {{--Master Data--}}
                             {{--<span class="fa fa-chevron-down"></span>--}}
                         {{--</a>--}}
                         {{--<ul class="nav child_menu">--}}
-                            {{--<li>--}}
-                                {{--<a href="{{ route('log-viewer::dashboard') }}">--}}
-                                    {{--{{ __('views.backend.section.navigation.menu_2_2') }}--}}
-                                {{--</a>--}}
+                            {{--<li><a>Status<span class="fa fa-chevron-down"></span></a>--}}
+                                {{--<ul class="nav child_menu">--}}
+                                    {{--<li class="sub_menu">--}}
+                                        {{--<a href="{{ route('admin.statuses') }}">--}}
+                                            {{--Daftar Status--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.statuses.create') }}">--}}
+                                            {{--Tambah Status--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                {{--</ul>--}}
                             {{--</li>--}}
-                            {{--<li>--}}
-                                {{--<a href="{{ route('log-viewer::logs.list') }}">--}}
-                                    {{--{{ __('views.backend.section.navigation.menu_2_3') }}--}}
-                                {{--</a>--}}
+                            {{--<li><a>Menu<span class="fa fa-chevron-down"></span></a>--}}
+                                {{--<ul class="nav child_menu">--}}
+                                    {{--<li class="sub_menu">--}}
+                                        {{--<a href="{{ route('admin.menus') }}">--}}
+                                            {{--Daftar Menu--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.menus.create') }}">--}}
+                                            {{--Tambah Menu--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                {{--</ul>--}}
+                            {{--</li>--}}
+                            {{--<li><a>Kategori Inventory<span class="fa fa-chevron-down"></span></a>--}}
+                                {{--<ul class="nav child_menu">--}}
+                                    {{--<li class="sub_menu">--}}
+                                        {{--<a href="{{ route('admin.groups') }}">--}}
+                                            {{--Daftar Kategori--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.groups.create') }}">--}}
+                                            {{--Tambah Kategori--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                {{--</ul>--}}
+                            {{--</li>--}}
+                            {{--<li><a>Departemen<span class="fa fa-chevron-down"></span></a>--}}
+                                {{--<ul class="nav child_menu">--}}
+                                    {{--<li class="sub_menu">--}}
+                                        {{--<a href="{{ route('admin.departments') }}">--}}
+                                            {{--Daftar Departemen--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.departments.create') }}">--}}
+                                            {{--Tambah Departemen--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                {{--</ul>--}}
+                            {{--</li>--}}
+                            {{--<li><a>Gudang<span class="fa fa-chevron-down"></span></a>--}}
+                                {{--<ul class="nav child_menu">--}}
+                                    {{--<li class="sub_menu">--}}
+                                        {{--<a href="{{ route('admin.warehouses') }}">--}}
+                                            {{--Daftar Gudang--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.warehouses.create') }}">--}}
+                                            {{--Tambah Gudang--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                {{--</ul>--}}
+                            {{--</li>--}}
+                            {{--<li><a>Jenis Dokumen<span class="fa fa-chevron-down"></span></a>--}}
+                                {{--<ul class="nav child_menu">--}}
+                                    {{--<li class="sub_menu">--}}
+                                        {{--<a href="{{ route('admin.documents') }}">--}}
+                                            {{--Daftar Jenis Dokumen--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.documents.create') }}">--}}
+                                            {{--Tambah Jenis Dokumen--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                {{--</ul>--}}
+                            {{--</li>--}}
+                            {{--<li><a>Satuan Unit<span class="fa fa-chevron-down"></span></a>--}}
+                                {{--<ul class="nav child_menu">--}}
+                                    {{--<li class="sub_menu">--}}
+                                        {{--<a href="{{ route('admin.uoms') }}">--}}
+                                            {{--Daftar Satuan Unit--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.uoms.create') }}">--}}
+                                            {{--Tambah Satuan Unit--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                {{--</ul>--}}
+                            {{--</li>--}}
+                            {{--<li><a>Metode Pembayaran<span class="fa fa-chevron-down"></span></a>--}}
+                                {{--<ul class="nav child_menu">--}}
+                                    {{--<li class="sub_menu">--}}
+                                        {{--<a href="{{ route('admin.payment_methods') }}">--}}
+                                            {{--Daftar Metode Pembayaran--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.payment_methods.create') }}">--}}
+                                            {{--Tambah Metode Pembayaran--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                {{--</ul>--}}
+                            {{--</li>--}}
+                            {{--<li><a>Site<span class="fa fa-chevron-down"></span></a>--}}
+                                {{--<ul class="nav child_menu">--}}
+                                    {{--<li class="sub_menu">--}}
+                                        {{--<a href="{{ route('admin.sites') }}">--}}
+                                            {{--Daftar Sites--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.sites.create') }}">--}}
+                                            {{--Tambah Site--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                {{--</ul>--}}
+                            {{--</li>--}}
+                            {{--<li><a>Vendor<span class="fa fa-chevron-down"></span></a>--}}
+                                {{--<ul class="nav child_menu">--}}
+                                    {{--<li class="sub_menu">--}}
+                                        {{--<a href="{{ route('admin.suppliers') }}">--}}
+                                            {{--Daftar Vendor--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.suppliers.create') }}">--}}
+                                            {{--Tambah Vendor--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                {{--</ul>--}}
+                            {{--</li>--}}
+
+                            {{--<li><a>Tipe Alat Berat<span class="fa fa-chevron-down"></span></a>--}}
+                                {{--<ul class="nav child_menu">--}}
+                                    {{--<li class="sub_menu">--}}
+                                        {{--<a href="{{ route('admin.machinery_types') }}">--}}
+                                            {{--Daftar Tipe Alat Berat--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.machinery_types.create') }}">--}}
+                                            {{--Tambah Tipe Alat Berat--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                {{--</ul>--}}
+                            {{--</li>--}}
+                            {{--<li><a>Kategori Alat Berat<span class="fa fa-chevron-down"></span></a>--}}
+                                {{--<ul class="nav child_menu">--}}
+                                    {{--<li class="sub_menu">--}}
+                                        {{--<a href="{{ route('admin.machinery_categories') }}">--}}
+                                            {{--Daftar Kategori Alat Berat--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.machinery_categories.create') }}">--}}
+                                            {{--Tambah Kategori Alat Berat--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                {{--</ul>--}}
+                            {{--</li>--}}
+                            {{--<li><a>Merek Alat Berat<span class="fa fa-chevron-down"></span></a>--}}
+                                {{--<ul class="nav child_menu">--}}
+                                    {{--<li class="sub_menu">--}}
+                                        {{--<a href="{{ route('admin.machinery_brands') }}">--}}
+                                            {{--Daftar Merek Alat Berat--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.machinery_brands.create') }}">--}}
+                                            {{--Tambah Merek Alat Berat--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                {{--</ul>--}}
                             {{--</li>--}}
                         {{--</ul>--}}
                     {{--</li>--}}
-                {{--</ul>--}}
-            {{--</div>--}}
-            {{--<div class="menu_section">--}}
-                {{--<h3>{{ __('views.backend.section.navigation.sub_header_3') }}</h3>--}}
-                {{--<ul class="nav side-menu">--}}
-                  {{--<li>--}}
-                      {{--<a href="http://netlicensing.io/?utm_source=Laravel_Boilerplate&utm_medium=github&utm_campaign=laravel_boilerplate&utm_content=credits" target="_blank" title="Online Software License Management"><i class="fa fa-lock" aria-hidden="true"></i>NetLicensing</a>--}}
-                  {{--</li>--}}
-                  {{--<li>--}}
-                      {{--<a href="https://photolancer.zone/?utm_source=Laravel_Boilerplate&utm_medium=github&utm_campaign=laravel_boilerplate&utm_content=credits" target="_blank" title="Individual digital content for your next campaign"><i class="fa fa-camera-retro" aria-hidden="true"></i>Photolancer Zone</a>--}}
-                  {{--</li>--}}
-                {{--</ul>--}}
-            {{--</div>--}}
+
+                </ul>
+            </div>
         </div>
         <!-- /sidebar menu -->
     </div>

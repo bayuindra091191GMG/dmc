@@ -136,7 +136,7 @@
             @foreach($purchaseRequestDetails as $detail)
                 <tr align="center">
                     <td>{{ $i }}</td>
-                    <td>A very good thing that I need Dood</td>
+                    <td>{{ $detail->item->name }}</td>
                     <td>{{ $detail->item->code }}</td>
                     <td>{{ $detail->item->uom->description }}</td>
                     <td>{{ $detail->quantity }}</td>

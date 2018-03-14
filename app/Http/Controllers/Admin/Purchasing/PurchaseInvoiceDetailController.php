@@ -2,24 +2,23 @@
 /**
  * Created by PhpStorm.
  * User: GMG-Developer
- * Date: 28/02/2018
- * Time: 11:02
+ * Date: 14/03/2018
+ * Time: 16:22
  */
 
 namespace App\Http\Controllers\Admin\Purchasing;
 
 
 use App\Http\Controllers\Controller;
-use App\Models\PurchaseOrderDetail;
-use App\Models\PurchaseOrderHeader;
+use App\Models\PurchaseInvoiceDetail;
+use App\Models\PurchaseInvoiceHeader;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
-class PurchaseOrderDetailController extends Controller
+class PurchaseInvoiceDetailController extends Controller
 {
     public function store(Request $request){
         try{
@@ -34,7 +33,7 @@ class PurchaseOrderDetailController extends Controller
                 return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
             }
 
-            $detail = new PurchaseOrderDetail();
+            $detail = new PurchaseInvoiceDetail();
             $detail->header_id = $request->input('header_id');
             $detail->item_id = $request->input('item');
 
@@ -60,12 +59,12 @@ class PurchaseOrderDetailController extends Controller
                 $detail->subtotal = $finalSubtotal;
             }
 
-            if(!empty(Input::get('remark'))) $detail->remark = Input::get('remark');
+            if($request->filled('remark')) $detail->remark = Input::get('remark');
 
             $detail->save();
 
             // Accumulate total price, discount & payment
-            $header = PurchaseOrderHeader::find($request->input('header_id'));
+            $header = PurchaseInvoiceHeader::find($request->input('header_id'));
             $totalPrice = $header->total_price + ($qty * $price);
             $header->total_price = $totalPrice;
 
@@ -98,9 +97,14 @@ class PurchaseOrderDetailController extends Controller
             if($request->filled('discount')){
                 $header->total_discount += $discountAmount;
             }
+
+            $now = Carbon::now('Asia/Jakarta');
+            $user = \Auth::user();
+            $header->updated_by = $user->id;
+            $header->updated_at = $now->toDateTimeString();
             $header->save();
 
-            $json = PurchaseOrderDetail::with('item')->find($detail->id);
+            $json = PurchaseInvoiceDetail::with('item')->find($detail->id);
             return new JsonResponse($json);
         }
         catch (\Exception $ex){
@@ -120,7 +124,7 @@ class PurchaseOrderDetailController extends Controller
                 return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
             }
 
-            $detail = PurchaseOrderDetail::find($request->input('id'));
+            $detail = PurchaseInvoiceDetail::find($request->input('id'));
 
             // Get old value
             $oldPrice = $detail->price;
@@ -162,7 +166,7 @@ class PurchaseOrderDetailController extends Controller
             $detail->save();
 
             // Accumulate total price, discount & payment
-            $header = PurchaseOrderHeader::find($detail->header_id);
+            $header = PurchaseInvoiceHeader::find($detail->header_id);
             $totalPrice = $header->total_price - ($oldQty * $oldPrice) + ($qty * $price);
             $header->total_price = $totalPrice;
 
@@ -196,9 +200,14 @@ class PurchaseOrderDetailController extends Controller
             }
 
             $header->total_payment = $totalPayment + $ppnAmount - $pphAmount;
+
+            $now = Carbon::now('Asia/Jakarta');
+            $user = \Auth::user();
+            $header->updated_by = $user->id;
+            $header->updated_at = $now->toDateTimeString();
             $header->save();
 
-            $json = PurchaseOrderDetail::with('item')->find($detail->id);
+            $json = PurchaseInvoiceDetail::with('item')->find($detail->id);
             return new JsonResponse($json);
         }
         catch(\Exception $ex){
@@ -209,12 +218,12 @@ class PurchaseOrderDetailController extends Controller
     public function delete(Request $request){
         try{
 
-            $details = PurchaseOrderDetail::where('header_id', Input::get('header_id'))->get();
+            $details = PurchaseInvoiceDetail::where('header_id', Input::get('header_id'))->get();
             if($details->count() == 1){
                 return Response::json(array('errors' => 'INVALID'));
             }
 
-            $detail = PurchaseOrderDetail::find(Input::get('id'));
+            $detail = PurchaseInvoiceDetail::find($request->input('id'));
 
             // Get old value
             $oldPrice = $detail->price;
@@ -232,7 +241,7 @@ class PurchaseOrderDetailController extends Controller
             }
 
             // Minus header total values
-            $header = PurchaseOrderHeader::find($detail->header_id);
+            $header = PurchaseInvoiceHeader::find($detail->header_id);
             $header->total_price = $header->total_price - ($oldQty * $oldPrice);
 
 //            $deliveryFee = $header->delivery_fee ?? 0;
@@ -265,6 +274,8 @@ class PurchaseOrderDetailController extends Controller
             $header->total_payment = $totalPayment + $ppnAmount - $pphAmount;
 
             $now = Carbon::now('Asia/Jakarta');
+            $user = \Auth::user();
+            $header->updated_by = $user->id;
             $header->updated_at = $now->toDateTimeString();
             $header->save();
 

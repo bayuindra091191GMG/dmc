@@ -69,7 +69,7 @@ class LoginController extends Controller
      */
     protected function sendFailedLoginResponse(Request $request)
     {
-        $errors = [$this->username() => __('auth.failed')];
+        $errors = [$this->username() => 'Email atau password anda salah!'];
 
         if ($request->expectsJson()) {
             return response()->json($errors, 422);
@@ -89,24 +89,33 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
-        $errors = [];
+        try{
+            $errors = [];
 
-        if (config('auth.users.confirm_email') && !$user->confirmed) {
-            $errors = [$this->username() => __('auth.notconfirmed', ['url' => route('confirm.send', [$user->email])])];
+            if (config('auth.users.confirm_email') && !$user->confirmed) {
+                $errors = [$this->username() => __('auth.notconfirmed', ['url' => route('confirm.send', [$user->email])])];
+            }
+
+            if (!$user->active) {
+                $errors = [$this->username() => __('auth.active')];
+            }
+
+            if ($user->status_id == 2){
+                $errors = [$this->username() => 'Email atau password anda salah!'];
+            }
+
+            if ($errors) {
+                auth()->logout();  //logout
+
+                return redirect()->back()
+                    ->withInput($request->only($this->username(), 'remember'))
+                    ->withErrors($errors);
+            }
+
+            return redirect('/admin');
         }
-
-        if (!$user->active) {
-            $errors = [$this->username() => __('auth.active')];
+        catch(\Exception $ex){
+            error_log($ex);
         }
-
-        if ($errors) {
-            auth()->logout();  //logout
-
-            return redirect()->back()
-                ->withInput($request->only($this->username(), 'remember'))
-                ->withErrors($errors);
-        }
-
-        return redirect('/admin');
     }
 }
