@@ -6,12 +6,12 @@
 
     <div class="row">
         @include('partials._success')
-        {{--<div class="nav navbar-right">--}}
-            {{--<a href="{{ route('admin.warehouses.create') }}" class="btn btn-app">--}}
-                {{--<i class="fa fa-plus"></i> Tambah--}}
-            {{--</a>--}}
-        {{--</div>--}}
-        {{--<div class="clearfix"></div>--}}
+        <div class="nav navbar-right">
+            <a href="{{ route('admin.warehouses.create') }}" class="btn btn-app">
+                <i class="fa fa-plus"></i> Tambah
+            </a>
+        </div>
+        <div class="clearfix"></div>
     </div>
     <div class="row">
         <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
@@ -21,6 +21,7 @@
                 <th class="text-center">No</th>
                 <th class="text-center">Kode</th>
                 <th class="text-center">Nama</th>
+                <th class="text-center">Site</th>
                 <th class="text-center">Tindakan</th>
             </tr>
             </thead>
@@ -52,6 +53,7 @@
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
                     { data: 'code', name: 'code', class: 'text-center'},
                     { data: 'name', name: 'name', class: 'text-center'},
+                    { data: 'site', name: site, class: 'text-center'},
                     { data: 'action', name:'action', orderable: false, searchable: false, class: 'text-center'}
                 ],
                 language: {

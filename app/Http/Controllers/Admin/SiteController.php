@@ -62,22 +62,13 @@ class SiteController extends Controller
             'name'              => 'required|max:45',
             'location'          => 'max:30',
             'phone'             => 'max:20',
-            'pic'               => 'max:45',
-            'warehouse_code'    => 'required|max:30|regex:/^\S*$/u|unique:warehouses,code',
-            'warehouse_name'    => 'required|max:45',
+            'pic'               => 'max:45'
         ],[
             'code.unique'           => 'Kode site telah terpakai!',
-            'code.regex'            => 'Kode site harus tanpa spasi',
-            'warehouse_code.unique' => 'Kode gudang telah terpakai',
-            'warehouse_code.regex'  => 'Kode gudang harus tanpa spasi'
+            'code.regex'            => 'Kode site harus tanpa spasi'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
-
-        $warehouse = Warehouse::create([
-            'code'      => $request->input('warehouse_code'),
-            'name'      => $request->input('warehouse_name')
-        ]);
 
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
@@ -88,7 +79,6 @@ class SiteController extends Controller
             'location'      => $request->input('location'),
             'phone'         => $request->input('phone'),
             'pic'           => $request->input('pic'),
-            'warehouse_id'  => $warehouse->id,
             'created_by'    => $user->id,
             'created_at'    => $now->toDateTimeString(),
             'updated_by'    => $user->id,
@@ -124,8 +114,8 @@ class SiteController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param Site $site
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Site $site)
@@ -141,19 +131,10 @@ class SiteController extends Controller
             'name'              => 'required|max:45',
             'location'          => 'max:30',
             'phone'             => 'max:20',
-            'pic'               => 'max:45',
-            'warehouse_code'    => [
-                'required',
-                'max:30',
-                'regex:/^\S*$/u',
-                Rule::unique('warehouses','code')->ignore($site->warehouse->id)
-            ],
-            'warehouse_name'    => 'required|max:45',
+            'pic'               => 'max:45'
         ],[
             'code.unique'           => 'Kode site telah terpakai!',
             'code.regex'            => 'Kode site harus tanpa spasi',
-            'warehouse_code.unique' => 'Kode gudang telah terpakai',
-            'warehouse_code.regex'  => 'Kode gudang harus tanpa spasi'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
@@ -167,12 +148,6 @@ class SiteController extends Controller
 
         $site->save();
 
-        // Update warehouse
-        $warehouse = Warehouse::find($site->warehouse_id);
-        $warehouse->code = $request->input('warehouse_code');
-        $warehouse->name = $request->input('warehouse_name');
-        $warehouse->save();
-
         Session::flash('message', 'Sukses mengubah data site!');
 
         return redirect(route('admin.sites.edit', ['site' => $site->id]));
@@ -181,8 +156,8 @@ class SiteController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request)
     {

@@ -11,9 +11,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
+use App\Models\DeliveryOrderDetail;
 use App\Models\Group;
+use App\Models\IssuedDocketDetail;
 use App\Models\Item;
+use App\Models\ItemReceiptDetail;
 use App\Models\ItemStock;
+use App\Models\PurchaseOrderDetail;
+use App\Models\PurchaseRequestDetail;
 use App\Models\Uom;
 use App\Models\Warehouse;
 use App\Transformer\MasterData\ItemTransformer;
@@ -78,12 +83,6 @@ class ItemController extends Controller
         if(Input::get('group') === '-1'){
             return redirect()->back()->withErrors('Pilih group!', 'default')->withInput($request->all());
         }
-        // Validate machinery type
-
-        $machinery_types = $request->input('machinery_type');
-        if(count($machinery_types) == 0) {
-            return redirect()->back()->withErrors('Tipe alat berat harus diisi!', 'default')->withInput($request->all());
-        }
 
         // Validate warehouse
         $warehouses = $request->input('warehouse');
@@ -119,13 +118,13 @@ class ItemController extends Controller
         $now = Carbon::now('Asia/Jakarta');
 
         $item = Item::create([
-            'name'          => $request->input('name'),
-            'code'          => $request->input('code'),
-            'uom_id'        => $request->input('uom'),
-            'group_id'      => $request->input('group'),
-            'machinery_type_id'      => $machinery_types[0],
-            'created_by'    => $user->id,
-            'created_at'    => $now->toDateTimeString()
+            'name'                  => $request->input('name'),
+            'code'                  => $request->input('code'),
+            'part_number'           => $request->input('part_number'),
+            'uom_id'                => $request->input('uom'),
+            'group_id'              => $request->input('group'),
+            'created_by'            => $user->id,
+            'created_at'            => $now->toDateTimeString()
         ]);
 
         if(!empty(Input::get('valuation')) && Input::get('valuation') != "0"){
@@ -133,10 +132,16 @@ class ItemController extends Controller
             $item->value = $value;
         }
 
+        if($request->filled('machinery_type')){
+            $item->machinery_type_id = $request->input('machinery_type');
+        }
+
         if(!empty(Input::get('description'))){
             $item->description = Input::get('description');
-            $item->save();
+
         }
+
+        $item->save();
 
         // Get stock
         if(count($warehouses) > 0){
@@ -171,11 +176,29 @@ class ItemController extends Controller
         $uoms = Uom::all();
         $groups = Group::all();
 
+        $isPrUsed = PurchaseRequestDetail::where('item_id', $item->id)->exists();
+        $isPoUsed = PurchaseOrderDetail::where('item_id', $item->id)->exists();
+        $isGrUsed = ItemReceiptDetail::where('item_id', $item->id)->exists();
+        $isIdUsed = IssuedDocketDetail::where('item_id', $item->id)->exists();
+        $isDoUsed = DeliveryOrderDetail::where('item_id', $item->id)->exists();
+
+        $isUsed = false;
+        if($isPrUsed || $isPoUsed || $isGrUsed || $isIdUsed || $isDoUsed){
+            $isUsed = true;
+        }
+
+        $itemStocks = null;
+        if(!$isUsed){
+            $itemStocks = ItemStock::where('item_id', $item->id)->get();
+        }
+
         $data = [
             'item'          => $item,
             'warehouses'    => $warehouses,
             'uoms'          => $uoms,
-            'groups'        => $groups
+            'groups'        => $groups,
+            'isUsed'        => $isUsed,
+            'itemStocks'    => $itemStocks
         ];
 
         return View('admin.items.edit')->with($data);
@@ -216,6 +239,26 @@ class ItemController extends Controller
     public function destroy(Request $request)
     {
         try{
+            $isPrUsed = PurchaseRequestDetail::where('item_id', $itemId)->exists();
+            $isPoUsed = PurchaseOrderDetail::where('item_id', $itemId)->exists();
+            $isGrUsed = ItemReceiptDetail::where('item_id', $itemId)->exists();
+            $isIdUsed = IssuedDocketDetail::where('item_id', $itemId)->exists();
+            $isDoUsed = DeliveryOrderDetail::where('item_id', $itemId)->exists();
+
+            $isUsed = false;
+            if($isPrUsed || $isPoUsed || $isGrUsed || $isIdUsed || $isDoUsed){
+                $isIdUsed = true;
+            }
+
+            if($isUsed){
+                return Response::json(array('errors' => 'INVALID'));
+            }
+
+            $itemStocks = ItemStock::where('item_id', $request->input('id'))->get();
+            foreach($itemStocks as $stock){
+                $stock->delete();
+            }
+
             $item = Item::find($request->input('id'));
             $item->delete();
 

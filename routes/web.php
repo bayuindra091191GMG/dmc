@@ -98,6 +98,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('items/ubah/{item}', 'ItemController@update')->name('items.update');
     Route::post('items/hapus', 'ItemController@destroy')->name('items.destroy');
 
+    //Item Stocks
+    Route::post('item_stocks/tambah', 'ItemStockController@store')->name('item_stocks.store');
+    Route::post('item_stocks/ubah', 'ItemStockController@update')->name('item_stocks.update');
+    Route::post('item_stocks/hapus', 'ItemStockController@destroy')->name('item_stocks.destroy');
+
     //Statuses
     Route::get('statuses', 'StatusController@index')->name('statuses');
     Route::get('statuses/tambah', 'StatusController@create')->name('statuses.create');
@@ -381,6 +386,7 @@ Route::get('/select-employees', 'Admin\EmployeeController@getEmployees')->name('
 Route::get('/select-items', 'Admin\ItemController@getItems')->name('select.items');
 Route::get('/select-extended_items', 'Admin\ItemController@getExtendedItems')->name('select.extended_items');
 Route::get('/select-warehouses', 'Admin\WarehouseController@getWarehouses')->name('select.warehouses');
+Route::get('/select-extended_warehouses', 'Admin\WarehouseController@getExtendedWarehouses')->name('select.extended_warehouses');
 Route::get('/select-groups', 'Admin\GroupController@getGroups')->name('select.groups');
 Route::get('/select-machineries', 'Admin\MachineryController@getMachineries')->name('select.machineries');
 Route::get('/select-machinery_types', 'Admin\MachineryTypeController@getMachineryTypes')->name('select.machinery_types');

@@ -22,6 +22,7 @@ class WarehouseTransformer extends TransformerAbstract
         return[
             'code'          => $warehouse->code,
             'name'          => $warehouse->name,
+            'site'          => $warehouse->site->name,
             'action'        => $action
         ];
     }

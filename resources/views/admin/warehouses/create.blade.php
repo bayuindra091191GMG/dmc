@@ -54,12 +54,17 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="location">
-                    Lokasi
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="site" >
+                    Site
+                    <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="location" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('location')) parsley-error @endif"
-                           name="location" value="{{ old('location') }}">
+                    <select id="site" name="site" class="form-control col-md-7 col-xs-12 @if($errors->has('site')) parsley-error @endif">
+                        <option value="-1" @if(empty(old('site'))) selected @endif> - Pilih Site - </option>
+                        @foreach($sites as $site)
+                            <option value="{{ $site->id }}" {{ old('site') == $site->id ? "selected":"" }}>{{ $site->code. ' - '. $site->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
 

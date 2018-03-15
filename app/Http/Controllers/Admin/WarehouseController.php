@@ -47,25 +47,25 @@ class WarehouseController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'code' => 'required|max:30|regex:/^\S*$/u|unique:warehouses',
-            'name' => 'required|max:45'
+            'code'      => 'required|max:30|regex:/^\S*$/u|unique:warehouses',
+            'name'      => 'required|max:45',
+            'phone'     => 'max:20'
         ],[
             'code.unique'   => 'Kode gudang telah terpakai!',
             'code.regex'    => 'Kode gudang harus tanpa spasi'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
-        $dateTimeNow = Carbon::now('Asia/Jakarta');
 
-        $user = Auth::user();
+        if($request->input('site_id') == '-1'){
+            return redirect()->back()->withErrors('Pilih Site!', 'default')->withInput($request->all());
+        }
 
         $warehouse = Warehouse::create([
             'code'          => $request->input('code'),
             'name'          => $request->input('name'),
-            'location'      => $request->input('location'),
+            'site_id'       => $request->input('site_id'),
             'phone'         => $request->input('phone'),
-            'created_by'    => $user->id,
-            'created_at'    => $dateTimeNow->toDateTimeString()
         ]);
 
         Session::flash('message', 'Berhasil membuat data gudang unit!');
@@ -88,19 +88,20 @@ class WarehouseController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param Warehouse $group
+     * @param Warehouse $warehouse
      * @return mixed
      */
     public function update(Request $request, Warehouse $warehouse)
     {
         $validator = Validator::make($request->all(), [
-            'code' => [
+            'code'      => [
                 'required',
                 'max:30',
                 'regex:/^\S*$/u',
                 Rule::unique('warehouses')->ignore($warehouse->id)
             ],
-            'name' => 'required|max:45'
+            'name'      => 'required|max:45',
+            'phone'     => 'max:20'
         ],[
             'code.unique'   => 'Kode gudang telah terpakai!',
             'code.regex'    => 'Kode gudang harus tanpa spasi'
@@ -108,14 +109,10 @@ class WarehouseController extends Controller
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
-        $dateTimeNow = Carbon::now('Asia/Jakarta');
-
         $warehouse->name = $request->input('name');
         $warehouse->code = $request->input('code');
-        $warehouse->location = $request->input('location');
+        $warehouse->site_id = $request->input('site_id');
         $warehouse->phone = $request->input('phone');
-        $warehouse->updated_at = $dateTimeNow->toDateTimeString();
-        $warehouse->updated_by = 1;
 
         $warehouse->save();
 
@@ -128,8 +125,8 @@ class WarehouseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request)
     {
@@ -169,6 +166,20 @@ class WarehouseController extends Controller
 
         foreach ($warehouses as $warehouse) {
             $formatted_tags[] = ['id' => $warehouse->id, 'text' => $warehouse->name];
+        }
+
+        return Response::json($formatted_tags);
+    }
+
+    public function getExtendedWarehouses(Request $request){
+        $term = trim($request->q);
+        $warehouses = Warehouse::where('name', 'LIKE', '%'. $term. '%')
+            ->where('id', '>', 0)->get();
+
+        $formatted_tags = [];
+
+        foreach ($warehouses as $warehouse) {
+            $formatted_tags[] = ['id' => $warehouse->id, 'text' => 'SITE: '. $warehouse->site->name. ' - GUDANG: '. $warehouse->name];
         }
 
         return Response::json($formatted_tags);

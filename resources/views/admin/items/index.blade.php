@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Daftar Barang')
+@section('title', 'Daftar Inventory')
 
 @section('content')
 
@@ -18,16 +18,17 @@
                width="100%" id="items-table">
             <thead>
             <tr>
-                <th>No</th>
-                <th>Nama Barang</th>
-                <th>Part Number</th>
-                <th>Satuan Unit</th>
-                <th>Total Stock</th>
-                <th>Group</th>
-                <th>Tipe Alat Berat</th>
-                <th>Deskripsi</th>
-                <th>Tanggal Dibuat</th>
-                <th>Tindakan</th>
+                <th class="text-center">No</th>
+                <th class="text-center">Kode</th>
+                <th class="text-center">Nama</th>
+                <th class="text-center">Part Number</th>
+                <th class="text-center">Satuan Unit</th>
+                <th class="text-center">Total Stock</th>
+                <th class="text-center">Group</th>
+                <th class="text-center">Tipe Alat Berat</th>
+                <th class="text-center">Deskripsi</th>
+                <th class="text-center">Tanggal Dibuat</th>
+                <th class="text-center">Tindakan</th>
             </tr>
             </thead>
             <tbody>
@@ -55,16 +56,17 @@
                 serverSide: true,
                 ajax: '{!! route('datatables.items') !!}',
                 columns: [
-                    { data: 'DT_Row_Index', orderable: false, searchable: false},
-                    { data: 'name', name: 'name' },
-                    { data: 'code', name: 'code' },
-                    { data: 'uom', name: 'uom' },
-                    { data: 'stock', name: 'stock' },
-                    { data: 'group', name: 'group' },
-                    { data: 'machinery_type', name: 'machinery_type' },
+                    { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
+                    { data: 'code', name: 'code', class: 'text-center'},
+                    { data: 'name', name: 'name', class: 'text-center'},
+                    { data: 'part_number', name: 'part_number', class: 'text-center'},
+                    { data: 'uom', name: 'uom', class: 'text-center'},
+                    { data: 'stock', name: 'stock', class: 'text-center'},
+                    { data: 'group', name: 'group', class: 'text-center'},
+                    { data: 'machinery_type', name: 'machinery_type', class: 'text-center'},
                     { data: 'description', name: 'decription' },
-                    { data: 'created_at', name: 'created_at' },
-                    { data: 'action', name: 'action' }
+                    { data: 'created_at', name: 'created_at', class: 'text-center'},
+                    { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'}
                 ],
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"

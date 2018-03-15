@@ -37,6 +37,10 @@ class ItemStock extends Eloquent
 		'updated_by' => 'int'
 	];
 
+	protected $appends = [
+	    'site_name'
+    ];
+
 	protected $fillable = [
 		'item_id',
 		'warehouse_id',
@@ -46,6 +50,14 @@ class ItemStock extends Eloquent
 		'updated_by',
 		'updated_at'
 	];
+
+	public function getSiteNameAttribute(){
+        $siteName = null;
+        if ($this->warehouse) {
+            $siteName = $this->warehouse->site->name;
+        }
+        return $siteName;
+    }
 
 	public function item()
 	{

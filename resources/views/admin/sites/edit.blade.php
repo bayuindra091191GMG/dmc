@@ -76,28 +76,6 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="warehouse_code" >
-                    Kode Gudang
-                    <span class="required">*</span>
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="warehouse_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('warehouse_code')) parsley-error @endif"
-                           name="warehouse_code" value="{{ $site->warehouse->code }}" required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="warehouse_name" >
-                    Nama Gudang
-                    <span class="required">*</span>
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="warehouse_name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('warehouse_name')) parsley-error @endif"
-                           name="warehouse_name" value="{{ $site->warehouse->name }}" required>
-                </div>
-            </div>
-
                 <div class="form-group">
                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                         <a class="btn btn-primary" href="{{ route('admin.sites') }}"> Batal</a>

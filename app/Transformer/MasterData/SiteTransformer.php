@@ -26,8 +26,6 @@ class SiteTransformer extends TransformerAbstract
             'location'          => $site->location ?? '-',
             'phone'             => $site->phone ?? '-',
             'pic'               => $site->pic ?? '-',
-            'warehouse_code'    => $site->warehouse->code,
-            'warehouse_name'    => $site->warehouse->name,
             'action'            => $action
         ];
     }

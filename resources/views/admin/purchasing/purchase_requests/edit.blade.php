@@ -152,10 +152,10 @@
                         </td>
                         <td>
                             <button class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}">
-                                <span class="glyphicon glyphicon-edit"></span> Ubah
+                                <span class="glyphicon glyphicon-edit"></span>
                             </button>
                             <button class="delete-modal btn btn-danger" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
-                                <span class="glyphicon glyphicon-trash"></span> Hapus
+                                <span class="glyphicon glyphicon-trash"></span>
                             </button>
                         </td>
                     </tr>

@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
 class PurchaseRequestDetailController extends Controller
@@ -28,10 +29,7 @@ class PurchaseRequestDetailController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
+                return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
             }
 
             $detail = new PurchaseRequestDetail();
@@ -64,10 +62,7 @@ class PurchaseRequestDetailController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
+                return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
             }
 
             $detail = PurchaseRequestDetail::find(Input::get('id'));

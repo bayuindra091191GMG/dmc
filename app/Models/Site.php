@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Mon, 12 Mar 2018 15:23:43 +0700.
+ * Date: Thu, 15 Mar 2018 09:44:35 +0700.
  */
 
 namespace App\Models;
@@ -16,7 +16,6 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $code
  * @property string $name
  * @property string $location
- * @property int $warehouse_id
  * @property string $phone
  * @property string $pic
  * @property \Carbon\Carbon $created_at
@@ -25,16 +24,15 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $updated_by
  * 
  * @property \App\Models\Auth\User\User $user
- * @property \App\Models\Warehouse $warehouse
  * @property \Illuminate\Database\Eloquent\Collection $delivery_order_headers
  * @property \Illuminate\Database\Eloquent\Collection $employees
+ * @property \Illuminate\Database\Eloquent\Collection $warehouses
  *
  * @package App\Models
  */
 class Site extends Eloquent
 {
 	protected $casts = [
-		'warehouse_id' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
 	];
@@ -43,7 +41,6 @@ class Site extends Eloquent
 		'code',
 		'name',
 		'location',
-		'warehouse_id',
 		'phone',
 		'pic',
 		'created_by',
@@ -60,11 +57,6 @@ class Site extends Eloquent
         return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
     }
 
-	public function warehouse()
-	{
-		return $this->belongsTo(\App\Models\Warehouse::class);
-	}
-
 	public function delivery_order_headers()
 	{
 		return $this->hasMany(\App\Models\DeliveryOrderHeader::class, 'to_site_id');
@@ -73,5 +65,10 @@ class Site extends Eloquent
 	public function employees()
 	{
 		return $this->hasMany(\App\Models\Employee::class);
+	}
+
+	public function warehouses()
+	{
+		return $this->hasMany(\App\Models\Warehouse::class);
 	}
 }

@@ -97,10 +97,9 @@
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="machinery_type" >
                     Tipe Alat Berat
-                    <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="machinery_type0" name="machinery_type" class='form-control'></select>
+                    <select id="machinery_type" name="machinery_type" class='form-control'></select>
                 </div>
             </div>
 
@@ -217,7 +216,7 @@
         });
 
         // Select machinery type
-        $('#machinery_type0').select2({
+        $('#machinery_type').select2({
             placeholder: {
                 id: '-1',
                 text: '- Pilih tipe alat berat -'
