@@ -74,14 +74,6 @@ class DocketController extends Controller
                 ->withInput();
         }
 
-        if(Input::get('department') === '-1'){
-            return redirect()->back()->withErrors('Pilih departemen!', 'default')->withInput($request->all());
-        }
-
-        if(empty(Input::get('machinery'))){
-            return redirect()->back()->withErrors('Pilih alat berat!', 'default')->withInput($request->all());
-        }
-
         if(empty(Input::get('pr_id')) && empty(Input::get('purchase_request_header'))){
             return redirect()->back()->withErrors('Pilih Purchase Request!', 'default')->withInput($request->all());
         }
@@ -133,9 +125,12 @@ class DocketController extends Controller
             return redirect()->back()->withErrors('Detail barang, Time dan Jumlah wajib diisi!', 'default')->withInput($request->all());
         }
 
+        $purchaseRequest = PurchaseRequestHeader::where('id', $prId)->first();
+
         $docketHeader = IssuedDocketHeader::create([
             'code'                  => $docketNumber,
-            'department_id'         => Input::get('department'),
+            'department_id'         => $purchaseRequest->department_id,
+            'unit_id'          => $purchaseRequest->machinery_id,
             'division'              => Input::get('division'),
             'status_id'             => 1,
             'created_by'            => $user->id,
@@ -144,11 +139,6 @@ class DocketController extends Controller
             'date'                  => $now->toDateString(),
             'purchase_request_id'   => $prId
         ]);
-
-        if(!empty(Input::get('machinery'))){
-            $docketHeader->unit_id = Input::get('machinery');
-            $docketHeader->save();
-        }
 
         $docketHeader->save();
 

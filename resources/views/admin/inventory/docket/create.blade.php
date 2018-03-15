@@ -23,6 +23,27 @@
             @endif
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="purchase_request_header">
+                    No PR
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="purchase_request_header" name="purchase_request_header" class="form-control col-md-7 col-xs-12 @if($errors->has('purchase_request_header')) parsley-error @endif">
+                    </select>
+                    <input type="hidden" id="pr_id" name="pr_id" @if(!empty($purchaseRequest)) value="{{ $purchaseRequest->id }} @endif">
+                </div>
+                <div class="col-md-2 col-sm-2 col-xs-12">
+                    <a class="get-pr-data btn btn-info">
+                        Ambil Data
+                    </a>
+                    @if(!empty($purchaseRequest))
+                        <a class="clear-pr-data btn btn-info">
+                            Set Ulang Data
+                        </a>
+                    @endif
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
                     Issued Docket No
                 </label>
@@ -42,53 +63,6 @@
                             <input type="checkbox" class="flat" id="auto_number" name="auto_number" checked="checked"> Auto Number
                         </label>
                     </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="department" >
-                    Departemen
-                    <span class="required">*</span>
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="department" name="department" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">
-                        <option value="-1" @if(empty(old('uom'))) selected @endif> - Pilih departemen - </option>
-                        @foreach($departments as $department)
-                            <option value="{{ $department->id }}" {{ old('department') == $department->id ? "selected":"" }}>{{ $department->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="machinery" >
-                    Unit Alat Berat
-                    <span class="required">*</span>
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="machinery" name="machinery" class="form-control col-md-7 col-xs-12 @if($errors->has('machinery')) parsley-error @endif">
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="purchase_request_header">
-                    No PR
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="purchase_request_header" name="purchase_request_header" class="form-control col-md-7 col-xs-12 @if($errors->has('purchase_request_header')) parsley-error @endif">
-                    </select>
-                    <input type="hidden" id="pr_id" name="pr_id" @if(!empty($purchaseRequest)) value="{{ $purchaseRequest->id }} @endif">
-                </div>
-                <div class="col-md-2 col-sm-2 col-xs-12">
-                    <a class="get-pr-data btn btn-info">
-                        Ambil Data
-                    </a>
-                    @if(!empty($purchaseRequest))
-                        <a class="clear-pr-data btn btn-info">
-                            Set Ulang Data
-                        </a>
-                    @endif
                 </div>
             </div>
 

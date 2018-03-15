@@ -337,6 +337,24 @@ class PurchaseOrderHeaderController extends Controller
         }
     }
 
+    public function printDocument($id){
+        $purchaseOrder = PurchaseOrderHeader::find($id);
+        $purchaseOrderDetails = PurchaseOrderDetail::where('header_id', $purchaseOrder->id)->get();
+
+        return view('documents.purchase_orders.purchase_orders_doc', compact('purchaseOrder', 'purchaseOrderDetails'));
+    }
+
+    public function download($id){
+        $purchaseOrder = PurchaseOrderHeader::find($id);
+        $purchaseOrderDetails = PurchaseOrderDetail::where('header_id', $purchaseOrder->id)->get();
+
+        $pdf = PDF::loadView('documents.purchase_orders.purchase_orders_doc', ['purchaseOrder' => $purchaseOrder, 'purchaseOrderDetails' => $purchaseOrderDetails])->setPaper('A4');
+        $now = Carbon::now('Asia/Jakarta');
+        $filename = $purchaseOrder->code. '_' . $now->toDateTimeString();
+
+        return $pdf->download($filename.'.pdf');
+    }
+
     public function getPurchaseOrders(Request $request){
         $term = trim($request->q);
         $purchase_requests = PurchaseOrderHeader::where('status_id', 3)

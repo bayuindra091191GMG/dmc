@@ -7,6 +7,8 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="navbar-right">
                 <a class="btn btn-default" href="{{ route('admin.purchase_orders.edit',[ 'purchase_order' => $header->id]) }}">UBAH</a>
+                <a class="btn btn-default" href="{{ route('admin.purchase_orders.print',[ 'purchase_order' => $header->id]) }}">CETAK</a>
+                <a class="btn btn-default" href="{{ route('admin.purchase_orders.download',[ 'purchase_order' => $header->id]) }}">DOWNLOAD</a>
             </div>
         </div>
     </div>
