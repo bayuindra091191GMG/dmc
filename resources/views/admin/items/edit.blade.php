@@ -53,6 +53,19 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="group" >
+                    Kategori Inventory
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="group" name="group" class="form-control col-md-7 col-xs-12 @if($errors->has('group')) parsley-error @endif">
+                        @foreach($groups as $group)
+                            <option value="{{ $group->id }}" {{ $item->group_id == $group->id ? "selected":"" }}>{{ $group->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="part_number">
                     Part Number
                 </label>
@@ -69,19 +82,6 @@
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="uom" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('uom')) parsley-error @endif"
                            name="uom" value="{{ $item->uom }}" required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="group" >
-                    Kategori Inventory
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="group" name="group" class="form-control col-md-7 col-xs-12 @if($errors->has('group')) parsley-error @endif">
-                        @foreach($groups as $group)
-                            <option value="{{ $group->id }}" {{ $item->group_id == $group->id ? "selected":"" }}>{{ $group->name }}</option>
-                        @endforeach
-                    </select>
                 </div>
             </div>
 

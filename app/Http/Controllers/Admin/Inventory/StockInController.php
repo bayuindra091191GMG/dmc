@@ -12,6 +12,7 @@ namespace App\Http\Controllers\Admin\Inventory;
 use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\ItemStock;
+use App\Models\StockCard;
 use App\Models\StockIn;
 use App\Models\Warehouse;
 use App\Transformer\Inventory\StockInTransformer;
@@ -79,20 +80,35 @@ class StockInController extends Controller
                 'created_by'    => $user->id,
                 'created_at'    => $now
             ]);
+            $itemStockPerWarehouse = $increase;
         }
         else{
             $oldStock = $itemStockDB->stock;
-            $itemStockDB->stock = $oldStock + $increase;
+            $itemStockPerWarehouse = $oldStock + $increase;
+
+            $itemStockDB->stock = $itemStockPerWarehouse;
             $itemStockDB->updated_by = $user->id;
             $itemStockDB->updated_at = $now;
 
             $itemStockDB->save();
+
+
         }
 
         //edit item
         $itemDB = Item::find($selectedItem);
         $itemDB->stock += $increase;
         $itemDB->save();
+
+        //add stock card item
+        $stockCard = StockCard::create([
+            'item_id'          => $selectedItem,
+            'change'          => $increase,
+            'stock'          => $itemStockPerWarehouse,
+            'warehouse_id'  => $request->input('warehouse'),
+            'created_by'    => $user->id,
+            'created_at'    => $now
+        ]);
 
 
         Session::flash('message', 'Berhasil membuat data Stock In baru!');

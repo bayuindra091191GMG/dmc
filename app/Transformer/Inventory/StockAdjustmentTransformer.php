@@ -30,7 +30,7 @@ class StockAdjustmentTransformer extends TransformerAbstract
             'item_code'   => $stockAdjustments->item->code,
             'item'   => $stockAdjustments->item->name,
             'depreciation'   => $stockAdjustments->depreciation,
-            'new_stock'   => $stockAdjustments->new_stock,
+            'warehouse'   => $stockAdjustments->warehouse->name,
             'created_by'    => $createdBy,
             'created_at'    => $createdDate
         ];

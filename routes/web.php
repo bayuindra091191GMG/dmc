@@ -352,6 +352,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('stock_ins/tambah', 'Inventory\StockInController@create')->name('stock_ins.create');
     Route::post('stock_ins/simpan', 'Inventory\StockInController@store')->name('stock_ins.store');
 
+    //Stock Card
+    Route::get('stock_cards', 'Inventory\StockCardController@index')->name('stock_cards');
+    Route::get('stock_cards/tambah', 'Inventory\StockCardController@create')->name('stock_cards.create');
+    Route::post('stock_cards/simpan', 'Inventory\StockCardController@store')->name('stock_cards.store');
+
     //Stock Item Mutation
     Route::get('item_mutations', 'Inventory\ItemMutationController@index')->name('item_mutations');
     Route::get('item_mutations/tambah', 'Inventory\ItemMutationController@create')->name('item_mutations.create');
@@ -433,6 +438,7 @@ Route::get('/datatables-issued_dockets', 'Admin\Inventory\DocketController@getIn
 Route::get('/datatables-item_receipts', 'Admin\Inventory\ItemReceiptController@getIndex')->name('datatables.item_receipts');
 Route::get('/datatables-stock_adjustments', 'Admin\Inventory\StockAdjustmentController@getIndex')->name('datatables.stock_adjustments');
 Route::get('/datatables-stock_ins', 'Admin\Inventory\StockInController@getIndex')->name('datatables.stock_ins');
+Route::get('/datatables-stock_cards', 'Admin\Inventory\StockCardController@getIndex')->name('datatables.stock_cards');
 Route::get('/datatables-item_mutations', 'Admin\Inventory\ItemMutationController@getIndex')->name('datatables.item_mutations');
 Route::get('/datatables-interchanges', 'Admin\Inventory\InterchangeController@getIndex')->name('datatables.interchanges');
 Route::get('/datatables-purchase_orders_for_gr', 'Admin\Inventory\ItemReceiptController@getPurchaseOrder')->name('datatables.purchase_orders_for_gr');

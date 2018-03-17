@@ -1,12 +1,12 @@
 @extends('admin.layouts.admin')
 
-@section('title','Buat Stock Adjustment Baru')
+@section('title','Buat Stock Card Baru')
 
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
 
-            {{ Form::open(['route'=>['admin.stock_adjustments.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.stock_cards.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
 
             @if(count($errors))
                 <div class="form-group">
@@ -23,8 +23,8 @@
             @endif
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="item[]">
-                    Nama Part
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="item">
+                    Nama Item
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs- field-item">
                     <select id="select0" name="item[]" class='form-control'></select>
@@ -46,30 +46,30 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="depreciation">
-                    Jumlah Pengurangan
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12 price-format">
-                    <input id="depreciation" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('depreciation')) parsley-error @endif"
-                           name="depreciation" value="{{ old('depreciation') }}">
-                </div>
-            </div>
-
             {{--<div class="form-group">--}}
-                {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="new_stock">--}}
-                    {{--Total Stock Baru--}}
+                {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="increase">--}}
+                    {{--Jumlah Penambahan--}}
                 {{--</label>--}}
                 {{--<div class="col-md-6 col-sm-6 col-xs-12 price-format">--}}
-                    {{--<input id="new_stock" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('new_stock')) parsley-error @endif"--}}
-                           {{--name="new_stock" value="{{ old('new_stock') }}">--}}
+                    {{--<input id="increase" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('increase')) parsley-error @endif"--}}
+                           {{--name="increase" value="{{ old('increase') }}">--}}
                 {{--</div>--}}
             {{--</div>--}}
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="increase">
+                    Jumlah Penambahan
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12 price-format">
+                    <input id="increase" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('increase')) parsley-error @endif"
+                           name="increase" value="{{ old('increase') }}">
+                </div>
+            </div>
 
 
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a class="btn btn-primary" href="{{ route('admin.stock_adjustments') }}"> Batal</a>
+                    <a class="btn btn-primary" href="{{ route('admin.stock_cards') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>

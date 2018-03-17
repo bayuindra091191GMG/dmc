@@ -79,6 +79,7 @@
                             <li><a href="{{ route('admin.delivery_orders') }}">Surat Jalan</a></li>
                             <li><a href="{{ route('admin.stock_adjustments') }}">Stock Adjustment (SA)</a></li>
                             <li><a href="{{ route('admin.stock_ins') }}">Stock In (SI)</a></li>
+                            <li><a href="{{ route('admin.stock_cards') }}">Stock Card</a></li>
                             <li><a href="{{ route('admin.item_mutations') }}">Mutasi</a></li>
                         </ul>
                     </li>

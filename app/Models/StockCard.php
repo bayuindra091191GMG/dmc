@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Wed, 14 Feb 2018 09:31:20 +0000.
+ * Date: Sat, 17 Mar 2018 15:08:46 +0700.
  */
 
 namespace App\Models;
@@ -10,12 +10,13 @@ namespace App\Models;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
- * Class StockAdjustment
+ * Class StockCard
  * 
  * @property int $id
  * @property int $item_id
- * @property int $depreciation
  * @property int $warehouse_id
+ * @property int $change
+ * @property int $stock
  * @property int $created_by
  * @property \Carbon\Carbon $created_at
  * @property int $updated_by
@@ -27,12 +28,13 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class StockAdjustment extends Eloquent
+class StockCard extends Eloquent
 {
 	protected $casts = [
 		'item_id' => 'int',
-        'warehouse_id' => 'int',
-		'depreciation' => 'int',
+		'warehouse_id' => 'int',
+		'change' => 'int',
+		'stock' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
 	];
@@ -40,18 +42,20 @@ class StockAdjustment extends Eloquent
     protected $dates = [
         'created_at'
     ];
+
 	protected $fillable = [
 		'item_id',
-		'depreciation',
-        'warehouse_id',
+		'warehouse_id',
+		'change',
+		'stock',
 		'created_by',
-        'created_at'
+		'updated_by'
 	];
 
-	public function item()
-	{
+    public function item()
+    {
         return $this->belongsTo(\App\Models\Item::class);
-	}
+    }
     public function warehouse()
     {
         return $this->belongsTo(\App\Models\Warehouse::class);
