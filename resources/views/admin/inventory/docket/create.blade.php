@@ -471,7 +471,7 @@
                 width: '100%',
                 minimumInputLength: 2,
                 ajax: {
-                    url: '{{ route('select.items') }}',
+                    url: '{{ route('select.extended_items') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {
@@ -573,7 +573,7 @@
                 width: '100%',
                 minimumInputLength: 2,
                 ajax: {
-                    url: '{{ route('select.items') }}',
+                    url: '{{ route('select.extended_items') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {

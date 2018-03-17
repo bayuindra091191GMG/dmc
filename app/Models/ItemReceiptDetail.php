@@ -42,7 +42,6 @@ class ItemReceiptDetail extends Eloquent
 		'header_id',
 		'item_id',
 		'quantity',
-		'purchase_order_id',
 		'remark'
 	];
 
@@ -57,11 +56,6 @@ class ItemReceiptDetail extends Eloquent
 	public function item()
 	{
 		return $this->belongsTo(\App\Models\Item::class);
-	}
-
-	public function purchase_order_header()
-	{
-		return $this->belongsTo(\App\Models\PurchaseOrderHeader::class, 'purchase_order_id');
 	}
 
 	public function item_receipt_header()

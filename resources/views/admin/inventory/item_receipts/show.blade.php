@@ -8,7 +8,6 @@
             <div class="navbar-right">
                 <a class="btn btn-default" href="{{ route('admin.item_receipts.edit',[ 'item_receipt' => $header->id]) }}">UBAH</a>
                 <a class="btn btn-default" href="{{ route('admin.item_receipts.print',[ 'item_receipts' => $header->id]) }}">CETAK</a>
-                <a class="btn btn-default" href="{{ route('admin.item_receipts.download',[ 'item_receipts' => $header->id]) }}">DOWNLOAD</a>
             </div>
         </div>
     </div>
@@ -37,7 +36,7 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        No Item Receipt
+                        No Purchase Order
                     </label>
                     <div class="col-md-6 col-sm-3 col-xs-12">
                         : {{ $header->code }}
@@ -46,27 +45,19 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        No. SJ / SPB
+                        No Good Receipt
                     </label>
                     <div class="col-md-6 col-sm-3 col-xs-12">
-                        : {{ $header->delivery_order_header->code }}
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-3 col-sm-3 col-xs-12">
-                        Pengiriman Dari
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->delivered_from }}
+                        : {{ $header->purchase_order_header->code }}
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Angkutan
+                        No. SJ / SPB
                     </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->angkutan }}
+                    <div class="col-md-6 col-sm-3 col-xs-12">
+                        : {{ $header->delivery_order_vendor }}
                     </div>
                 </div>
 
@@ -93,9 +84,6 @@
                                 <th class="text-center">
                                     Jumlah
                                 </th>
-                                <th clas="text-center">
-                                    No Purchase Order
-                                </th>
                                 <th class="text-center">
                                     Keterangan
                                 </th>
@@ -117,9 +105,6 @@
                                     </td>
                                     <td class="text-center">
                                         {{ $detail->quantity }}
-                                    </td>
-                                    <td class="text-center">
-                                        {{ $detail->purchase_order_header->code }}
                                     </td>
                                     <td class="text-center">
                                         {{ $detail->remarks ?? '-' }}

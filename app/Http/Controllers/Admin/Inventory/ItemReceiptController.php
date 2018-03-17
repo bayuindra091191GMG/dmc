@@ -13,7 +13,9 @@ use App\Models\ItemReceiptHeader;
 use App\Models\NumberingSystem;
 use App\Models\PurchaseOrderDetail;
 use App\Models\PurchaseOrderHeader;
+use App\Models\Warehouse;
 use App\Transformer\Inventory\ItemReceiptTransformer;
+use App\Transformer\Inventory\PurchaseOrderTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -35,19 +37,51 @@ class ItemReceiptController extends Controller
         return View('admin.inventory.item_receipts.show', compact('header'));
     }
 
+    public function createPo(){
+        return View('admin.inventory.item_receipts.po_list');
+    }
+
+    public function getPurchaseOrder(){
+        try{
+            $purchaseOrders = PurchaseOrderHeader::where('status_id', 3)->dateDescending()->get();
+            return DataTables::of($purchaseOrders)
+                ->setTransformer(new PurchaseOrderTransformer())
+                ->addIndexColumn()
+                ->make(true);
+        }
+        catch(\Exception $ex){
+            error_log($ex);
+        }
+    }
+
     public function create(){
+        $purchaseOrder = null;
+        if(!empty(request()->po)){
+            $purchaseOrder = PurchaseOrderHeader::find(request()->po);
+        }
+
         $deliveries = DeliveryOrderHeader::all();
         $sysNo = NumberingSystem::where('doc_id', '2')->first();
         $document = Document::where('id', '2')->first();
         $autoNumber = Utilities::GenerateNumber($document->code, $sysNo->next_no);
+        $warehouse = Warehouse::where('id', '!=', 0)->get();
 
-        return View('admin.inventory.item_receipts.create', compact('deliveries', 'autoNumber'));
+        $data = [
+            'purchaseOrder' => $purchaseOrder,
+            'warehouse'     => $warehouse,
+            'deliveries'    => $deliveries,
+            'autoNumber'    => $autoNumber
+        ];
+
+        return View('admin.inventory.item_receipts.create')->with($data);
     }
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
             'code'          => 'max:40',
-            'date'          => 'required'
+            'date'          => 'required',
+            'po_code'       => 'required',
+            'warehouse'     => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -55,10 +89,6 @@ class ItemReceiptController extends Controller
                 ->back()
                 ->withErrors($validator)
                 ->withInput();
-        }
-
-        if(empty(Input::get('delivery_order'))){
-            return redirect()->back()->withErrors('Pilih Delivery Order!', 'default')->withInput($request->all());
         }
 
         //Generate AutoNumber
@@ -71,7 +101,7 @@ class ItemReceiptController extends Controller
         }
         else{
             if(empty(Input::get('code'))){
-                return redirect()->back()->withErrors('No Item Receipt Wajib Diisi!', 'default')->withInput($request->all());
+                return redirect()->back()->withErrors('No Good Receipt Wajib Diisi!', 'default')->withInput($request->all());
             }
             $itemReceiptNumber = Input::get('code');
         }
@@ -79,15 +109,15 @@ class ItemReceiptController extends Controller
         //Check Code
         $check = ItemReceiptHeader::where('code', $itemReceiptNumber)->first();
         if($check != null){
-            return redirect()->back()->withErrors('Nomor Issued Docket Sudah terdaftar!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Nomor Good Receipt Sudah terdaftar!', 'default')->withInput($request->all());
         }
 
         // Validate details
-        $items = Input::get('item');
+        $items = Input::get('item_value');
         $qtys = Input::get('qty');
         $valid = true;
         $i = 0;
-        $purchaseOrderId = Input::get('po');
+        $purchaseOrderCode = Input::get('po_code');
         $qty = Input::get('qty');
 
         foreach($items as $item){
@@ -104,25 +134,21 @@ class ItemReceiptController extends Controller
         $validPo = true;
         $validQtyPo = true;
         $i = 0;
+        $purchaseOrder = PurchaseOrderHeader::where('code', $purchaseOrderCode)->first();
 
         foreach ($items as $item){
             //Check Data
             //Data Check with PO
-            $purchaseOrder = PurchaseOrderHeader::where('id', $purchaseOrderId[$i])->first();
-            $details = $purchaseOrder->purchase_order_details->where('item_id', $item);
+            $detail = $purchaseOrder->purchase_order_details->where('item_id', $item)->first();
 
-            if($details == null || $details->count() == 0){
+            if($detail == null || $detail->count() == 0){
                 $validPo = false;
             }
             else{
-                foreach ($details as $detail){
-                    if($qty[$i] > $detail->quantity){
-                        $validQtyPo = false;
-                    }
+                if($qty[$i] > $detail->quantity){
+                    $validQtyPo = false;
                 }
             }
-
-            $i++;
         }
 
         if(!$validPo){
@@ -134,28 +160,28 @@ class ItemReceiptController extends Controller
 
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
+        $date = Carbon::parse(Input::get('date'));
 
         $itemReceiptHeader = ItemReceiptHeader::create([
-            'code'              => $itemReceiptNumber,
-            'date'              => $now->toDateString(),
-            'delivery_order_id' => Input::get('delivery_order'),
-            'delivered_from'    => Input::get('delivered_from'),
-            'angkutan'          => Input::get('angkutan'),
-            'status_id'         => 1,
-            'created_by'        => $user->id,
-            'updated_by'        => $user->id,
-            'created_at'        => $now->toDateTimeString(),
+            'code'                  => $itemReceiptNumber,
+            'date'                  => $date->toDateString(),
+            'purchase_order_id'     => $purchaseOrder->id,
+            'warehouse_id'          => Input::get('warehouse'),
+            'delivery_order_vendor' => Input::get('delivery_order'),
+            'status_id'             => 1,
+            'created_by'            => $user->id,
+            'updated_by'            => $user->id,
+            'created_at'            => $now->toDateTimeString(),
         ]);
 
         // Create Item Receipt Detail
         $remark = Input::get('remark');
         $idx = 0;
-        foreach(Input::get('item') as $item){
+        foreach(Input::get('item_value') as $item){
             if(!empty($item)){
                 $itemReceiptDetail = ItemReceiptDetail::create([
                     'header_id'         => $itemReceiptHeader->id,
                     'item_id'           => $item,
-                    'purchase_order_id' => $purchaseOrderId[$idx],
                     'remark'            => $remark[$idx],
                     'quantity'          => $qty[$idx]
                 ]);
@@ -169,7 +195,6 @@ class ItemReceiptController extends Controller
                 $itemData->save();
 
                 //Update PO
-                $purchaseOrder = PurchaseOrderHeader::where('id', $purchaseOrderId[$idx])->first();
                 $detail = $purchaseOrder->purchase_order_details->where('item_id', $item)->first();
                 $detail->received_quantity = $detail->received_quantity + $qty[$idx];
                 $detail->save();
@@ -179,10 +204,9 @@ class ItemReceiptController extends Controller
 
         //Check PO
         $idx = 0;
-        foreach(Input::get('item') as $item){
+        foreach(Input::get('item_value') as $item){
             if(!empty($item)){
                 //Update PO
-                $purchaseOrder = PurchaseOrderHeader::where('id', $purchaseOrderId[$idx])->first();
                 $poCount = 1;
 
                 foreach($purchaseOrder->purchase_order_details as $detail){

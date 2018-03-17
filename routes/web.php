@@ -334,6 +334,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('item_receipts/download/{item_receipt}', 'Inventory\ItemReceiptController@download')->name('item_receipts.download');
     Route::get('item_receipts/report', 'Inventory\ItemReceiptController@report')->name('item_receipts.report');
     Route::post('item_receipts/download_report', 'Inventory\ItemReceiptController@downloadReport')->name('item_receipts.download-report');
+    Route::get('item_receipts/po_list', 'Inventory\ItemReceiptController@createPo')->name('item_receipts.create_po');
 
     //Item Receipts Details
     Route::get('item_receipt_details', 'Inventory\ItemReceiptDetailController@index')->name('item_receipt_details');
@@ -434,6 +435,7 @@ Route::get('/datatables-stock_adjustments', 'Admin\Inventory\StockAdjustmentCont
 Route::get('/datatables-stock_ins', 'Admin\Inventory\StockInController@getIndex')->name('datatables.stock_ins');
 Route::get('/datatables-item_mutations', 'Admin\Inventory\ItemMutationController@getIndex')->name('datatables.item_mutations');
 Route::get('/datatables-interchanges', 'Admin\Inventory\InterchangeController@getIndex')->name('datatables.interchanges');
+Route::get('/datatables-purchase_orders_for_gr', 'Admin\Inventory\ItemReceiptController@getPurchaseOrder')->name('datatables.purchase_orders_for_gr');
 
 // AUTHORIZATION
 Route::get('/datatables-permission-documents', 'Admin\PermissionDocumentController@getIndex')->name('datatables.permission_documents');

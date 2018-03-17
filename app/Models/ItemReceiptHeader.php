@@ -38,7 +38,8 @@ class ItemReceiptHeader extends Eloquent
     protected $appends = ['date_string'];
 
 	protected $casts = [
-		'delivery_order_id' => 'int',
+		'purchase_order_id' => 'int',
+        'warehouse_id'  => 'int',
 		'status_id' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
@@ -52,9 +53,9 @@ class ItemReceiptHeader extends Eloquent
 		'code',
 		'no_sj_spb',
 		'date',
-		'delivery_order_id',
-		'delivered_from',
-		'angkutan',
+		'delivery_order_vendor',
+        'purchase_order_id',
+        'warehouse_id',
 		'status_id',
 		'created_by',
 		'updated_by'
@@ -64,10 +65,15 @@ class ItemReceiptHeader extends Eloquent
         return Carbon::parse($this->attributes['date'])->format('d M Y');
     }
 
-	public function delivery_order_header()
-	{
-		return $this->belongsTo(\App\Models\DeliveryOrderHeader::class, 'delivery_order_id');
-	}
+    public function purchase_order_header()
+    {
+        return $this->belongsTo(\App\Models\PurchaseOrderHeader::class, 'purchase_order_id');
+    }
+
+    public function warehouse()
+    {
+        return $this->belongsTo(\App\Models\Warehouse::class, 'warehouse_id');
+    }
 
 	public function status()
 	{

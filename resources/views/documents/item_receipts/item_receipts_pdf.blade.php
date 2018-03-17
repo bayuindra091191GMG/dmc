@@ -39,10 +39,9 @@
   <tr>
        <th>No</th>
        <th>Code</th>
+       <th>PO Code</th>
        <th>Date</th>
        <th>Delivery Order (No SJ/SPB)</th>
-       <th>Delivered From</th>
-       <th>Angkutan</th>
        <th>Dibuat Oleh</th>
   </tr>
   </thead>
@@ -52,10 +51,9 @@
         <tr>
             <td>{{ $i }}</td>
             <td>{{ $item->code }}</td>
+            <td>{{ $item->purchase_order_header->code }}</td>
             <td>{{ $item->date_string }}</td>
-            <td>{{ $item->delivery_order_header->code }}</td>
-            <td>{{ $item->delivered_from }}</td>
-            <td>{{ $item->angkutan }}</td>
+            <td>{{ $item->delivery_order_vendor }}</td>
             <td>{{ $item->createdBy->name }}</td>
         </tr>
         @php($i++)
