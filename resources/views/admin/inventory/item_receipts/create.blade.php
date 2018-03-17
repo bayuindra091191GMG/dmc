@@ -181,7 +181,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="qty_add">Jumlah:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="qty_add" name="qty_add">
+                                <input type="number" class="form-control" id="qty_add" name="qty_add" min="0">
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -226,7 +226,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="qty_edit">Jumlah:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="qty_edit" name="qty">
+                                <input type="number" class="form-control" id="qty_edit" name="qty" min="0">
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
