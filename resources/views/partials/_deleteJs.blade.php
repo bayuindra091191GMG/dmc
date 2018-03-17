@@ -5,7 +5,7 @@
             url: '{{ route($routeUrl) }}',
             data: {
                 '_token': '{{ csrf_token() }}',
-                'id': $('#deleted-id').val(),
+                'id': $('#deleted-id').val()
             },
             success: function(data) {
                 if ((data.errors)){

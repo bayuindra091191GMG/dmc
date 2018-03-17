@@ -53,7 +53,7 @@
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
                     { data: 'code', name: 'code', class: 'text-center'},
                     { data: 'name', name: 'name', class: 'text-center'},
-                    { data: 'site', name: site, class: 'text-center'},
+                    { data: 'site', name: 'site', class: 'text-center'},
                     { data: 'action', name:'action', orderable: false, searchable: false, class: 'text-center'}
                 ],
                 language: {

@@ -5,6 +5,9 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="navbar-left">
+                <a class="btn btn-default" href="{{ route('admin.purchase_orders') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
+            </div>
             <div class="navbar-right">
                 <a class="btn btn-default" href="{{ route('admin.purchase_orders.edit',[ 'purchase_order' => $header->id]) }}">UBAH</a>
                 <a class="btn btn-default" href="{{ route('admin.purchase_orders.print',[ 'purchase_order' => $header->id]) }}">CETAK</a>
@@ -57,7 +60,7 @@
                         Total Harga
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->total_price_string }}
+                        : Rp {{ $header->total_price_string }}
                     </div>
                 </div>
 
@@ -66,7 +69,7 @@
                         Total Diskon
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->total_discount_string ?? '-' }}
+                        : {{ !empty($header->total_discount) ? 'Rp '. $header->total_discount_string : '-' }}
                     </div>
                 </div>
 
@@ -75,7 +78,7 @@
                         Ongkos Kirim
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ !empty($header->delivery_fee) && $header->delivery_fee > 0 ? $header->delivery_fee_string : '-' }}
+                        : {{ !empty($header->delivery_fee) && $header->delivery_fee > 0 ? 'Rp '. $header->delivery_fee_string : '-' }}
                     </div>
                 </div>
 
@@ -84,7 +87,7 @@
                         PPN {{ !empty($header->ppn_percent) && $header->ppn_percent > 0 ? $header->ppn_percent. '%' : '' }}
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ !empty($header->ppn_percent) && $header->ppn_percent > 0 ? $header->ppn_string : '-' }}
+                        : {{ !empty($header->ppn_percent) && $header->ppn_percent > 0 ? 'Rp '. $header->ppn_string : '-' }}
                     </div>
                 </div>
 
@@ -93,16 +96,16 @@
                         PPh
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ !empty($header->pph_amount) && $header->pph_amount > 0 ? $header->pph_string : '-' }}
+                        : {{ !empty($header->pph_amount) && $header->pph_amount > 0 ? 'Rp '. $header->pph_string : '-' }}
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Total Pembayaran
+                        Total PO
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->total_payment_string ?? '-' }}
+                        : Rp {{ $header->total_payment_string }}
                     </div>
                 </div>
 

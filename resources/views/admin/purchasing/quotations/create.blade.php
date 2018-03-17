@@ -24,12 +24,12 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="quot_code">
-                    Nomor Quotation
+                    Nomor RFQ
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="quot_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('quot_code')) parsley-error @endif"
-                           name="quot_code" value="{{ $autoNumber}}" disabled>
+                           name="quot_code" value="{{ $autoNumber}}" readonly>
                 </div>
             </div>
 
@@ -83,7 +83,7 @@
                                 Nomor Part
                             </th>
                             <th class="text-center" style="width: 15%">
-                                Jumlah
+                                QTY
                             </th><th class="text-center" style="width: 20%">
                                 Harga
                             </th><th class="text-center" style="width: 10%">
@@ -100,7 +100,7 @@
                                 <select id="select0" name="item[]" class='form-control'></select>
                             </td>
                             <td>
-                                <input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/>
+                                <input type='number' name='qty[]'  placeholder='QTY' class='form-control'/>
                             </td>
                             <td>
                                 <input id="price0" type='text' name='price[]'  placeholder='Harga' class='form-control'/>
@@ -147,11 +147,11 @@
         $('#auto_number').change(function(){
             if(this.checked){
                 $('#quot_code').val('{{ $autoNumber }}');
-                $('#quot_code').prop('disabled', true);
+                $('#quot_code').prop('readonly', true);
             }
             else{
                 $('#quot_code').val('');
-                $('#quot_code').prop('disabled', false);
+                $('#quot_code').prop('readonly', false);
             }
         });
 
@@ -161,7 +161,7 @@
                 text: 'Pilih Nomor PR...'
             },
             width: '100%',
-            minimumInputLength: 2,
+            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('select.purchase_requests') }}',
                 dataType: 'json',
@@ -184,7 +184,7 @@
                 text: 'Pilih Vendor...'
             },
             width: '100%',
-            minimumInputLength: 2,
+            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('select.suppliers') }}',
                 dataType: 'json',
@@ -215,7 +215,7 @@
                 text: 'Pilih barang...'
             },
             width: '100%',
-            minimumInputLength: 2,
+            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('select.items') }}',
                 dataType: 'json',
@@ -244,7 +244,7 @@
                     text: 'Pilih barang...'
                 },
                 width: '100%',
-                minimumInputLength: 2,
+                minimumInputLength: 1,
                 ajax: {
                     url: '{{ route('select.items') }}',
                     dataType: 'json',

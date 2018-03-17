@@ -44,9 +44,11 @@ class QuotationHeaderController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
-            'quot_code'     => 'max:40',
+            'quot_code'     => 'required|max:40',
             'pr_code'       => 'required',
             'supplier'      => 'required'
+        ],[
+            'quot_code.required'    => 'Nomor RFQ wajib diisi!'
         ]);
 
         if ($validator->fails()) {
@@ -57,12 +59,18 @@ class QuotationHeaderController extends Controller
         }
 
         // Validate quotation number
-        if(empty(Input::get('auto_number')) && (empty(Input::get('quot_code')) || Input::get('quot_code') == "")){
-            return redirect()->back()->withErrors('Nomor kuotasi vendor wajib diisi!', 'default')->withInput($request->all());
-        }
+//        if(empty(Input::get('auto_number')) && (empty(Input::get('quot_code')) || Input::get('quot_code') == "")){
+//            return redirect()->back()->withErrors('Nomor kuotasi vendor wajib diisi!', 'default')->withInput($request->all());
+//        }
 
         // Check detail
         $items = Input::get('item');
+
+        if(count($items) == 0){
+            return redirect()->back()->withErrors('Detail barang wajib diisi!', 'default')->withInput($request->all());
+        }
+
+
         $qtys = Input::get('qty');
         $prices = Input::get('price');
         $valid = true;
@@ -91,8 +99,7 @@ class QuotationHeaderController extends Controller
         }
 
         // Check existing number
-        $temp = QuotationHeader::where('code', $quotCode)->first();
-        if(!empty($temp)){
+        if(QuotationHeader::where('code', $quotCode)->exists()){
             return redirect()->back()->withErrors('Nomor kuotasi vendor sudah terdaftar!', 'default')->withInput($request->all());
         }
 

@@ -5,6 +5,9 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="navbar-left">
+                <a class="btn btn-default" href="{{ route('admin.quotations') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
+            </div>
             <div class="navbar-right">
                 <a class="btn btn-default" href="{{ route('admin.quotations.edit',[ 'quotation' => $header->id]) }}">UBAH</a>
             </div>
@@ -25,7 +28,7 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Nomor Quotation
+                        Nomor RFQ
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         : {{ $header->code }}

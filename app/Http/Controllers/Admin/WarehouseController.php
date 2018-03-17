@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
+use App\Models\Site;
 use App\Models\Warehouse;
 use App\Transformer\MasterData\WarehouseTransformer;
 use Illuminate\Http\Request;
@@ -35,7 +36,9 @@ class WarehouseController extends Controller
      */
     public function create()
     {
-        return view('admin.warehouses.create');
+        $sites = Site::all();
+
+        return view('admin.warehouses.create', compact('sites'));
     }
 
     /**
@@ -57,14 +60,14 @@ class WarehouseController extends Controller
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
-        if($request->input('site_id') == '-1'){
+        if($request->input('site') == '-1'){
             return redirect()->back()->withErrors('Pilih Site!', 'default')->withInput($request->all());
         }
 
         $warehouse = Warehouse::create([
             'code'          => $request->input('code'),
             'name'          => $request->input('name'),
-            'site_id'       => $request->input('site_id'),
+            'site_id'       => $request->input('site'),
             'phone'         => $request->input('phone'),
         ]);
 
@@ -81,7 +84,14 @@ class WarehouseController extends Controller
      */
     public function edit(Warehouse $warehouse)
     {
-        return view('admin.warehouses.edit', ['warehouse' => $warehouse]);
+        $sites = Site::all();
+
+        $data = [
+            'warehouse'     => $warehouse,
+            'sites'         => $sites
+        ];
+
+        return view('admin.warehouses.edit')->with($data);
     }
 
     /**
@@ -111,7 +121,7 @@ class WarehouseController extends Controller
 
         $warehouse->name = $request->input('name');
         $warehouse->code = $request->input('code');
-        $warehouse->site_id = $request->input('site_id');
+        $warehouse->site_id = $request->input('site');
         $warehouse->phone = $request->input('phone');
 
         $warehouse->save();
@@ -119,7 +129,7 @@ class WarehouseController extends Controller
 //        return redirect()->intended(route('admin.warehouses'));
         Session::flash('message', 'Berhasil mengubah data gudang!');
 
-        return redirect()->route('admin.warehouses.edit', ['warehouse' => $warehouse]);
+        return redirect()->route('admin.warehouses');
     }
 
     /**

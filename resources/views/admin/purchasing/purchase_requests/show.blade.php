@@ -107,7 +107,7 @@
                                     Satuan (UOM)
                                 </th>
                                 <th class="text-center" style="width: 10%">
-                                    Jumlah
+                                    QTY
                                 </th>
                                 <th class="text-center" style="width: 30%">
                                     Remark

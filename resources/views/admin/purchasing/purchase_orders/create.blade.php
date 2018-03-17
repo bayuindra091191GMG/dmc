@@ -130,7 +130,7 @@
                                 Nomor Part
                             </th>
                             <th class="text-center" style="width: 10%">
-                                Jumlah
+                                QTY
                             </th>
                             <th class="text-center" style="width: 15%">
                                 Harga

@@ -14,6 +14,7 @@ use App\Libs\Utilities;
 use App\Models\Department;
 use App\Models\Document;
 use App\Models\NumberingSystem;
+use App\Models\PurchaseOrderHeader;
 use App\Models\PurchaseRequestDetail;
 use App\Models\PurchaseRequestHeader;
 use App\Transformer\Purchasing\PurchaseRequestHeaderTransformer;
@@ -64,11 +65,11 @@ class PurchaseRequestHeaderController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
-            'pr_code'       => 'max:30|unique:purchase_request_headers',
+            'pr_code'       => 'required|max:30',
             'km'            => 'max:20',
             'hm'            => 'max:20'
         ],[
-            'pr_code.unique'    => 'Kode telah terpakai!'
+            'code.required'     => 'Nomor PR wajib diisi!'
         ]);
 
         if ($validator->fails()) {
@@ -79,9 +80,9 @@ class PurchaseRequestHeaderController extends Controller
         }
 
         // Validate PR number
-        if(empty(Input::get('auto_number')) && (empty(Input::get('pr_code')) || Input::get('pr_code') == "")){
-            return redirect()->back()->withErrors('Nomor PR wajib diisi!', 'default')->withInput($request->all());
-        }
+//        if(empty(Input::get('auto_number')) && (empty(Input::get('pr_code')) || Input::get('pr_code') == "")){
+//            return redirect()->back()->withErrors('Nomor PR wajib diisi!', 'default')->withInput($request->all());
+//        }
 
         // Validate department
         if(Input::get('department') === '-1'){
@@ -97,12 +98,11 @@ class PurchaseRequestHeaderController extends Controller
             $sysNo->save();
         }
         else{
-            $prCode = Input::get('po_code');
+            $prCode = Input::get('pr_code');
         }
 
         // Check existing number
-        $temp = PurchaseRequestHeader::where('code', $prCode)->first();
-        if(!empty($temp)){
+        if(PurchaseOrderHeader::where('code', $prCode)->exists()){
             return redirect()->back()->withErrors('Nomor PR sudah terdaftar!', 'default')->withInput($request->all());
         }
 

@@ -25,7 +25,7 @@
                 <th class="text-center">Total Harga</th>
                 <th class="text-center">Total Diskon</th>
                 <th class="text-center">Ongkos Kirim</th>
-                <th class="text-center">Total Pembayaran</th>
+                <th class="text-center">Total PO</th>
                 <th class="text-center">Tanggal Dibuat</th>
                 <th class="text-center">Status</th>
                 <th class="text-center">Tindakan</th>
@@ -53,17 +53,17 @@
                 serverSide: true,
                 ajax: '{!! route('datatables.purchase_orders') !!}',
                 columns: [
-                    { data: 'DT_Row_Index', orderable: false, searchable: false},
-                    { data: 'code', name: 'code' },
-                    { data: 'pr_code', name: 'pr_code' },
-                    { data: 'supplier', name: 'supplier' },
-                    { data: 'total_price', name: 'total_price' },
-                    { data: 'total_discount', name: 'total_discount' },
-                    { data: 'delivery_fee', name: 'delivery_fee' },
-                    { data: 'total_payment', name: 'total_payment' },
-                    { data: 'created_at', name: 'created_at' },
-                    { data: 'status', name: 'status' },
-                    { data: 'action', name: 'action', orderable: false, searchable: false}
+                    { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center' },
+                    { data: 'code', name: 'code', class: 'text-center' },
+                    { data: 'pr_code', name: 'pr_code', class: 'text-center' },
+                    { data: 'supplier', name: 'supplier', class: 'text-center' },
+                    { data: 'total_price', name: 'total_price', class: 'text-right' },
+                    { data: 'total_discount', name: 'total_discount', class: 'text-right' },
+                    { data: 'delivery_fee', name: 'delivery_fee', class: 'text-right' },
+                    { data: 'total_payment', name: 'total_payment', class: 'text-right' },
+                    { data: 'created_at', name: 'created_at', class: 'text-center' },
+                    { data: 'status', name: 'status', class: 'text-center' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center' }
                 ],
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"
