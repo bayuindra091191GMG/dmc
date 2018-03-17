@@ -20,7 +20,7 @@
                 <th class="text-center">ID</th>
                 <th class="text-center">Email</th>
                 <th class="text-center">Nama</th>
-                <th class="text-center">Nomor Telpon</th>
+                {{--<th class="text-center">Nomor Telpon</th>--}}
                 <th class="text-center">Departemen</th>
                 <th class="text-center">Site</th>
                 <th class="text-center">Roles</th>
@@ -54,7 +54,7 @@
                     { data: 'code', name: 'code' },
                     { data: 'email', name: 'email' },
                     { data: 'name', name: 'name' },
-                    { data: 'phone', name: 'phone' },
+//                    { data: 'phone', name: 'phone' },
                     { data: 'department', name: 'department' },
                     { data: 'site', name: 'site' },
                     { data: 'role', name: 'role' },

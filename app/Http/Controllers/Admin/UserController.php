@@ -62,7 +62,7 @@ class UserController extends Controller
             'code'      => 'required|max:30|regex:/^\S*$/u|unique:employees',
             'name'      => 'required|max:100',
             'email'     => 'required|email|unique:users|max:100',
-            'phone'     => 'max:20',
+//            'phone'     => 'max:20',
             'address'   => 'max:200'
         ],[
             'code.unique'       => 'Kode karyawan telah terpakai!',
@@ -74,7 +74,7 @@ class UserController extends Controller
             return $input->password;
         });
 
-        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
+        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors()->withInput($request->all()));
 
         if($request->input('department') === '-1'){
             return redirect()->back()->withErrors('Pilih departemen!', 'default')->withInput($request->all());
@@ -92,7 +92,7 @@ class UserController extends Controller
             'name'          => $request->input('name'),
             'code'          => $request->input('code'),
             'email'         => $request->input('email'),
-            'phone'         => $request->input('phone'),
+//            'phone'         => $request->input('phone'),
             'address'       => $request->input('address'),
             'department_id' => $request->input('department'),
             'site_id'       => $request->input('site'),
@@ -267,7 +267,7 @@ class UserController extends Controller
     public function getIndex()
     {
         try{
-            $users = User::all();
+            $users = User::where('status_id', 1)->get();
             return DataTables::of($users)
                 ->setTransformer(new UserTransformer)
                 ->addIndexColumn()

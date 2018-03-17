@@ -69,7 +69,7 @@
 
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a class="btn btn-primary" href="{{ route('admin.stock_adjustments') }}"> Batal</a>
+                    <a class="btn btn-primary" href="{{ route('admin.stock_ins') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>
@@ -98,7 +98,7 @@
                 text: 'Pilih barang...'
             },
             width: '100%',
-            minimumInputLength: 2,
+            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('select.items') }}',
                 dataType: 'json',

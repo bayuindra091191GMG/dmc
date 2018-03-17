@@ -17,7 +17,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $code
  * @property int $category_id
  * @property int $brand_id
- * @property int $type_id
+ * @property string $type
  * @property string $sn_chasis
  * @property string $sn_engine
  * @property string $production_year
@@ -48,7 +48,6 @@ class Machinery extends Eloquent
 	protected $casts = [
 		'category_id' => 'int',
 		'brand_id' => 'int',
-		'type_id' => 'int',
 		'status_id' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
@@ -66,7 +65,7 @@ class Machinery extends Eloquent
 		'code',
 		'category_id',
 		'brand_id',
-		'type_id',
+		'type',
 		'sn_chasis',
 		'sn_engine',
 		'production_year',
@@ -103,11 +102,6 @@ class Machinery extends Eloquent
 	public function machinery_category()
 	{
 		return $this->belongsTo(\App\Models\MachineryCategory::class, 'category_id');
-	}
-
-	public function machinery_type()
-	{
-		return $this->belongsTo(\App\Models\MachineryType::class, 'type_id');
 	}
 
 	public function status()

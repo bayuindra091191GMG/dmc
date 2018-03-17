@@ -76,10 +76,6 @@ class ItemController extends Controller
                 ->withInput();
         }
 
-        if(Input::get('uom') === '-1'){
-            return redirect()->back()->withErrors('Pilih uom!', 'default')->withInput($request->all());
-        }
-
         if(Input::get('group') === '-1'){
             return redirect()->back()->withErrors('Pilih group!', 'default')->withInput($request->all());
         }
@@ -121,10 +117,11 @@ class ItemController extends Controller
             'name'                  => $request->input('name'),
             'code'                  => $request->input('code'),
             'part_number'           => $request->input('part_number'),
-            'uom_id'                => $request->input('uom'),
+            'uom'                => $request->input('uom'),
             'group_id'              => $request->input('group'),
             'created_by'            => $user->id,
-            'created_at'            => $now->toDateTimeString()
+            'created_at'            => $now->toDateTimeString(),
+            'machinery_type'        => $request->input('machinery_type')
         ]);
 
         if(!empty(Input::get('valuation')) && Input::get('valuation') != "0"){
@@ -132,9 +129,6 @@ class ItemController extends Controller
             $item->value = $value;
         }
 
-        if($request->filled('machinery_type')){
-            $item->machinery_type_id = $request->input('machinery_type');
-        }
 
         if(!empty(Input::get('description'))){
             $item->description = Input::get('description');
@@ -173,7 +167,6 @@ class ItemController extends Controller
 
     public function edit(Item $item){
         $warehouses = Warehouse::all();
-        $uoms = Uom::all();
         $groups = Group::all();
 
         $isPrUsed = PurchaseRequestDetail::where('item_id', $item->id)->exists();
@@ -195,7 +188,6 @@ class ItemController extends Controller
         $data = [
             'item'          => $item,
             'warehouses'    => $warehouses,
-            'uoms'          => $uoms,
             'groups'        => $groups,
             'isUsed'        => $isUsed,
             'itemStocks'    => $itemStocks
@@ -223,7 +215,7 @@ class ItemController extends Controller
 
         $item->name = $request->input('name');
         $item->part_number = $request->input('part_number');
-        $item->uom_id = $request->input('uom');
+        $item->uom = $request->input('uom');
         $item->group_id = $request->input('group');
         $item->description = $request->input('description');
         $item->updated_by = $user->id;
@@ -304,7 +296,7 @@ class ItemController extends Controller
 
         foreach ($items as $item) {
             $createdDate = Carbon::parse($item->created_at)->format('d M Y');
-            $formatted_tags[] = ['id' => $item->id. '#'. $item->code. '#'. $item->name. '#'. $item->uomDescription, 'text' => $item->code. ' - '. $item->name. ' - '. $createdDate];
+            $formatted_tags[] = ['id' => $item->id. '#'. $item->code. '#'. $item->name. '#'. $item->uom, 'text' => $item->code. ' - '. $item->name. ' - '. $createdDate];
         }
 
         return \Response::json($formatted_tags);

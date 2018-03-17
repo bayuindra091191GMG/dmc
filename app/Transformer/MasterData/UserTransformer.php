@@ -25,7 +25,7 @@ class UserTransformer extends TransformerAbstract
             'code'          => $user->employee->code,
             'email'         => $user->email,
             'name'          => $user->employee->name,
-            'phone'         => $user->employee->phone ?? '-',
+//            'phone'         => $user->employee->phone ?? '-',
             'department'    => $user->employee->department->name,
             'site'          => $user->employee->site->name,
             'role'          => $user->roles->pluck('name')->implode(','),

@@ -19,10 +19,10 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $stock
  * @property float $value
  * @property int $is_serial
- * @property int $uom_id
+ * @property string $uom
  * @property int $group_id
  * @property int $warehouse_id
- * @property int $machinery_type_id
+ * @property string $machinery_type
  * @property string $description
  * @property int $created_by
  * @property \Carbon\Carbon $created_at
@@ -31,9 +31,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @property \App\Models\Auth\User\User $user
  * @property \App\Models\Group $group
- * @property \App\Models\Uom $uom
  * @property \App\Models\Warehouse $warehouse
- * @property \App\Models\MachineryType $machinery_type
  * @property \Illuminate\Database\Eloquent\Collection $delivery_note_details
  * @property \Illuminate\Database\Eloquent\Collection $issued_docket_details
  * @property \Illuminate\Database\Eloquent\Collection $item_receipt_details
@@ -53,15 +51,11 @@ class Item extends Eloquent
 		'stock' => 'int',
 		'value' => 'float',
 		'is_serial' => 'int',
-		'uom_id' => 'int',
 		'group_id' => 'int',
 		'warehouse_id' => 'int',
-		'machinery_type_id' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
 	];
-
-    protected $appends = array('uomDescription');
 
 	protected $fillable = [
 		'code',
@@ -70,22 +64,15 @@ class Item extends Eloquent
 		'stock',
 		'value',
 		'is_serial',
-		'uom_id',
+		'uom',
 		'group_id',
 		'warehouse_id',
-		'machinery_type_id',
+		'machinery_type',
 		'description',
 		'created_by',
 		'updated_by'
 	];
 
-    public function getUomDescriptionAttribute($value) {
-        $uomDescription = null;
-        if ($this->uom) {
-            $uomDescription = $this->uom->description;
-        }
-        return $uomDescription;
-    }
 
     public function createdBy()
     {
@@ -102,20 +89,11 @@ class Item extends Eloquent
 		return $this->belongsTo(\App\Models\Group::class);
 	}
 
-	public function uom()
-	{
-		return $this->belongsTo(\App\Models\Uom::class);
-	}
-
 	public function warehouse()
 	{
 		return $this->belongsTo(\App\Models\Warehouse::class);
 	}
 
-	public function machinery_type()
-	{
-		return $this->belongsTo(\App\Models\MachineryType::class);
-	}
 
 	public function delivery_note_details()
 	{

@@ -83,7 +83,7 @@
                 text: 'Pilih barang...'
             },
             width: '100%',
-            minimumInputLength: 2,
+            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('select.items') }}',
                 dataType: 'json',

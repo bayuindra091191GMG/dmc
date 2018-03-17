@@ -111,15 +111,15 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone" >
-                    Nomor Ponsel
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="phone" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('name')) parsley-error @endif"
-                           name="phone" value="{{ old('phone') }}">
-                </div>
-            </div>
+            {{--<div class="form-group">--}}
+                {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone" >--}}
+                    {{--Nomor Ponsel--}}
+                {{--</label>--}}
+                {{--<div class="col-md-6 col-sm-6 col-xs-12">--}}
+                    {{--<input id="phone" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('name')) parsley-error @endif"--}}
+                           {{--name="phone" value="{{ old('phone') }}">--}}
+                {{--</div>--}}
+            {{--</div>--}}
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="department" >
@@ -151,15 +151,15 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dob" >
-                    Tanggal Lahir
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="dob" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('dob')) parsley-error @endif"
-                           name="dob" value="{{ old('dob') }}">
-                </div>
-            </div>
+            {{--<div class="form-group">--}}
+                {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="dob" >--}}
+                    {{--Tanggal Lahir--}}
+                {{--</label>--}}
+                {{--<div class="col-md-6 col-sm-6 col-xs-12">--}}
+                    {{--<input id="dob" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('dob')) parsley-error @endif"--}}
+                           {{--name="dob" value="{{ old('dob') }}">--}}
+                {{--</div>--}}
+            {{--</div>--}}
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >

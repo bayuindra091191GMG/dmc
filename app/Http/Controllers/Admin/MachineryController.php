@@ -96,17 +96,13 @@ class MachineryController extends Controller
             return redirect()->back()->withErrors('Pilih merek alat berat!', 'default')->withInput($request->all());
         }
 
-        if(!$request->filled('machinery_type')){
-            return redirect()->back()->withErrors('Pilih tipe alat berat!', 'default')->withInput($request->all());
-        }
-
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
         $machinery = Machinery::create([
             'code'                  => $request->input('code'),
             'category_id'           => $request->input('machinery_category'),
             'brand_id'              => $request->input('machinery_brand'),
-            'type_id'               => $request->input('machinery_type'),
+            'type'               => $request->input('machinery_type'),
             'status_id'             => $request->input('status'),
             'sn_chasis'             => $request->input('sn_chasis'),
             'sn_engine'             => $request->input('sn_engine'),
@@ -186,10 +182,7 @@ class MachineryController extends Controller
         $user = Auth::user();
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
-        if(!empty(Input::get('machinery_type'))){
-            $machinery->type_id = Input::get('machinery_type');
-        }
-
+        $machinery->type = Input::get('machinery_type');
         $machinery->category_id = $request->input('machinery_category');
         $machinery->brand_id = $request->input('machinery_brand');
         $machinery->description = $request->input('description');

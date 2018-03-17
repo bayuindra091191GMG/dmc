@@ -70,12 +70,8 @@
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="uom" name="uom" class="form-control col-md-7 col-xs-12 @if($errors->has('uom')) parsley-error @endif">
-                        <option value="-1" @if(empty(old('uom'))) selected @endif> - Pilih satuan unit - </option>
-                        @foreach($uoms as $uom)
-                            <option value="{{ $uom->id }}" {{ old('uom') == $uom->id ? "selected":"" }}>{{ $uom->description }}</option>
-                        @endforeach
-                    </select>
+                    <input id="uom" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('uom')) parsley-error @endif"
+                           name="uom" value="{{ old('uom') }}" required>
                 </div>
             </div>
 
@@ -99,7 +95,8 @@
                     Tipe Alat Berat
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="machinery_type" name="machinery_type" class='form-control'></select>
+                    <input id="machinery_type" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('machinery_type')) parsley-error @endif"
+                           name="machinery_type" value="{{ old('machinery_type') }}" required>
                 </div>
             </div>
 
@@ -201,29 +198,6 @@
             width: '100%',
             ajax: {
                 url: '{{ route('select.warehouses') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                }
-            }
-        });
-
-        // Select machinery type
-        $('#machinery_type').select2({
-            placeholder: {
-                id: '-1',
-                text: '- Pilih tipe alat berat -'
-            },
-            width: '100%',
-            ajax: {
-                url: '{{ route('select.machinery_types') }}',
                 dataType: 'json',
                 data: function (params) {
                     return {

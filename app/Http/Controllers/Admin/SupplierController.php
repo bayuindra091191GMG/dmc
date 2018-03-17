@@ -70,7 +70,7 @@ class SupplierController extends Controller
             'phone'                 => 'required|max:30',
             'fax'                   => 'max:30',
             'cellphone'             => 'max:30',
-            'contact_person'        => 'max:30',
+            'contact_person'        => 'required|max:30',
             'address'               => 'max:150',
             'city'                  => 'max:30',
             'remark'                => 'max:150',
@@ -80,10 +80,12 @@ class SupplierController extends Controller
             'bank_account_name'     => 'max:30',
         ],[
             'code.unique'       => 'Kode telah terpakai!',
-            'code.regex'        => 'Kode vendor harus tanpa spasi!'
+            'code.regex'        => 'Kode vendor harus tanpa spasi!',
+            'phone.required'       => 'Telepon harus diisi!',
+            'contact_person.required'       => 'Contact Person harus diisi!'
         ]);
 
-        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
+        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
         $dateTimeNow = Carbon::now('Asia/Jakarta');
         $user = Auth::user();
@@ -209,8 +211,8 @@ class SupplierController extends Controller
     public function destroy(Request $request)
     {
         try{
-            $department = Department::find($request->input('id'));
-            $department->delete();
+            $supplier = Supplier::find($request->input('id'));
+            $supplier->delete();
             return Response::json(array('success' => 'VALID'));
         }
         catch(\Exception $ex){

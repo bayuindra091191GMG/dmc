@@ -27,11 +27,11 @@ class ItemTransformer extends TransformerAbstract
         return[
             'name'              => $name,
             'code'              => $item->code,
-            'uom'               => $item->uom->description,
+            'uom'               => $item->uom,
             'part_number'       => $item->part_number ?? '-',
             'stock'             => $item->stock ?? '-',
             'group'             => $item->group->name,
-            'machinery_type'    => $item->machinery_type->name ?? '-',
+            'machinery_type'    => $item->machinery_type,
             'description'       => $item->description ?? '-',
             'created_at'        => $createdDate,
             'action'            => $action

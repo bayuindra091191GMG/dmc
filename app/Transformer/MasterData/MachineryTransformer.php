@@ -28,7 +28,7 @@ class MachineryTransformer extends TransformerAbstract
 
         return[
             'code'          => $machinery->code,
-            'type'          => $machinery->machinery_type->name,
+            'type'          => $machinery->type,
             'brand'         => $machinery->machinery_brand->name,
             'category'      => $machinery->machinery_category->name,
             'purchase_date' => $purchaseDate,

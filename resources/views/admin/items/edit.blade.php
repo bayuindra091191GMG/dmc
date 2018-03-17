@@ -67,11 +67,8 @@
                     Satuan Unit
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="uom" name="uom" class="form-control col-md-7 col-xs-12 @if($errors->has('uom')) parsley-error @endif">
-                        @foreach($uoms as $uom)
-                            <option value="{{ $uom->id }}" {{ $item->uom_id == $uom->id ? "selected":"" }}>{{ $uom->description }}</option>
-                        @endforeach
-                    </select>
+                    <input id="uom" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('uom')) parsley-error @endif"
+                           name="uom" value="{{ $item->uom }}" required>
                 </div>
             </div>
 
@@ -360,28 +357,6 @@
             }
         });
 
-        // Select machinery type
-        $('#machinery_type0').select2({
-            placeholder: {
-                id: '-1',
-                text: '- Pilih tipe alat berat -'
-            },
-            width: '100%',
-            ajax: {
-                url: '{{ route('select.machinery_types') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                }
-            }
-        });
 
         // Add new stock
         $(document).on('click', '.add-modal', function() {
