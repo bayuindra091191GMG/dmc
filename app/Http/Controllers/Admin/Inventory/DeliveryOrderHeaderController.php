@@ -18,6 +18,7 @@ use App\Models\ItemStock;
 use App\Models\NumberingSystem;
 use App\Models\PurchaseRequestHeader;
 use App\Models\Site;
+use App\Models\Warehouse;
 use App\Transformer\Inventory\DeliveryOrderHeaderTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -35,7 +36,7 @@ class DeliveryOrderHeaderController extends Controller
     }
 
     public function create(){
-        $sites = Site::all();
+        $warehouses = Warehouse::where('id', '>', 0)->get();
 
         // Get PR data if exist
         $purchaseRequest = null;
@@ -48,7 +49,7 @@ class DeliveryOrderHeaderController extends Controller
         $autoNumber = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
 
         $data =[
-            'sites'             => $sites,
+            'warehouses'        => $warehouses,
             'autoNumber'        => $autoNumber,
             'purchaseRequest'   => $purchaseRequest
         ];
@@ -58,14 +59,21 @@ class DeliveryOrderHeaderController extends Controller
 
     public function show(DeliveryOrderHeader $delivery_order){
         $header = $delivery_order;
+        $date = Carbon::parse($delivery_order->date)->format('d M Y');
 
-        return View('admin.inventory.delivery_orders.show', compact('header'));
+        $data = [
+            'header'    => $header,
+            'date'      => $date
+        ];
+
+        return View('admin.inventory.delivery_orders.show')->with($data);
     }
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
-            'code'           => 'max:30|regex:/^\S*$/u|unique:delivery_order_headers',
+            'do_code'        => 'required|max:30|regex:/^\S*$/u',
             'remark_header'  => 'max:150',
+            'date'           => 'required'
         ],[
             'code.regex'     => 'Nomor Surat Jalan harus tanpa spasi'
         ]);
@@ -87,13 +95,13 @@ class DeliveryOrderHeaderController extends Controller
             return redirect()->back()->withErrors('Nomor PR wajib diisi!', 'default')->withInput($request->all());
         }
 
-        // Validate from & to site
-        if($request->input('from_site') === '-1' || $request->input('to_site') === '-1'){
-            return redirect()->back()->withErrors('Pilih site keberangkatan & tujuan!', 'default')->withInput($request->all());
+        // Validate from & to warehouse
+        if($request->input('from_warehouse') === '-1' || $request->input('to_warehouse') === '-1'){
+            return redirect()->back()->withErrors('Pilih gudang keberangkatan & tujuan!', 'default')->withInput($request->all());
         }
 
-        if($request->input('from_site') === $request->input('to_site')){
-            return redirect()->back()->withErrors('Site keberangkatan & tujuan harus berbeda!', 'default')->withInput($request->all());
+        if($request->input('from_warehouse') === $request->input('to_warehouse')){
+            return redirect()->back()->withErrors('Gudang keberangkatan & tujuan harus berbeda!', 'default')->withInput($request->all());
         }
 
         // Generate auto number
@@ -145,11 +153,11 @@ class DeliveryOrderHeaderController extends Controller
 
         $valid = true;
         // Validate stock
-        $site = Site::find($request->input('from_site'));
+        $warehouse = Warehouse::find($request->input('from_warehouse'));
         $i = 0;
         foreach($items as $item){
             if(!empty($item)){
-                $valid = ItemStock::where('warehouse_id', $site->warehouse_id)
+                $valid = ItemStock::where('warehouse_id', $warehouse->id)
                     ->where('item_id', $item)
                     ->where('stock', '>', $qtys[$i])
                     ->exists();
@@ -167,8 +175,8 @@ class DeliveryOrderHeaderController extends Controller
         $doHeader = DeliveryOrderHeader::create([
             'code'                  => $doCode,
             'purchase_request_id'   => $prId,
-            'from_site_id'          => $request->input('from_site'),
-            'to_site_id'            => $request->input('to_site'),
+            'from_warehouse_id'     => $request->input('from_warehouse'),
+            'to_warehouse_id'       => $request->input('to_warehouse'),
             'status_id'             => 3,
             'created_by'            => $user->id,
             'created_at'            => $now->toDateTimeString(),
@@ -190,6 +198,9 @@ class DeliveryOrderHeaderController extends Controller
             $doHeader->remark = $request->input('remark_header');
         }
 
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+        $doHeader->date = $date->toDateTimeString();
+
         $doHeader->save();
 
         // Create delivery order detail
@@ -209,7 +220,7 @@ class DeliveryOrderHeaderController extends Controller
                 }
 
                 // Change stock
-                $stock = ItemStock::where('warehouse_id', $site->warehouse_id)
+                $stock = ItemStock::where('warehouse_id', $warehouse->id)
                     ->where('item_id', $item)
                     ->where('stock', '>', $qtys[$idx])
                     ->first();
@@ -247,11 +258,13 @@ class DeliveryOrderHeaderController extends Controller
 
     public function edit(DeliveryOrderHeader $delivery_order){
         $header = $delivery_order;
-        $sites = Site::all();
+        $warehouses = Warehouse::where('id', '>', 0)->get();
+        $date = Carbon::parse($delivery_order->date)->format('d M Y');
 
         $data = [
-            'header'    => $header,
-            'sites'     => $sites
+            'header'        => $header,
+            'warehouses'    => $warehouses,
+            'date'          => $date
         ];
 
         return View('admin.inventory.delivery_orders.edit')->with($data);
@@ -259,7 +272,8 @@ class DeliveryOrderHeaderController extends Controller
 
     public function update(Request $request, DeliveryOrderHeader $delivery_order){
         $validator = Validator::make($request->all(),[
-            'remark'        => 'max:150'
+            'remark'        => 'max:150',
+            'date'          => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -275,6 +289,10 @@ class DeliveryOrderHeaderController extends Controller
         $delivery_order->remark = $request->input('remark');
         $delivery_order->updated_by = $user->id;
         $delivery_order->updated_at = $now->toDateTimeString();
+
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+        $delivery_order->date = $date->toDateTimeString();
+
         $delivery_order->save();
 
         Session::flash('message', 'Berhasil ubah Surat Jalan!');
@@ -388,6 +406,14 @@ class DeliveryOrderHeaderController extends Controller
         }
     }
 
+    public function getIndex(){
+        $deliveryOrders = DeliveryOrderHeader::dateDescending()->get();
+        return DataTables::of($deliveryOrders)
+            ->setTransformer(new DeliveryOrderHeaderTransformer)
+            ->addIndexColumn()
+            ->make(true);
+    }
+
     public function report(){
         return View('admin.inventory.delivery_orders.report');
     }
@@ -417,13 +443,5 @@ class DeliveryOrderHeaderController extends Controller
         $filename = 'DELIVERY_ORDER_REPORT_' . $now->toDateTimeString();
 
         return $pdf->download($filename.'.pdf');
-    }
-
-    public function getIndex(){
-        $deliveryOrders = DeliveryOrderHeader::dateDescending()->get();
-        return DataTables::of($deliveryOrders)
-            ->setTransformer(new DeliveryOrderHeaderTransformer)
-            ->addIndexColumn()
-            ->make(true);
     }
 }

@@ -29,7 +29,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="po_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('po_code')) parsley-error @endif"
-                           name="po_code" value="{{ $autoNumber }}" disabled>
+                           name="po_code" value="{{ $autoNumber }}" readonly>
                 </div>
             </div>
 
@@ -71,7 +71,7 @@
                     </a>
                     @if(!empty($purchaseRequest))
                         <a class="clear-pr-data btn btn-info">
-                            Set Ulang Data
+                            Reset Data
                         </a>
                     @endif
                 </div>
@@ -396,11 +396,11 @@
         $('#auto_number').change(function(){
             if(this.checked){
                 $('#po_code').val('{{ $autoNumber }}');
-                $('#po_code').prop('disabled', true);
+                $('#po_code').prop('readonly', true);
             }
             else{
                 $('#po_code').val('');
-                $('#po_code').prop('disabled', false);
+                $('#po_code').prop('readonly', false);
             }
         });
 
@@ -481,24 +481,28 @@
         pphFormat = new AutoNumeric('#pph', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
+            minimumValue: '0',
             decimalPlaces: 0
         });
 
         numberFormat = new AutoNumeric('#price_add', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
+            minimumValue: '0',
             decimalPlaces: 0
         });
 
         deliveryFeeFormat = new AutoNumeric('#delivery_fee', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
+            minimumValue: '0',
             decimalPlaces: 0
         });
 
         priceEditFormat = new AutoNumeric('#price_edit', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
+            minimumValue: '0',
             decimalPlaces: 0
         });
 

@@ -27,6 +27,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property float $ppn_amount
  * @property float $total_payment
  * @property int $status_id
+ * @property \Carbon\Carbon $date
  * @property int $created_by
  * @property \Carbon\Carbon $created_at
  * @property int $updated_by
@@ -79,6 +80,7 @@ class PurchaseInvoiceHeader extends Eloquent
 		'pph_amount',
 		'ppn_amount',
 		'total_payment',
+        'date',
 		'status_id',
 		'created_by',
 		'updated_by'
@@ -118,7 +120,7 @@ class PurchaseInvoiceHeader extends Eloquent
     }
 
     public function scopeDateDescending(Builder $query){
-        return $query->orderBy('created_at','DESC');
+        return $query->orderBy('date','DESC');
     }
 
 	public function purchase_order_header()

@@ -19,13 +19,13 @@
             <thead>
             <tr>
                 <th>No</th>
-                <th>Nomor SJ</th>
-                <th>Site Keberangkatan</th>
-                <th>Site Tujuan</th>
+                <th>Nomor Surat Jalan</th>
+                <th>Gudang Keberangkatan</th>
+                <th>Gudang Tujuan</th>
                 <th>Alat Berat</th>
                 <th>Nomor PR</th>
                 <th>Keterangan</th>
-                <th>Tanggal Dibuat</th>
+                <th>Tanggal</th>
                 <th>Status</th>
                 <th>Tindakan</th>
             </tr>
@@ -108,8 +108,8 @@
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
                     { data: 'code', name: 'code', class: 'text-center'},
-                    { data: 'from_site', name: 'from_site', class: 'text-center'},
-                    { data: 'to_site', name: 'to_site', class: 'text-center'},
+                    { data: 'from_warehouse', name: 'from_warehouse', class: 'text-center'},
+                    { data: 'to_warehouse', name: 'to_warehouse', class: 'text-center'},
                     { data: 'machinery', name: 'machinery', class: 'text-center'},
                     { data: 'pr_code', name: 'pr_code', class: 'text-center'},
                     { data: 'remark', name: 'remark' },

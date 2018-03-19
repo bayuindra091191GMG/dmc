@@ -279,6 +279,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('purchase_invoices/detil/{purchase_invoice}', 'Purchasing\PurchaseInvoiceHeaderController@show')->name('purchase_invoices.show');
     Route::get('purchase_invoices/{purchase_invoice}/ubah', 'Purchasing\PurchaseInvoiceHeaderController@edit')->name('purchase_invoices.edit');
     Route::put('purchase_invoices/ubah/{purchase_invoice}', 'Purchasing\PurchaseInvoiceHeaderController@update')->name('purchase_invoices.update');
+    Route::get('purchase_invoices/pilihpo', 'Purchasing\PurchaseInvoiceHeaderController@beforeCreate')->name('purchase_invoices.before_create');
     Route::get('purchase_invoices/tambah', 'Purchasing\PurchaseInvoiceHeaderController@create')->name('purchase_invoices.create');
     Route::post('purchase_invoices/simpan', 'Purchasing\PurchaseInvoiceHeaderController@store')->name('purchase_invoices.store');
     Route::get('purchase_invoices/report', 'Purchasing\PurchaseInvoiceHeaderController@report')->name('purchase_invoices.report');
@@ -292,7 +293,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     //Delivery Order Headers
     Route::get('delivery_orders', 'Inventory\DeliveryOrderHeaderController@index')->name('delivery_orders');
     Route::get('delivery_orders/detil/{delivery_order}', 'Inventory\DeliveryOrderHeaderController@show')->name('delivery_orders.show');
-    Route::get('delivery_orders/{delivery_order}/ubah', 'Inventory\DeliveryOrderHeaderController@edit')->name('delivery_orders.edit');
+//    Route::get('delivery_orders/{delivery_order}/ubah', 'Inventory\DeliveryOrderHeaderController@edit')->name('delivery_orders.edit');
     Route::put('delivery_orders/ubah/{delivery_order}', 'Inventory\DeliveryOrderHeaderController@update')->name('delivery_orders.update');
     Route::get('delivery_orders/tambah', 'Inventory\DeliveryOrderHeaderController@create')->name('delivery_orders.create');
     Route::post('delivery_orders/simpan', 'Inventory\DeliveryOrderHeaderController@store')->name('delivery_orders.store');

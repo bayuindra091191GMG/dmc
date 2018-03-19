@@ -15,6 +15,13 @@ use League\Fractal\TransformerAbstract;
 
 class PurchaseOrderHeaderTransformer extends TransformerAbstract
 {
+    protected $mode = 'default';
+
+    public function __construct($mode)
+    {
+        $this->mode = $mode;
+    }
+
     public function transform(PurchaseOrderHeader $header){
         try{
             $date = Carbon::parse($header->date)->format('d M Y');
@@ -22,8 +29,16 @@ class PurchaseOrderHeaderTransformer extends TransformerAbstract
             $code = "<a href='purchase_orders/detil/" . $header->id. "'>". $header->code. "</a>";
             $prCode =  "<a href='purchase_requests/detil/" . $header->purchase_request_id. "'>". $header->purchase_request_header->code. "</a>";
 
-            $action = "<a class='btn btn-xs btn-primary' href='purchase_orders/detil/". $header->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
-            $action .= "<a class='btn btn-xs btn-info' href='purchase_orders/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+            $action = "";
+            $route = route('admin.purchase_invoices.create', ['po' => $header->id]);
+
+            if($this->mode === 'default'){
+                $action = "<a class='btn btn-xs btn-primary' href='purchase_orders/detil/". $header->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
+                $action .= "<a class='btn btn-xs btn-info' href='purchase_orders/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+            }else{
+                $action = "<a class='btn btn-xs btn-success' href='". $route. "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i> Proses Invoice </a>";
+            }
+
 
             return[
                 'code'              => $code,

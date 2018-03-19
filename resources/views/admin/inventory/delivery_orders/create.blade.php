@@ -23,13 +23,13 @@
             @endif
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
-                    Nomor SJ
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="do_code">
+                    Nomor Surat Jalan
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-4 col-sm-4 col-xs-12">
-                    <input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
-                           name="code" value="{{ $autoNumber }}" disabled>
+                    <input id="do_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('do_code')) parsley-error @endif"
+                           name="do_code" value="{{ $autoNumber }}" readonly>
                 </div>
             </div>
 
@@ -45,48 +45,20 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="from_site" >
-                    Site Keberangkatan
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
+                    Tanggal
                     <span class="required">*</span>
                 </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                    <select id="from_site" name="from_site" class="form-control col-md-7 col-xs-12 @if($errors->has('from_site')) parsley-error @endif">
-                        <option value="-1" @if(empty(old('from_site'))) selected @endif> - Pilih site - </option>
-                        @foreach($sites as $site)
-                            <option value="{{ $site->id }}" {{ old('from_site') == $site->id ? "selected":"" }}>{{ $site->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group" id="from_site_warehouse">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="from_site_warehouse" >
-                    Gudang Keberangkatan
-                    <span class="required">*</span>
-                </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
-
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="to_site" >
-                    Site Tujuan
-                    <span class="required">*</span>
-                </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                    <select id="to_site" name="to_site" class="form-control col-md-7 col-xs-12 @if($errors->has('from_site')) parsley-error @endif">
-                        <option value="-1" @if(empty(old('to_site'))) selected @endif> - Pilih site - </option>
-                        @foreach($sites as $site)
-                            <option value="{{ $site->id }}" {{ old('to_site') == $site->id ? "selected":"" }}>{{ $site->name }}</option>
-                        @endforeach
-                    </select>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
+                           name="date" value="{{ old('date') }}" required>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pr_code" >
                     Nomor PR
+                    <span class="required">*</span>
                 </label>
                 <div class="col-md-4 col-sm-4 col-xs-12">
                     <select id="pr_code" name="pr_code" class="form-control col-md-7 col-xs-12 @if($errors->has('pr_code')) parsley-error @endif">
@@ -99,9 +71,39 @@
                     </a>
                     @if(!empty($purchaseRequest))
                         <a class="clear-pr-data btn btn-info">
-                            Set Ulang Data
+                            Reset Data
                         </a>
                     @endif
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="from_warehouse" >
+                    Gudang Keberangkatan
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <select id="from_warehouse" name="from_warehouse" class="form-control col-md-7 col-xs-12 @if($errors->has('from_warehouse')) parsley-error @endif">
+                        <option value="-1" @if(empty(old('from_warehouse'))) selected @endif> - Pilih gudang - </option>
+                        @foreach($warehouses as $warehouse)
+                            <option value="{{ $warehouse->id }}" {{ old('from_warehouse') == $warehouse->id ? "selected":"" }}>{{ $warehouse->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="to_warehouse" >
+                    Gudang Tujuan
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <select id="to_warehouse" name="to_warehouse" class="form-control col-md-7 col-xs-12 @if($errors->has('to_warehouse')) parsley-error @endif">
+                        <option value="-1" @if(empty(old('to_warehouse'))) selected @endif> - Pilih gudang - </option>
+                        @foreach($warehouses as $warehouse)
+                            <option value="{{ $warehouse->id }}" {{ old('to_warehouse') == $warehouse->id ? "selected":"" }}>{{ $warehouse->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
 
@@ -181,7 +183,7 @@
                                         <input type='hidden' name='qty[]' value='{{ $detail->quantity }}'/>
                                     </td>
                                     <td class='text-center'>
-                                        {{ $detail->item->uomDescription }}
+                                        {{ $detail->item->uom }}
                                     </td>
                                     <td>
                                         {{ $detail->remark }}
@@ -201,13 +203,16 @@
                         @endif
                         </tbody>
                     </table>
+
                 </div>
             </div>
 
             <input id="index_counter" type="hidden" value="{{ $idx }}"/>
 
+            <hr/>
+
             <div class="form-group">
-                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                <div class="col-md-12 col-sm-12 col-xs-12 text-center">
                     <a class="btn btn-danger" href="{{ route('admin.delivery_orders') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
@@ -345,6 +350,7 @@
 @section('styles')
     @parent
     {{ Html::style(mix('assets/admin/css/select2.css')) }}
+    {{ Html::style(mix('assets/admin/css/bootstrap-datetimepicker.css')) }}
     <style>
         .box-section{
             background-color: #ffffff;
@@ -360,16 +366,22 @@
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
     {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
     {{ Html::script(mix('assets/admin/js/stringbuilder.js')) }}
+    {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
     <script type="text/javascript">
+        // Date Picker
+        $('#date').datetimepicker({
+            format: "DD MMM Y"
+        });
+
         // Auto Numbering
         $('#auto_number').change(function(){
             if(this.checked){
                 $('#code').val('{{ $autoNumber }}');
-                $('#code').prop('disabled', true);
+                $('#code').prop('readonly', true);
             }
             else{
                 $('#code').val('');
-                $('#code').prop('disabled', false);
+                $('#code').prop('readonly', false);
             }
         });
 

@@ -17,7 +17,7 @@ class DeliveryOrderHeaderTransformer extends TransformerAbstract
 {
     public function transform(DeliveryOrderHeader $header){
         try{
-            $createdDate = Carbon::parse($header->created_at)->format('d M Y');
+            $date = Carbon::parse($header->date)->format('d M Y');
 
             $code = "<a href='delivery_orders/detil/" . $header->id. "'>". $header->code. "</a>";
 
@@ -27,18 +27,17 @@ class DeliveryOrderHeaderTransformer extends TransformerAbstract
             }
 
             $action = "<a class='btn btn-xs btn-primary' href='delivery_orders/detil/". $header->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
-//            $action .= "<a class='btn btn-xs btn-info' href='delivery_orders/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
             $action .= "<a class='confirm-modal btn btn-xs btn-success' data-id='". $header->id ."' ><i class='fa fa-check-square'></i></a>";
             $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $header->id ."' ><i class='fa fa-times-circle'></i></a>";
 
             return[
                 'code'              => $code,
-                'from_site'         => $header->fromSite->name,
-                'to_site'           => $header->toSite->name,
+                'from_warehouse'    => $header->toWarehouse->name,
+                'to_warehouse'      => $header->fromWarehouse->name,
                 'machinery'         => $header->machinery->code ?? "-",
                 'pr_code'           => $prCode,
                 'remark'            => $header->remark ?? "-",
-                'created_at'        => $createdDate,
+                'created_at'        => $date,
                 'status'            => $header->status->description,
                 'action'            => $action
             ];

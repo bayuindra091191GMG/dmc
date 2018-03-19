@@ -35,6 +35,10 @@ class PurchaseInvoiceHeaderController extends Controller
         return View('admin.purchasing.purchase_invoices.show', compact('header'));
     }
 
+    public function beforeCreate(){
+        return View('admin.purchasing.purchase_invoices.before_create');
+    }
+
     public function create(){
         $purchaseOrder = null;
         if(!empty(request()->po)){
@@ -55,7 +59,8 @@ class PurchaseInvoiceHeaderController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
-            'code'       => 'max:45|regex:/^\S*$/u'
+            'code'      => 'max:45|regex:/^\S*$/u',
+            'date'      => 'required'
         ],[
             'code.regex'    => 'Nomor Invoice harus tanpa spasi!'
         ]);
@@ -146,6 +151,9 @@ class PurchaseInvoiceHeaderController extends Controller
             $invHeader->purchase_order_id = $request->input('po_id');
         }
 
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+        $invHeader->date = $date->toDateTimeString();
+
         $invHeader->save();
 
         // Create po detail
@@ -227,13 +235,32 @@ class PurchaseInvoiceHeaderController extends Controller
 
     public function edit(PurchaseInvoiceHeader $purchase_invoice){
         $header = $purchase_invoice;
+        $date = Carbon::parse($purchase_invoice->date)->format('d M Y');
 
-        return View('admin.purchasing.purchase_invoices.edit', compact('header'));
+        $data = [
+            'header'    => $header,
+            'date'      => $date
+        ];
+
+        return View('admin.purchasing.purchase_invoices.edit')->with($data);
     }
 
     public function update(Request $request, PurchaseInvoiceHeader $purchase_invoice){
+        $validator = Validator::make($request->all(),[
+            'date'      => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
         if($request->filled('po_code')) $purchase_invoice->purchase_order_id = $request->input('po_code');
-//        if(!empty(Input::get('supplier'))) $purchase_order->supplier_id = Input::get('supplier');
+
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+        $purchase_invoice->date = $date->toDateTimeString();
 
         $totalPaymentWithoutTax = $purchase_invoice->total_payment_before_tax;
 
@@ -318,11 +345,20 @@ class PurchaseInvoiceHeaderController extends Controller
 //        return $pdf->download($filename.'.pdf');
 //    }
 
-    public function getIndex(){
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function getIndex(Request $request){
         try{
+            $mode = 'default';
+            if($request->filled('mode')){
+                $mode = $request->input('mode');
+            }
+
             $purchaseOrders = PurchaseInvoiceHeader::dateDescending()->get();
             return DataTables::of($purchaseOrders)
-                ->setTransformer(new PurchaseInvoiceHeaderTransformer)
+                ->setTransformer(new PurchaseInvoiceHeaderTransformer($mode))
                 ->addIndexColumn()
                 ->make(true);
         }

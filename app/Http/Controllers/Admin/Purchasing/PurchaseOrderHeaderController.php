@@ -70,7 +70,7 @@ class PurchaseOrderHeaderController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
-            'po_code'       => 'max:45|regex:/^\S*$/u',
+            'po_code'       => 'required|max:45|regex:/^\S*$/u',
             'date'          => 'required'
         ],[
             'po_code.regex'     => 'Nomor PO harus tanpa spasi!'
@@ -357,11 +357,17 @@ class PurchaseOrderHeaderController extends Controller
         return $pdf->download($filename.'.pdf');
     }
 
-    public function getIndex(){
+    public function getIndex(Request $request){
         try{
             $purchaseOrders = PurchaseOrderHeader::dateDescending()->get();
+
+            $mode = 'default';
+            if($request->filled('mode')){
+                $mode = $request->input('mode');
+            }
+
             return DataTables::of($purchaseOrders)
-                ->setTransformer(new PurchaseOrderHeaderTransformer)
+                ->setTransformer(new PurchaseOrderHeaderTransformer($mode))
                 ->addIndexColumn()
                 ->make(true);
         }

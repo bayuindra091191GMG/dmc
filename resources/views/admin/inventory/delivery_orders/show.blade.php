@@ -9,7 +9,7 @@
                 <a class="btn btn-default" href="{{ route('admin.delivery_orders') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
             </div>
             <div class="navbar-right">
-                <a class="btn btn-default" href="{{ route('admin.delivery_orders.edit',[ 'delivery_order' => $header->id]) }}">UBAH</a>
+                {{--<a class="btn btn-default" href="{{ route('admin.delivery_orders.edit',[ 'delivery_order' => $header->id]) }}">UBAH</a>--}}
                 {{--<a class="btn btn-default" href="{{ route('admin.purchase_requests.edit',[ 'purchase_request' => $header->id]) }}">CETAK</a>--}}
             </div>
         </div>
@@ -42,7 +42,16 @@
                         Site Keberangkatan
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->fromSite->name }}
+                        : {{ $header->fromWarehouse->site->name }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        Gudang Keberangkatan
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ $header->fromWarehouse->name }}
                     </div>
                 </div>
 
@@ -51,7 +60,16 @@
                         Site Tujuan
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->toSite->name }}
+                        : {{ $header->toWarehouse->site->name }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        Gudang Tujuan
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ $header->toWarehouse->name }}
                     </div>
                 </div>
 
@@ -61,7 +79,7 @@
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         @if(!empty($header->purchase_request_id))
-                            : <a href="{{ route('admin.purchase_requests.show', ['purchase_request' => $header->purchase_request_id]) }}">{{ $header->purchase_request_header->code }}</a>
+                            : <a style="text-decoration: underline;" href="{{ route('admin.purchase_requests.show', ['purchase_request' => $header->purchase_request_id]) }}">{{ $header->purchase_request_header->code }}</a>
                         @else
                             : -
                         @endif
@@ -128,7 +146,7 @@
                                         {{ $detail->item->name }}
                                     </td>
                                     <td class="text-center">
-                                        {{ $detail->item->uom->description }}
+                                        {{ $detail->item->uom }}
                                     </td>
                                     <td class="text-center">
                                         {{ $detail->quantity }}

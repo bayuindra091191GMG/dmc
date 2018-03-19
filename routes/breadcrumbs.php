@@ -379,4 +379,90 @@ Breadcrumbs::register('admin.menus.edit', function (Generator $breadcrumbs, \App
     $breadcrumbs->push('Ubah Menu', route('admin.menus.edit', ['menu' => $menu]));
 });
 
+// Purchase Request
+Breadcrumbs::register('admin.purchase_requests', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar PR');
+});
+
+Breadcrumbs::register('admin.purchase_requests.create', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar PR', route('admin.purchase_requests'));
+    $breadcrumbs->push('Tambah PR');
+});
+
+Breadcrumbs::register('admin.purchase_requests.show', function (Generator $breadcrumbs, \App\Models\PurchaseRequestHeader $purchase_request) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar PR', route('admin.purchase_requests'));
+    $breadcrumbs->push('Data PR '. $purchase_request->code, route('admin.purchase_requests.show', ['purchase_request' => $purchase_request]));
+});
+
+Breadcrumbs::register('admin.purchase_requests.edit', function (Generator $breadcrumbs, \App\Models\PurchaseRequestHeader $purchase_request) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar PR', route('admin.purchase_requests'));
+    $breadcrumbs->push('Ubah PR', route('admin.purchase_requests.edit', ['purchase_request' => $purchase_request]));
+});
+
+// Purchase Order
+Breadcrumbs::register('admin.purchase_orders', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar PO');
+});
+
+Breadcrumbs::register('admin.purchase_orders.before_create', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar PO', route('admin.purchase_orders'));
+    $breadcrumbs->push('Pilih PR');
+});
+
+Breadcrumbs::register('admin.purchase_orders.create', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar PO', route('admin.purchase_orders'));
+    $breadcrumbs->push('Pilih PR', route('admin.purchase_orders.before_create'));
+    $breadcrumbs->push('Tambah PO');
+});
+
+Breadcrumbs::register('admin.purchase_orders.show', function (Generator $breadcrumbs, \App\Models\PurchaseOrderHeader $purchase_order) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar PO', route('admin.purchase_orders'));
+    $breadcrumbs->push('Data PO '. $purchase_order->code, route('admin.purchase_orders.show', ['purchase_order' => $purchase_order]));
+});
+
+Breadcrumbs::register('admin.purchase_orders.edit', function (Generator $breadcrumbs, \App\Models\PurchaseOrderHeader $purchase_order) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar PO', route('admin.purchase_orders'));
+    $breadcrumbs->push('Ubah PO', route('admin.purchase_orders.edit', ['purchase_order' => $purchase_order]));
+});
+
+// Purchase Invoice
+Breadcrumbs::register('admin.purchase_invoices', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Invoice');
+});
+
+Breadcrumbs::register('admin.purchase_invoices.before_create', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar PO', route('admin.purchase_orders'));
+    $breadcrumbs->push('Pilih PO');
+});
+
+Breadcrumbs::register('admin.purchase_invoices.create', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Invoice', route('admin.purchase_invoices'));
+    $breadcrumbs->push('Pilih PO', route('admin.purchase_invoices.before_create'));
+    $breadcrumbs->push('Tambah Invoice');
+});
+
+Breadcrumbs::register('admin.purchase_invoices.show', function (Generator $breadcrumbs, \App\Models\PurchaseInvoiceHeader $purchase_invoice) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Invoice', route('admin.purchase_orders'));
+    $breadcrumbs->push('Data Invoice '. $purchase_invoice->code, route('admin.purchase_invoices.show', ['purchase_invoice' => $purchase_invoice]));
+});
+
+Breadcrumbs::register('admin.purchase_invoices.edit', function (Generator $breadcrumbs, \App\Models\PurchaseInvoiceHeader $purchase_invoice) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Invoice', route('admin.purchase_invoices'));
+    $breadcrumbs->push('Ubah Invoice', route('admin.purchase_invoices.edit', ['purchase_invoice' => $purchase_invoice]));
+});
+
 

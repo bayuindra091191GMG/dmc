@@ -37,34 +37,45 @@
                     Nomor SJ
                 </label>
                 <div class="col-md-4 col-sm-4 col-xs-12">
-                    <input id="do_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('do_code')) parsley-error @endif"
+                    <input id="do_code" type="text" class="form-control col-md-7 col-xs-12"
                            name="do_code" value="{{ $header->code }}" readonly>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="from_site" >
-                    Site Keberangkatan
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
+                    Tanggal
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
+                           name="date" value="{{ $date }}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="from_warehouse" >
+                    Gudang Keberangkatan
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-4 col-sm-4 col-xs-12">
-                    <select id="from_site" name="from_site" class="form-control col-md-7 col-xs-12 @if($errors->has('from_site')) parsley-error @endif">
-                        @foreach($sites as $site)
-                            <option value="{{ $site->id }}" {{ $header->from_site_id == $site->id ? "selected":"" }}>{{ $site->name }}</option>
+                    <select id="from_warehouse" name="from_warehouse" class="form-control col-md-7 col-xs-12 @if($errors->has('from_warehouse')) parsley-error @endif">
+                        @foreach($warehouses as $warehouse)
+                            <option value="{{ $warehouse->id }}" {{ $header->from_warehouse_id == $warehouse->id ? "selected":"" }}>{{ $warehouse->name }}</option>
                         @endforeach
                     </select>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="to_site" >
-                    Site Tujuan
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="to_warehouse" >
+                    Gudang Tujuan
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-4 col-sm-4 col-xs-12">
-                    <select id="to_site" name="to_site" class="form-control col-md-7 col-xs-12 @if($errors->has('from_site')) parsley-error @endif">
-                        @foreach($sites as $site)
-                            <option value="{{ $site->id }}" {{ $header->to_site_id == $site->id ? "selected":"" }}>{{ $site->name }}</option>
+                    <select id="to_warehouse" name="to_warehouse" class="form-control col-md-7 col-xs-12 @if($errors->has('to_warehouse')) parsley-error @endif">
+                        @foreach($warehouses as $warehouse)
+                            <option value="{{ $warehouse->id }}" {{ $header->to_warehouse_id == $warehouse->id ? "selected":"" }}>{{ $warehouse->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -148,7 +159,7 @@
                             {{ $detail->quantity }}
                         </td>
                         <td class='text-center'>
-                            {{ $detail->item->uomDescription }}
+                            {{ $detail->item->uom }}
                         </td>
                         <td>
                             {{ $detail->remark }}
@@ -322,6 +333,11 @@
     {{ Html::script(mix('assets/admin/js/stringbuilder.js')) }}
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript">
+        // Date Picker
+        $('#date').datetimepicker({
+            format: "DD MMM Y"
+        });
+
         var i=1;
 
         $('#machinery').select2({

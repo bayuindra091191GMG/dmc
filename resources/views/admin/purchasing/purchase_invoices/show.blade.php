@@ -5,6 +5,9 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="navbar-left">
+                <a class="btn btn-default" href="{{ route('admin.purchase_invoices') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
+            </div>
             <div class="navbar-right">
                 <a class="btn btn-default" href="{{ route('admin.purchase_invoices.edit',[ 'purchase_invoice' => $header->id]) }}">UBAH</a>
             </div>
@@ -46,7 +49,7 @@
                         Tanggal
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ \Carbon\Carbon::parse($header->created_at)->format('d M Y') }}
+                        : {{ \Carbon\Carbon::parse($header->date)->format('d M Y') }}
                     </div>
                 </div>
 
@@ -161,7 +164,7 @@
                                         {{ $detail->item->name }}
                                     </td>
                                     <td class="text-center">
-                                        {{ $detail->item->uom->description }}
+                                        {{ $detail->item->uom }}
                                     </td>
                                     <td class="text-center">
                                         {{ $detail->quantity }}

@@ -67,12 +67,13 @@ class PurchaseRequestHeaderController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
-            'pr_code'       => 'required|max:30',
+            'pr_code'       => 'required|max:30|regex:/^\S*$/u',
             'km'            => 'max:20',
             'hm'            => 'max:20',
             'date'          => 'required'
         ],[
-            'code.required'     => 'Nomor PR wajib diisi!'
+            'pr_code.required'      => 'Nomor PR wajib diisi!',
+            'pr_code.regex'         => 'Nomor PR harus tanpa spasi!'
         ]);
 
         if ($validator->fails()) {
@@ -242,6 +243,39 @@ class PurchaseRequestHeaderController extends Controller
         return redirect()->route('admin.purchase_requests.show', ['purchase_request' => $purchase_request]);
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getIndex(Request $request){
+        $purchaseRequests = PurchaseRequestHeader::all();
+
+        $mode = 'default';
+        if($request->filled('mode')){
+            $mode = $request->input('mode');
+        }
+
+        return DataTables::of($purchaseRequests)
+            ->setTransformer(new PurchaseRequestHeaderTransformer($mode))
+            ->addIndexColumn()
+            ->make(true);
+    }
+
+    public function getPurchaseRequests(Request $request){
+        $term = trim($request->q);
+        $purchase_requests = PurchaseRequestHeader::where('code', 'LIKE', '%'. $term. '%')
+            ->get();
+
+        $formatted_tags = [];
+
+        foreach ($purchase_requests as $purchase_request) {
+            $formatted_tags[] = ['id' => $purchase_request->id, 'text' => $purchase_request->code];
+        }
+
+        return \Response::json($formatted_tags);
+    }
+
     public function report(){
         return View('admin.purchasing.purchase_requests.report');
     }
@@ -289,38 +323,5 @@ class PurchaseRequestHeaderController extends Controller
         $purchaseRequestDetails = PurchaseRequestDetail::where('header_id', $purchaseRequest->id)->get();
 
         return view('documents.purchase_requests.purchase_requests_doc', compact('purchaseRequest', 'purchaseRequestDetails'));
-    }
-
-    /**
-     * @param Request $request
-     * @return mixed
-     * @throws \Exception
-     */
-    public function getIndex(Request $request){
-        $purchaseRequests = PurchaseRequestHeader::all();
-
-        $mode = 'default';
-        if($request->filled('mode')){
-            $mode = $request->input('mode');
-        }
-
-        return DataTables::of($purchaseRequests)
-            ->setTransformer(new PurchaseRequestHeaderTransformer($mode))
-            ->addIndexColumn()
-            ->make(true);
-    }
-
-    public function getPurchaseRequests(Request $request){
-        $term = trim($request->q);
-        $purchase_requests = PurchaseRequestHeader::where('code', 'LIKE', '%'. $term. '%')
-            ->get();
-
-        $formatted_tags = [];
-
-        foreach ($purchase_requests as $purchase_request) {
-            $formatted_tags[] = ['id' => $purchase_request->id, 'text' => $purchase_request->code];
-        }
-
-        return \Response::json($formatted_tags);
     }
 }

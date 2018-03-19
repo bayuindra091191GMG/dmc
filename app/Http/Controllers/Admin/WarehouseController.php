@@ -189,7 +189,7 @@ class WarehouseController extends Controller
         $formatted_tags = [];
 
         foreach ($warehouses as $warehouse) {
-            $formatted_tags[] = ['id' => $warehouse->id, 'text' => 'SITE: '. $warehouse->site->name. ' - GUDANG: '. $warehouse->name];
+            $formatted_tags[] = ['id' => $warehouse->id, 'text' => $warehouse->code. ' '. $warehouse->name. ' - '. $warehouse->site->name];
         }
 
         return Response::json($formatted_tags);

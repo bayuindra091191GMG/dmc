@@ -23,7 +23,7 @@
                 <th>Departemen</th>
                 <th>Kode Unit</th>
                 <th>Tanggal</th>
-                <th>Opsi</th>
+                <th>Tindakan</th>
             </tr>
             </thead>
             <tbody>

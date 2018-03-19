@@ -28,13 +28,14 @@ class PurchaseRequestHeaderTransformer extends TransformerAbstract
         $code = "<a href='purchase_requests/detil/" . $header->id. "' style='text-decoration: underline;'>". $header->code. "</a>";
 
         $action = "";
+        $route = route('admin.purchase_orders.create', ['pr' => $header->id]);
         if($this->mode === 'default'){
             $action = "<a class='btn btn-xs btn-primary' href='purchase_requests/detil/". $header->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
             $action .= "<a class='btn btn-xs btn-info' href='purchase_requests/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+            $action .= "<a class='btn btn-xs btn-success' href='". $route. "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i> Proses PO </a>";
         }
         else{
-            $route = route('admin.purchase_orders.create', ['pr' => $header->id]);
-            $action = "<a class='btn btn-xs btn-info' href='". $route. "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i></a>";
+            $action = "<a class='btn btn-xs btn-success' href='". $route. "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i> Proses PO </a>";
         }
 
         $machinery = '-';

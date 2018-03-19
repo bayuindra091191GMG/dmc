@@ -46,8 +46,7 @@
                 ajax: {
                     url: '{!! route('datatables.purchase_requests') !!}',
                     data: {
-                        'mode': 'before_create',
-                        'status': '{{ !empty($statusFilter) ? $statusFilter : 'default'}}'
+                        'mode': 'before_create'
                     }
                 },
                 columns: [
