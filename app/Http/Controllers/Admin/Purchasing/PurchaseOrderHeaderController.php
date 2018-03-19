@@ -31,10 +31,20 @@ class PurchaseOrderHeaderController extends Controller
         return View('admin.purchasing.purchase_orders.index');
     }
 
-    public function show(PurchaseOrderHeader $purchase_order){
-        $header = $purchase_order;
+    public function beforeCreate(){
 
-        return View('admin.purchasing.purchase_orders.show', compact('header'));
+        return View('admin.purchasing.purchase_orders.before_create');
+    }
+
+    public function show(PurchaseOrderHeader $purchase_order){
+        $date = Carbon::parse($purchase_order->date)->format('d M Y');
+
+        $data = [
+            'header'    => $purchase_order,
+            'date'      => $date
+        ];
+
+        return View('admin.purchasing.purchase_orders.show')->with($data);
     }
 
     public function create(){
@@ -60,7 +70,8 @@ class PurchaseOrderHeaderController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
-            'po_code'       => 'max:45|regex:/^\S*$/u'
+            'po_code'       => 'max:45|regex:/^\S*$/u',
+            'date'          => 'required'
         ],[
             'po_code.regex'     => 'Nomor PO harus tanpa spasi!'
         ]);
@@ -110,9 +121,9 @@ class PurchaseOrderHeaderController extends Controller
         }
 
         // Validate details
-        $items = Input::get('item_value');
-        $qtys = Input::get('qty');
-        $prices = Input::get('price');
+        $items = $request->input('item_value');
+        $qtys = $request->input('qty');
+        $prices = $request->input('price');
         $valid = true;
         $i = 0;
         foreach($items as $item){
@@ -132,25 +143,28 @@ class PurchaseOrderHeaderController extends Controller
         $poHeader = PurchaseOrderHeader::create([
             'code'                  => $poCode,
             'purchase_request_id'   => $prId,
-            'supplier_id'           => Input::get('supplier'),
+            'supplier_id'           => $request->input('supplier'),
             'status_id'             => 3,
             'created_by'            => $user->id,
             'created_at'            => $now->toDateTimeString()
         ]);
 
         $delivery = 0;
-        if(!empty(Input::get('delivery_fee')) && Input::get('delivery_fee') != '0'){
-            $deliveryFee = str_replace('.','', Input::get('delivery_fee'));
+        if($request->filled('delivery_fee') && $request->input('delivery_fee') != '0'){
+            $deliveryFee = str_replace('.','', $request->input('delivery_fee'));
             $delivery = (double) $deliveryFee;
             $poHeader->delivery_fee = $deliveryFee;
         }
 
-        if(!empty(Input::get('pr_code'))){
-            $poHeader->purchase_request_id = Input::get('pr_code');
+        if($request->filled('pr_code')){
+            $poHeader->purchase_request_id = $request->input('pr_code');
         }
         else{
-            $poHeader->purchase_request_id = Input::get('pr_id');
+            $poHeader->purchase_request_id = $request->input('pr_id');
         }
+
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+        $poHeader->date = $date->toDateTimeString();
 
         $poHeader->save();
 
@@ -232,14 +246,33 @@ class PurchaseOrderHeaderController extends Controller
     }
 
     public function edit(PurchaseOrderHeader $purchase_order){
-        $header = $purchase_order;
+        $date = Carbon::parse($purchase_order->date)->format('d M Y');
 
-        return View('admin.purchasing.purchase_orders.edit', compact('header'));
+        $data = [
+            'header'    => $purchase_order,
+            'date'      => $date
+        ];
+
+        return View('admin.purchasing.purchase_orders.edit')->with($data);
     }
 
     public function update(Request $request, PurchaseOrderHeader $purchase_order){
-        if(!empty(Input::get('pr_code'))) $purchase_order->purchase_request_id = Input::get('pr_code');
-        if(!empty(Input::get('supplier'))) $purchase_order->supplier_id = Input::get('supplier');
+        $validator = Validator::make($request->all(),[
+            'date'          => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        if($request->filled('pr_code')) $purchase_order->purchase_request_id = Input::get('pr_code');
+        if($request->filled('supplier')) $purchase_order->supplier_id = Input::get('supplier');
+
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+        $purchase_order->date = $date->toDateTimeString();
 
         $totalPaymentWithoutTax = $purchase_order->total_payment_before_tax;
 

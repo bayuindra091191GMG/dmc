@@ -33,6 +33,27 @@
             @endif
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pr_code">
+                    Nomor PR
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="pr_code" type="text" class="form-control col-md-7 col-xs-12"
+                           name="pr_code" value="{{ $header->code }}" readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
+                    Tanggal
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('purchase_date')) parsley-error @endif"
+                           name="date" value="{{ $date }}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="department" >
                     Departemen
                     <span class="required">*</span>
@@ -63,7 +84,6 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="priority" name="priority" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">
-                        <option value="-1" @if(empty($header->priority)) selected @endif> - Pilih prioritas - </option>
                         <option value="1" {{ $header->priority == "1" ? "selected":"" }}>1</option>
                         <option value="2" {{ $header->priority == "2" ? "selected":"" }}>2</option>
                         <option value="3" {{ $header->priority == "3" ? "selected":"" }}>3</option>
@@ -142,7 +162,7 @@
                             {{ $detail->item->code }} - {{ $detail->item->name }}
                         </td>
                         <td>
-                            {{ $detail->item->uom->description }}
+                            {{ $detail->item->uom }}
                         </td>
                         <td>
                             {{ $detail->quantity }}
@@ -316,6 +336,11 @@
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript">
+        // Date Picker
+        $('#date').datetimepicker({
+            format: "DD MMM Y"
+        });
+
         var i=1;
 
         $('#machinery').select2({
@@ -440,7 +465,7 @@
                         if (data.remark !== null) {
                             remarkAdd = data.remark;
                         }
-                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + remarkAdd + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
+                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uom + "</td><td>" + data.quantity + "</td><td>" + remarkAdd + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
 
                     }
                 },
@@ -516,7 +541,7 @@
                         if (data.remark !== null) {
                             remarkEdit = data.remark;
                         }
-                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + remarkEdit + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark=" + data.remark + "><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
+                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uom + "</td><td>" + data.quantity + "</td><td>" + remarkEdit + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark=" + data.remark + "><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
 
                     }
                 }

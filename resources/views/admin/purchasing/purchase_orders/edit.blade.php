@@ -42,6 +42,17 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
+                    Tanggal
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
+                           name="date" value="{{ $date }}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pr_code">
                     Nomor PR
                     <span class="required">*</span>
@@ -154,7 +165,7 @@
                             {{ $detail->item->code }} - {{ $detail->item->name }}
                         </td>
                         <td class="text-center">
-                            {{ $detail->item->uom->description }}
+                            {{ $detail->item->uom }}
                         </td>
                         <td>
                             {{ $detail->quantity }}
@@ -221,7 +232,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="discount_add">Diskon(%):</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="discount_add" name="discount_add">
+                                <input type="text" class="form-control" id="discount_add" name="discount_add">
                                 <p class="errorDiscount text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -279,7 +290,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="discount_edit">Diskon(%):</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="discount_edit" name="discount_edit">
+                                <input type="text" class="form-control" id="discount_edit" name="discount_edit">
                                 <p class="errorDiscount text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -365,6 +376,11 @@
     {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript">
+        // Date Picker
+        $('#date').datetimepicker({
+            format: "DD MMM Y"
+        });
+
         var i=1;
 
         $('#pr_code').select2({
@@ -441,6 +457,7 @@
         pphFormat = new AutoNumeric('#pph', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
+            minimumValue: '0',
             decimalPlaces: 0
         });
 
@@ -450,6 +467,7 @@
             pphFormat.set('{{ $header->pph_amount }}', {
                 decimalCharacter: ',',
                 digitGroupSeparator: '.',
+                minimumValue: '0',
                 decimalPlaces: 0
             });
         @endif
@@ -457,12 +475,14 @@
         numberFormat = new AutoNumeric('#price_add', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
+            minimumValue: '0',
             decimalPlaces: 0
         });
 
         deliveryFeeFormat = new AutoNumeric('#delivery_fee', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
+            minimumValue: '0',
             decimalPlaces: 0
         });
 
@@ -472,6 +492,7 @@
             deliveryFeeFormat.set('{{ $header->delivery_fee }}', {
                 decimalCharacter: ',',
                 digitGroupSeparator: '.',
+                minimumValue: '0',
                 decimalPlaces: 0
             });
         @endif
@@ -479,6 +500,19 @@
         priceEditFormat = new AutoNumeric('#price_edit', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
+            minimumValue: '0',
+            decimalPlaces: 0
+        });
+
+        discountAddFormat = new AutoNumeric('#discount_add', {
+            maximumValue: '100',
+            minimumValue: '0',
+            decimalPlaces: 0
+        });
+
+        discountEditFormat = new AutoNumeric('#discount_edit', {
+            maximumValue: '100',
+            minimumValue: '0',
             decimalPlaces: 0
         });
 
@@ -562,7 +596,7 @@
                         if (data.remark !== null) {
                             remarkAdd = data.remark;
                         }
-                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td class='text-center'>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + data.price_string + "</td><td class='text-center'>" + data.discount_string + "</td><td>" + data.subtotal_string + "</td><td>" + remarkAdd + "</td><td class='text-center'>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
+                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td class='text-center'>" + data.item.uom + "</td><td>" + data.quantity + "</td><td>" + data.price_string + "</td><td class='text-center'>" + data.discount_string + "</td><td>" + data.subtotal_string + "</td><td>" + remarkAdd + "</td><td class='text-center'>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
 
                         // Reset add form modal
                         $('#qty_add').val('');
@@ -606,17 +640,25 @@
 
             $('#qty_edit').val($(this).data('qty'));
             $('#remark_edit').val($(this).data('remark'));
-            $('#discount_edit').val($(this).data('discount'));
-            $('#editModal').modal('show');
 
             priceEditFormat.clear();
 
             priceEditFormat.set($(this).data('price'), {
                 decimalCharacter: ',',
                 digitGroupSeparator: '.',
+                minimumValue: '0',
                 decimalPlaces: 0
             });
 
+            discountEditFormat.clear();
+
+            discountEditFormat.set($(this).data('discount'), {
+                maximumValue: '100',
+                minimumValue: '0',
+                decimalPlaces: 0
+            });
+
+            $('#editModal').modal('show');
         });
         $('.modal-footer').on('click', '.edit', function() {
             $.ajax({
@@ -665,7 +707,7 @@
                         if (data.remark !== null) {
                             remarkEdit = data.remark;
                         }
-                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td class='text-center'>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + data.price_string + "</td><td class='text-center'>" + data.discount_string + "</td><td>" + data.subtotal_string + "</td><td>" + remarkEdit + "</td><td class='text-center'>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
+                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td class='text-center'>" + data.item.uom + "</td><td>" + data.quantity + "</td><td>" + data.price_string + "</td><td class='text-center'>" + data.discount_string + "</td><td>" + data.subtotal_string + "</td><td>" + remarkEdit + "</td><td class='text-center'>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
                     }
                 }
             });

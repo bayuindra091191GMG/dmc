@@ -7,7 +7,7 @@
     <div class="row">
         @include('partials._success')
         <div class="nav navbar-right">
-            <a href="{{ route('admin.purchase_orders.create') }}" class="btn btn-app">
+            <a href="{{ route('admin.purchase_orders.before_create') }}" class="btn btn-app">
                 <i class="fa fa-plus"></i> Tambah
             </a>
         </div>
@@ -26,7 +26,7 @@
                 <th class="text-center">Total Diskon</th>
                 <th class="text-center">Ongkos Kirim</th>
                 <th class="text-center">Total PO</th>
-                <th class="text-center">Tanggal Dibuat</th>
+                <th class="text-center">Tanggal</th>
                 <th class="text-center">Status</th>
                 <th class="text-center">Tindakan</th>
             </tr>

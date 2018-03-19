@@ -45,6 +45,17 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
+                    Tanggal
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
+                           name="date" value="{{ old('date') }}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pr_code" >
                     Nomor PR
                     <span class="required">*</span>
@@ -358,6 +369,7 @@
 @section('styles')
     @parent
     {{ Html::style(mix('assets/admin/css/select2.css')) }}
+    {{ Html::style(mix('assets/admin/css/bootstrap-datetimepicker.css')) }}
     <style>
         .box-section{
             background-color: #ffffff;
@@ -373,7 +385,13 @@
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
     {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
     {{ Html::script(mix('assets/admin/js/stringbuilder.js')) }}
+    {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
     <script type="text/javascript">
+        // Date Picker
+        $('#date').datetimepicker({
+            format: "DD MMM Y"
+        });
+
         // Auto Numbering
         $('#auto_number').change(function(){
             if(this.checked){
@@ -679,8 +697,6 @@
 
             $('#qty_edit').val($(this).data('qty'));
             $('#remark_edit').val($(this).data('remark'));
-            // $('#discount_edit').val($(this).data('discount'));
-            $('#editModal').modal('show');
 
             priceEditFormat.clear();
 
@@ -690,12 +706,15 @@
                 decimalPlaces: 0
             });
 
+            discountEditFormat.clear();
+
             discountEditFormat.set($(this).data('discount'), {
                 maximumValue: '100',
                 minimumValue: '0',
                 decimalPlaces: 0
             });
 
+            $('#editModal').modal('show');
         });
         $('.modal-footer').on('click', '.edit', function() {
             var itemEdit = $('#item_edit').val();

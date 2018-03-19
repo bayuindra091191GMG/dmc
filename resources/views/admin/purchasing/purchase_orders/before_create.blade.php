@@ -1,17 +1,13 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Daftar Purchase Request')
+@section('title', 'Pilih Purchase Request terlebih dahulu')
 
 @section('content')
 
     <div class="row">
-        @include('partials._success')
-        <div class="nav navbar-right">
-            <a href="{{ route('admin.purchase_requests.create') }}" class="btn btn-app">
-                <i class="fa fa-plus"></i> Tambah
-            </a>
+        <div class="navbar-left">
+            <a class="btn btn-default" href="{{ route('admin.purchase_orders') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
         </div>
-        <div class="clearfix"></div>
     </div>
     <div class="row">
         <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
@@ -23,7 +19,7 @@
                 <th>Departemen</th>
                 <th>Kode Unit</th>
                 <th>Tanggal</th>
-                <th>Opsi</th>
+                <th>Tindakan</th>
             </tr>
             </thead>
             <tbody>
@@ -46,7 +42,14 @@
             $('#pr-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('datatables.purchase_requests') !!}',
+                {{--ajax: '{!! route('datatables.purchase_requests') !!}',--}}
+                ajax: {
+                    url: '{!! route('datatables.purchase_requests') !!}',
+                    data: {
+                        'mode': 'before_create',
+                        'status': '{{ !empty($statusFilter) ? $statusFilter : 'default'}}'
+                    }
+                },
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center' },
                     { data: 'code', name: 'code', class: 'text-center' },

@@ -30,6 +30,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property float $total_payment
  * @property \Carbon\Carbon $closing_date
  * @property int $status_id
+ * @property \Carbon\Carbon $date
  * @property int $created_by
  * @property \Carbon\Carbon $created_at
  * @property int $updated_by
@@ -93,6 +94,7 @@ class PurchaseOrderHeader extends Eloquent
 		'total_payment',
         'closing_date',
 		'status_id',
+        'date',
 		'created_by',
 		'updated_by'
 	];

@@ -32,7 +32,6 @@
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
                         Nomor PR
-                        <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         : {{ $header->code }}
@@ -41,8 +40,16 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
+                        Tanggal
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ $date }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
                         Departemen
-                        <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         : {{ $header->department->name }}
@@ -52,7 +59,6 @@
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
                         Unit Alat Berat
-                        <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         : {{ $header->machinery->code }}
@@ -118,16 +124,16 @@
 
                             @foreach($header->purchase_request_details as $detail)
                                 <tr>
-                                    <td class='field-item'>
+                                    <td class="text-center">
                                         {{ $detail->item->code }}
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         {{ $detail->item->name }}
                                     </td>
-                                    <td>
-                                        {{ $detail->item->uom->description }}
+                                    <td class="text-center">
+                                        {{ $detail->item->uom }}
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         {{ $detail->quantity }}
                                     </td>
                                     <td>

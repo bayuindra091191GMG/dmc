@@ -15,11 +15,27 @@ use League\Fractal\TransformerAbstract;
 
 class PurchaseRequestHeaderTransformer extends TransformerAbstract
 {
-    public function transform(PurchaseRequestHeader $header){
-        $createdDate = Carbon::parse($header->created_at)->format('d M Y');
+    protected $mode = 'default';
 
-        $code = "<a href='purchase_requests/detil/" . $header->id. "'>". $header->code. "</a>";
-        $action = "<a class='btn btn-xs btn-info' href='purchase_requests/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+    public function __construct($mode)
+    {
+        $this->mode = $mode;
+    }
+
+    public function transform(PurchaseRequestHeader $header){
+        $date = Carbon::parse($header->date)->format('d M Y');
+
+        $code = "<a href='purchase_requests/detil/" . $header->id. "' style='text-decoration: underline;'>". $header->code. "</a>";
+
+        $action = "";
+        if($this->mode === 'default'){
+            $action = "<a class='btn btn-xs btn-primary' href='purchase_requests/detil/". $header->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
+            $action .= "<a class='btn btn-xs btn-info' href='purchase_requests/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+        }
+        else{
+            $route = route('admin.purchase_orders.create', ['pr' => $header->id]);
+            $action = "<a class='btn btn-xs btn-info' href='". $route. "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i></a>";
+        }
 
         $machinery = '-';
         if(!empty($header->machinery_id)){
@@ -30,7 +46,7 @@ class PurchaseRequestHeaderTransformer extends TransformerAbstract
             'code'          => $code,
             'department'    => $header->department->name,
             'machinery'     => $machinery,
-            'created_at'    => $createdDate,
+            'created_at'    => $date,
             'action'        => $action
         ];
     }

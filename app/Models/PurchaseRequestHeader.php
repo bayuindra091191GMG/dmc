@@ -21,6 +21,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $km
  * @property string $hm
  * @property int $status_id
+ * @property \Carbon\Carbon $date
  * @property int $created_by
  * @property \Carbon\Carbon $created_at
  * @property int $updated_by
@@ -59,6 +60,7 @@ class PurchaseRequestHeader extends Eloquent
 		'km',
 		'hm',
 		'status_id',
+        'date',
 		'created_by',
 		'updated_by'
 	];

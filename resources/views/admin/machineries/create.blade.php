@@ -134,6 +134,15 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description" >
+                    Keterangan Tambahan
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <textarea id="description" name="description" rows="5" class="form-control col-md-7 col-xs-12 @if($errors->has('description')) parsley-error @endif" style="resize: vertical">{{ old('description') }}</textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status" >
                     Status
                 </label>
@@ -144,15 +153,6 @@
                         <option value="8" {{ old('status') == "8" ? "selected":"" }}>Dalam pemeliharaan</option>
                         <option value="9" {{ old('status') == "9" ? "selected":"" }}>Rusak</option>
                     </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description" >
-                    Keterangan Tambahan
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <textarea id="description" name="description" rows="5" class="form-control col-md-7 col-xs-12 @if($errors->has('description')) parsley-error @endif" style="resize: vertical">{{ old('description') }}</textarea>
                 </div>
             </div>
 

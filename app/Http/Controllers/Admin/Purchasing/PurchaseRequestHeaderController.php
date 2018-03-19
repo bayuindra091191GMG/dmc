@@ -50,6 +50,7 @@ class PurchaseRequestHeaderController extends Controller
 
     public function show(PurchaseRequestHeader $purchase_request){
         $header = $purchase_request;
+        $date = Carbon::parse($purchase_request->date)->format('d M Y');
 
         // Numbering System
         $sysNo = NumberingSystem::where('doc_id', '3')->first();
@@ -57,7 +58,8 @@ class PurchaseRequestHeaderController extends Controller
 
         $data = [
             'header'        => $header,
-            'autoNumber'    => $autoNumber
+            'autoNumber'    => $autoNumber,
+            'date'          => $date
         ];
 
         return View('admin.purchasing.purchase_requests.show')->with($data);
@@ -67,7 +69,8 @@ class PurchaseRequestHeaderController extends Controller
         $validator = Validator::make($request->all(),[
             'pr_code'       => 'required|max:30',
             'km'            => 'max:20',
-            'hm'            => 'max:20'
+            'hm'            => 'max:20',
+            'date'          => 'required'
         ],[
             'code.required'     => 'Nomor PR wajib diisi!'
         ]);
@@ -85,20 +88,25 @@ class PurchaseRequestHeaderController extends Controller
 //        }
 
         // Validate department
-        if(Input::get('department') === '-1'){
+        if($request->input('department') === '-1'){
             return redirect()->back()->withErrors('Pilih departemen!', 'default')->withInput($request->all());
+        }
+
+        // Validate priority
+        if($request->input('priority') === '-1'){
+            return redirect()->back()->withErrors('Pilih prioritas!', 'default')->withInput($request->all());
         }
 
         // Generate auto number
         $prCode = 'default';
-        if(Input::get('auto_number')){
+        if($request->filled('auto_number')){
             $sysNo = NumberingSystem::where('doc_id', '3')->first();
             $prCode = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
             $sysNo->next_no++;
             $sysNo->save();
         }
         else{
-            $prCode = Input::get('pr_code');
+            $prCode = $request->input('pr_code');
         }
 
         // Check existing number
@@ -141,16 +149,20 @@ class PurchaseRequestHeaderController extends Controller
 
         ]);
 
-        if(!empty(Input::get('machinery'))){
-            $prHeader->machinery_id = Input::get('machinery');
+        if($request->filled('machinery')){
+            $prHeader->machinery_id = $request->input('machinery');
             $prHeader->save();
         }
 
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+        $prHeader->date = $date->toDateTimeString();
+        $prHeader->save();
+
         // Create purchase request detail
-        $qty = Input::get('qty');
-        $remark = Input::get('remark');
+        $qty = $request->input('qty');
+        $remark = $request->input('remark');
         $idx = 0;
-        foreach(Input::get('item') as $item){
+        foreach($request->input('item') as $item){
             if(!empty($item)){
                 $prDetail = PurchaseRequestDetail::create([
                     'header_id'     => $prHeader->id,
@@ -172,10 +184,12 @@ class PurchaseRequestHeaderController extends Controller
     public function edit(PurchaseRequestHeader $purchase_request){
         $header = $purchase_request;
         $departments = Department::all();
+        $date = Carbon::parse($purchase_request->date)->format('d M Y');
 
         $data = [
             'header'        => $header,
-            'departments'   => $departments
+            'departments'   => $departments,
+            'date'          => $date
         ];
 
         return View('admin.purchasing.purchase_requests.edit')->with($data);
@@ -184,7 +198,8 @@ class PurchaseRequestHeaderController extends Controller
     public function update(Request $request, PurchaseRequestHeader $purchase_request){
         $validator = Validator::make($request->all(),[
             'km'            => 'max:20',
-            'hm'            => 'max:20'
+            'hm'            => 'max:20',
+            'date'          => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -199,15 +214,27 @@ class PurchaseRequestHeaderController extends Controller
             return redirect()->back()->withErrors('Pilih departemen!', 'default')->withInput($request->all());
         }
 
+        // Validate priority
+        if($request->input('priority') === '-1'){
+            return redirect()->back()->withErrors('Pilih prioritas!', 'default')->withInput($request->all());
+        }
+
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
 
         $purchase_request->department_id = $request->input('department');
         $purchase_request->priority = $request->input('priority');
         $purchase_request->km = $request->input('km');
         $purchase_request->hm = $request->input('hm');
+        $purchase_request->date = $date;
         $purchase_request->updated_by = $user->id;
         $purchase_request->updated_at = $now->toDateTimeString();
+
+        if($request->filled('machinery')){
+            $purchase_request->machinery_id = $request->input('machinery');
+        }
+
         $purchase_request->save();
 
         Session::flash('message', 'Berhasil ubah purchase request!');
@@ -264,10 +291,21 @@ class PurchaseRequestHeaderController extends Controller
         return view('documents.purchase_requests.purchase_requests_doc', compact('purchaseRequest', 'purchaseRequestDetails'));
     }
 
-    public function getIndex(){
+    /**
+     * @param Request $request
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getIndex(Request $request){
         $purchaseRequests = PurchaseRequestHeader::all();
+
+        $mode = 'default';
+        if($request->filled('mode')){
+            $mode = $request->input('mode');
+        }
+
         return DataTables::of($purchaseRequests)
-            ->setTransformer(new PurchaseRequestHeaderTransformer)
+            ->setTransformer(new PurchaseRequestHeaderTransformer($mode))
             ->addIndexColumn()
             ->make(true);
     }

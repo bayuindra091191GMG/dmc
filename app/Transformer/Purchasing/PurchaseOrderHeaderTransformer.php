@@ -17,7 +17,7 @@ class PurchaseOrderHeaderTransformer extends TransformerAbstract
 {
     public function transform(PurchaseOrderHeader $header){
         try{
-            $createdDate = Carbon::parse($header->created_at)->format('d M Y');
+            $date = Carbon::parse($header->date)->format('d M Y');
 
             $code = "<a href='purchase_orders/detil/" . $header->id. "'>". $header->code. "</a>";
             $prCode =  "<a href='purchase_requests/detil/" . $header->purchase_request_id. "'>". $header->purchase_request_header->code. "</a>";
@@ -33,7 +33,7 @@ class PurchaseOrderHeaderTransformer extends TransformerAbstract
                 'total_discount'    => $header->total_discount_string ?? '-',
                 'delivery_fee'      => $header->delivery_fee_string ?? '-',
                 'total_payment'     => $header->total_payment_string,
-                'created_at'        => $createdDate,
+                'created_at'        => $date,
                 'status'            => $header->status_id == 3 ? 'open' : 'closed',
                 'action'            => $action
             ];

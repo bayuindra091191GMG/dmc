@@ -42,7 +42,7 @@
                         Tanggal
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ \Carbon\Carbon::parse($header->created_at)->format('d M Y') }}
+                        : {{ $date }}
                     </div>
                 </div>
 
@@ -157,7 +157,7 @@
                                         {{ $detail->item->name }}
                                     </td>
                                     <td class="text-center">
-                                        {{ $detail->item->uom->description }}
+                                        {{ $detail->item->uom }}
                                     </td>
                                     <td class="text-center">
                                         {{ $detail->quantity }}
