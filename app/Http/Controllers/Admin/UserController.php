@@ -27,7 +27,12 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.users.index');
+        $data = [
+            'filterStatus'      => $request->input('status') ?? 1
+        ];
+
+
+        return view('admin.users.index')->with($data);
     }
 
     /**
@@ -264,10 +269,17 @@ class UserController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function getIndex()
+    public function getIndex(Request $request)
     {
         try{
-            $users = User::where('status_id', 1)->get();
+
+            if($request->filled('status')){
+                $users = User::where('status_id', $request->input('status'))->get();
+            }
+            else{
+                $users = User::where('status_id', 1)->get();
+            }
+
             return DataTables::of($users)
                 ->setTransformer(new UserTransformer)
                 ->addIndexColumn()

@@ -13,6 +13,26 @@
         <div class="clearfix"></div>
     </div>
     <div class="row">
+        <form class="form-inline" style="margin-bottom: 10px;">
+            <div class="form-group">
+                <label>Status:</label>
+                <select id="filter-status" class="form-control" onchange="filterStatus(this)">
+
+                    @if(!empty($filterStatus) && $filterStatus == '1')
+                        <option value='1' selected>Aktif</option>
+                    @else
+                        <option value='1'>Aktif</option>
+                    @endif
+
+                    @if(!empty($filterStatus) && $filterStatus == '2')
+                        <option value='2' selected>NonAktif</option>
+                    @else
+                        <option value='2'>NonAktif</option>
+                    @endif
+
+                </select>
+            </div>
+        </form>
         <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
                width="100%" id="users-table">
             <thead>
@@ -49,7 +69,12 @@
             $('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('datatables.users') !!}',
+                ajax: {
+                    url: '{!! route('datatables.users') !!}',
+                    data: {
+                        'status' : '{{ $filterStatus  }}'
+                    }
+                },
                 columns: [
                     { data: 'code', name: 'code' },
                     { data: 'email', name: 'email' },
@@ -67,5 +92,15 @@
                 }
             });
         });
+
+
+        function filterStatus(e){
+            // Get status filter value
+            var status = e.value;
+
+            var url = "/admin/users?status=" + status;
+
+            window.location = url;
+        }
     </script>
 @endsection
