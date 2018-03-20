@@ -1,13 +1,17 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Pilih Purchase Request terlebih dahulu')
+@section('title', 'Daftar Material Request')
 
 @section('content')
 
     <div class="row">
-        <div class="navbar-left">
-            <a class="btn btn-default" href="{{ route('admin.purchase_orders') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
+        @include('partials._success')
+        <div class="nav navbar-right">
+            <a href="{{ route('admin.material_requests_other.create') }}" class="btn btn-app">
+                <i class="fa fa-plus"></i> Tambah
+            </a>
         </div>
+        <div class="clearfix"></div>
     </div>
     <div class="row">
         <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
@@ -15,7 +19,7 @@
             <thead>
             <tr>
                 <th>No</th>
-                <th>Nomor PR</th>
+                <th>Nomor MR</th>
                 <th>Departemen</th>
                 <th>Kode Unit</th>
                 <th>Tanggal</th>
@@ -43,9 +47,9 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{!! route('datatables.purchase_requests') !!}',
+                    url: '{!! route('datatables.material_requests') !!}',
                     data: {
-                        'mode': 'before_create'
+                        'type': 'other'
                     }
                 },
                 columns: [

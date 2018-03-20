@@ -2,12 +2,11 @@
 
 /**
  * Created by Reliese Model.
- * Date: Wed, 07 Mar 2018 14:00:41 +0700.
+ * Date: Tue, 20 Mar 2018 11:20:15 +0700.
  */
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -33,11 +32,11 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\User $user
  * @property \App\Models\MachineryBrand $machinery_brand
  * @property \App\Models\MachineryCategory $machinery_category
- * @property \App\Models\MachineryType $machinery_type
  * @property \App\Models\Status $status
  * @property \Illuminate\Database\Eloquent\Collection $delivery_order_headers
  * @property \Illuminate\Database\Eloquent\Collection $issued_docket_details
  * @property \Illuminate\Database\Eloquent\Collection $issued_docket_headers
+ * @property \Illuminate\Database\Eloquent\Collection $material_request_headers
  * @property \Illuminate\Database\Eloquent\Collection $purchase_request_headers
  * @property \Illuminate\Database\Eloquent\Collection $serials
  *
@@ -57,8 +56,8 @@ class Machinery extends Eloquent
 		'purchase_date'
 	];
 
-	protected $appends = [
-	    'purchase_date_string'
+    protected $appends = [
+        'purchase_date_string'
     ];
 
 	protected $fillable = [
@@ -77,7 +76,7 @@ class Machinery extends Eloquent
 		'updated_by'
 	];
 
-	public function getPurchaseDateStringAttribute(){
+    public function getPurchaseDateStringAttribute(){
         if(!empty($this->attributes['purchase_date'])){
             return Carbon::parse($this->attributes['purchase_date'])->format('d M Y');
         }
@@ -122,6 +121,11 @@ class Machinery extends Eloquent
 	public function issued_docket_headers()
 	{
 		return $this->hasMany(\App\Models\IssuedDocketHeader::class, 'unit_id');
+	}
+
+	public function material_request_headers()
+	{
+		return $this->hasMany(\App\Models\MaterialRequestHeader::class);
 	}
 
 	public function purchase_request_headers()

@@ -225,6 +225,45 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('menus/tambah', 'MenuController@create')->name('menus.create');
     Route::post('menus/simpan', 'MenuController@store')->name('menus.store');
 
+    //Material Request Headers Primary
+    Route::post('material_requests/simpan', 'Inventory\PurchaseRequestHeaderController@store')->name('material_requests.store');
+    Route::put('material_requests/ubah/{material_request}', 'Inventory\PurchaseRequestHeaderController@update')->name('material_requests.update');
+
+    //Purchase Request Details Primary
+    Route::post('material_request_details/simpan', 'Inventory\PurchaseRequestDetailController@store')->name('purchase_request_details.store');
+    Route::put('material_request_details/ubah', 'Inventory\PurchaseRequestDetailController@update')->name('purchase_request_details.update');
+    Route::post('material_request_details/hapus', 'Inventory\PurchaseRequestDetailController@delete')->name('purchase_request_details.delete');
+
+    //Material Request Headers for Other
+    Route::get('material_requests/inventory', 'Inventory\PurchaseRequestHeaderController@indexOther')->name('material_requests.other');
+    Route::get('material_requests/inventory/detil/{material_request}', 'Inventory\PurchaseRequestHeaderController@showOther')->name('material_requests.other.show');
+    Route::get('material_requests/inventory/{material_request}/ubah', 'Inventory\PurchaseRequestHeaderController@editOther')->name('material_requests.other.edit');
+    Route::get('material_requests/inventory/tambah', 'Inventory\PurchaseRequestHeaderController@createOther')->name('material_requests.other.create');
+    Route::get('material_requests/inventory/print/{material_request}', 'Inventory\PurchaseRequestHeaderController@printDocumentOther')->name('material_requests.other.print');
+    Route::get('material_requests/inventory/download/{material_request}', 'Inventory\PurchaseRequestHeaderController@downloadOther')->name('material_requests.other.download');
+    Route::get('material_requests/inventory/report', 'Inventory\PurchaseRequestHeaderController@reportOther')->name('material_requests.other.report');
+    Route::post('material_requests/inventory/download_report', 'Inventory\PurchaseRequestHeaderController@downloadReportOther')->name('material_requests.other.download-report');
+
+    //Material Request Headers for Fuel
+    Route::get('material_requests/bensin', 'Inventory\PurchaseRequestHeaderController@indexFuel')->name('material_requests.fuel');
+    Route::get('material_requests/bensin/detil/{material_request}', 'Inventory\PurchaseRequestHeaderController@showFuelr')->name('material_requests.fuel.show');
+    Route::get('material_requests/bensin/{material_request}/ubah', 'Inventory\PurchaseRequestHeaderController@editFuel')->name('material_requests.fuel.edit');
+    Route::get('material_requests/bensin/tambah', 'Inventory\PurchaseRequestHeaderController@createFuel')->name('material_requests.fuel.create');
+    Route::get('material_requests/bensin/print/{material_request}', 'Inventory\PurchaseRequestHeaderController@printDocumentFuel')->name('material_requests.fuel.print');
+    Route::get('material_requests/bensin/download/{material_request}', 'Inventory\PurchaseRequestHeaderController@downloadFuel')->name('material_requests.fuel.download');
+    Route::get('material_requests/bensin/report', 'Inventory\PurchaseRequestHeaderController@reportFuel')->name('material_requests.fuel.report');
+    Route::post('material_requests/bensin/download_report', 'Inventory\PurchaseRequestHeaderController@downloadReportFuel')->name('material_requests.fuel.download-report');
+
+    //Material Request Headers for Other
+    Route::get('material_requests/servis', 'Inventory\PurchaseRequestHeaderController@indexService')->name('material_requests.other');
+    Route::get('material_requests/servis/detil/{material_request}', 'Inventory\PurchaseRequestHeaderController@showService')->name('material_requests.service.show');
+    Route::get('material_requests/servis/{material_request}/ubah', 'Inventory\PurchaseRequestHeaderController@editService')->name('material_requests.service.edit');
+    Route::get('material_requests/servis/tambah', 'Inventory\PurchaseRequestHeaderController@createService')->name('material_requests.other.create');
+    Route::get('material_requests/servis/print/{material_request}', 'Inventory\PurchaseRequestHeaderController@printDocumentService')->name('material_requests.service.print');
+    Route::get('material_requests/servis/download/{material_request}', 'Inventory\PurchaseRequestHeaderController@downloadService')->name('material_requests.service.download');
+    Route::get('material_requests/servis/report', 'Inventory\PurchaseRequestHeaderController@reportService')->name('material_requests.service.report');
+    Route::post('material_requests/servis/download_report', 'Inventory\PurchaseRequestHeaderController@downloadReportService')->name('material_requests.service.download-report');
+
     //Purchase Request Headers
     Route::get('purchase_requests', 'Purchasing\PurchaseRequestHeaderController@index')->name('purchase_requests');
     Route::get('purchase_requests/detil/{purchase_request}', 'Purchasing\PurchaseRequestHeaderController@show')->name('purchase_requests.show');
@@ -435,6 +474,7 @@ Route::get('/datatables-purchase_orders', 'Admin\Purchasing\PurchaseOrderHeaderC
 Route::get('/datatables-purchase_invoices', 'Admin\Purchasing\PurchaseInvoiceHeaderController@getIndex')->name('datatables.purchase_invoices');
 
 // INVENTORY
+Route::get('/datatables-material_requests', 'Admin\Inventory\MaterialRequestHeaderController@getIndex')->name('datatables.material_requests');
 Route::get('/datatables-delivery_orders', 'Admin\Inventory\DeliveryOrderHeaderController@getIndex')->name('datatables.delivery_orders');
 Route::get('/datatables-issued_dockets', 'Admin\Inventory\DocketController@getIndex')->name('datatables.issued_dockets');
 Route::get('/datatables-item_receipts', 'Admin\Inventory\ItemReceiptController@getIndex')->name('datatables.item_receipts');

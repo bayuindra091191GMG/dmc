@@ -12,7 +12,6 @@ namespace App\Http\Controllers\Admin\Purchasing;
 use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
 use App\Models\Department;
-use App\Models\Document;
 use App\Models\NumberingSystem;
 use App\Models\PurchaseOrderHeader;
 use App\Models\PurchaseRequestDetail;
@@ -38,7 +37,7 @@ class PurchaseRequestHeaderController extends Controller
 
         // Numbering System
         $sysNo = NumberingSystem::where('doc_id', '3')->first();
-        $autoNumber = Utilities::GenerateNumber('PR', $sysNo->next_no);
+        $autoNumber = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
 
         $data = [
             'departments'   => $departments,
@@ -52,13 +51,8 @@ class PurchaseRequestHeaderController extends Controller
         $header = $purchase_request;
         $date = Carbon::parse($purchase_request->date)->format('d M Y');
 
-        // Numbering System
-        $sysNo = NumberingSystem::where('doc_id', '3')->first();
-        $autoNumber = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
-
         $data = [
             'header'        => $header,
-            'autoNumber'    => $autoNumber,
             'date'          => $date
         ];
 

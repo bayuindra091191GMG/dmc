@@ -42,6 +42,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Illuminate\Database\Eloquent\Collection $stock_adjustments
  * @property \Illuminate\Database\Eloquent\Collection $stock_ins
  * @property \Illuminate\Database\Eloquent\Collection $item_stocks
+ * @property \Illuminate\Database\Eloquent\Collection $material_request_details
  *
  * @package App\Models
  */
@@ -144,4 +145,9 @@ class Item extends Eloquent
 	{
 		return $this->hasMany(\App\Models\ItemStock::class);
 	}
+
+    public function material_request_details()
+    {
+        return $this->hasMany(MaterialRequestDetail::class);
+    }
 }
