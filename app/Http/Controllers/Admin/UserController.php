@@ -64,15 +64,12 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'code'      => 'required|max:30|regex:/^\S*$/u|unique:employees',
             'name'      => 'required|max:100',
-            'email'     => 'required|email|unique:users|max:100',
-//            'phone'     => 'max:20',
+            'email'     => 'required|regex:/^\S*$/u|unique:users|max:50',
             'address'   => 'max:200'
         ],[
-            'code.unique'       => 'Kode karyawan telah terpakai!',
-            'code.regex'        => 'Kode karyawan harus tanpa spasi!',
-            'email.unique'      => 'Email telah terdaftar!',
+            'email.unique'      => 'ID Login Akses telah terdaftar!',
+            'email.regex'       => 'ID Login Akses harus tanpa spasi!'
         ]);
 
         $validator->sometimes('password', 'min:6|confirmed', function ($input) {
@@ -95,9 +92,7 @@ class UserController extends Controller
         // Create new employee
         $employee = Employee::create([
             'name'          => $request->input('name'),
-            'code'          => $request->input('code'),
             'email'         => $request->input('email'),
-//            'phone'         => $request->input('phone'),
             'address'       => $request->input('address'),
             'department_id' => $request->input('department'),
             'site_id'       => $request->input('site'),
@@ -105,12 +100,6 @@ class UserController extends Controller
             'created_by'    => $user->id,
             'created_at'    => $now
         ]);
-
-        if($request->filled('dob')){
-            $dob = Carbon::createFromFormat('d M Y', Input::get('dob'), 'Asia/Jakarta');
-            $employee->date_of_birth = $dob->toDateString();
-            $employee->save();
-        }
 
         // Create new user
         $user = new User();
@@ -126,7 +115,7 @@ class UserController extends Controller
         $user->updated_by = $user->id;
         $user->save();
 
-        $user->roles()->attach($request->get('role'));
+        $user->roles()->attach($request->input('role'));
 
         Session::flash('message', 'Berhasil membuat data user baru!');
 
@@ -179,21 +168,19 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        dd($user->id);
-
         $employeeId = $request->input('employee_id');
         $validator = Validator::make($request->all(), [
             'name'      => 'required|max:100',
             'email' => [
                 'required',
-                'max:100',
-                'email',
+                'max:50',
+                'regex:/^\S*$/u',
                 Rule::unique('users')->ignore($user->id)
             ],
-            'phone'     => 'max:20',
             'address'   => 'max:200'
         ],[
-            'email.unique'      => 'Email telah terdaftar!',
+            'email.unique'      => 'ID Login Akses telah terdaftar!',
+            'email.regex'       => 'ID Login Akses harus tanpa spasi!',
         ]);
 
         $validator->sometimes('password', 'min:6|confirmed', function ($input) {
@@ -203,24 +190,18 @@ class UserController extends Controller
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
         // Update employee
-        $user = Auth::user();
+        $userAuth = Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
         $employee = Employee::find($employeeId);
         $employee->name = $request->input('name');
         $employee->email = $request->input('email');
-        $employee->phone = $request->input('phone');
         $employee->address = $request->input('address');
         $employee->department_id = $request->input('department');
         $employee->site_id = $request->input('site');
         $employee->status_id = $request->input('status');
-        $employee->updated_by = $user->id;
+        $employee->updated_by = $userAuth->id;
         $employee->updated_at = $now;
-
-        if($request->filled('dob')){
-            $dob = Carbon::createFromFormat('d M Y', Input::get('dob'), 'Asia/Jakarta');
-            $employee->date_of_birth = $dob->toDateString();
-        }
 
         $employee->save();
 
@@ -232,22 +213,19 @@ class UserController extends Controller
             $user->password = bcrypt($request->input('password'));
         }
 
-        $user->created_by = $user->id;
-        $user->updated_by = $user->id;
+        $user->created_by = $userAuth->id;
+        $user->updated_by = $userAuth->id;
         $user->save();
 
         //roles
         if ($request->has('role')) {
             $user->roles()->detach();
-
-            if ($request->input('role')) {
-                $user->roles()->attach($request->get('role'));
-            }
+            $user->roles()->attach($request->input('role'));
         }
 
         Session::flash('message', 'Berhasil mengubah data user!');
 
-        return redirect()->intended(route('admin.users.edit',['user' => $user]));
+        return redirect()->intended(route('admin.users',['user' => $user]));
     }
 
     /**

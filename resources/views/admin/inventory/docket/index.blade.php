@@ -15,18 +15,18 @@
     </div>
     <div class="row">
         <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
-               width="100%" id="pr-table">
+               width="100%" id="id-table">
             <thead>
             <tr>
-                <th>No</th>
-                <th>No Issued Docket</th>
-                <th>No PR</th>
-                <th>No Unit</th>
-                <th>Department</th>
-                <th>Divisi</th>
-                <th>Tanggal Dibuat</th>
-                <th>Dibuat Oleh</th>
-                <th>Opsi</th>
+                <th class="text-center">No</th>
+                <th class="text-center">No Issued Docket</th>
+                <th class="text-center">Nomor PR</th>
+                <th class="text-center">Nomor Unit Alat Berat</th>
+                <th class="text-center">Department</th>
+                <th class="text-center">Divisi</th>
+                <th class="text-center">Tanggal Dibuat</th>
+                <th class="text-center">Dibuat Oleh</th>
+                <th class="text-center">Tindakan</th>
             </tr>
             </thead>
             <tbody>
@@ -46,20 +46,20 @@
     {{ Html::script(mix('assets/admin/js/datatables.js')) }}
     <script>
         $(function() {
-            $('#pr-table').DataTable({
+            $('#id-table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: '{!! route('datatables.issued_dockets') !!}',
                 columns: [
-                    { data: 'DT_Row_Index', orderable: false, searchable: false},
-                    { data: 'no_issued_docket', name: 'no_issued_docket' },
-                    { data: 'no_pr', name: 'no_pr' },
-                    { data: 'no_unit', name: 'no_unit' },
-                    { data: 'department', name: 'department' },
-                    { data: 'division', name: 'division' },
-                    { data: 'created_at', name: 'created_at' },
-                    { data: 'created_by', name: 'created_by' },
-                    { data: 'action', name: 'action' }
+                    { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center' },
+                    { data: 'no_issued_docket', name: 'no_issued_docket', class: 'text-center' },
+                    { data: 'no_pr', name: 'no_pr', class: 'text-center' },
+                    { data: 'no_unit', name: 'no_unit', class: 'text-center' },
+                    { data: 'department', name: 'department', class: 'text-center' },
+                    { data: 'division', name: 'division', class: 'text-center' },
+                    { data: 'created_at', name: 'created_at', class: 'text-center' },
+                    { data: 'created_by', name: 'created_by', class: 'text-center' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center' }
                 ],
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"

@@ -11,7 +11,7 @@
         <!-- menu profile quick info -->
         <div class="profile clearfix">
             <div class="profile_pic">
-                <img src="{{ auth()->user()->avatar }}" alt="..." class="img-circle profile_img">
+                {{--<img src="{{ auth()->user()->avatar }}" alt="..." class="img-circle profile_img">--}}
             </div>
             <div class="profile_info">
                 <h2>{{ auth()->user()->name }}</h2>
@@ -136,11 +136,6 @@
                                     <li>
                                         <a href="{{ route('admin.machinery_brands') }}">
                                             Merek Alat
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.machinery_types') }}">
-                                            Tipe Alat
                                         </a>
                                     </li>
                                 </ul>

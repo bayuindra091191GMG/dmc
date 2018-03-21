@@ -6,6 +6,7 @@
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             {{ Form::open(['route'=>['admin.users.update', $user->id],'method' => 'put','class'=>'form-horizontal form-label-left']) }}
+            {{ csrf_field()}}
 
             @if(\Illuminate\Support\Facades\Session::has('message'))
                 <div class="form-group">
@@ -32,6 +33,17 @@
             @endif
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">
+                    ID Login Akses
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="email" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('email')) parsley-error @endif"
+                           name="email" value="{{ $user->email }}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name" >
                     Nama Lengkap
                     <span class="required">*</span>
@@ -39,17 +51,6 @@
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('name')) parsley-error @endif"
                            name="name" value="{{ $employee->name }}" required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">
-                    Email
-                    <span class="required">*</span>
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="email" type="email" class="form-control col-md-7 col-xs-12 @if($errors->has('email')) parsley-error @endif"
-                           name="email" value="{{ $user->email }}" required>
                 </div>
             </div>
 
@@ -62,6 +63,19 @@
                     {{--</select>--}}
                 {{--</div>--}}
             {{--</div>--}}
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="role">
+                    Level Akses
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="role" name="role" class="form-control col-md-7 col-xs-12">
+                        @foreach($roles as $role)
+                            <option value="{{ $role->id }}" @if($user->roles->pluck('id')[0] == $role->id) selected @endif>{{ $role->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="password">
@@ -80,29 +94,6 @@
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="password_confirmation" type="password" class="form-control col-md-7 col-xs-12 @if($errors->has('password_confirmation')) parsley-error @endif"
                            name="password_confirmation">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="role">
-                    Jabatan
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="role" name="role" class="form-control col-md-7 col-xs-12">
-                        @foreach($roles as $role)
-                            <option value="{{ $role->id }}" @if($user->roles->pluck('id')[0] == $role->id) @endif>{{ $role->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone" >
-                    Nomor Ponsel
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="phone" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('name')) parsley-error @endif"
-                           name="phone" value="{{ $employee->phone }}">
                 </div>
             </div>
 
@@ -129,16 +120,6 @@
                             <option value="{{ $site->id }}" {{ $employee->site_id == $site->id ? "selected":"" }}>{{ $site->name }}</option>
                         @endforeach
                     </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dob" >
-                    Tanggal Lahir
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="dob" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('dob')) parsley-error @endif"
-                           name="dob" value="{{ $dob }}">
                 </div>
             </div>
 

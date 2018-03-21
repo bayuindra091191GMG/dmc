@@ -92,9 +92,9 @@ class LoginController extends Controller
         try{
             $errors = [];
 
-            if (config('auth.users.confirm_email') && !$user->confirmed) {
-                $errors = [$this->username() => __('auth.notconfirmed', ['url' => route('confirm.send', [$user->email])])];
-            }
+//            if (config('auth.users.confirm_email') && !$user->confirmed) {
+//                $errors = [$this->username() => __('auth.notconfirmed', ['url' => route('confirm.send', [$user->email])])];
+//            }
 
             if (!$user->active) {
                 $errors = [$this->username() => __('auth.active')];

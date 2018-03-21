@@ -23,27 +23,6 @@
             @endif
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="purchase_request_header">
-                    No PR
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="purchase_request_header" name="purchase_request_header" class="form-control col-md-7 col-xs-12 @if($errors->has('purchase_request_header')) parsley-error @endif">
-                    </select>
-                    <input type="hidden" id="pr_id" name="pr_id" @if(!empty($purchaseRequest)) value="{{ $purchaseRequest->id }} @endif">
-                </div>
-                <div class="col-md-2 col-sm-2 col-xs-12">
-                    <a class="get-pr-data btn btn-info">
-                        Ambil Data
-                    </a>
-                    @if(!empty($purchaseRequest))
-                        <a class="clear-pr-data btn btn-info">
-                            Set Ulang Data
-                        </a>
-                    @endif
-                </div>
-            </div>
-
-            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
                     Issued Docket No
                 </label>
@@ -63,6 +42,27 @@
                             <input type="checkbox" class="flat" id="auto_number" name="auto_number" checked="checked"> Auto Number
                         </label>
                     </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="purchase_request_header">
+                    Nomor PR
+                </label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <select id="purchase_request_header" name="purchase_request_header" class="form-control col-md-7 col-xs-12 @if($errors->has('purchase_request_header')) parsley-error @endif">
+                    </select>
+                    <input type="hidden" id="pr_id" name="pr_id" @if(!empty($purchaseRequest)) value="{{ $purchaseRequest->id }} @endif">
+                </div>
+                <div class="col-md-2 col-sm-2 col-xs-12">
+                    <a class="get-pr-data btn btn-info">
+                        Ambil Data
+                    </a>
+                    @if(!empty($purchaseRequest))
+                        <a class="clear-pr-data btn btn-info">
+                            Set Ulang Data
+                        </a>
+                    @endif
                 </div>
             </div>
 
@@ -145,8 +145,8 @@
             <input id="index_counter" type="hidden" value="{{ $idx }}"/>
 
             <div class="form-group">
-                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a class="btn btn-primary" href="{{ route('admin.issued_dockets') }}"> Batal</a>
+                <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+                    <a class="btn btn-danger" href="{{ route('admin.issued_dockets') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>
@@ -342,7 +342,7 @@
                 text: '{{ $purchaseRequest->code }}'
             },
             width: '100%',
-            minimumInputLength: 2,
+            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('select.purchase_requests') }}',
                 dataType: 'json',
@@ -362,10 +362,10 @@
             $('#purchase_request_header').select2({
             placeholder: {
                 id: '-1',
-                text: 'Pilih Nomor PR...'
+                text: ' - Pilih Nomor PR - '
             },
             width: '100%',
-            minimumInputLength: 2,
+            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('select.purchase_requests') }}',
                 dataType: 'json',
@@ -418,10 +418,10 @@
         $('#machinery').select2({
             placeholder: {
                 id: '-1',
-                text: 'Pilih Alat Berat...'
+                text: ' - Pilih Alat Berat - '
             },
             width: '100%',
-            minimumInputLength: 2,
+            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('select.machineries') }}',
                 dataType: 'json',
@@ -441,10 +441,10 @@
         $('#select0').select2({
             placeholder: {
                 id: '-1',
-                text: 'Pilih barang...'
+                text: ' - Pilih Inventory - '
             },
             width: '100%',
-            minimumInputLength: 2,
+            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('select.items') }}',
                 dataType: 'json',
@@ -466,10 +466,10 @@
             $('#item_add').select2({
                 placeholder: {
                     id: '-1',
-                    text: 'Pilih barang...'
+                    text: ' - Pilih Inventory - '
                 },
                 width: '100%',
-                minimumInputLength: 2,
+                minimumInputLength: 1,
                 ajax: {
                     url: '{{ route('select.extended_items') }}',
                     dataType: 'json',
@@ -571,7 +571,7 @@
                     text: $(this).data('item-text')
                 },
                 width: '100%',
-                minimumInputLength: 2,
+                minimumInputLength: 1,
                 ajax: {
                     url: '{{ route('select.extended_items') }}',
                     dataType: 'json',

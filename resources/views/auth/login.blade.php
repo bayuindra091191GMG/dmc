@@ -11,8 +11,8 @@
                         <h1>FORM MASUK</h1>
 
                         <div>
-                            <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}"
-                                   placeholder="Alamat Email" required autofocus>
+                            <input id="email" type="text" class="form-control" name="email" value="{{ old('email') }}"
+                                   placeholder="ID Login Akses" required autofocus>
                         </div>
                         <div>
                             <input id="password" type="password" class="form-control" name="password"

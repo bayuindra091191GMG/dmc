@@ -6,6 +6,7 @@
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             {{ Form::open(['route'=>'admin.users.store', 'method' => 'post','class'=>'form-horizontal form-label-left']) }}
+            {{ csrf_field()}}
 
             @if(\Illuminate\Support\Facades\Session::has('message'))
                 <div class="form-group">
@@ -31,14 +32,25 @@
                 </div>
             @endif
 
+            {{--<div class="form-group">--}}
+                {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="code" >--}}
+                    {{--ID Karyawan--}}
+                    {{--<span class="required">*</span>--}}
+                {{--</label>--}}
+                {{--<div class="col-md-6 col-sm-6 col-xs-12">--}}
+                    {{--<input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"--}}
+                           {{--name="code" value="{{ old('code') }}">--}}
+                {{--</div>--}}
+            {{--</div>--}}
+
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code" >
-                    ID Karyawan
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">
+                    ID Login Akses
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
-                           name="code" value="{{ old('code') }}">
+                    <input id="email" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('email')) parsley-error @endif"
+                           name="email" value="{{ old('email') }}" required>
                 </div>
             </div>
 
@@ -54,13 +66,17 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">
-                    Email
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="role">
+                    Level Akses
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="email" type="email" class="form-control col-md-7 col-xs-12 @if($errors->has('email')) parsley-error @endif"
-                           name="email" value="{{ old('name') }}" required>
+                    <select id="role" name="role" class="form-control col-md-7 col-xs-12">
+                        <option value="-1"> - Pilih Level Akses - </option>
+                        @foreach($roles as $role)
+                            <option value="{{ $role->id }}">{{ $role->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
 
@@ -96,21 +112,6 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="role">
-                    Jabatan
-                    <span class="required">*</span>
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="role" name="role" class="form-control col-md-7 col-xs-12">
-                        <option value="-1"> - Pilih Jabatan - </option>
-                        @foreach($roles as $role)
-                            <option value="{{ $role->id }}">{{ $role->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-
             {{--<div class="form-group">--}}
                 {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone" >--}}
                     {{--Nomor Ponsel--}}
@@ -128,7 +129,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="department" name="department" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">
-                        <option value="-1" @if(empty(old('department'))) selected @endif> - Pilih departemen - </option>
+                        <option value="-1" @if(empty(old('department'))) selected @endif> - Pilih Departemen - </option>
                         @foreach($departments as $dep)
                             <option value="{{ $dep->id }}" {{ old('department') == $dep->id ? "selected":"" }}>{{ $dep->name }}</option>
                         @endforeach
@@ -143,7 +144,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="site" name="site" class="form-control col-md-7 col-xs-12 @if($errors->has('site')) parsley-error @endif">
-                        <option value="-1" @if(empty(old('site'))) selected @endif>Pilih site</option>
+                        <option value="-1" @if(empty(old('site'))) selected @endif> - Pilih Site - </option>
                         @foreach($sites as $site)
                             <option value="{{ $site->id }}" {{ old('site') == $site->id ? "selected":"" }}>{{ $site->name }}</option>
                         @endforeach
