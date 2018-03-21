@@ -356,7 +356,15 @@ class PurchaseInvoiceHeaderController extends Controller
                 $mode = $request->input('mode');
             }
 
-            $purchaseOrders = PurchaseInvoiceHeader::dateDescending()->get();
+            if($request->filled('supplier')){
+                $supplier = $request->input('supplier');
+                $temp = PurchaseInvoiceHeader::dateDescending()->get();
+                $purchaseOrders = $temp->where('supplier_id', $supplier)->get();
+            }
+            else{
+                $purchaseOrders = PurchaseInvoiceHeader::dateDescending()->get();
+            }
+
             return DataTables::of($purchaseOrders)
                 ->setTransformer(new PurchaseInvoiceHeaderTransformer($mode))
                 ->addIndexColumn()

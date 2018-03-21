@@ -220,12 +220,17 @@ class SupplierController extends Controller
         }
     }
 
-    public function getIndex()
+    public function getIndex(Request $request)
     {
         $suppliers = Supplier::all();
+        $mode = 'default';
+        if($request->filled('mode')){
+            $mode = $request->input('mode');
+        }
+
         return DataTables::of($suppliers)
             ->addIndexColumn()
-            ->setTransformer(new SupplierTransformer)
+            ->setTransformer(new SupplierTransformer($mode))
             ->make(true);
     }
 

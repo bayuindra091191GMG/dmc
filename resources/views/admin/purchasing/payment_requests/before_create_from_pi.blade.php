@@ -45,7 +45,8 @@
                 ajax: {
                     url: '{!! route('datatables.purchase_invoices') !!}',
                     data: {
-                        'mode': 'before_create'
+                        'mode': 'before_create',
+                        'supplier': '{{ $supplier->id }}'
                     }
                 },
                 columns: [

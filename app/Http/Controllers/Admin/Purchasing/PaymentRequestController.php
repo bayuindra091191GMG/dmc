@@ -17,6 +17,7 @@ use App\Models\PurchaseInvoiceHeader;
 use App\Models\PurchaseOrderDetail;
 use App\Models\PurchaseOrderHeader;
 use App\Models\PurchaseRequestHeader;
+use App\Models\Supplier;
 use App\Transformer\Purchasing\PaymentRequestTransformer;
 use App\Transformer\Purchasing\PurchaseInvoiceTransformer;
 use App\Transformer\Purchasing\PurchaseOrderHeaderTransformer;
@@ -36,8 +37,17 @@ class PaymentRequestController extends Controller
         return View('admin.purchasing.payment_requests.index');
     }
 
+    public function chooseVendor(){
+        return View('admin.purchasing.payment_requests.choose_vendor');
+    }
+
     public function beforeCreateFromPi(){
-        return View('admin.purchasing.payment_requests.before_create_from_pi');
+        $supplier = null;
+        if(!empty(request()->supplier)){
+            $supplier = Supplier::find(request()->supplier);
+        }
+
+        return View('admin.purchasing.payment_requests.before_create_from_pi', compact('supplier'));
     }
 
     public function show(PurchaseOrderHeader $purchase_order){
