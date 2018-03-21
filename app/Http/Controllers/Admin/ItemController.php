@@ -272,9 +272,41 @@ class ItemController extends Controller
 
     public function getItems(Request $request){
         $term = trim($request->q);
-        $items = Item::where('code', 'LIKE', '%'. $term. '%')
-            ->orWhere('name', 'LIKE', '%'. $term. '%')
-            ->get();
+
+        $items = null;
+        if(!empty($request->type)){
+            $type = $request->type;
+
+            if($type === 'other'){
+                $items = Item::where('group_id', '!=', 4)
+                    ->where('group_id', '!=', 5)
+                    ->where(function($q) use ($term) {
+                        $q->where('code', 'LIKE', '%'. $term. '%')
+                            ->orWhere('name', 'LIKE', '%'. $term. '%');
+                    })
+                    ->get();
+            }
+            elseif($type === 'fuel'){
+                $arr = [4,5];
+
+                $items = Item::whereIn('group_id', $arr)
+                    ->where(function($q) use ($term) {
+                        $q->where('code', 'LIKE', '%'. $term. '%')
+                            ->orWhere('name', 'LIKE', '%'. $term. '%');
+                    })
+                    ->get();
+            }
+            else{
+                $items = Item::where('code', 'LIKE', '%'. $term. '%')
+                    ->orWhere('name', 'LIKE', '%'. $term. '%')
+                    ->get();
+            }
+        }
+        else{
+            $items = Item::where('code', 'LIKE', '%'. $term. '%')
+                ->orWhere('name', 'LIKE', '%'. $term. '%')
+                ->get();
+        }
 
         $formatted_tags = [];
 

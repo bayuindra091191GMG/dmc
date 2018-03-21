@@ -1,12 +1,12 @@
 @extends('admin.layouts.admin')
 
-@section('title','Ubah Purchase Request '. $header->code)
+@section('title','Ubah Material Request Servis '. $header->code)
 
 @section('content')
     <div class="row" style="margin-bottom: 10px;">
         <div class="col-md-12 col-sm-12 col-xs-12">
 
-            {{ Form::open(['route'=>['admin.purchase_requests.update', $header->id],'method' => 'put','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.material_requests.update', $header->id],'method' => 'put','class'=>'form-horizontal form-label-left']) }}
 
             @if(\Illuminate\Support\Facades\Session::has('message'))
                 <div class="form-group">
@@ -34,7 +34,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pr_code">
-                    Nomor PR
+                    Nomor MR
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="pr_code" type="text" class="form-control col-md-7 col-xs-12"
@@ -59,7 +59,7 @@
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="department" name="department" class="form-control col-md-7 col-xs-12 @if($errors->has('priority')) parsley-error @endif">
+                    <select id="department" name="department" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">
                         @foreach($departments as $department)
                             <option value="{{ $department->id }}" {{ $header->department_id == $department->id ? "selected":"" }}>{{ $department->name }}</option>
                         @endforeach
@@ -83,7 +83,7 @@
                     Prioritas
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="priority" name="priority" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">
+                    <select id="priority" name="priority" class="form-control col-md-7 col-xs-12 @if($errors->has('priority')) parsley-error @endif">
                         <option value="1" {{ $header->priority == "1" ? "selected":"" }}>1</option>
                         <option value="2" {{ $header->priority == "2" ? "selected":"" }}>2</option>
                         <option value="3" {{ $header->priority == "3" ? "selected":"" }}>3</option>
@@ -113,9 +113,11 @@
                 </div>
             </div>
 
+            <input type="hidden" name="type" id="type" value="3"/>
+
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a class="btn btn-primary" href="{{ route('admin.purchase_requests') }}"> Batal</a>
+                    <a class="btn btn-primary" href="{{ route('admin.material_requests.other.show', ['material_request' => $header->id]) }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>
@@ -156,21 +158,21 @@
                 </thead>
                 <tbody>
 
-                @foreach($header->purchase_request_details as $detail)
+                @foreach($header->material_request_details as $detail)
                     <tr class="item{{ $detail->id }}">
-                        <td class='field-item'>
+                        <td class='text-center'>
                             {{ $detail->item->code }} - {{ $detail->item->name }}
                         </td>
-                        <td>
+                        <td class='text-center'>
                             {{ $detail->item->uom }}
                         </td>
-                        <td>
+                        <td class='text-center'>
                             {{ $detail->quantity }}
                         </td>
                         <td>
                             {{ $detail->remark ?? '-' }}
                         </td>
-                        <td>
+                        <td class='text-center'>
                             <button class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}">
                                 <span class="glyphicon glyphicon-edit"></span>
                             </button>
@@ -372,13 +374,14 @@
                 text: 'Pilih barang...'
             },
             width: '100%',
-            minimumInputLength: 2,
+            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('select.items') }}',
                 dataType: 'json',
                 data: function (params) {
                     return {
-                        q: $.trim(params.term)
+                        q: $.trim(params.term),
+                        type: 'service'
                     };
                 },
                 processResults: function (data) {
@@ -411,7 +414,8 @@
                     dataType: 'json',
                     data: function (params) {
                         return {
-                            q: $.trim(params.term)
+                            q: $.trim(params.term),
+                            type: 'service'
                         };
                     },
                     processResults: function (data) {
@@ -428,7 +432,7 @@
         $('.modal-footer').on('click', '.add', function() {
             $.ajax({
                 type: 'POST',
-                url: '{{ route('admin.purchase_request_details.store') }}',
+                url: '{{ route('admin.material_request_details.store') }}',
                 data: {
                     '_token': $('input[name=_token]').val(),
                     'header_id': '{{ $header->id }}',
@@ -465,7 +469,7 @@
                         if (data.remark !== null) {
                             remarkAdd = data.remark;
                         }
-                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uom + "</td><td>" + data.quantity + "</td><td>" + remarkAdd + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
+                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='text-center'>" + data.item.code + " - " + data.item.name + "</td><td class='text-center'>" + data.item.uom + "</td><td class='text-center'>" + data.quantity + "</td><td>" + remarkAdd + "</td><td class='text-center'>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
 
                     }
                 },
@@ -490,7 +494,8 @@
                     dataType: 'json',
                     data: function (params) {
                         return {
-                            q: $.trim(params.term)
+                            q: $.trim(params.term),
+                            type: 'service'
                         };
                     },
                     processResults: function (data) {
@@ -509,7 +514,7 @@
         $('.modal-footer').on('click', '.edit', function() {
             $.ajax({
                 type: 'PUT',
-                url: '{{ route('admin.purchase_request_details.update') }}',
+                url: '{{ route('admin.material_request_details.update') }}',
                 data: {
                     '_token': $('input[name=_token]').val(),
                     'id' : id,
@@ -541,7 +546,7 @@
                         if (data.remark !== null) {
                             remarkEdit = data.remark;
                         }
-                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uom + "</td><td>" + data.quantity + "</td><td>" + remarkEdit + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark=" + data.remark + "><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
+                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='text-center'>" + data.item.code + " - " + data.item.name + "</td><td class='text-center'>" + data.item.uom + "</td><td class='text-center'>" + data.quantity + "</td><td>" + remarkEdit + "</td><td class='text-center'>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark=" + data.remark + "><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
 
                     }
                 }
@@ -560,7 +565,7 @@
         $('.modal-footer').on('click', '.delete', function() {
             $.ajax({
                 type: 'POST',
-                url: '{{ route('admin.purchase_request_details.delete') }}',
+                url: '{{ route('admin.material_request_details.delete') }}',
                 data: {
                     '_token': $('input[name=_token]').val(),
                     'id': deletedId

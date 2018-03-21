@@ -97,7 +97,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="machinery_type" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('machinery_type')) parsley-error @endif"
-                           name="machinery_type" value="{{ old('machinery_type') }}" required>
+                           name="machinery_type" value="{{ old('machinery_type') }}">
                 </div>
             </div>
 

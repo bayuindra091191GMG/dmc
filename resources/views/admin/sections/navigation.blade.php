@@ -74,6 +74,26 @@
                                 </ul>
                             </li>
                             <li><a href="{{ route('admin.items') }}">Inventory</a></li>
+                            <li>
+                                <a>Material Request (MR)<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.material_requests.other') }}">
+                                            MR Utama
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.material_requests.fuel') }}">
+                                            MR Oli & Bensin
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.material_requests.service') }}">
+                                            MR Servis
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                             <li><a href="{{ route('admin.interchanges') }}">Interchanges</a></li>
                             <li><a href="{{ route('admin.issued_dockets') }}">Issued Docket (ID)</a></li>
                             <li><a href="{{ route('admin.delivery_orders') }}">Surat Jalan</a></li>

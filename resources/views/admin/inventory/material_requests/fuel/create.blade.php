@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title','Buat Material Request Inventory')
+@section('title','Buat Material Request Oli & Bensin')
 
 @section('content')
     <div class="row">
@@ -158,11 +158,11 @@
 
             <hr/>
 
-            <input type="hidden" name="type" id="type" value="1"/>
+            <input type="hidden" name="type" id="type" value="2"/>
 
             <div class="form-group">
                 <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                    <a class="btn btn-danger" href="{{ route('admin.material_requests.other') }}"> Batal</a>
+                    <a class="btn btn-danger" href="{{ route('admin.material_requests.fuel') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>
@@ -237,7 +237,7 @@
                 data: function (params) {
                     return {
                         q: $.trim(params.term),
-                        type: 'other'
+                        type: 'fuel'
                     };
                 },
                 processResults: function (data) {
@@ -267,7 +267,7 @@
                     data: function (params) {
                         return {
                             q: $.trim(params.term),
-                            type: 'other'
+                            type: 'fuel'
                         };
                     },
                     processResults: function (data) {

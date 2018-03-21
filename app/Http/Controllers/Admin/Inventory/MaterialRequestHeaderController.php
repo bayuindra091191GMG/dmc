@@ -83,7 +83,7 @@ class MaterialRequestHeaderController extends Controller
 
     public function showOther(MaterialRequestHeader $material_request){
         $header = $material_request;
-        $date = Carbon::parse($purchase_request->date)->format('d M Y');
+        $date = Carbon::parse($material_request->date)->format('d M Y');
 
         $data = [
             'header'        => $header,
@@ -95,7 +95,7 @@ class MaterialRequestHeaderController extends Controller
 
     public function showFuel(MaterialRequestHeader $material_request){
         $header = $material_request;
-        $date = Carbon::parse($purchase_request->date)->format('d M Y');
+        $date = Carbon::parse($material_request->date)->format('d M Y');
 
         $data = [
             'header'        => $header,
@@ -107,7 +107,7 @@ class MaterialRequestHeaderController extends Controller
 
     public function showService(MaterialRequestHeader $material_request){
         $header = $material_request;
-        $date = Carbon::parse($purchase_request->date)->format('d M Y');
+        $date = Carbon::parse($material_request->date)->format('d M Y');
 
         $data = [
             'header'        => $header,
@@ -147,10 +147,21 @@ class MaterialRequestHeaderController extends Controller
 
         // Generate auto number
         $type = $request->input('type');
+        $docId = 0;
+        if($type == 1){
+            $docId = 9;
+        }
+        else if($type == 2){
+            $docId = 10;
+        }
+        else{
+            $docId = 11;
+        }
+
         $mrCode = 'default';
         if($request->filled('auto_number')){
-            $sysNo = NumberingSystem::where('doc_id', $type)->first();
-            $prCode = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
+            $sysNo = NumberingSystem::where('doc_id', $docId)->first();
+            $mrCode = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
             $sysNo->next_no++;
             $sysNo->save();
         }
@@ -159,7 +170,7 @@ class MaterialRequestHeaderController extends Controller
         }
 
         // Check existing number
-        if(MaterialRequestHeader::where('code', $prCode)->exists()){
+        if(MaterialRequestHeader::where('code', $mrCode)->exists()){
             return redirect()->back()->withErrors('Nomor MR sudah terdaftar!', 'default')->withInput($request->all());
         }
 
@@ -216,7 +227,7 @@ class MaterialRequestHeaderController extends Controller
         foreach($request->input('item') as $item){
             if(!empty($item)){
                 $prDetail = MaterialRequestDetail::create([
-                    'header_id'     => $prHeader->id,
+                    'header_id'     => $mrHeader->id,
                     'item_id'       => $item,
                     'quantity'      => $qty[$idx]
                 ]);
@@ -329,13 +340,13 @@ class MaterialRequestHeaderController extends Controller
         Session::flash('message', 'Berhasil ubah material request!');
 
         if($type === '1'){
-            return redirect()->route('admin.material_requests.other.show', ['material_request' => $mrHeader]);
+            return redirect()->route('admin.material_requests.other.show', ['material_request' => $material_request]);
         }
         else if($type === '2'){
-            return redirect()->route('admin.material_requests.fuel.show', ['material_request' => $mrHeader]);
+            return redirect()->route('admin.material_requests.fuel.show', ['material_request' => $material_request]);
         }
         else{
-            return redirect()->route('admin.material_requests.service.show', ['material_request' => $mrHeader]);
+            return redirect()->route('admin.material_requests.service.show', ['material_request' => $material_request]);
         }
     }
 
