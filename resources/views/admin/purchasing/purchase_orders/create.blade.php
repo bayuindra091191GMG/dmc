@@ -820,6 +820,11 @@
             $('#deleteModal').modal('show');
         });
         $('.modal-footer').on('click', '.delete', function() {
+            // Decrease idx
+            var idx = $('#index_counter').val();
+            idx--;
+            $('#index_counter').val(idx);
+
             $('.item' + deletedId).remove();
         });
 

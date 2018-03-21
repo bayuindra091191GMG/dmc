@@ -12,6 +12,7 @@ namespace App\Http\Controllers\Admin\Purchasing;
 use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
 use App\Models\Department;
+use App\Models\MaterialRequestHeader;
 use App\Models\NumberingSystem;
 use App\Models\PurchaseOrderHeader;
 use App\Models\PurchaseRequestDetail;
@@ -32,7 +33,16 @@ class PurchaseRequestHeaderController extends Controller
         return View('admin.purchasing.purchase_requests.index');
     }
 
+    public function beforeCreate(){
+        return View('admin.purchasing.purchase_requests.before_create');
+    }
+
     public function create(){
+        $materialRequest = null;
+        if(!empty(request()->mr)){
+            $materialRequest = MaterialRequestHeader::find(request()->mr);
+        }
+
         $departments = Department::all();
 
         // Numbering System
@@ -40,8 +50,9 @@ class PurchaseRequestHeaderController extends Controller
         $autoNumber = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
 
         $data = [
-            'departments'   => $departments,
-            'autoNumber'    => $autoNumber
+            'departments'       => $departments,
+            'autoNumber'        => $autoNumber,
+            'materialRequest'   => $materialRequest
         ];
 
         return View('admin.purchasing.purchase_requests.create')->with($data);
@@ -77,10 +88,10 @@ class PurchaseRequestHeaderController extends Controller
                 ->withInput();
         }
 
-        // Validate PR number
-//        if(empty(Input::get('auto_number')) && (empty(Input::get('pr_code')) || Input::get('pr_code') == "")){
-//            return redirect()->back()->withErrors('Nomor PR wajib diisi!', 'default')->withInput($request->all());
-//        }
+        // Validate MR number
+        if(empty($request->input('mr_code')) && empty($request->input('mr_id'))){
+            return redirect()->back()->withErrors('Nomor MR wajib diisi!', 'default')->withInput($request->all());
+        }
 
         // Validate department
         if($request->input('department') === '-1'){
@@ -129,23 +140,37 @@ class PurchaseRequestHeaderController extends Controller
             return redirect()->back()->withErrors('Detail barang dan jumlah wajib diisi!', 'default')->withInput($request->all());
         }
 
+        // Get PR id
+        $mrId = '0';
+        if($request->filled('mr_code')){
+            $mrId = $request->input('mr_code');
+        }
+        else{
+            $mrId = $request->input('mr_id');
+        }
+
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
         $prHeader = PurchaseRequestHeader::create([
-            'code'              => $prCode,
-            'department_id'     => $request->input('department'),
-            'priority'          => $request->input('priority'),
-            'km'                => $request->input('km'),
-            'hm'                => $request->input('hm'),
-            'status_id'         => 3,
-            'created_by'        => $user->id,
-            'created_at'        => $now->toDateTimeString()
+            'code'                  => $prCode,
+            'material_request_id'   => $mrId,
+            'department_id'         => $request->input('department'),
+            'priority'              => $request->input('priority'),
+            'km'                    => $request->input('km'),
+            'hm'                    => $request->input('hm'),
+            'status_id'             => 3,
+            'created_by'            => $user->id,
+            'created_at'            => $now->toDateTimeString()
 
         ]);
 
         if($request->filled('machinery')){
             $prHeader->machinery_id = $request->input('machinery');
+            $prHeader->save();
+        }
+        elseif($request->filled('machinery_id')){
+            $prHeader->machinery_id = $request->input('machinery_id');
             $prHeader->save();
         }
 

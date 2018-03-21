@@ -45,6 +45,7 @@ class PurchaseRequestHeader extends Eloquent
     protected $appends = ['date_string'];
 
 	protected $casts = [
+	    'material_request_id' => 'int',
 		'department_id' => 'int',
 		'machinery_id' => 'int',
 		'status_id' => 'int',
@@ -54,6 +55,7 @@ class PurchaseRequestHeader extends Eloquent
 
 	protected $fillable = [
 		'code',
+        'material_request_id',
 		'department_id',
 		'machinery_id',
 		'priority',
@@ -123,4 +125,9 @@ class PurchaseRequestHeader extends Eloquent
 	{
 		return $this->hasMany(\App\Models\QuotationHeader::class, 'purchase_request_id');
 	}
+
+    public function material_request_header()
+    {
+        return $this->belongsTo(\App\Models\MaterialRequestHeader::class, 'material_request_id');
+    }
 }

@@ -1,30 +1,26 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Daftar Purchase Request')
+@section('title', 'Pilih Material Request Terlebih Dahulu')
 
 @section('content')
 
     <div class="row">
-        @include('partials._success')
-        <div class="nav navbar-right">
-            <a href="{{ route('admin.purchase_requests.before_create') }}" class="btn btn-app">
-                <i class="fa fa-plus"></i> Tambah
-            </a>
+        <div class="navbar-left">
+            <a class="btn btn-default" href="{{ route('admin.purchase_requests') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
         </div>
-        <div class="clearfix"></div>
     </div>
     <div class="row">
         <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
-               width="100%" id="pr-table">
+               width="100%" id="mr-table">
             <thead>
             <tr>
-                <th class="text-center">No</th>
-                <th class="text-center">Nomor PR</th>
-                <th class="text-center">Nomor MR</th>
-                <th class="text-center">Departemen</th>
-                <th class="text-center">Kode Unit</th>
+                <th>No</th>
+                <th>Nomor MR</th>
+                <th>Jenis</th>
+                <th>Departemen</th>
+                <th>Kode Unit</th>
                 <th>Tanggal</th>
-                <th class="text-center">Tindakan</th>
+                <th>Tindakan</th>
             </tr>
             </thead>
             <tbody>
@@ -44,14 +40,19 @@
     {{ Html::script(mix('assets/admin/js/datatables.js')) }}
     <script>
         $(function() {
-            $('#pr-table').DataTable({
+            $('#mr-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('datatables.purchase_requests') !!}',
+                ajax: {
+                    url: '{!! route('datatables.material_requests') !!}',
+                    data: {
+                        'type': 'before_create'
+                    }
+                },
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center' },
                     { data: 'code', name: 'code', class: 'text-center' },
-                    { data: 'mr_code', name: 'mr_code', class: 'text-center' },
+                    { data: 'type', name: 'type', class: 'text-center' },
                     { data: 'department', name: 'department', class: 'text-center' },
                     { data: 'machinery', name: 'machinery', class: 'text-center' },
                     { data: 'created_at', name: 'created_at', class: 'text-center' },

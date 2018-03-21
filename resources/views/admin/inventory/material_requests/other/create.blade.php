@@ -62,7 +62,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="department" name="department" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">
-                        <option value="-1" @if(empty(old('uom'))) selected @endif> - Pilih departemen - </option>
+                        <option value="-1" @if(empty(old('uom'))) selected @endif> - Pilih Departemen - </option>
                         @foreach($departments as $department)
                             <option value="{{ $department->id }}" {{ old('department') == $department->id ? "selected":"" }}>{{ $department->name }}</option>
                         @endforeach
@@ -86,7 +86,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="priority" name="priority" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">
-                        <option value="-1" @if(empty(old('priority'))) selected @endif> - Pilih prioritas - </option>
+                        <option value="-1" @if(empty(old('priority'))) selected @endif> - Pilih Prioritas - </option>
                         <option value="1" {{ old('priority') == "1" ? "selected":"" }}>1</option>
                         <option value="2" {{ old('priority') == "2" ? "selected":"" }}>2</option>
                         <option value="3" {{ old('priority') == "3" ? "selected":"" }}>3</option>
@@ -204,7 +204,7 @@
         $('#machinery').select2({
             placeholder: {
                 id: '-1',
-                text: 'Pilih Alat Berat...'
+                text: ' - Pilih Barang - '
             },
             width: '100%',
             minimumInputLength: 1,
@@ -227,7 +227,7 @@
         $('#select0').select2({
             placeholder: {
                 id: '-1',
-                text: 'Pilih barang...'
+                text: ' - Pilih Barang - '
             },
             width: '100%',
             minimumInputLength: 1,

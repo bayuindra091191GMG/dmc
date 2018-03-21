@@ -269,6 +269,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('purchase_requests/detil/{purchase_request}', 'Purchasing\PurchaseRequestHeaderController@show')->name('purchase_requests.show');
     Route::get('purchase_requests/{purchase_request}/ubah', 'Purchasing\PurchaseRequestHeaderController@edit')->name('purchase_requests.edit');
     Route::put('purchase_requests/ubah/{purchase_request}', 'Purchasing\PurchaseRequestHeaderController@update')->name('purchase_requests.update');
+    Route::get('purchase_requests/pilihmr', 'Purchasing\PurchaseRequestHeaderController@beforeCreate')->name('purchase_requests.before_create');
     Route::get('purchase_requests/tambah', 'Purchasing\PurchaseRequestHeaderController@create')->name('purchase_requests.create');
     Route::post('purchase_requests/simpan', 'Purchasing\PurchaseRequestHeaderController@store')->name('purchase_requests.store');
     Route::get('purchase_requests/print/{purchase_request}', 'Purchasing\PurchaseRequestHeaderController@printDocument')->name('purchase_requests.print');
@@ -452,6 +453,7 @@ Route::get('/select-groups', 'Admin\GroupController@getGroups')->name('select.gr
 Route::get('/select-machineries', 'Admin\MachineryController@getMachineries')->name('select.machineries');
 Route::get('/select-machinery_types', 'Admin\MachineryTypeController@getMachineryTypes')->name('select.machinery_types');
 Route::get('/select-suppliers', 'Admin\SupplierController@getSuppliers')->name('select.suppliers');
+Route::get('/select-material_requests', 'Admin\Inventory\MaterialRequestHeaderController@getMaterialRequests')->name('select.material_requests');
 Route::get('/select-purchase_requests', 'Admin\Purchasing\PurchaseRequestHeaderController@getPurchaseRequests')->name('select.purchase_requests');
 Route::get('/select-purchase_orders', 'Admin\Purchasing\PurchaseOrderHeaderController@getPurchaseOrders')->name('select.purchase_orders');
 Route::get('/select-delivery_orders', 'Admin\Inventory\DeliveryOrderController@getDeliveryOrders')->name('select.delivery_orders');

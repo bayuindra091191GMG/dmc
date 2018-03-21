@@ -369,13 +369,30 @@ class MaterialRequestHeaderController extends Controller
         else if($type === 'fuel'){
             $materialRequests = MaterialRequestHeader::where('type', 2)->get();
         }
-        else{
+        else if($type === 'service'){
             $materialRequests = MaterialRequestHeader::where('type', 3)->get();
+        }
+        else{
+            $materialRequests = MaterialRequestHeader::all();
         }
 
         return DataTables::of($materialRequests)
             ->setTransformer(new MaterialRequestHeaderTransformer($type))
             ->addIndexColumn()
             ->make(true);
+    }
+
+    public function getMaterialRequests(Request $request){
+        $term = trim($request->q);
+        $materialRequests = MaterialRequestHeader::where('code', 'LIKE', '%'. $term. '%')
+            ->get();
+
+        $formatted_tags = [];
+
+        foreach ($materialRequests as $materialRequest) {
+            $formatted_tags[] = ['id' => $materialRequest->id, 'text' => $materialRequest->code];
+        }
+
+        return \Response::json($formatted_tags);
     }
 }

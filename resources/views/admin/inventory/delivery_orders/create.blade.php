@@ -522,7 +522,7 @@
             }
 
             if(!qtyAdd || qtyAdd === "" || qtyAdd === "0"){
-                alert('Mohon isi jumlah...')
+                alert('Mohon isi kuantitas...')
                 return false;
             }
 

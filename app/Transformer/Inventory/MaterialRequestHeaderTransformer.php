@@ -32,17 +32,28 @@ class MaterialRequestHeaderTransformer extends TransformerAbstract
         else if($this->type === 'fuel'){
             $url = 'bensin';
         }
-        else{
+        else if($this->type === 'service'){
             $url = 'servis';
         }
 
-        $code = "<a href='material_requests/". $url. "/detil/" . $header->id. "' style='text-decoration: underline;'>". $header->code. "</a>";
+        $typeStr = 'default';
+        if($header->type === 1){
+            $typeStr = 'Inventory';
+        }
+        else if($header->type === 2){
+            $typeStr = 'Oli & Bensin';
+        }
+        else{
+            $typeStr = 'Servis';
+        }
+
+        $code = "<a href='/admin/material_requests/". $url. "/detil/" . $header->id. "' style='text-decoration: underline;'>". $header->code. "</a>";
 
         $action = "";
         $route = route('admin.purchase_requests.create', ['mr' => $header->id]);
         if($this->type !== 'before_create'){
-            $action = "<a class='btn btn-xs btn-primary' href='material_requests/". $url. "/detil/". $header->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
-            $action .= "<a class='btn btn-xs btn-info' href='material_requests/". $url. "/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+            $action = "<a class='btn btn-xs btn-primary' href='/admin/material_requests/". $url. "/detil/". $header->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
+            $action .= "<a class='btn btn-xs btn-info' href='/admin/material_requests/". $url. "/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
             $action .= "<a class='btn btn-xs btn-success' href='". $route. "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i> Proses PR </a>";
         }
         else{
@@ -56,6 +67,7 @@ class MaterialRequestHeaderTransformer extends TransformerAbstract
 
         return[
             'code'          => $code,
+            'type'          => $typeStr,
             'department'    => $header->department->name,
             'machinery'     => $machinery,
             'created_at'    => $date,

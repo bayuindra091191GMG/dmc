@@ -30,7 +30,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\Department $department
  * @property \App\Models\Machinery $machinery
  * @property \App\Models\Status $status
- * @property \App\Models\User $user
+ * @property \App\Models\Auth\User\User $user
  * @property \Illuminate\Database\Eloquent\Collection $material_request_details
  *
  * @package App\Models
@@ -79,13 +79,23 @@ class MaterialRequestHeader extends Eloquent
 		return $this->belongsTo(\App\Models\Status::class);
 	}
 
-	public function user()
-	{
-		return $this->belongsTo(\App\Models\User::class, 'updated_by');
-	}
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
+    }
 
 	public function material_request_details()
 	{
 		return $this->hasMany(\App\Models\MaterialRequestDetail::class, 'header_id');
 	}
+
+    public function purchase_request_headers()
+    {
+        return $this->hasMany(\App\Models\PurchaseRequestHeader::class, 'material_request_id');
+    }
 }

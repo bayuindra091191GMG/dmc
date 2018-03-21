@@ -49,6 +49,23 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
+                        Nomor MR
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+
+                        @if($header->material_request_header->type == 1)
+                            : <a style="text-decoration: underline;" href="{{ route('admin.material_requests.other.show', ['material_request' => $header->material_request_id]) }}">{{ $header->material_request_header->code }}</a>
+                        @elseif($header->material_request_header->type == 2)
+                            : <a style="text-decoration: underline;" href="{{ route('admin.material_requests.fuel.show', ['material_request' => $header->material_request_id]) }}">{{ $header->material_request_header->code }}</a>
+                        @else
+                            : <a style="text-decoration: underline;" href="{{ route('admin.material_requests.service.show', ['material_request' => $header->material_request_id]) }}">{{ $header->material_request_header->code }}</a>
+                        @endif
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
                         Departemen
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
@@ -61,7 +78,7 @@
                         Unit Alat Berat
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->machinery->code }}
+                        : {{ $header->machinery->code ?? '-' }}
                     </div>
                 </div>
 
@@ -110,7 +127,7 @@
                                     Keterangan
                                 </th>
                                 <th class="text-center" style="width: 10%">
-                                    Satuan (UOM)
+                                    UOM
                                 </th>
                                 <th class="text-center" style="width: 10%">
                                     QTY

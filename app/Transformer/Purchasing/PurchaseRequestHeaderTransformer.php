@@ -26,6 +26,7 @@ class PurchaseRequestHeaderTransformer extends TransformerAbstract
         $date = Carbon::parse($header->date)->format('d M Y');
 
         $code = "<a href='purchase_requests/detil/" . $header->id. "' style='text-decoration: underline;'>". $header->code. "</a>";
+        $mrCode = "<a href='material_requests/detil/" . $header->id. "' style='text-decoration: underline;'>". $header->code. "</a>";
 
         $action = "";
         $route = route('admin.purchase_orders.create', ['pr' => $header->id]);
@@ -45,6 +46,7 @@ class PurchaseRequestHeaderTransformer extends TransformerAbstract
 
         return[
             'code'          => $code,
+            'mr_code'       => $mrCode,
             'department'    => $header->department->name,
             'machinery'     => $machinery,
             'created_at'    => $date,
