@@ -15,6 +15,13 @@ use League\Fractal\TransformerAbstract;
 
 class PurchaseInvoiceHeaderTransformer extends TransformerAbstract
 {
+    protected $mode = 'default';
+
+    public function __construct($mode)
+    {
+        $this->mode = $mode;
+    }
+
     public function transform(PurchaseInvoiceHeader $header){
         try{
             $date = Carbon::parse($header->date)->format('d M Y');
@@ -22,8 +29,13 @@ class PurchaseInvoiceHeaderTransformer extends TransformerAbstract
             $code = "<a style='text-decoration: underline;' href='purchase_invoices/detil/" . $header->id. "'>". $header->code. "</a>";
             $poCode =  "<a style='text-decoration: underline;' href='purchase_invoices/detil/" . $header->purchase_order_id. "'>". $header->purchase_order_header->code. "</a>";
 
-            $action = "<a class='btn btn-xs btn-primary' href='purchase_invoices/detil/". $header->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
-            $action .= "<a class='btn btn-xs btn-info' href='purchase_invoices/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+            if($this->mode === 'default'){
+                $action = "<a class='btn btn-xs btn-primary' href='purchase_invoices/detil/". $header->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
+                $action .= "<a class='btn btn-xs btn-info' href='purchase_invoices/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+            }else{
+                $action = "<input type='checkbox' class='flat' id='chk". $header->id ."' name='chk[]' onclick='changeInput(". $header->id .");'/>";
+                $action .= "<input type='text' id='" . $header->id ."' hidden='true' name='ids[]' disabled value='". $header->id ."'/>";
+            }
 
             return[
                 'code'              => $code,

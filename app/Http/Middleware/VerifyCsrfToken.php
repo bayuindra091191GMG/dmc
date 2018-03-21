@@ -13,6 +13,7 @@ class VerifyCsrfToken extends BaseVerifier
      */
     protected $except = [
         'datatables-suppliers',
-        'datatables-sites'
+        'datatables-sites',
+        'payment_requests/tambahdaripi'
     ];
 }

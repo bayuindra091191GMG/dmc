@@ -2,11 +2,12 @@
 
 /**
  * Created by Reliese Model.
- * Date: Fri, 19 Jan 2018 04:10:48 +0000.
+ * Date: Mon, 19 Mar 2018 14:34:32 +0700.
  */
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -15,8 +16,6 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $id
  * @property string $code
  * @property \Carbon\Carbon $date
- * @property int $purchase_order_id
- * @property int $request_by
  * @property float $amount
  * @property float $ppn
  * @property float $pph_23
@@ -32,19 +31,19 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $updated_by
  * @property \Carbon\Carbon $updated_at
  * 
- * @property \App\Models\Employee $employees
- * @property \App\Models\PurchaseOrderHeader $purchase_order_header
- * @property \App\Models\Auth\User\User $user
+ * @property \App\Models\User $user
  * @property \Illuminate\Database\Eloquent\Collection $approval_payment_requests
  * @property \Illuminate\Database\Eloquent\Collection $payment_installments
+ * @property \Illuminate\Database\Eloquent\Collection $payment_requests_pi_details
+ * @property \Illuminate\Database\Eloquent\Collection $payment_requests_po_details
  *
  * @package App\Models
  */
 class PaymentRequest extends Eloquent
 {
+    protected $appends = ['date_string'];
+
 	protected $casts = [
-		'purchase_order_id' => 'int',
-		'request_by' => 'int',
 		'amount' => 'float',
 		'ppn' => 'float',
 		'pph_23' => 'float',
@@ -62,8 +61,6 @@ class PaymentRequest extends Eloquent
 	protected $fillable = [
 		'code',
 		'date',
-		'purchase_order_id',
-		'request_by',
 		'amount',
 		'ppn',
 		'pph_23',
@@ -78,15 +75,9 @@ class PaymentRequest extends Eloquent
 		'updated_by'
 	];
 
-	public function employee()
-	{
-		return $this->belongsTo(\App\Models\Employee::class, 'request_by');
-	}
-
-	public function purchase_order_header()
-	{
-		return $this->belongsTo(\App\Models\PurchaseOrderHeader::class, 'purchase_order_id');
-	}
+    public function getDateStringAttribute(){
+        return Carbon::parse($this->attributes['created_at'])->format('d M Y');
+    }
 
     public function createdBy()
     {
@@ -106,5 +97,15 @@ class PaymentRequest extends Eloquent
 	public function payment_installments()
 	{
 		return $this->hasMany(\App\Models\PaymentInstallment::class);
+	}
+
+	public function payment_requests_pi_details()
+	{
+		return $this->hasMany(\App\Models\PaymentRequestsPiDetail::class, 'payment_requests_id');
+	}
+
+	public function payment_requests_po_details()
+	{
+		return $this->hasMany(\App\Models\PaymentRequestsPoDetail::class, 'payment_requests_id');
 	}
 }

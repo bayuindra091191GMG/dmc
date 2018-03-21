@@ -116,7 +116,7 @@
                             <li><a href="{{ route('admin.purchase_orders') }}">Purchase Order (PO)</a></li>
                             <li><a href="{{ route('admin.item_receipts') }}">Goods Receipt (GR)</a></li>
                             <li><a href="{{ route('admin.purchase_invoices') }}">Purchase Invoice (PI)</a></li>
-                            <li><a href="#">Request For Payment (RFP</a></li>
+                            <li><a href="{{ route('admin.payment_requests') }}">Request For Payment (RFP)</a></li>
                         </ul>
                     </li>
                     <li>
