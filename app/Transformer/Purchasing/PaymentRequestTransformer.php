@@ -17,7 +17,7 @@ class PaymentRequestTransformer extends TransformerAbstract
 {
     public function transform(PaymentRequest $header){
         try{
-            $date = Carbon::parse($header->created_at)->format('d M Y');
+            $date = Carbon::parse($header->date)->format('d M Y');
 
             $code = "<a style='text-decoration: underline;' href='payment_requests/detil/" . $header->id. "'>". $header->code. "</a>";
 
@@ -26,7 +26,7 @@ class PaymentRequestTransformer extends TransformerAbstract
             return[
                 'code'              => $code,
                 'amount'            => $header->amount,
-                'request_by'        => $header->createdBy()->name,
+                'request_by'        => $header->createdBy->name,
                 'created_at'        => $date,
                 'action'            => $action
             ];

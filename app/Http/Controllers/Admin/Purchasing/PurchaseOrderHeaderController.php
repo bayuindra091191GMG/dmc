@@ -137,6 +137,35 @@ class PurchaseOrderHeaderController extends Controller
             return redirect()->back()->withErrors('Detail barang, jumlah dan harga wajib diisi!', 'default')->withInput($request->all());
         }
 
+        // Validate PR relationship
+        $validItem = true;
+        $validQty = true;
+        $i = 0;
+        $purchaseRequest = PurchaseRequestHeader::find($prId);
+        foreach($items as $item){
+            if(!empty($item)){
+                $prDetail = $purchaseRequest->purchase_request_details->where('item_id', $item)->first();
+                if(empty($prDetail)){
+                    $validItem = false;
+                    break;
+                }
+                else{
+                    if($qtys[$i] > $prDetail->quantity){
+                        $validQty = false;
+                        break;
+                    }
+                }
+                $i++;
+            }
+        }
+
+        if(!$validItem){
+            return redirect()->back()->withErrors('Inventory tidak ada dalam PR!', 'default')->withInput($request->all());
+        }
+        if(!$validQty){
+            return redirect()->back()->withErrors('Kuantitas inventory melebihi kuantitas PR!', 'default')->withInput($request->all());
+        }
+
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 

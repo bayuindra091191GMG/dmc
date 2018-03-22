@@ -121,17 +121,17 @@
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
                                         <a href="{{ route('admin.payment_requests') }}">
-                                            Data
+                                            Daftar RFP
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('admin.payment_requests.choose-vendor') }}">
-                                            Tambah RPF Purchase Invoice
+                                            Tambah RFP Purchase Invoice
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('admin.payment_requests.choose-vendor-po') }}">
-                                            Tambah RPF Purchase Invoice
+                                            Tambah RFP Purchase Order
                                         </a>
                                     </li>
                                 </ul>

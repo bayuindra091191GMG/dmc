@@ -19,13 +19,12 @@
             <thead>
             <tr>
                 <th>No</th>
-                <th>Code</th>
+                <th>Nomor GR</th>
                 <th>No SJ/SPB</th>
-                <th>Date</th>
                 <th>Delivery Note</th>
-                <th>Tanggal Dibuat</th>
+                <th>Tanggal</th>
                 <th>Dibuat Oleh</th>
-                <th>Opsi</th>
+                <th>Tindakan</th>
             </tr>
             </thead>
             <tbody>
@@ -53,9 +52,8 @@
                     { data: 'DT_Row_Index', orderable: false, searchable: false},
                     { data: 'code', name: 'code' },
                     { data: 'no_sj_spb', name: 'no_sj_spb' },
-                    { data: 'date', name: 'date' },
                     { data: 'delivery_order', name: 'delivery_order' },
-                    { data: 'created_at', name: 'created_at' },
+                    { data: 'date', name: 'date' },
                     { data: 'created_by', name: 'created_by' },
                     { data: 'action', name: 'action' }
                 ],

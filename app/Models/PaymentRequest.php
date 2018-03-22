@@ -47,8 +47,7 @@ class PaymentRequest extends Eloquent
         'amount_string',
         'total_amount_string',
         'ppn_string',
-        'pph_23_string',
-        'total_payment_string'
+        'pph_23_string'
     ];
 
 	protected $casts = [

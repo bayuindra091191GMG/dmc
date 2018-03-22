@@ -131,9 +131,13 @@
 
             <div class="form-group">
                 <div class="col-lg-12 col-md-12 col-xs-12 box-section">
-                    <a class="add-modal btn btn-info" style="margin-bottom: 10px;">
-                        <span class="glyphicon glyphicon-plus-sign"></span> Tambah
-                    </a>
+
+                    @if(empty($purchaseRequest))
+                        <a class="add-modal btn btn-info" style="margin-bottom: 10px;">
+                            <span class="glyphicon glyphicon-plus-sign"></span> Tambah
+                        </a>
+                    @endif
+
                     <table class="table table-bordered table-hover" id="detail_table">
                         <thead>
                         <tr>

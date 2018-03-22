@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 20 Mar 2018 11:16:45 +0700.
+ * Date: Thu, 22 Mar 2018 14:38:06 +0700.
  */
 
 namespace App\Models;
@@ -16,6 +16,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $header_id
  * @property int $item_id
  * @property int $quantity
+ * @property int $quantity_received
+ * @property int $quantity_issued
  * @property string $remark
  * 
  * @property \App\Models\Item $item
@@ -30,13 +32,17 @@ class MaterialRequestDetail extends Eloquent
 	protected $casts = [
 		'header_id' => 'int',
 		'item_id' => 'int',
-		'quantity' => 'int'
+		'quantity' => 'int',
+		'quantity_received' => 'int',
+		'quantity_issued' => 'int'
 	];
 
 	protected $fillable = [
 		'header_id',
 		'item_id',
 		'quantity',
+		'quantity_received',
+		'quantity_issued',
 		'remark'
 	];
 

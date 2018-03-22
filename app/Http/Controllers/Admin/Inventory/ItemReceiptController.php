@@ -136,6 +136,7 @@ class ItemReceiptController extends Controller
         $i = 0;
         $purchaseOrder = PurchaseOrderHeader::where('code', $purchaseOrderCode)->first();
 
+
         foreach ($items as $item){
             //Check Data
             //Data Check with PO
@@ -149,13 +150,14 @@ class ItemReceiptController extends Controller
                     $validQtyPo = false;
                 }
             }
+            $i++;
         }
 
         if(!$validPo){
-            return redirect()->back()->withErrors('Detail barang, Barang Tidak ada Dalam PO!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Inventory tidak ada dalam PO!', 'default')->withInput($request->all());
         }
         if(!$validQtyPo){
-            return redirect()->back()->withErrors('Detail barang, Jumlah Barang Melebihi Jumlah Barang Dalam PO!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Kuantitas inventory melebihi kuantitas PO!', 'default')->withInput($request->all());
         }
 
         $user = \Auth::user();
@@ -198,6 +200,13 @@ class ItemReceiptController extends Controller
                 $detail = $purchaseOrder->purchase_order_details->where('item_id', $item)->first();
                 $detail->received_quantity = $detail->received_quantity + $qty[$idx];
                 $detail->save();
+
+                //Update MR
+                $mrDetail = $purchaseOrder->purchase_request_header->material_request_header->material_request_details->where('item_id', $item)->first();
+                if(!empty($mrDetail)){
+                    $mrDetail->quantity_received = $mrDetail->quantity_received + $qty[$idx];
+                    $mrDetail->save();
+                }
             }
             $idx++;
         }

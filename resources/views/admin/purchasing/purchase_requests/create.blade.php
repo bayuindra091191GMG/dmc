@@ -84,7 +84,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="department" name="department" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">
-                        <option value="-1" @if(empty(old('uom'))) selected @endif> - Pilih departemen - </option>
+                        <option value="-1" @if(empty(old('department'))) selected @endif> - Pilih departemen - </option>
                         @foreach($departments as $department)
                             @if(!empty($materialRequest))
                                 <option value="{{ $department->id }}" {{ $materialRequest->department_id == $department->id ? "selected":"" }}>{{ $department->name }}</option>
@@ -156,9 +156,13 @@
 
             <div class="form-group">
                 <div class="col-lg-12 col-md-12 col-xs-12 box-section">
-                    <a class="add-modal btn btn-info" style="margin-bottom: 10px;">
-                        <span class="glyphicon glyphicon-plus-sign"></span> Tambah
-                    </a>
+
+                    @if(empty($materialRequest))
+                        <a class="add-modal btn btn-info" style="margin-bottom: 10px;">
+                            <span class="glyphicon glyphicon-plus-sign"></span> Tambah
+                        </a>
+                        @endif
+
                     <table class="table table-bordered table-hover" id="detail_table">
                         <thead>
                         <tr >
@@ -210,7 +214,7 @@
                                         <input type='hidden' name='remark[]' value='{{ $detail->remark }}'/>
                                     </td>
                                     <td class='text-center'>
-                                        <?php $itemId = $detail->item_id. "#". $detail->item->code. "#". $detail->item->name ?>
+                                        <?php $itemId = $detail->item_id. "#". $detail->item->code. "#". $detail->item->name. "#". $detail->item->uom ?>
                                         <a class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}">
                                             <span class="glyphicon glyphicon-edit"></span>
                                         </a>

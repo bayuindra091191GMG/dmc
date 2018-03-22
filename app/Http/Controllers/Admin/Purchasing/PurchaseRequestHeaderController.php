@@ -149,6 +149,35 @@ class PurchaseRequestHeaderController extends Controller
             $mrId = $request->input('mr_id');
         }
 
+        // Validate MR relationship
+        $validItem = true;
+        $validQty = true;
+        $i = 0;
+        $materialRequest = MaterialRequestHeader::find($mrId);
+        foreach($items as $item){
+            if(!empty($item)){
+                $mrDetail = $materialRequest->material_request_details->where('item_id', $item)->first();
+                if(empty($mrDetail)){
+                    $validItem = false;
+                    break;
+                }
+                else{
+                    if($qtys[$i] > $mrDetail->quantity){
+                        $validQty = false;
+                        break;
+                    }
+                }
+                $i++;
+            }
+        }
+
+        if(!$validItem){
+            return redirect()->back()->withErrors('Inventory tidak ada dalam MR!', 'default')->withInput($request->all());
+        }
+        if(!$validQty){
+            return redirect()->back()->withErrors('Kuantitas inventory melebihi kuantitas MR!', 'default')->withInput($request->all());
+        }
+
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
