@@ -42,7 +42,14 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  */
 class PaymentRequest extends Eloquent
 {
-    protected $appends = ['date_string'];
+    protected $appends = [
+        'date_string',
+        'amount_string',
+        'total_amount_string',
+        'ppn_string',
+        'pph_23_string',
+        'total_payment_string'
+    ];
 
 	protected $casts = [
 		'amount' => 'float',
@@ -76,6 +83,22 @@ class PaymentRequest extends Eloquent
 		'created_by',
 		'updated_by'
 	];
+
+    public function getTotalAmountStringAttribute(){
+        return number_format($this->attributes['total_amount'], 0, ",", ".");
+    }
+
+    public function getAmountStringAttribute(){
+        return number_format($this->attributes['amount'], 0, ",", ".");
+    }
+
+    public function getPpnStringAttribute(){
+        return number_format($this->attributes['ppn'], 0, ",", ".");
+    }
+
+    public function getPph23StringAttribute(){
+        return number_format($this->attributes['pph_23'], 0, ",", ".");
+    }
 
     public function getDateStringAttribute(){
         return Carbon::parse($this->attributes['created_at'])->format('d M Y');
