@@ -67,12 +67,7 @@ class PaymentRequestController extends Controller
 
     public function createFromPi(Request $request){
         $ids = $request->input('ids');
-        $purchaseInvoices = [];
-
-        foreach($ids as $id){
-            $temp = PurchaseInvoiceHeader::find($id);
-            $purchaseInvoices[] = [$temp];
-        }
+        $purchaseInvoices = PurchaseInvoiceHeader::whereIn('id', $ids)->get();
 
         // Numbering System
         $sysNo = NumberingSystem::where('doc_id', '7')->first();
@@ -88,16 +83,7 @@ class PaymentRequestController extends Controller
 
     public function createFromPo(Request $request){
         $ids = $request->input('ids');
-        $purchaseOrders = [];
-
         $purchaseOrders = PurchaseOrderHeader::whereIn('id', $ids)->get();
-
-//        foreach($ids as $id){
-//            $temp = PurchaseOrderHeader::find($id);
-//            $purchaseOrders[] = [$temp];
-//        }
-
-//        return $purchaseOrders;
 
         // Numbering System
         $sysNo = NumberingSystem::where('doc_id', '7')->first();
@@ -157,13 +143,10 @@ class PaymentRequestController extends Controller
         $pph_23 = 0;
         $total_amount = 0;
         $amount = 0;
-        $purchaseInvoices = [];
-        $purchaseOrders = [];
 
         if($flag == "pi"){
             foreach($ids as $id){
                 $temp = PurchaseInvoiceHeader::find($id);
-                $detailItem[] = [$temp];
                 $ppn += $temp->ppn_amount;
                 $pph_23 += $temp->pph_amount;
                 $amount += $temp->total_price;
@@ -173,7 +156,6 @@ class PaymentRequestController extends Controller
         else{
             foreach($ids as $id){
                 $temp = PurchaseOrderHeader::find($id);
-                $detailItem[] = [$temp];
                 $ppn += $temp->ppn_amount;
                 $pph_23 += $temp->pph_amount;
                 $amount += $temp->total_price;
@@ -215,6 +197,7 @@ class PaymentRequestController extends Controller
 
         // Create Payment Request detail
         if($flag == "pi"){
+            $purchaseInvoices = PurchaseInvoiceHeader::whereIn('id', $ids)->get();
             foreach($purchaseInvoices as $detail){
                 //create detail
                 $prDetail = PaymentRequestsPiDetail::create([
@@ -226,6 +209,7 @@ class PaymentRequestController extends Controller
             }
         }
         else{
+            $purchaseOrders = PurchaseOrderHeader::whereIn('id', $ids)->get();
             foreach($purchaseOrders as $detail){
                 //create detail
                 $prDetail = PaymentRequestsPoDetail::create([
@@ -242,12 +226,23 @@ class PaymentRequestController extends Controller
         return redirect()->route('admin.payment_requests.show', ['payment_request' => $paymentRequest]);
     }
 
-    public function show(PurchaseOrderHeader $purchase_order){
-        $date = Carbon::parse($purchase_order->date)->format('d M Y');
+    public function show(PaymentRequest $paymentRequest){
+        $date = Carbon::parse($paymentRequest->date)->format('d M Y');
+
+        $purchaseInvoices = PurchaseInvoiceHeader::where('payment_requests_id', $paymentRequest->id)->get();
+        $purchaseOrders = PurchaseOrderHeader::where('payment_requests_id', $paymentRequest->id)->get();
+
+        $flag = "po";
+        if($purchaseInvoices != null){
+            $flag = "pi";
+        }
 
         $data = [
-            'header'    => $purchase_order,
-            'date'      => $date
+            'header'            => $paymentRequest,
+            'purchaseInvoices'  => $purchaseInvoices,
+            'purchaseOrders'    => $purchaseOrders,
+            'flag'              => $flag,
+            'date'              => $date
         ];
 
         return View('admin.purchasing.payment_requests.show')->with($data);
