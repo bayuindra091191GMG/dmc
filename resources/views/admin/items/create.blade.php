@@ -34,7 +34,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code" >
-                    Kode Barang
+                    Kode Inventory
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -45,7 +45,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name" >
-                    Nama Barang
+                    Nama Inventory
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -71,7 +71,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="part_number">
-                    Part Number
+                    Part Number Asli
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="part_number" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('part_number')) parsley-error @endif"
@@ -111,16 +111,14 @@
                 </div>
             </div>
 
-            {{--<div class="form-group">--}}
-                {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="warehouse" >--}}
-                    {{--Gudang--}}
-                    {{--<span class="required">*</span>--}}
-                {{--</label>--}}
-                {{--<div class="col-md-6 col-sm-6 col-xs-12">--}}
-                    {{--<select id="warehouse" name="warehouse" class="form-control col-md-7 col-xs-12 @if($errors->has('warehouse')) parsley-error @endif">--}}
-                    {{--</select>--}}
-                {{--</div>--}}
-            {{--</div>--}}
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description" >
+                    Keterangan Tambahan
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <textarea id="description" name="description" rows="5" class="form-control col-md-7 col-xs-12 @if($errors->has('description')) parsley-error @endif" style="resize: vertical">{{ old('description') }}</textarea>
+                </div>
+            </div>
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Gudang dan Stok</label>
@@ -149,15 +147,6 @@
                         <tr id='addr1'></tr>
                     </table>
                     <a id="add_row" class="btn btn-default pull-left" style="margin-bottom: 10px;">Tambah</a><a id='delete_row' class="pull-right btn btn-default">Hapus</a>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description" >
-                    Keterangan Tambahan
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <textarea id="description" name="description" rows="5" class="form-control col-md-7 col-xs-12 @if($errors->has('description')) parsley-error @endif" style="resize: vertical">{{ old('description') }}</textarea>
                 </div>
             </div>
 

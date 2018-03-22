@@ -1,15 +1,18 @@
 @extends('admin.layouts.admin')
 
-@section('title','Data Barang '. $selectedItem->name. ' ('. $selectedItem->code.')')
+@section('title','Data Inventory '. $selectedItem->name. ' ('. $selectedItem->code.')')
 
 @section('content')
-    {{--<div class="row">--}}
-        {{--<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">--}}
-            {{--<div class="navbar-right">--}}
-                {{--<a class="btn btn-default" href="{{ route('admin.items.edit',[ 'quotation' => $selectedItem->id]) }}">UBAH</a>--}}
-            {{--</div>--}}
-        {{--</div>--}}
-    {{--</div>--}}
+    <div class="row">
+        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+            <div class="navbar-left">
+                <a class="btn btn-default" href="{{ route('admin.items') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
+            </div>
+            <div class="navbar-right">
+                <a class="btn btn-default" href="{{ route('admin.items.edit',[ 'purchase_request' => $selectedItem->id]) }}">UBAH</a>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
             <form class="form-horizontal form-label-left box-section">
@@ -46,13 +49,13 @@
                         Total Stok
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $selectedItem->stock  }}
+                        : {{ !empty($selectedItem->stock) && $selectedItem->stock > 0 ? $selectedItem->stock : '0'  }}
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Satuan
+                        UOM
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         : {{ $selectedItem->uom }}
@@ -61,7 +64,7 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Grup Barang
+                        Kategori Inventory
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         : {{ $selectedItem->group->name }}

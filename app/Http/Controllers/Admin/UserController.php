@@ -213,6 +213,7 @@ class UserController extends Controller
             $user->password = bcrypt($request->input('password'));
         }
 
+        $user->status_id = $request->input('status');
         $user->created_by = $userAuth->id;
         $user->updated_by = $userAuth->id;
         $user->save();

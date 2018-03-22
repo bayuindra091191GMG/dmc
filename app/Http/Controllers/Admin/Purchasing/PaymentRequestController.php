@@ -76,7 +76,7 @@ class PaymentRequestController extends Controller
 
         // Numbering System
         $sysNo = NumberingSystem::where('doc_id', '7')->first();
-        $autoNumber = Utilities::GenerateNumberPurchaseOrder('PMT', $sysNo->next_no);
+        $autoNumber = Utilities::GenerateNumber('PMT', $sysNo->next_no);
 
         $data = [
             'purchaseInvoices'   => $purchaseInvoices,
@@ -90,14 +90,18 @@ class PaymentRequestController extends Controller
         $ids = $request->input('ids');
         $purchaseOrders = [];
 
-        foreach($ids as $id){
-            $temp = PurchaseOrderHeader::find($id);
-            $purchaseOrders[] = [$temp];
-        }
+        $purchaseOrders = PurchaseOrderHeader::whereIn('id', $ids)->get();
+
+//        foreach($ids as $id){
+//            $temp = PurchaseOrderHeader::find($id);
+//            $purchaseOrders[] = [$temp];
+//        }
+
+//        return $purchaseOrders;
 
         // Numbering System
         $sysNo = NumberingSystem::where('doc_id', '7')->first();
-        $autoNumber = Utilities::GenerateNumberPurchaseOrder('PMT', $sysNo->next_no);
+        $autoNumber = Utilities::GenerateNumber('PMT', $sysNo->next_no);
 
         $data = [
             'purchaseOrders'   => $purchaseOrders,
@@ -133,7 +137,7 @@ class PaymentRequestController extends Controller
         // Generate auto number
         if(Input::get('auto_number')){
             $sysNo = NumberingSystem::where('doc_id', '4')->first();
-            $code = Utilities::GenerateNumberPurchaseOrder($sysNo->document->code, $sysNo->next_no);
+            $code = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
             $sysNo->next_no++;
             $sysNo->save();
         }

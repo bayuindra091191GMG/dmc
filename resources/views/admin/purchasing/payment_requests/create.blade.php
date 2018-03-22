@@ -190,9 +190,6 @@
                                         <td class='text-center'>
                                             {{ $detail->date_string }}
                                         </td>
-                                        <td>
-                                            {{ $detail->remark }}
-                                        </td>
                                         {{--<td>--}}
                                             {{--<?php $itemId = $detail->id. "#". $detail->code ?>--}}
                                             {{--<a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->code }}">--}}
@@ -259,22 +256,19 @@
                                         {{ $detail->supplier->name }}
                                     </td>
                                     <td class='text-center'>
-                                        {{ $detail->total_price }}
+                                        {{ $detail->total_price_string }}
                                     </td>
                                     <td class='text-center'>
-                                        {{ $detail->total_discount }}
+                                        {{ $detail->total_discount_string  }}
                                     </td>
                                     <td class='text-center'>
-                                        {{ $detail->delivery_fee }}
+                                        {{ $detail->delivery_fee_string  }}
                                     </td>
                                     <td class='text-center'>
-                                        {{ $detail->total_payment }}
+                                        {{ $detail->total_payment_string  }}
                                     </td>
                                     <td class='text-center'>
                                         {{ $detail->date_string }}
-                                    </td>
-                                    <td>
-                                        {{ $detail->remark }}
                                     </td>
                                     {{--<td>--}}
                                         {{--<?php $itemId = $detail->id. "#". $detail->code ?>--}}

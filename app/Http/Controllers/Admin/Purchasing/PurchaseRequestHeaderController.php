@@ -23,8 +23,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-use Yajra\DataTables\DataTables;
 use PDF;
+use Yajra\DataTables\DataTables;
 
 class PurchaseRequestHeaderController extends Controller
 {
@@ -268,7 +268,7 @@ class PurchaseRequestHeaderController extends Controller
      * @throws \Exception
      */
     public function getIndex(Request $request){
-        $purchaseRequests = PurchaseRequestHeader::all();
+        $purchaseRequests = PurchaseRequestHeader::dateDescending()->get();
 
         $mode = 'default';
         if($request->filled('mode')){

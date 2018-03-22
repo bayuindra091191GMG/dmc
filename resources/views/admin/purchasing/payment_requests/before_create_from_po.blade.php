@@ -40,13 +40,13 @@
     {{ Html::script(mix('assets/admin/js/datatables.js')) }}
     <script>
         $(function() {
-            $('#pi-table').DataTable({
+            $('#po-table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
                     url: '{!! route('datatables.purchase_orders') !!}',
                     data: {
-                        'mode': 'before_create',
+                        'mode': 'before_create_po',
                         'supplier': '{{ $supplier->id }}'
                     }
                 },

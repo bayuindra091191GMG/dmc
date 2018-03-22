@@ -62,11 +62,12 @@ class ItemController extends Controller
         $validator = Validator::make($request->all(),[
             'code'          => 'required|max:45|regex:/^\S*$/u|unique:items',
             'name'          => 'required|max:100',
+            'uom'           => 'required|max:30',
             'part_number'   => 'max:45',
             'description'   => 'max:200'
         ],[
-            'code.unique'   => 'Kode barang telah terpakai',
-            'code.regex'    => 'Kode barang harus tanpa spasi'
+            'code.unique'   => 'Kode inventory telah terpakai',
+            'code.regex'    => 'Kode inventory harus tanpa spasi'
         ]);
 
         if ($validator->fails()) {
@@ -117,14 +118,14 @@ class ItemController extends Controller
             'name'                  => $request->input('name'),
             'code'                  => $request->input('code'),
             'part_number'           => $request->input('part_number'),
-            'uom'                => $request->input('uom'),
+            'uom'                   => $request->input('uom'),
             'group_id'              => $request->input('group'),
             'created_by'            => $user->id,
             'created_at'            => $now->toDateTimeString(),
             'machinery_type'        => $request->input('machinery_type')
         ]);
 
-        if(!empty(Input::get('valuation')) && Input::get('valuation') != "0"){
+        if($request->filled('valuation') && $request->input('valuation') != "0"){
             $value = str_replace('.','', Input::get('valuation'));
             $item->value = $value;
         }
@@ -231,6 +232,8 @@ class ItemController extends Controller
     public function destroy(Request $request)
     {
         try{
+            $itemId = $request->input('id');
+
             $isPrUsed = PurchaseRequestDetail::where('item_id', $itemId)->exists();
             $isPoUsed = PurchaseOrderDetail::where('item_id', $itemId)->exists();
             $isGrUsed = ItemReceiptDetail::where('item_id', $itemId)->exists();
@@ -246,12 +249,12 @@ class ItemController extends Controller
                 return Response::json(array('errors' => 'INVALID'));
             }
 
-            $itemStocks = ItemStock::where('item_id', $request->input('id'))->get();
+            $itemStocks = ItemStock::where('item_id', $itemId)->get();
             foreach($itemStocks as $stock){
                 $stock->delete();
             }
 
-            $item = Item::find($request->input('id'));
+            $item = Item::find($itemId);
             $item->delete();
 
             Session::flash('message', 'Berhasil menghapus data barang '. $item->code. ' - '. $item->name);

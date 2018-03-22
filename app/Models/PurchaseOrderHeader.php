@@ -137,7 +137,7 @@ class PurchaseOrderHeader extends Eloquent
     }
 
     public function scopeDateDescending(Builder $query){
-        return $query->orderBy('created_at','DESC');
+        return $query->orderBy('date','DESC');
     }
 
 	public function purchase_request_header()

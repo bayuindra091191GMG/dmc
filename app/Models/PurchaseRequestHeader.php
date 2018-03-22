@@ -8,6 +8,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -66,6 +67,10 @@ class PurchaseRequestHeader extends Eloquent
 		'created_by',
 		'updated_by'
 	];
+
+    public function scopeDateDescending(Builder $query){
+        return $query->orderBy('date','DESC');
+    }
 
     public function getDateStringAttribute(){
         return Carbon::parse($this->attributes['created_at'])->format('d M Y');

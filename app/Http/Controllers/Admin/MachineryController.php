@@ -96,21 +96,23 @@ class MachineryController extends Controller
             return redirect()->back()->withErrors('Pilih merek alat berat!', 'default')->withInput($request->all());
         }
 
+        $user = Auth::user();
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
         $machinery = Machinery::create([
             'code'                  => $request->input('code'),
             'category_id'           => $request->input('machinery_category'),
             'brand_id'              => $request->input('machinery_brand'),
-            'type'               => $request->input('machinery_type'),
+            'type'                  => $request->input('machinery_type'),
             'status_id'             => $request->input('status'),
             'sn_chasis'             => $request->input('sn_chasis'),
             'sn_engine'             => $request->input('sn_engine'),
             'production_year'       => $request->input('production_year'),
             'location'              => $request->input('location'),
             'description'           => $request->input('description'),
-            'created_by'            => 1,
-            'created_at'            => $dateTimeNow->toDateTimeString()
+            'created_by'            => $user->id,
+            'created_at'            => $dateTimeNow->toDateTimeString(),
+            'updated_by'            => $user->id
         ]);
 
         if($request->filled('purchase_date')){
@@ -190,6 +192,7 @@ class MachineryController extends Controller
         $machinery->sn_engine = $request->input('sn_engine');
         $machinery->location = $request->input('location');
         $machinery->production_year = $request->input('production_year');
+        $machinery->status_id = $request->input('status');
         $machinery->updated_at = $dateTimeNow->toDateTimeString();
         $machinery->updated_by = $user->id;
 

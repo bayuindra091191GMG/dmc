@@ -24,7 +24,7 @@
                 <th class="text-center">Part Number</th>
                 <th class="text-center">Satuan Unit</th>
                 <th class="text-center">Total Stock</th>
-                <th class="text-center">Group</th>
+                <th class="text-center">Kategori Inventory</th>
                 <th class="text-center">Tipe Alat Berat</th>
                 <th class="text-center">Deskripsi</th>
                 <th class="text-center">Tanggal Dibuat</th>

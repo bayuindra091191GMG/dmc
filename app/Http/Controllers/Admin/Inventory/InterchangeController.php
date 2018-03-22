@@ -8,9 +8,11 @@
 namespace App\Http\Controllers\Admin\Inventory;
 
 use App\Http\Controllers\Controller;
+use App\Libs\Utilities;
 use App\Models\Group;
 use App\Models\Interchange;
 use App\Models\Item;
+use App\Models\ItemStock;
 use App\Models\Uom;
 use App\Models\Warehouse;
 use App\Transformer\Inventory\InterchangeTransformer;
@@ -44,8 +46,14 @@ class InterchangeController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
-            'name'      => 'required|max:100',
-            'code'     => 'required|max:45'
+            'code'          => 'required|max:45|regex:/^\S*$/u|unique:items',
+            'name'          => 'required|max:100',
+            'uom'           => 'required|max:30',
+            'part_number'   => 'max:45',
+            'description'   => 'max:200'
+        ],[
+            'code.unique'   => 'Kode inventory telah terpakai',
+            'code.regex'    => 'Kode inventory harus tanpa spasi'
         ]);
 
         if ($validator->fails()) {
@@ -55,43 +63,95 @@ class InterchangeController extends Controller
                 ->withInput();
         }
 
-        if(empty(Input::get('item_id_before'))){
-            return redirect()->back()->withErrors('Pilih barang sebelumnya!', 'default')->withInput($request->all());
+        if(!$request->filled('item_id_before')){
+            return redirect()->back()->withErrors('Pilih Inventory sebelumnya!', 'default')->withInput($request->all());
         }
 
-        if(Input::get('warehouse') === '-1'){
-            return redirect()->back()->withErrors('Pilih gudang!', 'default')->withInput($request->all());
+        if($request->input('group') === '-1'){
+            return redirect()->back()->withErrors('Pilih Kategori Inventory!', 'default')->withInput($request->all());
         }
 
-        if(Input::get('uom') === '-1'){
-            return redirect()->back()->withErrors('Pilih uom!', 'default')->withInput($request->all());
+        // Validate warehouse
+        $warehouses = $request->input('warehouse');
+        $qtys = $request->input('qty');
+        $valid = true;
+        $isStock = false;
+        if(count($warehouses) > 0){
+            $idx = 0;
+            foreach($warehouses as $warehouse){
+                if(empty($qtys[$idx])){
+                    $valid = false;
+                }
+                else{
+                    $isStock = true;
+                }
+                $idx++;
+            }
+
+            if(!$valid){
+                return redirect()->back()->withErrors('Detail gudang dan jumlah stok wajib diisi!', 'default')->withInput($request->all());
+            }
         }
 
-        if(Input::get('group') === '-1'){
-            return redirect()->back()->withErrors('Pilih group!', 'default')->withInput($request->all());
+        // Validate duplicated values
+        if($isStock){
+            $valid = Utilities::arrayIsUnique($warehouses);
+            if(!$valid){
+                return redirect()->back()->withErrors('Detail gudang tidak boleh kembar!', 'default')->withInput($request->all());
+            }
         }
 
         $user = Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
         $item = Item::create([
-            'name'          => Input::get('name'),
-            'code'          => Input::get('code'),
-            'uom_id'        => Input::get('uom'),
-            'warehouse_id'  => Input::get('warehouse'),
-            'group_id'      => Input::get('group'),
-            'created_by'    => $user->id,
-            'created_at'    => $now
+            'name'              => $request->input('name'),
+            'code'              => $request->input('code'),
+            'part_number'       => $request->input('part_number'),
+            'uom'               => $request->input('uom'),
+            'machinery_type'    => $request->input('machinery_type'),
+            'group_id'          => $request->input('group'),
+            'created_by'        => $user->id,
+            'created_at'        => $now
         ]);
 
-        if(!empty(Input::get('description'))){
+        if($request->filled('valuation') && $request->input('valuation') != "0"){
+            $value = str_replace('.','', Input::get('valuation'));
+            $item->value = $value;
+        }
+
+        if($request->filled('description')){
             $item->description = Input::get('description');
+        }
+
+        $item->save();
+
+        // Get stock
+        if(count($warehouses) > 0){
+            $idx = 0;
+            $totalStock = 0;
+            foreach($warehouses as $warehouse){
+                if(!empty($warehouse)){
+                    $stock = ItemStock::create([
+                        'item_id'       => $item->id,
+                        'warehouse_id'  => $warehouse,
+                        'stock'         => $qtys[$idx],
+                        'created_by'    => $user->id,
+                        'created_at'    => $now->toDateTimeString()
+                    ]);
+
+                    $totalStock = $totalStock + (int) $qtys[$idx];
+                }
+                $idx++;
+            }
+
+            $item->stock = $totalStock;
             $item->save();
         }
 
         //Create Interchange
         $interchange = Interchange::create([
-            'item_id_before'    => Input::get('item_id_before'),
+            'item_id_before'    => $request->input('item_id_before'),
             'item_id_after'     => $item->id,
             'created_by'        => $user->id,
             'created_at'        => $now
@@ -105,7 +165,7 @@ class InterchangeController extends Controller
     public function getIndex(){
         $items = Interchange::all();
         return DataTables::of($items)
-            ->setTransformer(new InterchangeTransformer())
+            ->setTransformer(new InterchangeTransformer)
             ->addIndexColumn()
             ->make(true);
     }
