@@ -127,7 +127,7 @@
 
                 <hr>
 
-                @php($i++)
+                @php($i = 0)
                 @if($flag == "pi")
                     <div class="form-group">
                         <label class="text-center col-lg-12 col-md-12 col-xs-12">Detil Purchase Invoice</label>
