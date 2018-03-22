@@ -156,28 +156,28 @@
                                                 {{ $i }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $detail->code }}
+                                                {{ $detail->purchase_invoice_header->code }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $detail->purchase_order_header->code }}
+                                                {{ $detail->purchase_invoice_header->purchase_order_header->code }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $detail->purchase_order_header->supplier->name }}
+                                                {{ $detail->purchase_invoice_header->purchase_order_header->supplier->name }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $detail->total_price_string }}
+                                                {{ $detail->purchase_invoice_header->total_price_string }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $detail->total_discount_string }}
+                                                {{ $detail->purchase_invoice_header->total_discount_string }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $detail->delivery_fee_string }}
+                                                {{ $detail->purchase_invoice_header->delivery_fee_string }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $detail->total_payment_string }}
+                                                {{ $detail->purchase_invoice_header->total_payment_string }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $detail->date_string }}
+                                                {{ $detail->purchase_invoice_header->date_string }}
                                             </td>
                                         </tr>
                                         @php($i++)
@@ -217,31 +217,31 @@
                                                 {{ $i }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $detail->code }}
+                                                {{ $detail->purchase_order_header->code }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $detail->purchase_request->code }}
+                                                {{ $detail->purchase_order_header->purchase_request->code }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $detail->supplier->name }}
+                                                {{ $detail->purchase_order_header->supplier->name }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $detail->total_price_string }}
+                                                {{ $detail->purchase_order_header->total_price_string }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $detail->total_discount_string }}
+                                                {{ $detail->purchase_order_header->total_discount_string }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $detail->delivery_fee_string }}
+                                                {{ $detail->purchase_order_header->delivery_fee_string }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $detail->total_payment_string }}
+                                                {{ $detail->purchase_order_header->total_payment_string }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $detail->date_string }}
+                                                {{ $detail->purchase_order_header->date_string }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $detail->status->description }}
+                                                {{ $detail->purchase_order_header->status->description }}
                                             </td>
                                         </tr>
                                         @php($i++)

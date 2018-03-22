@@ -229,8 +229,8 @@ class PaymentRequestController extends Controller
     public function show(PaymentRequest $paymentRequest){
         $date = Carbon::parse($paymentRequest->date)->format('d M Y');
 
-        $purchaseInvoices = PurchaseInvoiceHeader::where('payment_requests_id', $paymentRequest->id)->get();
-        $purchaseOrders = PurchaseOrderHeader::where('payment_requests_id', $paymentRequest->id)->get();
+        $purchaseInvoices = PaymentRequestsPiDetail::where('payment_requests_id', $paymentRequest->id)->get();
+        $purchaseOrders = PaymentRequestsPoDetail::where('payment_requests_id', $paymentRequest->id)->get();
 
         $flag = "po";
         if($purchaseInvoices != null){
