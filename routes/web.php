@@ -335,9 +335,15 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('payment_requests/detil/{payment_request}', 'Purchasing\PaymentRequestController@show')->name('payment_requests.show');
     Route::get('payment_requests/{payment_request}/ubah', 'Purchasing\PaymentRequestController@edit')->name('payment_requests.edit');
     Route::put('payment_requests/ubah/{payment_request}', 'Purchasing\PaymentRequestController@update')->name('payment_requests.update');
+
     Route::get('payment_requests/pilihvendor', 'Purchasing\PaymentRequestController@chooseVendor')->name('payment_requests.choose-vendor');
     Route::get('payment_requests/pilihpi', 'Purchasing\PaymentRequestController@beforeCreateFromPi')->name('payment_requests.before_create_pi');
     Route::post('payment_requests/tambahdaripi', 'Purchasing\PaymentRequestController@createFromPi')->name('payment_requests.create-from-pi');
+
+    Route::get('payment_requests/pilihvendorpo', 'Purchasing\PaymentRequestController@chooseVendorPo')->name('payment_requests.choose-vendor-po');
+    Route::get('payment_requests/pilihpo', 'Purchasing\PaymentRequestController@beforeCreateFromPo')->name('payment_requests.before_create_po');
+    Route::post('payment_requests/tambahdaripo', 'Purchasing\PaymentRequestController@createFromPo')->name('payment_requests.create-from-po');
+
     Route::post('payment_requests/simpan', 'Purchasing\PaymentRequestController@store')->name('payment_requests.store');
     Route::get('payment_requests/report', 'Purchasing\PaymentRequestController@report')->name('payment_requests.report');
     Route::post('payment_requests/download_report', 'Purchasing\PaymentRequestController@downloadReport')->name('payment_requests.download-report');

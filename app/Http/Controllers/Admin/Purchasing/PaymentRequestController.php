@@ -13,6 +13,8 @@ use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
 use App\Models\NumberingSystem;
 use App\Models\PaymentRequest;
+use App\Models\PaymentRequestsPiDetail;
+use App\Models\PaymentRequestsPoDetail;
 use App\Models\PurchaseInvoiceHeader;
 use App\Models\PurchaseOrderDetail;
 use App\Models\PurchaseOrderHeader;
@@ -41,6 +43,10 @@ class PaymentRequestController extends Controller
         return View('admin.purchasing.payment_requests.choose_vendor');
     }
 
+    public function chooseVendorPo(){
+        return View('admin.purchasing.payment_requests.choose_vendor_po');
+    }
+
     public function beforeCreateFromPi(){
         $supplier = null;
         if(!empty(request()->supplier)){
@@ -50,15 +56,13 @@ class PaymentRequestController extends Controller
         return View('admin.purchasing.payment_requests.before_create_from_pi', compact('supplier'));
     }
 
-    public function show(PurchaseOrderHeader $purchase_order){
-        $date = Carbon::parse($purchase_order->date)->format('d M Y');
+    public function beforeCreateFromPo(){
+        $supplier = null;
+        if(!empty(request()->supplier)){
+            $supplier = Supplier::find(request()->supplier);
+        }
 
-        $data = [
-            'header'    => $purchase_order,
-            'date'      => $date
-        ];
-
-        return View('admin.purchasing.payment_requests.show')->with($data);
+        return View('admin.purchasing.payment_requests.before_create_from_po', compact('supplier'));
     }
 
     public function createFromPi(Request $request){
@@ -82,12 +86,36 @@ class PaymentRequestController extends Controller
         return View('admin.purchasing.payment_requests.create')->with($data);
     }
 
+    public function createFromPo(Request $request){
+        $ids = $request->input('ids');
+        $purchaseOrders = [];
+
+        foreach($ids as $id){
+            $temp = PurchaseOrderHeader::find($id);
+            $purchaseOrders[] = [$temp];
+        }
+
+        // Numbering System
+        $sysNo = NumberingSystem::where('doc_id', '7')->first();
+        $autoNumber = Utilities::GenerateNumberPurchaseOrder('PMT', $sysNo->next_no);
+
+        $data = [
+            'purchaseOrders'   => $purchaseOrders,
+            'autoNumber'        => $autoNumber
+        ];
+
+        return View('admin.purchasing.payment_requests.create')->with($data);
+    }
+
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
-            'po_code'       => 'max:45|regex:/^\S*$/u',
-            'date'          => 'required'
+            'code'          => 'max:45|regex:/^\S*$/u',
+            'bank_name'     => 'required',
+            'account_no'    => 'required',
+            'account_name'  => 'required',
+            'date'          => 'required',
         ],[
-            'po_code.regex'     => 'Nomor PO harus tanpa spasi!'
+            'code.regex'     => 'Nomor PO harus tanpa spasi!'
         ]);
 
         if ($validator->fails()) {
@@ -97,169 +125,120 @@ class PaymentRequestController extends Controller
                 ->withInput();
         }
 
-        // Validate PO number
-        if(empty(Input::get('auto_number')) && (empty(Input::get('po_code')) || Input::get('po_code') == "")){
+        // Validate Payment Request number
+        if(empty(Input::get('auto_number')) && (empty(Input::get('code')) || Input::get('code') == "")){
             return redirect()->back()->withErrors('Nomor PO wajib diisi!', 'default')->withInput($request->all());
         }
 
-        // Validate PR number
-        if(empty(Input::get('pr_code')) && empty(Input::get('pr_id'))){
-            return redirect()->back()->withErrors('Nomor PR wajib diisi!', 'default')->withInput($request->all());
-        }
-
         // Generate auto number
-        $poCode = 'default';
         if(Input::get('auto_number')){
             $sysNo = NumberingSystem::where('doc_id', '4')->first();
-            $poCode = Utilities::GenerateNumberPurchaseOrder($sysNo->document->code, $sysNo->next_no);
+            $code = Utilities::GenerateNumberPurchaseOrder($sysNo->document->code, $sysNo->next_no);
             $sysNo->next_no++;
             $sysNo->save();
         }
         else{
-            $poCode = Input::get('po_code');
-        }
-
-        // Get PR id
-        $prId = '0';
-        if($request->filled('pr_code')){
-            $prId = $request->input('pr_code');
-        }
-        else{
-            $prId = $request->input('pr_id');
+            $code = Input::get('code');
         }
 
         // Check existing number
-        $temp = PurchaseOrderHeader::where('code', $poCode)->first();
+        $temp = PaymentRequest::where('code', $code)->first();
         if(!empty($temp)){
-            return redirect()->back()->withErrors('Nomor PO sudah terdaftar!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Nomor Payment Request sudah terdaftar!', 'default')->withInput($request->all());
         }
 
-        // Validate details
-        $items = $request->input('item_value');
-        $qtys = $request->input('qty');
-        $prices = $request->input('price');
-        $valid = true;
-        $i = 0;
-        foreach($items as $item){
-            if(empty($item)) $valid = false;
-            if(empty($qtys[$i]) || $qtys[$i] == '0') $valid = false;
-            if(empty($prices[$i]) || $prices[$i] == '0') $valid = false;
-            $i++;
-        }
+        $ids = $request->input('item');
+        $flag = $request->input('flag');
+        $ppn = 0;
+        $pph_23 = 0;
+        $total_amount = 0;
+        $amount = 0;
+        $purchaseInvoices = [];
+        $purchaseOrders = [];
 
-        if(!$valid){
-            return redirect()->back()->withErrors('Detail barang, jumlah dan harga wajib diisi!', 'default')->withInput($request->all());
+        if($flag == "pi"){
+            foreach($ids as $id){
+                $temp = PurchaseInvoiceHeader::find($id);
+                $detailItem[] = [$temp];
+                $ppn += $temp->ppn_amount;
+                $pph_23 += $temp->pph_amount;
+                $amount += $temp->total_price;
+                $total_amount += $temp->total_payment;
+            }
+        }
+        else{
+            foreach($ids as $id){
+                $temp = PurchaseOrderHeader::find($id);
+                $detailItem[] = [$temp];
+                $ppn += $temp->ppn_amount;
+                $pph_23 += $temp->pph_amount;
+                $amount += $temp->total_price;
+                $total_amount += $temp->total_payment;
+            }
         }
 
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
 
-        $poHeader = PurchaseOrderHeader::create([
-            'code'                  => $poCode,
-            'purchase_request_id'   => $prId,
-            'supplier_id'           => $request->input('supplier'),
-            'status_id'             => 3,
-            'created_by'            => $user->id,
-            'created_at'            => $now->toDateTimeString()
+        $paymentRequest = PaymentRequest::create([
+            'code'                      => $code,
+            'date'                      => $date,
+            'amount'                    => $amount,
+            'total_amount'              => $total_amount,
+            'requester_bank_name'       => $request->input('bank_name'),
+            'requester_bank_account'    => $request->input('account_no'),
+            'requester_account_name'    => $request->input('account_name'),
+            'note'                      => $request->input('note'),
+            'type'                      => $request->input('type'),
+            'status_id'                 => 3,
+            'created_by'                => $user->id,
+            'created_at'                => $now->toDateTimeString()
         ]);
 
-        $delivery = 0;
-        if($request->filled('delivery_fee') && $request->input('delivery_fee') != '0'){
-            $deliveryFee = str_replace('.','', $request->input('delivery_fee'));
-            $delivery = (double) $deliveryFee;
-            $poHeader->delivery_fee = $deliveryFee;
-        }
-
-        if($request->filled('pr_code')){
-            $poHeader->purchase_request_id = $request->input('pr_code');
+        //Check if DP or CBD
+        $type = $request->input('type');
+        if($type == "db" || $type == "cbd"){
+            $paymentRequest->ppn = 0;
+            $paymentRequest->pph_23 = 0;
         }
         else{
-            $poHeader->purchase_request_id = $request->input('pr_id');
+            $paymentRequest->ppn = $ppn;
+            $paymentRequest->pph_23 = $pph_23;
         }
 
-        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
-        $poHeader->date = $date->toDateTimeString();
+        $paymentRequest->save();
 
-        $poHeader->save();
-
-        // Create po detail
-        $totalPrice = 0;
-        $totalDiscount = 0;
-        $totalPayment = 0;
-        $discounts = Input::get('discount');
-        $remarks = Input::get('remark');
-        $idx = 0;
-
-        foreach($items as $item){
-            if(!empty($item)){
-                $priceStr = str_replace('.','', $prices[$idx]);
-                $price = (double) $priceStr;
-                $qty = (double) $qtys[$idx];
-                $poDetail = PurchaseOrderDetail::create([
-                    'header_id'     => $poHeader->id,
-                    'item_id'       => $item,
-                    'quantity'      => $qty,
-                    'price'         => $priceStr
+        // Create Payment Request detail
+        if($flag == "pi"){
+            foreach($purchaseInvoices as $detail){
+                //create detail
+                $prDetail = PaymentRequestsPiDetail::create([
+                    'payment_requests_id'           => $paymentRequest->id,
+                    'purchase_invoice_header_id'    => $detail->id
                 ]);
 
-                // Check discount
-                if(!empty($discounts[$idx]) && $discounts[$idx] !== '0'){
-                    $poDetail->discount = $discounts[$idx];
-
-                    $discount = (double) $discounts[$idx];
-                    $discountAmount = ($qty * $price) * $discount / 100;
-                    $poDetail->subtotal = ($qty * $price) - $discountAmount;
-
-                    // Accumulate total price
-                    $totalPrice += $qty * $price;
-
-                    // Accumulate total discount
-                    $totalDiscount += $discountAmount;
-                }
-                else{
-                    $poDetail->subtotal = $qty * $price;
-                    $totalPrice += $qty * $price;
-                }
-
-                if(!empty($remarks[$idx])) $poDetail->remark = $remarks[$idx];
-                $poDetail->save();
-
-                // Accumulate subtotal
-                $totalPayment += $poDetail->subtotal;
+                $prDetail->save();
             }
-            $idx++;
+        }
+        else{
+            foreach($purchaseOrders as $detail){
+                //create detail
+                $prDetail = PaymentRequestsPoDetail::create([
+                    'payment_requests_id'  => $paymentRequest->id,
+                    'purchase_order_id'    => $detail->id
+                ]);
+
+                $prDetail->save();
+            }
         }
 
-        if($totalDiscount > 0) $poHeader->total_discount = $totalDiscount;
-        $totalPayment += $delivery;
-        $poHeader->total_price = $totalPrice;
+        Session::flash('message', 'Berhasil membuat Payment Request!');
 
-        // Save total payment without tax
-        $poHeader->total_payment_before_tax = $totalPayment;
-
-        // Get PPN & PPh
-        $ppnAmount = 0;
-        if($request->filled('ppn') && $request->input('ppn') != '0'){
-            $ppnAmount = $totalPayment * (10 / 100);
-            $poHeader->ppn_percent = 10;
-            $poHeader->ppn_amount = $ppnAmount;
-        }
-        $pphAmount = 0;
-        if($request->filled('pph') && $request->input('pph') != '0'){
-            $pph = str_replace('.','', $request->input('pph'));
-            $pphAmount = (double) $pph;
-            $poHeader->pph_amount = $pphAmount;
-        }
-
-        $poHeader->total_payment = $totalPayment + $ppnAmount - $pphAmount;
-        $poHeader->save();
-
-        Session::flash('message', 'Berhasil membuat purchase order!');
-
-        return redirect()->route('admin.purchase_orders.show', ['purchase_order' => $poHeader]);
+        return redirect()->route('admin.payment_requests.show', ['payment_request' => $paymentRequest]);
     }
 
-    public function edit(PurchaseOrderHeader $purchase_order){
+    public function show(PurchaseOrderHeader $purchase_order){
         $date = Carbon::parse($purchase_order->date)->format('d M Y');
 
         $data = [
@@ -267,71 +246,7 @@ class PaymentRequestController extends Controller
             'date'      => $date
         ];
 
-        return View('admin.purchasing.purchase_orders.edit')->with($data);
-    }
-
-    public function update(Request $request, PurchaseOrderHeader $purchase_order){
-        $validator = Validator::make($request->all(),[
-            'date'          => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                ->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        if($request->filled('pr_code')) $purchase_order->purchase_request_id = Input::get('pr_code');
-        if($request->filled('supplier')) $purchase_order->supplier_id = Input::get('supplier');
-
-        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
-        $purchase_order->date = $date->toDateTimeString();
-
-        $totalPaymentWithoutTax = $purchase_order->total_payment_before_tax;
-
-        $oldDelivery = $purchase_order->delivery_fee ?? 0;
-        $newDelivery = 0;
-        if($request->filled('delivery_fee') && $request->input('delivery_fee') != '0'){
-            $deliveryFee = str_replace('.','', $request->input('delivery_fee'));
-            $newDelivery = (double) $deliveryFee;
-            $purchase_order->delivery_fee = $deliveryFee;
-        }
-        else{
-            $purchase_order->delivery_fee = null;
-        }
-        $totalPayment = $totalPaymentWithoutTax - $oldDelivery + $newDelivery;
-        $purchase_order->total_payment_before_tax = $totalPayment;
-
-        // Get PPN & PPh
-        $ppnAmount = 0;
-        if($request->filled('ppn')){
-            $ppnAmount = $totalPayment * (10 / 100);
-            $purchase_order->ppn_percent = 10;
-            $purchase_order->ppn_amount = $ppnAmount;
-        }
-        else{
-            $purchase_order->ppn_percent = null;
-            $purchase_order->ppn_amount = null;
-        }
-
-        $pphAmount = 0;
-        if($request->filled('pph')){
-            $pph = str_replace('.','', $request->input('pph'));
-            $pphAmount = (double) $pph;
-            $purchase_order->pph_amount = $pphAmount;
-        }
-        else{
-            $purchase_order->pph_percent = null;
-            $purchase_order->pph_amount = null;
-        }
-
-        $purchase_order->total_payment = $totalPayment + $ppnAmount - $pphAmount;
-        $purchase_order->save();
-
-        Session::flash('message', 'Berhasil ubah purchase order!');
-
-        return redirect()->route('admin.purchase_orders.show', ['purchase_order' => $purchase_order]);
+        return View('admin.purchasing.payment_requests.show')->with($data);
     }
 
     public function report(){
@@ -400,38 +315,5 @@ class PaymentRequestController extends Controller
         $filename = $purchaseOrder->code. '_' . $now->toDateTimeString();
 
         return $pdf->download($filename.'.pdf');
-    }
-
-    public function getPurchaseOrders(Request $request){
-        $term = trim($request->q);
-        $purchase_requests = PurchaseOrderHeader::where('status_id', 3)
-            ->where('code', 'LIKE', '%'. $term. '%')
-            ->get();
-
-        $formatted_tags = [];
-
-        foreach ($purchase_requests as $purchase_request) {
-            $formatted_tags[] = ['id' => $purchase_request->id, 'text' => $purchase_request->code];
-        }
-
-        return \Response::json($formatted_tags);
-    }
-
-    public function getInvoices(Request $request){
-        try{
-            $mode = 'default';
-            if($request->filled('mode')){
-                $mode = $request->input('mode');
-            }
-
-            $purchaseOrders = PurchaseInvoiceHeader::dateDescending()->get();
-            return DataTables::of($purchaseOrders)
-                ->setTransformer(new PurchaseInvoiceTransformer($mode))
-                ->addIndexColumn()
-                ->make(true);
-        }
-        catch(\Exception $ex){
-            error_log($ex);
-        }
     }
 }

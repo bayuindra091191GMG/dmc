@@ -8,6 +8,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -70,6 +71,7 @@ class PaymentRequest extends Eloquent
 		'requester_account_name',
 		'is_installment',
 		'note',
+        'type',
 		'status_id',
 		'created_by',
 		'updated_by'
@@ -77,6 +79,10 @@ class PaymentRequest extends Eloquent
 
     public function getDateStringAttribute(){
         return Carbon::parse($this->attributes['created_at'])->format('d M Y');
+    }
+
+    public function scopeDateDescending(Builder $query){
+        return $query->orderBy('date','DESC');
     }
 
     public function createdBy()

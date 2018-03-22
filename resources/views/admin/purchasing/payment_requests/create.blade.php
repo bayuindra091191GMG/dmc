@@ -45,6 +45,31 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="type" >
+                    Tipe Payment
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <select id="type" name="type" class="form-control col-md-7 col-xs-12 @if($errors->has('type')) parsley-error @endif">
+                        <option value="default">Default</option>
+                        <option value="dp">Down Payment (DP)</option>
+                        <option value="cbd">Cash Before Delivery (CBD)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
+                    Tanggal
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
+                           name="date" value="{{ old('date') }}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="bank_name" >
                     Nama Bank
                     <span class="required">*</span>
@@ -96,43 +121,128 @@
                 <div class="col-lg-12 col-md-12 col-xs-12 box-section">
                     <table class="table table-bordered table-hover" id="detail_table">
                         <thead>
-                        <tr >
-                            <th class="text-center">
-                                No
-                            </th>
-                            <th class="text-center" style="width: 10%">
-                                Nomor Invoice
-                            </th>
-                            <th class="text-center" style="width: 10%">
-                                Nomor PO
-                            </th>
-                            <th class="text-center" style="width: 10%">
-                                Nama Vendor
-                            </th>
-                            <th class="text-center" style="width: 10%">
-                                Total Harga
-                            </th>
-                            <th class="text-center" style="width: 10%">
-                                Total Diskon
-                            </th>
-                            <th class="text-center" style="width: 10%">
-                                Ongkos Kirim
-                            </th>
-                            <th class="text-center" style="width: 10%">
-                                Total Invoice
-                            </th>
-                            <th class="text-center" style="width: 10%">
-                                Tanggal
-                            </th>
-                            <th class="text-center" style="width: 10%">
-                                Tindakan
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php $idx = 0; ?>
                         @if(!empty($purchaseInvoices))
-                            @foreach($purchaseInvoices as $detail)
+                            <input type="hidden" value="pi" name="flag" />
+                            <tr >
+                                <th class="text-center">
+                                    No
+                                </th>
+                                <th class="text-center" style="width: 10%">
+                                    Nomor Invoice
+                                </th>
+                                <th class="text-center" style="width: 10%">
+                                    Nomor PO
+                                </th>
+                                <th class="text-center" style="width: 10%">
+                                    Nama Vendor
+                                </th>
+                                <th class="text-center" style="width: 10%">
+                                    Total Harga
+                                </th>
+                                <th class="text-center" style="width: 10%">
+                                    Total Diskon
+                                </th>
+                                <th class="text-center" style="width: 10%">
+                                    Ongkos Kirim
+                                </th>
+                                <th class="text-center" style="width: 10%">
+                                    Total Invoice
+                                </th>
+                                <th class="text-center" style="width: 10%">
+                                    Tanggal
+                                </th>
+                                {{--<th class="text-center" style="width: 10%">--}}
+                                    {{--Tindakan--}}
+                                {{--</th>--}}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php $idx = 0; ?>
+
+                                @foreach($purchaseInvoices as $detail)
+                                    <?php $idx++; ?>
+                                    <tr class='item{{ $idx }}'>
+                                        <td class='text-center'>
+                                            {{ $idx }}
+                                        </td>
+                                        <td class='text-center'>
+                                            {{ $detail->code }}
+                                            <input type='hidden' name='item[]' value='{{ $detail->id }}'/>
+                                        </td>
+                                        <td class='text-center'>
+                                            {{ $detail->purchase_order_header->code }}
+                                        </td>
+                                        <td class='text-center'>
+                                            {{ $detail->purchase_order_header->supplier->name }}
+                                        </td>
+                                        <td class='text-center'>
+                                            {{ $detail->total_price }}
+                                        </td>
+                                        <td class='text-center'>
+                                            {{ $detail->total_discount }}
+                                        </td>
+                                        <td class='text-center'>
+                                            {{ $detail->delivery_fee }}
+                                        </td>
+                                        <td class='text-center'>
+                                            {{ $detail->total_payment }}
+                                        </td>
+                                        <td class='text-center'>
+                                            {{ $detail->date_string }}
+                                        </td>
+                                        <td>
+                                            {{ $detail->remark }}
+                                        </td>
+                                        {{--<td>--}}
+                                            {{--<?php $itemId = $detail->id. "#". $detail->code ?>--}}
+                                            {{--<a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->code }}">--}}
+                                                {{--<span class="glyphicon glyphicon-trash"></span>--}}
+                                            {{--</a>--}}
+                                        {{--</td>--}}
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        @endif
+                        @if(!empty($purchaseOrders))
+                            <thead>
+                            <input type="hidden" value="po" name="flag" />
+                            <tr >
+                                <th class="text-center">
+                                    No
+                                </th>
+                                <th class="text-center" style="width: 10%">
+                                    Nomor PO
+                                </th>
+                                <th class="text-center" style="width: 10%">
+                                    Nomor PR
+                                </th>
+                                <th class="text-center" style="width: 10%">
+                                    Nama Vendor
+                                </th>
+                                <th class="text-center" style="width: 10%">
+                                    Total Harga
+                                </th>
+                                <th class="text-center" style="width: 10%">
+                                    Total Diskon
+                                </th>
+                                <th class="text-center" style="width: 10%">
+                                    Ongkos Kirim
+                                </th>
+                                <th class="text-center" style="width: 10%">
+                                    Total PO
+                                </th>
+                                <th class="text-center" style="width: 10%">
+                                    Tanggal
+                                </th>
+                                {{--<th class="text-center" style="width: 10%">--}}
+                                    {{--Tindakan--}}
+                                {{--</th>--}}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php $idx = 0; ?>
+
+                            @foreach($purchaseOrders as $detail)
                                 <?php $idx++; ?>
                                 <tr class='item{{ $idx }}'>
                                     <td class='text-center'>
@@ -143,10 +253,10 @@
                                         <input type='hidden' name='item[]' value='{{ $detail->id }}'/>
                                     </td>
                                     <td class='text-center'>
-                                        {{ $detail->purchase_order_header->code }}
+                                        {{ $detail->purchase_request_header->code }}
                                     </td>
                                     <td class='text-center'>
-                                        {{ $detail->purchase_order_header->supplier->name }}
+                                        {{ $detail->supplier->name }}
                                     </td>
                                     <td class='text-center'>
                                         {{ $detail->total_price }}
@@ -165,18 +275,16 @@
                                     </td>
                                     <td>
                                         {{ $detail->remark }}
-                                        <input type='hidden' name='remark[]' value='$detail->remark'/>
                                     </td>
-                                    <td>
-                                        <?php $itemId = $detail->id. "#". $detail->code ?>
-                                        <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail>code }}">
-                                            <span class="glyphicon glyphicon-trash"></span>
-                                        </a>
-                                    </td>
+                                    {{--<td>--}}
+                                        {{--<?php $itemId = $detail->id. "#". $detail->code ?>--}}
+                                        {{--<a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->code }}">--}}
+                                            {{--<span class="glyphicon glyphicon-trash"></span>--}}
+                                        {{--</a>--}}
+                                    {{--</td>--}}
                                 </tr>
                             @endforeach
                         @endif
-                        </tbody>
                     </table>
                 </div>
             </div>
@@ -185,7 +293,7 @@
 
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a class="btn btn-danger" href="{{ route('admin.delivery_orders') }}"> Batal</a>
+                    <a class="btn btn-danger" href="{{ route('admin.payment_requests') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>
@@ -193,44 +301,45 @@
         </div>
     </div>
 
-    <!-- Modal form to delete a form -->
-    <div id="deleteModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h4 class="modal-title"></h4>
-                </div>
-                <div class="modal-body">
-                    <h3 class="text-center">Apakah anda yakin ingin menghapus detail ini?</h3>
-                    <br />
-                    <form class="form-horizontal" role="form">
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="item_delete">Code:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="item_delete" disabled>
-                            </div>
-                        </div>
-                        <input type="hidden" name="deleted_id"/>
-                    </form>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger delete" data-dismiss="modal">
-                            <span id="" class='glyphicon glyphicon-trash'></span> Hapus
-                        </button>
-                        <button type="button" class="btn btn-warning" data-dismiss="modal">
-                            <span class='glyphicon glyphicon-remove'></span> Batal
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {{--<!-- Modal form to delete a form -->--}}
+    {{--<div id="deleteModal" class="modal fade" role="dialog">--}}
+        {{--<div class="modal-dialog">--}}
+            {{--<div class="modal-content">--}}
+                {{--<div class="modal-header">--}}
+                    {{--<button type="button" class="close" data-dismiss="modal">×</button>--}}
+                    {{--<h4 class="modal-title"></h4>--}}
+                {{--</div>--}}
+                {{--<div class="modal-body">--}}
+                    {{--<h3 class="text-center">Apakah anda yakin ingin menghapus detail ini?</h3>--}}
+                    {{--<br />--}}
+                    {{--<form class="form-horizontal" role="form">--}}
+                        {{--<div class="form-group">--}}
+                            {{--<label class="control-label col-sm-2" for="item_delete">Code:</label>--}}
+                            {{--<div class="col-sm-10">--}}
+                                {{--<input type="text" class="form-control" id="item_delete" disabled>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<input type="hidden" name="deleted_id"/>--}}
+                    {{--</form>--}}
+                    {{--<div class="modal-footer">--}}
+                        {{--<button type="button" class="btn btn-danger delete" data-dismiss="modal">--}}
+                            {{--<span id="" class='glyphicon glyphicon-trash'></span> Hapus--}}
+                        {{--</button>--}}
+                        {{--<button type="button" class="btn btn-warning" data-dismiss="modal">--}}
+                            {{--<span class='glyphicon glyphicon-remove'></span> Batal--}}
+                        {{--</button>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
 
 @endsection
 
 @section('styles')
     @parent
     {{ Html::style(mix('assets/admin/css/select2.css')) }}
+    {{ Html::style(mix('assets/admin/css/bootstrap-datetimepicker.css')) }}
     <style>
         .box-section{
             background-color: #ffffff;
@@ -246,7 +355,12 @@
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
     {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
     {{ Html::script(mix('assets/admin/js/stringbuilder.js')) }}
+    {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
     <script type="text/javascript">
+        $('#date').datetimepicker({
+            format: "DD MMM Y"
+        });
+
         // Auto Numbering
         $('#auto_number').change(function(){
             if(this.checked){
@@ -259,278 +373,18 @@
             }
         });
 
-        @if(!empty($purchaseRequest))
-        $('#pr_code').select2({
-            placeholder: {
-                id: '{{ $purchaseRequest->id }}',
-                text: '{{ $purchaseRequest->code }}'
-            },
-            width: '100%',
-            minimumInputLength: 1,
-            allowClear: true,
-            ajax: {
-                url: '{{ route('select.purchase_requests') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                }
-            }
-        });
-        @else
-        $('#pr_code').select2({
-            placeholder: {
-                id: '-1',
-                text: 'Pilih Nomor PR...'
-            },
-            width: '100%',
-            minimumInputLength: 1,
-            allowClear: true,
-            ajax: {
-                url: '{{ route('select.purchase_requests') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                }
-            }
-        });
-        @endif
-
-        // Get machinery data
-        $('#machinery').select2({
-            placeholder: {
-                id: '-1',
-                text: 'Pilih Alat Berat...'
-            },
-            width: '100%',
-            minimumInputLength: 1,
-            allowClear: true,
-            ajax: {
-                url: '{{ route('select.machineries') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                }
-            }
-        });
-
-        // Get selected PR data
-        $(document).on('click', '.get-pr-data', function(){
-            var url = '{{ route('admin.delivery_orders.create') }}';
-            if($('#pr_code').val() && $('#pr_code').val() !== ""){
-                url += "?pr=" + $('#pr_code').val();
-                window.location = url;
-            }
-            else{
-                if($('#pr_id').val() && $('#pr_id').val() !== ""){
-                    url += "?pr=" + $('#pr_id').val();
-                    window.location = url;
-                }
-            }
-        });
-
-        // Clear selected PR data
-        $(document).on('click', '.clear-pr-data', function(){
-            var url = '{{ route('admin.delivery_orders.create') }}';
-            window.location = url;
-        });
-
-        // Add new detail
-        $(document).on('click', '.add-modal', function() {
-            $('#item_add').select2({
-                placeholder: {
-                    id: '-1',
-                    text: 'Pilih barang...'
-                },
-                width: '100%',
-                minimumInputLength: 1,
-                ajax: {
-                    url: '{{ route('select.extended_items') }}',
-                    dataType: 'json',
-                    data: function (params) {
-                        return {
-                            q: $.trim(params.term)
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: data
-                        };
-                    }
-                }
-            });
-
-            $('.modal-title').text('Tambah Detail');
-            $('#addModal').modal({
-                backdrop: 'static',
-                keyboard: false
-            });
-        });
-        $('.modal-footer').on('click', '.add', function() {
-            var qtyAdd = $('#qty_add').val();
-            var itemAdd = $('#item_add').val();
-
-            if(!itemAdd || itemAdd === ""){
-                alert('Mohon pilih barang...');
-                return false;
-            }
-
-            if(!qtyAdd || qtyAdd === "" || qtyAdd === "0"){
-                alert('Mohon isi jumlah...')
-                return false;
-            }
-
-            var remarkAdd = $('#remark_add').val();
-
-            // Split item value
-            var splitted = itemAdd.split('#');
-
-            // Increase idx
-            var idx = $('#index_counter').val();
-            idx++;
-            $('#index_counter').val(idx);
-
-            var sbAdd = new stringbuilder();
-
-            sbAdd.append("<tr class='item" + idx + "'>");
-            sbAdd.append("<td class='text-center'>" + idx + "</td>");
-
-            sbAdd.append("<td class='text-center'>" + splitted[1]);
-            sbAdd.append("<input type='hidden' name='item[]' value='" + splitted[0] + "'/></td>");
-
-            sbAdd.append("<td class='text-center'>" + splitted[2] + "</td>");
-
-            sbAdd.append("<td class='text-center'>" + qtyAdd);
-            sbAdd.append("<input type='hidden' name='qty[]' value='" + qtyAdd + "'/></td>");
-
-            sbAdd.append("<td class='text-center'>" + splitted[3] + "</td>");
-
-            sbAdd.append("<td>" + remarkAdd);
-            sbAdd.append("<input type='hidden' name='remark[]' value='" + remarkAdd + "'/></td>");
-
-            sbAdd.append("<td>");
-            sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd + "'><span class='glyphicon glyphicon-edit'></span></a>");
-            sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd + "'><span class='glyphicon glyphicon-trash'></span></a>");
-            sbAdd.append("</td>");
-            sbAdd.append("</tr>");
-
-            $('#detail_table').append(sbAdd.toString());
-
-            // Reset add form modal
-            $('#qty_add').val('');
-            $('#remark_add').val('');
-            $('#item_add').val(null).trigger('change');
-        });
-
-        // Edit detail
-        $(document).on('click', '.edit-modal', function() {
-            id = $(this).data('id');
-
-            $('.modal-title').text('Ubah Detail');
-
-            $('#item_old_value').val($(this).data('item-id'));
-            $('#item_edit').select2({
-                placeholder: {
-                    id: $(this).data('item-id'),
-                    text: $(this).data('item-text')
-                },
-                width: '100%',
-                minimumInputLength: 1,
-                ajax: {
-                    url: '{{ route('select.extended_items') }}',
-                    dataType: 'json',
-                    data: function (params) {
-                        return {
-                            q: $.trim(params.term)
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: data
-                        };
-                    }
-                }
-            });
-
-            $('#qty_edit').val($(this).data('qty'));
-            $('#remark_edit').val($(this).data('remark'));
-            $('#editModal').modal('show');
-        });
-        $('.modal-footer').on('click', '.edit', function() {
-            var itemEdit = $('#item_edit').val();
-            var qtyEdit = $('#qty_edit').val();
-            var remarkEdit = $('#remark_edit').val();
-
-            // Split item value
-            var data = "default";
-            if(itemEdit && itemEdit !== ''){
-                data = itemEdit;
-            }
-            else {
-                data = $('#item_old_value').val();
-            }
-
-            var splitted = data.split('#');
-
-            var sbEdit = new stringbuilder();
-
-            sbEdit.append("<tr class='item" + id + "'>");
-            sbEdit.append("<td class='text-center'>" + id + "</td>");
-
-            sbEdit.append("<td class='text-center'>" + splitted[1]);
-            sbEdit.append("<input type='hidden' name='item[]' value='" + splitted[0] + "'/></td>");
-
-            sbEdit.append("<td class='text-center'>" + splitted[2] + "</td>");
-
-            sbEdit.append("<td class='text-center'>" + qtyEdit);
-            sbEdit.append("<input type='hidden' name='qty[]' value='" + qtyEdit + "'/></td>");
-
-            sbEdit.append("<td class='text-center'>" + splitted[3] + "</td>");
-
-            sbEdit.append("<td>" + remarkEdit);
-            sbEdit.append("<input type='hidden' name='remark[]' value='" + remarkEdit + "'/></td>");
-
-            sbEdit.append("<td>");
-            sbEdit.append("<a class='edit-modal btn btn-info' data-id='" + id + "' data-item-id='" + itemEdit + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "'><span class='glyphicon glyphicon-edit'></span></a>");
-            sbEdit.append("<a class='delete-modal btn btn-danger' data-id='" + id + "' data-item-id='" + itemEdit + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "'><span class='glyphicon glyphicon-trash'></span></a>");
-            sbEdit.append("</td>");
-            sbEdit.append("</tr>");
-
-            $('.item' + id).replaceWith(sbEdit.toString());
-        });
-
-        // Delete detail
-        var deletedId = "0";
-        $(document).on('click', '.delete-modal', function() {
-            $('.modal-title').text('Hapus Detail');
-            deletedId = $(this).data('id');
-            $('#item_delete').val($(this).data('item-text'));
-            $('#qty_delete').val($(this).data('qty'));
-            $('#remark_delete').val($(this).data('remark'));
-            $('#deleteModal').modal('show');
-        });
-        $('.modal-footer').on('click', '.delete', function() {
-            $('.item' + deletedId).remove();
-        });
+//        // Delete detail
+//        var deletedId = "0";
+//        $(document).on('click', '.delete-modal', function() {
+//            $('.modal-title').text('Hapus Detail');
+//            deletedId = $(this).data('id');
+//            $('#item_delete').val($(this).data('item-text'));
+//            $('#qty_delete').val($(this).data('qty'));
+//            $('#remark_delete').val($(this).data('remark'));
+//            $('#deleteModal').modal('show');
+//        });
+//        $('.modal-footer').on('click', '.delete', function() {
+//            $('.item' + deletedId).remove();
+//        });
     </script>
 @endsection

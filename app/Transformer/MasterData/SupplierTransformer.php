@@ -31,7 +31,12 @@ class SupplierTransformer extends TransformerAbstract
             $action =
                 "<a class='btn btn-xs btn-info' href='suppliers/".$supplier->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
             $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $supplier->id ."' ><i class='fa fa-trash'></i></a>";
-        }else{
+        }
+        else if($this->mode === 'before_create_po'){
+            $route = route('admin.payment_requests.before_create_po', ['supplier' => $supplier->id]);
+            $action = "<a class='btn btn-xs btn-success' href='". $route. "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i> Pilih Vendor </a>";
+        }
+        else{
             $action = "<a class='btn btn-xs btn-success' href='". $route. "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i> Pilih Vendor </a>";
         }
 

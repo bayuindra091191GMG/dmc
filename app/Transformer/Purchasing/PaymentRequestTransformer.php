@@ -22,7 +22,6 @@ class PaymentRequestTransformer extends TransformerAbstract
             $code = "<a style='text-decoration: underline;' href='payment_requests/detil/" . $header->id. "'>". $header->code. "</a>";
 
             $action = "<a class='btn btn-xs btn-primary' href='payment_requests/detil/". $header->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
-            $action .= "<a class='btn btn-xs btn-info' href='payment_requests/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
             return[
                 'code'              => $code,
