@@ -63,11 +63,11 @@ class PaymentRequestController extends Controller
 
     public function createFromPi(Request $request){
         $ids = $request->input('ids');
-        return $ids;
+        $purchaseInvoices = [];
 
-        $purchaseInvoices = null;
-        if(!empty(request()->pi)){
-            $purchaseInvoices = PurchaseInvoiceHeader::where('id', request()->pi)->get();
+        foreach($ids as $id){
+            $temp = PurchaseInvoiceHeader::find($id);
+            $purchaseInvoices[] = [$temp];
         }
 
         // Numbering System
@@ -75,7 +75,7 @@ class PaymentRequestController extends Controller
         $autoNumber = Utilities::GenerateNumberPurchaseOrder('PMT', $sysNo->next_no);
 
         $data = [
-            'purchaseInvoice'   => $purchaseInvoices,
+            'purchaseInvoices'   => $purchaseInvoices,
             'autoNumber'        => $autoNumber
         ];
 

@@ -45,72 +45,44 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="from_site" >
-                    Site Keberangkatan
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="bank_name" >
+                    Nama Bank
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-4 col-sm-4 col-xs-12">
-                    <select id="from_site" name="from_site" class="form-control col-md-7 col-xs-12 @if($errors->has('from_site')) parsley-error @endif">
-                        <option value="-1" @if(empty(old('from_site'))) selected @endif> - Pilih site - </option>
-                        @foreach($sites as $site)
-                            <option value="{{ $site->id }}" {{ old('from_site') == $site->id ? "selected":"" }}>{{ $site->name }}</option>
-                        @endforeach
-                    </select>
+                    <input id="bank_name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('bank_name')) parsley-error @endif"
+                           name="bank_name" />
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="to_site" >
-                    Site Tujuan
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="account_no" >
+                    Nomor Rekening
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-4 col-sm-4 col-xs-12">
-                    <select id="to_site" name="to_site" class="form-control col-md-7 col-xs-12 @if($errors->has('from_site')) parsley-error @endif">
-                        <option value="-1" @if(empty(old('to_site'))) selected @endif> - Pilih site - </option>
-                        @foreach($sites as $site)
-                            <option value="{{ $site->id }}" {{ old('to_site') == $site->id ? "selected":"" }}>{{ $site->name }}</option>
-                        @endforeach
-                    </select>
+                    <input id="account_no" type="number" min="0" class="form-control col-md-7 col-xs-12 @if($errors->has('account_no')) parsley-error @endif"
+                           name="account_no" />
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pr_code" >
-                    Nomor PR
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="account_name" >
+                    Nama Rekening
+                    <span class="required">*</span>
                 </label>
                 <div class="col-md-4 col-sm-4 col-xs-12">
-                    <select id="pr_code" name="pr_code" class="form-control col-md-7 col-xs-12 @if($errors->has('pr_code')) parsley-error @endif">
-                    </select>
-                    <input type="hidden" id="pr_id" name="pr_id" @if(!empty($purchaseRequest)) value="{{ $purchaseRequest->id }} @endif">
-                </div>
-                <div class="col-md-2 col-sm-2 col-xs-12">
-                    <a class="get-pr-data btn btn-info">
-                        Ambil Data
-                    </a>
-                    @if(!empty($purchaseRequest))
-                        <a class="clear-pr-data btn btn-info">
-                            Set Ulang Data
-                        </a>
-                    @endif
+                    <input id="account_name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('account_name')) parsley-error @endif"
+                           name="account_name" />
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="machinery" >
-                    Unit Alat Berat
-                </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                    <select id="machinery" name="machinery" class="form-control col-md-7 col-xs-12 @if($errors->has('machinery')) parsley-error @endif">
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="remark_header" >
-                    Keterangan
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="note" >
+                    Subject
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <textarea id="remark_header" name="remark_header" rows="5" style="resize: vertical;" class="form-control col-md-7 col-xs-12">{{ old('remark_header') }}</textarea>
+                    <textarea id="note" name="note" rows="5" style="resize: vertical;" class="form-control col-md-7 col-xs-12">{{ old('note') }}</textarea>
                 </div>
             </div>
 
@@ -122,65 +94,82 @@
 
             <div class="form-group">
                 <div class="col-lg-12 col-md-12 col-xs-12 box-section">
-                    <a class="add-modal btn btn-info" style="margin-bottom: 10px;">
-                        <span class="glyphicon glyphicon-plus-sign"></span> Tambah
-                    </a>
                     <table class="table table-bordered table-hover" id="detail_table">
                         <thead>
                         <tr >
                             <th class="text-center">
                                 No
                             </th>
-                            <th class="text-center" style="width: 15%">
-                                Part Number
+                            <th class="text-center" style="width: 10%">
+                                Nomor Invoice
                             </th>
-                            <th class="text-center" style="width: 20%">
-                                Part Name
+                            <th class="text-center" style="width: 10%">
+                                Nomor PO
                             </th>
-                            <th class="text-center" colspan="2" style="width: 20%">
-                                QTY
+                            <th class="text-center" style="width: 10%">
+                                Nama Vendor
                             </th>
-                            <th class="text-center" style="width: 30%">
-                                Remarks
+                            <th class="text-center" style="width: 10%">
+                                Total Harga
                             </th>
-                            <th class="text-center" style="width: 15%">
+                            <th class="text-center" style="width: 10%">
+                                Total Diskon
+                            </th>
+                            <th class="text-center" style="width: 10%">
+                                Ongkos Kirim
+                            </th>
+                            <th class="text-center" style="width: 10%">
+                                Total Invoice
+                            </th>
+                            <th class="text-center" style="width: 10%">
+                                Tanggal
+                            </th>
+                            <th class="text-center" style="width: 10%">
                                 Tindakan
                             </th>
                         </tr>
                         </thead>
                         <tbody>
                         <?php $idx = 0; ?>
-                        @if(!empty($purchaseRequest))
-                            @foreach($purchaseRequest->purchase_request_details as $detail)
+                        @if(!empty($purchaseInvoices))
+                            @foreach($purchaseInvoices as $detail)
                                 <?php $idx++; ?>
                                 <tr class='item{{ $idx }}'>
                                     <td class='text-center'>
                                         {{ $idx }}
                                     </td>
                                     <td class='text-center'>
-                                        {{ $detail->item->code }}
-                                        <input type='hidden' name='item[]' value='{{ $detail->item_id }}'/>
+                                        {{ $detail->code }}
+                                        <input type='hidden' name='item[]' value='{{ $detail->id }}'/>
                                     </td>
                                     <td class='text-center'>
-                                        {{ $detail->item->name }}
+                                        {{ $detail->purchase_order_header->code }}
                                     </td>
                                     <td class='text-center'>
-                                        {{ $detail->quantity }}
-                                        <input type='hidden' name='qty[]' value='{{ $detail->quantity }}'/>
+                                        {{ $detail->purchase_order_header->supplier->name }}
                                     </td>
                                     <td class='text-center'>
-                                        {{ $detail->item->uomDescription }}
+                                        {{ $detail->total_price }}
+                                    </td>
+                                    <td class='text-center'>
+                                        {{ $detail->total_discount }}
+                                    </td>
+                                    <td class='text-center'>
+                                        {{ $detail->delivery_fee }}
+                                    </td>
+                                    <td class='text-center'>
+                                        {{ $detail->total_payment }}
+                                    </td>
+                                    <td class='text-center'>
+                                        {{ $detail->date_string }}
                                     </td>
                                     <td>
                                         {{ $detail->remark }}
                                         <input type='hidden' name='remark[]' value='$detail->remark'/>
                                     </td>
                                     <td>
-                                        <?php $itemId = $detail->item_id. "#". $detail->item->code. "#". $detail->item->name ?>
-                                        <a class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}">
-                                            <span class="glyphicon glyphicon-edit"></span>
-                                        </a>
-                                        <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
+                                        <?php $itemId = $detail->id. "#". $detail->code ?>
+                                        <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail>code }}">
                                             <span class="glyphicon glyphicon-trash"></span>
                                         </a>
                                     </td>
@@ -204,91 +193,6 @@
         </div>
     </div>
 
-    <!-- Modal form to add new detail -->
-    <div id="addModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h4 class="modal-title"></h4>
-                </div>
-                <div class="modal-body">
-                    <form class="form-horizontal" role="form">
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="item_add">Barang:</label>
-                            <div class="col-sm-10">
-                                <select class="form-control" id="item_add" name="item_add"></select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="qty_add">Jumlah:</label>
-                            <div class="col-sm-10">
-                                <input type="number" class="form-control" id="qty_add" name="qty_add">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="remark_add">Remark:</label>
-                            <div class="col-sm-10">
-                                <textarea class="form-control" id="remark_add" name="remark_add" cols="40" rows="5"></textarea>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-warning" data-dismiss="modal">
-                            <span class='glyphicon glyphicon-remove'></span> Batal
-                        </button>
-                        <button type="button" class="btn btn-success add" data-dismiss="modal">
-                            <span id="" class='glyphicon glyphicon-check'></span> Simpan
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal form to edit a detail -->
-    <div id="editModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h4 class="modal-title"></h4>
-                </div>
-                <div class="modal-body">
-                    <form class="form-horizontal" role="form">
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="item_edit">Barang:</label>
-                            <div class="col-sm-10">
-                                <select class="form-control" id="item_edit" name="item_edit"></select>
-                                <input type="hidden" id="item_old_value"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="qty_edit">Jumlah:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="qty_edit" name="qty_edit">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="remark_edit">Remark:</label>
-                            <div class="col-sm-10">
-                                <textarea class="form-control" id="remark_edit" name="remark_edit" cols="40" rows="5"></textarea>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-warning" data-dismiss="modal">
-                            <span class='glyphicon glyphicon-remove'></span> Batal
-                        </button>
-                        <button type="button" class="btn btn-primary edit" data-dismiss="modal">
-                            <span class='glyphicon glyphicon-check'></span> Simpan
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Modal form to delete a form -->
     <div id="deleteModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -302,15 +206,9 @@
                     <br />
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="item_delete">Barang:</label>
+                            <label class="control-label col-sm-2" for="item_delete">Code:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="item_delete" disabled>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="qty_delete">Jumlah:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="qty_delete" disabled>
                             </div>
                         </div>
                         <input type="hidden" name="deleted_id"/>
