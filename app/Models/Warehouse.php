@@ -26,6 +26,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Illuminate\Database\Eloquent\Collection $items
  * @property \Illuminate\Database\Eloquent\Collection $serials
  * @property \Illuminate\Database\Eloquent\Collection $stock_ins
+ * @property \Illuminate\Database\Eloquent\Collection $stock_adjustments
  *
  * @package App\Models
  */
@@ -87,5 +88,9 @@ class Warehouse extends Eloquent
 	public function stock_ins()
 	{
 		return $this->hasMany(\App\Models\StockIn::class);
+	}
+	public function stock_adjustments()
+	{
+		return $this->hasMany(\App\Models\StockAdjustment::class);
 	}
 }
