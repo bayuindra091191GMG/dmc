@@ -56,10 +56,10 @@
             <td>{{ $i }}</td>
             <td>{{ $item->code }}</td>
             <td>{{ $item->date_string }}</td>
-            <td>{{ $item->machinery->code }}</td>
+            <td>{{ $item->machinery->code ?? '-' }}</td>
             <td>{{ $item->department->name }}</td>
-            <td>{{ $item->sn_chasis }}</td>
-            <td>{{ $item->sn_engine }}</td>
+            <td>{{ $item->sn_chasis ?? '-' }}</td>
+            <td>{{ $item->sn_engine ?? '-' }}</td>
             <td>{{ $item->status->description }}</td>
             <td>{{ $item->createdBy->name }}</td>
         </tr>

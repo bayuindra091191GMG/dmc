@@ -24,6 +24,7 @@ class MaterialRequestHeaderTransformer extends TransformerAbstract
 
     public function transform(MaterialRequestHeader $header){
         $date = Carbon::parse($header->date)->format('d M Y');
+        $createdAt = Carbon::parse($header->created_at)->format('d M Y');
 
         $url = 'default';
         if($this->type === 'other'){
@@ -70,7 +71,8 @@ class MaterialRequestHeaderTransformer extends TransformerAbstract
             'type'          => $typeStr,
             'department'    => $header->department->name,
             'machinery'     => $machinery,
-            'created_at'    => $date,
+            'date'          => $date,
+            'created_at'    => $createdAt,
             'action'        => $action
         ];
     }

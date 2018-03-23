@@ -23,7 +23,8 @@
                 <th class="text-center">Nomor MR</th>
                 <th class="text-center">Departemen</th>
                 <th class="text-center">Kode Unit</th>
-                <th>Tanggal</th>
+                <th class="text-center">Tanggal</th>
+                {{--<th class="text-center">Kapan Dibuat</th>--}}
                 <th class="text-center">Tindakan</th>
             </tr>
             </thead>
@@ -54,7 +55,8 @@
                     { data: 'mr_code', name: 'mr_code', class: 'text-center' },
                     { data: 'department', name: 'department', class: 'text-center' },
                     { data: 'machinery', name: 'machinery', class: 'text-center' },
-                    { data: 'created_at', name: 'created_at', class: 'text-center' },
+                    { data: 'date', name: 'date', class: 'text-center' },
+                    // { data: 'created_at', name: 'created_at', class: 'text-center' },
                     { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center' }
                 ],
                 language: {

@@ -395,4 +395,10 @@ class MaterialRequestHeaderController extends Controller
 
         return \Response::json($formatted_tags);
     }
+
+    public function printDocument($id){
+        $materialRequest = MaterialRequestHeader::find($id);
+
+        return view('documents.material_requests.material_requests_doc', compact('materialRequest'));
+    }
 }

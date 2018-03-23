@@ -465,4 +465,28 @@ Breadcrumbs::register('admin.purchase_invoices.edit', function (Generator $bread
     $breadcrumbs->push('Ubah Invoice', route('admin.purchase_invoices.edit', ['purchase_invoice' => $purchase_invoice]));
 });
 
+// Delivery Order
+Breadcrumbs::register('admin.delivery_orders', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Surat Jalan');
+});
+
+Breadcrumbs::register('admin.delivery_orders.create', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Surat Jalan', route('admin.delivery_orders'));
+    $breadcrumbs->push('Tambah Invoice');
+});
+
+Breadcrumbs::register('admin.delivery_orders.show', function (Generator $breadcrumbs, \App\Models\DeliveryOrderHeader $delivery_order) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Surat Jalan', route('admin.delivery_orders'));
+    $breadcrumbs->push('Data Invoice '. $delivery_order->code, route('admin.delivery_orders.show', ['delivery_order' => $delivery_order]));
+});
+
+Breadcrumbs::register('admin.delivery_orders.edit', function (Generator $breadcrumbs, \App\Models\DeliveryOrderHeader $delivery_order) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Surat Jalan', route('admin.delivery_orders'));
+    $breadcrumbs->push('Ubah Invoice', route('admin.delivery_orders.edit', ['delivery_order' => $delivery_order]));
+});
+
 

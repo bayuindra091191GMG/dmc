@@ -18,24 +18,24 @@
 			<img width=204 height=42 src="http://bayu159753.com/public/assets/images/image001.png">
 		</span>
     <br/>
-    <h4 style="text-align: center;"><b><u>Purchase Request</u></b></h4>
-    <h5 style="text-align: center; margin-top: -10px;">(Permintaan Pembelian)</h5>
+    <h4 style="text-align: center;"><b><u>Material Request</u></b></h4>
+    <h5 style="text-align: center; margin-top: -10px;">(Permintaan Barang)</h5>
 
     <table>
         <tr>
             <td width="50%">
-                No. PR/Date
+                No. MR/Date
             </td>
             <td>
-                : {{ $purchaseRequest->code }} {{ $purchaseRequest->date_string }}
+                : {{ $materialRequest->code }} {{ $materialRequest->date_string }}
             </td>
         </tr>
         <tr>
             <td width="50%">
-                Department
+                Departemen
             </td>
             <td>
-                : {{ $purchaseRequest->department->name }}
+                : {{ $materialRequest->department->name }}
             </td>
         </tr>
         <tr>
@@ -43,7 +43,7 @@
                 Unit Type
             </td>
             <td>
-                : {{ $purchaseRequest->machinery->machinery_type_name ?? '-' }}
+                : {{ $materialRequest->machinery->machinery_type_name ?? '-' }}
             </td>
         </tr>
         <tr>
@@ -51,7 +51,7 @@
                 Unit Code
             </td>
             <td>
-                : {{ $purchaseRequest->machinery->code ?? '-' }}
+                : {{ $materialRequest->machinery->code ?? '-' }}
             </td>
         </tr>
         <tr>
@@ -59,7 +59,7 @@
                 S/N Chasis
             </td>
             <td>
-                : {{ $purchaseRequest->machinery->sn_chasis ?? '-' }}
+                : {{ $materialRequest->machinery->sn_chasis ?? '-' }}
             </td>
         </tr>
         <tr>
@@ -67,7 +67,7 @@
                 S/N Engine
             </td>
             <td>
-                : {{ $purchaseRequest->machinery->sn_engine ?? '-' }}
+                : {{ $materialRequest->machinery->sn_engine ?? '-' }}
             </td>
         </tr>
         <tr>
@@ -75,12 +75,7 @@
                 HM
             </td>
             <td>
-                :
-                @if($purchaseRequest->hm != null)
-                    {{ $purchaseRequest->hm }}
-                @else
-                    -
-                @endif
+                : {{ $materialRequest->hm ?? '-' }}
             </td>
         </tr>
         <tr>
@@ -88,12 +83,7 @@
                 KM
             </td>
             <td>
-                :
-                @if($purchaseRequest->km != null)
-                    {{ $purchaseRequest->km }}
-                @else
-                    -
-                @endif
+                : {{ $materialRequest->km ?? '-' }}
             </td>
         </tr>
     </table>
@@ -111,18 +101,18 @@
         </tr>
         </thead>
         <tbody>
-            @php($i=1)
-            @foreach($purchaseRequestDetails as $detail)
-                <tr align="center">
-                    <td>{{ $i }}</td>
-                    <td>{{ $detail->item->name }}</td>
-                    <td>{{ $detail->item->code }}</td>
-                    <td>{{ $detail->item->uom }}</td>
-                    <td>{{ $detail->quantity }}</td>
-                    <td>{{ $detail->remark }}</td>
-                </tr>
-                @php($i++)
-            @endforeach
+        @php($i=1)
+        @foreach($materialRequest->material_request_details as $detail)
+            <tr align="center">
+                <td>{{ $i }}</td>
+                <td>{{ $detail->item->name }}</td>
+                <td>{{ $detail->item->code }}</td>
+                <td>{{ $detail->item->uom }}</td>
+                <td>{{ $detail->quantity }}</td>
+                <td>{{ $detail->remark ?? '-' }}</td>
+            </tr>
+            @php($i++)
+        @endforeach
         </tbody>
     </table>
 

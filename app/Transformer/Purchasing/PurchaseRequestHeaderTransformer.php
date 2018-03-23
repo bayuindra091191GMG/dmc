@@ -24,6 +24,7 @@ class PurchaseRequestHeaderTransformer extends TransformerAbstract
 
     public function transform(PurchaseRequestHeader $header){
         $date = Carbon::parse($header->date)->format('d M Y');
+        $createdAt = Carbon::parse($header->created_at)->format('d M Y - H:i');
 
         $code = "<a href='purchase_requests/detil/" . $header->id. "' style='text-decoration: underline;'>". $header->code. "</a>";
         $mrCode = "<a href='material_requests/detil/" . $header->id. "' style='text-decoration: underline;'>". $header->code. "</a>";
@@ -49,7 +50,8 @@ class PurchaseRequestHeaderTransformer extends TransformerAbstract
             'mr_code'       => $mrCode,
             'department'    => $header->department->name,
             'machinery'     => $machinery,
-            'created_at'    => $date,
+            'date'          => $date,
+            'created_at'    => $createdAt,
             'action'        => $action
         ];
     }
