@@ -403,6 +403,42 @@ Breadcrumbs::register('admin.purchase_requests.edit', function (Generator $bread
     $breadcrumbs->push('Ubah PR', route('admin.purchase_requests.edit', ['purchase_request' => $purchase_request]));
 });
 
+// Issued Docket
+Breadcrumbs::register('admin.issued_dockets', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Issued Docket');
+});
+
+Breadcrumbs::register('admin.issued_dockets.create', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Issued Docket', route('admin.issued_dockets'));
+    $breadcrumbs->push('Tambah Issued Docket');
+});
+
+Breadcrumbs::register('admin.issued_dockets.show', function (Generator $breadcrumbs, \App\Models\IssuedDocketHeader $issued_docket) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Issued Docket', route('admin.issued_dockets'));
+    $breadcrumbs->push('Data Issued Docket '. $issued_docket->code, route('admin.issued_dockets.show', ['issued_docket' => $issued_docket]));
+});
+
+// Good Receipt
+Breadcrumbs::register('admin.item_receipts', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Good Receipt');
+});
+
+Breadcrumbs::register('admin.item_receipts.create', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Good Receipt', route('admin.item_receipts'));
+    $breadcrumbs->push('Tambah Good Receipt');
+});
+
+Breadcrumbs::register('admin.item_receipts.show', function (Generator $breadcrumbs, \App\Models\ItemReceiptHeader $item_receipt) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Good Receipt', route('admin.item_receipts'));
+    $breadcrumbs->push('Data Good Receipt '. $item_receipt->code, route('admin.item_receipts.show', ['item_receipt' => $item_receipt]));
+});
+
 // Purchase Order
 Breadcrumbs::register('admin.purchase_orders', function (Generator $breadcrumbs) {
     $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));

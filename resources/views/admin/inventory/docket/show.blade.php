@@ -4,16 +4,27 @@
 
 @section('content')
     <div class="row">
-        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="navbar-left">
+                <a class="btn btn-default" href="{{ route('admin.issued_dockets') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
+            </div>
             <div class="navbar-right">
-                <a class="btn btn-default" href="{{ route('admin.issued_dockets.edit',[ 'issued_docket' => $header->id]) }}">UBAH</a>
-                <a class="btn btn-default" href="{{ route('admin.issued_dockets.print',[ 'issued_docket' => $header->id]) }}">CETAK</a>
-                <a class="btn btn-default" href="{{ route('admin.issued_dockets.download',[ 'issued_docket' => $header->id]) }}">DOWNLOAD</a>
+                <a class="btn btn-default" href="{{ route('admin.issued_dockets.print',[ 'material_request' => $header->id]) }}" target="_blank">CETAK</a>
+                @if($header->status_id == 3)
+                    <a class="btn btn-default" href="{{ route('admin.issued_dockets.edit',[ 'material_request' => $header->id]) }}">UBAH</a>
+                @endif
             </div>
         </div>
+        {{--<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">--}}
+            {{--<div class="navbar-right">--}}
+                {{--<a class="btn btn-default" href="{{ route('admin.issued_dockets.edit',[ 'issued_docket' => $header->id]) }}">UBAH</a>--}}
+                {{--<a class="btn btn-default" href="{{ route('admin.issued_dockets.print',[ 'issued_docket' => $header->id]) }}">CETAK</a>--}}
+                {{--<a class="btn btn-default" href="{{ route('admin.issued_dockets.download',[ 'issued_docket' => $header->id]) }}">DOWNLOAD</a>--}}
+            {{--</div>--}}
+        {{--</div>--}}
     </div>
     <div class="row">
-        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <form class="form-horizontal form-label-left box-section">
 
                 @if(\Illuminate\Support\Facades\Session::has('message'))
@@ -49,7 +60,13 @@
                         No MR
                     </label>
                     <div class="col-md-6 col-sm-3 col-xs-12">
-                        : {{ $header->material_request_header->code }}
+                        @if($header->material_request_header->type == 1)
+                            : <a style="text-decoration: underline;" href="{{ route('admin.material_requests.other.show', ['material_request' => $header->material_request_id]) }}" target="_blank">{{ $header->material_request_header->code }}</a>
+                        @elseif($header->material_request_header->type == 2)
+                            : <a style="text-decoration: underline;" href="{{ route('admin.material_requests.fuel.show', ['material_request' => $header->material_request_id]) }}" target="_blank">{{ $header->material_request_header->code }}</a>
+                        @else
+                            : <a style="text-decoration: underline;" href="{{ route('admin.material_requests.service.show', ['material_request' => $header->material_request_id]) }}" target="_blank">{{ $header->material_request_header->code }}</a>
+                        @endif
                     </div>
                 </div>
 

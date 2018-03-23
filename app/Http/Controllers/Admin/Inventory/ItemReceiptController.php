@@ -10,6 +10,7 @@ use App\Models\Document;
 use App\Models\Item;
 use App\Models\ItemReceiptDetail;
 use App\Models\ItemReceiptHeader;
+use App\Models\ItemStock;
 use App\Models\NumberingSystem;
 use App\Models\PurchaseOrderDetail;
 use App\Models\PurchaseOrderHeader;
@@ -32,8 +33,8 @@ class ItemReceiptController extends Controller
         return View('admin.inventory.item_receipts.index');
     }
 
-    public function show($id){
-        $header = ItemReceiptHeader::find($id);
+    public function show(ItemReceiptHeader $item_receipt){
+        $header = $item_receipt;
 
         return View('admin.inventory.item_receipts.show', compact('header'));
     }

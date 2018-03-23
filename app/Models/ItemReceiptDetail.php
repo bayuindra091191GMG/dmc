@@ -20,7 +20,6 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $remark
  * 
  * @property \App\Models\Item $item
- * @property \App\Models\PurchaseOrderHeader $purchase_order_header
  * @property \App\Models\ItemReceiptHeader $item_receipt_header
  *
  * @package App\Models

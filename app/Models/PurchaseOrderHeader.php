@@ -2,13 +2,11 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 13 Mar 2018 10:12:54 +0700.
+ * Date: Fri, 23 Mar 2018 16:56:21 +0700.
  */
 
 namespace App\Models;
 
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -20,17 +18,19 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $quotation_id
  * @property int $supplier_id
  * @property float $delivery_fee
- * @property float $total_price
  * @property float $total_discount
+ * @property float $total_price
  * @property float $total_payment_before_tax
  * @property int $pph_percent
  * @property int $ppn_percent
  * @property float $pph_amount
  * @property float $ppn_amount
  * @property float $total_payment
- * @property \Carbon\Carbon $closing_date
  * @property int $status_id
  * @property \Carbon\Carbon $date
+ * @property int $closed_by
+ * @property string $close_reason
+ * @property \Carbon\Carbon $closing_date
  * @property int $created_by
  * @property \Carbon\Carbon $created_at
  * @property int $updated_by
@@ -40,9 +40,10 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\QuotationHeader $quotation_header
  * @property \App\Models\Status $status
  * @property \App\Models\Supplier $supplier
- * @property \App\Models\Auth\User\User $user
- * @property \Illuminate\Database\Eloquent\Collection $item_receipt_details
- * @property \Illuminate\Database\Eloquent\Collection $payment_requests
+ * @property \App\Models\User $user
+ * @property \Illuminate\Database\Eloquent\Collection $item_receipt_headers
+ * @property \Illuminate\Database\Eloquent\Collection $payment_requests_po_details
+ * @property \Illuminate\Database\Eloquent\Collection $purchase_invoice_headers
  * @property \Illuminate\Database\Eloquent\Collection $purchase_order_details
  *
  * @package App\Models
@@ -56,13 +57,14 @@ class PurchaseOrderHeader extends Eloquent
 		'delivery_fee' => 'float',
 		'total_discount' => 'float',
 		'total_price' => 'float',
-        'total_payment_before_tax' => 'float',
+		'total_payment_before_tax' => 'float',
 		'pph_percent' => 'int',
 		'ppn_percent' => 'int',
 		'pph_amount' => 'float',
 		'ppn_amount' => 'float',
 		'total_payment' => 'float',
 		'status_id' => 'int',
+		'closed_by' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
 	];
@@ -78,6 +80,11 @@ class PurchaseOrderHeader extends Eloquent
         'closing_date_string'
     ];
 
+	protected $dates = [
+		'date',
+		'closing_date'
+	];
+
 	protected $fillable = [
 		'code',
 		'purchase_request_id',
@@ -86,17 +93,17 @@ class PurchaseOrderHeader extends Eloquent
 		'delivery_fee',
 		'total_discount',
 		'total_price',
-        'total_payment_before_tax',
+		'total_payment_before_tax',
 		'pph_percent',
 		'ppn_percent',
 		'pph_amount',
 		'ppn_amount',
 		'total_payment',
 		'status_id',
-        'date',
-        'close_reason',
-        'closed_by',
-        'closing_date',
+		'date',
+		'closed_by',
+		'close_reason',
+		'closing_date',
 		'created_by',
 		'updated_by'
 	];
@@ -162,29 +169,24 @@ class PurchaseOrderHeader extends Eloquent
 		return $this->belongsTo(\App\Models\Supplier::class);
 	}
 
-    public function createdBy()
-    {
-        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
-    }
-
-    public function updatedBy()
-    {
-        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
-    }
-
-    public function closeddBy()
-    {
-        return $this->belongsTo(\App\Models\Auth\User\User::class, 'closed_by');
-    }
-
-	public function item_receipt_details()
+	public function user()
 	{
-		return $this->hasMany(\App\Models\ItemReceiptDetail::class, 'purchase_order_id');
+		return $this->belongsTo(\App\Models\User::class, 'updated_by');
 	}
 
-	public function payment_requests()
+	public function item_receipt_headers()
 	{
-		return $this->hasMany(\App\Models\PaymentRequest::class, 'purchase_order_id');
+		return $this->hasMany(\App\Models\ItemReceiptHeader::class, 'purchase_order_id');
+	}
+
+	public function payment_requests_po_details()
+	{
+		return $this->hasMany(\App\Models\PaymentRequestsPoDetail::class, 'purchase_order_id');
+	}
+
+	public function purchase_invoice_headers()
+	{
+		return $this->hasMany(\App\Models\PurchaseInvoiceHeader::class, 'purchase_order_id');
 	}
 
 	public function purchase_order_details()
