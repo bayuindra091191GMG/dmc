@@ -368,6 +368,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('issued_dockets/detil/{issued_docket}', 'Inventory\DocketController@show')->name('issued_dockets.show');
     Route::get('issued_dockets/{issued_docket}/ubah', 'Inventory\DocketController@edit')->name('issued_dockets.edit');
     Route::put('issued_dockets/ubah/{issued_docket}', 'Inventory\DocketController@update')->name('issued_dockets.update');
+    Route::get('issued_dockets/pilihmr', 'Inventory\DocketController@beforeCreate')->name('issued_dockets.before_create');
     Route::get('issued_dockets/tambah', 'Inventory\DocketController@create')->name('issued_dockets.create');
     Route::post('issued_dockets/simpan', 'Inventory\DocketController@store')->name('issued_dockets.store');
     Route::get('issued_dockets/print/{issued_docket}', 'Inventory\DocketController@printDocument')->name('issued_dockets.print');

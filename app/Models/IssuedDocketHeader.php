@@ -29,6 +29,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\Department $department
  * @property \App\Models\Machinery $machinery
  * @property \App\Models\MaterialRequestHeader $material_request_header_id
+ * @property \App\Models\Warehouse $warehouse_id
  * @property \App\Models\Status $status
  * @property \App\Models\User $user
  * @property \Illuminate\Database\Eloquent\Collection $issued_docket_details
@@ -43,6 +44,7 @@ class IssuedDocketHeader extends Eloquent
 		'unit_id' => 'int',
 		'material_request_header_id' => 'int',
 		'department_id' => 'int',
+        'warehouse_id' => 'int',
 		'status_id' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
@@ -59,6 +61,7 @@ class IssuedDocketHeader extends Eloquent
         'hm',
 		'unit_id',
 		'material_request_header_id',
+        'warehouse_id',
 		'department_id',
 		'division',
 		'status_id',
@@ -74,6 +77,11 @@ class IssuedDocketHeader extends Eloquent
 	{
 		return $this->belongsTo(\App\Models\Department::class);
 	}
+
+    public function warehouse()
+    {
+        return $this->belongsTo(\App\Models\Warehouse::class, 'warehouse_id');
+    }
 
 	public function machinery()
 	{

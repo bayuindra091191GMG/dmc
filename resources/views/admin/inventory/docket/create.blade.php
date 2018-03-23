@@ -28,7 +28,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
-                           name="code" value="{{ $autoNumber }}" disabled="disabled">
+                           name="code" value="{{ $autoNumber }}" readonly>
                 </div>
             </div>
 
@@ -46,23 +46,45 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="purchase_request_header">
-                    Nomor PR
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="mr_id">
+                    Nomor MR
                 </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                    <select id="purchase_request_header" name="purchase_request_header" class="form-control col-md-7 col-xs-12 @if($errors->has('purchase_request_header')) parsley-error @endif">
-                    </select>
-                    <input type="hidden" id="pr_id" name="pr_id" @if(!empty($purchaseRequest)) value="{{ $purchaseRequest->id }} @endif">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="mr_id" type="text" class="form-control col-md-7 col-xs-12"
+                           name="mr_id" value="{{ $materialRequest->code }}" readonly>
                 </div>
-                <div class="col-md-2 col-sm-2 col-xs-12">
-                    <a class="get-pr-data btn btn-info">
-                        Ambil Data
-                    </a>
-                    @if(!empty($purchaseRequest))
-                        <a class="clear-pr-data btn btn-info">
-                            Set Ulang Data
-                        </a>
-                    @endif
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="hm">
+                    HM
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="hm" type="text" class="form-control col-md-7 col-xs-12"
+                           name="hm">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="km">
+                    KM
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="km" type="text" class="form-control col-md-7 col-xs-12"
+                           name="km">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="warehouse">
+                    Gudang
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="warehouse" name="warehouse" class="form-control col-md-7 col-xs-12 @if($errors->has('warehouse')) parsley-error @endif">
+                        @foreach($warehouse as $data)
+                            <option value="{{ $data->id }}">{{ $data->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
 
@@ -82,7 +104,7 @@
 
             <div class="form-group">
                 <div class="col-lg-12 col-md-12 col-xs-12 box-section">
-                    @if(empty($purchaseRequest))
+                    @if(empty($materialRequest))
                         <a class="add-modal btn btn-info" style="margin-bottom: 10px;">
                             <span class="glyphicon glyphicon-plus-sign"></span> Tambah
                         </a>
@@ -105,8 +127,8 @@
                         </thead>
                         <tbody>
                         @php($idx = 0)
-                        @if(!empty($purchaseRequest))
-                            @foreach($purchaseRequest->purchase_request_details as $detail)
+                        @if(!empty($materialRequest))
+                            @foreach($materialRequest->material_request_details as $detail)
                                 @php($idx++)
                                 <tr class='item{{ $idx }}'>
                                     <td class='field-item'>

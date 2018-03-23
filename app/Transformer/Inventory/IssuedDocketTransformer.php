@@ -30,7 +30,7 @@ class IssuedDocketTransformer extends TransformerAbstract
             'no_issued_docket'  => $code,
             'department'        => $header->department->name,
             'no_unit'           => $machinery,
-            'no_pr'             => $header->purchase_request_header->code ?? '-',
+            'no_mr'             => $header->material_request_header->code ?? '-',
             'division'          => $header->division,
             'created_at'        => $createdDate,
             'created_by'        => $header->createdBy->email,

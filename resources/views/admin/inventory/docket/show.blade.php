@@ -46,10 +46,10 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        No PR
+                        No MR
                     </label>
                     <div class="col-md-6 col-sm-3 col-xs-12">
-                        : {{ $header->purchase_request_header->code }}
+                        : {{ $header->material_request_header->code }}
                     </div>
                 </div>
 

@@ -372,6 +372,9 @@ class MaterialRequestHeaderController extends Controller
         else if($type === 'service'){
             $materialRequests = MaterialRequestHeader::where('type', 3)->get();
         }
+        else if($type === 'before_create' || $type === 'before_create_id'){
+            $materialRequests = MaterialRequestHeader::where('status_id', 3)->get();
+        }
         else{
             $materialRequests = MaterialRequestHeader::all();
         }

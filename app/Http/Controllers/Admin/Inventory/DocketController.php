@@ -9,9 +9,14 @@ use App\Models\Document;
 use App\Models\IssuedDocketDetail;
 use App\Models\IssuedDocketHeader;
 use App\Models\Item;
+use App\Models\ItemStock;
+use App\Models\MaterialRequestDetail;
+use App\Models\MaterialRequestHeader;
 use App\Models\NumberingSystem;
 use App\Models\PurchaseRequestDetail;
 use App\Models\PurchaseRequestHeader;
+use App\Models\StockCard;
+use App\Models\Warehouse;
 use App\Transformer\Inventory\IssuedDocketTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -35,6 +40,10 @@ class DocketController extends Controller
         return View('admin.inventory.docket.index');
     }
 
+    public function beforeCreate(){
+        return View('admin.inventory.docket.before_create');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -42,17 +51,17 @@ class DocketController extends Controller
      */
     public function create()
     {
-        $purchaseRequest = null;
-        if(!empty(request()->pr)){
-            $purchaseRequest = PurchaseRequestHeader::find(request()->pr);
+        $materialRequest = null;
+        if(!empty(request()->mr)){
+            $materialRequest = MaterialRequestHeader::find(request()->mr);
         }
 
-        $departments = Department::all();
         $sysNo = NumberingSystem::where('doc_id', '1')->first();
         $document = Document::where('id', '1')->first();
         $autoNumber = Utilities::GenerateNumber($document->code, $sysNo->next_no);
+        $warehouse = Warehouse::where('id', '!=', 0)->get();
 
-        return view('admin.inventory.docket.create', compact('departments', 'autoNumber', 'purchaseRequest'));
+        return view('admin.inventory.docket.create', compact('departments', 'autoNumber', 'materialRequest', 'warehouse'));
     }
 
     /**
@@ -74,17 +83,6 @@ class DocketController extends Controller
                 ->withInput();
         }
 
-        if(empty(Input::get('pr_id')) && empty(Input::get('purchase_request_header'))){
-            return redirect()->back()->withErrors('Pilih Purchase Request!', 'default')->withInput($request->all());
-        }
-
-        if(empty(Input::get('pr_id'))){
-            $prId = Input::get('purchase_request_header');
-        }
-        else{
-            $prId = Input::get('pr_id');
-        }
-
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
@@ -104,29 +102,40 @@ class DocketController extends Controller
         }
 
         // Validate details
+        $mrId = Input::get('mr_id');
         $items = Input::get('item_value');
         $qtys = Input::get('qty');
         $valid = true;
-        $prCheck = true;
+        $mrCheck = true;
         $qtyCheck = true;
+        $wrCheck = true;
+        $wrQtyCheck = true;
         $i = 0;
-        $purchaseRequest = PurchaseRequestHeader::where('id', $prId)->first();
+        $materialRequest = MaterialRequestHeader::where('code', $mrId)->first();
 
         foreach($items as $item){
             if(empty($item)) $valid = false;
             if(empty($qtys[$i]) || $qtys[$i] == '0') $valid = false;
 
             //Validate Details with PR Data
-            foreach($purchaseRequest->purchase_request_details as $detail){
-                if($detail->quantity < $qtys[$i]){
-                    $prCheck = false;
-                }
+            if($materialRequest->material_request_details[$i]->quantity < $qtys[$i]){
+                $mrCheck = false;
             }
 
             //Check Item in Stock
-            $tempItem = Item::find($item);
-            if($tempItem->stock == null || $tempItem->stock == 0 || $tempItem->stock < $qtys[$i]){
-                $qtyCheck = false;
+            $tempItem = ItemStock::where('item_id', $item)->first();
+
+            if($tempItem == null){
+                $wrCheck = false;
+            }
+            else if($tempItem->stock == null || $tempItem->stock == 0){
+                $wrQtyCheck = false;
+            }
+            else {
+                $lastStock = $tempItem->stock - $qtys[$i];
+                if ($tempItem->stock < $qtys[$i] || $lastStock < 0) {
+                    $qtyCheck = false;
+                }
             }
 
             $i++;
@@ -135,24 +144,31 @@ class DocketController extends Controller
         if(!$valid){
             return redirect()->back()->withErrors('Detail barang, Jumlah wajib diisi!', 'default')->withInput($request->all());
         }
-        if(!$prCheck){
-            return redirect()->back()->withErrors('Detail barang, Jumlah tidak boleh melebihi Jumlah di PR!', 'default')->withInput($request->all());
+        if(!$mrCheck){
+            return redirect()->back()->withErrors('Detail barang, Jumlah tidak boleh melebihi Jumlah di MR!', 'default')->withInput($request->all());
         }
         if(!$qtyCheck){
             return redirect()->back()->withErrors('Detail barang, Stock tidak mencukupi!', 'default')->withInput($request->all());
         }
+        if(!$wrCheck){
+            return redirect()->back()->withErrors('Detail barang, Barang Tidak ada di Warehouse yang dipilih!', 'default')->withInput($request->all());
+        }
+        if(!$wrQtyCheck){
+            return redirect()->back()->withErrors('Detail barang, Stock tidak ada pada Gudang yang Dipilih!', 'default')->withInput($request->all());
+        }
 
         $docketHeader = IssuedDocketHeader::create([
-            'code'                  => $docketNumber,
-            'department_id'         => $purchaseRequest->department_id,
-            'unit_id'               => $purchaseRequest->machinery_id,
-            'division'              => Input::get('division'),
-            'status_id'             => 1,
-            'created_by'            => $user->id,
-            'updated_by'            => $user->id,
-            'created_at'            => $now->toDateString(),
-            'date'                  => $now->toDateString(),
-            'purchase_request_id'   => $prId
+            'code'                          => $docketNumber,
+            'department_id'                 => $materialRequest->department_id,
+            'unit_id'                       => $materialRequest->machinery_id,
+            'division'                      => Input::get('division'),
+            'warehouse_id'                  => Input::get('warehouse'),
+            'status_id'                     => 1,
+            'created_by'                    => $user->id,
+            'updated_by'                    => $user->id,
+            'created_at'                    => $now->toDateString(),
+            'date'                          => $now->toDateString(),
+            'material_request_header_id'    => $materialRequest->id
         ]);
 
         $docketHeader->save();
@@ -174,13 +190,48 @@ class DocketController extends Controller
                 $docketDetail->save();
 
                 //Update Stock
+                //Item Stock
+                $itemStockData = ItemStock::where('item_id', $item)->first();
+                $itemStockData->stock = $itemStockData->stock - $qty[$idx];
+                $itemStockData->save();
+
+                //Stock Card
+                StockCard::create([
+                    'item_id'       => $item,
+                    'change'        => $qty[$idx],
+                    'stock'         => $itemStockData->stock,
+                    'warehouse_id'  => $request->input('warehouse'),
+                    'created_by'    => $user->id,
+                    'created_at'    => $now,
+                    'flag'          => '-',
+                    'description'   => 'Issued Docket ' . $docketHeader->code
+                ]);
+
+                //item
                 $itemData = Item::where('id', $item)->first();
                 $itemData->stock = $itemData->stock - $qty[$idx];
                 $itemData->save();
+
+                //Update Material Request Detail
+                $mrDetail = MaterialRequestDetail::find($materialRequest->material_request_details[$idx]->id);
+                $mrDetail->quantity_issued = $qty[$idx];
+                $mrDetail->save();
             }
             $idx++;
         }
 
+        //Update Material Request Header
+        $materialRequest = MaterialRequestHeader::where('code', $mrId)->first();
+        $done = true;
+        foreach ($materialRequest->material_request_details as $detail){
+            if($detail->quantity != $detail->quantity_issued){
+                $done = false;
+            }
+        }
+        if($done){
+            $materialRequest->status_id = 4;
+            $materialRequest->save();
+        }
 
         Session::flash('message', 'Berhasil membuat Issued Docket!');
 

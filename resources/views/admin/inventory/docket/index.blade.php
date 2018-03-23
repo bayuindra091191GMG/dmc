@@ -7,7 +7,7 @@
     <div class="row">
         @include('partials._success')
         <div class="nav navbar-right">
-            <a href="{{ route('admin.issued_dockets.create') }}" class="btn btn-app">
+            <a href="{{ route('admin.issued_dockets.before_create') }}" class="btn btn-app">
                 <i class="fa fa-plus"></i> Tambah
             </a>
         </div>
@@ -20,7 +20,7 @@
             <tr>
                 <th class="text-center">No</th>
                 <th class="text-center">No Issued Docket</th>
-                <th class="text-center">Nomor PR</th>
+                <th class="text-center">Nomor MR</th>
                 <th class="text-center">Nomor Unit Alat Berat</th>
                 <th class="text-center">Department</th>
                 <th class="text-center">Divisi</th>
@@ -53,7 +53,7 @@
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center' },
                     { data: 'no_issued_docket', name: 'no_issued_docket', class: 'text-center' },
-                    { data: 'no_pr', name: 'no_pr', class: 'text-center' },
+                    { data: 'no_mr', name: 'no_mr', class: 'text-center' },
                     { data: 'no_unit', name: 'no_unit', class: 'text-center' },
                     { data: 'department', name: 'department', class: 'text-center' },
                     { data: 'division', name: 'division', class: 'text-center' },

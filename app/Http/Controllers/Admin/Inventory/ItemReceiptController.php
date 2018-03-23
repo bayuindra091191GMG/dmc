@@ -13,6 +13,7 @@ use App\Models\ItemReceiptHeader;
 use App\Models\NumberingSystem;
 use App\Models\PurchaseOrderDetail;
 use App\Models\PurchaseOrderHeader;
+use App\Models\StockCard;
 use App\Models\Warehouse;
 use App\Transformer\Inventory\ItemReceiptTransformer;
 use App\Transformer\Inventory\PurchaseOrderTransformer;
@@ -192,9 +193,27 @@ class ItemReceiptController extends Controller
                 $itemReceiptDetail->save();
 
                 //Update Stock
+                //Item Stock
+                $itemStockData = ItemStock::where('item_id', $item)->first();
+                $itemStockData->stock = $itemStockData->stock - $qty[$idx];
+                $itemStockData->save();
+
+                //Item
                 $itemData = Item::where('id', $item)->first();
                 $itemData->stock = $itemData->stock + $qty[$idx];
                 $itemData->save();
+
+                //Stock Card
+                StockCard::create([
+                    'item_id'       => $item,
+                    'change'        => $qty[$idx],
+                    'stock'         => $itemStockData->stock,
+                    'warehouse_id'  => Input::get('warehouse'),
+                    'created_by'    => $user->id,
+                    'created_at'    => $now,
+                    'flag'          => '-',
+                    'description'   => 'Good Receipt ' . $itemReceiptHeader->code
+                ]);
 
                 //Update PO
                 $detail = $purchaseOrder->purchase_order_details->where('item_id', $item)->first();
