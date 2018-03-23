@@ -28,7 +28,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property \App\Models\Department $department
  * @property \App\Models\Machinery $machinery
- * @property \App\Models\PurchaseRequestHeader $purchase_request_header
+ * @property \App\Models\MaterialRequestHeader $material_request_header_id
  * @property \App\Models\Status $status
  * @property \App\Models\User $user
  * @property \Illuminate\Database\Eloquent\Collection $issued_docket_details
@@ -41,7 +41,7 @@ class IssuedDocketHeader extends Eloquent
 
 	protected $casts = [
 		'unit_id' => 'int',
-		'purchase_request_id' => 'int',
+		'material_request_header_id' => 'int',
 		'department_id' => 'int',
 		'status_id' => 'int',
 		'created_by' => 'int',
@@ -58,7 +58,7 @@ class IssuedDocketHeader extends Eloquent
         'km',
         'hm',
 		'unit_id',
-		'purchase_request_id',
+		'material_request_header_id',
 		'department_id',
 		'division',
 		'status_id',
@@ -80,9 +80,9 @@ class IssuedDocketHeader extends Eloquent
 		return $this->belongsTo(\App\Models\Machinery::class, 'unit_id');
 	}
 
-	public function purchase_request_header()
+	public function material_request_header()
 	{
-		return $this->belongsTo(\App\Models\PurchaseRequestHeader::class, 'purchase_request_id');
+		return $this->belongsTo(\App\Models\MaterialRequestHeader::class, 'material_request_header_id');
 	}
 
 	public function status()

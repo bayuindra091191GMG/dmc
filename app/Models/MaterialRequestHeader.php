@@ -30,6 +30,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\Department $department
  * @property \App\Models\Machinery $machinery
  * @property \App\Models\Status $status
+ * @property \Illuminate\Database\Eloquent\Collection $issued_docket_headers
  * @property \App\Models\Auth\User\User $user
  * @property \Illuminate\Database\Eloquent\Collection $material_request_details
  *
@@ -97,5 +98,10 @@ class MaterialRequestHeader extends Eloquent
     public function purchase_request_headers()
     {
         return $this->hasMany(\App\Models\PurchaseRequestHeader::class, 'material_request_id');
+    }
+
+    public function issued_docket_headers()
+    {
+        return $this->hasMany(\App\Models\IssuedDocketHeader::class, 'purchase_request_id');
     }
 }
