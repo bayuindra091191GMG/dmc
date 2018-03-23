@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -232,12 +233,27 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
-     * @return void
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try{
+            $userAuth = Auth::user();
+            $now = Carbon::now('Asia/Jakarta');
+
+            $user = User::find($request->input('id'));
+            $user->status_id = 10;
+            $user->updated_by = $userAuth->id;
+            $user->updated_at = $now->toDateTimeString();
+            $user->save();
+
+            Session::flash('message', 'Berhasil menghapus data user '. $user->email);
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 
     //DataTables
@@ -253,10 +269,14 @@ class UserController extends Controller
         try{
 
             if($request->filled('status')){
-                $users = User::where('status_id', $request->input('status'))->get();
+                $users = User::where('status_id', $request->input('status'))
+                    ->orderBy('created_at','DESC')
+                    ->get();
             }
             else{
-                $users = User::where('status_id', 1)->get();
+                $users = User::where('status_id', 1)
+                    ->orderBy('created_at','DESC')
+                    ->get();
             }
 
             return DataTables::of($users)

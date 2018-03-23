@@ -39,7 +39,6 @@
             <tr>
                 <th class="text-center">ID Login</th>
                 <th class="text-center">Nama</th>
-                {{--<th class="text-center">Nomor Telpon</th>--}}
                 <th class="text-center">Departemen</th>
                 <th class="text-center">Site</th>
                 <th class="text-center">Level Akses</th>
@@ -53,16 +52,19 @@
         </table>
     </div>
 
+    @include('partials._delete')
 @endsection
 
 @section('styles')
     @parent
     {{ Html::style(mix('assets/admin/css/users/index.css')) }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 @endsection
 
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/users/index.js')) }}
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         $(function() {
             $('#users-table').DataTable({
@@ -99,5 +101,15 @@
 
             window.location = url;
         }
+
+        $(document).on('click', '.delete-modal', function(){
+            $('#deleteModal').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+
+            $('#deleted-id').val($(this).data('id'));
+        });
     </script>
+    @include('partials._deleteJs', ['routeUrl' => 'admin.users.destroy', 'redirectUrl' => 'admin.users'])
 @endsection

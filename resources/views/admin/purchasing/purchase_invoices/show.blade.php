@@ -40,7 +40,7 @@
                         Nomor PO
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->purchase_order_header->code }}
+                        : <a style="text-decoration: underline;" href="{{ route('admin.purchase_orders.show', ['purchase_order' => $header->purchase_order_id]) }}" target="_blank">{{ $header->purchase_order_header->code }}</a>
                     </div>
                 </div>
 
@@ -58,7 +58,7 @@
                         Vendor
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : <a href="{{ route('admin.suppliers.edit', ['supplier' => $header->purchase_order_header->supplier_id]) }}">{{ $header->purchase_order_header->supplier->name }}</a>
+                        : <a style="text-decoration: underline;" href="{{ route('admin.suppliers.edit', ['supplier' => $header->purchase_order_header->supplier_id]) }}">{{ $header->purchase_order_header->supplier->name }}</a>
                     </div>
                 </div>
 

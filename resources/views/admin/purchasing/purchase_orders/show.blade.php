@@ -10,8 +10,8 @@
             </div>
             <div class="navbar-right">
                 <a class="btn btn-default" href="{{ route('admin.purchase_orders.edit',[ 'purchase_order' => $header->id]) }}">UBAH</a>
-                <a class="btn btn-default" href="{{ route('admin.purchase_orders.print',[ 'purchase_order' => $header->id]) }}">CETAK</a>
-                <a class="btn btn-default" href="{{ route('admin.purchase_orders.download',[ 'purchase_order' => $header->id]) }}">DOWNLOAD</a>
+                <a class="btn btn-default" href="{{ route('admin.purchase_orders.print',[ 'purchase_order' => $header->id]) }}" target="_blank">CETAK</a>
+                {{--<a class="btn btn-default" href="{{ route('admin.purchase_orders.download',[ 'purchase_order' => $header->id]) }}">DOWNLOAD</a>--}}
             </div>
         </div>
     </div>
@@ -39,6 +39,15 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
+                        Nomor PR
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : <a style="text-decoration: underline;" href="{{ route('admin.purchase_requests.show', ['purchase_request' => $header->purchase_request_id]) }}" target="_blank">{{ $header->purchase_request_header->code }}</a>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
                         Tanggal
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
@@ -51,7 +60,7 @@
                         Vendor
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : <a href="{{ route('admin.suppliers.edit', ['supplier' => $header->supplier_id]) }}">{{ $header->supplier->name }}</a>
+                        : <a style="text-decoration: underline;" href="{{ route('admin.suppliers.edit', ['supplier' => $header->supplier_id]) }}">{{ $header->supplier->name }}</a>
                     </div>
                 </div>
 

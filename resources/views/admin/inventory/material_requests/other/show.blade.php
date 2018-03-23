@@ -4,19 +4,21 @@
 
 @section('content')
     <div class="row">
-        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="navbar-left">
                 <a class="btn btn-default" href="{{ route('admin.material_requests.other') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
             </div>
             <div class="navbar-right">
                 <a class="btn btn-default" href="{{ route('admin.material_requests.other.edit',[ 'material_request' => $header->id]) }}">UBAH</a>
+                <a class="btn btn-default" href="{{ route('admin.material_requests.print',[ 'material_request' => $header->id]) }}" target="_blank">CETAK</a>
+                <a class="btn btn-success" href="{{ route('admin.purchase_requests.create',[ 'mr' => $header->id]) }}">PROSES PR</a>
                 {{--<a class="btn btn-default" href="{{ route('admin.purchase_requests.print',[ 'purchase_request' => $header->id]) }}">CETAK</a>--}}
                 {{--<a class="btn btn-default" href="{{ route('admin.purchase_requests.download',[ 'purchase_request' => $header->id]) }}">DOWNLOAD</a>--}}
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <form class="form-horizontal form-label-left box-section">
 
                 @if(\Illuminate\Support\Facades\Session::has('message'))
@@ -95,7 +97,7 @@
                 <hr/>
 
                 <div class="form-group">
-                    <label class="text-center col-lg-12 col-md-12 col-xs-12">Detil Barang</label>
+                    <h3 class="text-center col-lg-12 col-md-12 col-xs-12">Detil Barang</h3>
                 </div>
 
                 <div class="form-group">
@@ -106,16 +108,19 @@
                                 <th class="text-center" style="width: 20%">
                                     Kode Barang
                                 </th>
-                                <th class="text-center" style="width: 30%">
-                                    Keterangan
+                                <th class="text-center" style="width: 20%">
+                                    Nama Barang
+                                </th>
+                                <th class="text-center" style="width: 20%">
+                                    Part Number Asli
                                 </th>
                                 <th class="text-center" style="width: 10%">
-                                    Satuan (UOM)
+                                    UOM
                                 </th>
                                 <th class="text-center" style="width: 10%">
                                     QTY
                                 </th>
-                                <th class="text-center" style="width: 30%">
+                                <th class="text-center" style="width: 20%">
                                     Remark
                                 </th>
                             </tr>
@@ -129,6 +134,9 @@
                                     </td>
                                     <td class="text-center">
                                         {{ $detail->item->name }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ $detail->item->part_number ?? '-' }}
                                     </td>
                                     <td class="text-center">
                                         {{ $detail->item->uom }}
