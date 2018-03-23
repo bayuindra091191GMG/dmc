@@ -40,7 +40,9 @@
        <th>No</th>
        <th>Code</th>
        <th>Date</th>
-       <th>PR Code</th>
+       <th>MR Code</th>
+       <th>HM</th>
+       <th>KM</th>
        <th>Department</th>
        <th>Division</th>
        <th>Dibuat Oleh</th>
@@ -53,7 +55,9 @@
             <td>{{ $i }}</td>
             <td>{{ $item->code }}</td>
             <td>{{ $item->date_string }}</td>
-            <td>{{ $item->purchase_request_header->code }}</td>
+            <td>{{ $item->materil_request_header->code }}</td>
+            <td>{{ $item->hm }}</td>
+            <td>{{ $item->km }}</td>
             <td>{{ $item->department->name }}</td>
             <td>{{ $item->division }}</td>
             <td>{{ $item->createdBy->name }}</td>
