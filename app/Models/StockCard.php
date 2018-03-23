@@ -18,6 +18,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $change
  * @property int $stock
  * @property int $created_by
+ * @property string $flag
+ * @property string $description
  * @property \Carbon\Carbon $created_at
  * @property int $updated_by
  * @property \Carbon\Carbon $updated_at
@@ -48,6 +50,8 @@ class StockCard extends Eloquent
 		'warehouse_id',
 		'change',
 		'stock',
+		'flag',
+		'description',
 		'created_by',
 		'updated_by'
 	];

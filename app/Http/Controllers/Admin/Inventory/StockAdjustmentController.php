@@ -101,6 +101,8 @@ class StockAdjustmentController extends Controller
             'item_id'          => $selectedItem,
             'change'          => $depreciation,
             'stock'          => $itemStockPerWarehouse,
+            'flag'          => "-",
+            'description'          => "stock adjustment",
             'warehouse_id'  => $request->input('warehouse'),
             'created_by'    => $user->id,
             'created_at'    => $now
