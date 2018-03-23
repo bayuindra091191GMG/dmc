@@ -189,6 +189,11 @@ class User extends Authenticatable
         return $this->hasMany(\App\Models\Machinery::class, 'updated_by');
     }
 
+    public function material_request_headers()
+    {
+        return $this->hasMany(\App\Models\MaterialRequestHeader::class, 'updated_by');
+    }
+
     public function payment_requests()
     {
         return $this->hasMany(\App\Models\PaymentRequest::class, 'updated_by');
@@ -232,6 +237,11 @@ class User extends Authenticatable
     public function stock_adjustments()
     {
         return $this->hasMany(\App\Models\StockAdjustment::class, 'updated_by');
+    }
+
+    public function stock_cards()
+    {
+        return $this->hasMany(\App\Models\StockCard::class, 'updated_by');
     }
 
     public function stock_ins()

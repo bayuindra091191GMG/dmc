@@ -13,7 +13,7 @@
                 @if($header->status_id == 3)
                     <a class="btn btn-default" href="{{ route('admin.material_requests.other.edit',[ 'material_request' => $header->id]) }}">UBAH</a>
                     <a class="btn btn-success" href="{{ route('admin.purchase_requests.create',[ 'mr' => $header->id]) }}">PROSES PR</a>
-                    <a class="close-modal btn btn-danger">CLOSE</a>
+                    <a class="close-modal btn btn-danger" data-id="{{ $header->id }}">CLOSE</a>
                 @endif
             </div>
         </div>

@@ -270,6 +270,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('purchase_requests/pilihmr', 'Purchasing\PurchaseRequestHeaderController@beforeCreate')->name('purchase_requests.before_create');
     Route::get('purchase_requests/tambah', 'Purchasing\PurchaseRequestHeaderController@create')->name('purchase_requests.create');
     Route::post('purchase_requests/simpan', 'Purchasing\PurchaseRequestHeaderController@store')->name('purchase_requests.store');
+    Route::post('purchase_requests/tutup', 'Purchasing\PurchaseRequestHeaderController@close')->name('purchase_requests.close');
     Route::get('purchase_requests/print/{purchase_request}', 'Purchasing\PurchaseRequestHeaderController@printDocument')->name('purchase_requests.print');
     Route::get('purchase_requests/download/{purchase_request}', 'Purchasing\PurchaseRequestHeaderController@download')->name('purchase_requests.download');
     Route::get('purchase_requests/report', 'Purchasing\PurchaseRequestHeaderController@report')->name('purchase_requests.report');
@@ -289,6 +290,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('purchase_orders/pilihpr', 'Purchasing\PurchaseOrderHeaderController@beforeCreate')->name('purchase_orders.before_create');
     Route::get('purchase_orders/tambah', 'Purchasing\PurchaseOrderHeaderController@create')->name('purchase_orders.create');
     Route::post('purchase_orders/simpan', 'Purchasing\PurchaseOrderHeaderController@store')->name('purchase_orders.store');
+    Route::post('purchase_orders/tutup', 'Purchasing\PurchaseOrderHeaderController@close')->name('purchase_orders.close');
     Route::get('purchase_orders/print/{purchase_order}', 'Purchasing\PurchaseOrderHeaderController@printDocument')->name('purchase_orders.print');
     Route::get('purchase_orders/download/{purchase_order}', 'Purchasing\PurchaseOrderHeaderController@download')->name('purchase_orders.download');
     Route::get('purchase_orders/report', 'Purchasing\PurchaseOrderHeaderController@report')->name('purchase_orders.report');
@@ -349,7 +351,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     //Delivery Order Headers
     Route::get('delivery_orders', 'Inventory\DeliveryOrderHeaderController@index')->name('delivery_orders');
     Route::get('delivery_orders/detil/{delivery_order}', 'Inventory\DeliveryOrderHeaderController@show')->name('delivery_orders.show');
-//    Route::get('delivery_orders/{delivery_order}/ubah', 'Inventory\DeliveryOrderHeaderController@edit')->name('delivery_orders.edit');
     Route::put('delivery_orders/ubah/{delivery_order}', 'Inventory\DeliveryOrderHeaderController@update')->name('delivery_orders.update');
     Route::get('delivery_orders/tambah', 'Inventory\DeliveryOrderHeaderController@create')->name('delivery_orders.create');
     Route::post('delivery_orders/simpan', 'Inventory\DeliveryOrderHeaderController@store')->name('delivery_orders.store');

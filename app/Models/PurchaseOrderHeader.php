@@ -92,9 +92,11 @@ class PurchaseOrderHeader extends Eloquent
 		'pph_amount',
 		'ppn_amount',
 		'total_payment',
-        'closing_date',
 		'status_id',
         'date',
+        'close_reason',
+        'closed_by',
+        'closing_date',
 		'created_by',
 		'updated_by'
 	];
@@ -168,6 +170,11 @@ class PurchaseOrderHeader extends Eloquent
     public function updatedBy()
     {
         return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
+    }
+
+    public function closeddBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'closed_by');
     }
 
 	public function item_receipt_details()

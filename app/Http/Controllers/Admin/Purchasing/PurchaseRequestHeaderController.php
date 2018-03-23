@@ -21,6 +21,7 @@ use App\Transformer\Purchasing\PurchaseRequestHeaderTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use PDF;
@@ -322,6 +323,27 @@ class PurchaseRequestHeaderController extends Controller
         }
 
         return \Response::json($formatted_tags);
+    }
+
+    public function close(Request $request){
+        try{
+            $user = \Auth::user();
+            $now = Carbon::now('Asia/Jakarta');
+
+            $purchaseRequest = PurchaseRequestHeader::find($request->input('id'));
+            $purchaseRequest->closed_by = $user->id;
+            $purchaseRequest->closed_at = $now->toDateTimeString();
+            $purchaseRequest->close_reason = $request->input('reason');
+            $purchaseRequest->status_id = 11;
+            $purchaseRequest->save();
+
+            Session::flash('message', 'Berhasil tutup purchase request!');
+
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 
     public function report(){
