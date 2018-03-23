@@ -82,17 +82,16 @@
 
             <div class="form-group">
                 <div class="col-lg-12 col-md-12 col-xs-12 box-section">
-                    <a class="add-modal btn btn-info" style="margin-bottom: 10px;">
-                        <span class="glyphicon glyphicon-plus-sign"></span> Tambah
-                    </a>
+                    @if(empty($purchaseRequest))
+                        <a class="add-modal btn btn-info" style="margin-bottom: 10px;">
+                            <span class="glyphicon glyphicon-plus-sign"></span> Tambah
+                        </a>
+                    @endif
                     <table class="table table-bordered table-hover" id="detail_table">
                         <thead>
                         <tr >
                             <th class="text-center" style="width: 20%">
                                 Nomor Part
-                            </th>
-                            <th class="text-center" style="width: 20%">
-                                Time
                             </th>
                             <th class="text-center" style="width: 20%">
                                 Jumlah
@@ -115,17 +114,14 @@
                                         <input type='hidden' name='item_value[]' value='{{ $detail->item_id }}'/>
                                     </td>
                                     <td>
-                                        <input type='text' name='time[]'  placeholder='Time' class='form-control' value="00:00" readonly/>
-                                    </td>
-                                    <td>
-                                        <input type='number' name='qty[]'  placeholder='Jumlah' class='form-control' value="{{ $detail->quantity }}" readonly/>
+                                        <input type='number' name='qty[]' min="0" placeholder='Jumlah' class='form-control' value="{{ $detail->quantity }}" readonly/>
                                     </td>
                                     <td>
                                         <input type='text' name='remark[]' placeholder='Keterangan' class='form-control' value="{{ $detail->remark }}" readonly/>
                                     </td>
                                     <td>
                                         @php($itemId = $detail->item_id. "#". $detail->item->code. "#". $detail->item->name)
-                                        <a class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}" data-time="00:00">
+                                        <a class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}">
                                             <span class="glyphicon glyphicon-edit"></span> Ubah
                                         </a>
                                         <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
@@ -172,16 +168,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="time_add">Time:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="time_add" name="time_add">
-                                <p class="errorTime text-center alert alert-danger hidden"></p>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="control-label col-sm-2" for="qty_add">Jumlah:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="qty_add" name="qty_add">
+                                <input type="number" class="form-control" min="0" id="qty_add" name="qty_add">
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -224,16 +213,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="time_edit">Time:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="time_edit" name="time">
-                                <p class="errorTime text-center alert alert-danger hidden"></p>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="control-label col-sm-2" for="qty_edit">Jumlah:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="qty_edit" name="qty">
+                                <input type="number" class="form-control" min="0" id="qty_edit" name="qty">
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -277,13 +259,6 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="time_delete">Time:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="time_delete" disabled>
-                                <p class="errorTime text-center alert alert-danger hidden"></p>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="control-label col-sm-2" for="qty_delete">Jumlah:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="qty_delete" disabled>
@@ -322,15 +297,6 @@
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
     {{ Html::script(mix('assets/admin/js/stringbuilder.js')) }}
-
-    <script>
-        $('#time_add').datetimepicker({
-            format: "HH:mm"
-        });
-        $('#time_edit').datetimepicker({
-            format: "HH:mm"
-        });
-    </script>
 
     <script type="text/javascript">
         var i=1;
@@ -496,16 +462,10 @@
         $('.modal-footer').on('click', '.add', function() {
             var qtyAdd = $('#qty_add').val();
             var itemAdd = $('#item_add').val();
-            var timeAdd = $('#time_add').val();
             var remarkAdd = $('#remark_add').val();
 
             if(!itemAdd || itemAdd === ""){
                 alert('Mohon pilih barang...');
-                return false;
-            }
-
-            if(!timeAdd || timeAdd === ""){
-                alert('Mohon isi waktu...');
                 return false;
             }
 
@@ -528,24 +488,19 @@
             sbAdd.append("<tr class='item" + idx + "'>");
             sbAdd.append("<td class='field-item'><input type='text' name='item_text[]' class='form-control' value='" + splitted[1] + " - " + splitted[2] + "' readonly/>")
             sbAdd.append("<input type='hidden' name='item_value[]' value='" + splitted[0] + "'/></td>");
-            if(timeAdd && timeAdd !== ""){
-                sbAdd.append("<td><input type='text' name='time[]' class='form-control' value='" + timeAdd + "' readonly/></td>");
-            }
-            else{
-                sbAdd.append("<td><input type='text' name='time[]' class='form-control' value='0' readonly/></td>");
-            }
+
             if(qtyAdd && qtyAdd !== ""){
-                sbAdd.append("<td><input type='text' name='qty[]' class='form-control' value='" + qtyAdd + "' readonly/></td>");
+                sbAdd.append("<td><input type='text' name='qty[]' min='0' class='form-control' value='" + qtyAdd + "' readonly/></td>");
             }
             else{
-                sbAdd.append("<td><input type='text' name='qty[]' class='form-control' readonly/></td>");
+                sbAdd.append("<td><input type='text' name='qty[]' min='0' class='form-control' readonly/></td>");
             }
 
             sbAdd.append("<td><input type='text' name='remark[]' class='form-control' value='" + remarkAdd + "' readonly/></td>");
 
             sbAdd.append("<td>");
-            sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd + "' data-time='" + timeAdd  + "'><span class='glyphicon glyphicon-edit'></span> Ubah</a>");
-            sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd + "' data-time='" + timeAdd + "'><span class='glyphicon glyphicon-trash'></span> Hapus</a>");
+            sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd + "'><span class='glyphicon glyphicon-edit'></span> Ubah</a>");
+            sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd + "'><span class='glyphicon glyphicon-trash'></span> Hapus</a>");
             sbAdd.append("</td>");
             sbAdd.append("</tr>");
 
@@ -553,7 +508,6 @@
 
             // Reset add form modal
             $('#qty_add').val('');
-            $('#time_add').val('');
             $('#remark_add').val('');
             $('#item_add').val(null).trigger('change');
         });
@@ -590,23 +544,16 @@
 
             $('#qty_edit').val($(this).data('qty'));
             $('#remark_edit').val($(this).data('remark'));
-            $('#time_edit').val($(this).data('time'));
             $('#editModal').modal('show');
         });
 
         $('.modal-footer').on('click', '.edit', function() {
             var itemEdit = $('#item_edit').val();
             var qtyEdit = $('#qty_edit').val();
-            var timeEdit = $('#time_edit').val();
             var remarkEdit = $('#remark_edit').val();
 
             if(!qtyEdit || qtyEdit === "" || qtyEdit === "0"){
                 alert('Mohon isi jumlah...')
-                return false;
-            }
-
-            if(!timeEdit || timeEdit === ""){
-                alert('Mohon isi waktu...')
                 return false;
             }
 
@@ -627,25 +574,18 @@
             sbEdit.append("<td class='field-item'><input type='text' name='item_text[]' class='form-control' value='" + splitted[1] + ' - ' + splitted[2] + "' readonly/>")
             sbEdit.append("<input type='hidden' name='item_value[]' value='" + splitted[0] + "'/></td>");
 
-            if(timeEdit && timeEdit !== ""){
-                sbEdit.append("<td><input type='text' name='time[]' class='form-control' value='" + timeEdit + "' readonly/></td>");
-            }
-            else{
-                sbEdit.append("<td><input type='text' name='time[]' class='form-control' value='0' readonly/></td>");
-            }
-
             if(qtyEdit && qtyEdit !== ""){
-                sbEdit.append("<td><input type='text' name='qty[]' class='form-control' value='" + qtyEdit + "' readonly/></td>");
+                sbEdit.append("<td><input type='text' name='qty[]' min='0' class='form-control' value='" + qtyEdit + "' readonly/></td>");
             }
             else{
-                sbEdit.append("<td><input type='text' name='qty[]' class='form-control' readonly/></td>");
+                sbEdit.append("<td><input type='text' name='qty[]' min='0' class='form-control' readonly/></td>");
             }
 
             sbEdit.append("<td><input type='text' name='remark[]' class='form-control' value='" + remarkEdit + "' readonly/></td>");
 
             sbEdit.append("<td>");
-            sbEdit.append("<a class='edit-modal btn btn-info' data-id='" + id + "' data-item-id='" + data + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "' data-time='" + timeEdit + "'><span class='glyphicon glyphicon-edit'></span> Ubah</a>");
-            sbEdit.append("<a class='delete-modal btn btn-danger' data-id='" + id + "' data-item-id='" + data + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "' data-time='" + timeEdit + "'><span class='glyphicon glyphicon-trash'></span> Hapus</a>");
+            sbEdit.append("<a class='edit-modal btn btn-info' data-id='" + id + "' data-item-id='" + data + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "'><span class='glyphicon glyphicon-edit'></span> Ubah</a>");
+            sbEdit.append("<a class='delete-modal btn btn-danger' data-id='" + id + "' data-item-id='" + data + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "'><span class='glyphicon glyphicon-trash'></span> Hapus</a>");
             sbEdit.append("</td>");
             sbEdit.append("</tr>");
 
@@ -659,7 +599,6 @@
             deletedId = $(this).data('id');
             $('#item_delete').val($(this).data('item-text'));
             $('#qty_delete').val($(this).data('qty'));
-            $('#time_delete').val($(this).data('time'));
             $('#remark_delete').val($(this).data('remark'));
             $('#deleteModal').modal('show');
         });

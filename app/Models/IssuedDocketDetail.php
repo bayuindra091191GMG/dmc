@@ -41,7 +41,6 @@ class IssuedDocketDetail extends Eloquent
 		'header_id',
 		'item_id',
 		'machinery_id',
-		'time',
 		'quantity',
 		'remarks'
 	];

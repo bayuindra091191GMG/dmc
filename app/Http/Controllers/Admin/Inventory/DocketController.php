@@ -10,6 +10,7 @@ use App\Models\IssuedDocketDetail;
 use App\Models\IssuedDocketHeader;
 use App\Models\Item;
 use App\Models\NumberingSystem;
+use App\Models\PurchaseRequestDetail;
 use App\Models\PurchaseRequestHeader;
 use App\Transformer\Inventory\IssuedDocketTransformer;
 use Carbon\Carbon;
@@ -63,7 +64,6 @@ class DocketController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'division'      => 'max:90',
             'code'          => 'max:40'
         ]);
 
@@ -106,31 +106,46 @@ class DocketController extends Controller
         // Validate details
         $items = Input::get('item_value');
         $qtys = Input::get('qty');
-        $times = Input::get('time');
         $valid = true;
+        $prCheck = true;
+        $qtyCheck = true;
         $i = 0;
-        //$prData = PurchaseRequestDetail::where('header_id', '')
+        $purchaseRequest = PurchaseRequestHeader::where('id', $prId)->first();
 
         foreach($items as $item){
             if(empty($item)) $valid = false;
             if(empty($qtys[$i]) || $qtys[$i] == '0') $valid = false;
-            if(empty($times[$i]) || $times[$i] == '00:00') $valid = false;
 
             //Validate Details with PR Data
+            foreach($purchaseRequest->purchase_request_details as $detail){
+                if($detail->quantity < $qtys[$i]){
+                    $prCheck = false;
+                }
+            }
+
+            //Check Item in Stock
+            $tempItem = Item::find($item);
+            if($tempItem->stock == null || $tempItem->stock == 0 || $tempItem->stock < $qtys[$i]){
+                $qtyCheck = false;
+            }
 
             $i++;
         }
 
         if(!$valid){
-            return redirect()->back()->withErrors('Detail barang, Time dan Jumlah wajib diisi!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Detail barang, Jumlah wajib diisi!', 'default')->withInput($request->all());
         }
-
-        $purchaseRequest = PurchaseRequestHeader::where('id', $prId)->first();
+        if(!$prCheck){
+            return redirect()->back()->withErrors('Detail barang, Jumlah tidak boleh melebihi Jumlah di PR!', 'default')->withInput($request->all());
+        }
+        if(!$qtyCheck){
+            return redirect()->back()->withErrors('Detail barang, Stock tidak mencukupi!', 'default')->withInput($request->all());
+        }
 
         $docketHeader = IssuedDocketHeader::create([
             'code'                  => $docketNumber,
             'department_id'         => $purchaseRequest->department_id,
-            'unit_id'          => $purchaseRequest->machinery_id,
+            'unit_id'               => $purchaseRequest->machinery_id,
             'division'              => Input::get('division'),
             'status_id'             => 1,
             'created_by'            => $user->id,
@@ -145,7 +160,6 @@ class DocketController extends Controller
         // Create Issued Docket Detail
         $qty = Input::get('qty');
         $remark = Input::get('remark');
-        $time = Input::get('time');
         $idx = 0;
         foreach($items as $item){
             if(!empty($item)){
@@ -153,7 +167,6 @@ class DocketController extends Controller
                     'header_id'     => $docketHeader->id,
                     'item_id'       => $item,
                     'machinery_id'  => $docketHeader->machinery_id,
-                    'time'          => $time[$idx],
                     'quantity'      => $qty[$idx]
                 ]);
 

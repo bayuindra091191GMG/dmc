@@ -55,6 +55,8 @@ class IssuedDocketHeader extends Eloquent
 	protected $fillable = [
 		'code',
 		'date',
+        'km',
+        'hm',
 		'unit_id',
 		'purchase_request_id',
 		'department_id',

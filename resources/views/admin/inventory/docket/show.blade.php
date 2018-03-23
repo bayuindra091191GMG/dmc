@@ -52,12 +52,31 @@
                         : {{ $header->purchase_request_header->code }}
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
                         Unit Alat Berat
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         : {{ $header->machinery->code }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        HM
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ $header->hm ?? '-' }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        KM
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ $header->km ?? '-'}}
                     </div>
                 </div>
 
@@ -89,10 +108,7 @@
                     <div class="col-lg-12 col-md-12 col-xs-12 column">
                         <table class="table table-bordered table-hover">
                             <thead>
-                            <tr >
-                                <th class="text-center">
-                                    Time
-                                </th>
+                            <tr>
                                 <th class="text-center">
                                     Nama Barang
                                 </th>
@@ -115,16 +131,13 @@
                             @foreach($header->issued_docket_details as $detail)
                                 <tr>
                                     <td>
-                                        {{ $detail->time }}
-                                    </td>
-                                    <td>
                                         {{ $detail->item->name }}
                                     </td>
                                     <td class='field-item'>
                                         {{ $detail->item->code }}
                                     </td>
                                     <td>
-                                        {{ $detail->item->uom->description }}
+                                        {{ $detail->item->uom }}
                                     </td>
                                     <td>
                                         {{ $detail->quantity }}
