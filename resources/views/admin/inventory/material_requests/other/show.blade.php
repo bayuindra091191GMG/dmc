@@ -181,12 +181,12 @@
                     <button type="button" class="close" data-dismiss="modal">×</button>
                 </div>
                 <div class="modal-body">
-                    <h3 class="text-center">Apakah anda yakin ingin menutup dokumen MR secara manual?</h3>
+                    <h3 class="text-center">Apakah anda yakin ingin menutup dokumen MR ini secara manual?</h3>
                     <br />
 
                     <form role="form">
                         <input type="hidden" id="closed-id" name="closed-id"/>
-                        <label>Alasan Hapus:</label>
+                        <label for="reason">Alasan Hapus:</label>
                         <textarea id="reason" name="reason" rows="5" class="form-control col-md-7 col-xs-12" style="resize: vertical"></textarea>
                     </form>
 
@@ -194,7 +194,7 @@
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
                             <span class='glyphicon glyphicon-remove'></span> Tidak
                         </button>
-                        <button type="submit" class="btn btn-danger delete">
+                        <button type="submit" class="btn btn-danger closed">
                             <span class='glyphicon glyphicon-trash'></span> Ya
                         </button>
                     </div>
@@ -207,6 +207,7 @@
 @section('styles')
     @parent
     {{ Html::style(mix('assets/admin/css/datatables.css')) }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <style>
         .box-section{
             background-color: #ffffff;
@@ -220,7 +221,37 @@
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/datatables.js')) }}
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript">
+        $(document).on('click', '.close-modal', function(){
+            $('#closeModal').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
 
+            $('#closed-id').val($(this).data('id'));
+        });
+
+        $('.modal-footer').on('click', '.closed', function() {
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('admin.material_requests.close') }}',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'id': $('#closed-id').val(),
+                    'reason': $('#reason').val()
+                },
+                success: function(data) {
+                    if ((data.errors)){
+                        setTimeout(function () {
+                            toastr.error('Gagal menutup MR!!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                        }, 500);
+                    }
+                    else{
+                        window.location.reload();
+                    }
+                }
+            });
+        });
     </script>
 @endsection

@@ -399,6 +399,27 @@ class MaterialRequestHeaderController extends Controller
         return \Response::json($formatted_tags);
     }
 
+    public function close(Request $request){
+        try{
+            $user = \Auth::user();
+            $now = Carbon::now('Asia/Jakarta');
+
+            $materialRequest = MaterialRequestHeader::find($request->input('id'));
+            $materialRequest->closed_by = $user->id;
+            $materialRequest->closed_at = $now->toDateTimeString();
+            $materialRequest->close_reason = $request->input('reason');
+            $materialRequest->status_id = 11;
+            $materialRequest->save();
+
+            Session::flash('message', 'Berhasil tutup MR!');
+
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
+    }
+
     public function printDocument($id){
         $materialRequest = MaterialRequestHeader::find($id);
 

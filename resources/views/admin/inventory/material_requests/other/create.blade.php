@@ -204,7 +204,7 @@
         $('#machinery').select2({
             placeholder: {
                 id: '-1',
-                text: ' - Pilih Barang - '
+                text: ' - Pilih Alat Berat - '
             },
             width: '100%',
             minimumInputLength: 1,

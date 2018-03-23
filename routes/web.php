@@ -228,6 +228,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     //Material Request Headers Primary
     Route::post('material_requests/simpan', 'Inventory\MaterialRequestHeaderController@store')->name('material_requests.store');
     Route::put('material_requests/ubah/{material_request}', 'Inventory\MaterialRequestHeaderController@update')->name('material_requests.update');
+    Route::post('material_requests/tutup', 'Inventory\MaterialRequestHeaderController@close')->name('material_requests.close');
     Route::get('material_requests/print/{material_request}', 'Inventory\MaterialRequestHeaderController@printDocument')->name('material_requests.print');
 
     //Material Request Details Primary

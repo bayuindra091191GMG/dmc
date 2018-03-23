@@ -348,7 +348,7 @@
         $('#machinery').select2({
             placeholder: {
                 id: '{{ $header->machinery_id ?? '-1' }}',
-                text: '{{ $header->machinery_id !== null ? $header->machinery->code : 'Pilih alat berat...' }}'
+                text: '{{ $header->machinery_id !== null ? $header->machinery->code : ' - Pilih Alat Berat - ' }}'
             },
             width: '100%',
             minimumInputLength: 1,

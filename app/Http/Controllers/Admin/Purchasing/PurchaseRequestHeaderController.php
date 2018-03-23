@@ -337,7 +337,7 @@ class PurchaseRequestHeaderController extends Controller
             $purchaseRequest->status_id = 11;
             $purchaseRequest->save();
 
-            Session::flash('message', 'Berhasil tutup purchase request!');
+            Session::flash('message', 'Berhasil tutup PR!');
 
             return Response::json(array('success' => 'VALID'));
         }
