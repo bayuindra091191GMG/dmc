@@ -33,20 +33,20 @@
 
 <div class="container">
  <h2>Purchase Request Report</h2>
- <p>Date: {{ $start_date }} - {{ $finish_date }}</p>
-    <p>Total PR : {{ $data->count() }}</p>
+ <p>Tanggal: {{ $start_date }} - {{ $finish_date }}</p>
+    <p>Total PR: {{ $data->count() }}</p>
  <table class="table">
   <thead>
   <tr>
        <th>No</th>
-       <th>Code</th>
-       <th width="15%">Date</th>
+       <th>Nomor PR</th>
+       <th>Tanggal</th>
        <th>Alat Berat</th>
-       <th>Department</th>
-       <th>SN Chasis</th>
-       <th>SN Engine</th>
+       <th>Departemen</th>
+       {{--<th>S/N Chasis</th>--}}
+       {{--<th>S/N Engine</th>--}}
        <th>Status</th>
-       <th width="15%">Dibuat Oleh</th>
+       <th>Dibuat Oleh</th>
   </tr>
   </thead>
   <tbody>
@@ -58,8 +58,8 @@
             <td>{{ $item->date_string }}</td>
             <td>{{ $item->machinery->code ?? '-' }}</td>
             <td>{{ $item->department->name }}</td>
-            <td>{{ $item->sn_chasis ?? '-' }}</td>
-            <td>{{ $item->sn_engine ?? '-' }}</td>
+            {{--<td>{{ $item->sn_chasis ?? '-' }}</td>--}}
+            {{--<td>{{ $item->sn_engine ?? '-' }}</td>--}}
             <td>{{ $item->status->description }}</td>
             <td>{{ $item->createdBy->name }}</td>
         </tr>

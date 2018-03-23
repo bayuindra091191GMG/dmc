@@ -1,18 +1,18 @@
 @extends('admin.layouts.admin')
 
-{{--@section('title','Download Report Purchase Request')--}}
+{{--@section('title','Download Report Purchase Order')--}}
 
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-            <h2>Report Purchase Request</h2>
+            <h2>Report Material Request</h2>
             <hr/>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
 
-            {{ Form::open(['route'=>['admin.purchase_requests.download-report'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.material_requests.download-report'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
 
             @if(count($errors))
                 <div class="form-group">
@@ -29,8 +29,22 @@
             @endif
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status" >
+                    Tipe MR
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="status" name="status" class="form-control col-md-7 col-xs-12">
+                        <option value="0" selected>Semua</option>
+                        <option value="1">Inventory</option>
+                        <option value="2">Oli & Bensin</option>
+                        <option value="3">Servis</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="start_date" >
-                    Dari Tanggal
+                    Start Date
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="start_date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('start_date')) parsley-error @endif"
@@ -40,7 +54,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="end_date" >
-                    Sampai Tanggal
+                    Finish Date
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="end_date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('end_date')) parsley-error @endif"

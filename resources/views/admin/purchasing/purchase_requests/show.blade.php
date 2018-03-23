@@ -12,7 +12,9 @@
                 <a class="btn btn-default" href="{{ route('admin.purchase_requests.edit',[ 'purchase_request' => $header->id]) }}">UBAH</a>
                 <a class="btn btn-default" href="{{ route('admin.purchase_requests.print',[ 'purchase_request' => $header->id]) }}" target="_blank">CETAK</a>
                 {{--<a class="btn btn-default" href="{{ route('admin.purchase_requests.download',[ 'purchase_request' => $header->id]) }}">DOWNLOAD</a>--}}
-                <a class="btn btn-success" href="{{ route('admin.purchase_orders.create',[ 'pr' => $header->id]) }}">PROSES PO</a>
+                @if($header->status_id == 6)
+                    <a class="btn btn-success" href="{{ route('admin.purchase_orders.create',[ 'pr' => $header->id]) }}">PROSES PO</a>
+                @endif
             </div>
         </div>
     </div>

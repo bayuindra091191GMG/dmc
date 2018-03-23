@@ -1,8 +1,14 @@
 @extends('admin.layouts.admin')
 
-@section('title','Download Report Purchase Order')
+{{--@section('title','Download Report Purchase Order')--}}
 
 @section('content')
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+            <h2>Report Purchase Order</h2>
+            <hr/>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
 
@@ -43,8 +49,21 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status" >
+                    Status
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="status" name="status" class="form-control col-md-7 col-xs-12">
+                        <option value="0" selected>Semua</option>
+                        <option value="3">Open</option>
+                        <option value="4">Closed</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a class="btn btn-primary" href="{{ route('admin.issued_dockets') }}"> Batal</a>
+                    {{--<a class="btn btn-primary" href="{{ route('admin.issued_dockets') }}"> Batal</a>--}}
                     <button type="submit" class="btn btn-success"> Download</button>
                 </div>
             </div>

@@ -354,31 +354,52 @@ class PurchaseOrderHeaderController extends Controller
     }
 
     public function downloadReport(Request $request) {
-        //Get Data First
-        $tempStart = strtotime(Input::get('start_date'));
+        $validator = Validator::make($request->all(),[
+            'start_date'        => 'required',
+            'end_date'          => 'required',
+        ],[
+            'start_date.required'   => 'Dari Tanggal wajib diisi!',
+            'end_date.required'     => 'Sampai Tanggal wajib diisi!',
+
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $tempStart = strtotime($request->input('start_date'));
         $start = date('Y-m-d', $tempStart);
-        $tempEnd = strtotime(Input::get('end_date'));
+        $tempEnd = strtotime($request->input('end_date'));
         $end = date('Y-m-d', $tempEnd);
 
-        //Check date
+        // Validate date
         if($start > $end){
-            return redirect()->back()->withErrors('Start Date Tidak boleh lebih besar dari Finish Date!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Dari Tanggal tidak boleh lebih besar dari Sampai Tanggal!', 'default')->withInput($request->all());
         }
 
-        $data = PurchaseOrderHeader::whereBetween('created_at', array($start, $end))->get();
+        $data = PurchaseOrderHeader::whereBetween('created_at', array($start, $end));
 
-        //Check Data
-        if($data == null || $data->count() == 0){
-            return redirect()->back()->withErrors('Data Tidak Ditemukan!', 'default')->withInput($request->all());
+        // Filter status
+        $status = $request->input('status');
+        if($status != '0'){
+            $data = $data->where('status_id', $status);
         }
 
-        $total = 0;
-        foreach ($data as $item){
-            $total += $item->total_payment;
-        }
-        $totalStr = 'Rp '. number_format($total, 0, ",", ".");
+        $data = $data->orderByDesc('date')
+            ->get();
 
-        $pdf = PDF::loadView('documents.purchase_orders.purchase_orders_pdf', ['data' => $data, 'start_date' => Input::get('start_date'), 'finish_date' => Input::get('end_date'), 'total' => $totalStr])
+        // Validate Data
+        if(empty($data) || $data->count() == 0){
+            return redirect()->back()->withErrors('Data tidak ditemukan!', 'default')->withInput($request->all());
+        }
+
+        $total = $data->sum('total_payment');
+        $totalStr = number_format($total, 0, ",", ".");
+
+        $pdf = PDF::loadView('documents.purchase_orders.purchase_orders_pdf', ['data' => $data, 'start_date' => $request->input('start_date'), 'finish_date' => $request->input('end_date'), 'total' => $totalStr])
             ->setPaper('a4', 'landscape');
         $now = Carbon::now('Asia/Jakarta');
         $filename = 'PURCHASE_ORDER_REPORT_' . $now->toDateTimeString();

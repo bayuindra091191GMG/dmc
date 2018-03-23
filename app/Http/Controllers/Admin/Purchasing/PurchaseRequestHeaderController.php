@@ -329,22 +329,46 @@ class PurchaseRequestHeaderController extends Controller
     }
 
     public function downloadReport(Request $request) {
-        //Get Data First
-        $tempStart = strtotime(Input::get('start_date'));
-        $start = date('Y-m-d', $tempStart);
-        $tempEnd = strtotime(Input::get('end_date'));
-        $end = date('Y-m-d', $tempEnd);
+        $validator = Validator::make($request->all(),[
+            'start_date'        => 'required',
+            'end_date'          => 'required',
+        ],[
+            'start_date.required'   => 'Dari Tanggal wajib diisi!',
+            'end_date.required'     => 'Sampai Tanggal wajib diisi!',
 
-        //Check date
-        if($start > $end){
-            return redirect()->back()->withErrors('Start Date Tidak boleh lebih besar dari Finish Date!', 'default')->withInput($request->all());
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
         }
 
-        $data = PurchaseRequestHeader::whereBetween('created_at', array($start, $end))->get();
+        $tempStart = strtotime($request->input('start_date'));
+        $start = date('Y-m-d', $tempStart);
+        $tempEnd = strtotime($request->input('end_date'));
+        $end = date('Y-m-d', $tempEnd);
 
-        //Check Data
-        if($data == null || $data->count() == 0){
-            return redirect()->back()->withErrors('Data Tidak Ditemukan!', 'default')->withInput($request->all());
+        // Validate date
+        if($start > $end){
+            return redirect()->back()->withErrors('Dari Tanggal tidak boleh lebih besar dari Sampai Tanggal!', 'default')->withInput($request->all());
+        }
+
+        $data = PurchaseRequestHeader::whereBetween('date', array($start, $end));
+
+        // Filter status
+        $status = $request->input('status');
+        if($status != '0'){
+            $data = $data->where('status_id', $status);
+        }
+
+        $data = $data->orderByDesc('date')
+                    ->get();
+
+        // Validate Data
+        if(empty($data) || $data->count() == 0){
+            return redirect()->back()->withErrors('Data tidak ditemukan!', 'default')->withInput($request->all());
         }
 
         $pdf = PDF::loadView('documents.purchase_requests.purchase_requests_pdf', ['data' => $data, 'start_date' => Input::get('start_date'), 'finish_date' => Input::get('end_date')])

@@ -11,9 +11,9 @@
             <div class="navbar-right">
                 <a class="btn btn-default" href="{{ route('admin.material_requests.fuel.edit',[ 'material_request' => $header->id]) }}">UBAH</a>
                 <a class="btn btn-default" href="{{ route('admin.material_requests.print',[ 'material_request' => $header->id]) }}" target="_blank">CETAK</a>
-                <a class="btn btn-success" href="{{ route('admin.purchase_requests.create',[ 'mr' => $header->id]) }}">PROSES PR</a>
-                {{--<a class="btn btn-default" href="{{ route('admin.purchase_requests.print',[ 'purchase_request' => $header->id]) }}">CETAK</a>--}}
-                {{--<a class="btn btn-default" href="{{ route('admin.purchase_requests.download',[ 'purchase_request' => $header->id]) }}">DOWNLOAD</a>--}}
+                @if($header->status_id == 6)
+                    <a class="btn btn-success" href="{{ route('admin.purchase_requests.create',[ 'mr' => $header->id]) }}">PROSES PR</a>
+                @endif
             </div>
         </div>
     </div>

@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 20 Mar 2018 11:16:38 +0700.
+ * Date: Fri, 23 Mar 2018 15:42:43 +0700.
  */
 
 namespace App\Models;
@@ -22,6 +22,9 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $hm
  * @property int $status_id
  * @property \Carbon\Carbon $date
+ * @property string $close_reason
+ * @property int $closed_by
+ * @property \Carbon\Carbon $closed_at
  * @property int $created_by
  * @property \Carbon\Carbon $created_at
  * @property int $updated_by
@@ -30,30 +33,33 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\Department $department
  * @property \App\Models\Machinery $machinery
  * @property \App\Models\Status $status
- * @property \Illuminate\Database\Eloquent\Collection $issued_docket_headers
  * @property \App\Models\Auth\User\User $user
+ * @property \Illuminate\Database\Eloquent\Collection $issued_docket_headers
  * @property \Illuminate\Database\Eloquent\Collection $material_request_details
+ * @property \Illuminate\Database\Eloquent\Collection $purchase_request_headers
  *
  * @package App\Models
  */
 class MaterialRequestHeader extends Eloquent
 {
 	protected $casts = [
-	    'type' => 'int',
+		'type' => 'int',
 		'department_id' => 'int',
 		'machinery_id' => 'int',
 		'status_id' => 'int',
+		'closed_by' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
 	];
 
 	protected $dates = [
-		'date'
+		'date',
+		'closed_at'
 	];
 
 	protected $fillable = [
 		'code',
-        'type',
+		'type',
 		'department_id',
 		'machinery_id',
 		'priority',
@@ -61,6 +67,9 @@ class MaterialRequestHeader extends Eloquent
 		'hm',
 		'status_id',
 		'date',
+		'close_reason',
+		'closed_by',
+		'closed_at',
 		'created_by',
 		'updated_by'
 	];
@@ -90,18 +99,23 @@ class MaterialRequestHeader extends Eloquent
         return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
     }
 
+    public function closedBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'closed_by');
+    }
+
+	public function issued_docket_headers()
+	{
+		return $this->hasMany(\App\Models\IssuedDocketHeader::class);
+	}
+
 	public function material_request_details()
 	{
 		return $this->hasMany(\App\Models\MaterialRequestDetail::class, 'header_id');
 	}
 
-    public function purchase_request_headers()
-    {
-        return $this->hasMany(\App\Models\PurchaseRequestHeader::class, 'material_request_id');
-    }
-
-    public function issued_docket_headers()
-    {
-        return $this->hasMany(\App\Models\IssuedDocketHeader::class, 'purchase_request_id');
-    }
+	public function purchase_request_headers()
+	{
+		return $this->hasMany(\App\Models\PurchaseRequestHeader::class, 'material_request_id');
+	}
 }

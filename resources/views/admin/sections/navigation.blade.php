@@ -136,6 +136,31 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li>
+                                <a>Report<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="{{ route('admin.purchase_requests.report') }}">
+                                            Purchase Request (PR)
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.purchase_orders.report') }}">
+                                            Purchase Order (PO)
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.item_receipts.report') }}">
+                                            Goods Receipt (GR)
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.purchase_invoices.report') }}">
+                                            Purchase Invoice (PI)
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
                     <li>
