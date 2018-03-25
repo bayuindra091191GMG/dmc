@@ -18,6 +18,7 @@ use App\Models\ItemStock;
 use App\Models\NumberingSystem;
 use App\Models\PurchaseRequestHeader;
 use App\Models\Site;
+use App\Models\StockCard;
 use App\Models\Warehouse;
 use App\Transformer\Inventory\DeliveryOrderHeaderTransformer;
 use Carbon\Carbon;
@@ -227,6 +228,18 @@ class DeliveryOrderHeaderController extends Controller
                 $stock->stock -= intval($qtys[$idx]);
                 $stock->save();
 
+                // Add stock card
+                $stockCard = StockCard::create([
+                    'item_id'       => $item,
+                    'change'        => $qtys[$idx],
+                    'stock'         => $stock->stock,
+                    'flag'          => '-',
+                    'description'   => 'Surat Jalan '. $doHeader->code,
+                    'warehouse_id'  => $warehouse->id,
+                    'created_by'    => $user->id,
+                    'created_at'    => $now->toDateTimeString()
+                ]);
+
                 // Entry to Transport Warehouse
                 $transportStock = ItemStock::where('warehouse_id', 0)
                     ->where('item_id', $item)
@@ -321,10 +334,14 @@ class DeliveryOrderHeaderController extends Controller
                 $stockArrival = ItemStock::where('warehouse_id', $header->toSite->warehouse_id)
                     ->where('item_id', $detail->item_id)
                     ->first();
+
+                $stockResult = 0;
                 if(!empty($stockArrival)){
                     $stockArrival->stock += $detail->quantity;
                     $stockArrival->updated_at = $now->toDateTimeString();
                     $stockArrival->updated_by = $user->id;
+
+                    $stockResult = $stockArrival->stock;
                 }
                 else{
                     $newStock = new ItemStock();
@@ -335,7 +352,21 @@ class DeliveryOrderHeaderController extends Controller
                     $newStock->created_at = $now->toDateTimeString();
                     $newStock->updated_by = $user->id;
                     $newStock->save();
+
+                    $stockResult = $newStock->stock;
                 }
+
+                // Add stock card
+                $stockCard = StockCard::create([
+                    'item_id'       => $detail->item_id,
+                    'change'        => $detail->quantity,
+                    'stock'         => $stockResult,
+                    'flag'          => '+',
+                    'description'   => 'Surat Jalan '. $header->code,
+                    'warehouse_id'  => $header->toSite->warehouse_id,
+                    'created_by'    => $user->id,
+                    'created_at'    => $now->toDateTimeString()
+                ]);
             }
 
             $header->status_id = 4;
@@ -406,12 +437,34 @@ class DeliveryOrderHeaderController extends Controller
         }
     }
 
+    /**
+     * @return mixed
+     * @throws \Exception
+     */
     public function getIndex(){
         $deliveryOrders = DeliveryOrderHeader::dateDescending()->get();
         return DataTables::of($deliveryOrders)
             ->setTransformer(new DeliveryOrderHeaderTransformer)
             ->addIndexColumn()
             ->make(true);
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function getDeliveryOrders(Request $request){
+        $term = trim($request->q);
+        $deliveries = DeliveryOrderHeader::where('code', 'LIKE', '%'. $term. '%')
+            ->get();
+
+        $formatted_tags = [];
+
+        foreach ($deliveries as $delivery) {
+            $formatted_tags[] = ['id' => $delivery->id, 'text' => $delivery->code];
+        }
+
+        return Response::json($formatted_tags);
     }
 
     public function report(){

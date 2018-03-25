@@ -17,7 +17,9 @@ use App\Models\PurchaseOrderHeader;
 use App\Models\PurchaseRequestHeader;
 use App\Transformer\Purchasing\PurchaseOrderHeaderTransformer;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
@@ -347,6 +349,27 @@ class PurchaseOrderHeaderController extends Controller
         Session::flash('message', 'Berhasil ubah purchase order!');
 
         return redirect()->route('admin.purchase_orders.show', ['purchase_order' => $purchase_order]);
+    }
+
+    public function close(Request $request){
+        try{
+            $user = Auth::user();
+            $now = Carbon::now('Asia/Jakarta');
+
+            $purchaseOrder = PurchaseOrderHeader::find($request->input('id'));
+            $purchaseOrder->closed_by = $user->id;
+            $purchaseOrder->closing_date = $now->toDateTimeString();
+            $purchaseOrder->close_reason = $request->input('reason');
+            $purchaseOrder->status_id = 11;
+            $purchaseOrder->save();
+
+            Session::flash('message', 'Berhasil tutup PO!');
+
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 
     public function report(){

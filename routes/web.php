@@ -463,7 +463,7 @@ Route::get('/select-suppliers', 'Admin\SupplierController@getSuppliers')->name('
 Route::get('/select-material_requests', 'Admin\Inventory\MaterialRequestHeaderController@getMaterialRequests')->name('select.material_requests');
 Route::get('/select-purchase_requests', 'Admin\Purchasing\PurchaseRequestHeaderController@getPurchaseRequests')->name('select.purchase_requests');
 Route::get('/select-purchase_orders', 'Admin\Purchasing\PurchaseOrderHeaderController@getPurchaseOrders')->name('select.purchase_orders');
-Route::get('/select-delivery_orders', 'Admin\Inventory\DeliveryOrderController@getDeliveryOrders')->name('select.delivery_orders');
+Route::get('/select-delivery_orders', 'Admin\Inventory\DeliveryOrderHeaderController@getDeliveryOrders')->name('select.delivery_orders');
 
 /**
  * Datatables

@@ -7,6 +7,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**

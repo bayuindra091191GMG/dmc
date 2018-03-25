@@ -156,7 +156,7 @@
 
             <div class="form-group">
                 <div class="col-lg-12 col-md-12 col-xs-12 box-section">
-
+                    <h3 class="text-center">Detil Inventory</h3>
                     @if(empty($materialRequest))
                         <a class="add-modal btn btn-info" style="margin-bottom: 10px;">
                             <span class="glyphicon glyphicon-plus-sign"></span> Tambah
@@ -375,6 +375,14 @@
     @parent
     {{ Html::style(mix('assets/admin/css/select2.css')) }}
     {{ Html::style(mix('assets/admin/css/bootstrap-datetimepicker.css')) }}
+    <style>
+        .box-section{
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            padding: 10px;
+        }
+    </style>
 @endsection
 
 @section('scripts')

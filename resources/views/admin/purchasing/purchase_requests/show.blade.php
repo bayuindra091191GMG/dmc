@@ -130,19 +130,16 @@
                 <hr/>
 
                 <div class="form-group">
-                    <label class="text-center col-lg-12 col-md-12 col-xs-12">Detil Barang</label>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-lg-12 col-md-12 col-xs-12 column">
+                    <div class="col-lg-12 col-md-12 col-xs-12">
+                        <h4 class="text-center">Detil Inventory</h4>
                         <table class="table table-bordered table-hover">
                             <thead>
                             <tr >
                                 <th class="text-center" style="width: 20%">
-                                    Kode Barang
+                                    Kode Inventory
                                 </th>
                                 <th class="text-center" style="width: 20%">
-                                    Nama Barang
+                                    Nama Inventory
                                 </th>
                                 <th class="text-center" style="width: 20%">
                                     Part Number Asli

@@ -34,7 +34,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="do_code">
-                    Nomor SJ
+                    Nomor Surat Jalan
                 </label>
                 <div class="col-md-4 col-sm-4 col-xs-12">
                     <input id="do_code" type="text" class="form-control col-md-7 col-xs-12"
@@ -113,9 +113,8 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-0"></div>
-        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 box-section">
-            <h3>Detil Barang</h3>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 box-section">
+            <h3 class="text-center">Detil Inventory</h3>
             <button class="add-modal btn btn-info" data-header-id="{{ $header->id }}">
                 <span class="glyphicon glyphicon-plus-sign"></span> Tambah
             </button>
@@ -126,10 +125,10 @@
                         No
                     </th>
                     <th class="text-center" style="width: 15%">
-                        Part Number
+                        Kode Inventory
                     </th>
                     <th class="text-center" style="width: 20%">
-                        Part Name
+                        Nama Inventory
                     </th>
                     <th class="text-center" colspan="2" style="width: 20%">
                         QTY

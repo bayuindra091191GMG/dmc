@@ -7,6 +7,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**

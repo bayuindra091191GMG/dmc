@@ -77,17 +77,6 @@
                 </div>
             </div>
 
-            {{--<div class="form-group">--}}
-                {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="supplier" >--}}
-                    {{--Vendor--}}
-                    {{--<span class="required">*</span>--}}
-                {{--</label>--}}
-                {{--<div class="col-md-4 col-sm-4 col-xs-12">--}}
-                    {{--<select id="supplier" name="supplier" class="form-control col-md-7 col-xs-12 @if($errors->has('supplier')) parsley-error @endif">--}}
-                    {{--</select>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="delivery_fee">
                     Ongkos Kirim
@@ -124,16 +113,15 @@
             <hr/>
 
             <div class="form-group">
-                <label class="col-md-12 col-sm12 col-xs-12 text-center">
-                    <b>Detil Barang</b>
-                </label>
-            </div>
-
-            <div class="form-group">
                 <div class="col-lg-12 col-md-12 col-xs-12 box-section">
-                    <a class="add-modal btn btn-info" style="margin-bottom: 10px;">
-                        <span class="glyphicon glyphicon-plus-sign"></span> Tambah
-                    </a>
+                    <h3 class="text-center">Detil Inventory</h3>
+
+                    @if(empty($purchaseOrder))
+                        <a class="add-modal btn btn-info" style="margin-bottom: 10px;">
+                            <span class="glyphicon glyphicon-plus-sign"></span> Tambah
+                        </a>
+                    @endif
+
                     <table class="table table-bordered table-hover" id="detail_table">
                         <thead>
                         <tr>
@@ -141,7 +129,7 @@
                                 Nomor Part
                             </th>
                             <th class="text-center" style="width: 10%">
-                                Jumlah
+                                QTY
                             </th>
                             <th class="text-center" style="width: 15%">
                                 Harga

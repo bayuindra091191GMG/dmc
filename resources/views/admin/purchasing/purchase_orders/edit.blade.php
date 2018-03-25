@@ -124,7 +124,7 @@
 
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 box-section">
-            <h3>Detil Barang</h3>
+            <h3 class='text-center'>Detil Inventory</h3>
             <button class="add-modal btn btn-info" data-header-id="{{ $header->id }}">
                 <span class="glyphicon glyphicon-plus-sign"></span> Tambah
             </button>
@@ -135,7 +135,7 @@
                         Nomor Part
                     </th>
                     <th class="text-center" style="width: 5%;">
-                        Satuan
+                        UOM
                     </th>
                     <th class="text-center" style="width: 10%;">
                         QTY
@@ -170,13 +170,13 @@
                         <td>
                             {{ $detail->quantity }}
                         </td>
-                        <td>
+                        <td class='text-right'>
                             {{ $detail->price_string }}
                         </td>
                         <td class="text-center">
                             {{ $detail->discount_string ?? '-' }}
                         </td>
-                        <td>
+                        <td class='text-right'>
                             {{ $detail->subtotal_string }}
                         </td>
                         <td>
@@ -596,7 +596,7 @@
                         if (data.remark !== null) {
                             remarkAdd = data.remark;
                         }
-                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td class='text-center'>" + data.item.uom + "</td><td>" + data.quantity + "</td><td>" + data.price_string + "</td><td class='text-center'>" + data.discount_string + "</td><td>" + data.subtotal_string + "</td><td>" + remarkAdd + "</td><td class='text-center'>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
+                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td class='text-center'>" + data.item.uom + "</td><td>" + data.quantity + "</td><td class='text-right'>" + data.price_string + "</td><td class='text-center'>" + data.discount_string + "</td><td class='text-right'>" + data.subtotal_string + "</td><td>" + remarkAdd + "</td><td class='text-center'>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
 
                         // Reset add form modal
                         $('#qty_add').val('');
@@ -707,7 +707,7 @@
                         if (data.remark !== null) {
                             remarkEdit = data.remark;
                         }
-                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td class='text-center'>" + data.item.uom + "</td><td>" + data.quantity + "</td><td>" + data.price_string + "</td><td class='text-center'>" + data.discount_string + "</td><td>" + data.subtotal_string + "</td><td>" + remarkEdit + "</td><td class='text-center'>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
+                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td class='text-center'>" + data.item.uom + "</td><td>" + data.quantity + "</td><td class='text-right'>" + data.price_string + "</td><td class='text-center'>" + data.discount_string + "</td><td class='text-right'>" + data.subtotal_string + "</td><td>" + remarkEdit + "</td><td class='text-center'>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
                     }
                 }
             });

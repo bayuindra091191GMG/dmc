@@ -119,9 +119,8 @@
             <hr/>
 
             <div class="form-group">
-                <div class="col-lg-2 col-md-2 col-xs-0"></div>
-                <div class="col-lg-8 col-md-8 col-xs-12 column">
-                    <h3>Detil Barang</h3>
+                <div class="col-lg-12 col-md-12 col-xs-12 box-section">
+                    <h3 class="text-center">Detil Inventory</h3>
                     <table class="table table-bordered table-hover" id="tab_logic">
                         <thead>
                         <tr >
@@ -153,7 +152,6 @@
                     </table>
                     <a id="add_row" class="btn btn-default pull-left">Tambah</a><a id='delete_row' class="pull-right btn btn-default">Hapus</a>
                 </div>
-                <div class="col-lg-2 col-md-2 col-xs-0"></div>
             </div>
 
             <hr/>
@@ -175,6 +173,14 @@
     @parent
     {{ Html::style(mix('assets/admin/css/select2.css')) }}
     {{ Html::style(mix('assets/admin/css/bootstrap-datetimepicker.css')) }}
+    <style>
+        .box-section{
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            padding: 10px;
+        }
+    </style>
 @endsection
 
 @section('scripts')

@@ -52,16 +52,16 @@
                 serverSide: true,
                 ajax: '{!! route('datatables.purchase_invoices') !!}',
                 columns: [
-                    { data: 'DT_Row_Index', orderable: false, searchable: false},
-                    { data: 'code', name: 'code' },
-                    { data: 'po_code', name: 'po_code' },
-                    { data: 'supplier', name: 'supplier' },
-                    { data: 'total_price', name: 'total_price' },
-                    { data: 'total_discount', name: 'total_discount' },
-                    { data: 'delivery_fee', name: 'delivery_fee' },
-                    { data: 'total_payment', name: 'total_payment' },
-                    { data: 'created_at', name: 'created_at' },
-                    { data: 'action', name: 'action', orderable: false, searchable: false}
+                    { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center' },
+                    { data: 'code', name: 'code', class: 'text-center' },
+                    { data: 'po_code', name: 'po_code', class: 'text-center' },
+                    { data: 'supplier', name: 'supplier', class: 'text-center' },
+                    { data: 'total_price', name: 'total_price', class: 'text-right' },
+                    { data: 'total_discount', name: 'total_discount', class: 'text-right' },
+                    { data: 'delivery_fee', name: 'delivery_fee', class: 'text-right' },
+                    { data: 'total_payment', name: 'total_payment', class: 'text-right' },
+                    { data: 'created_at', name: 'created_at', class: 'text-center' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center' }
                 ],
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"

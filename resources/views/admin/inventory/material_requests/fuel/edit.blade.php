@@ -130,9 +130,8 @@
     <hr/>
 
     <div class="row">
-        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-0"></div>
-        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 box-section">
-            <h3>Detil Barang</h3>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 box-section">
+            <h3 class="text-center">Detil Inventory</h3>
             <button class="add-modal btn btn-info" data-header-id="{{ $header->id }}">
                 <span class="glyphicon glyphicon-plus-sign"></span> Tambah
             </button>
@@ -143,7 +142,7 @@
                         Nomor Part
                     </th>
                     <th class="text-center">
-                        Satuan
+                        UOM
                     </th>
                     <th class="text-center">
                         QTY
@@ -186,7 +185,6 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-0"></div>
     </div>
 
     <!-- Modal form to add new detail -->

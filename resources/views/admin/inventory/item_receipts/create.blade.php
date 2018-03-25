@@ -23,19 +23,8 @@
             @endif
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="po_code">
-                    Purchase Order No
-                    <span class="required">*</span>
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="po_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
-                           name="po_code" value="{{ $purchaseOrder->code }}" readonly>
-                </div>
-            </div>
-
-            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
-                    Good Receipt No
+                    Nomor Goods Receipt
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -45,9 +34,7 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
-
-                </label>
+                <div class="col-md-3 col-sm-3 col-xs-12"></div>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="checkbox">
                         <label>
@@ -58,8 +45,30 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="po_code">
+                    Nomor PO
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="po_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
+                           name="po_code" value="{{ $purchaseOrder->code }}" readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date" >
+                    Tanggal
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
+                           name="date" value="{{ old('date') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="warehouse" >
-                    Warehouse
+                    Gudang
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -72,19 +81,8 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date" >
-                    Date
-                    <span class="required">*</span>
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
-                           name="date" value="{{ old('date') }}">
-                </div>
-            </div>
-
-            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="delivery_order" >
-                    Delivery Orders Vendor
+                    Nomor SJ / SPB
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="delivery_order" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('delivery_order')) parsley-error @endif"
@@ -92,20 +90,19 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="text-center col-md-12 col-xs-12">Detil Barang</label>
-            </div>
+            <hr/>
 
             <div class="form-group">
                 <div class="col-lg-12 col-md-12 col-xs-12 box-section">
+                    <h3 class="text-center">Detil Inventory</h3>
                     <table class="table table-bordered table-hover" id="detail_table">
                         <thead>
                         <tr >
                             <th class="text-center" style="width: 30%">
-                                Nomor Item
+                                Nomor Inventory
                             </th>
                             <th class="text-center" style="width: 20%">
-                                Jumlah
+                                QTY
                             </th>
                             <th class="text-center" style="width: 30%">
                                 Keterangan
@@ -134,10 +131,10 @@
                                     <td>
                                         @php($itemId = $detail->item_id. "#". $detail->item->code. "#". $detail->item->name)
                                         <a class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}" data-time="00:00">
-                                            <span class="glyphicon glyphicon-edit"></span> Ubah
+                                            <span class="glyphicon glyphicon-edit"></span>
                                         </a>
                                         <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
-                                            <span class="glyphicon glyphicon-trash"></span> Hapus
+                                            <span class="glyphicon glyphicon-trash"></span>
                                         </a>
                                     </td>
                                 </tr>
@@ -295,6 +292,14 @@
     @parent
     {{ Html::style(mix('assets/admin/css/select2.css')) }}
     {{ Html::style(mix('assets/admin/css/bootstrap-datetimepicker.css')) }}
+    <style>
+        .box-section{
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            padding: 10px;
+        }
+    </style>
 @endsection
 
 @section('scripts')
@@ -420,8 +425,8 @@
             sbAdd.append("<td><input type='text' name='remark[]' class='form-control' value='" + remarkAdd + "' readonly/></td>");
 
             sbAdd.append("<td>");
-            sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd  + "'><span class='glyphicon glyphicon-edit'></span> Ubah</a>");
-            sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd + "'><span class='glyphicon glyphicon-trash'></span> Hapus</a>");
+            sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd  + "'><span class='glyphicon glyphicon-edit'></span></a>");
+            sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd + "'><span class='glyphicon glyphicon-trash'></span></a>");
             sbAdd.append("</td>");
             sbAdd.append("</tr>");
 
@@ -505,8 +510,8 @@
             sbEdit.append("<td><input type='text' name='remark[]' class='form-control' value='" + remarkEdit + "' readonly/></td>");
 
             sbEdit.append("<td>");
-            sbEdit.append("<a class='edit-modal btn btn-info' data-id='" + id + "' data-item-id='" + data + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "' data-time='" + "'><span class='glyphicon glyphicon-edit'></span> Ubah</a>");
-            sbEdit.append("<a class='delete-modal btn btn-danger' data-id='" + id + "' data-item-id='" + data + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "' data-time='" + "'><span class='glyphicon glyphicon-trash'></span> Hapus</a>");
+            sbEdit.append("<a class='edit-modal btn btn-info' data-id='" + id + "' data-item-id='" + data + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "' data-time='" + "'><span class='glyphicon glyphicon-edit'></span></a>");
+            sbEdit.append("<a class='delete-modal btn btn-danger' data-id='" + id + "' data-item-id='" + data + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "' data-time='" + "'><span class='glyphicon glyphicon-trash'></span></a>");
             sbEdit.append("</td>");
             sbEdit.append("</tr>");
 

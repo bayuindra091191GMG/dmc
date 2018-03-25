@@ -35,7 +35,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property \App\Models\PurchaseOrderHeader $purchase_order_header
  * @property \App\Models\Status $status
- * @property \App\Models\User $user
+ * @property \App\Models\Auth\User\User $user
  * @property \Illuminate\Database\Eloquent\Collection $purchase_invoice_details
  *
  * @package App\Models
@@ -91,32 +91,27 @@ class PurchaseInvoiceHeader extends Eloquent
     }
 
     public function getTotalPriceStringAttribute(){
-        return 'Rp '. number_format($this->attributes['total_price'], 0, ",", ".");
+        return number_format($this->attributes['total_price'], 0, ",", ".");
     }
 
     public function getTotalDiscountStringAttribute(){
-        if(!empty($this->attributes['total_discount']) && $this->attributes['total_discount'] != 0){
-            return 'Rp '. number_format($this->attributes['total_discount'], 0, ",", ".");
-        }
-        else{
-            return '-';
-        }
+        return number_format($this->attributes['total_discount'], 0, ",", ".");
     }
 
     public function getPpnStringAttribute(){
-        return 'Rp '. number_format($this->attributes['ppn_amount'], 0, ",", ".");
+        return number_format($this->attributes['ppn_amount'], 0, ",", ".");
     }
 
     public function getPphStringAttribute(){
-        return 'Rp '. number_format($this->attributes['pph_amount'], 0, ",", ".");
+        return number_format($this->attributes['pph_amount'], 0, ",", ".");
     }
 
     public function getTotalPaymentStringAttribute(){
-        return 'Rp '. number_format($this->attributes['total_payment'], 0, ",", ".");
+        return number_format($this->attributes['total_payment'], 0, ",", ".");
     }
 
     public function getDeliveryFeeStringAttribute(){
-        return 'Rp '. number_format($this->attributes['delivery_fee'], 0, ",", ".");
+        return number_format($this->attributes['delivery_fee'], 0, ",", ".");
     }
 
     public function scopeDateDescending(Builder $query){

@@ -15,12 +15,6 @@
                 @endif
             </div>
         </div>
-        {{--<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">--}}
-            {{--<div class="navbar-right">--}}
-                {{--<a class="btn btn-default" href="{{ route('admin.item_receipts.edit',[ 'item_receipt' => $header->id]) }}">UBAH</a>--}}
-                {{--<a class="btn btn-default" href="{{ route('admin.item_receipts.print',[ 'item_receipts' => $header->id]) }}">CETAK</a>--}}
-            {{--</div>--}}
-        {{--</div>--}}
     </div>
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -38,6 +32,15 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
+                        Nomor Good Receipt
+                    </label>
+                    <div class="col-md-6 col-sm-3 col-xs-12">
+                        : {{ $header->code }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
                         Tanggal
                     </label>
                     <div class="col-md-6 col-sm-3 col-xs-12">
@@ -47,16 +50,7 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        No Good Receipt
-                    </label>
-                    <div class="col-md-6 col-sm-3 col-xs-12">
-                        : {{ $header->code }}
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-md-3 col-sm-3 col-xs-12">
-                        No Purchase Order
+                        Nomor PO
                     </label>
                     <div class="col-md-6 col-sm-3 col-xs-12">
                         : <a style="text-decoration: underline;" href="{{ route('admin.purchase_orders.show', ['purchase_order' => $header->purchase_order_id]) }}" target="_blank">{{ $header->purchase_order_header->code }}</a>
@@ -65,7 +59,7 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        No. SJ / SPB
+                        Nomor SJ / SPB
                     </label>
                     <div class="col-md-6 col-sm-3 col-xs-12">
                         : {{ $header->delivery_order_vendor }}
@@ -75,11 +69,8 @@
                 <hr>
 
                 <div class="form-group">
-                    <label class="text-center col-lg-12 col-md-12 col-xs-12">Detil Barang</label>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-lg-12 col-md-12 col-xs-12 column">
+                    <div class="col-lg-12 col-md-12 col-xs-12 box-section">
+                        <h3 class="text-center">Detil Inventory</h3>
                         <table class="table table-bordered table-hover">
                             <thead>
                             <tr >
@@ -87,13 +78,13 @@
                                     No
                                 </th>
                                 <th class="text-center">
-                                    Kode Barang
+                                    Kode Inventory
                                 </th>
                                 <th class="text-center">
-                                    Nama Barang / Nomor Barang
+                                    Nama Inventory
                                 </th>
                                 <th class="text-center">
-                                    Jumlah
+                                    QTY
                                 </th>
                                 <th class="text-center">
                                     Keterangan
@@ -111,7 +102,7 @@
                                     <td class="text-center">
                                         {{ $detail->item->code }}
                                     </td>
-                                    <td class='field-item text-center'>
+                                    <td class='text-center'>
                                         {{ $detail->item->name }}
                                     </td>
                                     <td class="text-center">

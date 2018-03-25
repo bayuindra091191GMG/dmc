@@ -107,11 +107,8 @@
                 <hr/>
 
                 <div class="form-group">
-                    <label class="text-center col-lg-12 col-md-12 col-xs-12">Detil Barang</label>
-                </div>
-
-                <div class="form-group">
                     <div class="col-lg-12 col-md-12 col-xs-12 column">
+                        <h4 class="text-center">Detil Inventory</h4>
                         <table class="table table-bordered table-hover">
                             <thead>
                             <tr >
@@ -119,10 +116,10 @@
                                     No
                                 </th>
                                 <th class="text-center" style="width: 25%">
-                                    Part Number
+                                    Kode Inventory
                                 </th>
                                 <th class="text-center" style="width: 25%">
-                                    Part Name
+                                    Nama Inventory
                                 </th>
                                 <th class="text-center" colspan="2" style="width: 20%">
                                     QTY

@@ -129,13 +129,8 @@
             <hr/>
 
             <div class="form-group">
-                <label class="col-md-12 col-sm12 col-xs-12 text-center">
-                    <b>Detil Barang</b>
-                </label>
-            </div>
-
-            <div class="form-group">
                 <div class="col-lg-12 col-md-12 col-xs-12 box-section">
+                    <h3 class="text-center">Detil Inventory</h3>
                     <a class="add-modal btn btn-info" style="margin-bottom: 10px;">
                         <span class="glyphicon glyphicon-plus-sign"></span> Tambah
                     </a>
@@ -146,10 +141,10 @@
                                 No
                             </th>
                             <th class="text-center" style="width: 15%">
-                                Part Number
+                                Kode Inventory
                             </th>
                             <th class="text-center" style="width: 20%">
-                                Part Name
+                                Nama Inventory
                             </th>
                             <th class="text-center" colspan="2" style="width: 20%">
                                 QTY
