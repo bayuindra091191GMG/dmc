@@ -192,7 +192,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="qty_add">Jumlah:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" min="0" id="qty_add" name="qty_add">
+                                <input type="text" class="form-control" min="0" id="qty_add" name="qty_add">
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -237,7 +237,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="qty_edit">Jumlah:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" min="0" id="qty_edit" name="qty">
+                                <input type="text" class="form-control" min="0" id="qty_edit" name="qty">
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -319,8 +319,21 @@
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
     {{ Html::script(mix('assets/admin/js/stringbuilder.js')) }}
+    {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
 
     <script type="text/javascript">
+        qtyAddFormat = new AutoNumeric('#qty_add', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0
+        });
+
+        qrtEditFormat = new AutoNumeric('#qty_edit', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0
+        });
+
         var i=1;
 
         @if(!empty($purchaseRequest))

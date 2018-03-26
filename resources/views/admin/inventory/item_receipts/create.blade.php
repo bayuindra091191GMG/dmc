@@ -179,7 +179,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="qty_add">Jumlah:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="qty_add" name="qty_add" min="0">
+                                <input type="text" class="form-control" id="qty_add" name="qty_add" min="0">
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -224,7 +224,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="qty_edit">Jumlah:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="qty_edit" name="qty" min="0">
+                                <input type="text" class="form-control" id="qty_edit" name="qty" min="0">
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -307,6 +307,7 @@
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
     {{ Html::script(mix('assets/admin/js/stringbuilder.js')) }}
+    {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
 
     <script>
         $('#date').datetimepicker({
@@ -315,6 +316,17 @@
     </script>
 
     <script type="text/javascript">
+        qtyAddFormat = new AutoNumeric('#qty_add', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0
+        });
+
+        qrtEditFormat = new AutoNumeric('#qty_edit', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0
+        });
         var i=1;
 
         $('#auto_number').change(function(){

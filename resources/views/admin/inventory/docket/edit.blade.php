@@ -102,9 +102,6 @@
                         Nomor Part
                     </th>
                     <th>
-                        Time
-                    </th>
-                    <th>
                         Jumlah
                     </th>
                     <th class="text-center" style="width: 30%">
@@ -121,9 +118,6 @@
                     <tr class="item{{ $detail->id }}">
                         <td class='field-item'>
                             {{ $detail->item->code }} - {{ $detail->item->name }}
-                        </td>
-                        <td>
-                            {{ $detail->time }}
                         </td>
                         <td>
                             {{ $detail->quantity }}
@@ -166,16 +160,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="time_add">Time:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="time_add" name="time_add">
-                                <p class="errorTime text-center alert alert-danger hidden"></p>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="control-label col-sm-2" for="qty_add">Jumlah:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="qty_add" name="qty_add">
+                                <input type="text" class="form-control" id="qty_add" name="qty_add">
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -217,16 +204,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="time_edit">Time:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="time_edit" name="time">
-                                <p class="errorTime text-center alert alert-danger hidden"></p>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="control-label col-sm-2" for="qty_edit">Jumlah:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="qty_edit" name="qty">
+                                <input type="text" class="form-control" id="qty_edit" name="qty">
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -316,8 +296,22 @@
     @parent
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
+    {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript">
+
+        qtyAddFormat = new AutoNumeric('#qty_add', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0
+        });
+
+        qrtEditFormat = new AutoNumeric('#qty_edit', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0
+        });
+
         var i=1;
 
         $('#purchase_request_header').select2({
