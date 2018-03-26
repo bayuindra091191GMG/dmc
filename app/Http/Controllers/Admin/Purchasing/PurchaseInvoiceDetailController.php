@@ -59,7 +59,7 @@ class PurchaseInvoiceDetailController extends Controller
                 $detail->subtotal = $finalSubtotal;
             }
 
-            if($request->filled('remark')) $detail->remark = Input::get('remark');
+            if($request->filled('remark')) $detail->remark = $request->input('remark');
 
             $detail->save();
 
@@ -218,7 +218,7 @@ class PurchaseInvoiceDetailController extends Controller
     public function delete(Request $request){
         try{
 
-            $details = PurchaseInvoiceDetail::where('header_id', Input::get('header_id'))->get();
+            $details = PurchaseInvoiceDetail::where('header_id', $request->input('header_id'))->get();
             if($details->count() == 1){
                 return Response::json(array('errors' => 'INVALID'));
             }

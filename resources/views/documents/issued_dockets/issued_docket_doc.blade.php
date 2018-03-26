@@ -44,15 +44,15 @@
                 Hari/Tgl/Bln/Thn &nbsp;&nbsp;&nbsp;&nbsp;: {{ $issuedDocket->date_string }}
             </td>
             <td width="62%">
-                No. Issue Docket &nbsp;&nbsp;&nbsp;&nbsp;: {{ $issuedDocket->code }}
+                Nomor Issue Docket &nbsp;&nbsp;&nbsp;&nbsp;: {{ $issuedDocket->code }}
             </td>
         </tr>
         <tr>
             <td width="38%">
-                No. Unit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ $issuedDocket->machinery->code }}
+                Kode Alat Berat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ $issuedDocket->machinery->code ?? '-' }}
             </td>
             <td width="38%">
-                No. PR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ $issuedDocket->purchase_request_header->code }}
+                Nomor PR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ $issuedDocket->purchase_request_header->code }}
             </td>
         </tr>
         <tr>
@@ -72,8 +72,7 @@
         <thead>
             <tr>
                 <th>NO</th>
-                <th>Time</th>
-                <th>NAMA BARANG	</th>
+                <th>NAMA INVENTORY	</th>
                 <th>PART NUMBER</th>
                 <th>UNIT</th>
                 <th>QTY</th>
@@ -85,10 +84,9 @@
         @foreach($issuedDocketDetails as $item)
             <tr>
                 <td>{{ $i }}</td>
-                <td>{{ $item->time }}</td>
                 <td>{{ $item->item->name }}</td>
                 <td>{{ $item->item->code }}</td>
-                <td>{{ $item->item->uom->description }}</td>
+                <td>{{ $item->item->uom }}</td>
                 <td>{{ $item->quantity }}</td>
                 <td>{{ $item->remarks }}</td>
             </tr>

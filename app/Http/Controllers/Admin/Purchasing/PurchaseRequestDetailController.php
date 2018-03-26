@@ -92,7 +92,15 @@ class PurchaseRequestDetailController extends Controller
 
     public function delete(Request $request){
         try{
+
             $detail = PurchaseRequestDetail::find(Input::get('id'));
+
+            // Validate detail count
+            $details = PurchaseRequestDetail::where('header_id', $detail->header_id)->get();
+            if($details->count() == 1){
+                return Response::json(array('errors' => 'INVALID'));
+            }
+
             $detail->delete();
 
             return new JsonResponse($detail);

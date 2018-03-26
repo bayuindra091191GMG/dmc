@@ -54,6 +54,16 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="mr_code">
+                    Nomor MR
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="mr_code" type="text" class="form-control col-md-7 col-xs-12"
+                           name="mr_code" value="{{ $header->material_request_header->code }}" readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="department" >
                     Departemen
                     <span class="required">*</span>
@@ -125,9 +135,9 @@
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 box-section">
             <h3 class="text-center">Detil Inventory</h3>
-            <button class="add-modal btn btn-info" data-header-id="{{ $header->id }}">
-                <span class="glyphicon glyphicon-plus-sign"></span> Tambah
-            </button>
+            {{--<button class="add-modal btn btn-info" data-header-id="{{ $header->id }}">--}}
+                {{--<span class="glyphicon glyphicon-plus-sign"></span> Tambah--}}
+            {{--</button>--}}
             <table class="table table-bordered table-hover" id="detailTable">
                 <thead>
                 <tr >
@@ -152,19 +162,19 @@
 
                 @foreach($header->purchase_request_details as $detail)
                     <tr class="item{{ $detail->id }}">
-                        <td class='field-item'>
+                        <td class='text-center'>
                             {{ $detail->item->code }} - {{ $detail->item->name }}
                         </td>
-                        <td>
+                        <td class='text-center'>
                             {{ $detail->item->uom }}
                         </td>
-                        <td>
+                        <td class='text-center'>
                             {{ $detail->quantity }}
                         </td>
                         <td>
                             {{ $detail->remark ?? '-' }}
                         </td>
-                        <td>
+                        <td class='text-center'>
                             <button class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}">
                                 <span class="glyphicon glyphicon-edit"></span>
                             </button>
@@ -573,8 +583,15 @@
                     'id': deletedId
                 },
                 success: function(data) {
-                    toastr.success('Berhasil menghapus detail!', 'Sukses', {timeOut: 5000});
-                    $('.item' + data['id']).remove();
+                    if ((data.errors)){
+                        setTimeout(function () {
+                            toastr.error('Gagal menghapus detil!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                        }, 500);
+                    }
+                    else{
+                        toastr.success('Berhasil menghapus detail!', 'Sukses', {timeOut: 5000});
+                        $('.item' + data['id']).remove();
+                    }
                 }
             });
         });

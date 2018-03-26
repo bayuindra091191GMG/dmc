@@ -39,11 +39,12 @@ class PurchaseRequestHeaderController extends Controller
     }
 
     public function create(){
-        $materialRequest = null;
-        if(!empty(request()->mr)){
-            $materialRequest = MaterialRequestHeader::find(request()->mr);
+
+        if(empty(request()->mr)){
+            return redirect()->route('admin.purchase_requests.before_create');
         }
 
+        $materialRequest = MaterialRequestHeader::find(request()->mr);
         $departments = Department::all();
 
         // Numbering System
@@ -90,9 +91,9 @@ class PurchaseRequestHeaderController extends Controller
         }
 
         // Validate MR number
-        if(empty($request->input('mr_code')) && empty($request->input('mr_id'))){
-            return redirect()->back()->withErrors('Nomor MR wajib diisi!', 'default')->withInput($request->all());
-        }
+//        if(empty($request->input('mr_code')) && empty($request->input('mr_id'))){
+//            return redirect()->back()->withErrors('Nomor MR wajib diisi!', 'default')->withInput($request->all());
+//        }
 
         // Validate department
         if($request->input('department') === '-1'){
@@ -100,9 +101,9 @@ class PurchaseRequestHeaderController extends Controller
         }
 
         // Validate priority
-        if($request->input('priority') === '-1'){
-            return redirect()->back()->withErrors('Pilih prioritas!', 'default')->withInput($request->all());
-        }
+//        if($request->input('priority') === '-1'){
+//            return redirect()->back()->withErrors('Pilih prioritas!', 'default')->withInput($request->all());
+//        }
 
         // Generate auto number
         $prCode = 'default';
@@ -141,14 +142,8 @@ class PurchaseRequestHeaderController extends Controller
             return redirect()->back()->withErrors('Detail barang dan jumlah wajib diisi!', 'default')->withInput($request->all());
         }
 
-        // Get PR id
-        $mrId = '0';
-        if($request->filled('mr_code')){
-            $mrId = $request->input('mr_code');
-        }
-        else{
-            $mrId = $request->input('mr_id');
-        }
+        // Get MR id
+        $mrId = $request->input('mr_id');
 
         // Validate MR relationship
         $validItem = true;

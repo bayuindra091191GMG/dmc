@@ -49,7 +49,7 @@
                     Tanggal
                     <span class="required">*</span>
                 </label>
-                <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
                            name="date" value="{{ old('date') }}" required>
                 </div>
@@ -58,23 +58,22 @@
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pr_code" >
                     Nomor PR
-                    <span class="required">*</span>
                 </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                    <select id="pr_code" name="pr_code" class="form-control col-md-7 col-xs-12 @if($errors->has('pr_code')) parsley-error @endif">
-                    </select>
-                    <input type="hidden" id="pr_id" name="pr_id" @if(!empty($purchaseRequest)) value="{{ $purchaseRequest->id }} @endif">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="pr_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('pph')) parsley-error @endif"
+                           name="pr_code" value="{{ $purchaseRequest->code }}" readonly>
+                    <input type="hidden" id="pr_id" name="pr_id" value="{{ $purchaseRequest->id }}">
                 </div>
-                <div class="col-md-2 col-sm-2 col-xs-12">
-                    <a class="get-pr-data btn btn-info">
-                        Ambil Data
-                    </a>
-                    @if(!empty($purchaseRequest))
-                        <a class="clear-pr-data btn btn-info">
-                            Reset Data
-                        </a>
-                    @endif
-                </div>
+                {{--<div class="col-md-2 col-sm-2 col-xs-12">--}}
+                    {{--<a class="get-pr-data btn btn-info">--}}
+                        {{--Ambil Data--}}
+                    {{--</a>--}}
+                    {{--@if(!empty($purchaseRequest))--}}
+                        {{--<a class="clear-pr-data btn btn-info">--}}
+                            {{--Reset Data--}}
+                        {{--</a>--}}
+                    {{--@endif--}}
+                {{--</div>--}}
             </div>
 
             <div class="form-group">
@@ -82,7 +81,7 @@
                     Vendor
                     <span class="required">*</span>
                 </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="supplier" name="supplier" class="form-control col-md-7 col-xs-12 @if($errors->has('supplier')) parsley-error @endif">
                     </select>
                 </div>
@@ -402,53 +401,53 @@
             }
         });
 
-        @if(!empty($purchaseRequest))
-            $('#pr_code').select2({
-                placeholder: {
-                    id: '{{ $purchaseRequest->id }}',
-                    text: '{{ $purchaseRequest->code }}'
-                },
-                width: '100%',
-                minimumInputLength: 1,
-                ajax: {
-                    url: '{{ route('select.purchase_requests') }}',
-                    dataType: 'json',
-                    data: function (params) {
-                        return {
-                            q: $.trim(params.term)
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: data
-                        };
-                    }
-                }
-            });
-        @else
-            $('#pr_code').select2({
-                placeholder: {
-                    id: '-1',
-                    text: ' - Pilih Nomor PR - '
-                },
-                width: '100%',
-                minimumInputLength: 1,
-                ajax: {
-                    url: '{{ route('select.purchase_requests') }}',
-                    dataType: 'json',
-                    data: function (params) {
-                        return {
-                            q: $.trim(params.term)
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: data
-                        };
-                    }
-                }
-            });
-        @endif
+        {{--@if(!empty($purchaseRequest))--}}
+            {{--$('#pr_code').select2({--}}
+                {{--placeholder: {--}}
+                    {{--id: '{{ $purchaseRequest->id }}',--}}
+                    {{--text: '{{ $purchaseRequest->code }}'--}}
+                {{--},--}}
+                {{--width: '100%',--}}
+                {{--minimumInputLength: 1,--}}
+                {{--ajax: {--}}
+                    {{--url: '{{ route('select.purchase_requests') }}',--}}
+                    {{--dataType: 'json',--}}
+                    {{--data: function (params) {--}}
+                        {{--return {--}}
+                            {{--q: $.trim(params.term)--}}
+                        {{--};--}}
+                    {{--},--}}
+                    {{--processResults: function (data) {--}}
+                        {{--return {--}}
+                            {{--results: data--}}
+                        {{--};--}}
+                    {{--}--}}
+                {{--}--}}
+            {{--});--}}
+        {{--@else--}}
+            {{--$('#pr_code').select2({--}}
+                {{--placeholder: {--}}
+                    {{--id: '-1',--}}
+                    {{--text: ' - Pilih Nomor PR - '--}}
+                {{--},--}}
+                {{--width: '100%',--}}
+                {{--minimumInputLength: 1,--}}
+                {{--ajax: {--}}
+                    {{--url: '{{ route('select.purchase_requests') }}',--}}
+                    {{--dataType: 'json',--}}
+                    {{--data: function (params) {--}}
+                        {{--return {--}}
+                            {{--q: $.trim(params.term)--}}
+                        {{--};--}}
+                    {{--},--}}
+                    {{--processResults: function (data) {--}}
+                        {{--return {--}}
+                            {{--results: data--}}
+                        {{--};--}}
+                    {{--}--}}
+                {{--}--}}
+            {{--});--}}
+        {{--@endif--}}
 
 
         $('#supplier').select2({
@@ -528,26 +527,26 @@
             decimalPlaces: 0
         });
 
-        // Get selected PR data
-        $(document).on('click', '.get-pr-data', function(){
-            var url = '{{ route('admin.purchase_orders.create') }}';
-            if($('#pr_code').val() && $('#pr_code').val() !== ""){
-                url += "?pr=" + $('#pr_code').val();
-                window.location = url;
-            }
-            else{
-                if($('#pr_id').val() && $('#pr_id').val() !== ""){
-                    url += "?pr=" + $('#pr_id').val();
-                    window.location = url;
-                }
-            }
-        });
+        {{--// Get selected PR data--}}
+        {{--$(document).on('click', '.get-pr-data', function(){--}}
+            {{--var url = '{{ route('admin.purchase_orders.create') }}';--}}
+            {{--if($('#pr_code').val() && $('#pr_code').val() !== ""){--}}
+                {{--url += "?pr=" + $('#pr_code').val();--}}
+                {{--window.location = url;--}}
+            {{--}--}}
+            {{--else{--}}
+                {{--if($('#pr_id').val() && $('#pr_id').val() !== ""){--}}
+                    {{--url += "?pr=" + $('#pr_id').val();--}}
+                    {{--window.location = url;--}}
+                {{--}--}}
+            {{--}--}}
+        {{--});--}}
 
-        // Clear selected PR data
-        $(document).on('click', '.clear-pr-data', function(){
-            var url = '{{ route('admin.purchase_orders.create') }}';
-            window.location = url;
-        });
+        {{--// Clear selected PR data--}}
+        {{--$(document).on('click', '.clear-pr-data', function(){--}}
+            {{--var url = '{{ route('admin.purchase_orders.create') }}';--}}
+            {{--window.location = url;--}}
+        {{--});--}}
 
         // Add new detail
         $(document).on('click', '.add-modal', function() {

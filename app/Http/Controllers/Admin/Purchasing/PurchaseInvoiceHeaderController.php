@@ -40,10 +40,11 @@ class PurchaseInvoiceHeaderController extends Controller
     }
 
     public function create(){
-        $purchaseOrder = null;
-        if(!empty(request()->po)){
-            $purchaseOrder = PurchaseOrderHeader::find(request()->po);
+        if(empty(request()->po)){
+            return redirect()->route('admin.purchase_invoices.before_create');
         }
+
+        $purchaseOrder = PurchaseOrderHeader::find(request()->po);
 
         // Numbering System
         $sysNo = NumberingSystem::where('doc_id', '6')->first();
@@ -78,9 +79,9 @@ class PurchaseInvoiceHeaderController extends Controller
         }
 
         // Validate PO number
-        if(!$request->filled('po_code') && !$request->filled('po_id')){
-            return redirect()->back()->withErrors('Nomor PO wajib diisi!', 'default')->withInput($request->all());
-        }
+//        if(!$request->filled('po_code') && !$request->filled('po_id')){
+//            return redirect()->back()->withErrors('Nomor PO wajib diisi!', 'default')->withInput($request->all());
+//        }
 
         // Generate auto number
         $invCode = 'default';
@@ -95,13 +96,7 @@ class PurchaseInvoiceHeaderController extends Controller
         }
 
         // Get PO id
-        $poId = '0';
-        if($request->filled('po_code')){
-            $poId = $request->input('po_code');
-        }
-        else{
-            $poId = $request->input('po_id');
-        }
+        $poId = $request->input('po_id');
 
         // Check existing number
 //        $temp = PurchaseInvoiceHeader::where('code', $invCode)->first();
@@ -142,13 +137,6 @@ class PurchaseInvoiceHeaderController extends Controller
             $deliveryFee = str_replace('.','', $request->input('delivery_fee'));
             $delivery = (double) $deliveryFee;
             $invHeader->delivery_fee = $deliveryFee;
-        }
-
-        if($request->filled('po_code')){
-            $invHeader->purchase_order_id = $request->input('po_code');
-        }
-        else{
-            $invHeader->purchase_order_id = $request->input('po_id');
         }
 
         $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
@@ -327,7 +315,7 @@ class PurchaseInvoiceHeaderController extends Controller
                 ->withInput();
         }
 
-        if($request->filled('po_code')) $purchase_invoice->purchase_order_id = $request->input('po_code');
+//        if($request->filled('po_code')) $purchase_invoice->purchase_order_id = $request->input('po_code');
 
         $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
         $purchase_invoice->date = $date->toDateTimeString();

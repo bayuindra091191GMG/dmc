@@ -45,25 +45,24 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pr_code" >
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="po_code" >
                     Nomor PO
-                    <span class="required">*</span>
                 </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                    <select id="po_code" name="po_code" class="form-control col-md-7 col-xs-12 @if($errors->has('po_code')) parsley-error @endif">
-                    </select>
-                    <input type="hidden" id="po_id" name="po_id" @if(!empty($purchaseOrder)) value="{{ $purchaseOrder->id }} @endif">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="po_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
+                           name="po_code" value="{{ $purchaseOrder->code }}" readonly>
+                    <input type="hidden" id="po_id" name="po_id" value="{{ $purchaseOrder->id }}">
                 </div>
-                <div class="col-md-2 col-sm-2 col-xs-12">
-                    <a class="get-po-data btn btn-info">
-                        Ambil Data
-                    </a>
-                    @if(!empty($purchaseOrder))
-                        <a class="clear-po-data btn btn-info">
-                            Reset Data
-                        </a>
-                    @endif
-                </div>
+                {{--<div class="col-md-2 col-sm-2 col-xs-12">--}}
+                    {{--<a class="get-po-data btn btn-info">--}}
+                        {{--Ambil Data--}}
+                    {{--</a>--}}
+                    {{--@if(!empty($purchaseOrder))--}}
+                        {{--<a class="clear-po-data btn btn-info">--}}
+                            {{--Reset Data--}}
+                        {{--</a>--}}
+                    {{--@endif--}}
+                {{--</div>--}}
             </div>
 
             <div class="form-group">
@@ -71,7 +70,7 @@
                     Tanggal
                     <span class="required">*</span>
                 </label>
-                <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
                            name="date" value="{{ old('date') }}" required>
                 </div>
@@ -221,9 +220,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="qty_add">Jumlah:</label>
+                            <label class="control-label col-sm-2" for="qty_add">QTY:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="qty_add" name="qty_add">
+                                <input type="text" class="form-control" id="qty_add" name="qty_add">
                             </div>
                         </div>
                         <div class="form-group">
@@ -276,7 +275,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="qty_edit">Jumlah:</label>
+                            <label class="control-label col-sm-2" for="qty_edit">QTY:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="qty_edit" name="qty_edit">
                             </div>
@@ -392,53 +391,53 @@
             }
         });
 
-        @if(!empty($purchaseOrder))
-        $('#po_code').select2({
-            placeholder: {
-                id: '{{ $purchaseOrder->id }}',
-                text: '{{ $purchaseOrder->code }}'
-            },
-            width: '100%',
-            minimumInputLength: 1,
-            ajax: {
-                url: '{{ route('select.purchase_orders') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                }
-            }
-        });
-        @else
-        $('#po_code').select2({
-            placeholder: {
-                id: '-1',
-                text: 'Pilih Nomor PO...'
-            },
-            width: '100%',
-            minimumInputLength: 1,
-            ajax: {
-                url: '{{ route('select.purchase_orders') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                }
-            }
-        });
-        @endif
+        {{--@if(!empty($purchaseOrder))--}}
+        {{--$('#po_code').select2({--}}
+            {{--placeholder: {--}}
+                {{--id: '{{ $purchaseOrder->id }}',--}}
+                {{--text: '{{ $purchaseOrder->code }}'--}}
+            {{--},--}}
+            {{--width: '100%',--}}
+            {{--minimumInputLength: 1,--}}
+            {{--ajax: {--}}
+                {{--url: '{{ route('select.purchase_orders') }}',--}}
+                {{--dataType: 'json',--}}
+                {{--data: function (params) {--}}
+                    {{--return {--}}
+                        {{--q: $.trim(params.term)--}}
+                    {{--};--}}
+                {{--},--}}
+                {{--processResults: function (data) {--}}
+                    {{--return {--}}
+                        {{--results: data--}}
+                    {{--};--}}
+                {{--}--}}
+            {{--}--}}
+        {{--});--}}
+        {{--@else--}}
+        {{--$('#po_code').select2({--}}
+            {{--placeholder: {--}}
+                {{--id: '-1',--}}
+                {{--text: 'Pilih Nomor PO...'--}}
+            {{--},--}}
+            {{--width: '100%',--}}
+            {{--minimumInputLength: 1,--}}
+            {{--ajax: {--}}
+                {{--url: '{{ route('select.purchase_orders') }}',--}}
+                {{--dataType: 'json',--}}
+                {{--data: function (params) {--}}
+                    {{--return {--}}
+                        {{--q: $.trim(params.term)--}}
+                    {{--};--}}
+                {{--},--}}
+                {{--processResults: function (data) {--}}
+                    {{--return {--}}
+                        {{--results: data--}}
+                    {{--};--}}
+                {{--}--}}
+            {{--}--}}
+        {{--});--}}
+        {{--@endif--}}
 
 
         {{--$('#supplier').select2({--}}
@@ -466,6 +465,18 @@
         {{--});--}}
 
         // Add autonumeric
+        qtyAddFormat = new AutoNumeric('#qty_add', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0
+        });
+
+        qtyEditFormat = new AutoNumeric('#qty_edit', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0
+        });
+
         pphFormat = new AutoNumeric('#pph', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
@@ -522,26 +533,26 @@
             decimalPlaces: 0
         });
 
-        // Get selected PO data
-        $(document).on('click', '.get-po-data', function(){
-            var url = '{{ route('admin.purchase_invoices.create') }}';
-            if($('#po_code').val() && $('#po_code').val() !== ""){
-                url += "?po=" + $('#po_code').val();
-                window.location = url;
-            }
-            else{
-                if($('#po_id').val() && $('#po_id').val() !== ""){
-                    url += "?po=" + $('#po_id').val();
-                    window.location = url;
-                }
-            }
-        });
+        {{--// Get selected PO data--}}
+        {{--$(document).on('click', '.get-po-data', function(){--}}
+            {{--var url = '{{ route('admin.purchase_invoices.create') }}';--}}
+            {{--if($('#po_code').val() && $('#po_code').val() !== ""){--}}
+                {{--url += "?po=" + $('#po_code').val();--}}
+                {{--window.location = url;--}}
+            {{--}--}}
+            {{--else{--}}
+                {{--if($('#po_id').val() && $('#po_id').val() !== ""){--}}
+                    {{--url += "?po=" + $('#po_id').val();--}}
+                    {{--window.location = url;--}}
+                {{--}--}}
+            {{--}--}}
+        {{--});--}}
 
-        // Clear selected PO data
-        $(document).on('click', '.clear-po-data', function(){
-            var url = '{{ route('admin.purchase_invoices.create') }}';
-            window.location = url;
-        });
+        {{--// Clear selected PO data--}}
+        {{--$(document).on('click', '.clear-po-data', function(){--}}
+            {{--var url = '{{ route('admin.purchase_invoices.create') }}';--}}
+            {{--window.location = url;--}}
+        {{--});--}}
 
         // Add new detail
         $(document).on('click', '.add-modal', function() {

@@ -36,19 +36,8 @@
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
                     Nomor Invoice
                 </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="text" id="code" name="code" class="form-control col-md-12 col-xs-12" value="{{ $header->code }}" readonly/>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="po_code">
-                    Nomor PO
-                    <span class="required">*</span>
-                </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                    <select id="po_code" name="po_code" class="form-control col-md-12 col-xs-12 @if($errors->has('po_code')) parsley-error @endif">
-                    </select>
                 </div>
             </div>
 
@@ -57,11 +46,23 @@
                     Tanggal
                     <span class="required">*</span>
                 </label>
-                <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
                            name="date" value="{{ $date }}" required>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="po_code">
+                    Nomor PO
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input type="text" id="po_code" name="po_code" class="form-control col-md-12 col-xs-12" value="{{ $header->purchase_order_header->code }}" readonly/>
+                </div>
+            </div>
+
+
 
             {{--<div class="form-group">--}}
                 {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="supplier" >--}}
@@ -78,7 +79,7 @@
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="delivery_fee">
                     Ongkos Kirim
                 </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="delivery_fee" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('delivery_fee')) parsley-error @endif"
                            name="delivery_fee">
                 </div>
@@ -124,10 +125,10 @@
 
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 box-section">
-            <h3>Detil Barang</h3>
-            <button class="add-modal btn btn-info" data-header-id="{{ $header->id }}">
-                <span class="glyphicon glyphicon-plus-sign"></span> Tambah
-            </button>
+            <h3 class="text-center">Detil Inventory</h3>
+            {{--<button class="add-modal btn btn-info" data-header-id="{{ $header->id }}">--}}
+                {{--<span class="glyphicon glyphicon-plus-sign"></span> Tambah--}}
+            {{--</button>--}}
             <table class="table table-bordered table-hover" id="detailTable">
                 <thead>
                 <tr >
@@ -135,10 +136,10 @@
                         Nomor Part
                     </th>
                     <th class="text-center" style="width: 5%;">
-                        Satuan
+                        UOM
                     </th>
                     <th class="text-center" style="width: 10%;">
-                        Jumlah
+                        QTY
                     </th>
                     <th class="text-center" style="width: 10%;">
                         Harga
@@ -161,22 +162,22 @@
 
                 @foreach($header->purchase_invoice_details as $detail)
                     <tr class="item{{ $detail->id }}">
-                        <td class='field-item'>
+                        <td class='text-center'>
                             {{ $detail->item->code }} - {{ $detail->item->name }}
                         </td>
                         <td class="text-center">
                             {{ $detail->item->uom }}
                         </td>
-                        <td>
+                        <td class='text-center'>
                             {{ $detail->quantity }}
                         </td>
-                        <td>
+                        <td class='text-right'>
                             {{ $detail->price_string }}
                         </td>
                         <td class="text-center">
                             {{ $detail->discount_string ?? '-' }}
                         </td>
-                        <td>
+                        <td class='text-right'>
                             {{ $detail->subtotal_string }}
                         </td>
                         <td>
@@ -216,9 +217,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="qty_add">Jumlah:</label>
+                            <label class="control-label col-sm-2" for="qty_add">QTY:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="qty_add" name="qty_add">
+                                <input type="text" class="form-control" id="qty_add" name="qty_add">
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -232,7 +233,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="discount_add">Diskon(%):</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="discount_add" name="discount_add">
+                                <input type="text" class="form-control" id="discount_add" name="discount_add">
                                 <p class="errorDiscount text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -274,9 +275,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="qty_edit">Jumlah:</label>
+                            <label class="control-label col-sm-2" for="qty_edit">QTY:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="qty_edit" name="qty_edit">
+                                <input type="text" class="form-control" id="qty_edit" name="qty_edit">
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -290,7 +291,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="discount_edit">Diskon(%):</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="discount_edit" name="discount_edit">
+                                <input type="text" class="form-control" id="discount_edit" name="discount_edit">
                                 <p class="errorDiscount text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -385,28 +386,28 @@
 
         var i=1;
 
-        $('#po_code').select2({
-            placeholder: {
-                id: '{{ $header->purchase_order_id }}',
-                text: '{{ $header->purchase_order_header->code }}'
-            },
-            width: '100%',
-            minimumInputLength: 1,
-            ajax: {
-                url: '{{ route('select.purchase_orders') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                }
-            }
-        });
+        {{--$('#po_code').select2({--}}
+            {{--placeholder: {--}}
+                {{--id: '{{ $header->purchase_order_id }}',--}}
+                {{--text: '{{ $header->purchase_order_header->code }}'--}}
+            {{--},--}}
+            {{--width: '100%',--}}
+            {{--minimumInputLength: 1,--}}
+            {{--ajax: {--}}
+                {{--url: '{{ route('select.purchase_orders') }}',--}}
+                {{--dataType: 'json',--}}
+                {{--data: function (params) {--}}
+                    {{--return {--}}
+                        {{--q: $.trim(params.term)--}}
+                    {{--};--}}
+                {{--},--}}
+                {{--processResults: function (data) {--}}
+                    {{--return {--}}
+                        {{--results: data--}}
+                    {{--};--}}
+                {{--}--}}
+            {{--}--}}
+        {{--});--}}
 
         {{--$('#supplier').select2({--}}
             {{--placeholder: {--}}
@@ -456,6 +457,18 @@
         });
 
         // Add autonumeric
+        qtyAddFormat = new AutoNumeric('#qty_add', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0
+        });
+
+        qtyEditFormat = new AutoNumeric('#qty_edit', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0
+        });
+
         pphFormat = new AutoNumeric('#pph', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
@@ -598,7 +611,7 @@
                         if (data.remark !== null) {
                             remarkAdd = data.remark;
                         }
-                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td class='text-center'>" + data.item.uom + "</td><td>" + data.quantity + "</td><td>" + data.price_string + "</td><td class='text-center'>" + data.discount_string + "</td><td>" + data.subtotal_string + "</td><td>" + remarkAdd + "</td><td class='text-center'>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
+                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td class='text-center'>" + data.item.uom + "</td><td class='text-center'>" + data.quantity + "</td><td class='text-right'>" + data.price_string + "</td><td class='text-center'>" + data.discount_string + "</td><td class='text-right'>" + data.subtotal_string + "</td><td>" + remarkAdd + "</td><td class='text-center'>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
 
                         // Reset add form modal
                         $('#qty_add').val('');
@@ -708,7 +721,7 @@
                         if (data.remark !== null) {
                             remarkEdit = data.remark;
                         }
-                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td class='text-center'>" + data.item.uom + "</td><td>" + data.quantity + "</td><td>" + data.price_string + "</td><td class='text-center'>" + data.discount_string + "</td><td>" + data.subtotal_string + "</td><td>" + remarkEdit + "</td><td class='text-center'>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
+                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td class='text-center'>" + data.item.uom + "</td><td class='text-center'>" + data.quantity + "</td><td class='text-right'>" + data.price_string + "</td><td class='text-center'>" + data.discount_string + "</td><td class='text-right'>" + data.subtotal_string + "</td><td>" + remarkEdit + "</td><td class='text-center'>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
                     }
                 }
             });

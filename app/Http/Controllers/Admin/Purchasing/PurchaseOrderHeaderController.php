@@ -50,11 +50,11 @@ class PurchaseOrderHeaderController extends Controller
     }
 
     public function create(){
-        $purchaseRequest = null;
-        if(!empty(request()->pr)){
-            $purchaseRequest = PurchaseRequestHeader::find(request()->pr);
+        if(empty(request()->pr)){
+            return redirect()->route('admin.purchase_orders.before_create');
         }
 
+        $purchaseRequest = PurchaseRequestHeader::find(request()->pr);
         $quotation = null;
 
         // Numbering System
@@ -91,9 +91,9 @@ class PurchaseOrderHeaderController extends Controller
         }
 
         // Validate PR number
-        if(empty(Input::get('pr_code')) && empty(Input::get('pr_id'))){
-            return redirect()->back()->withErrors('Nomor PR wajib diisi!', 'default')->withInput($request->all());
-        }
+//        if(empty(Input::get('pr_code')) && empty(Input::get('pr_id'))){
+//            return redirect()->back()->withErrors('Nomor PR wajib diisi!', 'default')->withInput($request->all());
+//        }
 
         // Generate auto number
         $poCode = 'default';
@@ -108,13 +108,7 @@ class PurchaseOrderHeaderController extends Controller
         }
 
         // Get PR id
-        $prId = '0';
-        if($request->filled('pr_code')){
-            $prId = $request->input('pr_code');
-        }
-        else{
-            $prId = $request->input('pr_id');
-        }
+        $prId = $request->input('pr_id');
 
         // Check existing number
         $temp = PurchaseOrderHeader::where('code', $poCode)->first();
@@ -185,13 +179,6 @@ class PurchaseOrderHeaderController extends Controller
             $deliveryFee = str_replace('.','', $request->input('delivery_fee'));
             $delivery = (double) $deliveryFee;
             $poHeader->delivery_fee = $deliveryFee;
-        }
-
-        if($request->filled('pr_code')){
-            $poHeader->purchase_request_id = $request->input('pr_code');
-        }
-        else{
-            $poHeader->purchase_request_id = $request->input('pr_id');
         }
 
         $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
@@ -300,7 +287,6 @@ class PurchaseOrderHeaderController extends Controller
                 ->withInput();
         }
 
-        if($request->filled('pr_code')) $purchase_order->purchase_request_id = Input::get('pr_code');
         if($request->filled('supplier')) $purchase_order->supplier_id = Input::get('supplier');
 
         $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');

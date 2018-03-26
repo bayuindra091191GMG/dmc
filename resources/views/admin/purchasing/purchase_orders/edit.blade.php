@@ -36,7 +36,7 @@
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="po_code">
                     Nomor PO
                 </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="text" id="po_code" name="po_code" class="form-control col-md-12 col-xs-12" value="{{ $header->code }}" readonly/>
                 </div>
             </div>
@@ -46,7 +46,7 @@
                     Tanggal
                     <span class="required">*</span>
                 </label>
-                <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
                            name="date" value="{{ $date }}" required>
                 </div>
@@ -55,11 +55,10 @@
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pr_code">
                     Nomor PR
-                    <span class="required">*</span>
                 </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                    <select id="pr_code" name="pr_code" class="form-control col-md-12 col-xs-12 @if($errors->has('pr_code')) parsley-error @endif">
-                    </select>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="pr_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('pph')) parsley-error @endif"
+                           name="pr_code" value="{{ $header->purchase_request_header->code }}" readonly>
                 </div>
             </div>
 
@@ -68,7 +67,7 @@
                     Vendor
                     <span class="required">*</span>
                 </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="supplier" name="supplier" class="form-control col-md-7 col-xs-12 @if($errors->has('supplier')) parsley-error @endif">
                     </select>
                 </div>
@@ -78,7 +77,7 @@
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="delivery_fee">
                     Ongkos Kirim
                 </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="delivery_fee" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('delivery_fee')) parsley-error @endif"
                            name="delivery_fee">
                 </div>
@@ -92,7 +91,7 @@
                     <div class="checkbox">
                         <label>
                             <input type="checkbox" class="flat" id="ppn" name="ppn" @if(!empty($header->ppn_percent) && $header->ppn_percent > 0) checked @endif>
-                            PPN sekarang: 15%@if(!empty($header->ppn_percent) && $header->ppn_percent > 0), PPN tersimpan: {{ $header->ppn_percent }}% @endif
+                            @if(!empty($header->ppn_percent) && $header->ppn_percent > 0) PPN tersimpan: {{ $header->ppn_percent }}% @endif
                         </label>
                     </div>
                 </div>
@@ -125,9 +124,9 @@
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 box-section">
             <h3 class='text-center'>Detil Inventory</h3>
-            <button class="add-modal btn btn-info" data-header-id="{{ $header->id }}">
-                <span class="glyphicon glyphicon-plus-sign"></span> Tambah
-            </button>
+            {{--<button class="add-modal btn btn-info" data-header-id="{{ $header->id }}">--}}
+                {{--<span class="glyphicon glyphicon-plus-sign"></span> Tambah--}}
+            {{--</button>--}}
             <table class="table table-bordered table-hover" id="detailTable">
                 <thead>
                 <tr >
@@ -383,28 +382,28 @@
 
         var i=1;
 
-        $('#pr_code').select2({
-            placeholder: {
-                id: '{{ $header->purchase_request_id }}',
-                text: '{{ $header->purchase_request_header->code }}'
-            },
-            width: '100%',
-            minimumInputLength: 1,
-            ajax: {
-                url: '{{ route('select.purchase_requests') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                }
-            }
-        });
+        {{--$('#pr_code').select2({--}}
+            {{--placeholder: {--}}
+                {{--id: '{{ $header->purchase_request_id }}',--}}
+                {{--text: '{{ $header->purchase_request_header->code }}'--}}
+            {{--},--}}
+            {{--width: '100%',--}}
+            {{--minimumInputLength: 1,--}}
+            {{--ajax: {--}}
+                {{--url: '{{ route('select.purchase_requests') }}',--}}
+                {{--dataType: 'json',--}}
+                {{--data: function (params) {--}}
+                    {{--return {--}}
+                        {{--q: $.trim(params.term)--}}
+                    {{--};--}}
+                {{--},--}}
+                {{--processResults: function (data) {--}}
+                    {{--return {--}}
+                        {{--results: data--}}
+                    {{--};--}}
+                {{--}--}}
+            {{--}--}}
+        {{--});--}}
 
         $('#supplier').select2({
             placeholder: {

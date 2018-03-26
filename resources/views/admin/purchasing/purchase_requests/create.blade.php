@@ -49,7 +49,7 @@
                     Tanggal
                     <span class="required">*</span>
                 </label>
-                <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
                            name="date" value="{{ old('date') }}" required>
                 </div>
@@ -58,22 +58,11 @@
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="mr_code" >
                     Nomor MR
-                    <span class="required">*</span>
                 </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                    <select id="mr_code" name="mr_code" class="form-control col-md-7 col-xs-12 @if($errors->has('mr_code')) parsley-error @endif">
-                    </select>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="mr_code" type="text" class="form-control col-md-7 col-xs-12"
+                           name="mr_code" value="{{ $materialRequest->code }}" readonly>
                     <input type="hidden" id="mr_id" name="mr_id" @if(!empty($materialRequest)) value="{{ $materialRequest->id }} @endif">
-                </div>
-                <div class="col-md-2 col-sm-2 col-xs-12">
-                    <a class="get-mr-data btn btn-info">
-                        Ambil Data
-                    </a>
-                    @if(!empty($materialRequest))
-                        <a class="clear-mr-data btn btn-info">
-                            Reset Data
-                        </a>
-                    @endif
                 </div>
             </div>
 
@@ -433,55 +422,55 @@
             decimalPlaces: 0
         });
 
-        @if(!empty($materialRequest))
-            $('#mr_code').select2({
-                placeholder: {
-                    id: '{{ $materialRequest->id }}',
-                    text: '{{ $materialRequest->code }}'
-                },
-                width: '100%',
-                minimumInputLength: 1,
-                allowClear: true,
-                ajax: {
-                    url: '{{ route('select.material_requests') }}',
-                    dataType: 'json',
-                    data: function (params) {
-                        return {
-                            q: $.trim(params.term)
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: data
-                        };
-                    }
-                }
-            });
-        @else
-            $('#mr_code').select2({
-                placeholder: {
-                    id: '-1',
-                    text: ' - Pilih Nomor PR - '
-                },
-                width: '100%',
-                minimumInputLength: 1,
-                allowClear: true,
-                ajax: {
-                    url: '{{ route('select.material_requests') }}',
-                    dataType: 'json',
-                    data: function (params) {
-                        return {
-                            q: $.trim(params.term)
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: data
-                        };
-                    }
-                }
-            });
-        @endif
+        {{--@if(!empty($materialRequest))--}}
+            {{--$('#mr_code').select2({--}}
+                {{--placeholder: {--}}
+                    {{--id: '{{ $materialRequest->id }}',--}}
+                    {{--text: '{{ $materialRequest->code }}'--}}
+                {{--},--}}
+                {{--width: '100%',--}}
+                {{--minimumInputLength: 1,--}}
+                {{--allowClear: true,--}}
+                {{--ajax: {--}}
+                    {{--url: '{{ route('select.material_requests') }}',--}}
+                    {{--dataType: 'json',--}}
+                    {{--data: function (params) {--}}
+                        {{--return {--}}
+                            {{--q: $.trim(params.term)--}}
+                        {{--};--}}
+                    {{--},--}}
+                    {{--processResults: function (data) {--}}
+                        {{--return {--}}
+                            {{--results: data--}}
+                        {{--};--}}
+                    {{--}--}}
+                {{--}--}}
+            {{--});--}}
+        {{--@else--}}
+            {{--$('#mr_code').select2({--}}
+                {{--placeholder: {--}}
+                    {{--id: '-1',--}}
+                    {{--text: ' - Pilih Nomor PR - '--}}
+                {{--},--}}
+                {{--width: '100%',--}}
+                {{--minimumInputLength: 1,--}}
+                {{--allowClear: true,--}}
+                {{--ajax: {--}}
+                    {{--url: '{{ route('select.material_requests') }}',--}}
+                    {{--dataType: 'json',--}}
+                    {{--data: function (params) {--}}
+                        {{--return {--}}
+                            {{--q: $.trim(params.term)--}}
+                        {{--};--}}
+                    {{--},--}}
+                    {{--processResults: function (data) {--}}
+                        {{--return {--}}
+                            {{--results: data--}}
+                        {{--};--}}
+                    {{--}--}}
+                {{--}--}}
+            {{--});--}}
+        {{--@endif--}}
 
         $('#machinery').select2({
             placeholder: {
@@ -507,25 +496,25 @@
         });
 
         // Get selected MR data
-        $(document).on('click', '.get-mr-data', function(){
-            var url = '{{ route('admin.purchase_requests.create') }}';
-            if($('#mr_code').val() && $('#mr_code').val() !== ""){
-                url += "?mr=" + $('#mr_code').val();
-                window.location = url;
-            }
-            else{
-                if($('#mr_id').val() && $('#mr_id').val() !== ""){
-                    url += "?mr=" + $('#mr_id').val();
-                    window.location = url;
-                }
-            }
-        });
+        {{--$(document).on('click', '.get-mr-data', function(){--}}
+            {{--var url = '{{ route('admin.purchase_requests.create') }}';--}}
+            {{--if($('#mr_code').val() && $('#mr_code').val() !== ""){--}}
+                {{--url += "?mr=" + $('#mr_code').val();--}}
+                {{--window.location = url;--}}
+            {{--}--}}
+            {{--else{--}}
+                {{--if($('#mr_id').val() && $('#mr_id').val() !== ""){--}}
+                    {{--url += "?mr=" + $('#mr_id').val();--}}
+                    {{--window.location = url;--}}
+                {{--}--}}
+            {{--}--}}
+        {{--});--}}
 
         // Clear selected MR data
-        $(document).on('click', '.clear-mr-data', function(){
-            var url = '{{ route('admin.purchase_requests.create') }}';
-            window.location = url;
-        });
+        {{--$(document).on('click', '.clear-mr-data', function(){--}}
+            {{--var url = '{{ route('admin.purchase_requests.create') }}';--}}
+            {{--window.location = url;--}}
+        {{--});--}}
 
         // Add new detail
         $(document).on('click', '.add-modal', function() {
