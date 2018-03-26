@@ -131,7 +131,7 @@
                                     </li>
                                     <li>
                                         <a href="{{ route('admin.payment_requests.choose-vendor-po') }}">
-                                            Tambah RFP Purchase Order
+                                            Tambah RFP DP/CBD
                                         </a>
                                     </li>
                                 </ul>

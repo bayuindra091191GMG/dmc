@@ -60,7 +60,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="hm" type="text" class="form-control col-md-7 col-xs-12"
-                           name="hm">
+                           name="hm" value="{{ $materialRequest->hm }}">
                 </div>
             </div>
 
@@ -70,7 +70,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="km" type="text" class="form-control col-md-7 col-xs-12"
-                           name="km">
+                           name="km" value="{{ $materialRequest->km }}">
                 </div>
             </div>
 

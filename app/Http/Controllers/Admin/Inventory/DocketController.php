@@ -123,7 +123,9 @@ class DocketController extends Controller
             }
 
             //Check Item in Stock
-            $tempItem = ItemStock::where('item_id', $item)->first();
+            $tempItem = ItemStock::where('item_id', $item)
+                ->where('warehouse_id', Input::get('warehouse'))
+                ->first();
 
             if($tempItem == null){
                 $wrCheck = false;
@@ -164,6 +166,8 @@ class DocketController extends Controller
             'division'                      => Input::get('division'),
             'warehouse_id'                  => Input::get('warehouse'),
             'status_id'                     => 1,
+            'hm'                            => $materialRequest->hm,
+            'km'                            => $materialRequest->km,
             'created_by'                    => $user->id,
             'updated_by'                    => $user->id,
             'created_at'                    => $now->toDateString(),
