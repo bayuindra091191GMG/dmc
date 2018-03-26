@@ -24,9 +24,8 @@ class ItemReceiptTransformer extends TransformerAbstract
 
         return[
             'code'              => $code,
-            'no_sj_spb'         => $header->no_sj_spb,
+            'no_sj_spb'         => $header->delivery_order_vendor,
             'date'              => $date,
-            'delivery_order'    => $header->delivery_order_header->code ?? '-',
             'created_at'        => $createdDate,
             'created_by'        => $header->createdBy->email,
             'action'            => $action

@@ -144,9 +144,9 @@ td
   </span>
   <td class=xl68>: {{ $issuedDocket->machinery->code }}</td>
   <td class=xl68></td>
-  <td class=xl68>No. PR</td>
+  <td class=xl68>No. MR</td>
   <td class=xl68></td>
-  <td class=xl68>: {{ $issuedDocket->purchase_request_header->code }}</td>
+  <td class=xl68>: {{ $issuedDocket->material_request_header->code }}</td>
  </tr>
  <tr height=20 style='height:15.0pt'>
   <td height=20 class=xl68 colspan=2 style='height:15.0pt;mso-ignore:colspan'><span

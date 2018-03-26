@@ -220,8 +220,9 @@ class ItemReceiptController extends Controller
                     $stockResult = $newStock->stock;
                 }
 
-                $item = Item::find($item);
-                $item->stock += $qtyInt;
+                $itemData = Item::find($item);
+                $itemData->stock += $qtyInt;
+                $itemData->save();
 
                 //Stock Card
                 StockCard::create([
@@ -237,13 +238,13 @@ class ItemReceiptController extends Controller
 
                 //Update PO
                 $detail = $purchaseOrder->purchase_order_details->where('item_id', $item)->first();
-                $detail->received_quantity = $detail->received_quantity + $qty[$idx];
+                $detail->received_quantity = $detail->received_quantity + $qtyInt;
                 $detail->save();
 
                 //Update MR
                 $mrDetail = $purchaseOrder->purchase_request_header->material_request_header->material_request_details->where('item_id', $item)->first();
                 if(!empty($mrDetail)){
-                    $mrDetail->quantity_received = $mrDetail->quantity_received + $qty[$idx];
+                    $mrDetail->quantity_received = $mrDetail->quantity_received + $qtyInt;
                     $mrDetail->save();
                 }
             }

@@ -1102,7 +1102,7 @@
   <td colspan=5 class=xl123 style='border-right:.5pt solid black;border-left:
   none'>{{ $itemReceipt->angkutan }}</td>
   <td colspan=6 class=xl128 style='border-right:2.0pt double black;border-left:
-  none'>{{ $itemReceipt->delivery_order_header->code }}</td>
+  none'>{{ $itemReceipt->delivery_order_vendor }}</td>
  </tr>
  <tr height=20 style='height:15.0pt'>
   <td height=20 class=xl71 style='height:15.0pt;border-top:none'><span
@@ -1127,7 +1127,7 @@
   border-left:none;width:189pt'>{{ $itemReceiptDetail->item->name }}</td>
   <td class=xl77 style='border-top:none;border-left:none'><span
            style='mso-spacerun:yes'> </span> {{ $itemReceiptDetail->quantity }}<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl101 width=112 style='width:84pt'>{{ $itemReceiptDetail->purchase_order_header->code }}</td>
+  <td class=xl101 width=112 style='width:84pt'>{{ $itemReceipt->purchase_order_header->code }}</td>
   <td colspan=4 class=xl134 width=256 style='border-right:1.5pt solid black;
   width:192pt'><span style='mso-spacerun:yes'> </span>{{ $itemReceiptDetail->remark }}<span
            style='mso-spacerun:yes'> </span></td>

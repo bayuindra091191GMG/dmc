@@ -138,7 +138,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="priority" type="text" class="form-control col-md-7 col-xs-12"
-                           name="priority" value="{{ !empty($materialRequest->priority) ?? $materialRequest->priority }}" readonly>
+                           name="priority" value="{{ $materialRequest->priority }}" readonly>
                 </div>
             </div>
 
@@ -149,7 +149,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="km" type="text" class="form-control col-md-7 col-xs-12"
-                           name="km" value="{{ !empty($materialRequest->km) ?? $materialRequest->km }}" readonly>
+                           name="km" value="{{ $materialRequest->km }}" readonly>
                 </div>
             </div>
 
@@ -159,7 +159,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="hm" type="text" class="form-control col-md-7 col-xs-12"
-                           name="hm" value="{{ !empty($materialRequest->hm) ?? $materialRequest->hm }}" readonly>
+                           name="hm" value="{{ $materialRequest->hm }}" readonly>
                 </div>
             </div>
 

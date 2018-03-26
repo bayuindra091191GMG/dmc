@@ -180,6 +180,7 @@ class DocketController extends Controller
         // Create Issued Docket Detail
         $remark = Input::get('remark');
         $idx = 0;
+
         foreach($items as $item){
             if(!empty($item)){
                 $qty = (int) $qtys[$idx];
@@ -196,8 +197,10 @@ class DocketController extends Controller
 
                 //Update Stock
                 //Item Stock
-                $itemStockData = ItemStock::where('item_id', $item)->first();
-                $itemStockData->stock = $itemStockData->stock - $qty[$idx];
+                $itemStockData = ItemStock::where('item_id', $docketDetail->item_id)
+                        ->where('warehouse_id', $docketHeader->warehouse_id)
+                        ->first();
+                $itemStockData->stock = $itemStockData->stock - $qty;
                 $itemStockData->save();
 
                 //Stock Card
@@ -214,7 +217,7 @@ class DocketController extends Controller
 
                 //item
                 $itemData = Item::where('id', $item)->first();
-                $itemData->stock = $itemData->stock - $qty[$idx];
+                $itemData->stock = $itemData->stock - $qty;
                 $itemData->save();
 
                 //Update Material Request Detail

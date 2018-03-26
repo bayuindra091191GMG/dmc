@@ -37,8 +37,8 @@
                     Delivery Orders
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="delivery_order" name="delivery_order" class="form-control col-md-7 col-xs-12 @if($errors->has('delivery_order')) parsley-error @endif">
-                    </select>
+                    <input id="delivery_order" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
+                           name="delivery_order" value="{{ $header->delivery_order_vendor }}">
                 </div>
             </div>
 
@@ -100,9 +100,6 @@
                         Nomor Barang
                     </th>
                     <th>
-                        Nomor PO
-                    </th>
-                    <th>
                         Jumlah
                     </th>
                     <th class="text-center" style="width: 30%">
@@ -121,19 +118,16 @@
                             {{ $detail->item->code }} - {{ $detail->item->name }}
                         </td>
                         <td>
-                            {{ $detail->purchase_order_header->code }}
-                        </td>
-                        <td>
                             {{ $detail->quantity }}
                         </td>
                         <td>
                             {{ $detail->remark ?? '-' }}
                         </td>
                         <td>
-                            <button class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-po-id="{{ $detail->purchase_order_id }}" data-po-text="{{ $detail->purchase_order_header->code }}" data-remark="{{ $detail->remark }}">
+                            <button class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}">
                                 <span class="glyphicon glyphicon-edit"></span> Ubah
                             </button>
-                            <button class="delete-modal btn btn-danger" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-po-id="{{ $detail->purchase_order_id }}" data-po-text="{{ $detail->purchase_order_header->code }}" data-qty="{{ $detail->quantity }}">
+                            <button class="delete-modal btn btn-danger" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
                                 <span class="glyphicon glyphicon-trash"></span> Hapus
                             </button>
                         </td>
@@ -335,29 +329,6 @@
         });
 
         var i=1;
-
-        $('#delivery_order').select2({
-            placeholder: {
-                id: '-1',
-                text: '{{ $header->delivery_order_header->code }}'
-            },
-            width: '100%',
-            minimumInputLength: 2,
-            ajax: {
-                url: '{{ route('select.delivery_orders') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                }
-            }
-        });
 
         $('#select0').select2({
             placeholder: {

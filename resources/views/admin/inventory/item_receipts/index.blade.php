@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Daftar Item Receipt')
+@section('title', 'Daftar Good Receipt')
 
 @section('content')
 
@@ -21,7 +21,6 @@
                 <th>No</th>
                 <th>Nomor GR</th>
                 <th>No SJ/SPB</th>
-                <th>Delivery Note</th>
                 <th>Tanggal</th>
                 <th>Dibuat Oleh</th>
                 <th>Tindakan</th>
@@ -52,7 +51,6 @@
                     { data: 'DT_Row_Index', orderable: false, searchable: false},
                     { data: 'code', name: 'code' },
                     { data: 'no_sj_spb', name: 'no_sj_spb' },
-                    { data: 'delivery_order', name: 'delivery_order' },
                     { data: 'date', name: 'date' },
                     { data: 'created_by', name: 'created_by' },
                     { data: 'action', name: 'action' }
