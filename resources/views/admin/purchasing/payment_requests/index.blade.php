@@ -48,12 +48,12 @@
                 serverSide: true,
                 ajax: '{!! route('datatables.payment_requests') !!}',
                 columns: [
-                    { data: 'DT_Row_Index', orderable: false, searchable: false},
-                    { data: 'code', name: 'code' },
-                    { data: 'amount', name: 'amount' },
-                    { data: 'request_by', name: 'request_by' },
-                    { data: 'created_at', name: 'created_at' },
-                    { data: 'action', name: 'action', orderable: false, searchable: false}
+                    { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center' },
+                    { data: 'code', name: 'code', class: 'text-center' },
+                    { data: 'amount', name: 'amount', class: 'text-center' },
+                    { data: 'request_by', name: 'request_by', class: 'text-center' },
+                    { data: 'created_at', name: 'created_at', class: 'text-center' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center' }
                 ],
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"

@@ -23,6 +23,7 @@ class GroupTransformer extends TransformerAbstract
         return[
             'code'          => $group->code ?? '-',
             'name'          => $group->name,
+            'type'          => $group->type == 1 ? 'Inventory' : 'BBM atau oli',
             'action'        => $action
         ];
     }

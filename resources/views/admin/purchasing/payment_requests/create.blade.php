@@ -45,6 +45,17 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
+                    Tanggal
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
+                           name="date" value="{{ old('date') }}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="type" >
                     Tipe Payment
                     <span class="required">*</span>
@@ -55,17 +66,6 @@
                         <option value="dp">Down Payment (DP)</option>
                         <option value="cbd">Cash Before Delivery (CBD)</option>
                     </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
-                    Tanggal
-                    <span class="required">*</span>
-                </label>
-                <div class="col-md-3 col-sm-6 col-xs-12">
-                    <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
-                           name="date" value="{{ old('date') }}" required>
                 </div>
             </div>
 
@@ -111,17 +111,14 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                    <b>Detil Barang</b>
-                </label>
-            </div>
+            <hr/>
 
             <div class="form-group">
                 <div class="col-lg-12 col-md-12 col-xs-12 box-section">
+                    <h3 class="text-center">Detil Inventory</h3>
                     <table class="table table-bordered table-hover" id="detail_table">
                         <thead>
-                        @if(!empty($purchaseInvoices))
+                        @if(!empty($purchaseInvoices) && $purchaseInvoices->count() > 0)
                             <input type="hidden" value="pi" name="flag" />
                             <tr >
                                 <th class="text-center">
@@ -151,9 +148,6 @@
                                 <th class="text-center" style="width: 10%">
                                     Tanggal
                                 </th>
-                                {{--<th class="text-center" style="width: 10%">--}}
-                                    {{--Tindakan--}}
-                                {{--</th>--}}
                             </tr>
                             </thead>
                             <tbody>
@@ -190,17 +184,11 @@
                                         <td class='text-center'>
                                             {{ $detail->date_string }}
                                         </td>
-                                        {{--<td>--}}
-                                            {{--<?php $itemId = $detail->id. "#". $detail->code ?>--}}
-                                            {{--<a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->code }}">--}}
-                                                {{--<span class="glyphicon glyphicon-trash"></span>--}}
-                                            {{--</a>--}}
-                                        {{--</td>--}}
                                     </tr>
                                 @endforeach
                             </tbody>
                         @endif
-                        @if(!empty($purchaseOrders))
+                        @if(!empty($purchaseOrders) && $purchaseOrders->count() > 0)
                             <thead>
                             <input type="hidden" value="po" name="flag" />
                             <tr >
@@ -285,8 +273,10 @@
 
             <input id="index_counter" type="hidden" value="{{ $idx }}"/>
 
+            <hr/>
+
             <div class="form-group">
-                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                <div class="col-md-12 col-sm-12 col-xs-12 text-center">
                     <a class="btn btn-danger" href="{{ route('admin.payment_requests') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
@@ -294,39 +284,6 @@
             {{ Form::close() }}
         </div>
     </div>
-
-    {{--<!-- Modal form to delete a form -->--}}
-    {{--<div id="deleteModal" class="modal fade" role="dialog">--}}
-        {{--<div class="modal-dialog">--}}
-            {{--<div class="modal-content">--}}
-                {{--<div class="modal-header">--}}
-                    {{--<button type="button" class="close" data-dismiss="modal">×</button>--}}
-                    {{--<h4 class="modal-title"></h4>--}}
-                {{--</div>--}}
-                {{--<div class="modal-body">--}}
-                    {{--<h3 class="text-center">Apakah anda yakin ingin menghapus detail ini?</h3>--}}
-                    {{--<br />--}}
-                    {{--<form class="form-horizontal" role="form">--}}
-                        {{--<div class="form-group">--}}
-                            {{--<label class="control-label col-sm-2" for="item_delete">Code:</label>--}}
-                            {{--<div class="col-sm-10">--}}
-                                {{--<input type="text" class="form-control" id="item_delete" disabled>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<input type="hidden" name="deleted_id"/>--}}
-                    {{--</form>--}}
-                    {{--<div class="modal-footer">--}}
-                        {{--<button type="button" class="btn btn-danger delete" data-dismiss="modal">--}}
-                            {{--<span id="" class='glyphicon glyphicon-trash'></span> Hapus--}}
-                        {{--</button>--}}
-                        {{--<button type="button" class="btn btn-warning" data-dismiss="modal">--}}
-                            {{--<span class='glyphicon glyphicon-remove'></span> Batal--}}
-                        {{--</button>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-        {{--</div>--}}
-    {{--</div>--}}
 
 @endsection
 

@@ -15,6 +15,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $id
  * @property string $code
  * @property string $name
+ * @property int $type
  * 
  * @property \Illuminate\Database\Eloquent\Collection $items
  *
@@ -24,9 +25,14 @@ class Group extends Eloquent
 {
 	public $timestamps = false;
 
+	protected $casts = [
+	    'type'  => 'int'
+    ];
+
 	protected $fillable = [
 		'code',
-		'name'
+		'name',
+        'type'
 	];
 
 	public function items()

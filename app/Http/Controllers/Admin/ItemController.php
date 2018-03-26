@@ -120,6 +120,7 @@ class ItemController extends Controller
             'part_number'           => $request->input('part_number'),
             'uom'                   => $request->input('uom'),
             'group_id'              => $request->input('group'),
+            'stock'                 => 0,
             'created_by'            => $user->id,
             'created_at'            => $now->toDateTimeString(),
             'machinery_type'        => $request->input('machinery_type')
@@ -281,8 +282,9 @@ class ItemController extends Controller
             $type = $request->type;
 
             if($type === 'other'){
-                $items = Item::where('group_id', '!=', 4)
-                    ->where('group_id', '!=', 5)
+                $items = Item::whereHas('group', function($query){
+                    $query->where('type', 1);
+                })
                     ->where(function($q) use ($term) {
                         $q->where('code', 'LIKE', '%'. $term. '%')
                             ->orWhere('name', 'LIKE', '%'. $term. '%');
@@ -290,9 +292,10 @@ class ItemController extends Controller
                     ->get();
             }
             elseif($type === 'fuel'){
-                $arr = [4,5];
 
-                $items = Item::whereIn('group_id', $arr)
+                $items = Item::whereHas('group', function($query){
+                    $query->where('type', 2);
+                })
                     ->where(function($q) use ($term) {
                         $q->where('code', 'LIKE', '%'. $term. '%')
                             ->orWhere('name', 'LIKE', '%'. $term. '%');

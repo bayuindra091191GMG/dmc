@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="navbar-left">
                 <a class="btn btn-default" href="{{ route('admin.delivery_orders') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
             </div>
@@ -15,7 +15,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <form class="form-horizontal form-label-left box-section">
 
                 @if(\Illuminate\Support\Facades\Session::has('message'))
@@ -34,6 +34,28 @@
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         : {{ $header->code }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        Tanggal
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ $date }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        Nomor PR
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        @if(!empty($header->purchase_request_id))
+                            : <a style="text-decoration: underline;" href="{{ route('admin.purchase_requests.show', ['purchase_request' => $header->purchase_request_id]) }}">{{ $header->purchase_request_header->code }}</a>
+                        @else
+                            : -
+                        @endif
                     </div>
                 </div>
 
@@ -70,19 +92,6 @@
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         : {{ $header->toWarehouse->name }}
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-md-3 col-sm-3 col-xs-12">
-                        Nomor PR
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        @if(!empty($header->purchase_request_id))
-                            : <a style="text-decoration: underline;" href="{{ route('admin.purchase_requests.show', ['purchase_request' => $header->purchase_request_id]) }}">{{ $header->purchase_request_header->code }}</a>
-                        @else
-                            : -
-                        @endif
                     </div>
                 </div>
 

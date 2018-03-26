@@ -215,9 +215,10 @@ class PurchaseRequestHeaderController extends Controller
         foreach($request->input('item') as $item){
             if(!empty($item)){
                 $prDetail = PurchaseRequestDetail::create([
-                    'header_id'     => $prHeader->id,
-                    'item_id'       => $item,
-                    'quantity'      => $qty[$idx]
+                    'header_id'         => $prHeader->id,
+                    'item_id'           => $item,
+                    'quantity'          => $qty[$idx],
+                    'quantity_invoiced' => 0
                 ]);
 
                 if(!empty($remark[$idx])) $prDetail->remark = $remark[$idx];
@@ -265,9 +266,9 @@ class PurchaseRequestHeaderController extends Controller
         }
 
         // Validate priority
-        if($request->input('priority') === '-1'){
-            return redirect()->back()->withErrors('Pilih prioritas!', 'default')->withInput($request->all());
-        }
+//        if($request->input('priority') === '-1'){
+//            return redirect()->back()->withErrors('Pilih prioritas!', 'default')->withInput($request->all());
+//        }
 
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
@@ -313,7 +314,8 @@ class PurchaseRequestHeaderController extends Controller
 
     public function getPurchaseRequests(Request $request){
         $term = trim($request->q);
-        $purchase_requests = PurchaseRequestHeader::where('code', 'LIKE', '%'. $term. '%')
+        $purchase_requests = PurchaseRequestHeader::where('status_id', 3)
+            ->where('code', 'LIKE', '%'. $term. '%')
             ->get();
 
         $formatted_tags = [];

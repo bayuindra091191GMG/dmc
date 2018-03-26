@@ -17,6 +17,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $header_id
  * @property int $item_id
  * @property int $quantity
+ * @property int $quantity_invoiced
  * @property string $remark
  * @property \Carbon\Carbon $delivery_date
  * 
@@ -43,6 +44,7 @@ class PurchaseRequestDetail extends Eloquent
 		'header_id',
 		'item_id',
 		'quantity',
+        'quantity_invoiced',
 		'remark',
 		'delivery_date'
 	];

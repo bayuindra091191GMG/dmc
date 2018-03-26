@@ -178,16 +178,17 @@ class DocketController extends Controller
         $docketHeader->save();
 
         // Create Issued Docket Detail
-        $qty = Input::get('qty');
         $remark = Input::get('remark');
         $idx = 0;
         foreach($items as $item){
             if(!empty($item)){
+                $qty = (int) $qtys[$idx];
+
                 $docketDetail = IssuedDocketDetail::create([
                     'header_id'     => $docketHeader->id,
                     'item_id'       => $item,
                     'machinery_id'  => $docketHeader->machinery_id,
-                    'quantity'      => $qty[$idx]
+                    'quantity'      => $qty
                 ]);
 
                 if(!empty($remark[$idx])) $docketDetail->remarks = $remark[$idx];
@@ -218,7 +219,7 @@ class DocketController extends Controller
 
                 //Update Material Request Detail
                 $mrDetail = MaterialRequestDetail::find($materialRequest->material_request_details[$idx]->id);
-                $mrDetail->quantity_issued = $qty[$idx];
+                $mrDetail->quantity_issued += $qty;
                 $mrDetail->save();
             }
             $idx++;

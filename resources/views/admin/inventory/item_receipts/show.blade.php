@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title','Data Item Receipt '. $header->code)
+@section('title','Data Goods Receipt '. $header->code)
 
 @section('content')
     <div class="row">
@@ -32,7 +32,7 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Nomor Good Receipt
+                        Nomor Goods Receipt
                     </label>
                     <div class="col-md-6 col-sm-3 col-xs-12">
                         : {{ $header->code }}

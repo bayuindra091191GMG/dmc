@@ -213,10 +213,11 @@ class PurchaseOrderHeaderController extends Controller
                 $price = (double) $priceStr;
                 $qty = (double) $qtys[$idx];
                 $poDetail = PurchaseOrderDetail::create([
-                    'header_id'     => $poHeader->id,
-                    'item_id'       => $item,
-                    'quantity'      => $qty,
-                    'price'         => $priceStr
+                    'header_id'         => $poHeader->id,
+                    'item_id'           => $item,
+                    'quantity'          => $qty,
+                    'quantity_invoiced' => 0,
+                    'price'             => $priceStr
                 ]);
 
                 // Check discount
@@ -432,11 +433,23 @@ class PurchaseOrderHeaderController extends Controller
 
     public function getIndex(Request $request){
         try{
-            $purchaseOrders = PurchaseOrderHeader::dateDescending()->get();
+            $purchaseOrders = null;
 
             $mode = 'default';
             if($request->filled('mode')){
                 $mode = $request->input('mode');
+
+                if($mode == 'before_create_po'){
+                    $purchaseOrders = PurchaseOrderHeader::dateDescending()->get();
+                }
+                else{
+                    $purchaseOrders = PurchaseOrderHeader::where('status_id', 3)
+                        ->dateDescending()
+                        ->get();
+                }
+            }
+            else{
+                $purchaseOrders = PurchaseOrderHeader::dateDescending()->get();
             }
 
             return DataTables::of($purchaseOrders)

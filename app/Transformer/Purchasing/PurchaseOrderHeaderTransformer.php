@@ -54,7 +54,7 @@ class PurchaseOrderHeaderTransformer extends TransformerAbstract
                 'delivery_fee'      => $header->delivery_fee_string ?? '-',
                 'total_payment'     => $header->total_payment_string,
                 'created_at'        => $date,
-                'status'            => $header->status_id == 3 ? 'open' : 'closed',
+                'status'            => $header->status->description,
                 'action'            => $action
             ];
         }catch(\Exception $ex){

@@ -21,6 +21,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property float $subtotal
  * @property string $remark
  * @property int $received_quantity
+ * @property int $quantity_invoiced
  * 
  * @property \App\Models\Item $item
  * @property \App\Models\PurchaseOrderHeader $purchase_order_header
@@ -38,6 +39,7 @@ class PurchaseOrderDetail extends Eloquent
 		'price' => 'float',
 		'discount' => 'int',
         'received_quantity' => 'int',
+        'quantity_invoiced' => 'int',
 		'subtotal' => 'float'
 	];
 
@@ -55,6 +57,7 @@ class PurchaseOrderDetail extends Eloquent
 		'discount',
 		'subtotal',
         'received_quantity',
+        'quantity_invoiced',
 		'remark'
 	];
 

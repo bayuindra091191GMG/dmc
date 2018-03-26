@@ -51,6 +51,7 @@ class PurchaseRequestHeaderTransformer extends TransformerAbstract
             'department'    => $header->department->name,
             'machinery'     => $machinery,
             'date'          => $date,
+            'status'        => $header->status->description,
             'created_at'    => $createdAt,
             'action'        => $action
         ];

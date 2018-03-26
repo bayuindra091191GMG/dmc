@@ -228,6 +228,76 @@ class PurchaseInvoiceHeaderController extends Controller
         $invHeader->total_payment = $totalPayment + $ppnAmount - $pphAmount;
         $invHeader->save();
 
+        // Check PO
+        $purchaseOrder = $invHeader->purchase_order_header;
+        $idx = 0;
+        $isInvoicedPO = true;
+        foreach($items as $item){
+            if(!empty($item))
+            {
+                $isInvoicedPO = true;
+                $qty = (double) $qtys[$idx];
+
+                foreach($purchaseOrder->purchase_order_details as $detail){
+                    // Update PO
+                    if($detail->item_id == $item){
+                        $poDetail = $detail;
+                        $poDetail->quantity_invoiced += $qty;
+                        $poDetail->save();
+                    }
+
+                    // Check invoiced qty
+                    if($detail->quantity != $detail->quantity_invoiced){
+                        $isInvoicedPO = false;
+                    }
+                }
+            }
+            $idx++;
+        }
+
+        // Close PO
+        if($isInvoicedPO){
+            $purchaseOrder->status_id = 4;
+            $purchaseOrder->closing_date = $now->toDateString();
+            $purchaseOrder->save();
+
+            // Check PR
+            $purchaseRequest = $purchaseOrder->purchase_request_header;
+            $idx = 0;
+            $isInvoicedPR = true;
+            foreach($items as $item){
+                if(!empty($item))
+                {
+                    $isInvoicedPR = true;
+                    $qty = (double) $qtys[$idx];
+
+                    foreach($purchaseRequest->purchase_request_details as $detail){
+                        // Update PO
+                        if($detail->item_id == $item){
+                            $prDetail = $detail;
+                            $prDetail->quantity_invoiced += $qty;
+                            $prDetail->save();
+                        }
+
+                        // Check invoiced qty
+                        if($detail->quantity != $detail->quantity_invoiced){
+                            $isInvoicedPR = false;
+                        }
+                    }
+                }
+                $idx++;
+            }
+
+            if($isInvoicedPR){
+                $purchaseRequest->status_id = 4;
+                $purchaseRequest->closed_at = $now->toDateString();
+                $purchaseRequest->save();
+            }
+        }
+
+
+
+
         Session::flash('message', 'Berhasil membuat purchase invoice!');
 
         return redirect()->route('admin.purchase_invoices.show', ['purchase_invoice' => $invHeader]);

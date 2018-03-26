@@ -227,9 +227,11 @@ class MaterialRequestHeaderController extends Controller
         foreach($request->input('item') as $item){
             if(!empty($item)){
                 $prDetail = MaterialRequestDetail::create([
-                    'header_id'     => $mrHeader->id,
-                    'item_id'       => $item,
-                    'quantity'      => $qty[$idx]
+                    'header_id'         => $mrHeader->id,
+                    'item_id'           => $item,
+                    'quantity'          => $qty[$idx],
+                    'quantity_received' => 0,
+                    'quantity_issued'   => 0
                 ]);
 
                 if(!empty($remark[$idx])) $prDetail->remark = $remark[$idx];
@@ -387,7 +389,8 @@ class MaterialRequestHeaderController extends Controller
 
     public function getMaterialRequests(Request $request){
         $term = trim($request->q);
-        $materialRequests = MaterialRequestHeader::where('code', 'LIKE', '%'. $term. '%')
+        $materialRequests = MaterialRequestHeader::where('status_id', 3)
+            ->where('code', 'LIKE', '%'. $term. '%')
             ->get();
 
         $formatted_tags = [];

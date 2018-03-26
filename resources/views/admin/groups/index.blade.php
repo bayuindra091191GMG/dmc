@@ -21,6 +21,7 @@
                 <th class="text-center">No</th>
                 <th class="text-center">Kode</th>
                 <th class="text-center">Nama</th>
+                <th class="text-center">Tipe Kategori</th>
                 <th class="text-center">Tindakan</th>
             </tr>
             </thead>
@@ -49,10 +50,11 @@
                 serverSide: true,
                 ajax: '{!! route('datatables.groups') !!}',
                 columns: [
-                    { data: 'DT_Row_Index', orderable: false, searchable: false},
+                    { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center' },
                     { data: 'code', name: 'code' },
                     { data: 'name', name: 'name' },
-                    { data: 'action', name:'action' }
+                    { data: 'type', name: 'type' },
+                    { data: 'action', name:'action', orderable: false, searchable: false, class: 'text-center' }
                 ],
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"

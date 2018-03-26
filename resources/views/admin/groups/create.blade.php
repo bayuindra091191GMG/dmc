@@ -54,8 +54,26 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="auto_number">
+                    Apakah termasuk BBM atau Oli?
+                </label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-default">
+                            <input type="radio" name="bbm" value="2" id="yes-opt"> Ya
+                        </label>
+                        <label class="btn btn-default active">
+                            <input type="radio" name="bbm" value="1" id="no-opt" checked> Tidak
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a class="btn btn-primary" href="{{ route('admin.groups') }}"> Batal</a>
+                    <a class="btn btn-danger" href="{{ route('admin.groups') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>

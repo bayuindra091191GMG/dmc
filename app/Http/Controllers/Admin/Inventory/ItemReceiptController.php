@@ -183,47 +183,51 @@ class ItemReceiptController extends Controller
         $idx = 0;
         foreach(Input::get('item_value') as $item){
             if(!empty($item)){
+                $qtyInt = (int) $qty[$idx];
+
                 $itemReceiptDetail = ItemReceiptDetail::create([
                     'header_id'         => $itemReceiptHeader->id,
                     'item_id'           => $item,
                     'remark'            => $remark[$idx],
-                    'quantity'          => $qty[$idx]
+                    'quantity'          => $qtyInt
                 ]);
 
                 if(!empty($remark[$idx])) $itemReceiptDetail->remark = $remark[$idx];
                 $itemReceiptDetail->save();
 
-                //Update Stock
-                //Item Stock
+                // Update Stok
+                $stockResult = 0;
                 $itemStockData = ItemStock::where('item_id', $item)
                     ->where('warehouse_id',Input::get('warehouse'))
                     ->first();
 
                 if(!empty($itemStockData)){
-                    $itemStockData->stock = $itemStockData->stock + $qty[$idx];
+                    $itemStockData->stock = $itemStockData->stock + $qtyInt;
                     $itemStockData->save();
+
+                    $stockResult = $itemStockData->stock;
                 }
                 else{
                     $newStock = new ItemStock();
                     $newStock->warehouse_id = $request->input('warehouse');
                     $newStock->item_id = $item;
-                    $newStock->stock = $qty[$idx];
+                    $newStock->stock = $qtyInt;
                     $newStock->created_by = $user->id;
                     $newStock->created_at = $now->toDateTimeString();
                     $newStock->updated_by = $user->id;
                     $newStock->save();
+
+                    $stockResult = $newStock->stock;
                 }
 
-                //Item
-                $itemData = Item::where('id', $item)->first();
-                $itemData->stock = $itemData->stock + $qty[$idx];
-                $itemData->save();
+                $item = Item::find($item);
+                $item->stock += $qtyInt;
 
                 //Stock Card
                 StockCard::create([
                     'item_id'       => $item,
-                    'change'        => $qty[$idx],
-                    'stock'         => $itemStockData->stock,
+                    'change'        => $qtyInt,
+                    'stock'         => $stockResult,
                     'warehouse_id'  => Input::get('warehouse'),
                     'created_by'    => $user->id,
                     'created_at'    => $now,
@@ -247,26 +251,26 @@ class ItemReceiptController extends Controller
         }
 
         //Check PO
-        $idx = 0;
-        foreach(Input::get('item_value') as $item){
-            if(!empty($item)){
-                //Update PO
-                $poCount = 1;
-
-                foreach($purchaseOrder->purchase_order_details as $detail){
-                    if($detail->quantity != $detail->received_quantity){
-                        $poCount = 0;
-                    }
-                }
-
-                if($poCount == 1){
-                    $purchaseOrder->status_id = 4;
-                    $purchaseOrder->closing_date = $now->toDateString();
-                    $purchaseOrder->save();
-                }
-            }
-            $idx++;
-        }
+//        $idx = 0;
+//        foreach(Input::get('item_value') as $item){
+//            if(!empty($item)){
+//                //Update PO
+//                $poCount = 1;
+//
+//                foreach($purchaseOrder->purchase_order_details as $detail){
+//                    if($detail->quantity != $detail->received_quantity){
+//                        $poCount = 0;
+//                    }
+//                }
+//
+//                if($poCount == 1){
+//                    $purchaseOrder->status_id = 4;
+//                    $purchaseOrder->closing_date = $now->toDateString();
+//                    $purchaseOrder->save();
+//                }
+//            }
+//            $idx++;
+//        }
 
         Session::flash('message', 'Berhasil membuat Item Receipt!');
 

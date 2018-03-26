@@ -83,13 +83,8 @@
                     Prioritas
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="priority" name="priority" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">
-                        <option value="1" {{ $header->priority == "1" ? "selected":"" }}>1</option>
-                        <option value="2" {{ $header->priority == "2" ? "selected":"" }}>2</option>
-                        <option value="3" {{ $header->priority == "3" ? "selected":"" }}>3</option>
-                        <option value="4" {{ $header->priority == "4" ? "selected":"" }}>4</option>
-                        <option value="5" {{ $header->priority == "5" ? "selected":"" }}>5</option>
-                    </select>
+                    <input id="priority" type="text" class="form-control col-md-7 col-xs-12"
+                           name="priority" value="{{ $header->priority }}" readonly>
                 </div>
             </div>
 
@@ -99,7 +94,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="km" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('km')) parsley-error @endif"
-                           name="km" value="{{ $header->km }}">
+                           name="km" value="{{ $header->km }}" readonly>
                 </div>
             </div>
 
@@ -109,7 +104,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="hm" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('hm')) parsley-error @endif"
-                           name="hm" value="{{ $header->hm  }}">
+                           name="hm" value="{{ $header->hm  }}" readonly>
                 </div>
             </div>
 

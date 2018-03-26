@@ -107,38 +107,49 @@
                 </div>
             </div>
 
+            {{--<div class="form-group">--}}
+                {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="priority">--}}
+                    {{--Prioritas--}}
+                {{--</label>--}}
+                {{--<div class="col-md-6 col-sm-6 col-xs-12">--}}
+                    {{--<select id="priority" name="priority" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">--}}
+                        {{--@if(!empty($materialRequest))--}}
+                            {{--<option value="1" {{ $materialRequest->priority == 1 ? "selected":"" }}>1</option>--}}
+                            {{--<option value="2" {{ $materialRequest->priority == 2 ? "selected":"" }}>2</option>--}}
+                            {{--<option value="3" {{ $materialRequest->priority == 3 ? "selected":"" }}>3</option>--}}
+                            {{--<option value="4" {{ $materialRequest->priority == 4 ? "selected":"" }}>4</option>--}}
+                            {{--<option value="5" {{ $materialRequest->priority == 5 ? "selected":"" }}>5</option>--}}
+                        {{--@else--}}
+                            {{--<option value="-1" @if(empty(old('priority'))) selected @endif> - Pilih prioritas - </option>--}}
+                            {{--<option value="1" {{ old('priority') == "1" ? "selected":"" }}>1</option>--}}
+                            {{--<option value="2" {{ old('priority') == "2" ? "selected":"" }}>2</option>--}}
+                            {{--<option value="3" {{ old('priority') == "3" ? "selected":"" }}>3</option>--}}
+                            {{--<option value="4" {{ old('priority') == "4" ? "selected":"" }}>4</option>--}}
+                            {{--<option value="5" {{ old('priority') == "5" ? "selected":"" }}>5</option>--}}
+                        {{--@endif--}}
+
+                    {{--</select>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="priority">
                     Prioritas
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="priority" name="priority" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">
-                        @if(!empty($materialRequest))
-                            <option value="1" {{ $materialRequest->priority == 1 ? "selected":"" }}>1</option>
-                            <option value="2" {{ $materialRequest->priority == 2 ? "selected":"" }}>2</option>
-                            <option value="3" {{ $materialRequest->priority == 3 ? "selected":"" }}>3</option>
-                            <option value="4" {{ $materialRequest->priority == 4 ? "selected":"" }}>4</option>
-                            <option value="5" {{ $materialRequest->priority == 5 ? "selected":"" }}>5</option>
-                        @else
-                            <option value="-1" @if(empty(old('priority'))) selected @endif> - Pilih prioritas - </option>
-                            <option value="1" {{ old('priority') == "1" ? "selected":"" }}>1</option>
-                            <option value="2" {{ old('priority') == "2" ? "selected":"" }}>2</option>
-                            <option value="3" {{ old('priority') == "3" ? "selected":"" }}>3</option>
-                            <option value="4" {{ old('priority') == "4" ? "selected":"" }}>4</option>
-                            <option value="5" {{ old('priority') == "5" ? "selected":"" }}>5</option>
-                        @endif
-
-                    </select>
+                    <input id="priority" type="text" class="form-control col-md-7 col-xs-12"
+                           name="priority" value="{{ !empty($materialRequest->priority) ?? $materialRequest->priority }}" readonly>
                 </div>
             </div>
+
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="km">
                     KM
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="km" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('km')) parsley-error @endif"
-                           name="km" value="{{ !empty($materialRequest->km) ? $materialRequest->km : old('km') }}">
+                    <input id="km" type="text" class="form-control col-md-7 col-xs-12"
+                           name="km" value="{{ !empty($materialRequest->km) ?? $materialRequest->km }}" readonly>
                 </div>
             </div>
 
@@ -147,8 +158,8 @@
                     HM
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="hm" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('hm')) parsley-error @endif"
-                           name="hm" value="{{ !empty($materialRequest->hm) ? $materialRequest->hm : old('hm') }}">
+                    <input id="hm" type="text" class="form-control col-md-7 col-xs-12"
+                           name="hm" value="{{ !empty($materialRequest->hm) ?? $materialRequest->hm }}" readonly>
                 </div>
             </div>
 

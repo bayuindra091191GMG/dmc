@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="navbar-left">
                 <a class="btn btn-default" href="{{ route('admin.items') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
             </div>
@@ -14,7 +14,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <form class="form-horizontal form-label-left box-section">
                 @if(\Illuminate\Support\Facades\Session::has('message'))
                     <div class="form-group">
@@ -28,7 +28,7 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Kode Item
+                        Kode Inventory
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         : {{ $selectedItem->code }}
@@ -37,7 +37,7 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Nama Item
+                        Nama Inventory
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         : {{ $selectedItem->name }}
@@ -46,7 +46,7 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Total Stok
+                        QTY Stok
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         : {{ !empty($selectedItem->stock) && $selectedItem->stock > 0 ? $selectedItem->stock : '0'  }}
@@ -93,7 +93,7 @@
                                     Nama Gudang
                                 </th>
                                 <th class="text-center">
-                                    Jumlah Stok
+                                    QTY Stok
                                 </th>
                             </tr>
                             </thead>
