@@ -195,9 +195,12 @@ class ItemReceiptController extends Controller
 
                 //Update Stock
                 //Item Stock
-                $itemStockData = ItemStock::where('item_id', $item)->first();
+                $itemStockData = ItemStock::where('item_id', $item)
+                    ->where('warehouse_id',Input::get('warehouse'))
+                    ->first();
+
                 if(!empty($itemStockData)){
-                    $itemStockData->stock = $itemStockData->stock - $qty[$idx];
+                    $itemStockData->stock = $itemStockData->stock + $qty[$idx];
                     $itemStockData->save();
                 }
                 else{
