@@ -29,7 +29,7 @@ class ItemMutationController extends Controller
     }
 
     public function create(){
-        $warehouses = Warehouse::all();
+        $warehouses = Warehouse::where('id', '>', 0)->get();
 
         return View('admin.inventory.item_mutations.create', compact('warehouses'));
     }

@@ -32,7 +32,7 @@ class StockCardController extends Controller
     }
 
     public function create(){
-        $warehouses = Warehouse::all();
+        $warehouses = Warehouse::where('id', '>', 0)->get();
 
         return View('admin.inventory.stock_ins.create', compact('warehouses'));
     }
