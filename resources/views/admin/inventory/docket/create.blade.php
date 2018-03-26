@@ -24,7 +24,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
-                    Issued Docket No
+                    Nomor Issued Docket
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
@@ -33,9 +33,8 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
-
-                </label>
+                <div class="control-label col-md-3 col-sm-3 col-xs-12">
+                </div>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="checkbox">
                         <label>
@@ -98,12 +97,11 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="text-center col-md-12 col-xs-12">Detil Barang</label>
-            </div>
+            <hr/>
 
             <div class="form-group">
                 <div class="col-lg-12 col-md-12 col-xs-12 box-section">
+                    <h3 class="text-center">Detil Inventory</h3>
                     @if(empty($materialRequest))
                         <a class="add-modal btn btn-info" style="margin-bottom: 10px;">
                             <span class="glyphicon glyphicon-plus-sign"></span> Tambah
@@ -116,7 +114,7 @@
                                 Nomor Part
                             </th>
                             <th class="text-center" style="width: 20%">
-                                Jumlah
+                                QTY
                             </th>
                             <th class="text-center" style="width: 20%">
                                 Remark
@@ -131,23 +129,23 @@
                             @foreach($materialRequest->material_request_details as $detail)
                                 @php($idx++)
                                 <tr class='item{{ $idx }}'>
-                                    <td class='field-item'>
-                                        <input type='text' name='item_text[]' class='form-control' value='{{ $detail->item->code. ' - '. $detail->item->name }}' readonly/>
+                                    <td>
+                                        <input type='text' name='item_text[]' class='form-control text-center' value='{{ $detail->item->code. ' - '. $detail->item->name }}' readonly/>
                                         <input type='hidden' name='item_value[]' value='{{ $detail->item_id }}'/>
                                     </td>
                                     <td>
-                                        <input type='number' name='qty[]' min="0" placeholder='Jumlah' class='form-control' value="{{ $detail->quantity }}" readonly/>
+                                        <input type='number' name='qty[]' min="0" placeholder='QTY' class='form-control text-center' value="{{ $detail->quantity }}" readonly/>
                                     </td>
                                     <td>
                                         <input type='text' name='remark[]' placeholder='Keterangan' class='form-control' value="{{ $detail->remark }}" readonly/>
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         @php($itemId = $detail->item_id. "#". $detail->item->code. "#". $detail->item->name)
                                         <a class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}">
-                                            <span class="glyphicon glyphicon-edit"></span> Ubah
+                                            <span class="glyphicon glyphicon-edit"></span>
                                         </a>
                                         <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
-                                            <span class="glyphicon glyphicon-trash"></span> Hapus
+                                            <span class="glyphicon glyphicon-trash"></span>
                                         </a>
                                     </td>
                                 </tr>

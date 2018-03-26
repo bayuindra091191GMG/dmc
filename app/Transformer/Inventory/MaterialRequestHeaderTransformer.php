@@ -27,13 +27,13 @@ class MaterialRequestHeaderTransformer extends TransformerAbstract
         $createdAt = Carbon::parse($header->created_at)->format('d M Y');
 
         $url = 'default';
-        if($this->type === 'other'){
+        if($header->type === 1){
             $url = 'inventory';
         }
-        else if($this->type === 'fuel'){
+        else if($header->type === 2){
             $url = 'bensin';
         }
-        else if($this->type === 'service'){
+        else if($header->type === 3){
             $url = 'servis';
         }
 

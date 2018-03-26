@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title','Data Quotation Vendor '. $header->code)
+@section('title','Data RFQ Vendor '. $header->code)
 
 @section('content')
     <div class="row">
@@ -46,10 +46,19 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
+                        Nomor PR
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : <a style="text-decoration: underline;" href="{{ route('admin.purchase_requests.show', ['purchase_request' => $header->purchase_request_id]) }}">{{ $header->purchase_request_header->code }}</a>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
                         Vendor
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : <a href="{{ route('admin.suppliers.edit', ['supplier' => $header->supplier_id]) }}">{{ $header->supplier->name }}</a>
+                        : <a style="text-decoration: underline;" href="{{ route('admin.suppliers.edit', ['supplier' => $header->supplier_id]) }}">{{ $header->supplier->name }}</a>
                     </div>
                 </div>
 
@@ -83,19 +92,16 @@
                 <hr>
 
                 <div class="form-group">
-                    <label class="text-center col-lg-12 col-md-12 col-xs-12">Detil Barang</label>
-                </div>
-
-                <div class="form-group">
                     <div class="col-lg-12 col-md-12 col-xs-12 column">
+                        <h4 class="text-center">Detil Inventory</h4>
                         <table class="table table-bordered table-hover">
                             <thead>
                             <tr >
                                 <th class="text-center" style="width: 15%;">
-                                    Kode Barang
+                                    Kode Inventory
                                 </th>
                                 <th class="text-center" style="width: 15%;">
-                                    Nama Barang
+                                    Nama Inventory
                                 </th>
                                 <th class="text-center" style="width: 10%;">
                                     UOM

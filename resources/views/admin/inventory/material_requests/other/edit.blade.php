@@ -205,7 +205,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="qty_add">Jumlah:</label>
+                            <label class="control-label col-sm-2" for="qty_add">QTY:</label>
                             <div class="col-sm-10">
                                 <input type="number" class="form-control" id="qty_add" name="qty_add">
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
@@ -249,7 +249,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="qty_edit">Jumlah:</label>
+                            <label class="control-label col-sm-2" for="qty_edit">QTY:</label>
                             <div class="col-sm-10">
                                 <input type="number" class="form-control" id="qty_edit" name="qty">
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
@@ -295,7 +295,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="qty_delete">Jumlah:</label>
+                            <label class="control-label col-sm-2" for="qty_delete">QTY:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="qty_delete" disabled>
                             </div>
@@ -333,12 +333,26 @@
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
+    {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript">
         // Date Picker
         $('#date').datetimepicker({
             format: "DD MMM Y"
+        });
+
+        // AutoNumeric
+        qtyAddFormat = new AutoNumeric('#qty_add', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0
+        });
+
+        qtyEditFormat = new AutoNumeric('#qty_edit', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0
         });
 
         var i=1;
@@ -369,7 +383,7 @@
         $('#select0').select2({
             placeholder: {
                 id: '-1',
-                text: 'Pilih barang...'
+                text: ' - Pilih Inventory - '
             },
             width: '100%',
             minimumInputLength: 1,
@@ -403,7 +417,7 @@
             $('#item_add').select2({
                 placeholder: {
                     id: '-1',
-                    text: 'Pilih barang...'
+                    text: ' - Pilih Inventory - '
                 },
                 width: '100%',
                 minimumInputLength: 1,

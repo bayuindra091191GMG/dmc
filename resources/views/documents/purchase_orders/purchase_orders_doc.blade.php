@@ -132,9 +132,9 @@
     <table class="table" border="1" width="100%">
         <tr>
             <th>No</th>
-            <th width="25%">Description of Goods</th>
-            <th width="15%">Part No.</th>
-            <th>Qty</th>
+            <th width="15%">Part Number</th>
+            <th width="25%">Nama Inventory</th>
+            <th>QTY</th>
             <th>UOM</th>
             <th width="20%">Unit Price</th>
             <th>Amount</th>
@@ -143,10 +143,10 @@
         @foreach($purchaseOrderDetails as $detail)
             <tr>
                 <td>{{ $i }}</td>
-                <td>{{ $detail->item->name }}</td>
                 <td>{{ $detail->item->code }}</td>
+                <td>{{ $detail->item->name }}</td>
                 <td>{{ $detail->quantity }}</td>
-                <td>{{ $detail->item->uom->description }}</td>
+                <td>{{ $detail->item->uom }}</td>
                 <td>{{ $detail->price }}</td>
                 <td>{{ $detail->subtotal }}</td>
             </tr>

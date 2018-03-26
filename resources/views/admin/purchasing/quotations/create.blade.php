@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title','Buat Quotation Vendor Baru')
+@section('title','Buat RFQ Vendor Baru')
 
 @section('content')
     <div class="row">
@@ -70,12 +70,8 @@
             </div>
 
             <div class="form-group">
-                <label class="text-center col-md-12 col-xs-12">Detil Barang</label>
-            </div>
-
-            <div class="form-group">
-                <div class="col-lg-1 col-md-1 col-xs-0"></div>
-                <div class="col-lg-10 col-md-10 col-xs-12 column">
+                <div class="col-lg-12 col-md-12 col-xs-12 box-section">
+                    <h3 class="text-center">Detil Inventory</h3>
                     <table class="table table-bordered table-hover" id="tab_logic">
                         <thead>
                         <tr >
@@ -117,7 +113,6 @@
                     </table>
                     <a id="add_row" class="btn btn-default pull-left">Tambah</a><a id='delete_row' class="pull-right btn btn-default">Hapus</a>
                 </div>
-                <div class="col-lg-1 col-md-1 col-xs-0"></div>
             </div>
 
             <hr/>
@@ -136,12 +131,22 @@
 @section('styles')
     @parent
     {{ Html::style(mix('assets/admin/css/select2.css')) }}
+    {{ Html::style(mix('assets/admin/css/bootstrap-datetimepicker.css')) }}
+    <style>
+        .box-section{
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            padding: 10px;
+        }
+    </style>
 @endsection
 
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
     {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
+    {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
     <script type="text/javascript">
         // Auto Numbering
         $('#auto_number').change(function(){
@@ -158,7 +163,7 @@
         $('#pr_code').select2({
             placeholder: {
                 id: '-1',
-                text: 'Pilih Nomor PR...'
+                text: ' - Pilih Nomor PR - '
             },
             width: '100%',
             minimumInputLength: 1,
@@ -181,7 +186,7 @@
         $('#supplier').select2({
             placeholder: {
                 id: '-1',
-                text: 'Pilih Vendor...'
+                text: ' - Pilih Vendor -'
             },
             width: '100%',
             minimumInputLength: 1,
@@ -212,7 +217,7 @@
         $('#select0').select2({
             placeholder: {
                 id: '-1',
-                text: 'Pilih barang...'
+                text: ' - Pilih Inventory - '
             },
             width: '100%',
             minimumInputLength: 1,
@@ -241,7 +246,7 @@
             $('#select' + i).select2({
                 placeholder: {
                     id: '-1',
-                    text: 'Pilih barang...'
+                    text: ' - Pilih Inventory - '
                 },
                 width: '100%',
                 minimumInputLength: 1,

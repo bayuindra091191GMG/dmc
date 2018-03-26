@@ -39,13 +39,13 @@
   <thead>
   <tr>
        <th>No</th>
-       <th>No PO</th>
-       <th>No PR</th>
-       <th>No Kuotasi</th>
+       <th>Nomor PO</th>
+       <th>Nomor PR</th>
+       <th>Nomor RFQ</th>
        <th>Vendor</th>
        <th>Status</th>
-       <th>Open Date</th>
-       <th>Closed Date</th>
+       <th>Tanggal</th>
+       <th>Tanggal Closed</th>
        <th>Total PO</th>
   </tr>
   </thead>

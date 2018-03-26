@@ -141,7 +141,7 @@
                                 <select id="select0" name="item[]" class='form-control'></select>
                             </td>
                             <td>
-                                <input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/>
+                                <input id="qty0" type='text' name='qty[]'  placeholder='QTY' class='form-control'/>
                             </td>
                             <td>
                                 <input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/>
@@ -186,6 +186,7 @@
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
+    {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
     <script type="text/javascript">
         // Date Picker
@@ -203,6 +204,13 @@
                 $('#mr_code').val('');
                 $('#mr_code').prop('readonly', false);
             }
+        });
+
+        // AutoNumeric
+        qtyAddFormat = new AutoNumeric('#qty0', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0
         });
 
         var i=1;
@@ -233,7 +241,7 @@
         $('#select0').select2({
             placeholder: {
                 id: '-1',
-                text: ' - Pilih Barang - '
+                text: ' - Pilih Inventory - '
             },
             width: '100%',
             minimumInputLength: 1,
@@ -256,14 +264,14 @@
 
         var i=1;
         $("#add_row").click(function(){
-            $('#addr'+i).html("<td class='field-item'><select id='select" + i + "' name='item[]' class='form-control'></select></td><td><input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/></td><td><input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/></td>");
+            $('#addr'+i).html("<td class='field-item'><select id='select" + i + "' name='item[]' class='form-control'></select></td><td><input type='text' id='qty" + i + "' name='qty[]'  placeholder='QTY' class='form-control'/></td><td><input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/></td>");
 
             $('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
 
             $('#select' + i).select2({
                 placeholder: {
                     id: '-1',
-                    text: 'Pilih barang...'
+                    text: ' - Pilih Inventory - '
                 },
                 width: '100%',
                 minimumInputLength: 1,
@@ -282,6 +290,13 @@
                         };
                     }
                 }
+            });
+
+            // AutoNumeric
+            new AutoNumeric('#qty' + i, {
+                minimumValue: '0',
+                digitGroupSeparator: '',
+                decimalPlaces: 0
             });
 
             i++;

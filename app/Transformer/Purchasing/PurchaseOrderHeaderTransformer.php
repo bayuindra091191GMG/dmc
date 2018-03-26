@@ -26,8 +26,8 @@ class PurchaseOrderHeaderTransformer extends TransformerAbstract
         try{
             $date = Carbon::parse($header->date)->format('d M Y');
 
-            $code = "<a href='purchase_orders/detil/" . $header->id. "'>". $header->code. "</a>";
-            $prCode =  "<a href='purchase_requests/detil/" . $header->purchase_request_id. "'>". $header->purchase_request_header->code. "</a>";
+            $code = "<a style='text-decoration: underline;' href='purchase_orders/detil/" . $header->id. "'>". $header->code. "</a>";
+            $prCode =  "<a style='text-decoration: underline;' href='purchase_requests/detil/" . $header->purchase_request_id. "'>". $header->purchase_request_header->code. "</a>";
 
             $action = "";
             $route = route('admin.purchase_invoices.create', ['po' => $header->id]);

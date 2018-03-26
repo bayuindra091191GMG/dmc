@@ -231,9 +231,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="qty_add">Jumlah:</label>
+                            <label class="control-label col-sm-2" for="qty_add">QTY:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="qty_add" name="qty_add">
+                                <input type="text" class="form-control" id="qty_add" name="qty_add">
                             </div>
                         </div>
                         <div class="form-group">
@@ -286,7 +286,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="qty_edit">Jumlah:</label>
+                            <label class="control-label col-sm-2" for="qty_edit">QTY:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="qty_edit" name="qty_edit">
                             </div>
@@ -338,13 +338,13 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="item_delete">Barang:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="item_delete" disabled>
+                                <input type="text" class="form-control" id="item_delete" readonly>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="qty_delete">Jumlah:</label>
+                            <label class="control-label col-sm-2" for="qty_delete">QTY:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="qty_delete" disabled>
+                                <input type="text" class="form-control" id="qty_delete" readonly>
                             </div>
                         </div>
                         <input type="hidden" name="deleted_id"/>
@@ -429,7 +429,7 @@
             $('#pr_code').select2({
                 placeholder: {
                     id: '-1',
-                    text: 'Pilih Nomor PR...'
+                    text: ' - Pilih Nomor PR - '
                 },
                 width: '100%',
                 minimumInputLength: 1,
@@ -454,7 +454,7 @@
         $('#supplier').select2({
             placeholder: {
                 id: '-1',
-                text: 'Pilih Vendor...'
+                text: ' - Pilih Vendor - '
             },
             width: '100%',
             minimumInputLength: 1,
@@ -476,6 +476,18 @@
         });
 
         // Add autonumeric
+        qtyAddFormat = new AutoNumeric('#qty_add', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0
+        });
+
+        qtyEditFormat = new AutoNumeric('#qty_edit', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0
+        });
+
         pphFormat = new AutoNumeric('#pph', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
@@ -542,7 +554,7 @@
             $('#item_add').select2({
                 placeholder: {
                     id: '-1',
-                    text: 'Pilih barang...'
+                    text: ' - Pilih Inventory - '
                 },
                 width: '100%',
                 minimumInputLength: 1,

@@ -262,9 +262,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="qty_add">Jumlah:</label>
+                            <label class="control-label col-sm-2" for="qty_add">QTY:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="qty_add" name="qty_add">
+                                <input type="text" class="form-control" id="qty_add" name="qty_add">
                             </div>
                         </div>
                         <div class="form-group">
@@ -305,7 +305,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="qty_edit">Jumlah:</label>
+                            <label class="control-label col-sm-2" for="qty_edit">QTY:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="qty_edit" name="qty_edit">
                             </div>
@@ -349,9 +349,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="qty_delete">Jumlah:</label>
+                            <label class="control-label col-sm-2" for="qty_delete">QTY:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="qty_delete" disabled>
+                                <input type="text" class="form-control" id="qty_delete" readonly>
                             </div>
                         </div>
                         <input type="hidden" name="deleted_id"/>
@@ -388,6 +388,7 @@
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
+    {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
     {{ Html::script(mix('assets/admin/js/stringbuilder.js')) }}
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
     <script type="text/javascript">
@@ -406,6 +407,19 @@
                 $('#pr_code').val('');
                 $('#pr_code').prop('readonly', false);
             }
+        });
+
+        // AutoNumeric
+        qtyAddFormat = new AutoNumeric('#qty_add', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0
+        });
+
+        qtyEditFormat = new AutoNumeric('#qty_edit', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0
         });
 
         @if(!empty($materialRequest))

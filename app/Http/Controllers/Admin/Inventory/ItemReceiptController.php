@@ -196,8 +196,20 @@ class ItemReceiptController extends Controller
                 //Update Stock
                 //Item Stock
                 $itemStockData = ItemStock::where('item_id', $item)->first();
-                $itemStockData->stock = $itemStockData->stock - $qty[$idx];
-                $itemStockData->save();
+                if(!empty($itemStockData)){
+                    $itemStockData->stock = $itemStockData->stock - $qty[$idx];
+                    $itemStockData->save();
+                }
+                else{
+                    $newStock = new ItemStock();
+                    $newStock->warehouse_id = $request->input('warehouse');
+                    $newStock->item_id = $item;
+                    $newStock->stock = $qty[$idx];
+                    $newStock->created_by = $user->id;
+                    $newStock->created_at = $now->toDateTimeString();
+                    $newStock->updated_by = $user->id;
+                    $newStock->save();
+                }
 
                 //Item
                 $itemData = Item::where('id', $item)->first();
@@ -213,7 +225,7 @@ class ItemReceiptController extends Controller
                     'created_by'    => $user->id,
                     'created_at'    => $now,
                     'flag'          => '-',
-                    'description'   => 'Good Receipt ' . $itemReceiptHeader->code
+                    'description'   => 'Goods Receipt ' . $itemReceiptHeader->code
                 ]);
 
                 //Update PO

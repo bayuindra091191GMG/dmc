@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title','Ubah Quotation Vendor '. $header->code)
+@section('title','Ubah RFQ Vendor '. $header->code)
 
 @section('content')
     <div class="row" style="margin-bottom: 10px;">
@@ -31,6 +31,16 @@
                     </div>
                 </div>
             @endif
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="quot_code">
+                    Nomor RFQ
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="quot_code" type="text" class="form-control col-md-7 col-xs-12"
+                           name="quot_code" value="{{ $header->code}}" readonly>
+                </div>
+            </div>
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pr_code">
@@ -66,9 +76,8 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-0"></div>
         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 box-section">
-            <h3>Detil Barang</h3>
+            <h3 class="text-center">Detil Inventory</h3>
             <button class="add-modal btn btn-info" data-header-id="{{ $header->id }}">
                 <span class="glyphicon glyphicon-plus-sign"></span> Tambah
             </button>
@@ -79,7 +88,7 @@
                         Nomor Part
                     </th>
                     <th class="text-center">
-                        Satuan
+                        UOM
                     </th>
                     <th class="text-center">
                         QTY
@@ -109,7 +118,7 @@
                             {{ $detail->item->code }} - {{ $detail->item->name }}
                         </td>
                         <td>
-                            {{ $detail->item->uom->description }}
+                            {{ $detail->item->uom }}
                         </td>
                         <td>
                             {{ $detail->quantity }}
@@ -140,7 +149,6 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-0"></div>
     </div>
 
     <!-- Modal form to add new detail -->
@@ -329,7 +337,7 @@
                 text: '{{ $header->purchase_request_header->code }}'
             },
             width: '100%',
-            minimumInputLength: 2,
+            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('select.purchase_requests') }}',
                 dataType: 'json',
@@ -352,7 +360,7 @@
                 text: '{{ $header->supplier->name }}'
             },
             width: '100%',
-            minimumInputLength: 2,
+            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('select.suppliers') }}',
                 dataType: 'json',
@@ -373,7 +381,7 @@
         $('#select0').select2({
             placeholder: {
                 id: '-1',
-                text: 'Pilih barang...'
+                text: ' - Pilih Inventory - '
             },
             width: '100%',
             minimumInputLength: 2,
@@ -397,13 +405,15 @@
         numberFormat = new AutoNumeric('#price_add', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
-            decimalPlaces: 0
+            decimalPlaces: 0,
+            minimumValue: '0',
         });
 
         priceEditFormat = new AutoNumeric('#price_edit', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
-            decimalPlaces: 0
+            decimalPlaces: 0,
+            minimumValue: '0',
         });
 
         // Add new detail
@@ -411,10 +421,10 @@
             $('#item_add').select2({
                 placeholder: {
                     id: '-1',
-                    text: 'Pilih barang...'
+                    text: ' - Pilih Inventory -'
                 },
                 width: '100%',
-                minimumInputLength: 2,
+                minimumInputLength: 1,
                 ajax: {
                     url: '{{ route('select.items') }}',
                     dataType: 'json',
@@ -486,7 +496,7 @@
                         if (data.remark !== null) {
                             remarkAdd = data.remark;
                         }
-                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + data.priceString + "</td><td>" + data.discountString + "</td><td>" + data.subtotalString + "</td><td>" + remarkAdd + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
+                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uom + "</td><td>" + data.quantity + "</td><td>" + data.priceString + "</td><td>" + data.discountString + "</td><td>" + data.subtotalString + "</td><td>" + remarkAdd + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
 
                     }
                 },
@@ -583,7 +593,7 @@
                         if (data.remark !== null) {
                             remarkEdit = data.remark;
                         }
-                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uomDescription + "</td><td>" + data.quantity + "</td><td>" + data.priceString + "</td><td>" + data.discountString + "</td><td>" + data.subtotalString + "</td><td>" + remarkEdit + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
+                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uom + "</td><td>" + data.quantity + "</td><td>" + data.priceString + "</td><td>" + data.discountString + "</td><td>" + data.subtotalString + "</td><td>" + remarkEdit + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
                         // $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td>" + data.id + "</td><td>" + data.title + "</td><td>" + data.content + "</td><td class='text-center'><input type='checkbox' class='edit_published' data-id='" + data.id + "'></td><td>Right now</td><td><button class='show-modal btn btn-success' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-eye-open'></span> Show</button> <button class='edit-modal btn btn-info' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-edit'></span> Edit</button> <button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-trash'></span> Delete</button></td></tr>");
 
                     }

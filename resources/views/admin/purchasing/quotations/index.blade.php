@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Daftar Quotation Vendor')
+@section('title', 'Daftar RFQ Vendor')
 
 @section('content')
 
@@ -18,16 +18,16 @@
                width="100%" id="quot-table">
             <thead>
             <tr>
-                <th>No</th>
-                <th>Nomor Quotation</th>
-                <th>Nomor PR</th>
-                <th>Vendor</th>
-                <th>Total Harga</th>
-                <th>Diskon</th>
-                <th>Total Pembayaran</th>
-                <th>Status</th>
-                <th>Tanggal Dibuat</th>
-                <th>Tindakan</th>
+                <th class="text-center">No</th>
+                <th class="text-center">Nomor RFQ</th>
+                <th class="text-center">Nomor PR</th>
+                <th class="text-center">Vendor</th>
+                <th class="text-center">Total Harga</th>
+                <th class="text-center">Diskon</th>
+                <th class="text-center">Total Pembayaran</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Tanggal Dibuat</th>
+                <th class="text-center">Tindakan</th>
             </tr>
             </thead>
             <tbody>
@@ -52,16 +52,16 @@
                 serverSide: true,
                 ajax: '{!! route('datatables.quotations') !!}',
                 columns: [
-                    { data: 'DT_Row_Index', orderable: false, searchable: false},
-                    { data: 'code', name: 'code' },
-                    { data: 'pr_code', name: 'pr_code' },
-                    { data: 'vendor', name: 'vendor' },
-                    { data: 'total_price', name: 'total_price' },
-                    { data: 'discount', name: 'discount' },
-                    { data: 'total_payment', name: 'total_payment' },
-                    { data: 'status', name: 'status' },
-                    { data: 'created_at', name: 'created_at' },
-                    { data: 'action', name: 'action' }
+                    { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center' },
+                    { data: 'code', name: 'code', class: 'text-center' },
+                    { data: 'pr_code', name: 'pr_code', class: 'text-center'  },
+                    { data: 'vendor', name: 'vendor', class: 'text-center'  },
+                    { data: 'total_price', name: 'total_price', class: 'text-right' },
+                    { data: 'discount', name: 'discount', class: 'text-right' },
+                    { data: 'total_payment', name: 'total_payment', class: 'text-right' },
+                    { data: 'status', name: 'status', class: 'text-center' },
+                    { data: 'created_at', name: 'created_at', class: 'text-center' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center' }
                 ],
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"

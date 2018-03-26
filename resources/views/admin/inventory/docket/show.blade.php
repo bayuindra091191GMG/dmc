@@ -118,25 +118,22 @@
                 <hr>
 
                 <div class="form-group">
-                    <label class="text-center col-lg-12 col-md-12 col-xs-12">Detil Barang</label>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-lg-12 col-md-12 col-xs-12 column">
+                    <div class="col-lg-12 col-md-12 col-xs-12">
+                        <h4 class="text-center">Detil Inventory</h4>
                         <table class="table table-bordered table-hover">
                             <thead>
                             <tr>
                                 <th class="text-center">
-                                    Nama Barang
+                                    Nama Inventory
                                 </th>
                                 <th class="text-center">
-                                    Nomor Part (Part Number)
-                                </th>
-                                <th clas="text-center">
-                                    Satuan (UOM)
+                                    Kode Inventory
                                 </th>
                                 <th class="text-center">
-                                    Jumlah (QTY)
+                                    UOM
+                                </th>
+                                <th class="text-center">
+                                    QTY
                                 </th>
                                 <th class="text-center">
                                     Remark
@@ -147,19 +144,19 @@
 
                             @foreach($header->issued_docket_details as $detail)
                                 <tr>
-                                    <td>
+                                    <td class="text-center">
                                         {{ $detail->item->name }}
                                     </td>
-                                    <td class='field-item'>
+                                    <td class="text-center">
                                         {{ $detail->item->code }}
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         {{ $detail->item->uom }}
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         {{ $detail->quantity }}
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         {{ $detail->remarks ?? '-' }}
                                     </td>
                                 </tr>
