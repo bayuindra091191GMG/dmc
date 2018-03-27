@@ -41,6 +41,12 @@
             $('#supplier-table').DataTable({
                 processing: true,
                 serverSide: true,
+                responsive: {
+                    details: {
+                        display: $.fn.dataTable.Responsive.display.childRowImmediate,
+                        type: ''
+                    }
+                },
                 ajax: {
                     url: '{!! route('datatables.suppliers') !!}',
                     data: {

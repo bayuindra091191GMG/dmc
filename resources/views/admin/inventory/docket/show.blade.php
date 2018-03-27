@@ -15,13 +15,6 @@
                 @endif
             </div>
         </div>
-        {{--<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">--}}
-            {{--<div class="navbar-right">--}}
-                {{--<a class="btn btn-default" href="{{ route('admin.issued_dockets.edit',[ 'issued_docket' => $header->id]) }}">UBAH</a>--}}
-                {{--<a class="btn btn-default" href="{{ route('admin.issued_dockets.print',[ 'issued_docket' => $header->id]) }}">CETAK</a>--}}
-                {{--<a class="btn btn-default" href="{{ route('admin.issued_dockets.download',[ 'issued_docket' => $header->id]) }}">DOWNLOAD</a>--}}
-            {{--</div>--}}
-        {{--</div>--}}
     </div>
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -39,16 +32,7 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Hari/Tgl/Bln/Thn
-                    </label>
-                    <div class="col-md-6 col-sm-3 col-xs-12">
-                        : {{ \Carbon\Carbon::parse($header->date)->format('d M Y') }}
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-md-3 col-sm-3 col-xs-12">
-                        No Issued Docket
+                        Nomor Issued Docket
                     </label>
                     <div class="col-md-6 col-sm-3 col-xs-12">
                         : {{ $header->code }}
@@ -57,7 +41,16 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        No MR
+                        Tanggal
+                    </label>
+                    <div class="col-md-6 col-sm-3 col-xs-12">
+                        : {{ \Carbon\Carbon::parse($header->date)->format('d M Y') }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        Nomor MR
                     </label>
                     <div class="col-md-6 col-sm-3 col-xs-12">
                         @if($header->material_request_header->type == 1)
@@ -75,25 +68,7 @@
                         Unit Alat Berat
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->machinery->code }}
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-md-3 col-sm-3 col-xs-12">
-                        HM
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->hm ?? '-' }}
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-md-3 col-sm-3 col-xs-12">
-                        KM
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->km ?? '-'}}
+                        : {{ $header->machinery->code ?? '-' }}
                     </div>
                 </div>
 
@@ -112,6 +87,24 @@
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         : {{ $header->division ?? '-' }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        HM
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ $header->hm ?? '-' }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        KM
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ $header->km ?? '-'}}
                     </div>
                 </div>
 

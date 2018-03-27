@@ -207,7 +207,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="qty_add">QTY:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="qty_add" name="qty_add">
+                                <input type="text" class="form-control" id="qty_add" name="qty_add">
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -251,7 +251,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="qty_edit">QTY:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="qty_edit" name="qty">
+                                <input type="text" class="form-control" id="qty_edit" name="qty">
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>

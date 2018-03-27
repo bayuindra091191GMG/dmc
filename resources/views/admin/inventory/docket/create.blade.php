@@ -55,6 +55,19 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="warehouse">
+                    Gudang
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="warehouse" name="warehouse" class="form-control col-md-7 col-xs-12 @if($errors->has('warehouse')) parsley-error @endif">
+                        @foreach($warehouse as $data)
+                            <option value="{{ $data->id }}">{{ $data->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="hm">
                     HM
                 </label>
@@ -71,19 +84,6 @@
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="km" type="text" class="form-control col-md-7 col-xs-12"
                            name="km" value="{{ $materialRequest->km }}">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="warehouse">
-                    Gudang
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="warehouse" name="warehouse" class="form-control col-md-7 col-xs-12 @if($errors->has('warehouse')) parsley-error @endif">
-                        @foreach($warehouse as $data)
-                            <option value="{{ $data->id }}">{{ $data->name }}</option>
-                        @endforeach
-                    </select>
                 </div>
             </div>
 

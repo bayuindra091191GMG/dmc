@@ -1,16 +1,16 @@
 @extends('admin.layouts.admin')
 
-@section('title','Data Invoice '. $header->code)
+@section('title','Data RFP '. $header->code)
 
 @section('content')
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="navbar-left">
-                <a class="btn btn-default" href="{{ route('admin.purchase_invoices') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
+                <a class="btn btn-default" href="{{ route('admin.payment_requests') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
             </div>
-            <div class="navbar-right">
-                <a class="btn btn-default" href="{{ route('admin.purchase_invoices.edit',[ 'purchase_invoice' => $header->id]) }}">UBAH</a>
-            </div>
+            {{--<div class="navbar-right">--}}
+                {{--<a class="btn btn-default" href="{{ route('admin.payment_requests.edit',[ 'payment_request' => $header->id]) }}">UBAH</a>--}}
+            {{--</div>--}}
         </div>
     </div>
     <div class="row">
@@ -37,19 +37,19 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Tipe Payment
+                        Tanggal
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->type }}
+                        : {{ $header->date_string }}
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Tanggal
+                        Tipe Payment
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->date_string }}
+                        : {{ $header->type }}
                     </div>
                 </div>
 

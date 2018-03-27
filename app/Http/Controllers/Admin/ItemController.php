@@ -132,7 +132,7 @@ class ItemController extends Controller
         }
 
 
-        if(!empty(Input::get('description'))){
+        if($request->filled('description')){
             $item->description = Input::get('description');
 
         }

@@ -34,7 +34,7 @@ class PurchaseInvoiceHeaderTransformer extends TransformerAbstract
                 $action .= "<a class='btn btn-xs btn-info' href='purchase_invoices/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
             }else{
                 $action = "<input type='checkbox' class='flat' id='chk". $header->id ."' name='chk[]' onclick='changeInput(". $header->id .");'/>";
-                $action .= "<input type='text' id='" . $header->id ."' hidden='true' name='ids[]' disabled value='". $header->id ."'/>";
+                $action .= "<input type='text' id='" . $header->id ."' hidden='true' name='ids[]' value='' readonly />";
             }
 
             return[

@@ -5,6 +5,15 @@
 @section('content')
     {{ Form::open(['route'=>['admin.payment_requests.create-from-po'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
         <div class="row">
+            @if(\Illuminate\Support\Facades\Session::has('error'))
+                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                    </button>
+                    <strong>{{ \Illuminate\Support\Facades\Session::get('error') }}</strong>
+                </div>
+            @endif
+        </div>
+        <div class="row">
             <button type="submit" class="btn btn-success"> Next</button>
             <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
                    width="100%" id="po-table">
@@ -43,6 +52,12 @@
             $('#po-table').DataTable({
                 processing: true,
                 serverSide: true,
+                responsive: {
+                    details: {
+                        display: $.fn.dataTable.Responsive.display.childRowImmediate,
+                        type: ''
+                    }
+                },
                 ajax: {
                     url: '{!! route('datatables.purchase_orders') !!}',
                     data: {
@@ -71,10 +86,12 @@
 
         function changeInput(id){
             if(document.getElementById("chk"+id).checked == true){
-                document.getElementById(id).disabled = false;
+                // document.getElementById(id).disabled = false;
+                $('#' + id).val(id);
             }
             else{
-                document.getElementById(id).disabled = true;
+                // document.getElementById(id).disabled = true;
+                $('#' + id).val('');
             }
         }
     </script>

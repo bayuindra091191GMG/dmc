@@ -435,7 +435,9 @@ class PurchaseOrderHeaderController extends Controller
                 }
             }
             else{
-                $purchaseOrders = PurchaseOrderHeader::dateDescending()->get();
+                $purchaseOrders = PurchaseOrderHeader::where('status_id', 3)
+                    ->dateDescending()
+                    ->get();
             }
 
             return DataTables::of($purchaseOrders)
@@ -451,8 +453,16 @@ class PurchaseOrderHeaderController extends Controller
     public function printDocument($id){
         $purchaseOrder = PurchaseOrderHeader::find($id);
         $purchaseOrderDetails = PurchaseOrderDetail::where('header_id', $purchaseOrder->id)->get();
+        $dateNow = Carbon::now('Asia/Jakarta');
+        $now = $dateNow->format('d-M-Y');
 
-        return view('documents.purchase_orders.purchase_orders_doc', compact('purchaseOrder', 'purchaseOrderDetails'));
+        $data = [
+            'purchaseOrder'         => $purchaseOrder,
+            'purchaseOrderDetails'  => $purchaseOrderDetails,
+            'now'               => $now
+        ];
+
+        return view('documents.purchase_orders.purchase_orders_doc')->with($data);
     }
 
     public function download($id){

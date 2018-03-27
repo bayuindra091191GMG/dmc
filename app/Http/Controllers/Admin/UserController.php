@@ -77,7 +77,7 @@ class UserController extends Controller
             return $input->password;
         });
 
-        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors()->withInput($request->all()));
+        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
         if($request->input('department') === '-1'){
             return redirect()->back()->withErrors('Pilih departemen!', 'default')->withInput($request->all());

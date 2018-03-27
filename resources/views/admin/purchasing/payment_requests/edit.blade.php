@@ -25,22 +25,10 @@
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
                     Nomor Payment Request
-                    <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"
-                           name="code" value="{{ $autoNumber }}" readonly>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="auto_number"></label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" class="flat" id="auto_number" name="auto_number" checked="checked"> Auto Number
-                        </label>
-                    </div>
+                           name="code" value="{{ $header->code }}" readonly>
                 </div>
             </div>
 
@@ -51,20 +39,19 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
-                           name="date" value="{{ old('date') }}" required>
+                           name="date" value="{{ $date }}" required>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="type" >
                     Tipe Payment
-                    <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="type" name="type" class="form-control col-md-7 col-xs-12 @if($errors->has('type')) parsley-error @endif">
-                        <option value="default">Default</option>
-                        <option value="dp">Down Payment (DP)</option>
-                        <option value="cbd">Cash Before Delivery (CBD)</option>
+                        <option value="default" {{ $header->type == 'default' ? 'selected' : '' }}>Default</option>
+                        <option value="dp" {{ $header->type == 'dp' ? 'selected' : '' }}>Down Payment (DP)</option>
+                        <option value="cbd" {{ $header->type == 'cbd' ? 'selected' : '' }}>Cash Before Delivery (CBD)</option>
                     </select>
                 </div>
             </div>
@@ -76,7 +63,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="bank_name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('bank_name')) parsley-error @endif"
-                           name="bank_name" required />
+                           name="bank_name" value="{{ $header->requester_bank_name }}" required />
                 </div>
             </div>
 
@@ -87,7 +74,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="account_no" type="number" min="0" class="form-control col-md-7 col-xs-12 @if($errors->has('account_no')) parsley-error @endif"
-                           name="account_no" required />
+                           name="account_no" value="{{ $header->requester_bank_account }}" required />
                 </div>
             </div>
 
@@ -98,7 +85,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="account_name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('account_name')) parsley-error @endif"
-                           name="account_name" required />
+                           name="account_name" value="{{ $header->requester_account_name }}" required />
                 </div>
             </div>
 
@@ -149,44 +136,44 @@
                                     Tanggal
                                 </th>
                             </tr>
-                            </thead>
-                            <tbody>
-                            <?php $idx = 0; ?>
+                        </thead>
+                        <tbody>
+                        <?php $idx = 0; ?>
 
-                                @foreach($purchaseInvoices as $detail)
-                                    <?php $idx++; ?>
-                                    <tr class='item{{ $idx }}'>
-                                        <td class='text-center'>
-                                            {{ $idx }}
-                                        </td>
-                                        <td class='text-center'>
-                                            <a style="text-decoration: underline" href="{{ route('admin.purchase_invoices.show', ['purchase_invoice' => $detail->id]) }}" target="_blank">{{ $detail->code }}</a>
-                                            <input type='hidden' name='item[]' value='{{ $detail->id }}'/>
-                                        </td>
-                                        <td class='text-center'>
-                                            <a style="text-decoration: underline" href="{{ route('admin.purchase_orders.show', ['purchase_order' => $detail->purchase_order_id]) }}" target="_blank">{{ $detail->purchase_order_header->code }}</a>
-                                        </td>
-                                        <td class='text-center'>
-                                            {{ $detail->purchase_order_header->supplier->name }}
-                                        </td>
-                                        <td class='text-center'>
-                                            {{ $detail->total_price }}
-                                        </td>
-                                        <td class='text-center'>
-                                            {{ $detail->total_discount }}
-                                        </td>
-                                        <td class='text-center'>
-                                            {{ $detail->delivery_fee }}
-                                        </td>
-                                        <td class='text-center'>
-                                            {{ $detail->total_payment }}
-                                        </td>
-                                        <td class='text-center'>
-                                            {{ $detail->date_string }}
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
+                        @foreach($purchaseInvoices as $detail)
+                            <?php $idx++; ?>
+                            <tr class='item{{ $idx }}'>
+                                <td class='text-center'>
+                                    {{ $idx }}
+                                </td>
+                                <td class='text-center'>
+                                    <a style="text-decoration: underline" href="{{ route('admin.purchase_invoices.show', ['purchase_invoice' => $detail->id]) }}" target="_blank">{{ $detail->code }}</a>
+                                    <input type='hidden' name='item[]' value='{{ $detail->id }}'/>
+                                </td>
+                                <td class='text-center'>
+                                    <a style="text-decoration: underline" href="{{ route('admin.purchase_orders.show', ['purchase_order' => $detail->purchase_order_id]) }}" target="_blank">{{ $detail->purchase_order_header->code }}</a>
+                                </td>
+                                <td class='text-center'>
+                                    {{ $detail->purchase_order_header->supplier->name }}
+                                </td>
+                                <td class='text-center'>
+                                    {{ $detail->total_price }}
+                                </td>
+                                <td class='text-center'>
+                                    {{ $detail->total_discount }}
+                                </td>
+                                <td class='text-center'>
+                                    {{ $detail->delivery_fee }}
+                                </td>
+                                <td class='text-center'>
+                                    {{ $detail->total_payment }}
+                                </td>
+                                <td class='text-center'>
+                                    {{ $detail->date_string }}
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
                         @endif
                         @if(!empty($purchaseOrders) && $purchaseOrders->count() > 0)
                             <thead>
@@ -220,7 +207,7 @@
                                     Tanggal
                                 </th>
                                 {{--<th class="text-center" style="width: 10%">--}}
-                                    {{--Tindakan--}}
+                                {{--Tindakan--}}
                                 {{--</th>--}}
                             </tr>
                             </thead>
@@ -259,10 +246,10 @@
                                         {{ $detail->date_string }}
                                     </td>
                                     {{--<td>--}}
-                                        {{--<?php $itemId = $detail->id. "#". $detail->code ?>--}}
-                                        {{--<a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->code }}">--}}
-                                            {{--<span class="glyphicon glyphicon-trash"></span>--}}
-                                        {{--</a>--}}
+                                    {{--<?php $itemId = $detail->id. "#". $detail->code ?>--}}
+                                    {{--<a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->code }}">--}}
+                                    {{--<span class="glyphicon glyphicon-trash"></span>--}}
+                                    {{--</a>--}}
                                     {{--</td>--}}
                                 </tr>
                             @endforeach
@@ -282,6 +269,120 @@
                 </div>
             </div>
             {{ Form::close() }}
+        </div>
+    </div>
+
+    <!-- Modal form to add new detail -->
+    <div id="addModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group" id="pi_add_form">
+                            <label class="control-label col-sm-2" for="pi_add">Nomor PI:</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="pi_add" name="pi_add"></select>
+                                <p class="errorPi text-center alert alert-danger hidden"></p>
+                            </div>
+                        </div>
+                        <div class="form-group" id="po_add_form">
+                            <label class="control-label col-sm-2" for="po_add">Nomor PO:</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="po_add" name="po_add"></select>
+                                <p class="errorPo text-center alert alert-danger hidden"></p>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="modal-footer">\
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">
+                            <span class='glyphicon glyphicon-remove'></span> Batal
+                        </button>
+                        <button type="button" class="btn btn-success add" data-dismiss="modal">
+                            <span id="" class='glyphicon glyphicon-check'></span> Simpan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal form to edit a detail -->
+    <div id="editModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group" id="pi_edit_form">
+                            <label class="control-label col-sm-2" for="pi_edit">Nomor PI:</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="pi_edit" name="pi_edit"></select>
+                                <p class="errorPi text-center alert alert-danger hidden"></p>
+                            </div>
+                        </div>
+                        <div class="form-group" id="po_edit_form">
+                            <label class="control-label col-sm-2" for="po_edit">Nomor PO:</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="po_edit" name="po_edit"></select>
+                                <p class="errorPo text-center alert alert-danger hidden"></p>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">
+                            <span class='glyphicon glyphicon-remove'></span> Batal
+                        </button>
+                        <button type="button" class="btn btn-primary edit" data-dismiss="modal">
+                            <span class='glyphicon glyphicon-check'></span> Simpan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal form to delete a form -->
+    <div id="deleteModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <h3 class="text-center">Apakah anda yakin ingin menghapus detail ini?</h3>
+                    <br />
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group" id="pi_add_form">
+                            <label class="control-label col-sm-2" for="pi_delete">Nomor PI:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="pi_delete" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group" id="po_add_form">
+                            <label class="control-label col-sm-2" for="po_delete">Nomor PO:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="po_delete" readonly>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">
+                            <span class='glyphicon glyphicon-remove'></span> Batal
+                        </button>
+                        <button type="button" class="btn btn-danger delete" data-dismiss="modal">
+                            <span id="" class='glyphicon glyphicon-trash'></span> Hapus
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -312,30 +413,6 @@
             format: "DD MMM Y"
         });
 
-        // Auto Numbering
-        $('#auto_number').change(function(){
-            if(this.checked){
-                $('#code').val('{{ $autoNumber }}');
-                $('#code').prop('readonly', true);
-            }
-            else{
-                $('#code').val('');
-                $('#code').prop('readonly', false);
-            }
-        });
 
-//        // Delete detail
-//        var deletedId = "0";
-//        $(document).on('click', '.delete-modal', function() {
-//            $('.modal-title').text('Hapus Detail');
-//            deletedId = $(this).data('id');
-//            $('#item_delete').val($(this).data('item-text'));
-//            $('#qty_delete').val($(this).data('qty'));
-//            $('#remark_delete').val($(this).data('remark'));
-//            $('#deleteModal').modal('show');
-//        });
-//        $('.modal-footer').on('click', '.delete', function() {
-//            $('.item' + deletedId).remove();
-//        });
     </script>
 @endsection

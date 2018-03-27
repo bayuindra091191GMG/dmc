@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title','Buat Good Receipt Baru')
+@section('title','Buat Goods Receipt Baru')
 
 @section('content')
     <div class="row">
@@ -118,17 +118,17 @@
                             @foreach($purchaseOrder->purchase_order_details as $detail)
                                 @php($idx++)
                                 <tr class='item{{ $idx }}'>
-                                    <td class='field-item'>
+                                    <td>
                                         <input type='text' name='item_text[]' class='form-control' value='{{ $detail->item->code. ' - '. $detail->item->name }}' readonly/>
                                         <input type='hidden' name='item_value[]' value='{{ $detail->item_id }}'/>
                                     </td>
                                     <td>
-                                        <input type='number' name='qty[]'  placeholder='Jumlah' class='form-control' value="{{ $detail->quantity }}" readonly/>
+                                        <input type='text' name='qty[]'  placeholder='Jumlah' class='form-control text-center' value="{{ $detail->quantity }}" readonly/>
                                     </td>
                                     <td>
                                         <input type='text' name='remark[]' placeholder='Keterangan' class='form-control' value="{{ $detail->remark }}" readonly/>
                                     </td>
-                                    <td>
+                                    <td class='text-center'>
                                         @php($itemId = $detail->item_id. "#". $detail->item->code. "#". $detail->item->name)
                                         <a class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}" data-time="00:00">
                                             <span class="glyphicon glyphicon-edit"></span>
@@ -346,7 +346,7 @@
                 text: 'Pilih Purchase Order...'
             },
             width: '100%',
-            minimumInputLength: 2,
+            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('select.purchase_orders') }}',
                 dataType: 'json',
@@ -368,7 +368,7 @@
             $('#item_add').select2({
                 placeholder: {
                     id: '-1',
-                    text: 'Pilih barang...'
+                    text: ' - Pilih Inventory - '
                 },
                 width: '100%',
                 minimumInputLength: 1,
@@ -428,15 +428,15 @@
             sbAdd.append("<input type='hidden' name='item_value[]' value='" + splitted[0] + "'/></td>");
 
             if(qtyAdd && qtyAdd !== ""){
-                sbAdd.append("<td><input type='text' name='qty[]' class='form-control' value='" + qtyAdd + "' readonly/></td>");
+                sbAdd.append("<td><input type='text' name='qty[]' class='form-control text-center' value='" + qtyAdd + "' readonly/></td>");
             }
             else{
-                sbAdd.append("<td><input type='text' name='qty[]' class='form-control' readonly/></td>");
+                sbAdd.append("<td><input type='text' name='qty[]' class='form-control text-center' readonly/></td>");
             }
 
             sbAdd.append("<td><input type='text' name='remark[]' class='form-control' value='" + remarkAdd + "' readonly/></td>");
 
-            sbAdd.append("<td>");
+            sbAdd.append("<td class='text-center'>");
             sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd  + "'><span class='glyphicon glyphicon-edit'></span></a>");
             sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd + "'><span class='glyphicon glyphicon-trash'></span></a>");
             sbAdd.append("</td>");
@@ -513,15 +513,15 @@
             sbEdit.append("<input type='hidden' name='item_value[]' value='" + splitted[0] + "'/></td>");
 
             if(qtyEdit && qtyEdit !== ""){
-                sbEdit.append("<td><input type='text' name='qty[]' class='form-control' value='" + qtyEdit + "' readonly/></td>");
+                sbEdit.append("<td><input type='text' name='qty[]' class='form-control text-center' value='" + qtyEdit + "' readonly/></td>");
             }
             else{
-                sbEdit.append("<td><input type='text' name='qty[]' class='form-control' readonly/></td>");
+                sbEdit.append("<td><input type='text' name='qty[]' class='form-control text-center' readonly/></td>");
             }
 
             sbEdit.append("<td><input type='text' name='remark[]' class='form-control' value='" + remarkEdit + "' readonly/></td>");
 
-            sbEdit.append("<td>");
+            sbEdit.append("<td class='text-center'>");
             sbEdit.append("<a class='edit-modal btn btn-info' data-id='" + id + "' data-item-id='" + data + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "' data-time='" + "'><span class='glyphicon glyphicon-edit'></span></a>");
             sbEdit.append("<a class='delete-modal btn btn-danger' data-id='" + id + "' data-item-id='" + data + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "' data-time='" + "'><span class='glyphicon glyphicon-trash'></span></a>");
             sbEdit.append("</td>");
