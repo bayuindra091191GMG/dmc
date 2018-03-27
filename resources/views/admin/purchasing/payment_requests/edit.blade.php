@@ -156,20 +156,28 @@
                                 <td class='text-center'>
                                     {{ $detail->purchase_order_header->supplier->name }}
                                 </td>
-                                <td class='text-center'>
-                                    {{ $detail->total_price }}
+                                <td class='text-right'>
+                                    {{ $detail->total_price_string }}
                                 </td>
-                                <td class='text-center'>
-                                    {{ $detail->total_discount }}
+                                <td class='text-right'>
+                                    {{ $detail->total_discount_string }}
                                 </td>
-                                <td class='text-center'>
-                                    {{ $detail->delivery_fee }}
+                                <td class='text-right'>
+                                    {{ $detail->delivery_fee_string }}
                                 </td>
-                                <td class='text-center'>
-                                    {{ $detail->total_payment }}
+                                <td class='text-right'>
+                                    {{ $detail->total_payment_string }}
                                 </td>
                                 <td class='text-center'>
                                     {{ $detail->date_string }}
+                                </td>
+                                <td class='text-center'>
+                                    <a class="edit-modal btn btn-info" data-idx="{{ $idx }}" data-type="PI" data-pi-id="{{ $detail->id }}" data-pi-code="{{ $detail->code }}">
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                    </a>
+                                    <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-type="PI" data-pi-id="{{ $detail->id }}" data-pi-code="{{ $detail->code }}">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach
@@ -206,9 +214,9 @@
                                 <th class="text-center" style="width: 10%">
                                     Tanggal
                                 </th>
-                                {{--<th class="text-center" style="width: 10%">--}}
-                                {{--Tindakan--}}
-                                {{--</th>--}}
+                                <th class="text-center" style="width: 10%">
+                                    Tindakan
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -245,12 +253,14 @@
                                     <td class='text-center'>
                                         {{ $detail->date_string }}
                                     </td>
-                                    {{--<td>--}}
-                                    {{--<?php $itemId = $detail->id. "#". $detail->code ?>--}}
-                                    {{--<a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->code }}">--}}
-                                    {{--<span class="glyphicon glyphicon-trash"></span>--}}
-                                    {{--</a>--}}
-                                    {{--</td>--}}
+                                    <td class='text-center'>
+                                        <a class="edit-modal btn btn-info" data-idx="{{ $idx }}" data-type="PO" data-po-id="{{ $detail->id }}" data-po-code="{{ $detail->code }}">
+                                            <span class="glyphicon glyphicon-edit"></span>
+                                        </a>
+                                        <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-type="PO" data-po-id="{{ $detail->id }}" data-po-code="{{ $detail->code }}">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </a>
+                                    </td>
                                 </tr>
                             @endforeach
                         @endif
@@ -413,6 +423,283 @@
             format: "DD MMM Y"
         });
 
+        // Add new detail
+        $(document).on('click', '.add-modal', function() {
+            var typeAdd = $(this).data('type');
+
+            if(typeAdd === 'PI'){
+                $('#po_add_form').hide();
+                $('#pi_add_form').show();
+                $('#pi_add').select2({
+                    placeholder: {
+                        id: '-1',
+                        text: ' - Pilih Invoice - '
+                    },
+                    width: '100%',
+                    minimumInputLength: 1,
+                    ajax: {
+                        url: '{{ route('select.purchase_invoices') }}',
+                        dataType: 'json',
+                        data: function (params) {
+                            return {
+                                q: $.trim(params.term),
+                                supplier : $(this).data('supplier')
+                            };
+                        },
+                        processResults: function (data) {
+                            return {
+                                results: data
+                            };
+                        }
+                    }
+                });
+            }
+            else{
+                $('#pi_add_form').hide();
+                $('#po_add_form').show();
+                $('#po_add').select2({
+                    placeholder: {
+                        id: '-1',
+                        text: ' - Pilih PO - '
+                    },
+                    width: '100%',
+                    minimumInputLength: 1,
+                    ajax: {
+                        url: '{{ route('select.purchase_orders') }}',
+                        dataType: 'json',
+                        data: function (params) {
+                            return {
+                                q: $.trim(params.term),
+                                supplier : $(this).data('supplier')
+                            };
+                        },
+                        processResults: function (data) {
+                            return {
+                                results: data
+                            };
+                        }
+                    }
+                });
+            }
+
+            $('.modal-title').text('Tambah Detail');
+            $('#addModal').modal('show');
+        });
+        $('.modal-footer').on('click', '.add', function() {
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('admin.payment_request_details.store') }}',
+                data: {
+                    '_token': $('input[name=_token]').val(),
+                    'header_id': '{{ $header->id }}',
+                    'pi_id': $('#pi_add').val(),
+                    'po_id': $('#po_add').val()
+                },
+                success: function(data) {
+                    $('.errorPi').addClass('hidden');
+                    $('.errorPo').addClass('hidden');
+
+                    if ((data.errors)) {
+                        setTimeout(function () {
+                            $('#addModal').modal('show');
+                            toastr.error('Gagal simpan data!', 'Peringatan', {timeOut: 5000});
+                        }, 500);
+
+                        if (data.errors.pi_id) {
+                            $('.errorPi').removeClass('hidden');
+                            $('.errorPi').text(data.errors.pi_id);
+                        }
+                        if (data.errors.po_id) {
+                            $('.errorPo').removeClass('hidden');
+                            $('.errorPo').text(data.errors.po_id);
+                        }
+                    } else {
+                        toastr.success('Berhasil simpan detail!', 'Sukses', {timeOut: 5000});
+
+                        // Increase idx
+                        var idx = $('#index_counter').val();
+                        idx++;
+                        $('#index_counter').val(idx);
+
+                        var sbAdd = new stringbuilder();
+
+                        if(typeAdd === 'PI'){
+                            sbAdd.append("<tr class='item" + idx + "'>");
+                            sbAdd.append("<td class='text-center'>" + idx + "</td>");
+                            sbAdd.append("<td class='text-center'>" + data.show_url + "</td>");
+                            sbAdd.append("<td class='text-center'>" + data.show_url_po + "</td>");
+                            sbAdd.append("<td class='text-center'>" + data.po_supplier_name + "</td>");
+                            sbAdd.append("<td class='text-right'>" + data.total_price_string + "</td>");
+                            sbAdd.append("<td class='text-right'>" + data.total_discount_string + "</td>");
+                            sbAdd.append("<td class='text-right'>" + data.delivery_fee_string + "</td>");
+                            sbAdd.append("<td class='text-right'>" + data.total_payment_string + "</td>");
+                            sbAdd.append("<td class='text-center'>" + data.date_string + "</td>");
+                            sbAdd.append("<td class='text-center'>");
+                            sbAdd.append("<a class='edit-modal btn btn-info' data-idx='" + idx + "' data-type='PI' data-pi-id='" + data.id + "' data-pi-code='" + data.code + "'><span class='glyphicon glyphicon-edit'></span></a>");
+                            sbAdd.append("<a class='delete-modal btn btn-danger' data-idx='" + idx + "' data-type='PI' data-pi-id='" + data.id + "' data-pi-code='" + data.code + "'><span class='glyphicon glyphicon-trash'></span></a>");
+                            sbAdd.append("</td>");
+                            sbAdd.append("</tr>");
+                        }
+                        else{
+                            sbAdd.append("<tr class='item" + idx + "'>");
+                            sbAdd.append("<td class='text-center'>" + idx + "</td>");
+                            sbAdd.append("<td class='text-center'>" + data.show_url + "</td>");
+                            sbAdd.append("<td class='text-center'>" + data.show_url_pr + "</td>");
+                            sbAdd.append("<td class='text-center'>" + data.supplier_name + "</td>");
+                            sbAdd.append("<td class='text-right'>" + data.total_price_string + "</td>");
+                            sbAdd.append("<td class='text-right'>" + data.total_discount_string + "</td>");
+                            sbAdd.append("<td class='text-right'>" + data.delivery_fee_string + "</td>");
+                            sbAdd.append("<td class='text-right'>" + data.total_payment_string + "</td>");
+                            sbAdd.append("<td class='text-center'>" + data.date_string + "</td>");
+                            sbAdd.append("<td class='text-center'>");
+                            sbAdd.append("<a class='edit-modal btn btn-info' data-idx='" + idx + "' data-type='PO' data-po-id='" + data.id + "' data-po-code='" + data.code + "'><span class='glyphicon glyphicon-edit'></span></a>");
+                            sbAdd.append("<a class='delete-modal btn btn-danger' data-idx='" + idx + "' data-type='PO' data-po-id='" + data.id + "' data-po-code='" + data.code + "'><span class='glyphicon glyphicon-trash'></span></a>");
+                            sbAdd.append("</td>");
+                            sbAdd.append("</tr>");
+                        }
+
+                        $('#detail_table').append(sbAdd.toString());
+                    }
+                },
+            });
+        });
+
+        // Edit detail
+        $(document).on('click', '.edit-modal', function() {
+            var typeEdit = $(this).data('type');
+            var idxEdit = $(this).data('idx');
+
+            if($(this).data('type') === 'PI'){
+                $('#po_edit_form').hide();
+                $('#pi_edit_form').show();
+                $('#pi_edit').select2({
+                    placeholder: {
+                        id: $(this).data('pi-id'),
+                        text: $(this).data('pi-code')
+                    },
+                    width: '100%',
+                    minimumInputLength: 1,
+                    ajax: {
+                        url: '{{ route('select.purchase_invoices') }}',
+                        dataType: 'json',
+                        data: function (params) {
+                            return {
+                                q: $.trim(params.term),
+                                supplier : $(this).data('supplier')
+                            };
+                        },
+                        processResults: function (data) {
+                            return {
+                                results: data
+                            };
+                        }
+                    }
+                });
+            }
+            else{
+                $('#pi_edit_form').hide();
+                $('#po_edit_form').show();
+                $('#po_edit').select2({
+                    placeholder: {
+                        id: $(this).data('po-id'),
+                        text: $(this).data('po-code')
+                    },
+                    width: '100%',
+                    minimumInputLength: 1,
+                    ajax: {
+                        url: '{{ route('select.purchase_orders') }}',
+                        dataType: 'json',
+                        data: function (params) {
+                            return {
+                                q: $.trim(params.term),
+                                supplier : $(this).data('supplier')
+                            };
+                        },
+                        processResults: function (data) {
+                            return {
+                                results: data
+                            };
+                        }
+                    }
+                });
+            }
+
+            $('.modal-title').text('Tambah Detail');
+            $('#editModal').modal('show');
+        });
+        $('.modal-footer').on('click', '.edit', function() {
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('admin.payment_request_details.update') }}',
+                data: {
+                    '_token': $('input[name=_token]').val(),
+                    'type': typeEdit,
+                    'pi_id': $('#pi_edit').val(),
+                    'po_id': $('#po_edit').val()
+                },
+                success: function(data) {
+                    $('.errorPi').addClass('hidden');
+                    $('.errorPo').addClass('hidden');
+
+                    if ((data.errors)) {
+                        setTimeout(function () {
+                            $('#addModal').modal('show');
+                            toastr.error('Gagal simpan data!', 'Peringatan', {timeOut: 5000});
+                        }, 500);
+
+                        if (data.errors.pi_id) {
+                            $('.errorPi').removeClass('hidden');
+                            $('.errorPi').text(data.errors.pi_id);
+                        }
+                        if (data.errors.po_id) {
+                            $('.errorPo').removeClass('hidden');
+                            $('.errorPo').text(data.errors.po_id);
+                        }
+                    } else {
+                        toastr.success('Berhasil simpan detail!', 'Sukses', {timeOut: 5000});
+
+                        var sbEdit = new stringbuilder();
+
+                        if(typeEdit === 'PI'){
+                            sbEdit.append("<tr class='item" + idxEdit + "'>");
+                            sbEdit.append("<td class='text-center'>" + idx + "</td>");
+                            sbEdit.append("<td class='text-center'>" + data.show_url + "</td>");
+                            sbEdit.append("<td class='text-center'>" + data.show_url_po + "</td>");
+                            sbEdit.append("<td class='text-center'>" + data.po_supplier_name + "</td>");
+                            sbEdit.append("<td class='text-right'>" + data.total_price_string + "</td>");
+                            sbEdit.append("<td class='text-right'>" + data.total_discount_string + "</td>");
+                            sbEdit.append("<td class='text-right'>" + data.delivery_fee_string + "</td>");
+                            sbEdit.append("<td class='text-right'>" + data.total_payment_string + "</td>");
+                            sbEdit.append("<td class='text-center'>" + data.date_string + "</td>");
+                            sbEdit.append("<td class='text-center'>");
+                            sbEdit.append("<a class='edit-modal btn btn-info' data-idx='" + idx + "' data-type='PI' data-pi-id='" + data.id + "' data-pi-code='" + data.code + "'><span class='glyphicon glyphicon-edit'></span></a>");
+                            sbEdit.append("<a class='delete-modal btn btn-danger' data-idx='" + idx + "' data-type='PI' data-pi-id='" + data.id + "' data-pi-code='" + data.code + "'><span class='glyphicon glyphicon-trash'></span></a>");
+                            sbEdit.append("</td>");
+                            sbEdit.append("</tr>");
+                        }else{
+                            sbEdit.append("<tr class='item" + idxEdit + "'>");
+                            sbEdit.append("<td class='text-center'>" + idx + "</td>");
+                            sbEdit.append("<td class='text-center'>" + data.show_url + "</td>");
+                            sbEdit.append("<td class='text-center'>" + data.show_url_pr + "</td>");
+                            sbEdit.append("<td class='text-center'>" + data.supplier_name + "</td>");
+                            sbEdit.append("<td class='text-right'>" + data.total_price_string + "</td>");
+                            sbEdit.append("<td class='text-right'>" + data.total_discount_string + "</td>");
+                            sbEdit.append("<td class='text-right'>" + data.delivery_fee_string + "</td>");
+                            sbEdit.append("<td class='text-right'>" + data.total_payment_string + "</td>");
+                            sbEdit.append("<td class='text-center'>" + data.date_string + "</td>");
+                            sbEdit.append("<td class='text-center'>");
+                            sbEdit.append("<a class='edit-modal btn btn-info' data-idx='" + idx + "' data-type='P0' data-po-id='" + data.id + "' data-po-code='" + data.code + "'><span class='glyphicon glyphicon-edit'></span></a>");
+                            sbEdit.append("<a class='delete-modal btn btn-danger' data-idx='" + idx + "' data-type='P0' data-po-id='" + data.id + "' data-po-code='" + data.code + "'><span class='glyphicon glyphicon-trash'></span></a>");
+                            sbEdit.append("</td>");
+                            sbEdit.append("</tr>");
+                        }
+
+
+                        $('.item' + id).replaceWith(sbEdit.toString());
+                    }
+                },
+            });
+        });
 
     </script>
 @endsection

@@ -79,7 +79,10 @@ class PurchaseOrderHeader extends Eloquent
         'total_payment_string',
         'delivery_fee_string',
         'date_string',
-        'closing_date_string'
+        'closing_date_string',
+        'show_url',
+        'show_url_pr',
+        'supplier_name'
     ];
 
 	protected $dates = [
@@ -145,6 +148,19 @@ class PurchaseOrderHeader extends Eloquent
 
     public function getDeliveryFeeStringAttribute(){
         return number_format($this->attributes['delivery_fee'], 0, ",", ".");
+    }
+
+    public function getShowUrlAttribute(){
+        return "<a style='text-decoration: underline;' href='". route('admin.purchase_orders.show', ['purchase_order' => $this->attributes['id']]). "'>". $this->attributes['code']. "</a>";
+    }
+
+    public function getShowUrlPrAttribute(){
+        $prCode = $this->purchase_request_header->code;
+        return "<a style='text-decoration: underline;' href='". route('admin.purchase_requests.show', ['purchase_request' => $this->attributes['purchase_request_id']]). "'>". $prCode. "</a>";
+    }
+
+    public function getSupplierNameAttribute(){
+        return $this->supplier->name;
     }
 
     public function scopeDateDescending(Builder $query){

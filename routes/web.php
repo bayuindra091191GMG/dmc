@@ -349,6 +349,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('payment_requests/report', 'Purchasing\PaymentRequestController@report')->name('payment_requests.report');
     Route::post('payment_requests/download_report', 'Purchasing\PaymentRequestController@downloadReport')->name('payment_requests.download-report');
 
+    //Payment Request Details
+    Route::post('payment_request_details/simpan', 'Purchasing\PaymentRequestDetailController@store')->name('payment_request_details.store');
+    Route::put('payment_request_details/ubah', 'Purchasing\PaymentRequestDetailController@update')->name('payment_request_details.update');
+    Route::post('payment_request_details/hapus', 'Purchasing\PaymentRequestDetailController@delete')->name('payment_request_details.delete');
+
     //Delivery Order Headers
     Route::get('delivery_orders', 'Inventory\DeliveryOrderHeaderController@index')->name('delivery_orders');
     Route::get('delivery_orders/detil/{delivery_order}', 'Inventory\DeliveryOrderHeaderController@show')->name('delivery_orders.show');

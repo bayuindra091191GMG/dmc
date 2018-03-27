@@ -66,6 +66,9 @@ class PurchaseInvoiceHeader extends Eloquent
         'total_payment_string',
         'delivery_fee_string',
         'date_string',
+        'show_url',
+        'show_url_po',
+        'po_supplier_name'
     ];
 
 	protected $fillable = [
@@ -112,6 +115,19 @@ class PurchaseInvoiceHeader extends Eloquent
 
     public function getDeliveryFeeStringAttribute(){
         return number_format($this->attributes['delivery_fee'], 0, ",", ".");
+    }
+
+    public function getShowUrlAttribute(){
+        return "<a style='text-decoration: underline;' href='". route('admin.purchase_invoices.show', ['purchase_invoice' => $this->attributes['id']]). "'>". $this->attributes['code']. "</a>";
+    }
+
+    public function getShowUrlPoAttribute(){
+        $poCode = $this->purchase_order_header->code;
+        return "<a style='text-decoration: underline;' href='". route('admin.purchase_orders.show', ['purchase_order' => $this->attributes['purchase_order_id']]). "'>". $poCode. "</a>";
+    }
+
+    public function getPoSupplierNameAttribute(){
+        return $this->purchase_order_header->supplier->name;
     }
 
     public function scopeDateDescending(Builder $query){

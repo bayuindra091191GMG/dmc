@@ -478,14 +478,23 @@ class PurchaseOrderHeaderController extends Controller
 
     public function getPurchaseOrders(Request $request){
         $term = trim($request->q);
-        $purchase_requests = PurchaseOrderHeader::where('status_id', 3)
-            ->where('code', 'LIKE', '%'. $term. '%')
-            ->get();
+
+        if(!empty($request->supplier)){
+            $supplierId = $request->supplier;
+            $purchaseOrders = PurchaseOrderHeader::where('supplier_id', $supplierId)
+                ->where('code', 'LIKE', '%'. $term. '%')
+                ->get();
+        }
+        else{
+            $purchaseOrders = PurchaseOrderHeader::where('status_id', 3)
+                ->where('code', 'LIKE', '%'. $term. '%')
+                ->get();
+        }
 
         $formatted_tags = [];
 
-        foreach ($purchase_requests as $purchase_request) {
-            $formatted_tags[] = ['id' => $purchase_request->id, 'text' => $purchase_request->code];
+        foreach ($purchaseOrders as $purchaseOrder) {
+            $formatted_tags[] = ['id' => $purchaseOrder->id, 'text' => $purchaseOrder->code];
         }
 
         return \Response::json($formatted_tags);

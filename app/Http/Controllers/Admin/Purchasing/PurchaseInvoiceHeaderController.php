@@ -435,13 +435,25 @@ class PurchaseInvoiceHeaderController extends Controller
 
     public function getPurchaseInvoices(Request $request){
         $term = trim($request->q);
-        $purchase_invoices = PurchaseInvoiceHeader::where('code', 'LIKE', '%'. $term. '%')
-            ->get();
+
+        $invoices = null;
+        if(!empty($request->supplier)){
+            $supplierId = $request->supplier;
+            $invoices = PurchaseInvoiceHeader::whereHas('purchase_order_header', function($query) use($supplierId){
+                    $query->where('vendor_id', $supplierId);
+                })
+                ->where('code', 'LIKE', '%'. $term. '%')
+                    ->get();
+        }
+        else{
+            $invoices = PurchaseInvoiceHeader::where('code', 'LIKE', '%'. $term. '%')
+                ->get();
+        }
 
         $formatted_tags = [];
 
-        foreach ($purchase_invoices as $purchase_invoice) {
-            $formatted_tags[] = ['id' => $purchase_invoice->id, 'text' => $purchase_invoice->code];
+        foreach ($invoices as $invoice) {
+            $formatted_tags[] = ['id' => $invoice->id, 'text' => $invoice->code];
         }
 
         return \Response::json($formatted_tags);
