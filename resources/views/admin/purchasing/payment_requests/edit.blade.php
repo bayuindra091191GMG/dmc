@@ -370,13 +370,13 @@
                     <h3 class="text-center">Apakah anda yakin ingin menghapus detail ini?</h3>
                     <br />
                     <form class="form-horizontal" role="form">
-                        <div class="form-group" id="pi_add_form">
+                        <div class="form-group" id="pi_delete_form">
                             <label class="control-label col-sm-2" for="pi_delete">Nomor PI:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="pi_delete" readonly>
                             </div>
                         </div>
-                        <div class="form-group" id="po_add_form">
+                        <div class="form-group" id="po_delete_form">
                             <label class="control-label col-sm-2" for="po_delete">Nomor PO:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="po_delete" readonly>
@@ -500,18 +500,44 @@
                     $('.errorPo').addClass('hidden');
 
                     if ((data.errors)) {
-                        setTimeout(function () {
-                            $('#addModal').modal('show');
-                            toastr.error('Gagal simpan data!', 'Peringatan', {timeOut: 5000});
-                        }, 500);
-
-                        if (data.errors.pi_id) {
-                            $('.errorPi').removeClass('hidden');
-                            $('.errorPi').text(data.errors.pi_id);
+                        if(data.errors === 'pi_required'){
+                            setTimeout(function () {
+                                $('#addModal').modal('show');
+                                toastr.error('Pilih nomor Invoice!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                            }, 500);
                         }
-                        if (data.errors.po_id) {
-                            $('.errorPo').removeClass('hidden');
-                            $('.errorPo').text(data.errors.po_id);
+                        if(data.errors === 'po_required'){
+                            setTimeout(function () {
+                                $('#addModal').modal('show');
+                                toastr.error('Pilih nomor PO!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                            }, 500);
+                        }
+                        else if(data.errors === 'pi_exists'){
+                            setTimeout(function () {
+                                $('#addModal').modal('show');
+                                toastr.error('Nomor Invoice sudah terdaftar, mohon refresh browser!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                            }, 500);
+                        }
+                        else if(data.errors === 'po_exists'){
+                            setTimeout(function () {
+                                $('#addModal').modal('show');
+                                toastr.error('Nomor PO sudah terdaftar, mohon refresh browser!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                            }, 500);
+                        }
+                        else{
+                            setTimeout(function () {
+                                $('#addModal').modal('show');
+                                toastr.error('Gagal simpan data!', 'Peringatan', {timeOut: 5000});
+                            }, 500);
+
+                            if (data.errors.pi_id) {
+                                $('.errorPi').removeClass('hidden');
+                                $('.errorPi').text(data.errors.pi_id);
+                            }
+                            if (data.errors.po_id) {
+                                $('.errorPo').removeClass('hidden');
+                                $('.errorPo').text(data.errors.po_id);
+                            }
                         }
                     } else {
                         toastr.success('Berhasil simpan detail!', 'Sukses', {timeOut: 5000});
@@ -642,18 +668,44 @@
                     $('.errorPo').addClass('hidden');
 
                     if ((data.errors)) {
-                        setTimeout(function () {
-                            $('#addModal').modal('show');
-                            toastr.error('Gagal simpan data!', 'Peringatan', {timeOut: 5000});
-                        }, 500);
-
-                        if (data.errors.pi_id) {
-                            $('.errorPi').removeClass('hidden');
-                            $('.errorPi').text(data.errors.pi_id);
+                        if(data.errors === 'pi_required'){
+                            setTimeout(function () {
+                                $('#editModal').modal('show');
+                                toastr.error('Pilih nomor Invoice!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                            }, 500);
                         }
-                        if (data.errors.po_id) {
-                            $('.errorPo').removeClass('hidden');
-                            $('.errorPo').text(data.errors.po_id);
+                        if(data.errors === 'po_required'){
+                            setTimeout(function () {
+                                $('#editModal').modal('show');
+                                toastr.error('Pilih nomor PO!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                            }, 500);
+                        }
+                        else if(data.errors === 'pi_deleted'){
+                            setTimeout(function () {
+                                $('#editModal').modal('show');
+                                toastr.error('Nomor Invoice sudah terhapus, mohon refresh browser!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                            }, 500);
+                        }
+                        else if(data.errors === 'po_deleted'){
+                            setTimeout(function () {
+                                $('#editModal').modal('show');
+                                toastr.error('Nomor PO sudah terhapus, mohon refresh browser!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                            }, 500);
+                        }
+                        else{
+                            setTimeout(function () {
+                                $('#editModal').modal('show');
+                                toastr.error('Gagal simpan data!', 'Peringatan', {timeOut: 5000});
+                            }, 500);
+
+                            if (data.errors.pi_id) {
+                                $('.errorPi').removeClass('hidden');
+                                $('.errorPi').text(data.errors.pi_id);
+                            }
+                            if (data.errors.po_id) {
+                                $('.errorPo').removeClass('hidden');
+                                $('.errorPo').text(data.errors.po_id);
+                            }
                         }
                     } else {
                         toastr.success('Berhasil simpan detail!', 'Sukses', {timeOut: 5000});
@@ -698,6 +750,74 @@
                         $('.item' + id).replaceWith(sbEdit.toString());
                     }
                 },
+            });
+        });
+
+        // Delete detail
+        $(document).on('click', '.delete-modal', function() {
+            var typeDelete = $(this).data('type');
+            var idxDelete = $(this).data('idx');
+            var deletedPiId = $(this).data('pi_id');
+            var deletedPoId = $(this).data('po_id');
+
+            if($(this).data('type') === 'PI'){
+                $('#po_delete_form').hide();
+                $('#pi_delete_form').show();
+                $('#pi_delete').val($(this).data('pi-code'));
+            }
+            else{
+                $('#pi_delete_form').hide();
+                $('#po_delete_form').show();
+                $('#po_delete').val($(this).data('po-code'));
+            }
+
+            $('#deleteModal').modal('show');
+        });
+        $('.modal-footer').on('click', '.delete', function() {
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('admin.payment_request_details.delete') }}',
+                data: {
+                    '_token': $('input[name=_token]').val(),
+                    'header_id': '{{ $header->id }}',
+                    'pi_id': deletedPiId,
+                    'po_id': deletedPoId
+                },
+                success: function(data) {
+                    if ((data.errors)){
+                        if(data.errors === 'pi_last'){
+                            setTimeout(function () {
+                                $('#editModal').modal('show');
+                                toastr.error('Gagal menghapus detil!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                            }, 500);
+                        }
+                        if(data.errors === 'po_last'){
+                            setTimeout(function () {
+                                $('#editModal').modal('show');
+                                toastr.error('Gagal menghapus detil!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                            }, 500);
+                        }
+                        else if(data.errors === 'pi_deleted'){
+                            setTimeout(function () {
+                                $('#editModal').modal('show');
+                                toastr.error('Nomor Invoice sudah terhapus, mohon refresh browser!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                            }, 500);
+                        }
+                        else if(data.errors === 'po_deleted'){
+                            setTimeout(function () {
+                                $('#editModal').modal('show');
+                                toastr.error('Nomor PO sudah terhapus, mohon refresh browser!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                            }, 500);
+                        }
+                        setTimeout(function () {
+                            toastr.error('Gagal menghapus detil!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                        }, 500);
+                    }
+                    else{
+                        toastr.success('Berhasil menghapus detail!', 'Sukses', {timeOut: 5000});
+                        $('.item' + idxDelete).remove();
+                    }
+                }
             });
         });
 

@@ -23,7 +23,7 @@
                 <th>Departemen</th>
                 <th>Kode Unit</th>
                 <th>Tanggal</th>
-                {{--<th>Tanggal Dibuat</th>--}}
+                <th>Status</th>
                 <th>Tindakan</th>
             </tr>
             </thead>
@@ -59,7 +59,7 @@
                     { data: 'department', name: 'department', class: 'text-center' },
                     { data: 'machinery', name: 'machinery', class: 'text-center' },
                     { data: 'date', name: 'date', class: 'text-center' },
-                    // { data: 'created_at', name: 'created_at', class: 'text-center' },
+                    { data: 'status', name: 'status', class: 'text-center' },
                     { data: 'action', name: 'action',orderable: false, searchable: false, class: 'text-center' }
                 ],
                 language: {

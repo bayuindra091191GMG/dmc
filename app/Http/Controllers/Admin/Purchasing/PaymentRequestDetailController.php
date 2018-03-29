@@ -69,7 +69,7 @@ class PaymentRequestDetailController extends Controller
             return new JsonResponse($json);
         }
         catch(\Exception $ex){
-            error_log($ex);
+            return Response::json(array('errors' => 'error'));
         }
     }
 
@@ -126,22 +126,50 @@ class PaymentRequestDetailController extends Controller
             return new JsonResponse($json);
         }
         catch (\Exception $ex){
-            error_log($ex);
+            return Response::json(array('errors' => 'error'));
         }
     }
 
     public function delete(Request $request){
         try{
+            $type = $request->input('type');
+            $headerId = $request->input('header_id');
 
-            $detail = PurchaseRequestDetail::find(Input::get('id'));
+            $detail = null;
+            if($type === 'PI'){
+                $piId = $request->input('pi_id');
+                $details = PaymentRequestsPiDetail::where('payment_request_id', $headerId)
+                    ->get();
 
-            // Validate detail count
-            $details = PurchaseRequestDetail::where('header_id', $detail->header_id)->get();
-            if($details->count() == 1){
-                return Response::json(array('errors' => 'INVALID'));
+                if($details->count() == 1){
+                    return Response::json(array('errors' => 'pi_last'));
+                }
+
+                $detail = $details->where('purchase_invoice_header_id', $piId)->first();
+
+                if(empty($detail)){
+                    return Response::json(array('errors' => 'pi_deleted'));
+                }
+
+                $detail->delete();
             }
+            else{
+                $poId = $request->input('po_id');
+                $details = PaymentRequestsPiDetail::where('payment_request_id', $headerId)
+                    ->get();
 
-            $detail->delete();
+                if($details->count() == 1){
+                    return Response::json(array('errors' => 'pi_last'));
+                }
+
+                $detail = $details->where('purchase_order_id', $poId)->first();
+
+                if(empty($detail)){
+                    return Response::json(array('errors' => 'po_deleted'));
+                }
+
+                $detail->delete();
+            }
 
             return new JsonResponse($detail);
         }

@@ -3,7 +3,7 @@
 @section('content')
     <!-- page content -->
     <!-- top tiles -->
-    <div class="row tile_count">
+    <div id="testNotif" class="row tile_count">
         <h1>CONTOH DASHBOARD</h1>
     </div>
     <div class="row tile_count">
@@ -36,6 +36,9 @@
     </div>
     <!-- /top tiles -->
 
+    <div class="row">
+        <a class="btn btn-default" href="{{ route('admin.notify') }}">TEST</a>
+    </div>
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div id="log_activity" class="dashboard_graph">
@@ -261,6 +264,12 @@
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/dashboard.js')) }}
+    <script>
+
+        window.Echo.channel('test').listen('TestEvent', function(e) {
+            alert('TEST');
+        });
+    </script>
 @endsection
 
 @section('styles')

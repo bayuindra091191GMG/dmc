@@ -29,22 +29,14 @@ class MaterialRequestHeaderTransformer extends TransformerAbstract
         $url = 'default';
         if($header->type === 1){
             $url = 'inventory';
-        }
-        else if($header->type === 2){
-            $url = 'bensin';
-        }
-        else if($header->type === 3){
-            $url = 'servis';
-        }
-
-        $typeStr = 'default';
-        if($header->type === 1){
             $typeStr = 'Inventory';
         }
         else if($header->type === 2){
+            $url = 'bensin';
             $typeStr = 'Oli & Bensin';
         }
-        else{
+        else if($header->type === 3){
+            $url = 'servis';
             $typeStr = 'Servis';
         }
 
@@ -76,6 +68,7 @@ class MaterialRequestHeaderTransformer extends TransformerAbstract
             'department'    => $header->department->name,
             'machinery'     => $machinery,
             'date'          => $date,
+            'status'        => $header->status->description,
             'created_at'    => $createdAt,
             'action'        => $action
         ];

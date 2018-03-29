@@ -402,7 +402,7 @@
                     if ((data.errors)) {
                         if(data.errors === 'exists'){
                             setTimeout(function () {
-                                $('#editModal').modal('show');
+                                $('#addModal').modal('show');
                                 toastr.error('Stock sudah terdaftar, mohon refresh browser!!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
                             }, 500);
                         }

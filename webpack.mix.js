@@ -37,7 +37,8 @@ mix.webpackConfig({
  |
  */
 
-mix.scripts([
+mix.js([
+    'resources/assets/js/app.js',
     'node_modules/jquery/dist/jquery.js',
     'node_modules/pace-progress/pace.js',
 
@@ -77,7 +78,6 @@ mix.styles([
  */
 
 mix.scripts([
-    'node_modules/bootstrap/dist/js/bootstrap.js',
     'node_modules/gentelella/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js',
     'node_modules/gentelella/build/js/custom.js',
 ], 'public/assets/admin/js/admin.js').version();

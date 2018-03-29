@@ -50,6 +50,10 @@ Route::group(['namespace' => 'Auth'], function () {
  */
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => 'admin'], function () {
 
+    // Notification
+    Route::get('/notifications', 'NotificationController@notifications');
+    Route::get('/test_notify', 'NotificationController@testNotify')->name('notify');
+
     // Dashboard
     Route::get('/', 'DashboardController@index')->name('dashboard');
 
