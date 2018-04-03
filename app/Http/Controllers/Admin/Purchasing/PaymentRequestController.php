@@ -312,10 +312,11 @@ class PaymentRequestController extends Controller
     }
 
     public function printDocument($id){
-        $purchaseOrder = PurchaseOrderHeader::find($id);
-        $purchaseOrderDetails = PurchaseOrderDetail::where('header_id', $purchaseOrder->id)->get();
+        $paymentRequest = PaymentRequest::find($id);
+        $poDetails = PaymentRequestsPoDetail::where('header_id', $paymentRequest->id)->get();
+        $piDetails = PaymentRequestsPiDetail::where('header_id', $paymentRequest->id)->get();
 
-        return view('documents.purchase_orders.purchase_orders_doc', compact('purchaseOrder', 'purchaseOrderDetails'));
+        return view('documents.payment_requests.payment_requests_doc', compact('paymentRequest', 'poDetails', 'piDetails'));
     }
 
     public function download($id){
