@@ -38,35 +38,35 @@
  <table class="table">
   <thead>
   <tr>
-       <th>No</th>
-       <th>Nomor PO</th>
-       <th>Nomor PR</th>
-       <th>Nomor RFQ</th>
-       <th>Vendor</th>
-       <th>Status</th>
-       <th>Tanggal</th>
-       <th>Tanggal Closed</th>
-       <th>Total PO</th>
+       <th class="text-center">No</th>
+       <th class="text-center">Nomor PO</th>
+       <th class="text-center">Nomor PR</th>
+       <th class="text-center">Nomor RFQ</th>
+       <th class="text-center">Vendor</th>
+       <th class="text-center">Status</th>
+       <th class="text-center">Tanggal</th>
+       <th class="text-center">Tanggal Closed</th>
+       <th class="text-center">Total PO</th>
   </tr>
   </thead>
   <tbody>
     @php($i=1)
     @foreach($data as $item)
         <tr>
-            <td>{{ $i }}</td>
-            <td>{{ $item->code }}</td>
-            <td>{{ $item->purchase_request_header->code }}</td>
-            <td>
+            <td class="text-center">{{ $i }}</td>
+            <td class="text-center">{{ $item->code }}</td>
+            <td class="text-center">{{ $item->purchase_request_header->code }}</td>
+            <td class="text-center">
                 @if(!empty($item->quotation_id))
                     {{ $item->quotation_header->code }}
                 @else
                     -
                 @endif
             </td>
-            <td>{{ $item->supplier->name }}</td>
-            <td>{{ $item->status->description }}</td>
-            <td>{{ $item->date_string }}</td>
-            <td>
+            <td class="text-center">{{ $item->supplier->name }}</td>
+            <td class="text-center">{{ $item->status->description }}</td>
+            <td class="text-center">{{ $item->date_string }}</td>
+            <td class="text-center">
                 @if(!empty($item->closing_date))
                     {{ $item->closing_date_string }}
                 @else
@@ -74,19 +74,50 @@
                 @endif
             </td>
             <td class="text-right">
-                <div style="float: left;">Rp</div>
-                <div style="float: right;">{{ $item->total_payment_string }}</div>
+                {{ $item->total_payment_string }}
             </td>
         </tr>
+        <tr>
+            <td></td>
+            <td colspan="7">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th class="text-center">Kode</th>
+                        <th class="text-center">Nama</th>
+                        <th class="text-center">UOM</th>
+                        <th class="text-center">QTY</th>
+                        <th class="text-center">Harga</th>
+                        <th class="text-center">Diskon</th>
+                        <th class="text-center">Subtotal</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($item->purchase_order_details as $detail)
+                        <tr>
+                            <td class="text-center">{{ $detail->item->code }}</td>
+                            <td class="text-center">{{ $detail->item->name }}</td>
+                            <td class="text-center">{{ $detail->item->uom }}</td>
+                            <td class="text-center">{{ $detail->quantity }}</td>
+                            <td class="text-right">{{ $detail->price_string }}</td>
+                            <td class="text-center">{{ $detail->discount_string }}</td>
+                            <td class="text-right">{{ $detail->subtotal_string }}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </td>
+            <td></td>
+        </tr>
+
         @php($i++)
     @endforeach
     <tr>
-        <td colspan="8" align="right">
+        <td colspan="8" class="text-right">
             <b>Total</b>
         </td>
-        <td>
-            <div style="float: left;">Rp</div>
-            <div style="float: right;">{{ $total }}</div>
+        <td class="text-right">
+            {{ $total }}
         </td>
     </tr>
   </tbody>

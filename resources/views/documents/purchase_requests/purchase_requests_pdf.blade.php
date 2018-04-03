@@ -38,34 +38,52 @@
  <table class="table">
   <thead>
   <tr>
-       <th>No</th>
-       <th>Nomor PR</th>
-       <th>Tanggal</th>
-       <th>Alat Berat</th>
-       <th>Departemen</th>
-       {{--<th>S/N Chasis</th>--}}
-       {{--<th>S/N Engine</th>--}}
-       <th>Status</th>
-       <th>Dibuat Oleh</th>
+       <th class="text-center">No</th>
+       <th class="text-center">Nomor PR</th>
+       <th class="text-center">Tanggal</th>
+       <th class="text-center">Alat Berat</th>
+       <th class="text-center">Departemen</th>
+       <th class="text-center">Status</th>
   </tr>
   </thead>
   <tbody>
     @php($i=1)
     @foreach($data as $item)
         <tr>
-            <td>{{ $i }}</td>
-            <td>{{ $item->code }}</td>
-            <td>{{ $item->date_string }}</td>
-            <td>{{ $item->machinery->code ?? '-' }}</td>
-            <td>{{ $item->department->name }}</td>
-            {{--<td>{{ $item->sn_chasis ?? '-' }}</td>--}}
-            {{--<td>{{ $item->sn_engine ?? '-' }}</td>--}}
-            <td>{{ $item->status->description }}</td>
-            <td>{{ $item->createdBy->name }}</td>
+            <td class="text-center">{{ $i }}</td>
+            <td class="text-center">{{ $item->code }}</td>
+            <td class="text-center">{{ $item->date_string }}</td>
+            <td class="text-center">{{ $item->machinery->code ?? '-' }}</td>
+            <td class="text-center">{{ $item->department->name }}</td>
+            <td class="text-center">{{ $item->status->description }}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td colspan="5">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th class="text-center">Kode</th>
+                        <th class="text-center">Nama</th>
+                        <th class="text-center">UOM</th>
+                        <th class="text-center">QTY</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($item->purchase_request_details as $detail)
+                        <tr>
+                            <td class="text-center">{{ $detail->item->code }}</td>
+                            <td class="text-center">{{ $detail->item->name }}</td>
+                            <td class="text-center">{{ $detail->item->uom }}</td>
+                            <td class="text-center">{{ $detail->quantity }}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </td>
         </tr>
         @php($i++)
     @endforeach
-  <tr>
   </tbody>
  </table>
 </div>
