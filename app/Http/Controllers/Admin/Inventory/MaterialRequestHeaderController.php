@@ -11,10 +11,12 @@ namespace App\Http\Controllers\Admin\Inventory;
 
 use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
+use App\Models\Auth\User\User;
 use App\Models\Department;
 use App\Models\MaterialRequestDetail;
 use App\Models\MaterialRequestHeader;
 use App\Models\NumberingSystem;
+use App\Notifications\MaterialRequestCreated;
 use App\Transformer\Inventory\MaterialRequestHeaderTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -239,6 +241,10 @@ class MaterialRequestHeaderController extends Controller
             }
             $idx++;
         }
+
+        // Notification
+        $userNotif = User::find(4);
+        $userNotif->notify(new MaterialRequestCreated($mrHeader));
 
         Session::flash('message', 'Berhasil membuat material request!');
 

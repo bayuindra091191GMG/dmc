@@ -43,4 +43,13 @@
 
 @section('scripts')
     {{ Html::script(mix('assets/admin/js/admin.js')) }}
+    <script>
+        $(document).ready(function() {
+            var userId = '<?php echo auth()->user()->id; ?>';
+            window.Echo.private(`App.Models.Auth.User.User.` + userId)
+                .notification((notification) => {
+                    $('#notifications').prepend("<li><a href='#'>Notifikasi MR " + notification.data.code + "</a></li>");
+                });
+        })
+    </script>
 @endsection

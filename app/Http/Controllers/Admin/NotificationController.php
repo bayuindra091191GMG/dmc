@@ -24,6 +24,6 @@ class NotificationController extends Controller
     }
 
     public function notifications(){
-        error_log('test');
+
     }
 }

@@ -266,9 +266,9 @@
     {{ Html::script(mix('assets/admin/js/dashboard.js')) }}
     <script>
 
-        window.Echo.channel('test').listen('TestEvent', function(e) {
-            alert('TEST');
-        });
+        // window.Echo.channel('test').listen('TestEvent', function(e) {
+        //     alert('TEST');
+        // });
     </script>
 @endsection
 

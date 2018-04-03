@@ -8,9 +8,9 @@
             <div class="navbar-left">
                 <a class="btn btn-default" href="{{ route('admin.payment_requests') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
             </div>
-            {{--<div class="navbar-right">--}}
-                {{--<a class="btn btn-default" href="{{ route('admin.payment_requests.edit',[ 'payment_request' => $header->id]) }}">UBAH</a>--}}
-            {{--</div>--}}
+            <div class="navbar-right">
+                <a class="btn btn-default" href="{{ route('admin.payment_requests.edit',[ 'payment_request' => $header->id]) }}">UBAH</a>
+            </div>
         </div>
     </div>
     <div class="row">

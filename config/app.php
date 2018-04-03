@@ -204,6 +204,8 @@ return [
         \App\Providers\ProtectionProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+
+        \App\Providers\ComposerServiceProvider::class
     ],
 
     /*
