@@ -11,11 +11,7 @@
                 <th class="text-center">No</th>
                 <th class="text-center">Kode</th>
                 <th class="text-center">Nama</th>
-                <th class="text-center">Email</th>
-                <th class="text-center">Telpon</th>
-                <th class="text-center">Contact Person</th>
                 <th class="text-center">Kota</th>
-                <th class="text-center">Tanggal Dibuat</th>
                 <th class="text-center">Tindakan</th>
             </tr>
             </thead>
@@ -56,12 +52,8 @@
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
                     { data: 'code', name: 'code', class: 'text-center'},
-                    { data: 'name', name: 'name' },
-                    { data: 'email', name: 'email' },
-                    { data: 'phone', name: 'phone' },
-                    { data: 'contact_person', name: 'contact_person' },
-                    { data: 'city', name: 'city' },
-                    { data: 'created_at', name: 'created_at' },
+                    { data: 'name', name: 'name', class: 'text-center' },
+                    { data: 'city', name: 'city', class: 'text-center' },
                     { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'}
                 ],
                 language: {
