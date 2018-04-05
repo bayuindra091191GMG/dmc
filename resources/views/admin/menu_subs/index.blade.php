@@ -1,13 +1,13 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Daftar Menu')
+@section('title', 'Daftar Sub Menu')
 
 @section('content')
 
     <div class="row">
         @include('partials._success')
         <div class="nav navbar-right">
-            <a href="{{ route('admin.menus.create') }}" class="btn btn-app">
+            <a href="{{ route('admin.menu_subs.create') }}" class="btn btn-app">
                 <i class="fa fa-plus"></i> Tambah
             </a>
         </div>
@@ -19,9 +19,9 @@
             <thead>
             <tr>
                 <th>No</th>
-                <th>Nama</th>
+                <th>Nama Sub Menu</th>
                 <th>Route</th>
-                <th>Header Menu</th>
+                <th>Menu</th>
                 <th>Tindakan</th>
             </tr>
             </thead>
@@ -61,12 +61,12 @@
             $('#menus-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('datatables.menus') !!}',
+                ajax: '{!! route('datatables.menu_subs') !!}',
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false},
                     { data: 'name', name: 'name' },
                     { data: 'route', name: 'route' },
-                    { data: 'menu_header', name: 'menu_header' },
+                    { data: 'menu', name: 'menu' },
                     { data: 'action', name:'action' }
                 ],
                 language: {

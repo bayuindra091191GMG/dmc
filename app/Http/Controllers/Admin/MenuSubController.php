@@ -6,6 +6,8 @@ use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
 use App\Models\Menu;
 use App\Models\MenuHeader;
+use App\Models\MenuSub;
+use App\Transformer\MasterData\MenuSubTransformer;
 use App\Transformer\MasterData\MenuTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,7 +16,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
-class MenuController extends Controller
+class MenuSubController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,7 +25,7 @@ class MenuController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.menus.index');
+        return view('admin.menu_subs.index');
     }
 
 
@@ -37,9 +39,9 @@ class MenuController extends Controller
      */
     public function anyData()
     {
-        $menus = Menu::all();
+        $menus = MenuSub::all();
         return DataTables::of($menus)
-            ->setTransformer(new MenuTransformer())
+            ->setTransformer(new MenuSubTransformer())
             ->addIndexColumn()
             ->make(true);
     }
@@ -51,8 +53,8 @@ class MenuController extends Controller
      */
     public function create()
     {
-        $header = MenuHeader::all();
-        return view('admin.menus.create', compact('header'));
+        $header = Menu::all();
+        return view('admin.menu_subs.create', compact('header'));
     }
 
     /**
@@ -64,21 +66,21 @@ class MenuController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'              => 'required|max:50',
-            'menu_header_id'    => 'required'
+            'name'       => 'required|max:50',
+            'menu_id'    => 'required'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
-        Menu::create([
-            'name'              => $request->get('name'),
-            'menu_header_id'    => $request->get('menu_header_id'),
-            'route'             => $request->get('route')
+        MenuSub::create([
+            'name'      => $request->get('name'),
+            'menu_id'   => $request->get('menu_id'),
+            'route'     => $request->get('route')
         ]);
 
-        Session::flash('message', 'Berhasil membuat data menu baru!');
+        Session::flash('message', 'Berhasil membuat data menu sub baru!');
 
-        return redirect()->route('admin.menus');
+        return redirect()->route('admin.menu_subs');
     }
 
     /**
@@ -95,13 +97,14 @@ class MenuController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Menu $menu
+     * @param MenuSub $menuSub
      * @return \Illuminate\Http\Response
+     * @internal param Menu $menu
      */
-    public function edit(Menu $menu)
+    public function edit(MenuSub $menuSub)
     {
-        $header = MenuHeader::all();
-        return view('admin.menus.edit', ['menu' => $menu, 'header' => $header]);
+        $header = Menu::all();
+        return view('admin.menu_subs.edit', ['menuSub' => $menuSub, 'header' => $header]);
     }
 
     /**
@@ -111,27 +114,24 @@ class MenuController extends Controller
      * @param Menu $machinery_type
      * @return mixed
      */
-    public function update(Request $request, Menu $menu)
+    public function update(Request $request, MenuSub $menuSub)
     {
         $validator = Validator::make($request->all(), [
-            'name'              => 'required|max:50',
-            'menu_header_id'    => 'required',
-            'route'             => 'required'
+            'name'       => 'required|max:50',
+            'menu_id'    => 'required'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
-        $dateTimeNow = Carbon::now('Asia/Jakarta');
-
-        $menu->name = $request->get('name');
-        $menu->menu_header_id = $request->get('menu_header_id');
-        $menu->route = $request->get('route');
-        $menu->save();
+        $menuSub->name = $request->get('name');
+        $menuSub->menu_id = $request->get('menu_id');
+        $menuSub->route = $request->get('route');
+        $menuSub->save();
 
 //        return redirect()->intended(route('admin.menus'));
-        Session::flash('message', 'Berhasil mengubah data menu!');
+        Session::flash('message', 'Berhasil mengubah data menu sub!');
 
-        return redirect()->route('admin.menus.edit', ['menu' => $menu]);
+        return redirect()->route('admin.menu_subs.edit', ['menuSub' => $menuSub]);
     }
 
     /**

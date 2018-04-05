@@ -33,6 +33,20 @@
 
                 <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name" >
+                        Header Menu
+                        <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <select id="menu_header_id" name="menu_header_id" class="form-control col-md-7 col-xs-12 @if($errors->has('menu_header_id')) parsley-error @endif">
+                            @foreach($header as $header_menu)
+                                <option value="{{ $header_menu->id }}">{{ $header_menu->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name" >
                         Nama Menu
                         <span class="required">*</span>
                     </label>
@@ -43,13 +57,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name" >
-                        Deskripsi Menu
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="route" >
+                        Route Menu
                         <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input id="description" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('description')) parsley-error @endif"
-                               name="description"  value="{{ old('description') }}" required>
+                        <input id="route" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('route')) parsley-error @endif"
+                               name="route"  value="{{ old('route') }}" required>
                     </div>
                 </div>
 

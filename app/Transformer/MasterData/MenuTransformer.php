@@ -21,9 +21,10 @@ class MenuTransformer extends TransformerAbstract
             "<a class='btn btn-xs btn-info' href='menus/".$menu->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
         return[
-            'name'          => $menu->name,
-            'description'   => $menu->description,
-            'action'        => $action
+            'name'           => $menu->name,
+            'route'          => $menu->route,
+            'menu_header'    => $menu->menu_header->name,
+            'action'         => $action
         ];
     }
 }

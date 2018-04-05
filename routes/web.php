@@ -229,6 +229,20 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('menus/tambah', 'MenuController@create')->name('menus.create');
     Route::post('menus/simpan', 'MenuController@store')->name('menus.store');
 
+    //Menu Headers
+    Route::get('menu_headers', 'MenuHeaderController@index')->name('menu_headers');
+    Route::get('menu_headers/{menu_header}/ubah', 'MenuHeaderController@edit')->name('menu_headers.edit');
+    Route::put('menu_headers/ubah/{menu_header}', 'MenuHeaderController@update')->name('menu_headers.update');
+    Route::get('menu_headers/tambah', 'MenuHeaderController@create')->name('menu_headers.create');
+    Route::post('menu_headers/simpan', 'MenuHeaderController@store')->name('menu_headers.store');
+
+    //Menu Subs
+    Route::get('menu_subs', 'MenuSubController@index')->name('menu_subs');
+    Route::get('menu_subs/{menu_sub}/ubah', 'MenuSubController@edit')->name('menu_subs.edit');
+    Route::put('menu_subs/ubah/{menu_sub}', 'MenuSubController@update')->name('menu_subs.update');
+    Route::get('menu_subs/tambah', 'MenuSubController@create')->name('menu_subs.create');
+    Route::post('menu_subs/simpan', 'MenuSubController@store')->name('menu_subs.store');
+
     //Material Request Headers Primary
     Route::post('material_requests/simpan', 'Inventory\MaterialRequestHeaderController@store')->name('material_requests.store');
     Route::put('material_requests/ubah/{material_request}', 'Inventory\MaterialRequestHeaderController@update')->name('material_requests.update');
@@ -496,6 +510,8 @@ Route::get('/datatables-warehouses', 'Admin\WarehouseController@getIndex')->name
 Route::get('/datatables-sites', 'Admin\SiteController@getIndex')->name('datatables.sites');
 Route::get('/datatables-suppliers', 'Admin\SupplierController@getIndex')->name('datatables.suppliers');
 Route::get('/datatables-menus', 'Admin\MenuController@anyData')->name('datatables.menus');
+Route::get('/datatables-menu_headers', 'Admin\MenuHeaderController@anyData')->name('datatables.menu_headers');
+Route::get('/datatables-menu_subs', 'Admin\MenuSubController@anyData')->name('datatables.menu_subs');
 Route::get('/datatables-statuses', 'Admin\StatusController@getIndex')->name('datatables.statuses');
 
 // PURCHASING

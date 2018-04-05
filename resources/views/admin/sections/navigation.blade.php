@@ -37,6 +37,9 @@
                             <li><a href="{{ route('admin.departments') }}">Departemen</a></li>
                             <li><a href="{{ route('admin.documents') }}">Dokumen</a></li>
                             <li><a href="{{ route('admin.payment_methods') }}">Metode Pembayaran</a></li>
+                            <li><a href="{{ route('admin.menu_headers') }}">Header Menu</a></li>
+                            <li><a href="{{ route('admin.menus') }}">Menu</a></li>
+                            <li><a href="{{ route('admin.menu_subs') }}">Sub Menu</a></li>
                         </ul>
                     </li>
                     <li>
