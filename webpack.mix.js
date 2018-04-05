@@ -47,6 +47,7 @@ mix.js([
 mix.styles([
     'node_modules/font-awesome/css/font-awesome.css',
     'node_modules/pace-progress/themes/blue/pace-theme-minimal.css',
+    'node_modules/gentelella/vendors/iCheck/skins/flat/green.css',
 ], 'public/assets/app/css/app.css').version();
 
 mix.copy([

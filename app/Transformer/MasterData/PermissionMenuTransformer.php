@@ -19,7 +19,7 @@ class PermissionMenuTransformer extends TransformerAbstract
         $createdDate = Carbon::parse($permissionMenu->created_at)->format('d M Y');
         $updatedDate = Carbon::parse($permissionMenu->updated_at)->format('d M Y');
         $action =
-            "<a class='btn btn-xs btn-info' href='permission_menus/".$permissionMenu->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+            "<a class='btn btn-xs btn-info' href='permission_menus/hapus/".$permissionMenu->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
         return[
             'role'          => $permissionMenu->role->name,

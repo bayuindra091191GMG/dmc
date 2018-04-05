@@ -9,6 +9,20 @@
             @include('partials._error')
             {{ Form::open(['route'=>['admin.permission_menus.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
 
+            @if(count($errors))
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12 alert alert-danger alert-dismissible fade in" role="alert">
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            @endif
+
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="role" >
                     Role
@@ -26,16 +40,33 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="menu" >
-                    Menu
-                    <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="menu" name="menu" class="form-control col-md-7 col-xs-12 @if($errors->has('menu')) parsley-error @endif">
-                        <option value="-1" @if(empty(old('menu'))) selected @endif>Pilih Dokumen</option>
-                        @foreach($menus as $menu)
-                            <option value="{{ $menu->id }}" {{ old('menu') == $menu->id ? "selected":"" }}>{{ $menu->name }}</option>
-                        @endforeach
-                    </select>
+                    @php($idx = 0)
+                    <table class="table">
+                        <thead>
+                            <th>
+                                Menu
+                            </th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                @foreach($menus as $menu)
+                                    @php($idx++)
+                                        <td>
+                                            <label>
+                                                <input type="checkbox" class="flat" id="chk{{$menu->id}}" name="chk[]" onclick="changeInput('{{ $menu->id }}')" > {{ $menu->name }}
+                                                <input type="text" hidden="true" value="{{ $menu->id }}" id="{{ $menu->id }}" name="ids[]" disabled/>
+                                            </label>
+                                        </td>
+                                    @if($idx == 3)
+                                        <tr/><tr>
+                                        @php($idx = 0)
+                                    @endif
+                                @endforeach
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -58,4 +89,15 @@
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/users/edit.js')) }}
+
+    <script>
+        function changeInput(id){
+            if(document.getElementById("chk"+id).checked == true){
+                document.getElementById(id).disabled = false;
+            }
+            else{
+                document.getElementById(id).disabled = true;
+            }
+        }
+    </script>
 @endsection
