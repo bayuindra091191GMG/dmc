@@ -25,6 +25,15 @@
         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
             <div class="menu_section">
                 <ul class="nav side-menu">
+                    {{--@foreach($menus as $menu)--}}
+                        {{--<li>--}}
+                            {{--<a style="font-weight: bold;">--}}
+                                {{--<i class="fa fa-list"></i>--}}
+                                    {{--{{ $menu->menu->name }}--}}
+                                {{--<span class="fa fa-chevron-down"></span>--}}
+                            {{--</a>--}}
+                        {{--</li>--}}
+                    {{--@endforeach--}}
                     <li>
                         <a style="font-weight: bold;">
                             <i class="fa fa-list"></i>
