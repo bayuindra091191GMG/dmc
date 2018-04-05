@@ -67,6 +67,24 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
+                        Prioritas
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ $header->priority ?? '-' }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        Batas Jatuh Tempo Prioritas
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ $priorityLimitDate }} @if($header->priority_expired) <span style="font-weight: bold; color: red;">JATUH TEMPO</span> @endif
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
                         Nomor MR
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
@@ -102,15 +120,6 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Prioritas
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->priority ?? '-' }}
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-md-3 col-sm-3 col-xs-12">
                         KM
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
@@ -135,13 +144,13 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                             <tr >
-                                <th class="text-center" style="width: 20%">
+                                <th class="text-center" style="width: 15%">
                                     Kode Inventory
                                 </th>
                                 <th class="text-center" style="width: 20%">
                                     Nama Inventory
                                 </th>
-                                <th class="text-center" style="width: 20%">
+                                <th class="text-center" style="width: 15%">
                                     Part Number Asli
                                 </th>
                                 <th class="text-center" style="width: 10%">
@@ -149,6 +158,9 @@
                                 </th>
                                 <th class="text-center" style="width: 10%">
                                     QTY
+                                </th>
+                                <th class="text-center" style="width: 10%">
+                                    QTY Ter-Invoice
                                 </th>
                                 <th class="text-center" style="width: 20%">
                                     Remark
@@ -173,6 +185,9 @@
                                     </td>
                                     <td class="text-center">
                                         {{ $detail->quantity }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ $detail->quantity_invoiced }}
                                     </td>
                                     <td>
                                         {{ $detail->remark ?? '-' }}

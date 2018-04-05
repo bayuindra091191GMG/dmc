@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Auth\User\User;
+use App\Models\PurchaseRequestHeader;
 use Arcanedev\LogViewer\Entities\Log;
 use Arcanedev\LogViewer\Entities\LogEntry;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Routing\Route;
@@ -36,13 +38,26 @@ class DashboardController extends Controller
             'protected_pages' => 0,
         ];
 
-        foreach (\Route::getRoutes() as $route) {
-            foreach ($route->middleware() as $middleware) {
-                if (preg_match("/protection/", $middleware, $matches)) $counts['protected_pages']++;
+//        foreach (\Route::getRoutes() as $route) {
+//            foreach ($route->middleware() as $middleware) {
+//                if (preg_match("/protection/", $middleware, $matches)) $counts['protected_pages']++;
+//            }
+//        }
+
+        $purchaseRequests = new Collection();
+        $prHeaders = PurchaseRequestHeader::where('status_id', 3)->get();
+        foreach ($prHeaders as $header){
+            if($header->day_left <= 1){
+                $purchaseRequests->add($header);
             }
         }
 
-        return view('admin.dashboard', ['counts' => $counts]);
+        $data = [
+            'counts'    => $counts,
+            'prWarning' => $purchaseRequests
+        ];
+
+        return view('admin.dashboard')->with($data);
     }
 
 

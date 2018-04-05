@@ -223,6 +223,7 @@ class UserController extends Controller
         if ($request->has('role')) {
             $user->roles()->detach();
             $user->roles()->attach($request->input('role'));
+
         }
 
         Session::flash('message', 'Berhasil mengubah data user!');

@@ -20,6 +20,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $department_id
  * @property int $machinery_id
  * @property string $priority
+ * @property \Carbon\Carbon $priority_limit_date
  * @property string $km
  * @property string $hm
  * @property int $status_id
@@ -57,11 +58,15 @@ class PurchaseRequestHeader extends Eloquent
 		'updated_by' => 'int'
 	];
 
-    protected $appends = ['date_string'];
+    protected $appends = [
+        'date_string',
+        'priority_expired',
+        'day_left'];
 
 	protected $dates = [
 		'date',
-		'closed_at'
+		'closed_at',
+        'priority_limit_date'
 	];
 
 	protected $fillable = [
@@ -70,6 +75,7 @@ class PurchaseRequestHeader extends Eloquent
 		'department_id',
 		'machinery_id',
 		'priority',
+        'priority_limit_date',
 		'km',
 		'hm',
 		'status_id',
@@ -87,6 +93,17 @@ class PurchaseRequestHeader extends Eloquent
 
     public function getDateStringAttribute(){
         return Carbon::parse($this->attributes['created_at'])->format('d M Y');
+    }
+
+    public function getDayLeftAttribute(){
+        $limitDate = Carbon::parse($this->attributes['priority_limit_date']);
+        return $limitDate->diffInDays();
+    }
+
+    public function getPriorityExpiredAttribute(){
+        $now = Carbon::now('Asia/Jakarta');
+        $limitDate = Carbon::parse($this->attributes['priority_limit_date']);
+        return $now->gt($limitDate);
     }
 
 	public function department()

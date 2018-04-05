@@ -29,9 +29,17 @@ use Yajra\DataTables\DataTables;
 
 class PurchaseRequestHeaderController extends Controller
 {
+
+
+
     public function index(){
 
-        return View('admin.purchasing.purchase_requests.index');
+        $filterStatus = '0';
+        if(!empty(request()->status)){
+            $filterStatus = request()->status;
+        }
+
+        return View('admin.purchasing.purchase_requests.index', compact('filterStatus'));
     }
 
     public function beforeCreate(){
@@ -63,10 +71,12 @@ class PurchaseRequestHeaderController extends Controller
     public function show(PurchaseRequestHeader $purchase_request){
         $header = $purchase_request;
         $date = Carbon::parse($purchase_request->date)->format('d M Y');
+        $priorityLimitDate = Carbon::parse($purchase_request->priority_limit_date)->format('d M Y');
 
         $data = [
-            'header'        => $header,
-            'date'          => $date
+            'header'            => $header,
+            'date'              => $date,
+            'priorityLimitDate' => $priorityLimitDate
         ];
 
         return View('admin.purchasing.purchase_requests.show')->with($data);
@@ -177,11 +187,25 @@ class PurchaseRequestHeaderController extends Controller
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
+        $priority = $request->input('priority');
+
+        if($priority == '1'){
+            $limitDate = $now->addDays(8);
+        }
+        elseif($priority == '2'){
+            $limitDate = $now->addDays(15);
+        }
+        else{
+            $limitDate = $now->addDays(22);
+        }
+
+
         $prHeader = PurchaseRequestHeader::create([
             'code'                  => $prCode,
             'material_request_id'   => $mrId,
             'department_id'         => $request->input('department'),
             'priority'              => $request->input('priority'),
+            'priority_limit_date'   => $limitDate->toDateTimeString(),
             'km'                    => $request->input('km'),
             'hm'                    => $request->input('hm'),
             'status_id'             => 3,
@@ -294,11 +318,26 @@ class PurchaseRequestHeaderController extends Controller
      * @throws \Exception
      */
     public function getIndex(Request $request){
-        $purchaseRequests = PurchaseRequestHeader::dateDescending()->get();
 
         $mode = 'default';
         if($request->filled('mode')){
             $mode = $request->input('mode');
+        }
+
+        $status = '0';
+        if($request->filled('status')){
+            $status = $request->input('status');
+            if($status != '0'){
+                $purchaseRequests = PurchaseRequestHeader::where('status_id', $status)
+                    ->dateDescending()
+                    ->get();
+            }
+            else{
+                $purchaseRequests = PurchaseRequestHeader::dateDescending()->get();
+            }
+        }
+        else{
+            $purchaseRequests = PurchaseRequestHeader::dateDescending()->get();
         }
 
         return DataTables::of($purchaseRequests)

@@ -148,10 +148,8 @@
                 </label>
                 <div class="col-md-3 col-sm-6 col-xs-12">
                     <select id="status" name="status" class="form-control col-md-7 col-xs-12 @if($errors->has('status')) parsley-error @endif">
-                        <option value="6" @if(empty(old('status')) || ( !empty(old('status')) && old('status') == "6")) selected @endif>Ready</option>
-                        <option value="7" {{ old('status') == "7" ? "selected":"" }}>Sedang dipakai</option>
-                        <option value="8" {{ old('status') == "8" ? "selected":"" }}>Dalam pemeliharaan</option>
-                        <option value="9" {{ old('status') == "9" ? "selected":"" }}>Rusak</option>
+                        <option value="6" @if(empty(old('status')) || ( !empty(old('status')) && old('status') == "6")) selected @endif>RDU</option>
+                        <option value="9" {{ old('status') == "9" ? "selected":"" }}>BDN</option>
                     </select>
                 </div>
             </div>
