@@ -6,11 +6,6 @@
 
     <div class="row">
         @include('partials._success')
-        <div class="nav navbar-right">
-            <a href="{{ route('admin.permission_menus.create') }}" class="btn btn-app">
-                <i class="fa fa-plus"></i> Tambah
-            </a>
-        </div>
         <div class="clearfix"></div>
     </div>
     <div class="row">
