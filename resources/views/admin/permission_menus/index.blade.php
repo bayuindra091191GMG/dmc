@@ -20,11 +20,7 @@
                 <tr>
                     <th>No</th>
                     <th>Role</th>
-                    <th>Menu</th>
-                    <th>Dibuat Oleh</th>
-                    <th>Tanggal Dibuat</th>
-                    <th>Diubah Oleh</th>
-                    <th>Tanggal Diubah</th>
+                    <th>Permission</th>
                     <th>Opsi</th>
                 </tr>
             </thead>
@@ -52,11 +48,7 @@
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false},
                     { data: 'role', name: 'role' },
-                    { data: 'menu', name: 'menu' },
-                    { data: 'created_by', name: 'created_by' },
-                    { data: 'created_at', name: 'created_at' },
-                    { data: 'updated_by', name: 'updated_by' },
-                    { data: 'updated_at', name: 'updated_at' },
+                    { data: 'permission', name: 'permission' },
                     { data: 'action', name:'action' }
                 ],
                 language: {

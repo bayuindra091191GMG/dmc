@@ -157,10 +157,10 @@ Breadcrumbs::register('admin.permission_menus.create', function (Generator $brea
     $breadcrumbs->push('Tambah Otorisasi Menu');
 });
 
-Breadcrumbs::register('admin.permission_menus.edit', function (Generator $breadcrumbs, \App\Models\PermissionMenu $permissionMenu) {
+Breadcrumbs::register('admin.permission_menus.edit', function (Generator $breadcrumbs) {
     $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
     $breadcrumbs->push('Daftar Otorisasi Menu', route('admin.permission_menus'));
-    $breadcrumbs->push('Ubah Otorisasi Menu', route('admin.permission_menus.edit', ['permission_menu' => $permissionMenu]));
+//    $breadcrumbs->push('Ubah Otorisasi Menu', route('admin.permission_menus.edit', ['permission_menu' => $permissionMenu]));
 });
 
 // Permission Documents

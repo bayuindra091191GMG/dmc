@@ -124,80 +124,69 @@ class PermissionMenuController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param PermissionMenu $permissionMenu
+     * @param $id
      * @return \Illuminate\Http\Response
+     * @internal param PermissionMenu $permissionMenu
      */
-    public function edit(PermissionMenu $permissionMenu)
+    public function edit($id)
     {
         $menus = Menu::all();
-        $roles = Role::all();
+        $role = Role::find($id);
+        $permissionMenus = PermissionMenu::where('role_id', $role->id)->get();
 
-        return view('admin.permission_menus.edit', compact('menus', 'roles', 'permissionMenu'));
+        return view('admin.permission_menus.edit', compact('menus', 'role', 'permissionMenus'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @internal param int $id
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //On Progress Editing the Permissions
-//        //
-//        $validator = Validator::make($request->all(), [
-//            'role' => 'required'
-//        ]);
-//
-//        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
-//
-//        $dateTimeNow = Carbon::now('Asia/Jakarta');
-//        $user = Auth::user();
-//        $role_id = $request->get('role');
-//        $menu_id = $request->get('menu');
-//
-//        //Checking
-//        $menus = Input::get('ids');
-//        $role_id = $request->get('role');
-//        $exist = true;
-//
-//        foreach ($menus as $menu){
-//            if(empty($item)) $exist = false;
-//        }
-//
-//        if(!$exist){
-//            return redirect()->back()->withErrors('Belum ada menu yang dipilih!', 'default')->withInput($request->all());
-//        }
-//
-//        $allPermission = PermissionMenu::where('role_id', $role_id)->get();
-//
-//        foreach ($menus as $menu){
-//            $permissionMenu = PermissionMenu::find($id);
-//
-//            if($permissionMenu == null){
-//                PermissionMenu::create([
-//                    'role_id'       => $role_id,
-//                    'menu_id'       => $menu,
-//                    'created_by'    => $user->id,
-//                    'created_at'    => $dateTimeNow->toDateTimeString(),
-//                    'updated_by'    => $user->id,
-//                    'updated_at'    => $dateTimeNow->toDateTimeString()
-//                ]);
-//            }
-//            else{
-//
-//                $permissionMenu->role_id = $role_id;
-//                $permissionMenu->menu_id = $menu_id;
-//                $permissionMenu->updated_by = $user->id;
-//                $permissionMenu->updated_at = $dateTimeNow->toDateTimeString();
-//                $permissionMenu->save();
-//            }
-//        }
-//
-//        Session::flash('message', 'Sukses mengubah data Otorisasi Menu!');
-//
-//        return redirect(route('admin.permission_menus.edit', ['permission_menu' => $permissionMenu->id]));
+        $validator = Validator::make($request->all(), [
+            'role' => 'required'
+        ]);
+
+        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
+
+        //Add Permission Menus
+        $menus = Input::get('ids');
+        $role_id = $request->get('role');
+        $dateTimeNow = Carbon::now('Asia/Jakarta');
+        $user = Auth::user();
+
+        foreach ($menus as $menu){
+            $permission = PermissionMenu::where('role_id', $role_id)->where('menu_id', $menu)->first();
+            if($permission == null){
+                PermissionMenu::create([
+                    'role_id'       => $role_id,
+                    'menu_id'       => $menu,
+                    'created_by'    => $user->id,
+                    'created_at'    => $dateTimeNow->toDateTimeString(),
+                    'updated_by'    => $user->id,
+                    'updated_at'    => $dateTimeNow->toDateTimeString()
+                ]);
+            }
+        }
+        //End add permission menu
+
+        //Delete Permission Menus
+        $menusDelete = Input::get('idsDelete');
+        if($menusDelete != null){
+            foreach($menusDelete as $menu){
+               $data = PermissionMenu::where('role_id', $role_id)->where('menu_id', $menu)->first();
+               if($data != null){
+                   $data->delete();
+               }
+            }
+        }
+        //End Delete Permission Menu
+
+        Session::flash('message', 'Berhasil membuat data otorisasi menu baru!');
+        return redirect(route('admin.permission_menus'));
     }
 
     /**
@@ -217,7 +206,7 @@ class PermissionMenuController extends Controller
 
     public function getIndex()
     {
-        $permissionMenus = PermissionMenu::all();
+        $permissionMenus = Role::all();
         return DataTables::of($permissionMenus)
             ->setTransformer(new PermissionMenuTransformer())
             ->addIndexColumn()

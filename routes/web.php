@@ -48,7 +48,7 @@ Route::group(['namespace' => 'Auth'], function () {
 /**
  * Backend routes
  */
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => 'admin'], function () {
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => 'auth'], function () {
 
     // Notification
     Route::get('/notifications', 'NotificationController@notifications');
@@ -131,8 +131,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     //Permission Menu
     Route::get('permission_menus', 'PermissionMenuController@index')->name('permission_menus');
+    Route::get('permission_menus/detil/{permission_menu}', 'PermissionMenuController@show')->name('permission_menus.show');
     Route::get('permission_menus/{permission_menu}/ubah', 'PermissionMenuController@edit')->name('permission_menus.edit');
-    Route::put('permission_menus/ubah/{permission_menu}', 'PermissionMenuController@update')->name('permission_menus.update');
+    Route::post('permission_menus/ubah', 'PermissionMenuController@update')->name('permission_menus.update');
     Route::get('permission_menus/tambah', 'PermissionMenuController@create')->name('permission_menus.create');
     Route::post('permission_menus/simpan', 'PermissionMenuController@store')->name('permission_menus.store');
     Route::get('permission_menus/hapus/[permission_menu]', 'PermissionMenuController@destroy')->name('permission_menus.destroy');

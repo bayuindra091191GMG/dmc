@@ -8,26 +8,23 @@
 
 namespace App\Transformer\MasterData;
 
+use App\Models\Auth\Role\Role;
 use App\Models\PermissionMenu;
-use Carbon\Carbon;
 use League\Fractal\TransformerAbstract;
 
 class PermissionMenuTransformer extends TransformerAbstract
 {
-    public function transform(PermissionMenu $permissionMenu){
-
-        $createdDate = Carbon::parse($permissionMenu->created_at)->format('d M Y');
-        $updatedDate = Carbon::parse($permissionMenu->updated_at)->format('d M Y');
+    public function transform(Role $role){
+        $permissionMenuRoute = route('admin.permission_menus.show', ['permission_menu' => $role->id]);
+        $roleName =  "<a style='text-decoration: underline;' href='" . $permissionMenuRoute. "' target='_blank'>". $role->name . "</a>";
         $action =
-            "<a class='btn btn-xs btn-info' href='permission_menus/hapus/".$permissionMenu->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+            "<a class='btn btn-xs btn-info' href='permission_menus/". $role->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+
+        $permission = PermissionMenu::where('role_id', $role->id)->count();
 
         return[
-            'role'          => $permissionMenu->role->name,
-            'menu'          => $permissionMenu->menu->name,
-            'created_by'    => $permissionMenu->createdBy->email,
-            'created_at'    => $createdDate,
-            'updated_by'    => $permissionMenu->updatedBy->email,
-            'updated_at'    => $updatedDate,
+            'role'          => $roleName,
+            'permission'    => $permission,
             'action'        => $action
         ];
     }
