@@ -39,6 +39,11 @@
 
 @section('styles')
     {{ Html::style(mix('assets/admin/css/admin.css')) }}
+    <style>
+        .has_notification{
+            color: red !important;
+        }
+    </style>
 @endsection
 
 @section('scripts')
@@ -48,8 +53,23 @@
             var userId = '<?php echo auth()->user()->id; ?>';
             window.Echo.private(`App.Models.Auth.User.User.` + userId)
                 .notification((notification) => {
-                    $('#notifications').prepend("<li><a href='#'>Notifikasi MR " + notification.data.code + "</a></li>");
+                    var read = $('#unread').html();
+                    $('#notification_badge').attr('style', 'color: red !important');
+
+                    if(read === '0'){
+                        $('#notifications').html('');
+                        $('#notifications').append("<li><a href='#'>" + notification.type + "</a></li>");
+                    }
+                    else{
+                        $('#notifications').prepend("<li><a href='#'>" + notification.type + "</a></li>");
+                    }
                 });
+
+
         })
+
+        function clearNotif(){
+            $('#notification_badge').attr('style', 'color: #515356 !important');
+        }
     </script>
 @endsection

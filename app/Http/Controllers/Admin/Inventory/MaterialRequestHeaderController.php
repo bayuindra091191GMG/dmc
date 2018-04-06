@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Admin\Inventory;
 
 use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
+use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
 use App\Models\Department;
 use App\Models\MaterialRequestDetail;
@@ -242,9 +243,15 @@ class MaterialRequestHeaderController extends Controller
             $idx++;
         }
 
+        // Check stock
+
+
         // Notification
-        $userNotif = User::find(4);
-        $userNotif->notify(new MaterialRequestCreated($mrHeader));
+        $role = Role::find(3);
+        $users =  $role->users()->get();
+        foreach ($users as $notifiedUser){
+            $notifiedUser->notify(new MaterialRequestCreated($mrHeader));
+        }
 
         Session::flash('message', 'Berhasil membuat material request!');
 

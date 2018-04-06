@@ -16,7 +16,7 @@ class MaterialRequestCreated extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      *
-     * @return void
+     * @param MaterialRequestHeader $header
      */
     public function __construct(MaterialRequestHeader $header)
     {
@@ -36,8 +36,11 @@ class MaterialRequestCreated extends Notification implements ShouldQueue
 
     public function toDatabase($notifiable){
         return [
-            'id'        => $this->materialRequest->id,
-            'code'      => $this->materialRequest->code
+            'mr_id'             => $this->materialRequest->id,
+            'code'              => $this->materialRequest->code,
+            'sender_id'         => $this->materialRequest->created_by,
+            'receiver_id'       => 0,
+            'redeiver_role_id'  => 3
         ];
     }
 
@@ -50,11 +53,14 @@ class MaterialRequestCreated extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
-            'id' => $this->id,
-            'read_at' => null,
-            'data' => [
-                'id' => $this->materialRequest->id,
-                'code' => $this->materialRequest->code
+            'id'        => $this->id,
+            'read_at'   => null,
+            'data'      => [
+                'id'            => $this->materialRequest->id,
+                'code'          => $this->materialRequest->code,
+                'sender_id'         => $this->materialRequest->created_by,
+                'receiver_id'       => 0,
+                'redeiver_role_id'  => 3
             ],
         ];
     }

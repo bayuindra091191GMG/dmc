@@ -17,13 +17,9 @@ use Illuminate\Support\Facades\Event;
 
 class NotificationController extends Controller
 {
-    public function testNotify(){
-//        $user = Auth::user();
-//        $user->notify(new TestingNotify($user));
-        Event::fire(new TestEvent('TEST'));
-    }
+    public function index(){
+        $notifications = auth()->user()->notifications()->get();
 
-    public function notifications(){
 
     }
 }

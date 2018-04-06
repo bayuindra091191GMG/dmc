@@ -13,16 +13,15 @@ use Illuminate\View\View;
 
 class NotificationComposer
 {
-    public $testArr;
+    public $notifications;
 
     public function __construct()
     {
-        $this->testArr = auth()->user()->unreadNotifications()->limit(5)->get();
+        $this->notifications = auth()->user()->unreadNotifications()->limit(5)->get();
     }
 
     public function compose(View $view)
     {
-//        dd($this->testArr);
-        $view->with('testArr', $this->testArr);
+        $view->with('notifications', $this->notifications);
     }
 }

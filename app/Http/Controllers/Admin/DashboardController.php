@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
 use App\Models\PurchaseRequestHeader;
 use Arcanedev\LogViewer\Entities\Log;
