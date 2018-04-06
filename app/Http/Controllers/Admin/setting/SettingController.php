@@ -73,6 +73,7 @@ class SettingController extends Controller
         $preference->fax = $request->input('fax');
         $preference->email = $request->input('email');
         $preference->ppn = $request->input('ppn');
+        $preference->approval_setting = $request->input('approval_setting');
         $preference->save();
 
         Session::flash('message', 'Berhasil mengganti data preferensi perusahaan!');

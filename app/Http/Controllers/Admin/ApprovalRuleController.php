@@ -3,16 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ApprovalPaymentRequest;
+use App\Models\ApprovalPurchaseRequest;
 use App\Models\ApprovalRule;
 use App\Models\Auth\User\User;
 use App\Models\Document;
+use App\Models\PurchaseRequestHeader;
 use App\Transformer\MasterData\ApprovalRuleTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Session;
-use Validator;
 
 class ApprovalRuleController extends Controller
 {
@@ -68,6 +72,13 @@ class ApprovalRuleController extends Controller
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
         //Checking
+        if(Input::get('user') === '-1'){
+            return redirect()->back()->withErrors('Pilih user!', 'default')->withInput($request->all());
+        }
+        if(Input::get('document') === '-1'){
+            return redirect()->back()->withErrors('Pilih dokumen!', 'default')->withInput($request->all());
+        }
+
         $user_id = $request->get('user');
         $document_id = $request->get('document');
 
@@ -172,6 +183,71 @@ class ApprovalRuleController extends Controller
         //
     }
 
+    //Purchase Request Approval
+    public function prApproval($id){
+        $header = PurchaseRequestHeader::find($id);
+        $date = Carbon::parse($header->date)->format('d M Y');
+        $priorityLimitDate = Carbon::parse($header->priority_limit_date)->format('d M Y');
+
+        $data = [
+            'header'            => $header,
+            'date'              => $date,
+            'priorityLimitDate' => $priorityLimitDate
+        ];
+
+        return View('admin.approval_rules.approval_pr')->with($data);
+    }
+
+    public function approvePr(Request $request, $id){
+        $datas = ApprovalRule::where('document_id', $id)->get();
+        $count = $datas->count();
+
+        //Create Approval
+        $dateTimeNow = Carbon::now('Asia/Jakarta');
+        $user = Auth::user();
+
+        $valid = true;
+        $exist = true;
+        foreach ($datas as $data){
+            if($user->id == $data->user_id){
+                $valid = false;
+            }
+
+            //Check Approval Purhcase Request
+            $approvalData = ApprovalPurchaseRequest::where('purchase_request_id', $id)->where('user_id', $user->id)->first();
+            if($approvalData != null){
+                $exist = false;
+            }
+        }
+
+        if(!$valid){
+            return redirect()->back()->withErrors('Anda tidak berhak melakukan approval dokumen ini!', 'default')->withInput($request->all());
+        }
+        if(!$exist){
+            return redirect()->back()->withErrors('Anda sudah melakukan approval dokumen ini!', 'default')->withInput($request->all());
+        }
+
+        ApprovalPurchaseRequest::create([
+            'purchase_request_id'   => $id,
+            'user_id'               => $user->id,
+            'created_at'            => $dateTimeNow->toDateTimeString(),
+            'updated_at'            => $dateTimeNow->toDateTimeString(),
+            'created_by'            => $user->id,
+            'updated_by'            => $user->id
+        ]);
+
+        //Update Document Status
+        $approvalCount = ApprovalPurchaseRequest::where('purchase_request_id', $id)->get()->count();
+        if($approvalCount == $count){
+            $purchaseRequest = PurchaseRequestHeader::find($id);
+            $purchaseRequest->is_approved = 1;
+        }
+
+        Session::flash('message', 'Berhasil Approve Dokumen ini!');
+
+        return redirect()->route('admin.approval_rules.pr_approval', ['approval_rule' => $id]);
+    }
+
     public function getIndex()
     {
         $approvalRules = ApprovalRule::all();
@@ -181,3 +257,4 @@ class ApprovalRuleController extends Controller
             ->make(true);
     }
 }
+

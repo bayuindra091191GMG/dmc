@@ -9,6 +9,20 @@
             @include('partials._error')
             {{ Form::open(['route'=>['admin.approval_rules.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
 
+            @if(count($errors))
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12 alert alert-danger alert-dismissible fade in" role="alert">
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            @endif
+
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="user" >
                     User
@@ -18,7 +32,7 @@
                     <select id="user" name="user" class="form-control col-md-7 col-xs-12 @if($errors->has('user')) parsley-error @endif">
                         <option value="-1" @if(empty(old('user'))) selected @endif>Pilih User</option>
                         @foreach($users as $user)
-                            <option value="{{ $user->id }}" {{ old('user') == $user->id ? "selected":"" }}>{{ $user->name }}</option>
+                            <option value="{{ $user->id }}" {{ old('user') == $user->id ? "selected":"" }}>{{ $user->email }} - {{ $user->name }}</option>
                         @endforeach
                     </select>
                 </div>

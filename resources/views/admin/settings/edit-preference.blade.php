@@ -83,6 +83,23 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="ppn" >
+                    Approval Setting
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="approval_setting" name="approval_setting" class="form-control col-md-7 col-xs-12">
+                        <option value="0">Not Active</option>
+                        @if($preference->approval_setting == 1)
+                            <option value="1" selected>Active</option>
+                        @else
+                            <option value="1">Active</option>
+                        @endif
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                     <a class="btn btn-primary" href="{{ route('admin.dashboard') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>

@@ -128,6 +128,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('approval_rules/ubah/{approval_rule}', 'ApprovalRuleController@update')->name('approval_rules.update');
     Route::get('approval_rules/tambah', 'ApprovalRuleController@create')->name('approval_rules.create');
     Route::post('approval_rules/simpan', 'ApprovalRuleController@store')->name('approval_rules.store');
+    Route::get('approval_rules/pr_approval/[approval_rule]', 'ApprovalRuleController@prApproval')->name('approval_rules.pr_approval');
+    Route::post('approval_rules/pr_approve', 'ApprovalRuleController@approvePr')->name('approval_rules.approve_pr');
 
     //Permission Menu
     Route::get('permission_menus', 'PermissionMenuController@index')->name('permission_menus');

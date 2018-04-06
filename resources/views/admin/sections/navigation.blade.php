@@ -61,6 +61,7 @@
                             <li><a href="{{ route('admin.permission_documents') }}">Otorisasi Dokumen</a></li>
                             <li><a href="{{ route('admin.permission_menus') }}">Otorisasi Menu</a></li>
                             <li><a href="{{ route('admin.roles') }}">Level Akses</a></li>
+                            <li><a href="{{ route('admin.approval_rules') }}">Approval Rules</a></li>
                         </ul>
                     </li>
                     <li>
