@@ -52,6 +52,7 @@ class PurchaseRequestHeader extends Eloquent
 		'material_request_id' => 'int',
 		'department_id' => 'int',
 		'machinery_id' => 'int',
+        'is_approved' => 'int',
 		'status_id' => 'int',
 		'closed_by' => 'int',
 		'created_by' => 'int',
@@ -65,6 +66,7 @@ class PurchaseRequestHeader extends Eloquent
 
 	protected $dates = [
 		'date',
+        'approved_date',
 		'closed_at',
         'priority_limit_date'
 	];
@@ -80,6 +82,8 @@ class PurchaseRequestHeader extends Eloquent
 		'hm',
 		'status_id',
 		'date',
+        'is_approved',
+        'approved_date',
 		'close_reason',
 		'closed_by',
 		'closed_at',
