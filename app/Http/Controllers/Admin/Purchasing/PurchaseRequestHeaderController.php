@@ -11,9 +11,13 @@ namespace App\Http\Controllers\Admin\Purchasing;
 
 use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
+use App\Models\ApprovalPaymentRequest;
+use App\Models\ApprovalPurchaseRequest;
+use App\Models\ApprovalRule;
 use App\Models\Department;
 use App\Models\MaterialRequestHeader;
 use App\Models\NumberingSystem;
+use App\Models\PreferenceCompany;
 use App\Models\PurchaseOrderHeader;
 use App\Models\PurchaseRequestDetail;
 use App\Models\PurchaseRequestHeader;
@@ -73,10 +77,34 @@ class PurchaseRequestHeaderController extends Controller
         $date = Carbon::parse($purchase_request->date)->format('d M Y');
         $priorityLimitDate = Carbon::parse($purchase_request->priority_limit_date)->format('d M Y');
 
+        //Check Approval & Permission to Print
+        $user = \Auth::user();
+        $permission = true;
+        $approveOrder = false;
+
+        //All Approval Settings checked if On Or Not
+        $setting = PreferenceCompany::find(1);
+
+        if($setting->approval_setting == 1) {
+            $tempApprove = ApprovalRule::where('document_id', 3)->where('user_id', $user->id)->get();
+            $approvals = ApprovalRule::where('document_id', 3)->get();
+            $approvalPr = ApprovalPurchaseRequest::where('purchase_request_id', $purchase_request->id)->get();
+
+            if ($tempApprove != null && $tempApprove->count() != 0) {
+                $approveOrder = true;
+            }
+
+            if ($approvals->count() != $approvalPr->count()) {
+                $permission = false;
+            }
+        }
+
         $data = [
             'header'            => $header,
             'date'              => $date,
-            'priorityLimitDate' => $priorityLimitDate
+            'priorityLimitDate' => $priorityLimitDate,
+            'permission'        => $permission,
+            'approveOrder'      => $approveOrder
         ];
 
         return View('admin.purchasing.purchase_requests.show')->with($data);

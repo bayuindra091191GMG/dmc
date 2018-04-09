@@ -184,21 +184,28 @@ class ApprovalRuleController extends Controller
     }
 
     //Purchase Request Approval
-    public function prApproval($id){
-        $header = PurchaseRequestHeader::find($id);
+    public function prApproval($approval_rule){
+        $user = Auth::user();
+        $header = PurchaseRequestHeader::find($approval_rule);
         $date = Carbon::parse($header->date)->format('d M Y');
         $priorityLimitDate = Carbon::parse($header->priority_limit_date)->format('d M Y');
+        $status = false;
+        $approvalData = ApprovalPurchaseRequest::where('purchase_request_id', $approval_rule)->where('user_id', $user->id)->first();
+        if($approvalData != null){
+            $status = true;
+        }
 
         $data = [
             'header'            => $header,
             'date'              => $date,
-            'priorityLimitDate' => $priorityLimitDate
+            'priorityLimitDate' => $priorityLimitDate,
+            'status'            => $status
         ];
 
         return View('admin.approval_rules.approval_pr')->with($data);
     }
 
-    public function approvePr(Request $request, $id){
+    public function approvePr($id){
         $datas = ApprovalRule::where('document_id', $id)->get();
         $count = $datas->count();
 
@@ -208,23 +215,21 @@ class ApprovalRuleController extends Controller
 
         $valid = true;
         $exist = true;
+        $approvalData = ApprovalPurchaseRequest::where('purchase_request_id', $id)->where('user_id', $user->id)->first();
+        if($approvalData != null){
+            $exist = false;
+        }
         foreach ($datas as $data){
             if($user->id == $data->user_id){
                 $valid = false;
             }
-
-            //Check Approval Purhcase Request
-            $approvalData = ApprovalPurchaseRequest::where('purchase_request_id', $id)->where('user_id', $user->id)->first();
-            if($approvalData != null){
-                $exist = false;
-            }
         }
 
         if(!$valid){
-            return redirect()->back()->withErrors('Anda tidak berhak melakukan approval dokumen ini!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Anda tidak berhak melakukan approval dokumen ini!', 'default');
         }
         if(!$exist){
-            return redirect()->back()->withErrors('Anda sudah melakukan approval dokumen ini!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Anda sudah melakukan approval dokumen ini!', 'default');
         }
 
         ApprovalPurchaseRequest::create([

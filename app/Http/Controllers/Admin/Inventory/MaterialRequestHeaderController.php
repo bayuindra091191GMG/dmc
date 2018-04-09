@@ -247,11 +247,11 @@ class MaterialRequestHeaderController extends Controller
 
 
         // Notification
-        $role = Role::find(3);
-        $users =  $role->users()->get();
-        foreach ($users as $notifiedUser){
-            $notifiedUser->notify(new MaterialRequestCreated($mrHeader));
-        }
+//        $role = Role::find(3);
+//        $users =  $role->users()->get();
+//        foreach ($users as $notifiedUser){
+//            $notifiedUser->notify(new MaterialRequestCreated($mrHeader));
+//        }
 
         Session::flash('message', 'Berhasil membuat material request!');
 

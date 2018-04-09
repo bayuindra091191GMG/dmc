@@ -9,14 +9,8 @@
                 <a class="btn btn-default" href="{{ route('admin.purchase_requests') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
             </div>
             <div class="navbar-right">
-                <a class="btn btn-default" href="{{ route('admin.purchase_requests.print',[ 'purchase_request' => $header->id]) }}" target="_blank">CETAK</a>
-                @if($header->status_id == 3)
-                    <a class="btn btn-default" href="{{ route('admin.purchase_requests.edit',[ 'purchase_request' => $header->id]) }}">UBAH</a>
-                    <a class="btn btn-success" href="{{ route('admin.purchase_orders.create',[ 'pr' => $header->id]) }}">PROSES PO</a>
-                    <a class="close-modal btn btn-danger" data-id="{{ $header->id }}">CLOSE</a>
-                @endif
                 @if($header->is_approved == null || $header->is_approved == 0)
-                    <a class="btn btn-success" href="{{ route('admin.approval_rules.approve',[ 'approval_rule' => $header->id]) }}">APPROVE</a>
+                    <a class="btn btn-success" href="{{ route('admin.approval_rules.approve_pr',[ 'approval_rule' => $header->id]) }}">APPROVE</a>
                 @endif
             </div>
         </div>
@@ -24,6 +18,20 @@
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <form class="form-horizontal form-label-left box-section">
+
+                @if(count($errors))
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12 alert alert-danger alert-dismissible fade in" role="alert">
+                            <ul>
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                @endif
 
                 @if(\Illuminate\Support\Facades\Session::has('message'))
                     <div class="form-group">
@@ -46,6 +54,19 @@
                             : <span style="font-weight: bold; color: red;">CLOSED</span>
                         @elseif($header->status_id == 11)
                             : <span style="font-weight: bold; color: red;">CLOSED MANUAL</span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        Approved
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        @if($status)
+                            : <span style="font-weight: bold; color: green;">Approved by You</span>
+                        @elseif(!$status)
+                            : <span style="font-weight: bold; color: red;">Not Approved Yet!</span>
                         @endif
                     </div>
                 </div>

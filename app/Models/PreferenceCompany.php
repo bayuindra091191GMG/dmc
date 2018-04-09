@@ -17,7 +17,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $phone
  * @property string $fax
  * @property string $email
- * @property string $approval_setting
+ * @property int $approval_setting
  * @property int $ppn
  * @property \Carbon\Carbon $created_at
  * @property int $created_by

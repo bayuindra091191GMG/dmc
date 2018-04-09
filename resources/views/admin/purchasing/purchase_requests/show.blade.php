@@ -9,7 +9,14 @@
                 <a class="btn btn-default" href="{{ route('admin.purchase_requests') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
             </div>
             <div class="navbar-right">
-                <a class="btn btn-default" href="{{ route('admin.purchase_requests.print',[ 'purchase_request' => $header->id]) }}" target="_blank">CETAK</a>
+                @if($permission)
+                    <a class="btn btn-default" href="{{ route('admin.purchase_requests.print',[ 'purchase_request' => $header->id]) }}" target="_blank">CETAK</a>
+                @endif
+
+                @if($approveOrder)
+                    <a class="btn btn-default" href="{{ route('admin.approval_rules.pr_approval',[ 'approval_rule' => $header->id]) }}">APPROVE</a>
+                @endif
+
                 @if($header->status_id == 3)
                     <a class="btn btn-default" href="{{ route('admin.purchase_requests.edit',[ 'purchase_request' => $header->id]) }}">UBAH</a>
                     <a class="btn btn-success" href="{{ route('admin.purchase_orders.create',[ 'pr' => $header->id]) }}">PROSES PO</a>
