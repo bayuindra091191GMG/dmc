@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title','Data Material Request Part/Non-Part '. $header->code)
+@section('title','Data Material Request Oli '. $header->code)
 
 @section('content')
     <div class="row">

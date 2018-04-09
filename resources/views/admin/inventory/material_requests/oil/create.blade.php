@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title','Buat Material Request Part/Non-Part')
+@section('title','Buat Material Request Oil')
 
 @section('content')
     <div class="row">
@@ -154,7 +154,7 @@
 
             <hr/>
 
-            <input type="hidden" name="type" id="type" value="1"/>
+            <input type="hidden" name="type" id="type" value="3"/>
 
             <div class="form-group">
                 <div class="col-md-12 col-sm-12 col-xs-12 text-center">
@@ -249,7 +249,7 @@
                 data: function (params) {
                     return {
                         q: $.trim(params.term),
-                        type: 'other'
+                        type: 'oil'
                     };
                 },
                 processResults: function (data) {
@@ -279,7 +279,7 @@
                     data: function (params) {
                         return {
                             q: $.trim(params.term),
-                            type: 'other'
+                            type: 'oil'
                         };
                     },
                     processResults: function (data) {

@@ -92,12 +92,17 @@
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
                                         <a href="{{ route('admin.material_requests.other') }}">
-                                            MR Utama
+                                            MR Part/Non-Part
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('admin.material_requests.fuel') }}">
-                                            MR Oli & Bensin
+                                            MR BBM
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.material_requests.oil') }}">
+                                            MR Oli
                                         </a>
                                     </li>
                                     <li>

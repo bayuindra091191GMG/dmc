@@ -14,6 +14,7 @@ use App\Libs\Utilities;
 use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
 use App\Models\Department;
+use App\Models\Item;
 use App\Models\MaterialRequestDetail;
 use App\Models\MaterialRequestHeader;
 use App\Models\NumberingSystem;
@@ -244,14 +245,29 @@ class MaterialRequestHeaderController extends Controller
         }
 
         // Check stock
-
+        $isInStock = true;
+        $idx = 0;
+        foreach($request->input('item') as $item){
+            if(!empty($item)){
+                $qtyInt = (int) $qtyp[$idx];
+                $item = Item::find($item);
+                if($item->stock < $qtyInt){
+                    $isInStock = false;
+                }
+            }
+            $idx++;
+        }
 
         // Notification
-//        $role = Role::find(3);
-//        $users =  $role->users()->get();
-//        foreach ($users as $notifiedUser){
-//            $notifiedUser->notify(new MaterialRequestCreated($mrHeader));
-//        }
+        if(!$isInStock){
+            $role = Role::whereIn('id', [4,5]);
+            $users =  $role->users()->get();
+            if($users->count() > 0){
+                foreach ($users as $notifiedUser){
+                    $notifiedUser->notify(new MaterialRequestCreated($mrHeader));
+                }
+            }
+        }
 
         Session::flash('message', 'Berhasil membuat material request!');
 

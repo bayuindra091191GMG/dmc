@@ -268,13 +268,22 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('material_requests/inventory/download_report', 'Inventory\MaterialRequestHeaderController@downloadReportOther')->name('material_requests.other.download-report');
 
     //Material Request Headers for Fuel
-    Route::get('material_requests/bensin', 'Inventory\MaterialRequestHeaderController@indexFuel')->name('material_requests.fuel');
-    Route::get('material_requests/bensin/detil/{material_request}', 'Inventory\MaterialRequestHeaderController@showFuel')->name('material_requests.fuel.show');
-    Route::get('material_requests/bensin/{material_request}/ubah', 'Inventory\MaterialRequestHeaderController@editFuel')->name('material_requests.fuel.edit');
-    Route::get('material_requests/bensin/tambah', 'Inventory\MaterialRequestHeaderController@createFuel')->name('material_requests.fuel.create');
-    Route::get('material_requests/bensin/download/{material_request}', 'Inventory\MaterialRequestHeaderController@downloadFuel')->name('material_requests.fuel.download');
-    Route::get('material_requests/bensin/report', 'Inventory\MaterialRequestHeaderController@reportFuel')->name('material_requests.fuel.report');
-    Route::post('material_requests/bensin/download_report', 'Inventory\MaterialRequestHeaderController@downloadReportFuel')->name('material_requests.fuel.download-report');
+    Route::get('material_requests/bbm', 'Inventory\MaterialRequestHeaderController@indexFuel')->name('material_requests.fuel');
+    Route::get('material_requests/bbm/detil/{material_request}', 'Inventory\MaterialRequestHeaderController@showFuel')->name('material_requests.fuel.show');
+    Route::get('material_requests/bbm/{material_request}/ubah', 'Inventory\MaterialRequestHeaderController@editFuel')->name('material_requests.fuel.edit');
+    Route::get('material_requests/bbm/tambah', 'Inventory\MaterialRequestHeaderController@createFuel')->name('material_requests.fuel.create');
+    Route::get('material_requests/bbm/download/{material_request}', 'Inventory\MaterialRequestHeaderController@downloadFuel')->name('material_requests.fuel.download');
+    Route::get('material_requests/bbm/report', 'Inventory\MaterialRequestHeaderController@reportFuel')->name('material_requests.fuel.report');
+    Route::post('material_requests/bbm/download_report', 'Inventory\MaterialRequestHeaderController@downloadReportFuel')->name('material_requests.fuel.download-report');
+
+    //Material Request Headers for Oil
+    Route::get('material_requests/oli', 'Inventory\MaterialRequestHeaderController@indexOil')->name('material_requests.oil');
+    Route::get('material_requests/oli/detil/{material_request}', 'Inventory\MaterialRequestHeaderController@showOil')->name('material_requests.oil.show');
+    Route::get('material_requests/oli/{material_request}/ubah', 'Inventory\MaterialRequestHeaderController@editOil')->name('material_requests.oil.edit');
+    Route::get('material_requests/oli/tambah', 'Inventory\MaterialRequestHeaderController@createOil')->name('material_requests.oil.create');
+    Route::get('material_requests/oli/download/{material_request}', 'Inventory\MaterialRequestHeaderController@downloadOil')->name('material_requests.oil.download');
+    Route::get('material_requests/oli/report', 'Inventory\MaterialRequestHeaderController@reportOil')->name('material_requests.oil.report');
+    Route::post('material_requests/oli/download_report', 'Inventory\MaterialRequestHeaderController@downloadReportOil')->name('material_requests.oil.download-report');
 
     //Material Request Headers for Service
     Route::get('material_requests/servis', 'Inventory\MaterialRequestHeaderController@indexService')->name('material_requests.service');
@@ -461,6 +470,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('settings/ubah/{id}', 'Setting\SettingController@update')->name('settings.update');
     Route::get('settings/perusahaan/ubah', 'Setting\SettingController@preference')->name('settings.preference');
     Route::put('settings/perusahaan/ubah/{preference}', 'Setting\SettingController@preferenceUpdate')->name('settings.preference-update');
+
+    //Notifications
+    Route::get('notifications', 'NotificationController@index')->name('notifications');
 });
 
 
@@ -517,6 +529,7 @@ Route::get('/datatables-menus', 'Admin\MenuController@anyData')->name('datatable
 Route::get('/datatables-menu_headers', 'Admin\MenuHeaderController@anyData')->name('datatables.menu_headers');
 Route::get('/datatables-menu_subs', 'Admin\MenuSubController@anyData')->name('datatables.menu_subs');
 Route::get('/datatables-statuses', 'Admin\StatusController@getIndex')->name('datatables.statuses');
+Route::get('/datatables-notifications', 'Admin\NotificationController@getIndex')->name('datatables.notifications');
 
 // PURCHASING
 Route::get('/datatables-purchase_requests', 'Admin\Purchasing\PurchaseRequestHeaderController@getIndex')->name('datatables.purchase_requests');

@@ -54,16 +54,19 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="auto_number">
-                    Apakah termasuk BBM atau Oli?
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                    Pilih Kategori
                 </label>
                 <div class="col-md-4 col-sm-4 col-xs-12">
                     <div class="btn-group" data-toggle="buttons">
-                        <label class="btn btn-default {{ $group->type == 2 ? 'active':'' }}">
-                            <input type="radio" name="bbm" value="2" id="yes-opt" {{ $group->type == 2 ? 'checked':'' }}> Ya
-                        </label>
                         <label class="btn btn-default {{ $group->type == 1 ? 'active':'' }}">
-                            <input type="radio" name="bbm" value="1" id="no-opt" {{ $group->type == 1 ? 'checked':'' }}> Tidak
+                            <input type="radio" name="type" value="1" {{ $group->type == 1 ? 'checked':'' }}> Part/Non-Part
+                        </label>
+                        <label class="btn btn-default {{ $group->type == 2 ? 'active':'' }}">
+                            <input type="radio" name="type" value="2" {{ $group->type == 2 ? 'checked':'' }}> BBM
+                        </label>
+                        <label class="btn btn-default {{ $group->type == 3 ? 'active':'' }}">
+                            <input type="radio" name="type" value="3" {{ $group->type == 3 ? 'checked':'' }}> Oli
                         </label>
                     </div>
                 </div>

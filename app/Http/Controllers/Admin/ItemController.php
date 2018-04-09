@@ -281,7 +281,7 @@ class ItemController extends Controller
         if(!empty($request->type)){
             $type = $request->type;
 
-            if($type === 'other'){
+            if($type === 'part'){
                 $items = Item::whereHas('group', function($query){
                     $query->where('type', 1);
                 })
@@ -295,6 +295,17 @@ class ItemController extends Controller
 
                 $items = Item::whereHas('group', function($query){
                     $query->where('type', 2);
+                })
+                    ->where(function($q) use ($term) {
+                        $q->where('code', 'LIKE', '%'. $term. '%')
+                            ->orWhere('name', 'LIKE', '%'. $term. '%');
+                    })
+                    ->get();
+            }
+            elseif($type === 'oil'){
+
+                $items = Item::whereHas('group', function($query){
+                    $query->where('type', 3);
                 })
                     ->where(function($q) use ($term) {
                         $q->where('code', 'LIKE', '%'. $term. '%')

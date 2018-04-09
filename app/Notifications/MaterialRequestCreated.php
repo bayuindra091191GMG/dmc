@@ -35,10 +35,25 @@ class MaterialRequestCreated extends Notification implements ShouldQueue
     }
 
     public function toDatabase($notifiable){
+        if($this->materialRequest->type == 1){
+            $documentType = 'Material Request Part/Non-Part';
+        }
+        elseif($this->materialRequest->type == 2){
+            $documentType = 'Material Request BBM';
+        }
+        elseif($this->materialRequest->type == 3){
+            $documentType = 'Material Request Oli';
+        }
+        else{
+            $documentType = 'Material Request Servis';
+        }
+
         return [
+            'document_type'     => $documentType,
             'mr_id'             => $this->materialRequest->id,
             'code'              => $this->materialRequest->code,
             'sender_id'         => $this->materialRequest->created_by,
+            'sender_name'       => $this->materialRequest->createdBy->name,
             'receiver_id'       => 0,
             'redeiver_role_id'  => 3
         ];
@@ -52,13 +67,28 @@ class MaterialRequestCreated extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
+        if($this->materialRequest->type == 1){
+            $documentType = 'Material Request Part/Non-Part';
+        }
+        elseif($this->materialRequest->type == 2){
+            $documentType = 'Material Request BBM';
+        }
+        elseif($this->materialRequest->type == 3){
+            $documentType = 'Material Request Oli';
+        }
+        else{
+            $documentType = 'Material Request Servis';
+        }
+
         return [
             'id'        => $this->id,
             'read_at'   => null,
             'data'      => [
-                'id'            => $this->materialRequest->id,
-                'code'          => $this->materialRequest->code,
+                'document_type'     => $documentType,
+                'id'                => $this->materialRequest->id,
+                'code'              => $this->materialRequest->code,
                 'sender_id'         => $this->materialRequest->created_by,
+                'sender_name'       => $this->materialRequest->createdBy->name,
                 'receiver_id'       => 0,
                 'redeiver_role_id'  => 3
             ],

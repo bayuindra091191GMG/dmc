@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title','Ubah Material Request Part/Non-Part '. $header->code)
+@section('title','Ubah Material Request Oli '. $header->code)
 
 @section('content')
     <div class="row" style="margin-bottom: 10px;">
@@ -113,7 +113,7 @@
                 </div>
             </div>
 
-            <input type="hidden" name="type" id="type" value="1"/>
+            <input type="hidden" name="type" id="type" value="3"/>
 
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">

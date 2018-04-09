@@ -15,6 +15,11 @@
                     </a>
                     <ul class="dropdown-menu dropdown-usermenu pull-right">
                         <li>
+                            <a href="{{ route('admin.notifications') }}">
+                                Notifikasi
+                            </a>
+                        </li>
+                        <li>
                             <a href="{{ route('admin.settings.edit') }}">
                                 Setting
                             </a>
@@ -37,7 +42,7 @@
                             @foreach($notifications as $notif)
                                 <li>
                                     @if($notif->type == 'App\Notifications\MaterialRequestCreated')
-                                        <a href="{{ route('admin.material_requests.show', ['material_request' => $notif->data['mr_id']]) }}">MR {{ $notif->data['code'] }} telah dibuat, mohon buat PR</a>
+                                        <a href="{{ route('admin.material_requests.other.show', ['material_request' => $notif->data['mr_id']]) }}">MR {{ $notif->data['code'] }} telah dibuat, mohon buat PR</a>
                                     @endif
                                 </li>
                             @endforeach

@@ -75,7 +75,7 @@ class GroupController extends Controller
         $group = Group::create([
             'code'          => $request->input('code'),
             'name'          => $request->input('name'),
-            'type'          => $request->input('bbm')
+            'type'          => $request->input('type')
         ]);
 
         Session::flash('message', 'Berhasil membuat data kategori inventory baru!');
@@ -131,7 +131,7 @@ class GroupController extends Controller
 
         $group->name = $request->input('name');
         $group->code = $request->input('code');
-        $group->type = $request->input('bbm');
+        $group->type = $request->input('type');
         $group->save();
 
         Session::flash('message', 'Berhasil mengubah data kategori inventory!');

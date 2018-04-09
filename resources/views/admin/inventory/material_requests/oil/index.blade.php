@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Daftar Material Request Part/Non-Part')
+@section('title', 'Daftar Material Request Oli')
 
 @section('content')
 
