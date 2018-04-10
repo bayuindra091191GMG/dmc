@@ -6,6 +6,19 @@
 
     <div class="row">
         @include('partials._success')
+        <div class="nav navbar-left">
+            <form class="form-inline" style="margin-bottom: 10px;">
+                <div class="form-group">
+                    <label for="filter-status">Status:</label>
+                    <select id="filter-status" class="form-control" onchange="filterStatus(this)">
+                        <option value="0" @if(!empty($filterStatus) || $filterStatus == '0') selected @endif>Semua</option>
+                        <option value="3" @if(empty($filterStatus) || (!empty($filterStatus) && $filterStatus == '3')) selected @endif>Open</option>
+                        <option value="4" @if(!empty($filterStatus) && $filterStatus == '4') selected @endif>Close</option>
+                        <option value="11" @if(!empty($filterStatus) && $filterStatus == '11') selected @endif>Close Manual</option>
+                    </select>
+                </div>
+            </form>
+        </div>
         <div class="nav navbar-right">
             <a href="{{ route('admin.purchase_orders.before_create') }}" class="btn btn-app">
                 <i class="fa fa-plus"></i> Tambah
@@ -51,7 +64,12 @@
             $('#pr-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('datatables.purchase_orders') !!}',
+                ajax: {
+                    url: '{!! route('datatables.purchase_orders') !!}',
+                    data: {
+                        'status': '{{ $filterStatus }}'
+                    }
+                },
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center' },
                     { data: 'code', name: 'code', class: 'text-center' },
@@ -70,5 +88,14 @@
                 }
             });
         });
+
+        function filterStatus(e){
+            // Get status filter value
+            var status = e.value;
+
+            var url = "/admin/purchase_requests?status=" + status;
+
+            window.location = url;
+        }
     </script>
 @endsection

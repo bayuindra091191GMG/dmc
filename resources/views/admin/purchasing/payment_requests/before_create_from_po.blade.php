@@ -3,7 +3,7 @@
 @section('title', 'Pilih Purchase Orders!')
 
 @section('content')
-    {{ Form::open(['route'=>['admin.payment_requests.create-from-po'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
+    {{ Form::open(['route'=>['admin.payment_requests.create_from_po'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
         <div class="row">
             @if(\Illuminate\Support\Facades\Session::has('error'))
                 <div class="alert alert-danger alert-dismissible fade in" role="alert">

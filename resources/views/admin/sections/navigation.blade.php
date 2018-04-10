@@ -143,12 +143,12 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('admin.payment_requests.choose-vendor') }}">
-                                            Tambah RFP Purchase Invoice
+                                        <a href="{{ route('admin.payment_requests.choose_vendor') }}">
+                                            Tambah RFP dari Invoice
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('admin.payment_requests.choose-vendor-po') }}">
+                                        <a href="{{ route('admin.payment_requests.choose_vendor_po') }}">
                                             Tambah RFP DP/CBD
                                         </a>
                                     </li>

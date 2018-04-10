@@ -447,7 +447,7 @@ class MaterialRequestHeaderController extends Controller
         }
 
         $materialRequests = null;
-        if($type === 'other'){
+        if($type === 'part'){
             $materialRequests = MaterialRequestHeader::where('type', 1)->get();
         }
         else if($type === 'fuel'){

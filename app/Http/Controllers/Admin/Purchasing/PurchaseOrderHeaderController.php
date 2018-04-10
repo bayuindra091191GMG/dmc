@@ -29,8 +29,12 @@ use PDF;
 class PurchaseOrderHeaderController extends Controller
 {
     public function index(){
+        $filterStatus = '0';
+        if(!empty(request()->status)){
+            $filterStatus = request()->status;
+        }
 
-        return View('admin.purchasing.purchase_orders.index');
+        return View('admin.purchasing.purchase_orders.index', compact('filterStatus'));
     }
 
     public function beforeCreate(){
@@ -435,9 +439,23 @@ class PurchaseOrderHeaderController extends Controller
                 }
             }
             else{
-                $purchaseOrders = PurchaseOrderHeader::where('status_id', 3)
-                    ->dateDescending()
-                    ->get();
+                $status = '0';
+                if($request->filled('status')){
+                    $status = $request->input('status');
+                    if($status != '0'){
+                        $purchaseOrders = PurchaseOrderHeader::where('status_id', $status)
+                            ->dateDescending()
+                            ->get();
+                    }
+                    else{
+                        $purchaseOrders = PurchaseOrderHeader::dateDescending()->get();
+                    }
+                }
+                else{
+                    $purchaseOrders = PurchaseOrderHeader::where('status_id', 3)
+                        ->dateDescending()
+                        ->get();
+                }
             }
 
             return DataTables::of($purchaseOrders)

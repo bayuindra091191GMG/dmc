@@ -499,22 +499,28 @@ Breadcrumbs::register('admin.purchase_requests.edit', function (Generator $bread
     $breadcrumbs->push('Ubah PR', route('admin.purchase_requests.edit', ['purchase_request' => $purchase_request]));
 });
 
-// Issued Docket
-Breadcrumbs::register('admin.issued_dockets', function (Generator $breadcrumbs) {
+// RFQ
+Breadcrumbs::register('admin.quotations', function (Generator $breadcrumbs) {
     $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
-    $breadcrumbs->push('Daftar Issued Docket');
+    $breadcrumbs->push('Daftar RFQ');
 });
 
-Breadcrumbs::register('admin.issued_dockets.create', function (Generator $breadcrumbs) {
+Breadcrumbs::register('admin.quotations.create', function (Generator $breadcrumbs) {
     $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
-    $breadcrumbs->push('Daftar Issued Docket', route('admin.issued_dockets'));
-    $breadcrumbs->push('Tambah Issued Docket');
+    $breadcrumbs->push('Daftar RFQ', route('admin.quotations'));
+    $breadcrumbs->push('Tambah RFQ');
 });
 
-Breadcrumbs::register('admin.issued_dockets.show', function (Generator $breadcrumbs, \App\Models\IssuedDocketHeader $issued_docket) {
+Breadcrumbs::register('admin.quotations.show', function (Generator $breadcrumbs, \App\Models\QuotationHeader $quotation) {
     $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
-    $breadcrumbs->push('Daftar Issued Docket', route('admin.issued_dockets'));
-    $breadcrumbs->push('Data Issued Docket '. $issued_docket->code, route('admin.issued_dockets.show', ['issued_docket' => $issued_docket]));
+    $breadcrumbs->push('Daftar RFQ', route('admin.quotations'));
+    $breadcrumbs->push('Data RFQ '. $purchase_request->code, route('admin.quotations.show', ['quotation' => $quotation]));
+});
+
+Breadcrumbs::register('admin.quotations.edit', function (Generator $breadcrumbs, \App\Models\QuotationHeader $quotation) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar RFQ', route('admin.quotations'));
+    $breadcrumbs->push('Ubah RFQ', route('admin.quotations.edit', ['quotation' => $quotation]));
 });
 
 // Purchase Order
@@ -595,6 +601,73 @@ Breadcrumbs::register('admin.purchase_invoices.edit', function (Generator $bread
     $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
     $breadcrumbs->push('Daftar Invoice', route('admin.purchase_invoices'));
     $breadcrumbs->push('Ubah Invoice', route('admin.purchase_invoices.edit', ['purchase_invoice' => $purchase_invoice]));
+});
+
+// Payment Request
+Breadcrumbs::register('admin.payment_requests', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar RFP');
+});
+
+Breadcrumbs::register('admin.payment_requests.choose_vendor', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar RFP', route('admin.payment_requests'));
+    $breadcrumbs->push('Pilih Vendor');
+});
+
+Breadcrumbs::register('admin.payment_requests.choose_vendor_po', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar RFP', route('admin.payment_requests'));
+    $breadcrumbs->push('Pilih Vendor');
+});
+
+Breadcrumbs::register('admin.payment_requests.before_create_pi', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar RFP', route('admin.payment_requests'));
+    $breadcrumbs->push('Pilih Invoice');
+});
+
+Breadcrumbs::register('admin.payment_requests.before_create_po', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar RFP', route('admin.payment_requests'));
+    $breadcrumbs->push('Pilih PO');
+});
+
+Breadcrumbs::register('admin.payment_requests.create', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar RFP', route('admin.payment_requests'));
+    $breadcrumbs->push('Pilih PO', route('admin.payment_requests.before_create'));
+    $breadcrumbs->push('Tambah RFP');
+});
+
+Breadcrumbs::register('admin.payment_requests.show', function (Generator $breadcrumbs, \App\Models\PaymentRequest $payment_request) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar RFP', route('admin.payment_requests'));
+    $breadcrumbs->push('Data RFP '. $purchase_invoice->code, route('admin.payment_requests.show', ['payment_request' => $payment_request]));
+});
+
+Breadcrumbs::register('admin.payment_requests.edit', function (Generator $breadcrumbs, \App\Models\PaymentRequest $payment_request) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar RFP', route('admin.payment_requests'));
+    $breadcrumbs->push('Ubah RFP', route('admin.payment_requests.edit', ['payment_request' => $payment_request]));
+});
+
+// Issued Docket
+Breadcrumbs::register('admin.issued_dockets', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Issued Docket');
+});
+
+Breadcrumbs::register('admin.issued_dockets.create', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Issued Docket', route('admin.issued_dockets'));
+    $breadcrumbs->push('Tambah Issued Docket');
+});
+
+Breadcrumbs::register('admin.issued_dockets.show', function (Generator $breadcrumbs, \App\Models\IssuedDocketHeader $issued_docket) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Issued Docket', route('admin.issued_dockets'));
+    $breadcrumbs->push('Data Issued Docket '. $issued_docket->code, route('admin.issued_dockets.show', ['issued_docket' => $issued_docket]));
 });
 
 // Delivery Order
