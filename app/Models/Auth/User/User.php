@@ -23,6 +23,7 @@ use Kyslik\ColumnSortable\Sortable;
  * @property string $password
  * @property int $active
  * @property string $confirmation_code
+ * @property string $img_path
  * @property bool $confirmed
  * @property string $remember_token
  * @property int $status_id
@@ -94,6 +95,7 @@ class User extends Authenticatable
         'password',
         'active',
         'confirmation_code',
+        'img_path',
         'confirmed',
         'username',
         'status_id',

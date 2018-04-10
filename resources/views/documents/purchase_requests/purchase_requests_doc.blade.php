@@ -140,7 +140,15 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
+            <td><img src="{{ URL::asset('storage/img_sign/'.$approvalUser[0]->user->img_path) }}"  width="100px"/></td>
             <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td height="20px;">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>{{ $approvalUser[0]->user->name }}</td>
             <td>&nbsp;</td>
         </tr>
     </table>

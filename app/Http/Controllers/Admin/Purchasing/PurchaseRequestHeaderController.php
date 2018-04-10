@@ -479,7 +479,8 @@ class PurchaseRequestHeaderController extends Controller
     public function printDocument($id){
         $purchaseRequest = PurchaseRequestHeader::find($id);
         $purchaseRequestDetails = PurchaseRequestDetail::where('header_id', $purchaseRequest->id)->get();
+        $approvalUser = ApprovalRule::where('document_id', 3)->get();
 
-        return view('documents.purchase_requests.purchase_requests_doc', compact('purchaseRequest', 'purchaseRequestDetails'));
+        return view('documents.purchase_requests.purchase_requests_doc', compact('purchaseRequest', 'purchaseRequestDetails', 'approvalUser'));
     }
 }

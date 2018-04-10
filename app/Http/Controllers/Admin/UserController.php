@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Intervention\Image\Facades\Image;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
@@ -210,8 +211,20 @@ class UserController extends Controller
         $user->name = $request->input('name');
         if($user->email != $request->input('email')) $user->email = $request->input('email');
 
-        if ($request->has('password')) {
+        if ($request->has('password') && $request->input('password') != null) {
             $user->password = bcrypt($request->input('password'));
+        }
+
+        //Image
+        if($request->file('user_image') != null) {
+            $img = Image::make($request->file('user_image'));
+            $extStr = $img->mime();
+            $ext = explode('/', $extStr, 2);
+
+            $filename = $user->name . '_Signature' . Carbon::now('Asia/Jakarta')->format('Ymdhms') . '.' . $ext[1];
+
+            $img->save(public_path('storage/img_sign/' . $filename), 75);
+            $user->img_path = $filename;
         }
 
         $user->status_id = $request->input('status');
