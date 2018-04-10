@@ -154,7 +154,7 @@
 
             <hr/>
 
-            <input type="hidden" name="type" id="type" value="3"/>
+            <input type="hidden" name="type" id="type" value="4"/>
 
             <div class="form-group">
                 <div class="col-md-12 col-sm-12 col-xs-12 text-center">

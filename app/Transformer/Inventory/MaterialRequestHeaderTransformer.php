@@ -32,10 +32,14 @@ class MaterialRequestHeaderTransformer extends TransformerAbstract
             $typeStr = 'Inventory';
         }
         else if($header->type === 2){
-            $url = 'bensin';
-            $typeStr = 'Oli & Bensin';
+            $url = 'bbm';
+            $typeStr = 'BBM';
         }
         else if($header->type === 3){
+            $url = 'oli';
+            $typeStr = 'Oli';
+        }
+        else{
             $url = 'servis';
             $typeStr = 'Servis';
         }

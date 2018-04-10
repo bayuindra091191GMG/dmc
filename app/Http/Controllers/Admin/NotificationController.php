@@ -13,6 +13,7 @@ use App\Events\TestEvent;
 use App\Http\Controllers\Controller;
 use App\Notifications\TestingNotify;
 use App\Transformer\NotificationTransformer;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\View\View;
@@ -22,6 +23,13 @@ class NotificationController extends Controller
 {
     public function index(){
         return view('admin.notifications.index');
+    }
+
+    public function read(Request $request){
+        $user = \Auth::user();
+        foreach ($user->unreadNotifications as $notification) {
+            $notification->markAsRead();
+        }
     }
 
     /**

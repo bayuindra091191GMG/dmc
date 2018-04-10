@@ -36,6 +36,10 @@ class MaterialRequestHeaderController extends Controller
         return View('admin.inventory.material_requests.fuel.index');
     }
 
+    public function indexOil(){
+        return View('admin.inventory.material_requests.oil.index');
+    }
+
     public function indexService(){
         return View('admin.inventory.material_requests.service.index');
     }
@@ -70,11 +74,26 @@ class MaterialRequestHeaderController extends Controller
         return View('admin.inventory.material_requests.fuel.create')->with($data);
     }
 
-    public function createService(){
+    public function createOil(){
         $departments = Department::all();
 
         // Numbering System
         $sysNo = NumberingSystem::where('doc_id', '11')->first();
+        $autoNumber = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
+
+        $data = [
+            'departments'   => $departments,
+            'autoNumber'    => $autoNumber
+        ];
+
+        return View('admin.inventory.material_requests.oil.create')->with($data);
+    }
+
+    public function createService(){
+        $departments = Department::all();
+
+        // Numbering System
+        $sysNo = NumberingSystem::where('doc_id', '12')->first();
         $autoNumber = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
 
         $data = [
@@ -107,6 +126,18 @@ class MaterialRequestHeaderController extends Controller
         ];
 
         return View('admin.inventory.material_requests.fuel.show')->with($data);
+    }
+
+    public function showOil(MaterialRequestHeader $material_request){
+        $header = $material_request;
+        $date = Carbon::parse($material_request->date)->format('d M Y');
+
+        $data = [
+            'header'        => $header,
+            'date'          => $date
+        ];
+
+        return View('admin.inventory.material_requests.oil.show')->with($data);
     }
 
     public function showService(MaterialRequestHeader $material_request){
@@ -152,14 +183,17 @@ class MaterialRequestHeaderController extends Controller
         // Generate auto number
         $type = $request->input('type');
         $docId = 0;
-        if($type == 1){
+        if($type == '1'){
             $docId = 9;
         }
-        else if($type == 2){
+        else if($type == '2'){
             $docId = 10;
         }
-        else{
+        else if($type == '3'){
             $docId = 11;
+        }
+        else{
+            $docId = 12;
         }
 
         $mrCode = 'default';
@@ -249,7 +283,7 @@ class MaterialRequestHeaderController extends Controller
         $idx = 0;
         foreach($request->input('item') as $item){
             if(!empty($item)){
-                $qtyInt = (int) $qtyp[$idx];
+                $qtyInt = (int) $qty[$idx];
                 $item = Item::find($item);
                 if($item->stock < $qtyInt){
                     $isInStock = false;
@@ -260,11 +294,13 @@ class MaterialRequestHeaderController extends Controller
 
         // Notification
         if(!$isInStock){
-            $role = Role::whereIn('id', [4,5]);
-            $users =  $role->users()->get();
-            if($users->count() > 0){
-                foreach ($users as $notifiedUser){
-                    $notifiedUser->notify(new MaterialRequestCreated($mrHeader));
+            $roles = Role::whereIn('id', [4,5])->get();
+            foreach($roles as $role){
+                $users =  $role->users()->get();
+                if($users->count() > 0){
+                    foreach ($users as $notifiedUser){
+                        $notifiedUser->notify(new MaterialRequestCreated($mrHeader));
+                    }
                 }
             }
         }
@@ -308,6 +344,20 @@ class MaterialRequestHeaderController extends Controller
         ];
 
         return View('admin.inventory.material_requests.fuel.edit')->with($data);
+    }
+
+    public function editOil(MaterialRequestHeader $material_request){
+        $header = $material_request;
+        $departments = Department::all();
+        $date = Carbon::parse($material_request->date)->format('d M Y');
+
+        $data = [
+            'header'        => $header,
+            'departments'   => $departments,
+            'date'          => $date
+        ];
+
+        return View('admin.inventory.material_requests.oil.edit')->with($data);
     }
 
     public function editService(MaterialRequestHeader $material_request){
@@ -376,6 +426,9 @@ class MaterialRequestHeaderController extends Controller
         else if($type === '2'){
             return redirect()->route('admin.material_requests.fuel.show', ['material_request' => $material_request]);
         }
+        else if($type === '3'){
+            return redirect()->route('admin.material_requests.oil.show', ['material_request' => $material_request]);
+        }
         else{
             return redirect()->route('admin.material_requests.service.show', ['material_request' => $material_request]);
         }
@@ -400,8 +453,11 @@ class MaterialRequestHeaderController extends Controller
         else if($type === 'fuel'){
             $materialRequests = MaterialRequestHeader::where('type', 2)->get();
         }
-        else if($type === 'service'){
+        else if($type === 'oil'){
             $materialRequests = MaterialRequestHeader::where('type', 3)->get();
+        }
+        else if($type === 'service'){
+            $materialRequests = MaterialRequestHeader::where('type', 4)->get();
         }
         else if($type === 'before_create' || $type === 'before_create_id'){
             $materialRequests = MaterialRequestHeader::where('status_id', 3)->get();

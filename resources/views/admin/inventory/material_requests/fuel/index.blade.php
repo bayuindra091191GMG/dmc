@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Daftar Material Request Oli & Bensin')
+@section('title', 'Daftar Material Request BBM')
 
 @section('content')
 
@@ -23,6 +23,7 @@
                 <th>Departemen</th>
                 <th>Kode Unit</th>
                 <th>Tanggal</th>
+                <th>Status</th>
                 <th>Tindakan</th>
             </tr>
             </thead>
@@ -57,7 +58,8 @@
                     { data: 'code', name: 'code', class: 'text-center' },
                     { data: 'department', name: 'department', class: 'text-center' },
                     { data: 'machinery', name: 'machinery', class: 'text-center' },
-                    { data: 'created_at', name: 'created_at', class: 'text-center' },
+                    { data: 'date', name: 'created_at', class: 'text-center' },
+                    { data: 'status', name: 'status', class: 'text-center' },
                     { data: 'action', name: 'action',orderable: false, searchable: false, class: 'text-center' }
                 ],
                 language: {

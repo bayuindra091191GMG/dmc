@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title','Ubah Material Request Oli & Bensin '. $header->code)
+@section('title','Ubah Material Request BBM '. $header->code)
 
 @section('content')
     <div class="row" style="margin-bottom: 10px;">

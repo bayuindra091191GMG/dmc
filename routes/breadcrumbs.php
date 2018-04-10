@@ -379,6 +379,102 @@ Breadcrumbs::register('admin.menus.edit', function (Generator $breadcrumbs, \App
     $breadcrumbs->push('Ubah Menu', route('admin.menus.edit', ['menu' => $menu]));
 });
 
+// Material Request Part/Non-Part
+Breadcrumbs::register('admin.material_requests.other', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar MR Part/Non-Part');
+});
+
+Breadcrumbs::register('admin.material_requests.other.create', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar MR Part/Non-Part', route('admin.material_requests.other'));
+    $breadcrumbs->push('Tambah MR Part/Non-Part');
+});
+
+Breadcrumbs::register('admin.material_requests.other.show', function (Generator $breadcrumbs, \App\Models\MaterialRequestHeader $material_request) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar MR Part/Non-Part', route('admin.material_requests.other'));
+    $breadcrumbs->push('Data MR Part/Non-Part '. $material_request->code, route('admin.material_requests.other.show', ['material_request' => $material_request]));
+});
+
+Breadcrumbs::register('admin.material_requests.other.edit', function (Generator $breadcrumbs, \App\Models\MaterialRequestHeader $material_request) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar MR Part/Non-Part', route('admin.material_requests.other'));
+    $breadcrumbs->push('Ubah MR Part/Non-Part', route('admin.material_requests.other.edit', ['material_request' => $material_request]));
+});
+
+// Material Request BBM
+Breadcrumbs::register('admin.material_requests.fuel', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar MR BBM');
+});
+
+Breadcrumbs::register('admin.material_requests.fuel.create', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar MR BBM', route('admin.material_requests.fuel'));
+    $breadcrumbs->push('Tambah MR BBM');
+});
+
+Breadcrumbs::register('admin.material_requests.fuel.show', function (Generator $breadcrumbs, \App\Models\MaterialRequestHeader $material_request) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar MR BBM', route('admin.material_requests.fuel'));
+    $breadcrumbs->push('Data MR BBM '. $material_request->code, route('admin.material_requests.fuel.show', ['material_request' => $material_request]));
+});
+
+Breadcrumbs::register('admin.material_requests.fuel.edit', function (Generator $breadcrumbs, \App\Models\MaterialRequestHeader $material_request) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar MR BBM', route('admin.material_requests.fuel'));
+    $breadcrumbs->push('Ubah MR BBM', route('admin.material_requests.fuel.edit', ['material_request' => $material_request]));
+});
+
+// Material Request Oli
+Breadcrumbs::register('admin.material_requests.oil', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar MR Oli');
+});
+
+Breadcrumbs::register('admin.material_requests.oil.create', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar MR Oli', route('admin.material_requests.oil'));
+    $breadcrumbs->push('Tambah MR Oli');
+});
+
+Breadcrumbs::register('admin.material_requests.oil.show', function (Generator $breadcrumbs, \App\Models\MaterialRequestHeader $material_request) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar MR Oli', route('admin.material_requests.oil'));
+    $breadcrumbs->push('Data MR Oli '. $material_request->code, route('admin.material_requests.oil.show', ['material_request' => $material_request]));
+});
+
+Breadcrumbs::register('admin.material_requests.oil.edit', function (Generator $breadcrumbs, \App\Models\MaterialRequestHeader $material_request) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar MR Oli', route('admin.material_requests.oil'));
+    $breadcrumbs->push('Ubah MR Oli', route('admin.material_requests.oil.edit', ['material_request' => $material_request]));
+});
+
+// Material Request Servis
+Breadcrumbs::register('admin.material_requests.service', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar MR Servis');
+});
+
+Breadcrumbs::register('admin.material_requests.service.create', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar MR Servis', route('admin.material_requests.service'));
+    $breadcrumbs->push('Tambah MR Servis');
+});
+
+Breadcrumbs::register('admin.material_requests.service.show', function (Generator $breadcrumbs, \App\Models\MaterialRequestHeader $material_request) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar MR Servis', route('admin.material_requests.service'));
+    $breadcrumbs->push('Data MR Servis '. $material_request->code, route('admin.material_requests.service.show', ['material_request' => $material_request]));
+});
+
+Breadcrumbs::register('admin.material_requests.service.edit', function (Generator $breadcrumbs, \App\Models\MaterialRequestHeader $material_request) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar MR Servis', route('admin.material_requests.service'));
+    $breadcrumbs->push('Ubah MR Servis', route('admin.material_requests.service.edit', ['material_request' => $material_request]));
+});
+
 // Purchase Request
 Breadcrumbs::register('admin.purchase_requests', function (Generator $breadcrumbs) {
     $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
@@ -421,24 +517,6 @@ Breadcrumbs::register('admin.issued_dockets.show', function (Generator $breadcru
     $breadcrumbs->push('Data Issued Docket '. $issued_docket->code, route('admin.issued_dockets.show', ['issued_docket' => $issued_docket]));
 });
 
-// Good Receipt
-Breadcrumbs::register('admin.item_receipts', function (Generator $breadcrumbs) {
-    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
-    $breadcrumbs->push('Daftar Good Receipt');
-});
-
-Breadcrumbs::register('admin.item_receipts.create', function (Generator $breadcrumbs) {
-    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
-    $breadcrumbs->push('Daftar Good Receipt', route('admin.item_receipts'));
-    $breadcrumbs->push('Tambah Good Receipt');
-});
-
-Breadcrumbs::register('admin.item_receipts.show', function (Generator $breadcrumbs, \App\Models\ItemReceiptHeader $item_receipt) {
-    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
-    $breadcrumbs->push('Daftar Good Receipt', route('admin.item_receipts'));
-    $breadcrumbs->push('Data Good Receipt '. $item_receipt->code, route('admin.item_receipts.show', ['item_receipt' => $item_receipt]));
-});
-
 // Purchase Order
 Breadcrumbs::register('admin.purchase_orders', function (Generator $breadcrumbs) {
     $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
@@ -468,6 +546,24 @@ Breadcrumbs::register('admin.purchase_orders.edit', function (Generator $breadcr
     $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
     $breadcrumbs->push('Daftar PO', route('admin.purchase_orders'));
     $breadcrumbs->push('Ubah PO', route('admin.purchase_orders.edit', ['purchase_order' => $purchase_order]));
+});
+
+// Goods Receipt
+Breadcrumbs::register('admin.item_receipts', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Good Receipt');
+});
+
+Breadcrumbs::register('admin.item_receipts.create', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Good Receipt', route('admin.item_receipts'));
+    $breadcrumbs->push('Tambah Good Receipt');
+});
+
+Breadcrumbs::register('admin.item_receipts.show', function (Generator $breadcrumbs, \App\Models\ItemReceiptHeader $item_receipt) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar Good Receipt', route('admin.item_receipts'));
+    $breadcrumbs->push('Data Good Receipt '. $item_receipt->code, route('admin.item_receipts.show', ['item_receipt' => $item_receipt]));
 });
 
 // Purchase Invoice

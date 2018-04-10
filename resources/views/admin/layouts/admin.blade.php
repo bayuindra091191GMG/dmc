@@ -70,6 +70,18 @@
 
         function clearNotif(){
             $('#notification_badge').attr('style', 'color: #515356 !important');
+
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('admin.notifications.read') }}',
+                data: {
+                    '_token': $('input[name=_token]').val()
+                },
+                success: function(data) {
+
+                }
+            });
+
         }
     </script>
 @endsection

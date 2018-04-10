@@ -7,7 +7,7 @@
     <div class="row">
         @include('partials._success')
         <div class="nav navbar-right">
-            <a href="{{ route('admin.material_requests.other.create') }}" class="btn btn-app">
+            <a href="{{ route('admin.material_requests.oil.create') }}" class="btn btn-app">
                 <i class="fa fa-plus"></i> Tambah
             </a>
         </div>
@@ -50,7 +50,7 @@
                 ajax: {
                     url: '{!! route('datatables.material_requests') !!}',
                     data: {
-                        'type': 'part'
+                        'type': 'oil'
                     }
                 },
                 columns: [

@@ -473,6 +473,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     //Notifications
     Route::get('notifications', 'NotificationController@index')->name('notifications');
+    Route::post('notifications/read', 'NotificationController@read')->name('notifications.read');
 });
 
 

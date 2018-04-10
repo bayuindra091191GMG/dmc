@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title','Buat Material Request Oli & Bensin')
+@section('title','Buat Material Request BBM')
 
 @section('content')
     <div class="row">
