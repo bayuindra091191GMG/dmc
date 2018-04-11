@@ -15,12 +15,14 @@ use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
 use App\Models\Department;
 use App\Models\Item;
+use App\Models\ItemStock;
 use App\Models\MaterialRequestDetail;
 use App\Models\MaterialRequestHeader;
 use App\Models\NumberingSystem;
 use App\Notifications\MaterialRequestCreated;
 use App\Transformer\Inventory\MaterialRequestHeaderTransformer;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -108,9 +110,32 @@ class MaterialRequestHeaderController extends Controller
         $header = $material_request;
         $date = Carbon::parse($material_request->date)->format('d M Y');
 
+        $itemStocks = new Collection();
+
+        if($header->status_id == 3){
+            // Check stock
+            $isInStock = true;
+            foreach($header->material_request_details as $detail){
+                if($detail->item->stock < $detail->quantity){
+                    $isInStock = false;
+                }
+            }
+
+            // Get stock
+            if($isInStock){
+                foreach($header->material_request_details as $detail){
+                    $stocks = ItemStock::where('item_id', $detail->item_id)->get();
+                    foreach($stocks as $stock){
+                        $itemStocks->add($stock);
+                    }
+                }
+            }
+        }
+
         $data = [
             'header'        => $header,
-            'date'          => $date
+            'date'          => $date,
+            'itemStocks'    => $itemStocks
         ];
 
         return View('admin.inventory.material_requests.other.show')->with($data);

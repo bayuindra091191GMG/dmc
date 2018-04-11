@@ -141,7 +141,7 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td><img src="{{ URL::asset('storage/img_sign/'.$approvalUser[0]->user->img_path) }}"  width="100px"/></td>
-            <td>&nbsp;</td>
+            <td><img src="{{ URL::asset('storage/img_sign/'.$approvalUser[1]->user->img_path) }}"  width="100px"/></td>
         </tr>
         <tr>
             <td height="20px;">{{ $purchaseRequest->createdBy->name }}</td>
@@ -149,7 +149,7 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>{{ $approvalUser[0]->user->name }}</td>
-            <td>&nbsp;</td>
+            <td>{{ $approvalUser[1]->user->name }}</td>
         </tr>
     </table>
 </div>

@@ -12,7 +12,9 @@
                 <a class="btn btn-default" href="{{ route('admin.material_requests.print',[ 'material_request' => $header->id]) }}" target="_blank">CETAK</a>
                 @if($header->status_id == 3)
                     <a class="btn btn-default" href="{{ route('admin.material_requests.other.edit',[ 'material_request' => $header->id]) }}">UBAH</a>
-                    <a class="btn btn-success" href="{{ route('admin.purchase_requests.create',[ 'mr' => $header->id]) }}">PROSES PR</a>
+                    @if($itemStocks->count() == 0)
+                        <a class="btn btn-success" href="{{ route('admin.purchase_requests.create',[ 'mr' => $header->id]) }}">PROSES PR</a>
+                    @endif
                     <a class="close-modal btn btn-danger" data-id="{{ $header->id }}">CLOSE</a>
                 @endif
             </div>
@@ -24,9 +26,9 @@
 
                 @if(\Illuminate\Support\Facades\Session::has('message'))
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                        <label class="control-label col-lg-3 col-md-12 col-sm-12 col-xs-12">
                         </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                             @include('partials._success')
                         </div>
                     </div>
@@ -111,6 +113,25 @@
                 </div>
 
                 <hr/>
+
+                @if($itemStocks->count() > 0)
+                    <div class="form-group">
+                        <label class="control-label col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                        </label>
+                        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                            <div class="alert alert-success  fade in" role="alert">
+                                Inventory tersedia di gudang sebagai berikut,
+                                <br/>
+                                <ul>
+                                    @foreach($itemStocks as $stock)
+                                        <li>{{ $stock->warehouse->name }} tersedia {{ $stock->item->code }} ({{ $stock->item->name }}) sebanyak {{ $stock->stock }} {{ $stock->item->uom }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
 
                 <div class="form-group">
                     <div class="col-lg-12 col-md-12 col-xs-12 column">

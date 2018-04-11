@@ -17,6 +17,7 @@ class UserTransformer extends TransformerAbstract
 {
     public function transform(User $user){
 
+        try{
         $createdDate = Carbon::parse($user->created_at)->format('d M Y');
 
         $action = "<a class='btn btn-xs btn-info' href='users/".$user->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
@@ -33,5 +34,9 @@ class UserTransformer extends TransformerAbstract
             'created_at'    => $createdDate,
             'action'        => $action
         ];
+        }
+        catch (\Exception $exception){
+            error_log($exception);
+        }
     }
 }

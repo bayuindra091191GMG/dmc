@@ -235,7 +235,9 @@ class UserController extends Controller
         //Image
         if($request->file('user_image') != null) {
             $tempImg = public_path('storage/img_sign/'.$user->img_path);
-            if(file_exists($tempImg)) unlink($tempImg);
+            if(file_exists($tempImg)){
+                unlink($tempImg);
+            }
 
             $img = Image::make($request->file('user_image'));
             $extStr = $img->mime();
