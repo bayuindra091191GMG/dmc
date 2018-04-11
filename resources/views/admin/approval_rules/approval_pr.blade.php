@@ -24,12 +24,15 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">
                         </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12 alert alert-danger alert-dismissible fade in" role="alert">
-                            <ul>
-                                @foreach($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                <ul>
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 @endif
@@ -45,14 +48,30 @@
                 @endif
 
                 <div class="form-group">
+                    <label class="control-label col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                    </label>
+                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                        <div class="alert alert-danger  fade in" role="alert">
+                            User yang harus melakukan approval pada dokumen ini adalah
+                            <br/>
+                            <ul>
+                                @foreach($approvalData as $data)
+                                    <li>{{ $data->user->name }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
                         Approved
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         @if($status)
-                            : <span style="font-weight: bold; color: green;">Approved by You</span>
+                            : <span style="font-weight: bold; color: green;">Sudah Approved</span>
                         @elseif(!$status)
-                            : <span style="font-weight: bold; color: red;">Not Approved Yet!</span>
+                            : <span style="font-weight: bold; color: red;">Approved Sebagian</span>
                         @endif
                     </div>
                 </div>

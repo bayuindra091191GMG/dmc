@@ -194,12 +194,14 @@ class ApprovalRuleController extends Controller
         if($approvalData != null){
             $status = true;
         }
+        $approvalRule = ApprovalRule::where('document_id', '3')->get();
 
         $data = [
             'header'            => $header,
             'date'              => $date,
             'priorityLimitDate' => $priorityLimitDate,
-            'status'            => $status
+            'status'            => $status,
+            'approvalData'      => $approvalRule
         ];
 
         return View('admin.approval_rules.approval_pr')->with($data);

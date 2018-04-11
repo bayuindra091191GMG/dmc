@@ -60,9 +60,9 @@
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         @if($status)
-                            : <span style="font-weight: bold; color: green;">Approved by You</span>
+                            : <span style="font-weight: bold; color: green;">Sudah Approved</span>
                         @elseif(!$status)
-                            : <span style="font-weight: bold; color: red;">Not Approved Yet!</span>
+                            : <span style="font-weight: bold; color: red;">Approved Sebagian</span>
                         @endif
                     </div>
                 </div>
