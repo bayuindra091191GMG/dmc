@@ -5,7 +5,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            {{ Form::open(['route'=>'admin.users.store', 'method' => 'post','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>'admin.users.store', 'method' => 'post','class'=>'form-horizontal form-label-left', 'enctype'=>'multipart/form-data']) }}
             {{ csrf_field()}}
 
             @if(\Illuminate\Support\Facades\Session::has('message'))
@@ -180,6 +180,15 @@
                         <option value="1" selected>Aktif</option>
                         <option value="2">Non Aktif</option>
                     </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >
+                    Gambar Tanda Tangan
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    {!! Form::file('user_image', array('id' => 'photo', 'class' => 'file')) !!}
                 </div>
             </div>
 

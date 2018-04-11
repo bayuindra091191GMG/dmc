@@ -68,6 +68,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name'      => 'required|max:100',
             'email'     => 'required|regex:/^\S*$/u|unique:users|max:50',
+            'password'  => 'required',
             'address'   => 'max:200'
         ],[
             'email.unique'      => 'ID Login Akses telah terdaftar!',
@@ -86,6 +87,10 @@ class UserController extends Controller
 
         if($request->input('site') === '-1'){
             return redirect()->back()->withErrors('Pilih site!', 'default')->withInput($request->all());
+        }
+
+        if($request->input('role') === '-1'){
+            return redirect()->back()->withErrors('Pilih level akses!', 'default')->withInput($request->all());
         }
 
         $user = Auth::user();
@@ -111,6 +116,18 @@ class UserController extends Controller
 
         if ($request->has('password')) {
             $user->password = bcrypt($request->input('password'));
+        }
+
+        //Image
+        if($request->file('user_image') != null) {
+            $img = Image::make($request->file('user_image'));
+            $extStr = $img->mime();
+            $ext = explode('/', $extStr, 2);
+
+            $filename = $user->name . '_Signature' . Carbon::now('Asia/Jakarta')->format('Ymdhms') . '.' . $ext[1];
+
+            $img->save(public_path('storage/img_sign/' . $filename), 75);
+            $user->img_path = $filename;
         }
 
         $user->created_by = $user->id;
@@ -217,6 +234,9 @@ class UserController extends Controller
 
         //Image
         if($request->file('user_image') != null) {
+            $tempImg = public_path('storage/img_sign/'.$user->img_path);
+            if(file_exists($tempImg)) unlink($tempImg);
+
             $img = Image::make($request->file('user_image'));
             $extStr = $img->mime();
             $ext = explode('/', $extStr, 2);
@@ -241,7 +261,7 @@ class UserController extends Controller
 
         Session::flash('message', 'Berhasil mengubah data user!');
 
-        return redirect()->intended(route('admin.users',['user' => $user]));
+        return redirect()->intended(route('admin.users'));
     }
 
     /**
@@ -260,6 +280,8 @@ class UserController extends Controller
             $user->status_id = 10;
             $user->updated_by = $userAuth->id;
             $user->updated_at = $now->toDateTimeString();
+            $tempImg = public_path('storage/img_sign/'.$user->img_path);
+            if(file_exists($tempImg)) unlink($tempImg);
             $user->save();
 
             Session::flash('message', 'Berhasil menghapus data user '. $user->email);

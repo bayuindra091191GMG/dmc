@@ -144,7 +144,7 @@
             <td>&nbsp;</td>
         </tr>
         <tr>
-            <td height="20px;">&nbsp;</td>
+            <td height="20px;">{{ $purchaseRequest->createdBy->name }}</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
