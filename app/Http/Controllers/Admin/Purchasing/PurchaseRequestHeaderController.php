@@ -81,6 +81,7 @@ class PurchaseRequestHeaderController extends Controller
         $user = \Auth::user();
         $permission = true;
         $approveOrder = false;
+        $status = false;
 
         //All Approval Settings checked if On Or Not
         $setting = PreferenceCompany::find(1);
@@ -94,8 +95,18 @@ class PurchaseRequestHeaderController extends Controller
                 $approveOrder = true;
             }
 
+            $approvalData = ApprovalPurchaseRequest::where('purchase_request_id', $header->id)->where('user_id', $user->id)->first();
+            if($approvalData != null){
+                $approveOrder = false;
+            }
+
             if ($approvals->count() != $approvalPr->count()) {
                 $permission = false;
+            }
+
+            $approvalData = ApprovalPurchaseRequest::where('purchase_request_id', $header->id)->where('user_id', $user->id)->first();
+            if($approvalData != null){
+                $status = true;
             }
         }
 
@@ -104,7 +115,8 @@ class PurchaseRequestHeaderController extends Controller
             'date'              => $date,
             'priorityLimitDate' => $priorityLimitDate,
             'permission'        => $permission,
-            'approveOrder'      => $approveOrder
+            'approveOrder'      => $approveOrder,
+            'status'            => $status
         ];
 
         return View('admin.purchasing.purchase_requests.show')->with($data);

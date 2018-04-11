@@ -145,6 +145,12 @@ Breadcrumbs::register('admin.approval_rules.edit', function (Generator $breadcru
     $breadcrumbs->push('Ubah Pengaturan Approval', route('admin.approval_rules.edit', ['approval_rule' => $approvalRule]));
 });
 
+Breadcrumbs::register('admin.approval_rules.pr_approval', function (Generator $breadcrumbs) {
+    $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
+    $breadcrumbs->push('Daftar PR', route('admin.purchase_requests'));
+    $breadcrumbs->push('Approve Purchase Request');
+});
+
 // Permission Menu
 Breadcrumbs::register('admin.permission_menus', function (Generator $breadcrumbs) {
     $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));

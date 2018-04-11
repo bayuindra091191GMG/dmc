@@ -1,16 +1,17 @@
 @extends('admin.layouts.admin')
 
-@section('title','Data Purchase Request '. $header->code)
+@section('title','Approve Purchase Request '. $header->code)
 
 @section('content')
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="navbar-left">
-                <a class="btn btn-default" href="{{ route('admin.purchase_requests') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
+                <a class="btn btn-default" href="{{ route('admin.purchase_requests.show', ['purchase_request' => $header->id]) }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
             </div>
             <div class="navbar-right">
                 @if($header->is_approved == null || $header->is_approved == 0)
-                    <a class="btn btn-success" href="{{ route('admin.approval_rules.approve_pr',[ 'approval_rule' => $header->id]) }}">APPROVE</a>
+                    {{--<a class="btn btn-success" href="{{ route('admin.approval_rules.approve_pr',[ 'approval_rule' => $header->id]) }}">APPROVE</a>--}}
+                    <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#approveModal">Approve</button>
                 @endif
             </div>
         </div>
@@ -42,21 +43,6 @@
                         </div>
                     </div>
                 @endif
-
-                <div class="form-group">
-                    <label class="col-md-3 col-sm-3 col-xs-12">
-                        STATUS
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        @if($header->status_id == 3)
-                            : <span style="font-weight: bold; color: green;">OPEN</span>
-                        @elseif($header->status_id == 4)
-                            : <span style="font-weight: bold; color: red;">CLOSED</span>
-                        @elseif($header->status_id == 11)
-                            : <span style="font-weight: bold; color: red;">CLOSED MANUAL</span>
-                        @endif
-                    </div>
-                </div>
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
@@ -224,6 +210,31 @@
                     </div>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <div id="approveModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+                <div class="modal-body">
+                    <h3 class="text-center">Apakah anda yakin ingin approve?</h3>
+                    <br />
+
+                    <form role="form">
+                        <input type="hidden" id="approve-id" name="approve-id"/>
+                    </form>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">
+                            <span class='glyphicon glyphicon-remove'></span> Tidak
+                        </button>
+                        <a class="btn btn-warning delete" href="{{ route('admin.approval_rules.approve_pr',[ 'approval_rule' => $header->id]) }}"><span class='glyphicon glyphicon-ok'></span> Ya</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection

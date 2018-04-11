@@ -56,6 +56,19 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
+                        Approved
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        @if($status)
+                            : <span style="font-weight: bold; color: green;">Approved by You</span>
+                        @elseif(!$status)
+                            : <span style="font-weight: bold; color: red;">Not Approved Yet!</span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
                         Nomor PR
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
