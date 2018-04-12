@@ -51,14 +51,14 @@ class MaterialRequestHeaderTransformer extends TransformerAbstract
         if($this->type !== 'before_create' && $this->type !== 'before_create_id'){
             $action = "<a class='btn btn-xs btn-primary' href='/admin/material_requests/". $url. "/detil/". $header->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
             $action .= "<a class='btn btn-xs btn-info' href='/admin/material_requests/". $url. "/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
-            $action .= "<a class='btn btn-xs btn-success' href='". $route . "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i> Proses PR </a>";
+//            $action .= "<a class='btn btn-xs btn-success' href='". $route . "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i> Proses PR </a>";
         }
         else if($this->type === 'before_create_id'){
             $route = route('admin.issued_dockets.create', ['mr' => $header->id]);
             $action = "<a class='btn btn-xs btn-success' href='". $route . "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i> Proses Issued Docket </a>";
         }
         else{
-            $action = "<a class='btn btn-xs btn-success' href='". $route . "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i> Proses PR </a>";
+//            $action = "<a class='btn btn-xs btn-success' href='". $route . "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i> Proses PR </a>";
         }
 
         $machinery = '-';

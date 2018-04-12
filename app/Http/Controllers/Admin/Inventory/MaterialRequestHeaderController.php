@@ -319,16 +319,21 @@ class MaterialRequestHeaderController extends Controller
 
         // Notification
         if(!$isInStock){
-            $roles = Role::whereIn('id', [4,5])->get();
-            foreach($roles as $role){
-                $users =  $role->users()->get();
-                if($users->count() > 0){
-                    foreach ($users as $notifiedUser){
-                        $notifiedUser->notify(new MaterialRequestCreated($mrHeader));
-                    }
+            $roleIds = [4,5];
+        }
+        else{
+            $roleIds = [4,6];
+        }
+        $roles = Role::whereIn('id', $roleIds)->get();
+        foreach($roles as $role){
+            $users =  $role->users()->get();
+            if($users->count() > 0){
+                foreach ($users as $notifiedUser){
+                    $notifiedUser->notify(new MaterialRequestCreated($mrHeader, $isInStock));
                 }
             }
         }
+
 
         Session::flash('message', 'Berhasil membuat material request!');
 

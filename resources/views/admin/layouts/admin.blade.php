@@ -56,12 +56,21 @@
                     var read = $('#unread').html();
                     $('#notification_badge').attr('style', 'color: red !important');
 
+                    var notifString = "default";
+                    var route = "default";
+                    if(notification.type === "App\\Notifications\\MaterialRequestCreated"){
+                        if(notification.data['document_type'] === "Material Request Part & Non-Part"){
+                            route = "/admin/material_requests/inventory/detil/" + notification.data["mr_id"];
+                        }
+                        notifString = "<li><a href='" + route +"'>MR " + notification.data['code'] +" telah dibuat, mohon buat PR</a></li>"
+                    }
+
                     if(read === '0'){
                         $('#notifications').html('');
-                        $('#notifications').append("<li><a href='#'>" + notification.type + "</a></li>");
+                        $('#notifications').append(notifString);
                     }
                     else{
-                        $('#notifications').prepend("<li><a href='#'>" + notification.type + "</a></li>");
+                        $('#notifications').prepend(notifString);
                     }
                 });
 
