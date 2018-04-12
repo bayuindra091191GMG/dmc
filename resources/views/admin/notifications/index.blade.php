@@ -5,15 +5,6 @@
 @section('content')
 
     <div class="row">
-        @include('partials._success')
-        <div class="nav navbar-right">
-            <a href="{{ route('admin.machinery_brands.create') }}" class="btn btn-app">
-                <i class="fa fa-plus"></i> Tambah
-            </a>
-        </div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="row">
         <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
                width="100%" id="machinery-types-table">
             <thead>
