@@ -25,200 +25,222 @@
         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
             <div class="menu_section">
                 <ul class="nav side-menu">
-                    {{--@foreach($menus as $menu)--}}
-                        {{--<li>--}}
-                            {{--<a style="font-weight: bold;">--}}
-                                {{--<i class="fa fa-list"></i>--}}
-                                    {{--{{ $menu->menu->name }}--}}
-                                {{--<span class="fa fa-chevron-down"></span>--}}
-                            {{--</a>--}}
-                        {{--</li>--}}
-                    {{--@endforeach--}}
-                    <li>
-                        <a style="font-weight: bold;">
-                            <i class="fa fa-list"></i>
-                            Management
-                            <span class="fa fa-chevron-down"></span>
-                        </a>
-                        <ul class="nav child_menu">
-                            <li><a href="{{ route('admin.users') }}">User</a></li>
-                            <li><a href="{{ route('admin.sites') }}">Site</a></li>
-                            <li><a href="{{ route('admin.departments') }}">Departemen</a></li>
-                            <li><a href="{{ route('admin.documents') }}">Dokumen</a></li>
-                            <li><a href="{{ route('admin.payment_methods') }}">Metode Pembayaran</a></li>
-                            <li><a href="{{ route('admin.menu_headers') }}">Header Menu</a></li>
-                            <li><a href="{{ route('admin.menus') }}">Menu</a></li>
-                            <li><a href="{{ route('admin.menu_subs') }}">Sub Menu</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a style="font-weight: bold;">
-                            <i class="fa fa-list"></i>
-                            Otorisasi
-                            <span class="fa fa-chevron-down"></span>
-                        </a>
-                        <ul class="nav child_menu">
-                            <li><a href="{{ route('admin.permission_documents') }}">Otorisasi Dokumen</a></li>
-                            <li><a href="{{ route('admin.permission_menus') }}">Otorisasi Menu</a></li>
-                            <li><a href="{{ route('admin.roles') }}">Level Akses</a></li>
-                            <li><a href="{{ route('admin.approval_rules') }}">Approval Rules</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a style="font-weight: bold;">
-                            <i class="fa fa-list"></i>
-                            Logistik
-                            <span class="fa fa-chevron-down"></span>
-                        </a>
-                        <ul class="nav child_menu">
-                            <li>
-                                <a>Master<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li class="sub_menu">
-                                        <a href="{{ route('admin.warehouses') }}">
-                                            Gudang
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.groups') }}">
-                                            Kategori Inventory
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a href="{{ route('admin.items') }}">Inventory</a></li>
-                            <li>
-                                <a>Material Request (MR)<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li class="sub_menu">
-                                        <a href="{{ route('admin.material_requests.other') }}">
-                                            MR Part/Non-Part
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.material_requests.fuel') }}">
-                                            MR BBM
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.material_requests.oil') }}">
-                                            MR Oli
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.material_requests.service') }}">
-                                            MR Servis
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a href="{{ route('admin.interchanges') }}">Interchanges</a></li>
-                            <li><a href="{{ route('admin.issued_dockets') }}">Issued Docket (ID)</a></li>
-                            <li><a href="{{ route('admin.delivery_orders') }}">Surat Jalan</a></li>
-                            <li><a href="{{ route('admin.stock_adjustments') }}">Stock Adjustment (SA)</a></li>
-                            <li><a href="{{ route('admin.stock_ins') }}">Stock In (SI)</a></li>
-                            <li><a href="{{ route('admin.stock_cards') }}">Stock Card</a></li>
-                            <li><a href="{{ route('admin.item_mutations') }}">Mutasi</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a style="font-weight: bold;">
-                            <i class="fa fa-list"></i>
-                            Purchasing
-                            <span class="fa fa-chevron-down"></span>
-                        </a>
-                        <ul class="nav child_menu">
-                            <li><a href="{{ route('admin.suppliers') }}">Vendor</a></li>
-                            <li><a href="{{ route('admin.purchase_requests') }}">Purchase Request (PR)</a></li>
-                            <li><a href="{{ route('admin.quotations') }}">Request For Quotation (RFQ)</a></li>
-                            <li><a href="{{ route('admin.purchase_orders') }}">Purchase Order (PO)</a></li>
-                            <li><a href="{{ route('admin.item_receipts') }}">Goods Receipt (GR)</a></li>
-                            <li><a href="{{ route('admin.purchase_invoices') }}">Purchase Invoice (PI)</a></li>
-                            <li>
-                                <a>Request For Payment (RFP)<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li class="sub_menu">
-                                        <a href="{{ route('admin.payment_requests') }}">
-                                            Daftar RFP
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.payment_requests.choose_vendor') }}">
-                                            Tambah RFP dari Invoice
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.payment_requests.choose_vendor_po') }}">
-                                            Tambah RFP DP/CBD
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a>Report<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li class="sub_menu">
-                                        <a href="{{ route('admin.purchase_requests.report') }}">
-                                            Purchase Request (PR)
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.purchase_orders.report') }}">
-                                            Purchase Order (PO)
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.item_receipts.report') }}">
-                                            Goods Receipt (GR)
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.purchase_invoices.report') }}">
-                                            Purchase Invoice (PI)
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a style="font-weight: bold;">
-                            <i class="fa fa-list"></i>
-                            Equipment
-                            <span class="fa fa-chevron-down"></span>
-                        </a>
-                        <ul class="nav child_menu">
-                            <li><a>Master<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li class="sub_menu">
-                                        <a href="{{ route('admin.machinery_categories') }}">
-                                            Kategori Alat
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.machinery_brands') }}">
-                                            Merek Alat
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a href="{{ route('admin.machineries') }}">Alat Berat</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a style="font-weight: bold;">
-                            <i class="fa fa-list"></i>
-                            Utility
-                            <span class="fa fa-chevron-down"></span>
-                        </a>
-                        <ul class="nav child_menu">
-                            <li>
-                                <a href="{{ route('admin.settings.preference') }}">
-                                    Preferensi Perusahaan
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                    @foreach($menuHeader as $header)
+                        <li>
+                            <a style="font-weight: bold;">
+                                <i class="fa fa-list"></i>
+                                    {{ $header->menu_header->name }}
+                                <span class="fa fa-chevron-down"></span>
+                            </a>
+                            <ul class="nav child_menu">
+                                @foreach($menus as $menu)
+                                    @if($menu->menu->menu_header->id == $header->menu_header_id)
+                                        @if($menu->menu->route != "-")
+                                            <li><a href="{{ route($menu->menu->route) }}">{{ $menu->menu->name }}</a></li>
+                                        @else
+                                            <li>
+                                                <a>{{ $menu->menu->name }}<span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+                                                    @foreach($menu->menu->menu_subs as $sub)
+                                                        <li class="sub_menu">
+                                                            <a href="{{ route($sub->route) }}">
+                                                                {{ $sub->name }}
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </li>
+                                        @endif
+                                    @endif
+                                @endforeach
+                            </ul>
+                        </li>
+                    @endforeach
+                    {{--<li>--}}
+                        {{--<a style="font-weight: bold;">--}}
+                            {{--<i class="fa fa-list"></i>--}}
+                            {{--Management--}}
+                            {{--<span class="fa fa-chevron-down"></span>--}}
+                        {{--</a>--}}
+                        {{--<ul class="nav child_menu">--}}
+                            {{--<li><a href="{{ route('admin.users') }}">User</a></li>--}}
+                            {{--<li><a href="{{ route('admin.sites') }}">Site</a></li>--}}
+                            {{--<li><a href="{{ route('admin.departments') }}">Departemen</a></li>--}}
+                            {{--<li><a href="{{ route('admin.documents') }}">Dokumen</a></li>--}}
+                            {{--<li><a href="{{ route('admin.payment_methods') }}">Metode Pembayaran</a></li>--}}
+                            {{--<li><a href="{{ route('admin.menu_headers') }}">Header Menu</a></li>--}}
+                            {{--<li><a href="{{ route('admin.menus') }}">Menu</a></li>--}}
+                            {{--<li><a href="{{ route('admin.menu_subs') }}">Sub Menu</a></li>--}}
+                        {{--</ul>--}}
+                    {{--</li>--}}
+                    {{--<li>--}}
+                        {{--<a style="font-weight: bold;">--}}
+                            {{--<i class="fa fa-list"></i>--}}
+                            {{--Otorisasi--}}
+                            {{--<span class="fa fa-chevron-down"></span>--}}
+                        {{--</a>--}}
+                        {{--<ul class="nav child_menu">--}}
+                            {{--<li><a href="{{ route('admin.permission_documents') }}">Otorisasi Dokumen</a></li>--}}
+                            {{--<li><a href="{{ route('admin.permission_menus') }}">Otorisasi Menu</a></li>--}}
+                            {{--<li><a href="{{ route('admin.roles') }}">Level Akses</a></li>--}}
+                            {{--<li><a href="{{ route('admin.approval_rules') }}">Approval Rules</a></li>--}}
+                        {{--</ul>--}}
+                    {{--</li>--}}
+                    {{--<li>--}}
+                        {{--<a style="font-weight: bold;">--}}
+                            {{--<i class="fa fa-list"></i>--}}
+                            {{--Logistik--}}
+                            {{--<span class="fa fa-chevron-down"></span>--}}
+                        {{--</a>--}}
+                        {{--<ul class="nav child_menu">--}}
+                            {{--<li>--}}
+                                {{--<a>Master<span class="fa fa-chevron-down"></span></a>--}}
+                                {{--<ul class="nav child_menu">--}}
+                                    {{--<li class="sub_menu">--}}
+                                        {{--<a href="{{ route('admin.warehouses') }}">--}}
+                                            {{--Gudang--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.groups') }}">--}}
+                                            {{--Kategori Inventory--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                {{--</ul>--}}
+                            {{--</li>--}}
+                            {{--<li><a href="{{ route('admin.items') }}">Inventory</a></li>--}}
+                            {{--<li>--}}
+                                {{--<a>Material Request (MR)<span class="fa fa-chevron-down"></span></a>--}}
+                                {{--<ul class="nav child_menu">--}}
+                                    {{--<li class="sub_menu">--}}
+                                        {{--<a href="{{ route('admin.material_requests.other') }}">--}}
+                                            {{--MR Part/Non-Part--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.material_requests.fuel') }}">--}}
+                                            {{--MR BBM--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.material_requests.oil') }}">--}}
+                                            {{--MR Oli--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.material_requests.service') }}">--}}
+                                            {{--MR Servis--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                {{--</ul>--}}
+                            {{--</li>--}}
+                            {{--<li><a href="{{ route('admin.interchanges') }}">Interchanges</a></li>--}}
+                            {{--<li><a href="{{ route('admin.issued_dockets') }}">Issued Docket (ID)</a></li>--}}
+                            {{--<li><a href="{{ route('admin.delivery_orders') }}">Surat Jalan</a></li>--}}
+                            {{--<li><a href="{{ route('admin.stock_adjustments') }}">Stock Adjustment (SA)</a></li>--}}
+                            {{--<li><a href="{{ route('admin.stock_ins') }}">Stock In (SI)</a></li>--}}
+                            {{--<li><a href="{{ route('admin.stock_cards') }}">Stock Card</a></li>--}}
+                            {{--<li><a href="{{ route('admin.item_mutations') }}">Mutasi</a></li>--}}
+                        {{--</ul>--}}
+                    {{--</li>--}}
+                    {{--<li>--}}
+                        {{--<a style="font-weight: bold;">--}}
+                            {{--<i class="fa fa-list"></i>--}}
+                            {{--Purchasing--}}
+                            {{--<span class="fa fa-chevron-down"></span>--}}
+                        {{--</a>--}}
+                        {{--<ul class="nav child_menu">--}}
+                            {{--<li><a href="{{ route('admin.suppliers') }}">Vendor</a></li>--}}
+                            {{--<li><a href="{{ route('admin.purchase_requests') }}">Purchase Request (PR)</a></li>--}}
+                            {{--<li><a href="{{ route('admin.quotations') }}">Request For Quotation (RFQ)</a></li>--}}
+                            {{--<li><a href="{{ route('admin.purchase_orders') }}">Purchase Order (PO)</a></li>--}}
+                            {{--<li><a href="{{ route('admin.item_receipts') }}">Goods Receipt (GR)</a></li>--}}
+                            {{--<li><a href="{{ route('admin.purchase_invoices') }}">Purchase Invoice (PI)</a></li>--}}
+                            {{--<li>--}}
+                                {{--<a>Request For Payment (RFP)<span class="fa fa-chevron-down"></span></a>--}}
+                                {{--<ul class="nav child_menu">--}}
+                                    {{--<li class="sub_menu">--}}
+                                        {{--<a href="{{ route('admin.payment_requests') }}">--}}
+                                            {{--Daftar RFP--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.payment_requests.choose_vendor') }}">--}}
+                                            {{--Tambah RFP dari Invoice--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.payment_requests.choose_vendor_po') }}">--}}
+                                            {{--Tambah RFP DP/CBD--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                {{--</ul>--}}
+                            {{--</li>--}}
+                            {{--<li>--}}
+                                {{--<a>Report<span class="fa fa-chevron-down"></span></a>--}}
+                                {{--<ul class="nav child_menu">--}}
+                                    {{--<li class="sub_menu">--}}
+                                        {{--<a href="{{ route('admin.purchase_requests.report') }}">--}}
+                                            {{--Purchase Request (PR)--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.purchase_orders.report') }}">--}}
+                                            {{--Purchase Order (PO)--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.item_receipts.report') }}">--}}
+                                            {{--Goods Receipt (GR)--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.purchase_invoices.report') }}">--}}
+                                            {{--Purchase Invoice (PI)--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                {{--</ul>--}}
+                            {{--</li>--}}
+                        {{--</ul>--}}
+                    {{--</li>--}}
+                    {{--<li>--}}
+                        {{--<a style="font-weight: bold;">--}}
+                            {{--<i class="fa fa-list"></i>--}}
+                            {{--Equipment--}}
+                            {{--<span class="fa fa-chevron-down"></span>--}}
+                        {{--</a>--}}
+                        {{--<ul class="nav child_menu">--}}
+                            {{--<li><a>Master<span class="fa fa-chevron-down"></span></a>--}}
+                                {{--<ul class="nav child_menu">--}}
+                                    {{--<li class="sub_menu">--}}
+                                        {{--<a href="{{ route('admin.machinery_categories') }}">--}}
+                                            {{--Kategori Alat--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                    {{--<li>--}}
+                                        {{--<a href="{{ route('admin.machinery_brands') }}">--}}
+                                            {{--Merek Alat--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                {{--</ul>--}}
+                            {{--</li>--}}
+                            {{--<li><a href="{{ route('admin.machineries') }}">Alat Berat</a></li>--}}
+                        {{--</ul>--}}
+                    {{--</li>--}}
+                    {{--<li>--}}
+                        {{--<a style="font-weight: bold;">--}}
+                            {{--<i class="fa fa-list"></i>--}}
+                            {{--Utility--}}
+                            {{--<span class="fa fa-chevron-down"></span>--}}
+                        {{--</a>--}}
+                        {{--<ul class="nav child_menu">--}}
+                            {{--<li>--}}
+                                {{--<a href="{{ route('admin.settings.preference') }}">--}}
+                                    {{--Preferensi Perusahaan--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
+                        {{--</ul>--}}
+                    {{--</li>--}}
                     {{--<li>--}}
                         {{--<a style="font-weight: bold;">--}}
                             {{--<i class="fa fa-list"></i>--}}

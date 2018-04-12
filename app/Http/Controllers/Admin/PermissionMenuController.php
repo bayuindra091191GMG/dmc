@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Auth\Role\Role;
 use App\Models\Menu;
 use App\Models\PermissionMenu;
+use App\Models\PermissionMenuHeader;
 use App\Transformer\MasterData\PermissionMenuTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -96,7 +97,7 @@ class PermissionMenuController extends Controller
         $user = Auth::user();
 
         foreach ($menus as $menu){
-            PermissionMenu::create([
+            $menuResult = PermissionMenu::create([
                 'role_id'       => $role_id,
                 'menu_id'       => $menu,
                 'created_by'    => $user->id,
@@ -104,6 +105,21 @@ class PermissionMenuController extends Controller
                 'updated_by'    => $user->id,
                 'updated_at'    => $dateTimeNow->toDateTimeString()
             ]);
+
+            //Create menu Header
+            //Check first if Exist
+
+            $menuHeader = PermissionMenuHeader::where('role_id', $role_id)->where('menu_header_id', $menuResult->menu_header->id)->first();
+            if($menuHeader == null){
+                PermissionMenuHeader::create([
+                    'role_id'           => $role_id,
+                    'menu_header_id'    => $menu->menu_header->id,
+                    'created_by'        => $user->id,
+                    'created_at'        => $dateTimeNow->toDateTimeString(),
+                    'updated_by'        => $user->id,
+                    'updated_at'        => $dateTimeNow->toDateTimeString()
+                ]);
+            }
         }
 
         Session::flash('message', 'Berhasil membuat data otorisasi menu baru!');
@@ -158,17 +174,41 @@ class PermissionMenuController extends Controller
         $dateTimeNow = Carbon::now('Asia/Jakarta');
         $user = Auth::user();
 
-        foreach ($menus as $menu){
-            $permission = PermissionMenu::where('role_id', $role_id)->where('menu_id', $menu)->first();
-            if($permission == null){
-                PermissionMenu::create([
-                    'role_id'       => $role_id,
-                    'menu_id'       => $menu,
-                    'created_by'    => $user->id,
-                    'created_at'    => $dateTimeNow->toDateTimeString(),
-                    'updated_by'    => $user->id,
-                    'updated_at'    => $dateTimeNow->toDateTimeString()
-                ]);
+        $menus = Input::get('ids');
+        $role_id = $request->get('role');
+        $exist = true;
+
+        if($menus == null){
+            $exist = false;
+        }
+
+        if($exist) {
+            foreach ($menus as $menu) {
+                $permission = PermissionMenu::where('role_id', $role_id)->where('menu_id', $menu)->first();
+                if ($permission == null) {
+                    $menuResult = PermissionMenu::create([
+                        'role_id' => $role_id,
+                        'menu_id' => $menu,
+                        'created_by' => $user->id,
+                        'created_at' => $dateTimeNow->toDateTimeString(),
+                        'updated_by' => $user->id,
+                        'updated_at' => $dateTimeNow->toDateTimeString()
+                    ]);
+
+                    //Create menu Header
+                    //Check first if Exist
+                    $menuHeader = PermissionMenuHeader::where('role_id', $role_id)->where('menu_header_id', $menuResult->menu->menu_header->id)->first();
+                    if ($menuHeader == null) {
+                        PermissionMenuHeader::create([
+                            'role_id'           => $role_id,
+                            'menu_header_id'    => $menuResult->menu->menu_header->id,
+                            'created_by'        => $user->id,
+                            'created_at'        => $dateTimeNow->toDateTimeString(),
+                            'updated_by'        => $user->id,
+                            'updated_at'        => $dateTimeNow->toDateTimeString()
+                        ]);
+                    }
+                }
             }
         }
         //End add permission menu

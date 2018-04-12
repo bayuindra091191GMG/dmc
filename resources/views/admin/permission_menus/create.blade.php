@@ -55,7 +55,7 @@
                                     @php($idx++)
                                         <td>
                                             <label>
-                                                <input type="checkbox" class="flat" id="chk{{$menu->id}}" name="chk[]" onclick="changeInput('{{ $menu->id }}')" > {{ $menu->name }}
+                                                <input type="checkbox" class="flat" id="chk{{$menu->id}}" name="chk[]" onclick="changeInput('{{ $menu->id }}')" /> {{ $menu->name }}
                                                 <input type="text" hidden="true" value="{{ $menu->id }}" id="{{ $menu->id }}" name="ids[]" disabled/>
                                             </label>
                                         </td>
@@ -64,6 +64,18 @@
                                         @php($idx = 0)
                                     @endif
                                 @endforeach
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" class="flat" id="selectAll"/> Select All
+                                    </label>
+                                </td>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" class="flat" id="unSelectAll"/> Unselect All
+                                    </label>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -91,6 +103,10 @@
     {{ Html::script(mix('assets/admin/js/users/edit.js')) }}
 
     <script>
+        $("#selectall").click(function(){
+            $('input:checkbox').not(this).prop('checked', this.checked);
+        });
+
         function changeInput(id){
             if(document.getElementById("chk"+id).checked == true){
                 document.getElementById(id).disabled = false;

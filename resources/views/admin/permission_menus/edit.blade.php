@@ -59,11 +59,11 @@
                                             @endforeach
 
                                             @if($flag == 1)
-                                                <input type="checkbox" class="flat" id="chk{{$menu->id}}" name="chk[]" onclick="changeInput('{{ $menu->id }}')" checked="checked"> {{ $menu->name }}
+                                                <input type="checkbox" class="flat" id="chk{{$menu->id}}" name="chk[]" onchange="changeInput('{{ $menu->id }}')" checked="checked"> {{ $menu->name }}
                                                 <input type="text" hidden="true" value="{{ $menu->id }}" id="ids{{ $menu->id }}" name="ids[]"/>
                                                 <input type="text" hidden="true" value="{{ $menu->id }}" id="idsDelete{{ $menu->id }}" name="idsDelete[]" disabled/>
                                             @else
-                                                <input type="checkbox" class="flat" id="chk{{$menu->id}}" name="chk[]" onclick="changeInput('{{ $menu->id }}')" > {{ $menu->name }}
+                                                <input type="checkbox" class="flat" id="chk{{$menu->id}}" name="chk[]" onchange="changeInput('{{ $menu->id }}')" > {{ $menu->name }}
                                                 <input type="text" hidden="true" value="{{ $menu->id }}" id="ids{{ $menu->id }}" name="ids[]" disabled/>
                                                 <input type="text" hidden="true" value="{{ $menu->id }}" id="idsDelete{{ $menu->id }}" name="idsDelete[]"/>
                                             @endif
@@ -74,6 +74,13 @@
                                         @php($idx = 0)
                                     @endif
                                 @endforeach
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" class="flat" id="selectAll"/> Select/Unselect All
+                                    </label>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -101,6 +108,9 @@
     {{ Html::script(mix('assets/admin/js/users/edit.js')) }}
 
     <script>
+        $("#selectAll").click(function(){
+            $('input:checkbox').not(this).prop('checked', this.checked).change();
+        });
         function changeInput(id){
             if(document.getElementById("chk"+id).checked == true){
                 document.getElementById("ids"+id).disabled = false;
