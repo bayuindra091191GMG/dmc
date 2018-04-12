@@ -234,17 +234,18 @@ class PurchaseRequestHeaderController extends Controller
 
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
 
         $priority = $request->input('priority');
 
         if($priority == '1'){
-            $limitDate = $now->addDays(8);
+            $limitDate = $date->addDays(8);
         }
         elseif($priority == '2'){
-            $limitDate = $now->addDays(15);
+            $limitDate = $date->addDays(15);
         }
         else{
-            $limitDate = $now->addDays(22);
+            $limitDate = $date->addDays(22);
         }
 
 
@@ -271,7 +272,6 @@ class PurchaseRequestHeaderController extends Controller
             $prHeader->save();
         }
 
-        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
         $prHeader->date = $date->toDateTimeString();
         $prHeader->save();
 

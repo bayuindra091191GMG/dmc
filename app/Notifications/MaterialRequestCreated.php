@@ -12,15 +12,18 @@ class MaterialRequestCreated extends Notification implements ShouldQueue
 {
     use Queueable;
     protected $materialRequest;
+    protected $isInStock;
 
     /**
      * Create a new notification instance.
      *
      * @param MaterialRequestHeader $header
+     * @param bool $isInStock
      */
-    public function __construct(MaterialRequestHeader $header)
+    public function __construct(MaterialRequestHeader $header, bool $isInStock)
     {
         $this->materialRequest = $header;
+        $this->isInStock = $isInStock;
     }
 
     /**
@@ -36,7 +39,7 @@ class MaterialRequestCreated extends Notification implements ShouldQueue
 
     public function toDatabase($notifiable){
         if($this->materialRequest->type == 1){
-            $documentType = 'Material Request Part/Non-Part';
+            $documentType = 'Material Request Part & Non-Part';
         }
         elseif($this->materialRequest->type == 2){
             $documentType = 'Material Request BBM';
@@ -48,6 +51,13 @@ class MaterialRequestCreated extends Notification implements ShouldQueue
             $documentType = 'Material Request Servis';
         }
 
+        if(!$this->isInStock){
+            $roleIds = [4,5];
+        }
+        else{
+            $roleIds = [4,6];
+        }
+
         return [
             'document_type'     => $documentType,
             'mr_id'             => $this->materialRequest->id,
@@ -55,7 +65,7 @@ class MaterialRequestCreated extends Notification implements ShouldQueue
             'sender_id'         => $this->materialRequest->created_by,
             'sender_name'       => $this->materialRequest->createdBy->name,
             'receiver_id'       => 0,
-            'redeiver_role_id'  => 3
+            'redeiver_role_id'  => $roleIds
         ];
     }
 
@@ -68,7 +78,7 @@ class MaterialRequestCreated extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         if($this->materialRequest->type == 1){
-            $documentType = 'Material Request Part/Non-Part';
+            $documentType = 'Material Request Part & Non-Part';
         }
         elseif($this->materialRequest->type == 2){
             $documentType = 'Material Request BBM';
@@ -80,17 +90,24 @@ class MaterialRequestCreated extends Notification implements ShouldQueue
             $documentType = 'Material Request Servis';
         }
 
+        if(!$this->isInStock){
+            $roleIds = [4,5];
+        }
+        else{
+            $roleIds = [4,6];
+        }
+
         return [
             'id'        => $this->id,
             'read_at'   => null,
             'data'      => [
                 'document_type'     => $documentType,
-                'id'                => $this->materialRequest->id,
+                'mr_id'                => $this->materialRequest->id,
                 'code'              => $this->materialRequest->code,
                 'sender_id'         => $this->materialRequest->created_by,
                 'sender_name'       => $this->materialRequest->createdBy->name,
                 'receiver_id'       => 0,
-                'redeiver_role_id'  => 3
+                'redeiver_role_id'  => $roleIds
             ],
         ];
     }
