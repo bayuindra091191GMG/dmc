@@ -54,18 +54,22 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="col-md-3 col-sm-3 col-xs-12">
-                        Approved
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        @if($status)
-                            : <span style="font-weight: bold; color: green;">Sudah Approved</span>
-                        @elseif(!$status)
-                            : <span style="font-weight: bold; color: red;">Approved Sebagian</span>
-                        @endif
+                @if($setting == 1)
+                    <div class="form-group">
+                        <label class="col-md-3 col-sm-3 col-xs-12">
+                            Approved
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @if($status == 99)
+                                : <span style="font-weight: bold; color: green;">Sudah Approved</span>
+                            @elseif($status < 99 && $status != 0)
+                                : <span style="font-weight: bold; color: blue;">Approved Sebagian</span>
+                            @elseif($status == 0)
+                                : <span style="font-weight: bold; color: red;">Belum Diapprove</span>
+                            @endif
+                        </div>
                     </div>
-                </div>
+                @endif
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">

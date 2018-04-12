@@ -81,7 +81,8 @@ class PurchaseRequestHeaderController extends Controller
         $user = \Auth::user();
         $permission = true;
         $approveOrder = false;
-        $status = false;
+        //Kondisi belum diapprove
+        $status = 0;
 
         //All Approval Settings checked if On Or Not
         $setting = PreferenceCompany::find(1);
@@ -100,13 +101,19 @@ class PurchaseRequestHeaderController extends Controller
                 $approveOrder = false;
             }
 
-            if ($approvals->count() != $approvalPr->count()) {
-                $permission = false;
+            //Kondisi Approve Sebagian
+            $approvalPrData = ApprovalPurchaseRequest::where('purchase_request_id', $header->id)->first();
+            if($approvalData != null || $approvalPrData != null){
+                $status = $approvalPrData->count();
+
+                //Kondisi Semua sudah Approve
+                if($approvalPrData->count() == $approvals->count()){
+                    $status = 99;
+                }
             }
 
-            $approvalData = ApprovalPurchaseRequest::where('purchase_request_id', $header->id)->where('user_id', $user->id)->first();
-            if($approvalData != null){
-                $status = true;
+            if ($approvals->count() != $approvalPr->count()) {
+                $permission = false;
             }
         }
 
@@ -116,9 +123,10 @@ class PurchaseRequestHeaderController extends Controller
             'priorityLimitDate' => $priorityLimitDate,
             'permission'        => $permission,
             'approveOrder'      => $approveOrder,
-            'status'            => $status
+            'status'            => $status,
+            'setting'           => $setting->approval_setting
         ];
-
+        //dd($status);
         return View('admin.purchasing.purchase_requests.show')->with($data);
     }
 
@@ -492,7 +500,9 @@ class PurchaseRequestHeaderController extends Controller
         $purchaseRequest = PurchaseRequestHeader::find($id);
         $purchaseRequestDetails = PurchaseRequestDetail::where('header_id', $purchaseRequest->id)->get();
         $approvalUser = ApprovalRule::where('document_id', 3)->get();
+        $temp = PreferenceCompany::find(1);
+        $setting = $temp->approval_setting;
 
-        return view('documents.purchase_requests.purchase_requests_doc', compact('purchaseRequest', 'purchaseRequestDetails', 'approvalUser'));
+        return view('documents.purchase_requests.purchase_requests_doc', compact('purchaseRequest', 'purchaseRequestDetails', 'approvalUser', 'setting'));
     }
 }
