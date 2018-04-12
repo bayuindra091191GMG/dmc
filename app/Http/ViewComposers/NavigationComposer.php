@@ -25,7 +25,7 @@ class NavigationComposer
         $user = auth()->user();
         $role = $user->roles()->pluck('id')[0];
         $this->menus = PermissionMenu::where('role_id', $role)->get();
-        $this->menuHeader = PermissionMenuHeader::where('role_id', $role)->get();
+        $this->menuHeader = PermissionMenuHeader::where('role_id', $role)->orderby('menu_header_id')->get();
         //dd($this->menuHeader);
     }
 

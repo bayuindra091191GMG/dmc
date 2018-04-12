@@ -146,7 +146,7 @@ class PermissionMenuController extends Controller
      */
     public function edit($id)
     {
-        $menus = Menu::all();
+        $menus = Menu::orderBy('name')->get();
         $role = Role::find($id);
         $permissionMenus = PermissionMenu::where('role_id', $role->id)->get();
 
@@ -216,11 +216,31 @@ class PermissionMenuController extends Controller
         //Delete Permission Menus
         $menusDelete = Input::get('idsDelete');
         if($menusDelete != null){
+
+
             foreach($menusDelete as $menu){
-               $data = PermissionMenu::where('role_id', $role_id)->where('menu_id', $menu)->first();
-               if($data != null){
-                   $data->delete();
-               }
+                $data = PermissionMenu::where('role_id', $role_id)->where('menu_id', $menu)->first();
+                if($data != null){
+                    $menuHeader = PermissionMenuHeader::where('role_id', $role_id)->where('menu_header_id', $data->menu->menu_header->id)->first();
+                    $data->delete();
+
+                    //Checking Header and Delete Them if no more data in PermissionMenu that Contains Menu header with same ID
+                    $menuHeaderId = $menuHeader->menu_header_id;
+                    $valid = true;
+
+                    if(PermissionMenu::where('role_id', $role_id)->whereHas('menu', function($query) use ($menuHeaderId){
+                        $menuHeaderId2 = $menuHeaderId;
+                        $query->whereHas('menu_header', function ($query1) use ($menuHeaderId2){
+                            $query1->where('id', $menuHeaderId2);
+                        });
+                    })->exists()){
+                        $valid = false;
+                    }
+
+                    if($valid){
+                        $menuHeader->delete();
+                    }
+                }
             }
         }
         //End Delete Permission Menu
