@@ -83,8 +83,9 @@
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="machinery" name="machinery" class="form-control col-md-7 col-xs-12 @if($errors->has('machinery')) parsley-error @endif">
-                    </select>
+                    <input id="machinery" type="text" class="form-control col-md-7 col-xs-12"
+                           name="machinery" value="{{ $header->machinery->code }}" readonly>
+                    <input type="hidden" id="machinery_id" name="machinery_id" value="{{ $header->machinery_id }}">
                 </div>
             </div>
 

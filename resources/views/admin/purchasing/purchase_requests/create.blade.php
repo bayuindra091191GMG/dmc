@@ -90,8 +90,9 @@
                     Unit Alat Berat
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="machinery" name="machinery" class="form-control col-md-7 col-xs-12 @if($errors->has('machinery')) parsley-error @endif">
-                    </select>
+                    {{--<select id="machinery" name="machinery" class="form-control col-md-7 col-xs-12 @if($errors->has('machinery')) parsley-error @endif">--}}
+                    {{--</select>--}}
+                    <input type="text" name="machinery" class="form-control col-md-7 col-xs-12" value="{{ $materialRequest->machinery->code }}" readonly>
                     <input type="hidden" id="machinery_id" name="machinery_id" @if(!empty($materialRequest)) value="{{ $materialRequest->machinery_id }} @endif">
                 </div>
             </div>

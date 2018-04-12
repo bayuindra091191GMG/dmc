@@ -263,11 +263,7 @@ class PurchaseRequestHeaderController extends Controller
 
         ]);
 
-        if($request->filled('machinery')){
-            $prHeader->machinery_id = $request->input('machinery');
-            $prHeader->save();
-        }
-        elseif($request->filled('machinery_id')){
+        if($request->filled('machinery_id')){
             $prHeader->machinery_id = $request->input('machinery_id');
             $prHeader->save();
         }
@@ -332,11 +328,6 @@ class PurchaseRequestHeaderController extends Controller
             return redirect()->back()->withErrors('Pilih departemen!', 'default')->withInput($request->all());
         }
 
-        // Validate priority
-//        if($request->input('priority') === '-1'){
-//            return redirect()->back()->withErrors('Pilih prioritas!', 'default')->withInput($request->all());
-//        }
-
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
         $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
@@ -348,10 +339,7 @@ class PurchaseRequestHeaderController extends Controller
         $purchase_request->date = $date;
         $purchase_request->updated_by = $user->id;
         $purchase_request->updated_at = $now->toDateTimeString();
-
-        if($request->filled('machinery')){
-            $purchase_request->machinery_id = $request->input('machinery');
-        }
+        $purchase_request->machinery_id = $request->input('machinery_id');
 
         $purchase_request->save();
 
