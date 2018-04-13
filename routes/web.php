@@ -257,6 +257,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('material_request_details/simpan', 'Inventory\MaterialRequestDetailController@store')->name('material_request_details.store');
     Route::put('material_request_details/ubah', 'Inventory\MaterialRequestDetailController@update')->name('material_request_details.update');
     Route::post('material_request_details/hapus', 'Inventory\MaterialRequestDetailController@delete')->name('material_request_details.delete');
+    Route::get('material_requests/report', 'Inventory\MaterialRequestHeaderController@report')->name('material_requests.report');
+    Route::post('material_requests/download_report', 'Inventory\MaterialRequestHeaderController@downloadReport')->name('material_requests.download-report');
 
     //Material Request Headers for Other
     Route::get('material_requests/inventory', 'Inventory\MaterialRequestHeaderController@indexOther')->name('material_requests.other');
@@ -264,8 +266,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('material_requests/inventory/{material_request}/ubah', 'Inventory\MaterialRequestHeaderController@editOther')->name('material_requests.other.edit');
     Route::get('material_requests/inventory/tambah', 'Inventory\MaterialRequestHeaderController@createOther')->name('material_requests.other.create');
     Route::get('material_requests/inventory/download/{material_request}', 'Inventory\MaterialRequestHeaderController@downloadOther')->name('material_requests.other.download');
-    Route::get('material_requests/inventory/report', 'Inventory\MaterialRequestHeaderController@reportOther')->name('material_requests.other.report');
-    Route::post('material_requests/inventory/download_report', 'Inventory\MaterialRequestHeaderController@downloadReportOther')->name('material_requests.other.download-report');
 
     //Material Request Headers for Fuel
     Route::get('material_requests/bbm', 'Inventory\MaterialRequestHeaderController@indexFuel')->name('material_requests.fuel');
@@ -273,8 +273,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('material_requests/bbm/{material_request}/ubah', 'Inventory\MaterialRequestHeaderController@editFuel')->name('material_requests.fuel.edit');
     Route::get('material_requests/bbm/tambah', 'Inventory\MaterialRequestHeaderController@createFuel')->name('material_requests.fuel.create');
     Route::get('material_requests/bbm/download/{material_request}', 'Inventory\MaterialRequestHeaderController@downloadFuel')->name('material_requests.fuel.download');
-    Route::get('material_requests/bbm/report', 'Inventory\MaterialRequestHeaderController@reportFuel')->name('material_requests.fuel.report');
-    Route::post('material_requests/bbm/download_report', 'Inventory\MaterialRequestHeaderController@downloadReportFuel')->name('material_requests.fuel.download-report');
 
     //Material Request Headers for Oil
     Route::get('material_requests/oli', 'Inventory\MaterialRequestHeaderController@indexOil')->name('material_requests.oil');
@@ -282,8 +280,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('material_requests/oli/{material_request}/ubah', 'Inventory\MaterialRequestHeaderController@editOil')->name('material_requests.oil.edit');
     Route::get('material_requests/oli/tambah', 'Inventory\MaterialRequestHeaderController@createOil')->name('material_requests.oil.create');
     Route::get('material_requests/oli/download/{material_request}', 'Inventory\MaterialRequestHeaderController@downloadOil')->name('material_requests.oil.download');
-    Route::get('material_requests/oli/report', 'Inventory\MaterialRequestHeaderController@reportOil')->name('material_requests.oil.report');
-    Route::post('material_requests/oli/download_report', 'Inventory\MaterialRequestHeaderController@downloadReportOil')->name('material_requests.oil.download-report');
 
     //Material Request Headers for Service
     Route::get('material_requests/servis', 'Inventory\MaterialRequestHeaderController@indexService')->name('material_requests.service');
@@ -291,8 +287,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('material_requests/servis/{material_request}/ubah', 'Inventory\MaterialRequestHeaderController@editService')->name('material_requests.service.edit');
     Route::get('material_requests/servis/tambah', 'Inventory\MaterialRequestHeaderController@createService')->name('material_requests.service.create');
     Route::get('material_requests/servis/download/{material_request}', 'Inventory\MaterialRequestHeaderController@downloadService')->name('material_requests.service.download');
-    Route::get('material_requests/servis/report', 'Inventory\MaterialRequestHeaderController@reportService')->name('material_requests.service.report');
-    Route::post('material_requests/servis/download_report', 'Inventory\MaterialRequestHeaderController@downloadReportService')->name('material_requests.service.download-report');
 
     //Purchase Request Headers
     Route::get('purchase_requests', 'Purchasing\PurchaseRequestHeaderController@index')->name('purchase_requests');

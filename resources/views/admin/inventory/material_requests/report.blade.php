@@ -29,22 +29,23 @@
             @endif
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status" >
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="type" >
                     Tipe MR
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="status" name="status" class="form-control col-md-7 col-xs-12">
+                    <select id="type" name="type" class="form-control col-md-7 col-xs-12">
                         <option value="0" selected>Semua</option>
-                        <option value="1">Inventory</option>
-                        <option value="2">Oli & Bensin</option>
-                        <option value="3">Servis</option>
+                        <option value="1">Part & Non-Part</option>
+                        <option value="2">BBM</option>
+                        <option value="2">Oli</option>
+                        <option value="4">Servis</option>
                     </select>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="start_date" >
-                    Start Date
+                    Dari Tanggal
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="start_date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('start_date')) parsley-error @endif"
@@ -54,7 +55,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="end_date" >
-                    Finish Date
+                    Sampai Tanggal
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="end_date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('end_date')) parsley-error @endif"
@@ -71,6 +72,7 @@
                         <option value="0" selected>Semua</option>
                         <option value="3">Open</option>
                         <option value="4">Closed</option>
+                        <option value="11">Closed Manual</option>
                     </select>
                 </div>
             </div>

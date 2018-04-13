@@ -37,30 +37,28 @@
  <table class="table">
   <thead>
   <tr>
-       <th>No</th>
-       <th>Code</th>
-       <th>Date</th>
-       <th>MR Code</th>
-       <th>HM</th>
-       <th>KM</th>
-       <th>Department</th>
-       <th>Division</th>
-       <th>Dibuat Oleh</th>
+       <th class="text-center">No</th>
+       <th class="text-center">Nomor Docket</th>
+       <th class="text-center">Tanggal</th>
+       <th class="text-center">Nomor MR</th>
+       <th class="text-center">HM</th>
+       <th class="text-center">KM</th>
+       <th class="text-center">Departemen</th>
+       <th class="text-center">Divisi</th>
   </tr>
   </thead>
   <tbody>
     @php($i=1)
     @foreach($data as $item)
         <tr>
-            <td>{{ $i }}</td>
-            <td>{{ $item->code }}</td>
-            <td>{{ $item->date_string }}</td>
-            <td>{{ $item->materil_request_header->code }}</td>
-            <td>{{ $item->hm }}</td>
-            <td>{{ $item->km }}</td>
-            <td>{{ $item->department->name }}</td>
-            <td>{{ $item->division }}</td>
-            <td>{{ $item->createdBy->name }}</td>
+            <td class="text-center">{{ $i }}</td>
+            <td class="text-center">{{ $item->code }}</td>
+            <td class="text-center">{{ $item->date_string }}</td>
+            <td class="text-center">{{ $item->materil_request_header->code }}</td>
+            <td class="text-center">{{ $item->hm }}</td>
+            <td class="text-center">{{ $item->km }}</td>
+            <td class="text-center">{{ $item->department->name }}</td>
+            <td class="text-center">{{ $item->division }}</td>
         </tr>
         @php($i++)
     @endforeach

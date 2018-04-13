@@ -11,7 +11,6 @@ namespace App\Http\Controllers\Admin\Purchasing;
 
 use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
-use App\Models\ApprovalPaymentRequest;
 use App\Models\ApprovalPurchaseRequest;
 use App\Models\ApprovalRule;
 use App\Models\Department;

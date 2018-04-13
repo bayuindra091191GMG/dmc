@@ -397,22 +397,37 @@ class DocketController extends Controller
     }
 
     public function downloadReport(Request $request) {
-        //Get Data First
-        $tempStart = strtotime(Input::get('start_date'));
+        $validator = Validator::make($request->all(),[
+            'start_date'        => 'required',
+            'end_date'          => 'required',
+        ],[
+            'start_date.required'   => 'Dari Tanggal wajib diisi!',
+            'end_date.required'     => 'Sampai Tanggal wajib diisi!',
+
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $tempStart = strtotime($request->input('start_date'));
         $start = date('Y-m-d', $tempStart);
-        $tempEnd = strtotime(Input::get('end_date'));
+        $tempEnd = strtotime($request->input('end_date'));
         $end = date('Y-m-d', $tempEnd);
 
         //Check date
         if($start > $end){
-            return redirect()->back()->withErrors('Start Date Tidak boleh lebih besar dari Finish Date!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Dari Tanggal tidak boleh lebih besar dari Sampai Tanggal!', 'default')->withInput($request->all());
         }
 
         $data = IssuedDocketHeader::whereBetween('date', array($start, $end))->get();
 
         //Check Data
         if($data == null || $data->count() == 0){
-            return redirect()->back()->withErrors('Data Tidak Ditemukan!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Data tidak ditemukan!', 'default')->withInput($request->all());
         }
 
         $pdf = PDF::loadView('documents.issued_dockets.issued_docket_pdf', ['data' => $data, 'start_date' => Input::get('start_date'), 'finish_date' => Input::get('end_date')])

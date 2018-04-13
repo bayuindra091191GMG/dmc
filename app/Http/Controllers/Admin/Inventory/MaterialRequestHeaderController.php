@@ -12,7 +12,6 @@ namespace App\Http\Controllers\Admin\Inventory;
 use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
 use App\Models\Auth\Role\Role;
-use App\Models\Auth\User\User;
 use App\Models\Department;
 use App\Models\Item;
 use App\Models\ItemStock;
@@ -27,6 +26,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
+use PDF;
 
 class MaterialRequestHeaderController extends Controller
 {
@@ -542,5 +542,66 @@ class MaterialRequestHeaderController extends Controller
         $materialRequest = MaterialRequestHeader::find($id);
 
         return view('documents.material_requests.material_requests_doc', compact('materialRequest'));
+    }
+
+    public function report(){
+        return View('admin.inventory.material_requests.report');
+    }
+
+    public function downloadReport(Request $request) {
+        $validator = Validator::make($request->all(),[
+            'start_date'        => 'required',
+            'end_date'          => 'required',
+        ],[
+            'start_date.required'   => 'Dari Tanggal wajib diisi!',
+            'end_date.required'     => 'Sampai Tanggal wajib diisi!',
+
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $tempStart = strtotime($request->input('start_date'));
+        $start = date('Y-m-d', $tempStart);
+        $tempEnd = strtotime($request->input('end_date'));
+        $end = date('Y-m-d', $tempEnd);
+
+        // Validate date
+        if($start > $end){
+            return redirect()->back()->withErrors('Dari Tanggal tidak boleh lebih besar dari Sampai Tanggal!', 'default')->withInput($request->all());
+        }
+
+        $data = MaterialRequestHeader::whereBetween('date', array($start, $end));
+
+        // Filter type
+        $type = $request->input('type');
+        if($type != '0'){
+            $data = $data->where('type', $type);
+        }
+
+        // Filter status
+        $status = $request->input('status');
+        if($status != '0'){
+            $data = $data->where('status_id', $status);
+        }
+
+        $data = $data->orderByDesc('date')
+            ->get();
+
+        // Validate Data
+        if(empty($data) || $data->count() == 0){
+            return redirect()->back()->withErrors('Data tidak ditemukan!', 'default')->withInput($request->all());
+        }
+
+        $pdf = PDF::loadView('documents.material_requests.material_requests_pdf', ['data' => $data, 'start_date' => $request->input('start_date'), 'finish_date' => $request->input('end_date')])
+            ->setPaper('a4', 'landscape');
+        $now = Carbon::now('Asia/Jakarta');
+        $filename = 'MATERIAL_REQUEST_REPORT_' . $now->toDateTimeString();
+
+        return $pdf->download($filename.'.pdf');
     }
 }
