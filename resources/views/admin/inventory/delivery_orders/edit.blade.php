@@ -118,66 +118,68 @@
             <button class="add-modal btn btn-info" data-header-id="{{ $header->id }}">
                 <span class="glyphicon glyphicon-plus-sign"></span> Tambah
             </button>
-            <table class="table table-bordered table-hover" id="detailTable">
-                <thead>
-                <tr >
-                    <th class="text-center">
-                        No
-                    </th>
-                    <th class="text-center" style="width: 15%">
-                        Kode Inventory
-                    </th>
-                    <th class="text-center" style="width: 20%">
-                        Nama Inventory
-                    </th>
-                    <th class="text-center" colspan="2" style="width: 20%">
-                        QTY
-                    </th>
-                    <th class="text-center" style="width: 30%">
-                        Remarks
-                    </th>
-                    <th class="text-center" style="width: 15%">
-                        Tindakan
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                @php( $idx = 1 )
-                @foreach($header->delivery_order_details as $detail)
-                    <tr class="item{{ $detail->id }}">
-                        <td class='text-center'>
-                            {{ $idx }}
-                        </td>
-                        <td class='text-center'>
-                            {{ $detail->item->code }}
-                        </td>
-                        <td class='text-center'>
-                            {{ $detail->item->name }}
-                        </td>
-                        <td class='text-center'>
-                            {{ $detail->quantity }}
-                        </td>
-                        <td class='text-center'>
-                            {{ $detail->item->uom }}
-                        </td>
-                        <td>
-                            {{ $detail->remark }}
-                        </td>
-                        <td>
-                            <?php $itemId = $detail->item_id. "#". $detail->item->code. "#". $detail->item->name ?>
-                            <a class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}">
-                                <span class="glyphicon glyphicon-edit"></span>
-                            </a>
-                            <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
-                                <span class="glyphicon glyphicon-trash"></span>
-                            </a>
-                        </td>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="detailTable">
+                    <thead>
+                    <tr >
+                        <th class="text-center">
+                            No
+                        </th>
+                        <th class="text-center" style="width: 15%">
+                            Kode Inventory
+                        </th>
+                        <th class="text-center" style="width: 20%">
+                            Nama Inventory
+                        </th>
+                        <th class="text-center" colspan="2" style="width: 20%">
+                            QTY
+                        </th>
+                        <th class="text-center" style="width: 30%">
+                            Remarks
+                        </th>
+                        <th class="text-center" style="width: 15%">
+                            Tindakan
+                        </th>
                     </tr>
-                    @php( $idx++ )
-                @endforeach
+                    </thead>
+                    <tbody>
+                    @php( $idx = 1 )
+                    @foreach($header->delivery_order_details as $detail)
+                        <tr class="item{{ $detail->id }}">
+                            <td class='text-center'>
+                                {{ $idx }}
+                            </td>
+                            <td class='text-center'>
+                                {{ $detail->item->code }}
+                            </td>
+                            <td class='text-center'>
+                                {{ $detail->item->name }}
+                            </td>
+                            <td class='text-center'>
+                                {{ $detail->quantity }}
+                            </td>
+                            <td class='text-center'>
+                                {{ $detail->item->uom }}
+                            </td>
+                            <td>
+                                {{ $detail->remark }}
+                            </td>
+                            <td>
+                                <?php $itemId = $detail->item_id. "#". $detail->item->code. "#". $detail->item->name ?>
+                                <a class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </a>
+                                <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                            </td>
+                        </tr>
+                        @php( $idx++ )
+                    @endforeach
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-0"></div>
     </div>

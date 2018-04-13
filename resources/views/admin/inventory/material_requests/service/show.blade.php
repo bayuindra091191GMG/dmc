@@ -100,56 +100,58 @@
                 <div class="form-group">
                     <div class="col-lg-12 col-md-12 col-xs-12">
                         <h4 class="text-center">Detil Inventory</h4>
-                        <table class="table table-bordered table-hover">
-                            <thead>
-                            <tr >
-                                <th class="text-center" style="width: 20%">
-                                    Kode Inventory
-                                </th>
-                                <th class="text-center" style="width: 20%">
-                                    Nama Inventory
-                                </th>
-                                <th class="text-center" style="width: 20%">
-                                    Part Number Asli
-                                </th>
-                                <th class="text-center" style="width: 10%">
-                                    UOM
-                                </th>
-                                <th class="text-center" style="width: 10%">
-                                    QTY
-                                </th>
-                                <th class="text-center" style="width: 20%">
-                                    Remark
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            @foreach($header->material_request_details as $detail)
-                                <tr>
-                                    <td class="text-center">
-                                        {{ $detail->item->code }}
-                                    </td>
-                                    <td class="text-center">
-                                        {{ $detail->item->name }}
-                                    </td>
-                                    <td class="text-center">
-                                        {{ $detail->part_number ?? '-' }}
-                                    </td>
-                                    <td class="text-center">
-                                        {{ $detail->item->uom }}
-                                    </td>
-                                    <td class="text-center">
-                                        {{ $detail->quantity }}
-                                    </td>
-                                    <td>
-                                        {{ $detail->remark ?? '-' }}
-                                    </td>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr >
+                                    <th class="text-center" style="width: 20%">
+                                        Kode Inventory
+                                    </th>
+                                    <th class="text-center" style="width: 20%">
+                                        Nama Inventory
+                                    </th>
+                                    <th class="text-center" style="width: 20%">
+                                        Part Number Asli
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        UOM
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        QTY
+                                    </th>
+                                    <th class="text-center" style="width: 20%">
+                                        Remark
+                                    </th>
                                 </tr>
-                            @endforeach
+                                </thead>
+                                <tbody>
 
-                            </tbody>
-                        </table>
+                                @foreach($header->material_request_details as $detail)
+                                    <tr>
+                                        <td class="text-center">
+                                            {{ $detail->item->code }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $detail->item->name }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $detail->part_number ?? '-' }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $detail->item->uom }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $detail->quantity }}
+                                        </td>
+                                        <td>
+                                            {{ $detail->remark ?? '-' }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </form>

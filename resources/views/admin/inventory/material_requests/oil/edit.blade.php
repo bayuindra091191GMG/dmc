@@ -135,55 +135,57 @@
             <button class="add-modal btn btn-info" data-header-id="{{ $header->id }}">
                 <span class="glyphicon glyphicon-plus-sign"></span> Tambah
             </button>
-            <table class="table table-bordered table-hover" id="detailTable">
-                <thead>
-                <tr >
-                    <th class="text-center">
-                        Nomor Part
-                    </th>
-                    <th class="text-center">
-                        UOM
-                    </th>
-                    <th class="text-center">
-                        QTY
-                    </th>
-                    <th class="text-center" style="width: 30%;">
-                        Remark
-                    </th>
-                    <th class="text-center" style="width: 20%;">
-                        Tindakan
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-
-                @foreach($header->material_request_details as $detail)
-                    <tr class="item{{ $detail->id }}">
-                        <td class='text-center'>
-                            {{ $detail->item->code }} - {{ $detail->item->name }}
-                        </td>
-                        <td class='text-center'>
-                            {{ $detail->item->uom }}
-                        </td>
-                        <td class='text-center'>
-                            {{ $detail->quantity }}
-                        </td>
-                        <td>
-                            {{ $detail->remark ?? '-' }}
-                        </td>
-                        <td class='text-center'>
-                            <button class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}">
-                                <span class="glyphicon glyphicon-edit"></span>
-                            </button>
-                            <button class="delete-modal btn btn-danger" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
-                                <span class="glyphicon glyphicon-trash"></span>
-                            </button>
-                        </td>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="detailTable">
+                    <thead>
+                    <tr >
+                        <th class="text-center">
+                            Nomor Part
+                        </th>
+                        <th class="text-center">
+                            UOM
+                        </th>
+                        <th class="text-center">
+                            QTY
+                        </th>
+                        <th class="text-center" style="width: 30%;">
+                            Remark
+                        </th>
+                        <th class="text-center" style="width: 20%;">
+                            Tindakan
+                        </th>
                     </tr>
-                @endforeach
+                    </thead>
+                    <tbody>
 
-                </tbody>
-            </table>
+                    @foreach($header->material_request_details as $detail)
+                        <tr class="item{{ $detail->id }}">
+                            <td class='text-center'>
+                                {{ $detail->item->code }} - {{ $detail->item->name }}
+                            </td>
+                            <td class='text-center'>
+                                {{ $detail->item->uom }}
+                            </td>
+                            <td class='text-center'>
+                                {{ $detail->quantity }}
+                            </td>
+                            <td>
+                                {{ $detail->remark ?? '-' }}
+                            </td>
+                            <td class='text-center'>
+                                <button class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </button>
+                                <button class="delete-modal btn btn-danger" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    @endforeach
+
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

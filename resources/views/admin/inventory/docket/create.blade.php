@@ -107,53 +107,55 @@
                             <span class="glyphicon glyphicon-plus-sign"></span> Tambah
                         </a>
                     @endif
-                    <table class="table table-bordered table-hover" id="detail_table">
-                        <thead>
-                        <tr >
-                            <th class="text-center" style="width: 20%">
-                                Nomor Part
-                            </th>
-                            <th class="text-center" style="width: 20%">
-                                QTY
-                            </th>
-                            <th class="text-center" style="width: 20%">
-                                Remark
-                            </th><th class="text-center" style="width: 20%">
-                                Tindakan
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @php($idx = 0)
-                        @if(!empty($materialRequest))
-                            @foreach($materialRequest->material_request_details as $detail)
-                                @php($idx++)
-                                <tr class='item{{ $idx }}'>
-                                    <td>
-                                        <input type='text' name='item_text[]' class='form-control text-center' value='{{ $detail->item->code. ' - '. $detail->item->name }}' readonly/>
-                                        <input type='hidden' name='item_value[]' value='{{ $detail->item_id }}'/>
-                                    </td>
-                                    <td>
-                                        <input type='number' name='qty[]' min="0" placeholder='QTY' class='form-control text-center' value="{{ $detail->quantity }}" readonly/>
-                                    </td>
-                                    <td>
-                                        <input type='text' name='remark[]' placeholder='Keterangan' class='form-control' value="{{ $detail->remark }}" readonly/>
-                                    </td>
-                                    <td class="text-center">
-                                        @php($itemId = $detail->item_id. "#". $detail->item->code. "#". $detail->item->name)
-                                        <a class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}">
-                                            <span class="glyphicon glyphicon-edit"></span>
-                                        </a>
-                                        <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
-                                            <span class="glyphicon glyphicon-trash"></span>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr id='addr1'></tr>
-                            @endforeach
-                        @endif
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="detail_table">
+                            <thead>
+                            <tr >
+                                <th class="text-center" style="width: 20%">
+                                    Nomor Part
+                                </th>
+                                <th class="text-center" style="width: 20%">
+                                    QTY
+                                </th>
+                                <th class="text-center" style="width: 20%">
+                                    Remark
+                                </th><th class="text-center" style="width: 20%">
+                                    Tindakan
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @php($idx = 0)
+                            @if(!empty($materialRequest))
+                                @foreach($materialRequest->material_request_details as $detail)
+                                    @php($idx++)
+                                    <tr class='item{{ $idx }}'>
+                                        <td>
+                                            <input type='text' name='item_text[]' class='form-control text-center' value='{{ $detail->item->code. ' - '. $detail->item->name }}' readonly/>
+                                            <input type='hidden' name='item_value[]' value='{{ $detail->item_id }}'/>
+                                        </td>
+                                        <td>
+                                            <input type='number' name='qty[]' min="0" placeholder='QTY' class='form-control text-center' value="{{ $detail->quantity }}" readonly/>
+                                        </td>
+                                        <td>
+                                            <input type='text' name='remark[]' placeholder='Keterangan' class='form-control' value="{{ $detail->remark }}" readonly/>
+                                        </td>
+                                        <td class="text-center">
+                                            @php($itemId = $detail->item_id. "#". $detail->item->code. "#". $detail->item->name)
+                                            <a class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}">
+                                                <span class="glyphicon glyphicon-edit"></span>
+                                            </a>
+                                            <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
+                                                <span class="glyphicon glyphicon-trash"></span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr id='addr1'></tr>
+                                @endforeach
+                            @endif
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="col-lg-2 col-md-2 col-xs-0"></div>
             </div>

@@ -121,68 +121,70 @@
                 <div class="form-group">
                     <div class="col-lg-12 col-md-12 col-xs-12 column">
                         <h4 class="text-center">Detil Inventory</h4>
-                        <table class="table table-bordered table-hover">
-                            <thead>
-                            <tr >
-                                <th class="text-center" style="width: 15%;">
-                                    Kode Inventory
-                                </th>
-                                <th class="text-center" style="width: 15%;">
-                                    Nama Inventory
-                                </th>
-                                <th class="text-center" style="width: 10%;">
-                                    UOM
-                                </th>
-                                <th class="text-center" style="width: 10%;">
-                                    QTY
-                                </th>
-                                <th class="text-center" style="width: 10%;">
-                                    Harga
-                                </th>
-                                <th class="text-center" style="width: 10%;">
-                                    Diskon
-                                </th>
-                                <th class="text-center" style="width: 10%;">
-                                    Subtotal
-                                </th>
-                                <th class="text-center" style="width: 20%;">
-                                    Remark
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            @foreach($header->purchase_invoice_details as $detail)
-                                <tr>
-                                    <td class="text-center">
-                                        {{ $detail->item->code }}
-                                    </td>
-                                    <td class="text-center">
-                                        {{ $detail->item->name }}
-                                    </td>
-                                    <td class="text-center">
-                                        {{ $detail->item->uom }}
-                                    </td>
-                                    <td class="text-center">
-                                        {{ $detail->quantity }}
-                                    </td>
-                                    <td class="text-right">
-                                        {{ $detail->price_string }}
-                                    </td>
-                                    <td class="text-center">
-                                        {{ $detail->discount_string }}
-                                    </td>
-                                    <td class="text-right">
-                                        {{ $detail->subtotal_string }}
-                                    </td>
-                                    <td>
-                                        {{ $detail->remark }}
-                                    </td>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr >
+                                    <th class="text-center" style="width: 15%;">
+                                        Kode Inventory
+                                    </th>
+                                    <th class="text-center" style="width: 15%;">
+                                        Nama Inventory
+                                    </th>
+                                    <th class="text-center" style="width: 10%;">
+                                        UOM
+                                    </th>
+                                    <th class="text-center" style="width: 10%;">
+                                        QTY
+                                    </th>
+                                    <th class="text-center" style="width: 10%;">
+                                        Harga
+                                    </th>
+                                    <th class="text-center" style="width: 10%;">
+                                        Diskon
+                                    </th>
+                                    <th class="text-center" style="width: 10%;">
+                                        Subtotal
+                                    </th>
+                                    <th class="text-center" style="width: 20%;">
+                                        Remark
+                                    </th>
                                 </tr>
-                            @endforeach
+                                </thead>
+                                <tbody>
 
-                            </tbody>
-                        </table>
+                                @foreach($header->purchase_invoice_details as $detail)
+                                    <tr>
+                                        <td class="text-center">
+                                            {{ $detail->item->code }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $detail->item->name }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $detail->item->uom }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $detail->quantity }}
+                                        </td>
+                                        <td class="text-right">
+                                            {{ $detail->price_string }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $detail->discount_string }}
+                                        </td>
+                                        <td class="text-right">
+                                            {{ $detail->subtotal_string }}
+                                        </td>
+                                        <td>
+                                            {{ $detail->remark }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </form>

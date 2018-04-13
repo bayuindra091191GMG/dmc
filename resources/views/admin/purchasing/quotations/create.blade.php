@@ -72,45 +72,47 @@
             <div class="form-group">
                 <div class="col-lg-12 col-md-12 col-xs-12 box-section">
                     <h3 class="text-center">Detil Inventory</h3>
-                    <table class="table table-bordered table-hover" id="tab_logic">
-                        <thead>
-                        <tr >
-                            <th class="text-center" style="width: 15%">
-                                Nomor Part
-                            </th>
-                            <th class="text-center" style="width: 15%">
-                                QTY
-                            </th><th class="text-center" style="width: 20%">
-                                Harga
-                            </th><th class="text-center" style="width: 10%">
-                                Diskon (%)
-                            </th>
-                            <th class="text-center" style="width: 40%">
-                                Remark
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr id='addr0'>
-                            <td class='field-item'>
-                                <select id="select0" name="item[]" class='form-control'></select>
-                            </td>
-                            <td>
-                                <input type='number' name='qty[]'  placeholder='QTY' class='form-control'/>
-                            </td>
-                            <td>
-                                <input id="price0" type='text' name='price[]'  placeholder='Harga' class='form-control'/>
-                            </td>
-                            <td>
-                                <input type='number' name='discount[]'  placeholder='Diskon' class='form-control'/>
-                            </td>
-                            <td>
-                                <input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/>
-                            </td>
-                        </tr>
-                        <tr id='addr1'></tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="tab_logic">
+                            <thead>
+                            <tr >
+                                <th class="text-center" style="width: 15%">
+                                    Nomor Part
+                                </th>
+                                <th class="text-center" style="width: 15%">
+                                    QTY
+                                </th><th class="text-center" style="width: 20%">
+                                    Harga
+                                </th><th class="text-center" style="width: 10%">
+                                    Diskon (%)
+                                </th>
+                                <th class="text-center" style="width: 40%">
+                                    Remark
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr id='addr0'>
+                                <td class='field-item'>
+                                    <select id="select0" name="item[]" class='form-control'></select>
+                                </td>
+                                <td>
+                                    <input type='number' name='qty[]'  placeholder='QTY' class='form-control'/>
+                                </td>
+                                <td>
+                                    <input id="price0" type='text' name='price[]'  placeholder='Harga' class='form-control'/>
+                                </td>
+                                <td>
+                                    <input type='number' name='discount[]'  placeholder='Diskon' class='form-control'/>
+                                </td>
+                                <td>
+                                    <input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/>
+                                </td>
+                            </tr>
+                            <tr id='addr1'></tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <a id="add_row" class="btn btn-default pull-left">Tambah</a><a id='delete_row' class="pull-right btn btn-default">Hapus</a>
                 </div>
             </div>

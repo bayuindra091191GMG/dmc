@@ -135,8 +135,9 @@
 
                     <div class="form-group">
                         <div class="col-lg-12 col-md-12 col-xs-12 column">
-                            <table class="table table-bordered table-hover">
-                                <thead>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
                                     <tr>
                                         <th class="text-center">No</th>
                                         <th class="text-center">Nomor Invoice</th>
@@ -148,8 +149,8 @@
                                         <th class="text-center">Total Invoice</th>
                                         <th class="text-center">Tanggal</th>
                                     </tr>
-                                </thead>
-                                <tbody>
+                                    </thead>
+                                    <tbody>
                                     @foreach($purchaseInvoices as $detail)
                                         <tr>
                                             <td class="text-center">
@@ -182,8 +183,9 @@
                                         </tr>
                                         @php($i++)
                                     @endforeach
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 @endif

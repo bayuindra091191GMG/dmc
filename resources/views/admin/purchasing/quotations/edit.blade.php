@@ -81,73 +81,75 @@
             <button class="add-modal btn btn-info" data-header-id="{{ $header->id }}">
                 <span class="glyphicon glyphicon-plus-sign"></span> Tambah
             </button>
-            <table class="table table-bordered table-hover" id="detailTable">
-                <thead>
-                <tr >
-                    <th class="text-center">
-                        Nomor Part
-                    </th>
-                    <th class="text-center">
-                        UOM
-                    </th>
-                    <th class="text-center">
-                        QTY
-                    </th>
-                    <th class="text-center">
-                        Harga
-                    </th>
-                    <th class="text-center">
-                        Diskon
-                    </th>
-                    <th class="text-center">
-                        Subtotal
-                    </th>
-                    <th class="text-center">
-                        Remark
-                    </th>
-                    <th class="text-center">
-                        Tindakan
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-
-                @foreach($header->quotation_details as $detail)
-                    <tr class="item{{ $detail->id }}">
-                        <td class='field-item'>
-                            {{ $detail->item->code }} - {{ $detail->item->name }}
-                        </td>
-                        <td>
-                            {{ $detail->item->uom }}
-                        </td>
-                        <td>
-                            {{ $detail->quantity }}
-                        </td>
-                        <td>
-                            {{ $detail->price_string }}
-                        </td>
-                        <td>
-                            {{ $detail->discount_string ?? '-' }}
-                        </td>
-                        <td>
-                            {{ $detail->subtotal_string }}
-                        </td>
-                        <td>
-                            {{ $detail->remark ?? '-' }}
-                        </td>
-                        <td>
-                            <button class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}" data-price="{{ $detail->price }}" data-discount="{{ $detail->discount }}">
-                                <span class="glyphicon glyphicon-edit"></span>
-                            </button>
-                            <button class="delete-modal btn btn-danger" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
-                                <span class="glyphicon glyphicon-trash"></span>
-                            </button>
-                        </td>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="detailTable">
+                    <thead>
+                    <tr >
+                        <th class="text-center">
+                            Nomor Part
+                        </th>
+                        <th class="text-center">
+                            UOM
+                        </th>
+                        <th class="text-center">
+                            QTY
+                        </th>
+                        <th class="text-center">
+                            Harga
+                        </th>
+                        <th class="text-center">
+                            Diskon
+                        </th>
+                        <th class="text-center">
+                            Subtotal
+                        </th>
+                        <th class="text-center">
+                            Remark
+                        </th>
+                        <th class="text-center">
+                            Tindakan
+                        </th>
                     </tr>
-                @endforeach
+                    </thead>
+                    <tbody>
 
-                </tbody>
-            </table>
+                    @foreach($header->quotation_details as $detail)
+                        <tr class="item{{ $detail->id }}">
+                            <td class='field-item'>
+                                {{ $detail->item->code }} - {{ $detail->item->name }}
+                            </td>
+                            <td>
+                                {{ $detail->item->uom }}
+                            </td>
+                            <td>
+                                {{ $detail->quantity }}
+                            </td>
+                            <td>
+                                {{ $detail->price_string }}
+                            </td>
+                            <td>
+                                {{ $detail->discount_string ?? '-' }}
+                            </td>
+                            <td>
+                                {{ $detail->subtotal_string }}
+                            </td>
+                            <td>
+                                {{ $detail->remark ?? '-' }}
+                            </td>
+                            <td>
+                                <button class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}" data-price="{{ $detail->price }}" data-discount="{{ $detail->discount }}">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </button>
+                                <button class="delete-modal btn btn-danger" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    @endforeach
+
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

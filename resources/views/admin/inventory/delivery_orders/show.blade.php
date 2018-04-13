@@ -118,54 +118,56 @@
                 <div class="form-group">
                     <div class="col-lg-12 col-md-12 col-xs-12 column">
                         <h4 class="text-center">Detil Inventory</h4>
-                        <table class="table table-bordered table-hover">
-                            <thead>
-                            <tr >
-                                <th class="text-center" style="width: 10%">
-                                    No
-                                </th>
-                                <th class="text-center" style="width: 25%">
-                                    Kode Inventory
-                                </th>
-                                <th class="text-center" style="width: 25%">
-                                    Nama Inventory
-                                </th>
-                                <th class="text-center" colspan="2" style="width: 20%">
-                                    QTY
-                                </th>
-                                <th class="text-center" style="width: 20%">
-                                    Keterangan
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @php( $idx = 1 )
-                            @foreach($header->delivery_order_details as $detail)
-                                <tr>
-                                    <td class="text-center">
-                                        {{ $idx }}
-                                    </td>
-                                    <td class="text-center">
-                                        {{ $detail->item->code }}
-                                    </td>
-                                    <td class="text-center">
-                                        {{ $detail->item->name }}
-                                    </td>
-                                    <td class="text-center">
-                                        {{ $detail->item->uom }}
-                                    </td>
-                                    <td class="text-center">
-                                        {{ $detail->quantity }}
-                                    </td>
-                                    <td>
-                                        {{ $detail->remark ?? '-' }}
-                                    </td>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr >
+                                    <th class="text-center" style="width: 10%">
+                                        No
+                                    </th>
+                                    <th class="text-center" style="width: 25%">
+                                        Kode Inventory
+                                    </th>
+                                    <th class="text-center" style="width: 25%">
+                                        Nama Inventory
+                                    </th>
+                                    <th class="text-center" colspan="2" style="width: 20%">
+                                        QTY
+                                    </th>
+                                    <th class="text-center" style="width: 20%">
+                                        Keterangan
+                                    </th>
                                 </tr>
-                                @php( $idx++ )
-                            @endforeach
+                                </thead>
+                                <tbody>
+                                @php( $idx = 1 )
+                                @foreach($header->delivery_order_details as $detail)
+                                    <tr>
+                                        <td class="text-center">
+                                            {{ $idx }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $detail->item->code }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $detail->item->name }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $detail->item->uom }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $detail->quantity }}
+                                        </td>
+                                        <td>
+                                            {{ $detail->remark ?? '-' }}
+                                        </td>
+                                    </tr>
+                                    @php( $idx++ )
+                                @endforeach
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </form>

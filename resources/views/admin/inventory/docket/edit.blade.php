@@ -95,49 +95,51 @@
             <button class="add-modal btn btn-info" data-header-id="{{ $header->id }}">
                 <span class="glyphicon glyphicon-plus-sign"></span> Tambah
             </button>
-            <table class="table table-bordered table-hover" id="detailTable">
-                <thead>
-                <tr >
-                    <th>
-                        Nomor Part
-                    </th>
-                    <th>
-                        Jumlah
-                    </th>
-                    <th class="text-center" style="width: 30%">
-                        Remark
-                    </th>
-                    <th class="text-center" style="width: 20%">
-                        Tindakan
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-
-                @foreach($header->issued_docket_details as $detail)
-                    <tr class="item{{ $detail->id }}">
-                        <td class='field-item'>
-                            {{ $detail->item->code }} - {{ $detail->item->name }}
-                        </td>
-                        <td>
-                            {{ $detail->quantity }}
-                        </td>
-                        <td>
-                            {{ $detail->remarks ?? '-' }}
-                        </td>
-                        <td>
-                            <button class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-time="{{ $detail->time }}" data-remark="{{ $detail->remarks }}">
-                                <span class="glyphicon glyphicon-edit"></span> Ubah
-                            </button>
-                            <button class="delete-modal btn btn-danger" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-time="{{ $detail->time }}" data-qty="{{ $detail->quantity }}">
-                                <span class="glyphicon glyphicon-trash"></span> Hapus
-                            </button>
-                        </td>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="detailTable">
+                    <thead>
+                    <tr >
+                        <th>
+                            Nomor Part
+                        </th>
+                        <th>
+                            Jumlah
+                        </th>
+                        <th class="text-center" style="width: 30%">
+                            Remark
+                        </th>
+                        <th class="text-center" style="width: 20%">
+                            Tindakan
+                        </th>
                     </tr>
-                @endforeach
+                    </thead>
+                    <tbody>
 
-                </tbody>
-            </table>
+                    @foreach($header->issued_docket_details as $detail)
+                        <tr class="item{{ $detail->id }}">
+                            <td class='field-item'>
+                                {{ $detail->item->code }} - {{ $detail->item->name }}
+                            </td>
+                            <td>
+                                {{ $detail->quantity }}
+                            </td>
+                            <td>
+                                {{ $detail->remarks ?? '-' }}
+                            </td>
+                            <td>
+                                <button class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-time="{{ $detail->time }}" data-remark="{{ $detail->remarks }}">
+                                    <span class="glyphicon glyphicon-edit"></span> Ubah
+                                </button>
+                                <button class="delete-modal btn btn-danger" data-id="{{ $detail->id }}" data-item-id="{{ $detail->item_id }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-time="{{ $detail->time }}" data-qty="{{ $detail->quantity }}">
+                                    <span class="glyphicon glyphicon-trash"></span> Hapus
+                                </button>
+                            </td>
+                        </tr>
+                    @endforeach
+
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-0"></div>
     </div>

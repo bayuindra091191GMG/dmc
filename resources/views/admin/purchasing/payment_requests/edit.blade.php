@@ -103,168 +103,170 @@
             <div class="form-group">
                 <div class="col-lg-12 col-md-12 col-xs-12 box-section">
                     <h3 class="text-center">Detil Inventory</h3>
-                    <table class="table table-bordered table-hover" id="detail_table">
-                        <thead>
-                        @if(!empty($purchaseInvoices) && $purchaseInvoices->count() > 0)
-                            <input type="hidden" value="pi" name="flag" />
-                            <tr >
-                                <th class="text-center">
-                                    No
-                                </th>
-                                <th class="text-center" style="width: 10%">
-                                    Nomor Invoice
-                                </th>
-                                <th class="text-center" style="width: 10%">
-                                    Nomor PO
-                                </th>
-                                <th class="text-center" style="width: 10%">
-                                    Nama Vendor
-                                </th>
-                                <th class="text-center" style="width: 10%">
-                                    Total Harga
-                                </th>
-                                <th class="text-center" style="width: 10%">
-                                    Total Diskon
-                                </th>
-                                <th class="text-center" style="width: 10%">
-                                    Ongkos Kirim
-                                </th>
-                                <th class="text-center" style="width: 10%">
-                                    Total Invoice
-                                </th>
-                                <th class="text-center" style="width: 10%">
-                                    Tanggal
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php $idx = 0; ?>
-
-                        @foreach($purchaseInvoices as $detail)
-                            <?php $idx++; ?>
-                            <tr class='item{{ $idx }}'>
-                                <td class='text-center'>
-                                    {{ $idx }}
-                                </td>
-                                <td class='text-center'>
-                                    <a style="text-decoration: underline" href="{{ route('admin.purchase_invoices.show', ['purchase_invoice' => $detail->id]) }}" target="_blank">{{ $detail->code }}</a>
-                                    <input type='hidden' name='item[]' value='{{ $detail->id }}'/>
-                                </td>
-                                <td class='text-center'>
-                                    <a style="text-decoration: underline" href="{{ route('admin.purchase_orders.show', ['purchase_order' => $detail->purchase_order_id]) }}" target="_blank">{{ $detail->purchase_order_header->code }}</a>
-                                </td>
-                                <td class='text-center'>
-                                    {{ $detail->purchase_order_header->supplier->name }}
-                                </td>
-                                <td class='text-right'>
-                                    {{ $detail->total_price_string }}
-                                </td>
-                                <td class='text-right'>
-                                    {{ $detail->total_discount_string }}
-                                </td>
-                                <td class='text-right'>
-                                    {{ $detail->delivery_fee_string }}
-                                </td>
-                                <td class='text-right'>
-                                    {{ $detail->total_payment_string }}
-                                </td>
-                                <td class='text-center'>
-                                    {{ $detail->date_string }}
-                                </td>
-                                <td class='text-center'>
-                                    <a class="edit-modal btn btn-info" data-idx="{{ $idx }}" data-type="PI" data-pi-id="{{ $detail->id }}" data-pi-code="{{ $detail->code }}">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </a>
-                                    <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-type="PI" data-pi-id="{{ $detail->id }}" data-pi-code="{{ $detail->code }}">
-                                        <span class="glyphicon glyphicon-trash"></span>
-                                    </a>
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                        @endif
-                        @if(!empty($purchaseOrders) && $purchaseOrders->count() > 0)
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="detail_table">
                             <thead>
-                            <input type="hidden" value="po" name="flag" />
-                            <tr >
-                                <th class="text-center">
-                                    No
-                                </th>
-                                <th class="text-center" style="width: 10%">
-                                    Nomor PO
-                                </th>
-                                <th class="text-center" style="width: 10%">
-                                    Nomor PR
-                                </th>
-                                <th class="text-center" style="width: 10%">
-                                    Nama Vendor
-                                </th>
-                                <th class="text-center" style="width: 10%">
-                                    Total Harga
-                                </th>
-                                <th class="text-center" style="width: 10%">
-                                    Total Diskon
-                                </th>
-                                <th class="text-center" style="width: 10%">
-                                    Ongkos Kirim
-                                </th>
-                                <th class="text-center" style="width: 10%">
-                                    Total PO
-                                </th>
-                                <th class="text-center" style="width: 10%">
-                                    Tanggal
-                                </th>
-                                <th class="text-center" style="width: 10%">
-                                    Tindakan
-                                </th>
-                            </tr>
+                            @if(!empty($purchaseInvoices) && $purchaseInvoices->count() > 0)
+                                <input type="hidden" value="pi" name="flag" />
+                                <tr >
+                                    <th class="text-center">
+                                        No
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        Nomor Invoice
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        Nomor PO
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        Nama Vendor
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        Total Harga
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        Total Diskon
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        Ongkos Kirim
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        Total Invoice
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        Tanggal
+                                    </th>
+                                </tr>
                             </thead>
                             <tbody>
                             <?php $idx = 0; ?>
 
-                            @foreach($purchaseOrders as $detail)
+                            @foreach($purchaseInvoices as $detail)
                                 <?php $idx++; ?>
                                 <tr class='item{{ $idx }}'>
                                     <td class='text-center'>
                                         {{ $idx }}
                                     </td>
                                     <td class='text-center'>
-                                        {{ $detail->code }}
+                                        <a style="text-decoration: underline" href="{{ route('admin.purchase_invoices.show', ['purchase_invoice' => $detail->id]) }}" target="_blank">{{ $detail->code }}</a>
                                         <input type='hidden' name='item[]' value='{{ $detail->id }}'/>
                                     </td>
                                     <td class='text-center'>
-                                        {{ $detail->purchase_request_header->code }}
+                                        <a style="text-decoration: underline" href="{{ route('admin.purchase_orders.show', ['purchase_order' => $detail->purchase_order_id]) }}" target="_blank">{{ $detail->purchase_order_header->code }}</a>
                                     </td>
                                     <td class='text-center'>
-                                        {{ $detail->supplier->name }}
+                                        {{ $detail->purchase_order_header->supplier->name }}
                                     </td>
-                                    <td class='text-center'>
+                                    <td class='text-right'>
                                         {{ $detail->total_price_string }}
                                     </td>
-                                    <td class='text-center'>
-                                        {{ $detail->total_discount_string  }}
+                                    <td class='text-right'>
+                                        {{ $detail->total_discount_string }}
                                     </td>
-                                    <td class='text-center'>
-                                        {{ $detail->delivery_fee_string  }}
+                                    <td class='text-right'>
+                                        {{ $detail->delivery_fee_string }}
                                     </td>
-                                    <td class='text-center'>
-                                        {{ $detail->total_payment_string  }}
+                                    <td class='text-right'>
+                                        {{ $detail->total_payment_string }}
                                     </td>
                                     <td class='text-center'>
                                         {{ $detail->date_string }}
                                     </td>
                                     <td class='text-center'>
-                                        <a class="edit-modal btn btn-info" data-idx="{{ $idx }}" data-type="PO" data-po-id="{{ $detail->id }}" data-po-code="{{ $detail->code }}">
+                                        <a class="edit-modal btn btn-info" data-idx="{{ $idx }}" data-type="PI" data-pi-id="{{ $detail->id }}" data-pi-code="{{ $detail->code }}">
                                             <span class="glyphicon glyphicon-edit"></span>
                                         </a>
-                                        <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-type="PO" data-po-id="{{ $detail->id }}" data-po-code="{{ $detail->code }}">
+                                        <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-type="PI" data-pi-id="{{ $detail->id }}" data-pi-code="{{ $detail->code }}">
                                             <span class="glyphicon glyphicon-trash"></span>
                                         </a>
                                     </td>
                                 </tr>
                             @endforeach
-                        @endif
-                    </table>
+                            </tbody>
+                            @endif
+                            @if(!empty($purchaseOrders) && $purchaseOrders->count() > 0)
+                                <thead>
+                                <input type="hidden" value="po" name="flag" />
+                                <tr >
+                                    <th class="text-center">
+                                        No
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        Nomor PO
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        Nomor PR
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        Nama Vendor
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        Total Harga
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        Total Diskon
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        Ongkos Kirim
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        Total PO
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        Tanggal
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        Tindakan
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php $idx = 0; ?>
+
+                                @foreach($purchaseOrders as $detail)
+                                    <?php $idx++; ?>
+                                    <tr class='item{{ $idx }}'>
+                                        <td class='text-center'>
+                                            {{ $idx }}
+                                        </td>
+                                        <td class='text-center'>
+                                            {{ $detail->code }}
+                                            <input type='hidden' name='item[]' value='{{ $detail->id }}'/>
+                                        </td>
+                                        <td class='text-center'>
+                                            {{ $detail->purchase_request_header->code }}
+                                        </td>
+                                        <td class='text-center'>
+                                            {{ $detail->supplier->name }}
+                                        </td>
+                                        <td class='text-center'>
+                                            {{ $detail->total_price_string }}
+                                        </td>
+                                        <td class='text-center'>
+                                            {{ $detail->total_discount_string  }}
+                                        </td>
+                                        <td class='text-center'>
+                                            {{ $detail->delivery_fee_string  }}
+                                        </td>
+                                        <td class='text-center'>
+                                            {{ $detail->total_payment_string  }}
+                                        </td>
+                                        <td class='text-center'>
+                                            {{ $detail->date_string }}
+                                        </td>
+                                        <td class='text-center'>
+                                            <a class="edit-modal btn btn-info" data-idx="{{ $idx }}" data-type="PO" data-po-id="{{ $detail->id }}" data-po-code="{{ $detail->code }}">
+                                                <span class="glyphicon glyphicon-edit"></span>
+                                            </a>
+                                            <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-type="PO" data-po-id="{{ $detail->id }}" data-po-code="{{ $detail->code }}">
+                                                <span class="glyphicon glyphicon-trash"></span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                        </table>
+                    </div>
                 </div>
             </div>
 

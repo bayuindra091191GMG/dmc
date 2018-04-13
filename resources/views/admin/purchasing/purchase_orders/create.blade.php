@@ -130,72 +130,73 @@
                             <span class="glyphicon glyphicon-plus-sign"></span> Tambah
                         </a>
                     @endif
-
-                    <table class="table table-bordered table-hover" id="detail_table">
-                        <thead>
-                        <tr>
-                            <th class="text-center" style="width: 20%">
-                                Nomor Part
-                            </th>
-                            <th class="text-center" style="width: 10%">
-                                QTY
-                            </th>
-                            <th class="text-center" style="width: 15%">
-                                Harga
-                            </th>
-                            <th class="text-center" style="width: 10%">
-                                Diskon (%)
-                            </th>
-                            <th class="text-center" style="width: 15%">
-                                Subtotal
-                            </th>
-                            <th class="text-center" style="width: 15%">
-                                Remark
-                            </th>
-                            <th class="text-center" style="width: 15%">
-                                Tindakan
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php $idx = 0; ?>
-                        @if(!empty($purchaseRequest))
-                            @foreach($purchaseRequest->purchase_request_details as $detail)
-                                <?php $idx++; ?>
-                                <tr class='item{{ $idx }}'>
-                                    <td class='field-item'>
-                                        <input type='text' name='item_text[]' class='form-control' value='{{ $detail->item->code. ' - '. $detail->item->name }}' readonly/>
-                                        <input type='hidden' name='item_value[]' value='{{ $detail->item_id }}'/>
-                                    </td>
-                                    <td>
-                                        <input type='text' name='qty[]' class='form-control' value='{{ $detail->quantity }}' readonly/>
-                                    </td>
-                                    <td>
-                                        <input type='text' name='price[]' class='form-control' value='0' readonly/>
-                                    </td>
-                                    <td>
-                                        <input type='text' name='discount[]' class='form-control' value='0' readonly/>
-                                    </td>
-                                    <td>
-                                        <input type='text' name='subtotal[]' class='form-control' value='0' readonly/>
-                                    </td>
-                                    <td>
-                                        <input type='text' name='remark[]' class='form-control' value='{{ $detail->remark }}' readonly/>
-                                    </td>
-                                    <td class='text-center'>
-                                        <?php $itemId = $detail->item_id. "#". $detail->item->code. "#". $detail->item->name ?>
-                                        <a class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}" data-price="0" data-discount="0">
-                                            <span class="glyphicon glyphicon-edit"></span>
-                                        </a>
-                                        <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
-                                            <span class="glyphicon glyphicon-trash"></span>
-                                        </a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endif
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="detail_table">
+                            <thead>
+                            <tr>
+                                <th class="text-center" style="width: 20%">
+                                    Nomor Part
+                                </th>
+                                <th class="text-center" style="width: 10%">
+                                    QTY
+                                </th>
+                                <th class="text-center" style="width: 15%">
+                                    Harga
+                                </th>
+                                <th class="text-center" style="width: 10%">
+                                    Diskon (%)
+                                </th>
+                                <th class="text-center" style="width: 15%">
+                                    Subtotal
+                                </th>
+                                <th class="text-center" style="width: 15%">
+                                    Remark
+                                </th>
+                                <th class="text-center" style="width: 15%">
+                                    Tindakan
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php $idx = 0; ?>
+                            @if(!empty($purchaseRequest))
+                                @foreach($purchaseRequest->purchase_request_details as $detail)
+                                    <?php $idx++; ?>
+                                    <tr class='item{{ $idx }}'>
+                                        <td class='field-item'>
+                                            <input type='text' name='item_text[]' class='form-control' value='{{ $detail->item->code. ' - '. $detail->item->name }}' readonly/>
+                                            <input type='hidden' name='item_value[]' value='{{ $detail->item_id }}'/>
+                                        </td>
+                                        <td>
+                                            <input type='text' name='qty[]' class='form-control' value='{{ $detail->quantity }}' readonly/>
+                                        </td>
+                                        <td>
+                                            <input type='text' name='price[]' class='form-control' value='0' readonly/>
+                                        </td>
+                                        <td>
+                                            <input type='text' name='discount[]' class='form-control' value='0' readonly/>
+                                        </td>
+                                        <td>
+                                            <input type='text' name='subtotal[]' class='form-control' value='0' readonly/>
+                                        </td>
+                                        <td>
+                                            <input type='text' name='remark[]' class='form-control' value='{{ $detail->remark }}' readonly/>
+                                        </td>
+                                        <td class='text-center'>
+                                            <?php $itemId = $detail->item_id. "#". $detail->item->code. "#". $detail->item->name ?>
+                                            <a class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}" data-price="0" data-discount="0">
+                                                <span class="glyphicon glyphicon-edit"></span>
+                                            </a>
+                                            <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
+                                                <span class="glyphicon glyphicon-trash"></span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
