@@ -363,64 +363,6 @@ class PurchaseOrderHeaderController extends Controller
         }
     }
 
-    public function report(){
-        return View('admin.purchasing.purchase_orders.report');
-    }
-
-    public function downloadReport(Request $request) {
-        $validator = Validator::make($request->all(),[
-            'start_date'        => 'required',
-            'end_date'          => 'required',
-        ],[
-            'start_date.required'   => 'Dari Tanggal wajib diisi!',
-            'end_date.required'     => 'Sampai Tanggal wajib diisi!',
-
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                ->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        $tempStart = strtotime($request->input('start_date'));
-        $start = date('Y-m-d', $tempStart);
-        $tempEnd = strtotime($request->input('end_date'));
-        $end = date('Y-m-d', $tempEnd);
-
-        // Validate date
-        if($start > $end){
-            return redirect()->back()->withErrors('Dari Tanggal tidak boleh lebih besar dari Sampai Tanggal!', 'default')->withInput($request->all());
-        }
-
-        $data = PurchaseOrderHeader::whereBetween('created_at', array($start, $end));
-
-        // Filter status
-        $status = $request->input('status');
-        if($status != '0'){
-            $data = $data->where('status_id', $status);
-        }
-
-        $data = $data->orderByDesc('date')
-            ->get();
-
-        // Validate Data
-        if(empty($data) || $data->count() == 0){
-            return redirect()->back()->withErrors('Data tidak ditemukan!', 'default')->withInput($request->all());
-        }
-
-        $total = $data->sum('total_payment');
-        $totalStr = number_format($total, 0, ",", ".");
-
-        $pdf = PDF::loadView('documents.purchase_orders.purchase_orders_pdf', ['data' => $data, 'start_date' => $request->input('start_date'), 'finish_date' => $request->input('end_date'), 'total' => $totalStr])
-            ->setPaper('a4', 'landscape');
-        $now = Carbon::now('Asia/Jakarta');
-        $filename = 'PURCHASE_ORDER_REPORT_' . $now->toDateTimeString();
-
-        return $pdf->download($filename.'.pdf');
-    }
-
     public function getIndex(Request $request){
         try{
             $purchaseOrders = null;
@@ -470,6 +412,94 @@ class PurchaseOrderHeaderController extends Controller
         }
     }
 
+    public function getPurchaseOrders(Request $request){
+        $term = trim($request->q);
+
+        if(!empty($request->supplier)){
+            $supplierId = $request->supplier;
+            $purchaseOrders = PurchaseOrderHeader::where('supplier_id', $supplierId)
+                ->where('code', 'LIKE', '%'. $term. '%')
+                ->get();
+        }
+        else{
+            $purchaseOrders = PurchaseOrderHeader::where('status_id', 3)
+                ->where('code', 'LIKE', '%'. $term. '%')
+                ->get();
+        }
+
+        $formatted_tags = [];
+
+        foreach ($purchaseOrders as $purchaseOrder) {
+            $formatted_tags[] = ['id' => $purchaseOrder->id, 'text' => $purchaseOrder->code];
+        }
+
+        return \Response::json($formatted_tags);
+    }
+
+    public function report(){
+        return View('admin.purchasing.purchase_orders.report');
+    }
+
+    public function downloadReport(Request $request) {
+        $validator = Validator::make($request->all(),[
+            'start_date'        => 'required',
+            'end_date'          => 'required',
+        ],[
+            'start_date.required'   => 'Dari Tanggal wajib diisi!',
+            'end_date.required'     => 'Sampai Tanggal wajib diisi!',
+
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $tempStart = strtotime($request->input('start_date'));
+        $start = date('Y-m-d', $tempStart);
+        $tempEnd = strtotime($request->input('end_date'));
+        $end = date('Y-m-d', $tempEnd);
+
+        // Validate date
+        if($start > $end){
+            return redirect()->back()->withErrors('Dari Tanggal tidak boleh lebih besar dari Sampai Tanggal!', 'default')->withInput($request->all());
+        }
+
+        $data = PurchaseOrderHeader::whereBetween('created_at', array($start, $end));
+
+        // Filter departemen
+        $department = $request->input('department');
+        if($department != '0'){
+            $data = $data->where('department_id', $department);
+        }
+
+        // Filter status
+        $status = $request->input('status');
+        if($status != '0'){
+            $data = $data->where('status_id', $status);
+        }
+
+        $data = $data->orderByDesc('date')
+            ->get();
+
+        // Validate Data
+        if(empty($data) || $data->count() == 0){
+            return redirect()->back()->withErrors('Data tidak ditemukan!', 'default')->withInput($request->all());
+        }
+
+        $total = $data->sum('total_payment');
+        $totalStr = number_format($total, 0, ",", ".");
+
+        $pdf = PDF::loadView('documents.purchase_orders.purchase_orders_pdf', ['data' => $data, 'start_date' => $request->input('start_date'), 'finish_date' => $request->input('end_date'), 'total' => $totalStr])
+            ->setPaper('a4', 'landscape');
+        $now = Carbon::now('Asia/Jakarta');
+        $filename = 'PURCHASE_ORDER_REPORT_' . $now->toDateTimeString();
+
+        return $pdf->download($filename.'.pdf');
+    }
+
     public function printDocument($id){
         $purchaseOrder = PurchaseOrderHeader::find($id);
         $purchaseOrderDetails = PurchaseOrderDetail::where('header_id', $purchaseOrder->id)->get();
@@ -496,27 +526,5 @@ class PurchaseOrderHeaderController extends Controller
         return $pdf->download($filename.'.pdf');
     }
 
-    public function getPurchaseOrders(Request $request){
-        $term = trim($request->q);
 
-        if(!empty($request->supplier)){
-            $supplierId = $request->supplier;
-            $purchaseOrders = PurchaseOrderHeader::where('supplier_id', $supplierId)
-                ->where('code', 'LIKE', '%'. $term. '%')
-                ->get();
-        }
-        else{
-            $purchaseOrders = PurchaseOrderHeader::where('status_id', 3)
-                ->where('code', 'LIKE', '%'. $term. '%')
-                ->get();
-        }
-
-        $formatted_tags = [];
-
-        foreach ($purchaseOrders as $purchaseOrder) {
-            $formatted_tags[] = ['id' => $purchaseOrder->id, 'text' => $purchaseOrder->code];
-        }
-
-        return \Response::json($formatted_tags);
-    }
 }

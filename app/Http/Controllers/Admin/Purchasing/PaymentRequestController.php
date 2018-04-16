@@ -98,13 +98,17 @@ class PaymentRequestController extends Controller
         $ids = $request->input('ids');
         $purchaseInvoices = PurchaseInvoiceHeader::whereIn('id', $ids)->get();
 
+        // Get supplier
+        $supplierId = $request->input('supplier');
+
         // Numbering System
         $sysNo = NumberingSystem::where('doc_id', '7')->first();
         $autoNumber = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
 
         $data = [
-            'purchaseInvoices'   => $purchaseInvoices,
-            'autoNumber'        => $autoNumber
+            'purchaseInvoices'  => $purchaseInvoices,
+            'autoNumber'        => $autoNumber,
+            'supplierId'        => $supplierId
         ];
 
         return View('admin.purchasing.payment_requests.create')->with($data);
@@ -120,13 +124,17 @@ class PaymentRequestController extends Controller
         $ids = $request->input('ids');
         $purchaseOrders = PurchaseOrderHeader::whereIn('id', $ids)->get();
 
+        // Get supplier
+        $supplierId = $request->input('supplier');
+
         // Numbering System
         $sysNo = NumberingSystem::where('doc_id', '7')->first();
         $autoNumber = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
 
         $data = [
-            'purchaseOrders'   => $purchaseOrders,
-            'autoNumber'        => $autoNumber
+            'purchaseOrders'    => $purchaseOrders,
+            'autoNumber'        => $autoNumber,
+            'supplierId'        => $supplierId
         ];
 
         return View('admin.purchasing.payment_requests.create')->with($data);
@@ -205,6 +213,7 @@ class PaymentRequestController extends Controller
         $paymentRequest = PaymentRequest::create([
             'code'                      => $code,
             'date'                      => $date,
+            'supplier_id'               => $request->input('supplier'),
             'amount'                    => $amount,
             'total_amount'              => $total_amount,
             'requester_bank_name'       => $request->input('bank_name'),

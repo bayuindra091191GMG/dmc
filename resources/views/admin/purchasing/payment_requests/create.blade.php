@@ -282,6 +282,7 @@
             </div>
 
             <input id="index_counter" type="hidden" value="{{ $idx }}"/>
+            <input id="supplier" type="hidden" name="supplier" value="{{ $supplierId }}"/>
 
             <hr/>
 

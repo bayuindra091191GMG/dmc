@@ -653,6 +653,12 @@ class MaterialRequestHeaderController extends Controller
             $data = $data->where('type', $type);
         }
 
+        // Filter departemen
+        $department = $request->input('department');
+        if($department != '0'){
+            $data = $data->where('department_id', $department);
+        }
+
         // Filter status
         $status = $request->input('status');
         if($status != '0'){

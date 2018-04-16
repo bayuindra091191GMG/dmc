@@ -32,9 +32,6 @@ use Yajra\DataTables\DataTables;
 
 class PurchaseRequestHeaderController extends Controller
 {
-
-
-
     public function index(){
 
         $filterStatus = '0';
@@ -449,6 +446,12 @@ class PurchaseRequestHeaderController extends Controller
         }
 
         $data = PurchaseRequestHeader::whereBetween('date', array($start, $end));
+
+        // Filter departemen
+        $department = $request->input('department');
+        if($department != '0'){
+            $data = $data->where('department_id', $department);
+        }
 
         // Filter status
         $status = $request->input('status');

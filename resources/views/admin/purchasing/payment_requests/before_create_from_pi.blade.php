@@ -4,6 +4,7 @@
 
 @section('content')
     {{ Form::open(['route'=>['admin.payment_requests.create_from_pi'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
+        <input type="hidden" name="supplier" id="supplier" value="{{ $supplier->id }}"/>
         <div class="row">
             @if(\Illuminate\Support\Facades\Session::has('error'))
                 <div class="alert alert-danger alert-dismissible fade in" role="alert">
