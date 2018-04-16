@@ -448,7 +448,9 @@ class PurchaseOrderHeaderController extends Controller
                             ->get();
                     }
                     else{
-                        $purchaseOrders = PurchaseOrderHeader::dateDescending()->get();
+                        $purchaseOrders = PurchaseOrderHeader::where('status_id', 3)
+                            ->dateDescending()
+                            ->get();
                     }
                 }
                 else{

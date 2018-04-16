@@ -41,7 +41,7 @@ class PurchaseOrderHeaderTransformer extends TransformerAbstract
             }
             else if($this->mode === 'before_create_po'){
                 $action = "<input type='checkbox' class='flat' id='chk". $header->id ."' name='chk[]' onclick='changeInput(". $header->id .");'/>";
-                $action .= "<input type='text' id='" . $header->id ."' hidden='true' name='ids[]' value='' disabled />";
+                $action .= "<input type='text' id='" . $header->id ."' hidden='true' name='ids[]' value='' readonly />";
             }
             else{
                 $action = "<a class='btn btn-xs btn-success' href='". $route. "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i> Proses Invoice </a>";

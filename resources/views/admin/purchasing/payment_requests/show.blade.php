@@ -222,7 +222,7 @@
                                                 <a style="text-decoration: underline" href="{{ route('admin.purchase_orders.show',['purchase_order' => $detail->purchase_order_id]) }}">{{ $detail->purchase_order_header->code }}</a>
                                             </td>
                                             <td class="text-center">
-                                                <a style="text-decoration: underline" href="{{ route('admin.purchase_requests.show',['purchase_request' => $detail->purchase_order_header->purchase_request_id]) }}">{{ $detail->purchase_order_header->purchase_request->code }}</a>
+                                                <a style="text-decoration: underline" href="{{ route('admin.purchase_requests.show',['purchase_request' => $detail->purchase_order_header->purchase_request_id]) }}">{{ $detail->purchase_order_header->purchase_request_header->code }}</a>
                                             </td>
                                             <td class="text-center">
                                                 {{ $detail->purchase_order_header->supplier->name }}

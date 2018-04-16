@@ -97,6 +97,27 @@
 
                 <hr/>
 
+                @if($itemStocks->count() > 0)
+                    <div class="form-group">
+                        <label class="control-label col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                        </label>
+                        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                            <div class="alert alert-success  fade in" role="alert">
+                                Inventory tersedia di gudang sebagai berikut,
+                                <br/>
+                                <ul>
+                                    @foreach($itemStocks as $stock)
+                                        <li>{{ $stock->warehouse->name }} tersedia {{ $stock->item->code }} ({{ $stock->item->name }}) sebanyak {{ $stock->stock }} {{ $stock->item->uom }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                <hr/>
+
+                @endif
+
                 <div class="form-group">
                     <div class="col-lg-12 col-md-12 col-xs-12 column">
                         <h4 class="text-center">Detil Inventory</h4>

@@ -651,11 +651,16 @@
                 }
             });
 
-            $('#qty_edit').val($(this).data('qty'));
             $('#remark_edit').val($(this).data('remark'));
 
-            priceEditFormat.clear();
+            qtyEditFormat.clear();
+            qtyEditFormat.set($(this).data('qty'),{
+                minimumValue: '0',
+                digitGroupSeparator: '',
+                decimalPlaces: 0
+            });
 
+            priceEditFormat.clear();
             priceEditFormat.set($(this).data('price'), {
                 decimalCharacter: ',',
                 digitGroupSeparator: '.',
@@ -664,7 +669,6 @@
             });
 
             discountEditFormat.clear();
-
             discountEditFormat.set($(this).data('discount'), {
                 maximumValue: '100',
                 minimumValue: '0',

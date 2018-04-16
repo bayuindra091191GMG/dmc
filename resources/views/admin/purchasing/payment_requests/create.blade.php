@@ -115,7 +115,15 @@
 
             <div class="form-group">
                 <div class="col-lg-12 col-md-12 col-xs-12 box-section">
-                    <h3 class="text-center">Detil Inventory</h3>
+
+                    @if(!empty($purchaseInvoices) && $purchaseInvoices->count() > 0)
+                        <h3 class="text-center">Detil Invoice</h3>
+                    @endif
+
+                    @if(!empty($purchaseOrders) && $purchaseOrders->count() > 0)
+                        <h3 class="text-center">Detil PO</h3>
+                    @endif
+
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover" id="detail_table">
                             <thead>

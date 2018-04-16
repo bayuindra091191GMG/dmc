@@ -522,7 +522,13 @@
                 }
             });
 
-            $('#qty_edit').val($(this).data('qty'));
+            qtyEditFormat.clear();
+            qtyEditFormat.set($(this).data('qty'),{
+                minimumValue: '0',
+                digitGroupSeparator: '',
+                decimalPlaces: 0
+            });
+
             $('#remark_edit').val($(this).data('remark'));
             $('#date_edit').val($(this).data('date'));
             $('#editModal').modal('show');

@@ -520,7 +520,7 @@ Breadcrumbs::register('admin.quotations.create', function (Generator $breadcrumb
 Breadcrumbs::register('admin.quotations.show', function (Generator $breadcrumbs, \App\Models\QuotationHeader $quotation) {
     $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
     $breadcrumbs->push('Daftar RFQ', route('admin.quotations'));
-    $breadcrumbs->push('Data RFQ '. $purchase_request->code, route('admin.quotations.show', ['quotation' => $quotation]));
+    $breadcrumbs->push('Data RFQ '. $quotation->code, route('admin.quotations.show', ['quotation' => $quotation]));
 });
 
 Breadcrumbs::register('admin.quotations.edit', function (Generator $breadcrumbs, \App\Models\QuotationHeader $quotation) {
@@ -649,7 +649,7 @@ Breadcrumbs::register('admin.payment_requests.create', function (Generator $brea
 Breadcrumbs::register('admin.payment_requests.show', function (Generator $breadcrumbs, \App\Models\PaymentRequest $payment_request) {
     $breadcrumbs->push(__('views.admin.dashboard.title'), route('admin.dashboard'));
     $breadcrumbs->push('Daftar RFP', route('admin.payment_requests'));
-    $breadcrumbs->push('Data RFP '. $purchase_invoice->code, route('admin.payment_requests.show', ['payment_request' => $payment_request]));
+    $breadcrumbs->push('Data RFP '. $payment_request->code, route('admin.payment_requests.show', ['payment_request' => $payment_request]));
 });
 
 Breadcrumbs::register('admin.payment_requests.edit', function (Generator $breadcrumbs, \App\Models\PaymentRequest $payment_request) {

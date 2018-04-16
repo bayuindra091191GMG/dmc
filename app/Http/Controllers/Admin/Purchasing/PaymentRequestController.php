@@ -39,6 +39,28 @@ class PaymentRequestController extends Controller
         return View('admin.purchasing.payment_requests.index');
     }
 
+    public function show(PaymentRequest $paymentRequest){
+        $date = Carbon::parse($paymentRequest->date)->format('d M Y');
+
+        $purchaseInvoices = PaymentRequestsPiDetail::where('payment_requests_id', $paymentRequest->id)->get();
+        $purchaseOrders = PaymentRequestsPoDetail::where('payment_requests_id', $paymentRequest->id)->get();
+
+        $flag = "po";
+        if($purchaseInvoices->count() > 0){
+            $flag = "pi";
+        }
+
+        $data = [
+            'header'            => $paymentRequest,
+            'purchaseInvoices'  => $purchaseInvoices,
+            'purchaseOrders'    => $purchaseOrders,
+            'flag'              => $flag,
+            'date'              => $date
+        ];
+
+        return View('admin.purchasing.payment_requests.show')->with($data);
+    }
+
     public function chooseVendor(){
         return View('admin.purchasing.payment_requests.choose_vendor');
     }
@@ -239,26 +261,21 @@ class PaymentRequestController extends Controller
         return redirect()->route('admin.payment_requests.show', ['payment_request' => $paymentRequest]);
     }
 
-    public function show(PaymentRequest $paymentRequest){
-        $date = Carbon::parse($paymentRequest->date)->format('d M Y');
+    public function edit(PaymentRequest $payment_request){
+        $header = $payment_request;
 
-        $purchaseInvoices = PaymentRequestsPiDetail::where('payment_requests_id', $paymentRequest->id)->get();
-        $purchaseOrders = PaymentRequestsPoDetail::where('payment_requests_id', $paymentRequest->id)->get();
-
-        $flag = "po";
-        if($purchaseInvoices != null){
-            $flag = "pi";
-        }
+        $date = Carbon::parse($header->date)->format('d M Y');
+        $purchaseInvoices = PaymentRequestsPiDetail::where('payment_requests_id', $header->id)->get();
+        $purchaseOrders = PaymentRequestsPoDetail::where('payment_requests_id', $header->id)->get();
 
         $data = [
-            'header'            => $paymentRequest,
+            'header'            => $header,
             'purchaseInvoices'  => $purchaseInvoices,
             'purchaseOrders'    => $purchaseOrders,
-            'flag'              => $flag,
             'date'              => $date
         ];
 
-        return View('admin.purchasing.payment_requests.show')->with($data);
+        return View('admin.purchasing.payment_requests.edit')->with($data);
     }
 
     public function report(){

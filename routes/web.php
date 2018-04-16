@@ -377,7 +377,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     //Payment Request Details
     Route::post('payment_request_details/simpan', 'Purchasing\PaymentRequestDetailController@store')->name('payment_request_details.store');
-    Route::put('payment_request_details/ubah', 'Purchasing\PaymentRequestDetailController@update')->name('payment_request_details.update');
+    Route::post('payment_request_details/ubah', 'Purchasing\PaymentRequestDetailController@update')->name('payment_request_details.update');
     Route::post('payment_request_details/hapus', 'Purchasing\PaymentRequestDetailController@delete')->name('payment_request_details.delete');
 
     //Delivery Order Headers
@@ -499,6 +499,7 @@ Route::get('/select-material_requests', 'Admin\Inventory\MaterialRequestHeaderCo
 Route::get('/select-purchase_requests', 'Admin\Purchasing\PurchaseRequestHeaderController@getPurchaseRequests')->name('select.purchase_requests');
 Route::get('/select-purchase_orders', 'Admin\Purchasing\PurchaseOrderHeaderController@getPurchaseOrders')->name('select.purchase_orders');
 Route::get('/select-delivery_orders', 'Admin\Inventory\DeliveryOrderHeaderController@getDeliveryOrders')->name('select.delivery_orders');
+Route::get('/select-purchase_invoices', 'Admin\Purchasing\PurchaseInvoiceHeaderController@getPurchaseInvoices')->name('select.purchase_invoices');
 
 /**
  * Datatables

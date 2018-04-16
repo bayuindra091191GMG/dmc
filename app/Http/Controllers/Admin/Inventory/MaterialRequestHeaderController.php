@@ -18,6 +18,7 @@ use App\Models\ItemStock;
 use App\Models\MaterialRequestDetail;
 use App\Models\MaterialRequestHeader;
 use App\Models\NumberingSystem;
+use App\Models\PurchaseRequestHeader;
 use App\Notifications\MaterialRequestCreated;
 use App\Transformer\Inventory\MaterialRequestHeaderTransformer;
 use Carbon\Carbon;
@@ -132,10 +133,16 @@ class MaterialRequestHeaderController extends Controller
             }
         }
 
+        $isPrCreated = false;
+        if(PurchaseRequestHeader::where('material_request_id', $header->id)->exists()){
+            $isPrCreated = true;
+        }
+
         $data = [
             'header'        => $header,
             'date'          => $date,
-            'itemStocks'    => $itemStocks
+            'itemStocks'    => $itemStocks,
+            'isPrCreated'   => $isPrCreated
         ];
 
         return View('admin.inventory.material_requests.other.show')->with($data);
@@ -145,9 +152,38 @@ class MaterialRequestHeaderController extends Controller
         $header = $material_request;
         $date = Carbon::parse($material_request->date)->format('d M Y');
 
+        $itemStocks = new Collection();
+
+        if($header->status_id == 3){
+            // Check stock
+            $isInStock = true;
+            foreach($header->material_request_details as $detail){
+                if($detail->item->stock < $detail->quantity){
+                    $isInStock = false;
+                }
+            }
+
+            // Get stock
+            if($isInStock){
+                foreach($header->material_request_details as $detail){
+                    $stocks = ItemStock::where('item_id', $detail->item_id)->get();
+                    foreach($stocks as $stock){
+                        $itemStocks->add($stock);
+                    }
+                }
+            }
+        }
+
+        $isPrCreated = false;
+        if(PurchaseRequestHeader::where('material_request_id', $header->id)->exists()){
+            $isPrCreated = true;
+        }
+
         $data = [
             'header'        => $header,
-            'date'          => $date
+            'date'          => $date,
+            'itemStocks'    => $itemStocks,
+            'isPrCreated'   => $isPrCreated
         ];
 
         return View('admin.inventory.material_requests.fuel.show')->with($data);
@@ -157,9 +193,38 @@ class MaterialRequestHeaderController extends Controller
         $header = $material_request;
         $date = Carbon::parse($material_request->date)->format('d M Y');
 
+        $itemStocks = new Collection();
+
+        if($header->status_id == 3){
+            // Check stock
+            $isInStock = true;
+            foreach($header->material_request_details as $detail){
+                if($detail->item->stock < $detail->quantity){
+                    $isInStock = false;
+                }
+            }
+
+            // Get stock
+            if($isInStock){
+                foreach($header->material_request_details as $detail){
+                    $stocks = ItemStock::where('item_id', $detail->item_id)->get();
+                    foreach($stocks as $stock){
+                        $itemStocks->add($stock);
+                    }
+                }
+            }
+        }
+
+        $isPrCreated = false;
+        if(PurchaseRequestHeader::where('material_request_id', $header->id)->exists()){
+            $isPrCreated = true;
+        }
+
         $data = [
             'header'        => $header,
-            'date'          => $date
+            'date'          => $date,
+            'itemStocks'    => $itemStocks,
+            'isPrCreated'   => $isPrCreated
         ];
 
         return View('admin.inventory.material_requests.oil.show')->with($data);
@@ -350,6 +415,11 @@ class MaterialRequestHeaderController extends Controller
 
     public function editOther(MaterialRequestHeader $material_request){
         $header = $material_request;
+
+        if(PurchaseRequestHeader::where('material_request_id', $header->id)->exists()){
+            return redirect()->route('admin.material_requests.other.show', ['material_request' => $header]);
+        }
+
         $departments = Department::all();
         $date = Carbon::parse($material_request->date)->format('d M Y');
 

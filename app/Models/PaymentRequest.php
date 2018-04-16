@@ -17,6 +17,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $id
  * @property string $code
  * @property \Carbon\Carbon $date
+ * @property int $supplier_id
  * @property float $amount
  * @property float $ppn
  * @property float $pph_23
@@ -51,6 +52,7 @@ class PaymentRequest extends Eloquent
     ];
 
 	protected $casts = [
+        'supplier_id' => 'int',
 		'amount' => 'float',
 		'ppn' => 'float',
 		'pph_23' => 'float',
@@ -68,6 +70,7 @@ class PaymentRequest extends Eloquent
 	protected $fillable = [
 		'code',
 		'date',
+        'supplier_id',
 		'amount',
 		'ppn',
 		'pph_23',
@@ -105,6 +108,11 @@ class PaymentRequest extends Eloquent
 
     public function scopeDateDescending(Builder $query){
         return $query->orderBy('date','DESC');
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(\App\Models\Supplier::class, 'supplier_id');
     }
 
     public function createdBy()

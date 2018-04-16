@@ -102,7 +102,15 @@
 
             <div class="form-group">
                 <div class="col-lg-12 col-md-12 col-xs-12 box-section">
-                    <h3 class="text-center">Detil Inventory</h3>
+
+                    @if(!empty($purchaseInvoices) && $purchaseInvoices->count() > 0)
+                        <h3 class="text-center">Detil Invoice</h3>
+                    @endif
+
+                    @if(!empty($purchaseOrders) && $purchaseOrders->count() > 0)
+                        <h3 class="text-center">Detil PO</h3>
+                    @endif
+
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover" id="detail_table">
                             <thead>
@@ -136,6 +144,9 @@
                                     <th class="text-center" style="width: 10%">
                                         Tanggal
                                     </th>
+                                    <th class="text-center" style="width: 10%">
+                                        Tindakan
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -148,35 +159,35 @@
                                         {{ $idx }}
                                     </td>
                                     <td class='text-center'>
-                                        <a style="text-decoration: underline" href="{{ route('admin.purchase_invoices.show', ['purchase_invoice' => $detail->id]) }}" target="_blank">{{ $detail->code }}</a>
+                                        <a style="text-decoration: underline" href="{{ route('admin.purchase_invoices.show', ['purchase_invoice' => $detail->purchase_invoice_header_id]) }}" target="_blank">{{ $detail->purchase_invoice_header->code }}</a>
                                         <input type='hidden' name='item[]' value='{{ $detail->id }}'/>
                                     </td>
                                     <td class='text-center'>
-                                        <a style="text-decoration: underline" href="{{ route('admin.purchase_orders.show', ['purchase_order' => $detail->purchase_order_id]) }}" target="_blank">{{ $detail->purchase_order_header->code }}</a>
+                                        <a style="text-decoration: underline" href="{{ route('admin.purchase_orders.show', ['purchase_order' => $detail->purchase_invoice_header->purchase_order_id]) }}" target="_blank">{{ $detail->purchase_invoice_header->purchase_order_header->code }}</a>
                                     </td>
                                     <td class='text-center'>
-                                        {{ $detail->purchase_order_header->supplier->name }}
+                                        {{ $detail->purchase_invoice_header->purchase_order_header->supplier->name }}
                                     </td>
                                     <td class='text-right'>
-                                        {{ $detail->total_price_string }}
+                                        {{ $detail->purchase_invoice_header->total_price_string }}
                                     </td>
                                     <td class='text-right'>
-                                        {{ $detail->total_discount_string }}
+                                        {{ $detail->purchase_invoice_header->total_discount_string }}
                                     </td>
                                     <td class='text-right'>
-                                        {{ $detail->delivery_fee_string }}
+                                        {{ $detail->purchase_invoice_header->delivery_fee_string }}
                                     </td>
                                     <td class='text-right'>
-                                        {{ $detail->total_payment_string }}
+                                        {{ $detail->purchase_invoice_header->total_payment_string }}
                                     </td>
                                     <td class='text-center'>
-                                        {{ $detail->date_string }}
+                                        {{ $detail->purchase_invoice_header->date_string }}
                                     </td>
                                     <td class='text-center'>
-                                        <a class="edit-modal btn btn-info" data-idx="{{ $idx }}" data-type="PI" data-pi-id="{{ $detail->id }}" data-pi-code="{{ $detail->code }}">
+                                        <a class="edit-modal btn btn-info" data-idx="{{ $idx }}" data-type="PI" data-detail-id="{{ $detail->id }}" data-pi-id="{{ $detail->purchase_invoice_header_id }}" data-pi-code="{{ $detail->purchase_invoice_header->code }}">
                                             <span class="glyphicon glyphicon-edit"></span>
                                         </a>
-                                        <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-type="PI" data-pi-id="{{ $detail->id }}" data-pi-code="{{ $detail->code }}">
+                                        <a class="delete-modal btn btn-danger" data-idx="{{ $idx }}" data-type="PI" data-detail-id="{{ $detail->id }}" data-pi-id="{{ $detail->purchase_invoice_header_id }}" data-pi-code="{{ $detail->purchase_invoice_header->code }}">
                                             <span class="glyphicon glyphicon-trash"></span>
                                         </a>
                                     </td>
@@ -230,35 +241,35 @@
                                             {{ $idx }}
                                         </td>
                                         <td class='text-center'>
-                                            {{ $detail->code }}
+                                            {{ $detail->purchase_order_header->code }}
                                             <input type='hidden' name='item[]' value='{{ $detail->id }}'/>
                                         </td>
                                         <td class='text-center'>
-                                            {{ $detail->purchase_request_header->code }}
+                                            {{ $detail->purchase_order_header->purchase_request_header->code }}
                                         </td>
                                         <td class='text-center'>
-                                            {{ $detail->supplier->name }}
+                                            {{ $detail->purchase_order_header->supplier->name }}
+                                        </td>
+                                        <td class='text-right'>
+                                            {{ $detail->purchase_order_header->total_price_string }}
+                                        </td>
+                                        <td class='text-right'>
+                                            {{ $detail->purchase_order_header->total_discount_string  }}
+                                        </td>
+                                        <td class='text-right'>
+                                            {{ $detail->purchase_order_header->delivery_fee_string  }}
+                                        </td>
+                                        <td class='text-right'>
+                                            {{ $detail->purchase_order_header->total_payment_string  }}
                                         </td>
                                         <td class='text-center'>
-                                            {{ $detail->total_price_string }}
+                                            {{ $detail->purchase_order_header->date_string }}
                                         </td>
                                         <td class='text-center'>
-                                            {{ $detail->total_discount_string  }}
-                                        </td>
-                                        <td class='text-center'>
-                                            {{ $detail->delivery_fee_string  }}
-                                        </td>
-                                        <td class='text-center'>
-                                            {{ $detail->total_payment_string  }}
-                                        </td>
-                                        <td class='text-center'>
-                                            {{ $detail->date_string }}
-                                        </td>
-                                        <td class='text-center'>
-                                            <a class="edit-modal btn btn-info" data-idx="{{ $idx }}" data-type="PO" data-po-id="{{ $detail->id }}" data-po-code="{{ $detail->code }}">
+                                            <a class="edit-modal btn btn-info" data-idx="{{ $idx }}" data-type="PO" data-detail-id="{{ $detail->id }}" data-po-id="{{ $detail->purchase_order_id }}" data-po-code="{{ $detail->purchase_order_header->code }}">
                                                 <span class="glyphicon glyphicon-edit"></span>
                                             </a>
-                                            <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-type="PO" data-po-id="{{ $detail->id }}" data-po-code="{{ $detail->code }}">
+                                            <a class="delete-modal btn btn-danger" data-idx="{{ $idx }}" data-type="PO" data-detail-id="{{ $detail->id }}" data-po-id="{{ $detail->purchase_order_id }}" data-po-code="{{ $detail->purchase_order_header->code }}">
                                                 <span class="glyphicon glyphicon-trash"></span>
                                             </a>
                                         </td>
@@ -308,6 +319,7 @@
                                 <p class="errorPo text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
+                        <input type="hidden" id="type_add" />
                     </form>
                     <div class="modal-footer">\
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
@@ -346,6 +358,9 @@
                                 <p class="errorPo text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
+                        <input type="hidden" id="detail_edit" />
+                        <input type="hidden" id="type_edit" />
+                        <input type="hidden" id="idx_edit" />
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
@@ -384,6 +399,9 @@
                                 <input type="text" class="form-control" id="po_delete" readonly>
                             </div>
                         </div>
+                        <input type="hidden" id="detail_delete" />
+                        <input type="hidden" id="type_delete" />
+                        <input type="hidden" id="idx_delete" />
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
@@ -404,6 +422,7 @@
     @parent
     {{ Html::style(mix('assets/admin/css/select2.css')) }}
     {{ Html::style(mix('assets/admin/css/bootstrap-datetimepicker.css')) }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <style>
         .box-section{
             background-color: #ffffff;
@@ -420,6 +439,7 @@
     {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
     {{ Html::script(mix('assets/admin/js/stringbuilder.js')) }}
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript">
         $('#date').datetimepicker({
             format: "DD MMM Y"
@@ -427,9 +447,9 @@
 
         // Add new detail
         $(document).on('click', '.add-modal', function() {
-            var typeAdd = $(this).data('type');
+            $('#type_add').val($(this).data('type'));
 
-            if(typeAdd === 'PI'){
+            if($(this).data('type') === 'PI'){
                 $('#po_add_form').hide();
                 $('#pi_add_form').show();
                 $('#pi_add').select2({
@@ -488,6 +508,16 @@
             $('#addModal').modal('show');
         });
         $('.modal-footer').on('click', '.add', function() {
+            var typeAdd = $('#type_add').val();
+
+            if(typeAdd === 'PI' && $('#pi_add').val() == null){
+                alert('Pilih nomor Invoice!');
+            }
+
+            if(typeAdd === 'PO' && $('#po_add').val() == null){
+                alert('Pilih nomor PO!');
+            }
+
             $.ajax({
                 type: 'POST',
                 url: '{{ route('admin.payment_request_details.store') }}',
@@ -554,34 +584,34 @@
                         if(typeAdd === 'PI'){
                             sbAdd.append("<tr class='item" + idx + "'>");
                             sbAdd.append("<td class='text-center'>" + idx + "</td>");
-                            sbAdd.append("<td class='text-center'>" + data.show_url + "</td>");
-                            sbAdd.append("<td class='text-center'>" + data.show_url_po + "</td>");
-                            sbAdd.append("<td class='text-center'>" + data.po_supplier_name + "</td>");
-                            sbAdd.append("<td class='text-right'>" + data.total_price_string + "</td>");
-                            sbAdd.append("<td class='text-right'>" + data.total_discount_string + "</td>");
-                            sbAdd.append("<td class='text-right'>" + data.delivery_fee_string + "</td>");
-                            sbAdd.append("<td class='text-right'>" + data.total_payment_string + "</td>");
-                            sbAdd.append("<td class='text-center'>" + data.date_string + "</td>");
+                            sbAdd.append("<td class='text-center'>" + data.purchase_invoice_header.show_url + "</td>");
+                            sbAdd.append("<td class='text-center'>" + data.purchase_invoice_header.show_url_po + "</td>");
+                            sbAdd.append("<td class='text-center'>" + data.purchase_invoice_header.po_supplier_name + "</td>");
+                            sbAdd.append("<td class='text-right'>" + data.purchase_invoice_header.total_price_string + "</td>");
+                            sbAdd.append("<td class='text-right'>" + data.purchase_invoice_header.total_discount_string + "</td>");
+                            sbAdd.append("<td class='text-right'>" + data.purchase_invoice_header.delivery_fee_string + "</td>");
+                            sbAdd.append("<td class='text-right'>" + data.purchase_invoice_header.total_payment_string + "</td>");
+                            sbAdd.append("<td class='text-center'>" + data.purchase_invoice_header.date_string + "</td>");
                             sbAdd.append("<td class='text-center'>");
-                            sbAdd.append("<a class='edit-modal btn btn-info' data-idx='" + idx + "' data-type='PI' data-pi-id='" + data.id + "' data-pi-code='" + data.code + "'><span class='glyphicon glyphicon-edit'></span></a>");
-                            sbAdd.append("<a class='delete-modal btn btn-danger' data-idx='" + idx + "' data-type='PI' data-pi-id='" + data.id + "' data-pi-code='" + data.code + "'><span class='glyphicon glyphicon-trash'></span></a>");
+                            sbAdd.append("<a class='edit-modal btn btn-info' data-idx='" + idx + "' data-type='PI' data-detail-id='" + data.id + "' data-pi-id='" + data.purchase_invoice_header_id + "' data-pi-code='" + data.purchase_invoice_header.code + "'><span class='glyphicon glyphicon-edit'></span></a>");
+                            sbAdd.append("<a class='delete-modal btn btn-danger' data-idx='" + idx + "' data-type='PI' data-detail-id='\" + data.id + \"' data-pi-id='" + data.purchase_invoice_header_id + "' data-pi-code='" + data.purchase_invoice_header.code + "'><span class='glyphicon glyphicon-trash'></span></a>");
                             sbAdd.append("</td>");
                             sbAdd.append("</tr>");
                         }
                         else{
                             sbAdd.append("<tr class='item" + idx + "'>");
                             sbAdd.append("<td class='text-center'>" + idx + "</td>");
-                            sbAdd.append("<td class='text-center'>" + data.show_url + "</td>");
-                            sbAdd.append("<td class='text-center'>" + data.show_url_pr + "</td>");
-                            sbAdd.append("<td class='text-center'>" + data.supplier_name + "</td>");
-                            sbAdd.append("<td class='text-right'>" + data.total_price_string + "</td>");
-                            sbAdd.append("<td class='text-right'>" + data.total_discount_string + "</td>");
-                            sbAdd.append("<td class='text-right'>" + data.delivery_fee_string + "</td>");
-                            sbAdd.append("<td class='text-right'>" + data.total_payment_string + "</td>");
-                            sbAdd.append("<td class='text-center'>" + data.date_string + "</td>");
+                            sbAdd.append("<td class='text-center'>" + data.purchase_order_header.show_url + "</td>");
+                            sbAdd.append("<td class='text-center'>" + data.purchase_order_header.show_url_pr + "</td>");
+                            sbAdd.append("<td class='text-center'>" + data.purchase_order_header.supplier_name + "</td>");
+                            sbAdd.append("<td class='text-right'>" + data.purchase_order_header.total_price_string + "</td>");
+                            sbAdd.append("<td class='text-right'>" + data.purchase_order_header.total_discount_string + "</td>");
+                            sbAdd.append("<td class='text-right'>" + data.purchase_order_header.delivery_fee_string + "</td>");
+                            sbAdd.append("<td class='text-right'>" + data.purchase_order_header.total_payment_string + "</td>");
+                            sbAdd.append("<td class='text-center'>" + data.purchase_order_header.date_string + "</td>");
                             sbAdd.append("<td class='text-center'>");
-                            sbAdd.append("<a class='edit-modal btn btn-info' data-idx='" + idx + "' data-type='PO' data-po-id='" + data.id + "' data-po-code='" + data.code + "'><span class='glyphicon glyphicon-edit'></span></a>");
-                            sbAdd.append("<a class='delete-modal btn btn-danger' data-idx='" + idx + "' data-type='PO' data-po-id='" + data.id + "' data-po-code='" + data.code + "'><span class='glyphicon glyphicon-trash'></span></a>");
+                            sbAdd.append("<a class='edit-modal btn btn-info' data-idx='" + idx + "' data-type='PO' data-detail-id='" + data.id + "' data-po-id='" + data.purchase_order_id + "' data-po-code='" + data.purchase_order_header.code + "'><span class='glyphicon glyphicon-edit'></span></a>");
+                            sbAdd.append("<a class='delete-modal btn btn-danger' data-idx='" + idx + "' data-type='PO' data-detail-id='" + data.id + "' data-po-id='" + data.purchase_order_id + "' data-po-code='" + data.purchase_order_header.code + "'><span class='glyphicon glyphicon-trash'></span></a>");
                             sbAdd.append("</td>");
                             sbAdd.append("</tr>");
                         }
@@ -594,8 +624,9 @@
 
         // Edit detail
         $(document).on('click', '.edit-modal', function() {
-            var typeEdit = $(this).data('type');
-            var idxEdit = $(this).data('idx');
+            $('#detail_edit').val($(this).data('detail-id'));
+            $('#type_edit').val($(this).data('type'));
+            $('#idx_edit').val($(this).data('idx'));
 
             if($(this).data('type') === 'PI'){
                 $('#po_edit_form').hide();
@@ -613,7 +644,7 @@
                         data: function (params) {
                             return {
                                 q: $.trim(params.term),
-                                supplier : $(this).data('supplier')
+                                supplier : '{{ $header->supplier_id }}'
                             };
                         },
                         processResults: function (data) {
@@ -640,7 +671,7 @@
                         data: function (params) {
                             return {
                                 q: $.trim(params.term),
-                                supplier : $(this).data('supplier')
+                                supplier : '{{ $header->supplier_id }}'
                             };
                         },
                         processResults: function (data) {
@@ -656,111 +687,122 @@
             $('#editModal').modal('show');
         });
         $('.modal-footer').on('click', '.edit', function() {
-            $.ajax({
-                type: 'POST',
-                url: '{{ route('admin.payment_request_details.update') }}',
-                data: {
-                    '_token': $('input[name=_token]').val(),
-                    'type': typeEdit,
-                    'pi_id': $('#pi_edit').val(),
-                    'po_id': $('#po_edit').val()
-                },
-                success: function(data) {
-                    $('.errorPi').addClass('hidden');
-                    $('.errorPo').addClass('hidden');
+            var typeEdit = $('#type_edit').val();
+            var idxEdit = $('#idx_edit').val();
 
-                    if ((data.errors)) {
-                        if(data.errors === 'pi_required'){
-                            setTimeout(function () {
-                                $('#editModal').modal('show');
-                                toastr.error('Pilih nomor Invoice!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
-                            }, 500);
-                        }
-                        if(data.errors === 'po_required'){
-                            setTimeout(function () {
-                                $('#editModal').modal('show');
-                                toastr.error('Pilih nomor PO!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
-                            }, 500);
-                        }
-                        else if(data.errors === 'pi_deleted'){
-                            setTimeout(function () {
-                                $('#editModal').modal('show');
-                                toastr.error('Nomor Invoice sudah terhapus, mohon refresh browser!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
-                            }, 500);
-                        }
-                        else if(data.errors === 'po_deleted'){
-                            setTimeout(function () {
-                                $('#editModal').modal('show');
-                                toastr.error('Nomor PO sudah terhapus, mohon refresh browser!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
-                            }, 500);
-                        }
-                        else{
-                            setTimeout(function () {
-                                $('#editModal').modal('show');
-                                toastr.error('Gagal simpan data!', 'Peringatan', {timeOut: 5000});
-                            }, 500);
+            if((typeEdit === 'PI' && $('#pi_edit').val() == null) ||
+                (typeEdit === 'PO' && $('#po_edit').val() == null)){
+                $('#editModal').modal('hide');
+            }
+            else{
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route('admin.payment_request_details.update') }}',
+                    data: {
+                        '_token': $('input[name=_token]').val(),
+                        'header_id': '{{ $header->id }}',
+                        'detail_id' : $('#detail_edit').val(),
+                        'type': typeEdit,
+                        'pi_id': $('#pi_edit').val(),
+                        'po_id': $('#po_edit').val()
+                    },
+                    success: function(data) {
+                        $('.errorPi').addClass('hidden');
+                        $('.errorPo').addClass('hidden');
 
-                            if (data.errors.pi_id) {
-                                $('.errorPi').removeClass('hidden');
-                                $('.errorPi').text(data.errors.pi_id);
+                        if ((data.errors)) {
+                            if(data.errors === 'pi_required'){
+                                setTimeout(function () {
+                                    $('#editModal').modal('show');
+                                    toastr.error('Pilih nomor Invoice!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                                }, 500);
                             }
-                            if (data.errors.po_id) {
-                                $('.errorPo').removeClass('hidden');
-                                $('.errorPo').text(data.errors.po_id);
+                            if(data.errors === 'po_required'){
+                                setTimeout(function () {
+                                    $('#editModal').modal('show');
+                                    toastr.error('Pilih nomor PO!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                                }, 500);
                             }
+                            else if(data.errors === 'pi_deleted'){
+                                setTimeout(function () {
+                                    $('#editModal').modal('show');
+                                    toastr.error('Nomor Invoice sudah terhapus, mohon refresh browser!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                                }, 500);
+                            }
+                            else if(data.errors === 'po_deleted'){
+                                setTimeout(function () {
+                                    $('#editModal').modal('show');
+                                    toastr.error('Nomor PO sudah terhapus, mohon refresh browser!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                                }, 500);
+                            }
+                            else{
+                                setTimeout(function () {
+                                    $('#editModal').modal('show');
+                                    toastr.error('Gagal simpan data!', 'Peringatan', {timeOut: 5000});
+                                }, 500);
+
+                                if (data.errors.pi_id) {
+                                    $('.errorPi').removeClass('hidden');
+                                    $('.errorPi').text(data.errors.pi_id);
+                                }
+                                if (data.errors.po_id) {
+                                    $('.errorPo').removeClass('hidden');
+                                    $('.errorPo').text(data.errors.po_id);
+                                }
+                            }
+                        } else {
+                            toastr.success('Berhasil simpan detail!', 'Sukses', {timeOut: 5000});
+
+                            var sbEdit = new stringbuilder();
+
+                            if(typeEdit === 'PI'){
+                                sbEdit.append("<tr class='item" + idxEdit + "'>");
+                                sbEdit.append("<td class='text-center'>" + idxEdit + "</td>");
+                                sbEdit.append("<td class='text-center'>" + data.purchase_invoice_header.show_url + "</td>");
+                                sbEdit.append("<td class='text-center'>" + data.purchase_invoice_header.show_url_po + "</td>");
+                                sbEdit.append("<td class='text-center'>" + data.purchase_invoice_header.po_supplier_name + "</td>");
+                                sbEdit.append("<td class='text-right'>" + data.purchase_invoice_header.total_price_string + "</td>");
+                                sbEdit.append("<td class='text-right'>" + data.purchase_invoice_header.total_discount_string + "</td>");
+                                sbEdit.append("<td class='text-right'>" + data.purchase_invoice_header.delivery_fee_string + "</td>");
+                                sbEdit.append("<td class='text-right'>" + data.purchase_invoice_header.total_payment_string + "</td>");
+                                sbEdit.append("<td class='text-center'>" + data.purchase_invoice_header.date_string + "</td>");
+                                sbEdit.append("<td class='text-center'>");
+                                sbEdit.append("<a class='edit-modal btn btn-info' data-idx='" + idxEdit + "' data-type='PI' data-detail-id='" + data.id + "' data-pi-id='" + data.purchase_invoice_header_id + "' data-pi-code='" + data.purchase_invoice_header.code + "'><span class='glyphicon glyphicon-edit'></span></a>");
+                                sbEdit.append("<a class='delete-modal btn btn-danger' data-idx='" + idxEdit + "' data-type='PI' data-detail-id='" + data.id + "' data-pi-id='" + data.purchase_invoice_header_id + "' data-pi-code='" + data.purchase_invoice_header.code + "'><span class='glyphicon glyphicon-trash'></span></a>");
+                                sbEdit.append("</td>");
+                                sbEdit.append("</tr>");
+                            }else{
+                                sbEdit.append("<tr class='item" + idxEdit + "'>");
+                                sbEdit.append("<td class='text-center'>" + idxEdit + "</td>");
+                                sbEdit.append("<td class='text-center'>" + data.purchase_order_header.show_url + "</td>");
+                                sbEdit.append("<td class='text-center'>" + data.purchase_order_header.show_url_pr + "</td>");
+                                sbEdit.append("<td class='text-center'>" + data.purchase_order_header.supplier_name + "</td>");
+                                sbEdit.append("<td class='text-right'>" + data.purchase_order_header.total_price_string + "</td>");
+                                sbEdit.append("<td class='text-right'>" + data.purchase_order_header.total_discount_string + "</td>");
+                                sbEdit.append("<td class='text-right'>" + data.purchase_order_header.delivery_fee_string + "</td>");
+                                sbEdit.append("<td class='text-right'>" + data.purchase_order_header.total_payment_string + "</td>");
+                                sbEdit.append("<td class='text-center'>" + data.purchase_order_header.date_string + "</td>");
+                                sbEdit.append("<td class='text-center'>");
+                                sbEdit.append("<a class='edit-modal btn btn-info' data-idx='" + idxEdit + "' data-type='P0' data-detail-id='" + data.id + "' data-po-id='" + data.purchase_order_id + "' data-po-code='" + data.purchase_order_header.code + "'><span class='glyphicon glyphicon-edit'></span></a>");
+                                sbEdit.append("<a class='delete-modal btn btn-danger' data-idx='" + idxEdit + "' data-type='P0' data-detail-id='" + data.id + "' data-po-id='" + data.purchase_order_id + "' data-po-code='" + data.purchase_order_header.code + "'><span class='glyphicon glyphicon-trash'></span></a>");
+                                sbEdit.append("</td>");
+                                sbEdit.append("</tr>");
+                            }
+
+
+                            $('.item' + idxEdit).replaceWith(sbEdit.toString());
                         }
-                    } else {
-                        toastr.success('Berhasil simpan detail!', 'Sukses', {timeOut: 5000});
+                    },
+                });
+            }
 
-                        var sbEdit = new stringbuilder();
-
-                        if(typeEdit === 'PI'){
-                            sbEdit.append("<tr class='item" + idxEdit + "'>");
-                            sbEdit.append("<td class='text-center'>" + idx + "</td>");
-                            sbEdit.append("<td class='text-center'>" + data.show_url + "</td>");
-                            sbEdit.append("<td class='text-center'>" + data.show_url_po + "</td>");
-                            sbEdit.append("<td class='text-center'>" + data.po_supplier_name + "</td>");
-                            sbEdit.append("<td class='text-right'>" + data.total_price_string + "</td>");
-                            sbEdit.append("<td class='text-right'>" + data.total_discount_string + "</td>");
-                            sbEdit.append("<td class='text-right'>" + data.delivery_fee_string + "</td>");
-                            sbEdit.append("<td class='text-right'>" + data.total_payment_string + "</td>");
-                            sbEdit.append("<td class='text-center'>" + data.date_string + "</td>");
-                            sbEdit.append("<td class='text-center'>");
-                            sbEdit.append("<a class='edit-modal btn btn-info' data-idx='" + idx + "' data-type='PI' data-pi-id='" + data.id + "' data-pi-code='" + data.code + "'><span class='glyphicon glyphicon-edit'></span></a>");
-                            sbEdit.append("<a class='delete-modal btn btn-danger' data-idx='" + idx + "' data-type='PI' data-pi-id='" + data.id + "' data-pi-code='" + data.code + "'><span class='glyphicon glyphicon-trash'></span></a>");
-                            sbEdit.append("</td>");
-                            sbEdit.append("</tr>");
-                        }else{
-                            sbEdit.append("<tr class='item" + idxEdit + "'>");
-                            sbEdit.append("<td class='text-center'>" + idx + "</td>");
-                            sbEdit.append("<td class='text-center'>" + data.show_url + "</td>");
-                            sbEdit.append("<td class='text-center'>" + data.show_url_pr + "</td>");
-                            sbEdit.append("<td class='text-center'>" + data.supplier_name + "</td>");
-                            sbEdit.append("<td class='text-right'>" + data.total_price_string + "</td>");
-                            sbEdit.append("<td class='text-right'>" + data.total_discount_string + "</td>");
-                            sbEdit.append("<td class='text-right'>" + data.delivery_fee_string + "</td>");
-                            sbEdit.append("<td class='text-right'>" + data.total_payment_string + "</td>");
-                            sbEdit.append("<td class='text-center'>" + data.date_string + "</td>");
-                            sbEdit.append("<td class='text-center'>");
-                            sbEdit.append("<a class='edit-modal btn btn-info' data-idx='" + idx + "' data-type='P0' data-po-id='" + data.id + "' data-po-code='" + data.code + "'><span class='glyphicon glyphicon-edit'></span></a>");
-                            sbEdit.append("<a class='delete-modal btn btn-danger' data-idx='" + idx + "' data-type='P0' data-po-id='" + data.id + "' data-po-code='" + data.code + "'><span class='glyphicon glyphicon-trash'></span></a>");
-                            sbEdit.append("</td>");
-                            sbEdit.append("</tr>");
-                        }
-
-
-                        $('.item' + id).replaceWith(sbEdit.toString());
-                    }
-                },
-            });
         });
 
         // Delete detail
         $(document).on('click', '.delete-modal', function() {
-            var typeDelete = $(this).data('type');
-            var idxDelete = $(this).data('idx');
-            var deletedPiId = $(this).data('pi_id');
-            var deletedPoId = $(this).data('po_id');
+            $('#detail_delete').val($(this).data('detail-id'));
+            $('#type_delete').val($(this).data('type'));
+            $('#idx_delete').val($(this).data('idx'));
 
             if($(this).data('type') === 'PI'){
                 $('#po_delete_form').hide();
@@ -782,42 +824,45 @@
                 data: {
                     '_token': $('input[name=_token]').val(),
                     'header_id': '{{ $header->id }}',
-                    'pi_id': deletedPiId,
-                    'po_id': deletedPoId
+                    'detail_id': $('#detail_delete').val(),
+                    'type': $('#type_delete').val(),
                 },
                 success: function(data) {
+                    alert(data.errors);
                     if ((data.errors)){
                         if(data.errors === 'pi_last'){
                             setTimeout(function () {
-                                $('#editModal').modal('show');
+                                $('#deleteModal').modal('show');
                                 toastr.error('Gagal menghapus detil!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
                             }, 500);
                         }
-                        if(data.errors === 'po_last'){
+                        else if(data.errors === 'po_last'){
                             setTimeout(function () {
-                                $('#editModal').modal('show');
+                                $('#deleteModal').modal('show');
                                 toastr.error('Gagal menghapus detil!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
                             }, 500);
                         }
                         else if(data.errors === 'pi_deleted'){
                             setTimeout(function () {
-                                $('#editModal').modal('show');
+                                $('#deleteModal').modal('show');
                                 toastr.error('Nomor Invoice sudah terhapus, mohon refresh browser!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
                             }, 500);
                         }
                         else if(data.errors === 'po_deleted'){
                             setTimeout(function () {
-                                $('#editModal').modal('show');
+                                $('#deleteModal').modal('show');
                                 toastr.error('Nomor PO sudah terhapus, mohon refresh browser!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
                             }, 500);
                         }
-                        setTimeout(function () {
-                            toastr.error('Gagal menghapus detil!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
-                        }, 500);
+                        else{
+                            setTimeout(function () {
+                                toastr.error('Gagal menghapus detil!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                            }, 500);
+                        }
                     }
                     else{
                         toastr.success('Berhasil menghapus detail!', 'Sukses', {timeOut: 5000});
-                        $('.item' + idxDelete).remove();
+                        $('.item' + $('#idx_delete').val()).remove();
                     }
                 }
             });

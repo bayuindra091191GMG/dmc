@@ -11,7 +11,9 @@
             <div class="navbar-right">
                 <a class="btn btn-default" href="{{ route('admin.material_requests.print',[ 'material_request' => $header->id]) }}" target="_blank">CETAK</a>
                 @if($header->status_id == 3)
-                    <a class="btn btn-default" href="{{ route('admin.material_requests.other.edit',[ 'material_request' => $header->id]) }}">UBAH</a>
+                    @if(!$isPrCreated)
+                        <a class="btn btn-default" href="{{ route('admin.material_requests.other.edit',[ 'material_request' => $header->id]) }}">UBAH</a>
+                    @endif
                     @if($itemStocks->count() == 0)
                         <a class="btn btn-success" href="{{ route('admin.purchase_requests.create',[ 'mr' => $header->id]) }}">PROSES PR</a>
                     @endif
@@ -132,6 +134,7 @@
                     </div>
                 @endif
 
+                <hr/>
 
                 <div class="form-group">
                     <div class="col-lg-12 col-md-12 col-xs-12 column">

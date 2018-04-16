@@ -84,15 +84,10 @@
 
         function changeInput(id){
             if(document.getElementById("chk"+id).checked == true){
-
                 $('#' + id).val(id);
-
-                // document.getElementById(id).disabled = false;
             }
             else{
                 $('#' + id).val('');
-
-                // document.getElementById(id).disabled = true;
             }
         }
     </script>
