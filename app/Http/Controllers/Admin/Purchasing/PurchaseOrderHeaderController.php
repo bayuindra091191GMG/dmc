@@ -240,7 +240,6 @@ class PurchaseOrderHeaderController extends Controller
         }
 
         if($totalDiscount > 0) $poHeader->total_discount = $totalDiscount;
-        $totalPayment += $delivery;
         $poHeader->total_price = $totalPrice;
 
         // Save total payment without tax
@@ -260,7 +259,7 @@ class PurchaseOrderHeaderController extends Controller
             $poHeader->pph_amount = $pphAmount;
         }
 
-        $poHeader->total_payment = $totalPayment + $ppnAmount - $pphAmount;
+        $poHeader->total_payment = $totalPayment + $delivery + $ppnAmount - $pphAmount;
         $poHeader->save();
 
         Session::flash('message', 'Berhasil membuat purchase order!');
@@ -308,7 +307,7 @@ class PurchaseOrderHeaderController extends Controller
         else{
             $purchase_order->delivery_fee = null;
         }
-        $totalPayment = $totalPaymentWithoutTax - $oldDelivery + $newDelivery;
+        $totalPayment = $totalPaymentWithoutTax;
         $purchase_order->total_payment_before_tax = $totalPayment;
 
         // Get PPN & PPh
@@ -334,7 +333,7 @@ class PurchaseOrderHeaderController extends Controller
             $purchase_order->pph_amount = null;
         }
 
-        $purchase_order->total_payment = $totalPayment + $ppnAmount - $pphAmount;
+        $purchase_order->total_payment = $totalPayment - $oldDelivery + $newDelivery + $ppnAmount - $pphAmount;
         $purchase_order->save();
 
         Session::flash('message', 'Berhasil ubah purchase order!');

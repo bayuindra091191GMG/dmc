@@ -319,7 +319,12 @@ class MaterialRequestHeaderController extends Controller
         }
 
         if(!$valid){
-            return redirect()->back()->withErrors('Detail barang dan jumlah wajib diisi!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Detail inventory dan jumlah wajib diisi!', 'default')->withInput($request->all());
+        }
+
+        $valid = Utilities::arrayIsUnique($items);
+        if(!$valid){
+            return redirect()->back()->withErrors('Detail inventory tidak boleh kembar!', 'default')->withInput($request->all());
         }
 
         $user = \Auth::user();
@@ -407,6 +412,9 @@ class MaterialRequestHeaderController extends Controller
         }
         else if($type === '2'){
             return redirect()->route('admin.material_requests.fuel.show', ['material_request' => $mrHeader]);
+        }
+        else if($type === '3'){
+            return redirect()->route('admin.material_requests.oil.show', ['material_request' => $mrHeader]);
         }
         else{
             return redirect()->route('admin.material_requests.service.show', ['material_request' => $mrHeader]);
