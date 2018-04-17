@@ -322,6 +322,7 @@ class MaterialRequestHeaderController extends Controller
             return redirect()->back()->withErrors('Detail inventory dan jumlah wajib diisi!', 'default')->withInput($request->all());
         }
 
+        // Check duplicate inventory
         $valid = Utilities::arrayIsUnique($items);
         if(!$valid){
             return redirect()->back()->withErrors('Detail inventory tidak boleh kembar!', 'default')->withInput($request->all());
@@ -556,23 +557,32 @@ class MaterialRequestHeaderController extends Controller
 
         $materialRequests = null;
         if($type === 'part'){
-            $materialRequests = MaterialRequestHeader::where('type', 1)->get();
+            $materialRequests = MaterialRequestHeader::where('type', 1);
         }
         else if($type === 'fuel'){
-            $materialRequests = MaterialRequestHeader::where('type', 2)->get();
+            $materialRequests = MaterialRequestHeader::where('type', 2);
         }
         else if($type === 'oil'){
-            $materialRequests = MaterialRequestHeader::where('type', 3)->get();
+            $materialRequests = MaterialRequestHeader::where('type', 3);
         }
         else if($type === 'service'){
-            $materialRequests = MaterialRequestHeader::where('type', 4)->get();
+            $materialRequests = MaterialRequestHeader::where('type', 4);
         }
         else if($type === 'before_create' || $type === 'before_create_id'){
-            $materialRequests = MaterialRequestHeader::where('status_id', 3)->get();
+            $materialRequests = MaterialRequestHeader::where('status_id', 3);
         }
         else{
-            $materialRequests = MaterialRequestHeader::all();
+            $materialRequests = MaterialRequestHeader::whereIn('status_id', [3,4,11]);
         }
+
+        if($request->filled('is_mr_exists')){
+            $isMrExist = $request->input('is_mr_exists') == 'true' ? true : false;
+            if(!$isMrExist){
+                $materialRequests = $materialRequests->doesntHave('purchase_request_headers');
+            }
+        }
+
+        $materialRequests = $materialRequests->get();
 
         return DataTables::of($materialRequests)
             ->setTransformer(new MaterialRequestHeaderTransformer($type))

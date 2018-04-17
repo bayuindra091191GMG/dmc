@@ -120,7 +120,13 @@ class PurchaseInvoiceHeaderController extends Controller
         }
 
         if(!$valid){
-            return redirect()->back()->withErrors('Detail barang, jumlah dan harga wajib diisi!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Detail inventory, jumlah dan harga wajib diisi!', 'default')->withInput($request->all());
+        }
+
+        // Check duplicate inventory
+        $valid = Utilities::arrayIsUnique($items);
+        if(!$valid){
+            return redirect()->back()->withErrors('Detail inventory tidak boleh kembar!', 'default')->withInput($request->all());
         }
 
         $user = \Auth::user();
@@ -195,7 +201,6 @@ class PurchaseInvoiceHeaderController extends Controller
         }
 
         if($totalDiscount > 0) $invHeader->total_discount = $totalDiscount;
-        $totalPayment += $delivery;
         $invHeader->total_price = $totalPrice;
 
         // Save total payment without tax
@@ -215,7 +220,7 @@ class PurchaseInvoiceHeaderController extends Controller
             $invHeader->pph_amount = $pphAmount;
         }
 
-        $invHeader->total_payment = $totalPayment + $ppnAmount - $pphAmount;
+        $invHeader->total_payment = $totalPayment + $delivery + $ppnAmount - $pphAmount;
         $invHeader->save();
 
         // Check PO
@@ -334,7 +339,7 @@ class PurchaseInvoiceHeaderController extends Controller
         else{
             $purchase_invoice->delivery_fee = null;
         }
-        $totalPayment = $totalPaymentWithoutTax - $oldDelivery + $newDelivery;
+        $totalPayment = $totalPaymentWithoutTax;
         $purchase_invoice->total_payment_before_tax = $totalPayment;
 
         // Get PPN & PPh
@@ -360,7 +365,7 @@ class PurchaseInvoiceHeaderController extends Controller
             $purchase_invoice->pph_amount = null;
         }
 
-        $purchase_invoice->total_payment = $totalPayment + $ppnAmount - $pphAmount;
+        $purchase_invoice->total_payment = $totalPayment - $oldDelivery + $newDelivery + $ppnAmount - $pphAmount;
         $purchase_invoice->save();
 
         Session::flash('message', 'Berhasil ubah purchase invoice!');

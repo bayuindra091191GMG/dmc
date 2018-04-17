@@ -610,7 +610,8 @@
             // Filter variables
             var price = 0;
             if(priceAdd && priceAdd !== "" && priceAdd !== "0"){
-                price = parseFloat(priceAdd.replace('.',''));
+                var priceClean = priceAdd.replace(/\./g,'');
+                price = parseFloat(priceClean);
             }
             var discount = 0;
             if(discountAdd && discountAdd !== "" && discountAdd !== "0"){
@@ -766,7 +767,8 @@
             // Filter variables
             var price = 0;
             if(priceEdit && priceEdit !== "" && priceEdit !== "0"){
-                price = parseFloat(priceEdit.replace('.',''));
+                var priceClean = priceEdit.replace(/\./g,'');
+                price = parseFloat(priceClean);
             }
             var discount = 0;
             if(discountEdit && discountEdit !== "" && discountEdit !== "0"){
@@ -801,6 +803,8 @@
                 sbEdit.append("<td><input type='text' name='discount[]' class='form-control' value='0' readonly/></td>");
             }
 
+
+
             var subtotal = 0;
             var totalPrice = price * qty;
             if(discount > 0){
@@ -809,6 +813,9 @@
             else{
                 subtotal = totalPrice;
             }
+
+
+
             var subtotalString = rupiahFormat(subtotal);
 
             sbEdit.append("<td><input type='text' class='form-control' value='" + subtotalString + "' readonly/></td>");

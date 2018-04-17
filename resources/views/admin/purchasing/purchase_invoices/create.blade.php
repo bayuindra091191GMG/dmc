@@ -616,7 +616,8 @@
             // Filter variables
             var price = 0;
             if(priceAdd && priceAdd !== "" && priceAdd !== "0"){
-                price = parseFloat(priceAdd.replace('.',''));
+                var priceClean = priceAdd.replace(/\./g,'');
+                price = parseFloat(priceClean);
             }
             var discount = 0;
             if(discountAdd && discountAdd !== "" && discountAdd !== "0"){
@@ -767,7 +768,8 @@
             // Filter variables
             var price = 0;
             if(priceEdit && priceEdit !== "" && priceEdit !== "0"){
-                price = parseFloat(priceEdit.replace('.',''));
+                var priceClean = priceEdit.replace(/\./g,'');
+                price = parseFloat(priceClean);
             }
             var discount = 0;
             if(discountEdit && discountEdit !== "" && discountEdit !== "0"){

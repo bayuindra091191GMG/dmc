@@ -46,7 +46,8 @@
                 ajax: {
                     url: '{!! route('datatables.material_requests') !!}',
                     data: {
-                        'type': 'before_create'
+                        'type': 'before_create',
+                        'is_mr_exists': 'false'
                     }
                 },
                 columns: [

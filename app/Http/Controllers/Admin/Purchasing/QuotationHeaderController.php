@@ -70,7 +70,6 @@ class QuotationHeaderController extends Controller
             return redirect()->back()->withErrors('Detail barang wajib diisi!', 'default')->withInput($request->all());
         }
 
-
         $qtys = Input::get('qty');
         $prices = Input::get('price');
         $valid = true;
@@ -83,7 +82,13 @@ class QuotationHeaderController extends Controller
         }
 
         if(!$valid){
-            return redirect()->back()->withErrors('Detail barang, jumlah dan harga wajib diisi!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Detail inventory, jumlah dan harga wajib diisi!', 'default')->withInput($request->all());
+        }
+
+        // Check duplicate inventory
+        $valid = Utilities::arrayIsUnique($items);
+        if(!$valid){
+            return redirect()->back()->withErrors('Detail inventory tidak boleh kembar!', 'default')->withInput($request->all());
         }
 
         // Generate auto number

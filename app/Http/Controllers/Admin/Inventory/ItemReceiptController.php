@@ -130,7 +130,13 @@ class ItemReceiptController extends Controller
         }
 
         if(!$valid){
-            return redirect()->back()->withErrors('Detail barang, Jumlah wajib diisi!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Kuantitas inventory wajib diisi!', 'default')->withInput($request->all());
+        }
+
+        // Check duplicate inventory
+        $valid = Utilities::arrayIsUnique($items);
+        if(!$valid){
+            return redirect()->back()->withErrors('Detail inventory tidak boleh kembar!', 'default')->withInput($request->all());
         }
 
         $validPo = true;

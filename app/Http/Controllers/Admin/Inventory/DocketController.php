@@ -144,19 +144,25 @@ class DocketController extends Controller
         }
 
         if(!$valid){
-            return redirect()->back()->withErrors('Detail barang, Jumlah wajib diisi!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Kuantitas wajib diisi!', 'default')->withInput($request->all());
         }
         if(!$mrCheck){
-            return redirect()->back()->withErrors('Detail barang, Jumlah tidak boleh melebihi Jumlah di MR!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Kuantitas tidak boleh melebihi kuantitas di MR!', 'default')->withInput($request->all());
         }
         if(!$qtyCheck){
-            return redirect()->back()->withErrors('Detail barang, Stock tidak mencukupi!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Stock tidak mencukupi!', 'default')->withInput($request->all());
         }
         if(!$wrCheck){
-            return redirect()->back()->withErrors('Detail barang, Barang Tidak ada di Warehouse yang dipilih!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Inventory tidak ada di gudang yang dipilih!', 'default')->withInput($request->all());
         }
         if(!$wrQtyCheck){
-            return redirect()->back()->withErrors('Detail barang, Stock tidak ada pada Gudang yang Dipilih!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Stock tidak ada pada gudang yang dipilih!', 'default')->withInput($request->all());
+        }
+
+        // Check duplicate inventory
+        $valid = Utilities::arrayIsUnique($items);
+        if(!$valid){
+            return redirect()->back()->withErrors('Detail inventory tidak boleh kembar!', 'default')->withInput($request->all());
         }
 
         $docketHeader = IssuedDocketHeader::create([
