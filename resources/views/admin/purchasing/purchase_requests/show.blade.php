@@ -9,17 +9,20 @@
                 <a class="btn btn-default" href="{{ route('admin.purchase_requests') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
             </div>
             <div class="navbar-right">
-                @if($permission)
+                @if($permission || $header->status_id != 3)
                     <a class="btn btn-default" href="{{ route('admin.purchase_requests.print',[ 'purchase_request' => $header->id]) }}" target="_blank">CETAK</a>
                 @endif
 
-                @if($approveOrder)
+                @if($header->status_id == 3 && $approveOrder)
                     <a class="btn btn-default" href="{{ route('admin.approval_rules.pr_approval',[ 'approval_rule' => $header->id]) }}">APPROVE</a>
+                @endif
+
+                @if($header->status_id == 3 && $permission)
+                    <a class="btn btn-success" href="{{ route('admin.purchase_orders.create',[ 'pr' => $header->id]) }}">PROSES PO</a>
                 @endif
 
                 @if($header->status_id == 3)
                     <a class="btn btn-default" href="{{ route('admin.purchase_requests.edit',[ 'purchase_request' => $header->id]) }}">UBAH</a>
-                    <a class="btn btn-success" href="{{ route('admin.purchase_orders.create',[ 'pr' => $header->id]) }}">PROSES PO</a>
                     <a class="close-modal btn btn-danger" data-id="{{ $header->id }}">CLOSE</a>
                 @endif
             </div>

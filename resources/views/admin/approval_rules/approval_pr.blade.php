@@ -68,10 +68,12 @@
                         Approved
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        @if($status)
+                        @if($status == 99)
                             : <span style="font-weight: bold; color: green;">Sudah Approved</span>
-                        @elseif(!$status)
-                            : <span style="font-weight: bold; color: red;">Approved Sebagian</span>
+                        @elseif($status < 99 && $status != 0)
+                            : <span style="font-weight: bold; color: #f4bf42;">Approved Sebagian</span>
+                        @elseif($status == 0)
+                            : <span style="font-weight: bold; color: red;">Belum Diapprove</span>
                         @endif
                     </div>
                 </div>

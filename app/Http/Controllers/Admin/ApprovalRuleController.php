@@ -189,11 +189,21 @@ class ApprovalRuleController extends Controller
         $header = PurchaseRequestHeader::find($approval_rule);
         $date = Carbon::parse($header->date)->format('d M Y');
         $priorityLimitDate = Carbon::parse($header->priority_limit_date)->format('d M Y');
-        $status = false;
-        $approvalData = ApprovalPurchaseRequest::where('purchase_request_id', $approval_rule)->where('user_id', $user->id)->first();
-        if($approvalData != null){
-            $status = true;
+
+        //Check kondisi Approval
+        $approvals = ApprovalRule::where('document_id', 3)->get();
+        $approvalData = ApprovalPurchaseRequest::where('purchase_request_id', $header->id)->where('user_id', $user->id)->first();
+        $status = 0;
+        $approvalPrData = ApprovalPurchaseRequest::where('purchase_request_id', $header->id)->get();
+        if($approvalData != null || $approvalPrData != null){
+            $status = $approvalPrData->count();
+
+            //Kondisi Semua sudah Approve
+            if($approvalPrData->count() == $approvals->count()){
+                $status = 99;
+            }
         }
+
         $approvalRule = ApprovalRule::where('document_id', '3')->get();
 
         $data = [
@@ -208,22 +218,23 @@ class ApprovalRuleController extends Controller
     }
 
     public function approvePr($id){
-        $datas = ApprovalRule::where('document_id', $id)->get();
+        $datas = ApprovalRule::where('document_id', 3)->get();
         $count = $datas->count();
 
         //Create Approval
         $dateTimeNow = Carbon::now('Asia/Jakarta');
         $user = Auth::user();
 
-        $valid = true;
+        $valid = false;
         $exist = true;
         $approvalData = ApprovalPurchaseRequest::where('purchase_request_id', $id)->where('user_id', $user->id)->first();
         if($approvalData != null){
             $exist = false;
         }
+
         foreach ($datas as $data){
             if($user->id == $data->user_id){
-                $valid = false;
+                $valid = true;
             }
         }
 

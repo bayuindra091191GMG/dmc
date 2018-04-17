@@ -98,7 +98,7 @@ class PurchaseRequestHeaderController extends Controller
             }
 
             //Kondisi Approve Sebagian
-            $approvalPrData = ApprovalPurchaseRequest::where('purchase_request_id', $header->id)->first();
+            $approvalPrData = ApprovalPurchaseRequest::where('purchase_request_id', $header->id)->get();
             if($approvalData != null || $approvalPrData != null){
                 $status = $approvalPrData->count();
 
