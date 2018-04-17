@@ -18,9 +18,11 @@ use App\Models\PurchaseOrderHeader;
 use App\Transformer\Purchasing\PurchaseInvoiceHeaderTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
+use PDF;
 
 class PurchaseInvoiceHeaderController extends Controller
 {
@@ -457,5 +459,36 @@ class PurchaseInvoiceHeaderController extends Controller
         }
 
         return \Response::json($formatted_tags);
+    }
+
+    public function report(){
+        return View('admin.purchasing.purchase_invoices.report');
+    }
+
+    public function downloadReport(Request $request) {
+        //Get Data First
+        $tempStart = strtotime(Input::get('start_date'));
+        $start = date('Y-m-d', $tempStart);
+        $tempEnd = strtotime(Input::get('end_date'));
+        $end = date('Y-m-d', $tempEnd);
+
+        //Check date
+        if($start > $end){
+            return redirect()->back()->withErrors('Start Date Tidak boleh lebih besar dari Finish Date!', 'default')->withInput($request->all());
+        }
+
+        $data = PurchaseInvoiceHeader::whereBetween('date', array($start, $end))->get();
+
+        //Check Data
+        if($data == null || $data->count() == 0){
+            return redirect()->back()->withErrors('Data Tidak Ditemukan!', 'default')->withInput($request->all());
+        }
+
+        $pdf = PDF::loadView('documents.purchase_invoices.purchase_invoices_pdf', ['data' => $data, 'start_date' => Input::get('start_date'), 'finish_date' => Input::get('end_date')])
+            ->setPaper('a4', 'landscape');
+        $now = Carbon::now('Asia/Jakarta');
+        $filename = 'PURCHASE_INVOICES_REPORT_' . $now->toDateTimeString();
+
+        return $pdf->download($filename.'.pdf');
     }
 }

@@ -55,7 +55,7 @@ class Utilities
                 break;
         }
 
-        $number = $code."/".$now->year."/".$modulus."/".$nextNumber;
+        $number = $code."/".$now->year."/".$modulus.$nextNumber;
         return $number;
     }
 
