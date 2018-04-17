@@ -1,8 +1,14 @@
 @extends('admin.layouts.admin')
 
-@section('title','Download Report Delivery Order')
+{{--@section('title','Download Report Delivery Order')--}}
 
 @section('content')
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+            <h2>Report Surat Jalan</h2>
+            <hr/>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
 
@@ -24,7 +30,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="start_date" >
-                    Start Date
+                    Dari Tanggal
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="start_date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('start_date')) parsley-error @endif"
@@ -34,11 +40,25 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="end_date" >
-                    Finish Date
+                    Sampai Tanggal
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="end_date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('end_date')) parsley-error @endif"
                            name="end_date" value="{{ old('end_date') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status" >
+                    Status
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="status" name="status" class="form-control col-md-7 col-xs-12">
+                        <option value="0" selected>Semua</option>
+                        <option value="3">Open</option>
+                        <option value="4">Closed</option>
+                        <option value="5">Batal</option>
+                    </select>
                 </div>
             </div>
 
