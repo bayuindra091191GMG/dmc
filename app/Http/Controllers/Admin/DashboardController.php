@@ -48,9 +48,15 @@ class DashboardController extends Controller
         $purchaseRequests = new Collection();
         $prHeaders = PurchaseRequestHeader::where('status_id', 3)->get();
         foreach ($prHeaders as $header){
-            if($header->day_left <= 1){
+            if($header->priority_expired){
                 $purchaseRequests->add($header);
             }
+            else{
+                if($header->day_left <= 1){
+                    $purchaseRequests->add($header);
+                }
+            }
+
         }
 
         $data = [

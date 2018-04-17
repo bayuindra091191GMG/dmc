@@ -421,7 +421,7 @@ class DeliveryOrderHeaderController extends Controller
                 }
             }
 
-            $header->status_id = 4;
+            $header->status_id = 5;
             $header->confirm_by = $user->id;
             $header->confirm_date = $now->toDateTimeString();
             $header->updated_by = $user->id;
@@ -472,7 +472,22 @@ class DeliveryOrderHeaderController extends Controller
     }
 
     public function downloadReport(Request $request) {
-        //Get Data First
+        $validator = Validator::make($request->all(),[
+            'start_date'        => 'required',
+            'end_date'          => 'required',
+        ],[
+            'start_date.required'   => 'Dari Tanggal wajib diisi!',
+            'end_date.required'     => 'Sampai Tanggal wajib diisi!',
+
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
         $tempStart = strtotime(Input::get('start_date'));
         $start = date('Y-m-d', $tempStart);
         $tempEnd = strtotime(Input::get('end_date'));
@@ -480,14 +495,23 @@ class DeliveryOrderHeaderController extends Controller
 
         //Check date
         if($start > $end){
-            return redirect()->back()->withErrors('Start Date Tidak boleh lebih besar dari Finish Date!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Dari Tanggal tidak boleh lebih besar dari Sampai Tanggal!', 'default')->withInput($request->all());
         }
 
-        $data = DeliveryOrderHeader::whereBetween('created_at', array($start, $end))->get();
+        $data = DeliveryOrderHeader::whereBetween('created_at', array($start, $end));
 
-        //Check Data
+        // Filter status
+        $status = $request->input('status');
+        if($status != '0'){
+            $data = $data->where('status_id', $status);
+        }
+
+        $data = $data->orderByDesc('date')
+            ->get();
+
+        // Check Data
         if($data == null || $data->count() == 0){
-            return redirect()->back()->withErrors('Data Tidak Ditemukan!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Data tidak ditemukan!', 'default')->withInput($request->all());
         }
 
         $pdf = PDF::loadView('documents.delivery_orders.delivery_orders_pdf', ['data' => $data, 'start_date' => Input::get('start_date'), 'finish_date' => Input::get('end_date')])
