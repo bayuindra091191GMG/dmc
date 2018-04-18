@@ -28,7 +28,7 @@ Pusher.logToConsole = true;
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: '5766d7c115acfd57b166',
+    key: 'e8d312137b74ece60a85',
     cluster: 'ap1',
     encrypted: false,
     disableStats: false

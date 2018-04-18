@@ -75,7 +75,7 @@
                 });
 
 
-        })
+        });
 
         function clearNotif(){
             $('#notification_badge').attr('style', 'color: #515356 !important');
@@ -84,7 +84,7 @@
                 type: 'POST',
                 url: '{{ route('admin.notifications.read') }}',
                 data: {
-                    '_token': $('input[name=_token]').val()
+                    _token: '{!! csrf_token() !!}',
                 },
                 success: function(data) {
 

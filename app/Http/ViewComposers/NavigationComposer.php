@@ -10,7 +10,6 @@ namespace App\Http\ViewComposers;
 
 use App\Models\PermissionMenu;
 use App\Models\PermissionMenuHeader;
-use App\Models\UsersRole;
 use Illuminate\View\View;
 
 class NavigationComposer
@@ -20,7 +19,6 @@ class NavigationComposer
 
     public function __construct()
     {
-//        $this->testArr = auth()->user()->unreadNotifications()->limit(5)->get();
         //Try to get the menu permissions and all the Menu
         $user = auth()->user();
         $role = $user->roles()->pluck('id')[0];
@@ -31,7 +29,6 @@ class NavigationComposer
 
     public function compose(View $view)
     {
-//        dd($this->testArr);
         $data = [
             'menus'         => $this->menus,
             'menuHeader'    => $this->menuHeader
