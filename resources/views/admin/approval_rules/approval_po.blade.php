@@ -47,21 +47,21 @@
                     </div>
                 @endif
 
-                <div class="form-group">
-                    <label class="control-label col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                    </label>
-                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                        <div class="alert alert-danger  fade in" role="alert">
-                            User yang harus melakukan approval pada dokumen ini adalah
-                            <br/>
-                            <ul>
-                                @foreach($approvalData as $data)
-                                    <li>{{ $data->user->name }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                {{--<div class="form-group">--}}
+                    {{--<label class="control-label col-lg-3 col-md-12 col-sm-12 col-xs-12">--}}
+                    {{--</label>--}}
+                    {{--<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">--}}
+                        {{--<div class="alert alert-danger  fade in" role="alert">--}}
+                            {{--User yang harus melakukan approval pada dokumen ini adalah--}}
+                            {{--<br/>--}}
+                            {{--<ul>--}}
+                                {{--@foreach($approvalData as $data)--}}
+                                    {{--<li>{{ $data->user->name }}</li>--}}
+                                {{--@endforeach--}}
+                            {{--</ul>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
@@ -69,9 +69,19 @@
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         @if($status == 99)
-                            : <span style="font-weight: bold; color: green;">Sudah Approved</span>
+                            :
+                            <span style="font-weight: bold; color: green;">
+                                @foreach($approvalData as $data)
+                                    {{ $data->user->name }}
+                                @endforeach
+                            </span>
                         @elseif($status < 99 && $status != 0)
-                            : <span style="font-weight: bold; color: #f4bf42;">Approved Sebagian</span>
+                            :
+                            <span style="font-weight: bold; color: #f4bf42;">
+                                @foreach($approvalData as $data)
+                                    {{ $data->user->name }}
+                                @endforeach
+                            </span>
                         @elseif($status == 0)
                             : <span style="font-weight: bold; color: red;">Belum Diapprove</span>
                         @endif

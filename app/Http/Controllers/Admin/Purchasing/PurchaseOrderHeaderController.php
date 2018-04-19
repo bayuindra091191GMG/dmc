@@ -60,6 +60,7 @@ class PurchaseOrderHeaderController extends Controller
         //All Approval Settings checked if On Or Not
         $setting = PreferenceCompany::find(1);
 
+        $approvals = null;
         if($setting->approval_setting == 1) {
             $tempApprove = ApprovalRule::where('document_id', 4)->where('user_id', $user->id)->get();
             $approvals = ApprovalRule::where('document_id', 4)->get();
@@ -96,6 +97,7 @@ class PurchaseOrderHeaderController extends Controller
             'permission'        => $permission,
             'approveOrder'      => $approveOrder,
             'status'            => $status,
+            'approvalData'      => $approvals,
             'setting'           => $setting->approval_setting
         ];
 
