@@ -62,32 +62,50 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="col-md-3 col-sm-3 col-xs-12">
-                        Total Harga
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->total_price_string }}
+                    <div class="form-group">
+                        <label class="col-md-3 col-sm-3 col-xs-12">
+                            Total Diskon
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            : {{ !empty($header->total_discount) ? 'Rp '. $header->total_discount_string : '-' }}
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="col-md-3 col-sm-3 col-xs-12">
-                        Total Diskon
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->total_discount_string ?? '-' }}
+                    <div class="form-group">
+                        <label class="col-md-3 col-sm-3 col-xs-12">
+                            Ongkos Kirim
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            : {{ !empty($header->delivery_fee) && $header->delivery_fee > 0 ? 'Rp '. $header->delivery_fee_string : '-' }}
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="col-md-3 col-sm-3 col-xs-12">
-                        Total Pembayaran
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $header->total_payment_string ?? '-' }}
+                    <div class="form-group">
+                        <label class="col-md-3 col-sm-3 col-xs-12">
+                            PPN {{ !empty($header->ppn_percent) && $header->ppn_percent > 0 ? $header->ppn_percent. '%' : '' }}
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            : {{ !empty($header->ppn_percent) && $header->ppn_percent > 0 ? 'Rp '. $header->ppn_string : '-' }}
+                        </div>
                     </div>
-                </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 col-sm-3 col-xs-12">
+                            PPh
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            : {{ !empty($header->pph_amount) && $header->pph_amount > 0 ? 'Rp '. $header->pph_string : '-' }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 col-sm-3 col-xs-12">
+                            Total RFQ
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            : Rp {{ $header->total_payment_string }}
+                        </div>
+                    </div>
 
                 <hr>
 
@@ -135,7 +153,7 @@
                                             {{ $detail->item->name }}
                                         </td>
                                         <td class="text-center">
-                                            {{ $detail->item->uom->description }}
+                                            {{ $detail->item->uom }}
                                         </td>
                                         <td class="text-center">
                                             {{ $detail->quantity }}
@@ -143,8 +161,8 @@
                                         <td class="text-right">
                                             {{ $detail->price_string }}
                                         </td>
-                                        <td class="text-center">
-                                            {{ $detail->discount_string }}
+                                        <td class="text-right">
+                                            {{ $detail->discount_amount_string ?? '0' }}
                                         </td>
                                         <td class="text-right">
                                             {{ $detail->subtotal_string }}

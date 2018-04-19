@@ -83,7 +83,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="delivery_fee" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('delivery_fee')) parsley-error @endif"
-                           name="delivery_fee" value="{{ old('delivery_fee') }}">
+                           name="delivery_fee">
                 </div>
             </div>
 
@@ -485,6 +485,20 @@
             decimalPlaces: 0
         });
 
+        @if(!empty(old('pph')))
+            pphFormat.clear();
+
+            var pph = '{{ old('pph') }}';
+            var pphClean = pph.replace(/\./g,'');
+
+                pphFormat.set(pphClean, {
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
+                minimumValue: '0',
+                decimalPlaces: 0
+            });
+        @endif
+
         numberFormat = new AutoNumeric('#price_add', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
@@ -498,6 +512,20 @@
             minimumValue: '0',
             decimalPlaces: 0
         });
+
+        @if(!empty(old('delivery_fee')))
+            deliveryFeeFormat.clear();
+
+            var deliveryFee = '{{ old('delivery_fee') }}';
+            var deliveryFeeClean = deliveryFee.replace(/\./g,'');
+
+            deliveryFeeFormat.set(deliveryFeeClean, {
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
+                minimumValue: '0',
+                decimalPlaces: 0
+            });
+        @endif
 
         priceEditFormat = new AutoNumeric('#price_edit', {
             decimalCharacter: ',',

@@ -268,7 +268,7 @@ class PurchaseOrderDetailController extends Controller
             $header->updated_at = $now->toDateTimeString();
             $header->save();
 
-            // Delete quotation detail completely
+            // Delete purchase order detail completely
             $detail->delete();
 
             return new JsonResponse($detail);

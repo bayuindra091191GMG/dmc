@@ -78,15 +78,15 @@ class QuotationHeaderController extends Controller
             return redirect()->back()->withErrors('Nomor kuotasi vendor wajib diisi!', 'default')->withInput($request->all());
         }
 
-        // Check detail
-        $items = Input::get('item');
+        // Validate details
+        $items = $request->input('item_value');
 
         if(count($items) == 0){
             return redirect()->back()->withErrors('Detail inventory wajib diisi!', 'default')->withInput($request->all());
         }
 
-        $qtys = Input::get('qty');
-        $prices = Input::get('price');
+        $qtys = $request->input('qty');
+        $prices = $request->input('price');
         $valid = true;
         $i = 0;
         foreach($items as $item){
@@ -96,7 +96,7 @@ class QuotationHeaderController extends Controller
         }
 
         if(!$valid){
-            return redirect()->back()->withErrors('Detail inventory dan kuantitas wajib diisi!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Detail inventory & kuantitas wajib diisi!', 'default')->withInput($request->all());
         }
 
         // Check duplicate inventory
@@ -127,7 +127,7 @@ class QuotationHeaderController extends Controller
 
         $quotHeader = QuotationHeader::create([
             'code'                  => $quotCode,
-            'purchase_request_id'   => Input::get('pr_code'),
+            'purchase_request_id'   => Input::get('pr_id'),
             'supplier_id'           => Input::get('supplier'),
             'status_id'             => 3,
             'created_by'            => $user->id,

@@ -42,10 +42,10 @@ class QuotationDetail extends Eloquent
 	];
 
     protected $appends = [
-        'priceString',
-        'discountString',
-        'discountAmountString',
-        'subtotalString'
+        'price_string',
+        'discount_string',
+        'discount_amount_string',
+        'subtotal_string'
     ];
 
 	protected $fillable = [

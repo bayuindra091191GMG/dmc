@@ -384,29 +384,6 @@
 
         var i=1;
 
-        {{--$('#pr_code').select2({--}}
-            {{--placeholder: {--}}
-                {{--id: '{{ $header->purchase_request_id }}',--}}
-                {{--text: '{{ $header->purchase_request_header->code }}'--}}
-            {{--},--}}
-            {{--width: '100%',--}}
-            {{--minimumInputLength: 1,--}}
-            {{--ajax: {--}}
-                {{--url: '{{ route('select.purchase_requests') }}',--}}
-                {{--dataType: 'json',--}}
-                {{--data: function (params) {--}}
-                    {{--return {--}}
-                        {{--q: $.trim(params.term)--}}
-                    {{--};--}}
-                {{--},--}}
-                {{--processResults: function (data) {--}}
-                    {{--return {--}}
-                        {{--results: data--}}
-                    {{--};--}}
-                {{--}--}}
-            {{--}--}}
-        {{--});--}}
-
         $('#supplier').select2({
             placeholder: {
                 id: '{{ $header->supplier_id }}',

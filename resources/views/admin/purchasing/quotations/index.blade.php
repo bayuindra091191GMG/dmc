@@ -23,8 +23,11 @@
                 <th class="text-center">Nomor PR</th>
                 <th class="text-center">Vendor</th>
                 <th class="text-center">Total Harga</th>
-                <th class="text-center">Diskon</th>
-                <th class="text-center">Total Pembayaran</th>
+                <th class="text-center">Total Diskon</th>
+                <th class="text-center">Ongkos Kirim</th>
+                <th class="text-center">PPN</th>
+                <th class="text-center">PPh</th>
+                <th class="text-center">Total RFQ</th>
                 <th class="text-center">Status</th>
                 <th class="text-center">Tanggal Dibuat</th>
                 <th class="text-center">Tindakan</th>
@@ -58,6 +61,9 @@
                     { data: 'vendor', name: 'vendor', class: 'text-center'  },
                     { data: 'total_price', name: 'total_price', class: 'text-right' },
                     { data: 'discount', name: 'discount', class: 'text-right' },
+                    { data: 'delivery_fee', name: 'delivery_fee', class: 'text-right' },
+                    { data: 'ppn', name: 'ppn', class: 'text-right' },
+                    { data: 'pph', name: 'pph', class: 'text-right' },
                     { data: 'total_payment', name: 'total_payment', class: 'text-right' },
                     { data: 'status', name: 'status', class: 'text-center' },
                     { data: 'created_at', name: 'created_at', class: 'text-center' },

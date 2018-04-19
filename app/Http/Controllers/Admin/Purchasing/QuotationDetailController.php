@@ -48,10 +48,11 @@ class QuotationDetailController extends Controller
             // Check discount and subtotal
             $finalSubtotal = 0;
             $discountAmount = 0;
-            if(!empty(Input::get('discount'))){
-                $discount = (double) Input::get('discount');
-                $detail->discount = $discount;
+            if($request->filled('discount')){
+                $discount = (double) $request->input('discount');
+                $detail->discount_percent = $discount;
                 $discountAmount = ($qty * $price) * $discount/ 100;
+                $detail->discount_amount = $discountAmount;
                 $finalSubtotal = ($qty * $price) - $discountAmount;
                 $detail->subtotal = $finalSubtotal;
             }
@@ -65,10 +66,37 @@ class QuotationDetailController extends Controller
             $detail->save();
 
             // Accumulate total price, discount & payment
-            $header = QuotationHeader::find(Input::get('header_id'));
-            $header->total_price = $header->total_price + ($qty * $price);
-            $header->total_payment = $header->total_payment + $finalSubtotal;
-            if(!empty(Input::get('discount'))){
+            $header = QuotationHeader::find($request->input('header_id'));
+            $totalPrice = $header->total_price + ($qty * $price);
+            $header->total_price = $totalPrice;
+
+//            $deliveryFee = $header->delivery_fee ?? 0;
+            $totalPayment = $header->total_payment_before_tax + $finalSubtotal;
+            $header->total_payment_before_tax = $totalPayment;
+
+            // Get PPN & PPh
+            $ppnAmount = 0;
+            if(!empty($header->ppn_percent) && $header->ppn_percent > 0){
+                $ppnAmount = $totalPayment * (10 / 100);
+                $header->ppn_percent = 10;
+                $header->ppn_amount = $ppnAmount;
+            }
+            else{
+                $header->ppn_percent = null;
+                $header->ppn_amount = null;
+            }
+
+            $pphAmount = 0;
+            if(!empty($header->pph_amount) && $header->pph_amount > 0){
+                $pphAmount = $header->pph_amount;
+            }
+            else{
+                $header->pph_percent = null;
+                $header->pph_amount = null;
+            }
+
+            $header->total_payment = $totalPayment + $ppnAmount - $pphAmount;
+            if($request->filled('discount')){
                 $header->total_discount += $discountAmount;
             }
             $header->save();
@@ -93,7 +121,7 @@ class QuotationDetailController extends Controller
                 return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
             }
 
-            $detail = QuotationDetail::find(Input::get('id'));
+            $detail = QuotationDetail::find($request->input('id'));
 
             // Get old value
             $oldPrice = $detail->price;
@@ -101,11 +129,11 @@ class QuotationDetailController extends Controller
             $oldSubtotal = $detail->subtotal;
             $oldQty = $detail->quantity;
 
-            if(!empty(Input::get('item'))){
-                $detail->item_id = Input::get('item');
+            if($request->filled('item')){
+                $detail->item_id = $request->input('item');
             }
 
-            $qty = (double) Input::get('qty');
+            $qty = (double) $request->input('qty');
 
             $detail->quantity = $qty;
             $priceStr = str_replace('.','', Input::get('price'));
@@ -115,32 +143,60 @@ class QuotationDetailController extends Controller
             // Check discount and subtotal
             $finalSubtotal = 0;
             $discountAmount = 0;
-            if(!empty(Input::get('discount'))){
+            if($request->filled('discount')){
                 // Get old discount
                 $oldDiscountAmount = ($oldQty * $oldPrice) * $detail->discount / 100;
 
-                $discount = (double) Input::get('discount');
+                $discount = (double) $request->input('discount');
                 $detail->discount = $discount;
                 $discountAmount = ($qty * $price) * $discount/ 100;
+                $detail->discount_amount = $discountAmount;
                 $finalSubtotal = ($qty * $price) - $discountAmount;
-                $detail->subtotal = ($qty * $price) - $finalSubtotal;
+                $detail->subtotal = $finalSubtotal;
             }
             else{
                 $finalSubtotal = ($qty * $price);
                 $detail->subtotal = $finalSubtotal;
             }
 
-            if(!empty(Input::get('remark'))) $detail->remark = Input::get('remark');
+            if($request->filled('remark')) $detail->remark = $request->input('remark');
 
             $detail->save();
 
             // Accumulate total price, discount & payment
             $header = QuotationHeader::find($detail->header_id);
-            $header->total_price = $header->total_price - ($oldQty * $oldPrice) + ($qty * $price);
-            $header->total_payment = $header->total_payment - $oldSubtotal + $finalSubtotal;
-            if(!empty(Input::get('discount'))){
+            $totalPrice = $header->total_price - ($oldQty * $oldPrice) + ($qty * $price);
+            $header->total_price = $totalPrice;
+
+            $totalPayment = $header->total_payment_before_tax - $oldSubtotal + $finalSubtotal;
+            $header->total_payment_before_tax = $totalPayment;
+
+            if($request->filled('discount')){
                 $header->total_discount = $header->total_discount - $oldDiscountAmount + $discountAmount;
             }
+
+            // Get PPN & PPh
+            $ppnAmount = 0;
+            if(!empty($header->ppn_percent) && $header->ppn_percent > 0){
+                $ppnAmount = $totalPayment * (10 / 100);
+                $header->ppn_percent = 10;
+                $header->ppn_amount = $ppnAmount;
+            }
+            else{
+                $header->ppn_percent = null;
+                $header->ppn_amount = null;
+            }
+
+            $pphAmount = 0;
+            if(!empty($header->pph_amount) && $header->pph_amount > 0){
+                $pphAmount = $header->pph_amount;
+            }
+            else{
+                $header->pph_percent = null;
+                $header->pph_amount = null;
+            }
+
+            $header->total_payment = $totalPayment + $ppnAmount - $pphAmount;
             $header->save();
 
             $json = QuotationDetail::with('item')->find($detail->id);
@@ -154,12 +210,12 @@ class QuotationDetailController extends Controller
     public function delete(Request $request){
         try{
 
-            $details = QuotationDetail::where('header_id', Input::get('header_id'))->get();
+            $details = QuotationDetail::where('header_id', $request->input('header_id'))->get();
             if($details->count() == 1){
                 return Response::json(array('errors' => 'INVALID'));
             }
 
-            $detail = QuotationDetail::find(Input::get('id'));
+            $detail = QuotationDetail::find($request->input('id'));
 
             // Get old value
             $oldPrice = $detail->price;
@@ -179,8 +235,35 @@ class QuotationDetailController extends Controller
             // Minus header total values
             $header = QuotationHeader::find($detail->header_id);
             $header->total_price = $header->total_price - ($oldQty * $oldPrice);
+
+//            $deliveryFee = $header->delivery_fee ?? 0;
+            $totalPayment = $header->total_payment_before_tax - $oldSubtotal;
+            $header->total_payment_before_tax = $totalPayment;
+
             $header->total_discount = $header->total_discount -  $oldDiscountAmount;
-            $header->total_payment = $header->total_payment - $oldSubtotal;
+
+            // Get PPN & PPh
+            $ppnAmount = 0;
+            if(!empty($header->ppn_percent) && $header->ppn_percent > 0){
+                $ppnAmount = $totalPayment * (10 / 100);
+                $header->ppn_percent = 10;
+                $header->ppn_amount = $ppnAmount;
+            }
+            else{
+                $header->ppn_percent = null;
+                $header->ppn_amount = null;
+            }
+
+            $pphAmount = 0;
+            if(!empty($header->pph_amount) && $header->pph_amount > 0){
+                $pphAmount = $header->pph_amount;
+            }
+            else{
+                $header->pph_percent = null;
+                $header->pph_amount = null;
+            }
+
+            $header->total_payment = $totalPayment + $ppnAmount - $pphAmount;
 
             $now = Carbon::now('Asia/Jakarta');
             $header->updated_at = $now->toDateTimeString();

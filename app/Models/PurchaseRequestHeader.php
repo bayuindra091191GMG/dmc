@@ -105,9 +105,9 @@ class PurchaseRequestHeader extends Eloquent
     }
 
     public function getPriorityExpiredAttribute(){
-        $now = Carbon::now('Asia/Jakarta');
+        $now = Carbon::now('Asia/Jakarta')->startOfDay();
         $limitDate = Carbon::parse($this->attributes['priority_limit_date']);
-        return $now->gt($limitDate);
+        return $now->gt($limitDate->startOfDay());
     }
 
 	public function department()

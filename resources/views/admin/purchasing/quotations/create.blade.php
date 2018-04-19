@@ -45,6 +45,17 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
+                    Tanggal
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
+                           name="date" value="{{ old('date') }}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pr_code" >
                     Nomor PR
                 </label>
@@ -104,48 +115,78 @@
             <div class="form-group">
                 <div class="col-lg-12 col-md-12 col-xs-12 box-section">
                     <h3 class="text-center">Detil Inventory</h3>
+                    @if(empty($purchaseRequest))
+                        <a class="add-modal btn btn-info" style="margin-bottom: 10px;">
+                            <span class="glyphicon glyphicon-plus-sign"></span> Tambah
+                        </a>
+                    @endif
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover" id="tab_logic">
+                        <table class="table table-bordered table-hover" id="detail_table">
                             <thead>
-                            <tr >
-                                <th class="text-center" style="width: 15%">
+                            <tr>
+                                <th class="text-center" style="width: 20%">
                                     Nomor Part
                                 </th>
-                                <th class="text-center" style="width: 15%">
+                                <th class="text-center" style="width: 10%">
                                     QTY
-                                </th><th class="text-center" style="width: 20%">
+                                </th>
+                                <th class="text-center" style="width: 15%">
                                     Harga
-                                </th><th class="text-center" style="width: 10%">
+                                </th>
+                                <th class="text-center" style="width: 10%">
                                     Diskon (%)
                                 </th>
-                                <th class="text-center" style="width: 40%">
+                                <th class="text-center" style="width: 15%">
+                                    Subtotal
+                                </th>
+                                <th class="text-center" style="width: 15%">
                                     Remark
+                                </th>
+                                <th class="text-center" style="width: 15%">
+                                    Tindakan
                                 </th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr id='addr0'>
-                                <td class='field-item'>
-                                    <select id="select0" name="item[]" class='form-control'></select>
-                                </td>
-                                <td>
-                                    <input type='number' name='qty[]'  placeholder='QTY' class='form-control'/>
-                                </td>
-                                <td>
-                                    <input id="price0" type='text' name='price[]'  placeholder='Harga' class='form-control'/>
-                                </td>
-                                <td>
-                                    <input type='number' name='discount[]'  placeholder='Diskon' class='form-control'/>
-                                </td>
-                                <td>
-                                    <input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/>
-                                </td>
-                            </tr>
-                            <tr id='addr1'></tr>
+                            <?php $idx = 0; ?>
+                            @if(!empty($purchaseRequest))
+                                @foreach($purchaseRequest->purchase_request_details as $detail)
+                                    <?php $idx++; ?>
+                                    <tr class='item{{ $idx }}'>
+                                        <td class='field-item'>
+                                            <input type='text' name='item_text[]' class='form-control' value='{{ $detail->item->code. ' - '. $detail->item->name }}' readonly/>
+                                            <input type='hidden' name='item_value[]' value='{{ $detail->item_id }}'/>
+                                        </td>
+                                        <td>
+                                            <input type='text' name='qty[]' class='form-control' value='{{ $detail->quantity }}' readonly/>
+                                        </td>
+                                        <td>
+                                            <input type='text' name='price[]' class='form-control' value='0' readonly/>
+                                        </td>
+                                        <td>
+                                            <input type='text' name='discount[]' class='form-control' value='0' readonly/>
+                                        </td>
+                                        <td>
+                                            <input type='text' name='subtotal[]' class='form-control' value='0' readonly/>
+                                        </td>
+                                        <td>
+                                            <input type='text' name='remark[]' class='form-control' value='{{ $detail->remark }}' readonly/>
+                                        </td>
+                                        <td class='text-center'>
+                                            <?php $itemId = $detail->item_id. "#". $detail->item->code. "#". $detail->item->name ?>
+                                            <a class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}" data-price="0" data-discount="0">
+                                                <span class="glyphicon glyphicon-edit"></span>
+                                            </a>
+                                            <a class="delete-modal btn btn-danger" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}">
+                                                <span class="glyphicon glyphicon-trash"></span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
                             </tbody>
                         </table>
                     </div>
-                    <a id="add_row" class="btn btn-default pull-left">Tambah</a><a id='delete_row' class="pull-right btn btn-default">Hapus</a>
                 </div>
             </div>
 
@@ -158,6 +199,154 @@
                 </div>
             </div>
             {{ Form::close() }}
+        </div>
+    </div>
+
+    <!-- Modal form to add new detail -->
+    <div id="addModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="item_add">Barang:</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="item_add" name="item_add"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="qty_add">QTY:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="qty_add" name="qty_add">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="price_add">Harga:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="price_add" name="price_add">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="discount_add">Diskon(%):</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="discount_add" name="discount_add">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="remark_add">Remark:</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="remark_add" name="remark_add" cols="40" rows="5"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">
+                            <span class='glyphicon glyphicon-remove'></span> Batal
+                        </button>
+                        <button type="button" class="btn btn-success add" data-dismiss="modal">
+                            <span id="" class='glyphicon glyphicon-check'></span> Simpan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal form to edit a detail -->
+    <div id="editModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="item_edit">Barang:</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="item_edit" name="item_edit"></select>
+                                <input type="hidden" id="item_old_value"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="qty_edit">QTY:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="qty_edit" name="qty_edit">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="price_edit">Harga:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="price_edit" name="price_edit">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="discount_edit">Diskon(%):</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="discount_edit" name="discount_edit">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="remark_edit">Remark:</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="remark_edit" name="remark_edit" cols="40" rows="5"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">
+                            <span class='glyphicon glyphicon-remove'></span> Batal
+                        </button>
+                        <button type="button" class="btn btn-primary edit" data-dismiss="modal">
+                            <span class='glyphicon glyphicon-check'></span> Simpan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal form to delete a form -->
+    <div id="deleteModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <h3 class="text-center">Apakah anda yakin ingin menghapus detail ini?</h3>
+                    <br />
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="item_delete">Barang:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="item_delete" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="qty_delete">QTY:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="qty_delete" readonly>
+                            </div>
+                        </div>
+                        <input type="hidden" name="deleted_id"/>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">
+                            <span class='glyphicon glyphicon-remove'></span> Batal
+                        </button>
+                        <button type="button" class="btn btn-danger delete" data-dismiss="modal">
+                            <span id="" class='glyphicon glyphicon-trash'></span> Hapus
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
@@ -180,8 +369,14 @@
     @parent
     {{ Html::script(mix('assets/admin/js/select2.js')) }}
     {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
+    {{ Html::script(mix('assets/admin/js/stringbuilder.js')) }}
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
     <script type="text/javascript">
+        // Date Picker
+        $('#date').datetimepicker({
+            format: "DD MMM Y"
+        });
+
         // Auto Numbering
         $('#auto_number').change(function(){
             if(this.checked){
@@ -191,29 +386,6 @@
             else{
                 $('#quot_code').val('');
                 $('#quot_code').prop('readonly', false);
-            }
-        });
-
-        $('#pr_code').select2({
-            placeholder: {
-                id: '-1',
-                text: ' - Pilih Nomor PR - '
-            },
-            width: '100%',
-            minimumInputLength: 1,
-            ajax: {
-                url: '{{ route('select.purchase_requests') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                }
             }
         });
 
@@ -241,43 +413,90 @@
             }
         });
 
-        // autoNumeric
-        numberFormat = new AutoNumeric('#price0', {
-            decimalCharacter: ',',
-            digitGroupSeparator: '.',
+        // Add autonumeric
+        qtyAddFormat = new AutoNumeric('#qty_add', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
             decimalPlaces: 0
         });
 
-        $('#select0').select2({
-            placeholder: {
-                id: '-1',
-                text: ' - Pilih Inventory - '
-            },
-            width: '100%',
-            minimumInputLength: 1,
-            ajax: {
-                url: '{{ route('select.items') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                }
-            }
+        qtyEditFormat = new AutoNumeric('#qty_edit', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0
         });
 
-        var i=1;
-        $("#add_row").click(function(){
-            $('#addr'+i).html("<td class='field-item'><select id='select" + i + "' name='item[]' class='form-control'></select></td><td><input type='number' name='qty[]'  placeholder='Jumlah' class='form-control'/></td><td><input type='text' id='price" + i + "' name='price[]'  placeholder='Harga' class='form-control'/></td><td><input type='number' name='discount[]'  placeholder='Diskon' class='form-control'/></td><td><input type='text' name='remark[]' placeholder='Keterangan' class='form-control'/></td>");
+        pphFormat = new AutoNumeric('#pph', {
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+            minimumValue: '0',
+            decimalPlaces: 0
+        });
 
-            $('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
+        @if(!empty(old('pph')))
+            pphFormat.clear();
 
-            $('#select' + i).select2({
+            var pph = '{{ old('pph') }}';
+            var pphClean = pph.replace(/\./g,'');
+
+            pphFormat.set(pphClean, {
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
+                minimumValue: '0',
+                decimalPlaces: 0
+            });
+        @endif
+
+        numberFormat = new AutoNumeric('#price_add', {
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+            minimumValue: '0',
+            decimalPlaces: 0
+        });
+
+        deliveryFeeFormat = new AutoNumeric('#delivery_fee', {
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+            minimumValue: '0',
+            decimalPlaces: 0
+        });
+
+        @if(!empty(old('delivery_fee')))
+            deliveryFeeFormat.clear();
+
+            var deliveryFee = '{{ old('delivery_fee') }}';
+            var deliveryFeeClean = deliveryFee.replace(/\./g,'');
+
+            deliveryFeeFormat.set(deliveryFeeClean, {
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
+                minimumValue: '0',
+                decimalPlaces: 0
+            });
+        @endif
+
+        priceEditFormat = new AutoNumeric('#price_edit', {
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+            minimumValue: '0',
+            decimalPlaces: 0
+        });
+
+        discountAddFormat = new AutoNumeric('#discount_add', {
+            maximumValue: '100',
+            minimumValue: '0',
+            decimalPlaces: 0
+        });
+
+        discountEditFormat = new AutoNumeric('#discount_edit', {
+            maximumValue: '100',
+            minimumValue: '0',
+            decimalPlaces: 0
+        });
+
+        // Add new detail
+        $(document).on('click', '.add-modal', function() {
+            $('#item_add').select2({
                 placeholder: {
                     id: '-1',
                     text: ' - Pilih Inventory - '
@@ -285,7 +504,7 @@
                 width: '100%',
                 minimumInputLength: 1,
                 ajax: {
-                    url: '{{ route('select.items') }}',
+                    url: '{{ route('select.extended_items') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {
@@ -300,21 +519,291 @@
                 }
             });
 
-            // autoNumeric
-            numberFormat = new AutoNumeric('#price' + i, {
+            $('.modal-title').text('Tambah Detail');
+            $('#addModal').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+        });
+        $('.modal-footer').on('click', '.add', function() {
+            var qtyAdd = $('#qty_add').val();
+            var itemAdd = $('#item_add').val();
+
+            if(!itemAdd || itemAdd === ""){
+                alert('Mohon pilih barang...');
+                return false;
+            }
+
+            if(!qtyAdd || qtyAdd === "" || qtyAdd === "0"){
+                alert('Mohon isi jumlah...')
+                return false;
+            }
+
+            var priceAdd = $('#price_add').val();
+
+            if(!priceAdd || priceAdd === "" || priceAdd === "0"){
+                alert('Mohon isi harga...')
+                return false;
+            }
+
+            var discountAdd = $('#discount_add').val();
+            var remarkAdd = $('#remark_add').val();
+
+            // Split item value
+            var splitted = itemAdd.split('#');
+
+            // Filter variables
+            var price = 0;
+            if(priceAdd && priceAdd !== "" && priceAdd !== "0"){
+                var priceClean = priceAdd.replace(/\./g,'');
+                price = parseFloat(priceClean);
+            }
+            var discount = 0;
+            if(discountAdd && discountAdd !== "" && discountAdd !== "0"){
+                discount = parseFloat(discountAdd);
+            }
+            var qty = parseFloat(qtyAdd);
+
+            // Increase idx
+            var idx = $('#index_counter').val();
+            idx++;
+            $('#index_counter').val(idx);
+
+            var sbAdd = new stringbuilder();
+
+            sbAdd.append("<tr class='item" + idx + "'>");
+            sbAdd.append("<td class='field-item'><input type='text' name='item_text[]' class='form-control' value='" + splitted[1] + " - " + splitted[2] + "' readonly/>")
+            sbAdd.append("<input type='hidden' name='item_value[]' value='" + splitted[0] + "'/></td>");
+            if(qtyAdd && qtyAdd !== ""){
+                sbAdd.append("<td><input type='text' name='qty[]' class='form-control' value='" + qtyAdd + "' readonly/></td>");
+            }
+            else{
+                sbAdd.append("<td><input type='text' name='qty[]' class='form-control' readonly/></td>");
+            }
+
+            if(priceAdd && priceAdd !== "" && priceAdd !== "0"){
+                sbAdd.append("<td><input type='text' name='price[]' class='form-control' value='" + priceAdd + "' readonly/></td>");
+            }
+            else{
+                sbAdd.append("<td><input type='text' name='price[]' class='form-control' value='0' readonly/></td>");
+            }
+
+            if(discountAdd && discountAdd !== "" && discountAdd !== "0"){
+                discount = parseFloat(discountAdd);
+                sbAdd.append("<td><input type='text' name='discount[]' class='form-control' value='" + discountAdd + "' readonly/></td>");
+            }
+            else{
+                sbAdd.append("<td><input type='text' name='discount[]' class='form-control' value='0' readonly/></td>");
+            }
+
+            var subtotal = 0;
+            var totalPrice = price * qty;
+            if(discount > 0){
+                subtotal = totalPrice - (totalPrice * discount / 100);
+            }
+            else{
+                subtotal = totalPrice;
+            }
+            var subtotalString = rupiahFormat(subtotal);
+
+            sbAdd.append("<td><input type='text' class='form-control' value='" + subtotalString + "' readonly/></td>");
+            sbAdd.append("<td><input type='text' name='remark[]' class='form-control' value='" + remarkAdd + "' readonly/></td>");
+
+            sbAdd.append("<td class='text-center'>");
+            sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-edit'></span></a>");
+            sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-trash'></span></a>");
+            sbAdd.append("</td>");
+            sbAdd.append("</tr>");
+
+            $('#detail_table').append(sbAdd.toString());
+
+            // Reset add form modal
+            $('#qty_add').val('');
+            $('#price_add').val('');
+            $('#discount_add').val('');
+            $('#remark_add').val('');
+            $('#item_add').val(null).trigger('change');
+        });
+
+        // Edit detail
+        $(document).on('click', '.edit-modal', function() {
+            id = $(this).data('id');
+
+            $('.modal-title').text('Ubah Detail');
+
+            $('#item_old_value').val($(this).data('item-id'));
+            $('#item_edit').select2({
+                placeholder: {
+                    id: $(this).data('item-id'),
+                    text: $(this).data('item-text')
+                },
+                width: '100%',
+                minimumInputLength: 1,
+                ajax: {
+                    url: '{{ route('select.extended_items') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            q: $.trim(params.term)
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+
+            $('#remark_edit').val($(this).data('remark'));
+
+            qtyEditFormat.clear();
+            qtyEditFormat.set($(this).data('qty'),{
+                minimumValue: '0',
+                digitGroupSeparator: '',
+                decimalPlaces: 0
+            });
+
+            priceEditFormat.clear();
+            priceEditFormat.set($(this).data('price'), {
                 decimalCharacter: ',',
                 digitGroupSeparator: '.',
                 decimalPlaces: 0
             });
 
-            i++;
+            discountEditFormat.clear();
+            discountEditFormat.set($(this).data('discount'), {
+                maximumValue: '100',
+                minimumValue: '0',
+                decimalPlaces: 0
+            });
+
+            $('#editModal').modal('show');
+        });
+        $('.modal-footer').on('click', '.edit', function() {
+            var itemEdit = $('#item_edit').val();
+            var qtyEdit = $('#qty_edit').val();
+            var priceEdit = $('#price_edit').val();
+            var discountEdit = $('#discount_edit').val();
+            var remarkEdit = $('#remark_edit').val();
+
+            if(!qtyEdit || qtyEdit === "" || qtyEdit === "0"){
+                alert('Mohon isi jumlah...')
+                return false;
+            }
+
+            // if(!priceEdit || priceEdit === "" || priceEdit === "0"){
+            //     alert('Mohon isi harga...')
+            //     return false;
+            // }
+
+            // Split item value
+            var data = "default";
+            if(itemEdit && itemEdit !== ''){
+                alert(itemEdit);
+                data = itemEdit;
+            }
+            else {
+                data = $('#item_old_value').val();
+            }
+
+            var splitted = data.split('#');
+
+            // Filter variables
+            var price = 0;
+            if(priceEdit && priceEdit !== "" && priceEdit !== "0"){
+                var priceClean = priceEdit.replace(/\./g,'');
+                price = parseFloat(priceClean);
+            }
+            var discount = 0;
+            if(discountEdit && discountEdit !== "" && discountEdit !== "0"){
+                discount = parseFloat(discountEdit);
+            }
+            var qty = parseFloat(qtyEdit);
+
+            var sbEdit = new stringbuilder();
+
+            sbEdit.append("<tr class='item" + id + "'>");
+            sbEdit.append("<td class='field-item'><input type='text' name='item_text[]' class='form-control' value='" + splitted[1] + ' - ' + splitted[2] + "' readonly/>")
+            sbEdit.append("<input type='hidden' name='item_value[]' value='" + splitted[0] + "'/></td>");
+            if(qtyEdit && qtyEdit !== ""){
+                sbEdit.append("<td><input type='text' name='qty[]' class='form-control' value='" + qtyEdit + "' readonly/></td>");
+            }
+            else{
+                sbEdit.append("<td><input type='text' name='qty[]' class='form-control' readonly/></td>");
+            }
+
+            if(priceEdit && priceEdit !== "" && priceEdit !== "0"){
+                sbEdit.append("<td><input type='text' name='price[]' class='form-control' value='" + priceEdit + "' readonly/></td>");
+            }
+            else{
+                sbEdit.append("<td><input type='text' name='price[]' class='form-control' value='0' readonly/></td>");
+            }
+
+            if(discountEdit && discountEdit !== "" && discountEdit !== "0"){
+                discount = parseFloat(discountEdit);
+                sbEdit.append("<td><input type='text' name='discount[]' class='form-control' value='" + discountEdit + "' readonly/></td>");
+            }
+            else{
+                sbEdit.append("<td><input type='text' name='discount[]' class='form-control' value='0' readonly/></td>");
+            }
+
+
+
+            var subtotal = 0;
+            var totalPrice = price * qty;
+            if(discount > 0){
+                subtotal = totalPrice - (totalPrice * discount / 100);
+            }
+            else{
+                subtotal = totalPrice;
+            }
+
+
+
+            var subtotalString = rupiahFormat(subtotal);
+
+            sbEdit.append("<td><input type='text' class='form-control' value='" + subtotalString + "' readonly/></td>");
+            sbEdit.append("<td><input type='text' name='remark[]' class='form-control' value='" + remarkEdit + "' readonly/></td>");
+
+            sbEdit.append("<td class='text-center'>");
+            sbEdit.append("<a class='edit-modal btn btn-info' data-id='" + id + "' data-item-id='" + data + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-edit'></span></a>");
+            sbEdit.append("<a class='delete-modal btn btn-danger' data-id='" + id + "' data-item-id='" + data + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-trash'></span></a>");
+            sbEdit.append("</td>");
+            sbEdit.append("</tr>");
+
+            $('.item' + id).replaceWith(sbEdit.toString());
         });
 
-        $("#delete_row").click(function(){
-            if(i>1){
-                $("#addr"+(i-1)).html('');
-                i--;
-            }
+        // Delete detail
+        var deletedId = "0";
+        $(document).on('click', '.delete-modal', function() {
+            $('.modal-title').text('Hapus Detail');
+            deletedId = $(this).data('id');
+            $('#item_delete').val($(this).data('item-text'));
+            $('#qty_delete').val($(this).data('qty'));
+            $('#remark_delete').val($(this).data('remark'));
+            $('#deleteModal').modal('show');
         });
+        $('.modal-footer').on('click', '.delete', function() {
+            // Decrease idx
+            var idx = $('#index_counter').val();
+            idx--;
+            $('#index_counter').val(idx);
+
+            $('.item' + deletedId).remove();
+        });
+
+        function rupiahFormat(nStr) {
+            nStr += '';
+            x = nStr.split(',');
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + '.' + '$2');
+            }
+            return x1 + x2;
+        }
     </script>
 @endsection
