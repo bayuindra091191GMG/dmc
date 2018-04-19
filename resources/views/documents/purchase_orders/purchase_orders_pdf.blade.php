@@ -38,83 +38,55 @@
  <table class="table">
   <thead>
   <tr>
-       <th class="text-center">No</th>
-       <th class="text-center">Nomor PO</th>
-       <th class="text-center">Nomor PR</th>
-       <th class="text-center">Nomor RFQ</th>
-       <th class="text-center">Vendor</th>
-       <th class="text-center">Status</th>
-       <th class="text-center">Tanggal</th>
-       <th class="text-center">Tanggal Closed</th>
-       <th class="text-center">Total PO</th>
+      <th class="text-center">Kode</th>
+      <th class="text-center">Nama</th>
+      <th class="text-center">QTY</th>
+      <th class="text-center">Harga</th>
+      <th class="text-center">Diskon</th>
+      <th class="text-center">Subtotal</th>
+      <th></th>
   </tr>
+  {{--<tr>--}}
+       {{--<th class="text-center">No</th>--}}
+       {{--<th class="text-center">Nomor PO</th>--}}
+       {{--<th class="text-center">Nomor PR</th>--}}
+       {{--<th class="text-center">Nomor RFQ</th>--}}
+       {{--<th class="text-center">Vendor</th>--}}
+       {{--<th class="text-center">Status</th>--}}
+       {{--<th class="text-center">Tanggal</th>--}}
+       {{--<th class="text-center">Tanggal Closed</th>--}}
+       {{--<th class="text-center">Total PO</th>--}}
+  {{--</tr>--}}
   </thead>
   <tbody>
     @php($i=1)
     @foreach($data as $item)
         <tr>
-            <td class="text-center">{{ $i }}</td>
-            <td class="text-center">{{ $item->code }}</td>
-            <td class="text-center">{{ $item->purchase_request_header->code }}</td>
-            <td class="text-center">
-                @if(!empty($item->quotation_id))
-                    {{ $item->quotation_header->code }}
-                @else
-                    -
-                @endif
-            </td>
-            <td class="text-center">{{ $item->supplier->name }}</td>
-            <td class="text-center">{{ $item->status->description }}</td>
-            <td class="text-center">{{ $item->date_string }}</td>
-            <td class="text-center">
-                @if(!empty($item->closing_date))
-                    {{ $item->closing_date_string }}
-                @else
-                    -
-                @endif
-            </td>
-            <td class="text-right">
-                {{ $item->total_payment_string }}
-            </td>
+            <td colspan="5"><b>{{ $item->code }} - Nomor PR: {{ $item->purchase_request_header->code }} - {{ $item->supplier->name }} - {{ $item->date_string }}</b></td>
+            <td class="text-right">Total PO:</td>
+            <td class="text-right">{{ $item->total_payment_string }}</td>
         </tr>
+        @foreach($item->purchase_order_details as $detail)
+            <tr>
+                <td class="text-center">{{ $detail->item->code }}</td>
+                <td class="text-center">{{ $detail->item->name }}</td>
+                <td class="text-center">{{ $detail->quantity }} {{ $detail->item->uom }}</td>
+                <td class="text-right">{{ $detail->price_string }}</td>
+                <td class="text-center">{{ $detail->discount_string }}</td>
+                <td class="text-right">{{ $detail->subtotal_string }}</td>
+                <td></td>
+            </tr>
+        @endforeach
         <tr>
-            <td></td>
-            <td colspan="7">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th class="text-center">Kode</th>
-                        <th class="text-center">Nama</th>
-                        <th class="text-center">UOM</th>
-                        <th class="text-center">QTY</th>
-                        <th class="text-center">Harga</th>
-                        <th class="text-center">Diskon</th>
-                        <th class="text-center">Subtotal</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($item->purchase_order_details as $detail)
-                        <tr>
-                            <td class="text-center">{{ $detail->item->code }}</td>
-                            <td class="text-center">{{ $detail->item->name }}</td>
-                            <td class="text-center">{{ $detail->item->uom }}</td>
-                            <td class="text-center">{{ $detail->quantity }}</td>
-                            <td class="text-right">{{ $detail->price_string }}</td>
-                            <td class="text-center">{{ $detail->discount_string }}</td>
-                            <td class="text-right">{{ $detail->subtotal_string }}</td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </td>
+            <td colspan="4"></td>
+            <td class="text-right">PPN:</td>
+            <td class="text-right">{{ $item->ppn_string }}</td>
             <td></td>
         </tr>
-
-        @php($i++)
     @endforeach
     <tr>
-        <td colspan="8" class="text-right">
-            <b>Total</b>
+        <td colspan="6" class="text-right">
+            <b>Total Semua PO</b>
         </td>
         <td class="text-right">
             {{ $total }}
