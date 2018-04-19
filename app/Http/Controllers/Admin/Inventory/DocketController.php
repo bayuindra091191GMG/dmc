@@ -440,6 +440,7 @@ class DocketController extends Controller
             ->setPaper('a4', 'landscape');
         $now = Carbon::now('Asia/Jakarta');
         $filename = 'ISSUED_DOCKET_REPORT_' . $now->toDateTimeString();
+        $pdf->setOptions(["isPhpEnabled"=>true]);
 
         return $pdf->download($filename.'.pdf');
     }

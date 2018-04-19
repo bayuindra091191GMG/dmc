@@ -554,6 +554,7 @@ class PurchaseOrderHeaderController extends Controller
             ->setPaper('a4', 'landscape');
         $now = Carbon::now('Asia/Jakarta');
         $filename = 'PURCHASE_ORDER_REPORT_' . $now->toDateTimeString();
+        $pdf->setOptions(["isPhpEnabled"=>true]);
 
         return $pdf->download($filename.'.pdf');
     }

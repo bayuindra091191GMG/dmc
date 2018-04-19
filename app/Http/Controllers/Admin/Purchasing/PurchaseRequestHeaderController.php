@@ -491,6 +491,7 @@ class PurchaseRequestHeaderController extends Controller
             ->setPaper('a4', 'landscape');
         $now = Carbon::now('Asia/Jakarta');
         $filename = 'PURCHASE_REQUEST_REPORT_' . $now->toDateTimeString();
+        $pdf->setOptions(["isPhpEnabled"=>true]);
 
         return $pdf->download($filename.'.pdf');
     }
@@ -499,11 +500,12 @@ class PurchaseRequestHeaderController extends Controller
         $purchaseRequest = PurchaseRequestHeader::find($id);
         $purchaseRequestDetails = PurchaseRequestDetail::where('header_id', $purchaseRequest->id)->get();
 
-        $pdf = PDF::loadView('documents.purchase_requests.purchase_requests_doc', ['purchaseRequest' => $purchaseRequest, 'purchaseRequestDetails' => $purchaseRequestDetails])->setPaper('A4');
+        $pdf = PDF::loadView('documents.purchase_requests.purchase_requests_doc', ['purchaseRequest' => $purchaseRequest, 'purchaseRequestDetails' => $purchaseRequestDetails]);
         $now = Carbon::now('Asia/Jakarta');
         $filename = $purchaseRequest->code. '_' . $now->toDateTimeString();
+        $pdf->set_option("isPhpEnabled", true);
 
-        return $pdf->download($filename.'.pdf');
+        return $pdf->stream($filename.'.pdf');
     }
 
     public function printDocument($id){

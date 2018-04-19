@@ -368,6 +368,7 @@ class ItemReceiptController extends Controller
             ->setPaper('a4', 'landscape');
         $now = Carbon::now('Asia/Jakarta');
         $filename = 'ITEM_RECEIPT_REPORT_' . $now->toDateTimeString();
+        $pdf->setOptions(["isPhpEnabled"=>true]);
 
         return $pdf->download($filename.'.pdf');
     }

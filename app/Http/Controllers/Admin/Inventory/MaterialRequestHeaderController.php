@@ -725,6 +725,7 @@ class MaterialRequestHeaderController extends Controller
             ->setPaper('a4', 'landscape');
         $now = Carbon::now('Asia/Jakarta');
         $filename = 'MATERIAL_REQUEST_REPORT_' . $now->toDateTimeString();
+        $pdf->setOptions(["isPhpEnabled"=>true]);
 
         return $pdf->download($filename.'.pdf');
     }
