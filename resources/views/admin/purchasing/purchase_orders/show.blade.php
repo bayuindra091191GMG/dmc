@@ -64,30 +64,32 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-md-3 col-sm-3 col-xs-12">
-                            Approved
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            @if($status == 99)
-                                :
-                                <span style="font-weight: bold; color: green;">
+                    @if($setting == 1)
+                        <div class="form-group">
+                            <label class="col-md-3 col-sm-3 col-xs-12">
+                                Approved
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                @if($status == 99)
+                                    :
+                                    <span style="font-weight: bold; color: green;">
                                 @foreach($approvalData as $data)
-                                    {{ $data->user->name }},
-                                @endforeach
+                                            {{ $data->user->name }},
+                                        @endforeach
                             </span>
-                            @elseif($status < 99 && $status != 0)
-                                :
-                                <span style="font-weight: bold; color: #f4bf42;">
+                                @elseif($status < 99 && $status != 0)
+                                    :
+                                    <span style="font-weight: bold; color: #f4bf42;">
                                 @foreach($approvalData as $data)
-                                    {{ $data->user->name }},
-                                @endforeach
+                                            {{ $data->user->name }},
+                                        @endforeach
                             </span>
-                            @elseif($status == 0)
-                                : <span style="font-weight: bold; color: red;">Belum Diapprove</span>
-                            @endif
+                                @elseif($status == 0)
+                                    : <span style="font-weight: bold; color: red;">Belum Diapprove</span>
+                                @endif
+                            </div>
                         </div>
-                    </div>
+                    @endif
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
