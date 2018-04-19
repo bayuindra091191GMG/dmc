@@ -41,12 +41,22 @@ class MaterialRequestHeaderController extends Controller
         return View('admin.inventory.material_requests.other.index', compact('filterStatus'));
     }
 
-    public function indexFuel(){
-        return View('admin.inventory.material_requests.fuel.index');
+    public function indexFuel(Request $request){
+        $filterStatus = '3';
+        if($request->status != null){
+            $filterStatus = $request->status;
+        }
+
+        return View('admin.inventory.material_requests.fuel.index', compact('filterStatus'));
     }
 
-    public function indexOil(){
-        return View('admin.inventory.material_requests.oil.index');
+    public function indexOil(Request $request){
+        $filterStatus = '3';
+        if($request->status != null){
+            $filterStatus = $request->status;
+        }
+
+        return View('admin.inventory.material_requests.oil.index', compact('filterStatus'));
     }
 
     public function indexService(){
@@ -650,7 +660,9 @@ class MaterialRequestHeaderController extends Controller
     }
 
     public function report(){
-        return View('admin.inventory.material_requests.report');
+        $departments = Department::all();
+
+        return View('admin.inventory.material_requests.report', compact('departments'));
     }
 
     public function downloadReport(Request $request) {
@@ -670,17 +682,18 @@ class MaterialRequestHeaderController extends Controller
                 ->withInput();
         }
 
-        $tempStart = strtotime($request->input('start_date'));
-        $start = date('Y-m-d', $tempStart);
-        $tempEnd = strtotime($request->input('end_date'));
-        $end = date('Y-m-d', $tempEnd);
+        $start = Carbon::createFromFormat('d M Y', $request->input('start_date'), 'Asia/Jakarta');
+        $end = Carbon::createFromFormat('d M Y', $request->input('end_date'), 'Asia/Jakarta');
 
         // Validate date
-        if($start > $end){
+        if($start->gt($end)){
             return redirect()->back()->withErrors('Dari Tanggal tidak boleh lebih besar dari Sampai Tanggal!', 'default')->withInput($request->all());
         }
 
-        $data = MaterialRequestHeader::whereBetween('date', array($start, $end));
+        $start = $start->addDays(-1);
+        $end = $end->addDays(1);
+
+        $data = MaterialRequestHeader::whereBetween('date', array($start->toDateTimeString(), $end->toDateTimeString()));
 
         // Filter type
         $type = $request->input('type');
