@@ -19,12 +19,14 @@ class NavigationComposer
 
     public function __construct()
     {
-        //Try to get the menu permissions and all the Menu
         $user = auth()->user();
         $role = $user->roles()->pluck('id')[0];
-        $this->menus = PermissionMenu::where('role_id', $role)->get();
-        $this->menuHeader = PermissionMenuHeader::where('role_id', $role)->orderby('menu_header_id')->get();
-        //dd($this->menuHeader);
+        $this->menus = PermissionMenu::where('role_id', $role)
+            ->orderBy('menu_id')
+            ->get();
+        $this->menuHeader = PermissionMenuHeader::where('role_id', $role)->orderby('menu_header_id')
+            ->orderBy('menu_header_id')
+            ->get();
     }
 
     public function compose(View $view)

@@ -32,11 +32,11 @@ use Yajra\DataTables\DataTables;
 
 class PurchaseRequestHeaderController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
 
-        $filterStatus = '0';
-        if(!empty(request()->status)){
-            $filterStatus = request()->status;
+        $filterStatus = '3';
+        if($request->status != null){
+            $filterStatus = $request->status;
         }
 
         return View('admin.purchasing.purchase_requests.index', compact('filterStatus'));
@@ -113,6 +113,12 @@ class PurchaseRequestHeaderController extends Controller
             }
         }
 
+        // Check PO created
+        $isPoCreated = false;
+        if(PurchaseOrderHeader::where('purchase_request_id', $header->id)->exists()){
+            $isPoCreated = true;
+        }
+
         $data = [
             'header'            => $header,
             'date'              => $date,
@@ -120,7 +126,8 @@ class PurchaseRequestHeaderController extends Controller
             'permission'        => $permission,
             'approveOrder'      => $approveOrder,
             'status'            => $status,
-            'setting'           => $setting->approval_setting
+            'setting'           => $setting->approval_setting,
+            'isPoCreated'       => $isPoCreated
         ];
         //dd($status);
         return View('admin.purchasing.purchase_requests.show')->with($data);
@@ -307,8 +314,6 @@ class PurchaseRequestHeaderController extends Controller
 
     public function update(Request $request, PurchaseRequestHeader $purchase_request){
         $validator = Validator::make($request->all(),[
-            'km'            => 'max:20',
-            'hm'            => 'max:20',
             'date'          => 'required'
         ]);
 
@@ -328,8 +333,19 @@ class PurchaseRequestHeaderController extends Controller
         $now = Carbon::now('Asia/Jakarta');
         $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
 
+        if($purchase_request->priority == '1'){
+            $limitDate = $date->addDays(8);
+        }
+        elseif($purchase_request->priority== '2'){
+            $limitDate = $date->addDays(15);
+        }
+        else{
+            $limitDate = $date->addDays(22);
+        }
+
         $purchase_request->department_id = $request->input('department');
         $purchase_request->priority = $request->input('priority');
+        $purchase_request->priority_limit_date = $limitDate->toDateTimeString();
         $purchase_request->km = $request->input('km');
         $purchase_request->hm = $request->input('hm');
         $purchase_request->date = $date;
@@ -415,7 +431,9 @@ class PurchaseRequestHeaderController extends Controller
     }
 
     public function report(){
-        return View('admin.purchasing.purchase_requests.report');
+        $departments = Department::all();
+
+        return View('admin.purchasing.purchase_requests.report', compact('departments'));
     }
 
     public function downloadReport(Request $request) {

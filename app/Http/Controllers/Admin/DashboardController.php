@@ -52,7 +52,7 @@ class DashboardController extends Controller
                 $purchaseRequests->add($header);
             }
             else{
-                if($header->day_left <= 1){
+                if($header->day_left <= 3){
                     $purchaseRequests->add($header);
                 }
             }

@@ -66,10 +66,11 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'      => 'required|max:100',
-            'email'     => 'required|regex:/^\S*$/u|unique:users|max:50',
-            'password'  => 'required',
-            'address'   => 'max:200'
+            'name'              => 'required|max:100',
+            'email'             => 'required|regex:/^\S*$/u|unique:users|max:50',
+            'email_address'     => 'required|email|max:50',
+            'password'          => 'required',
+            'address'           => 'max:200'
         ],[
             'email.unique'      => 'ID Login Akses telah terdaftar!',
             'email.regex'       => 'ID Login Akses harus tanpa spasi!'
@@ -100,6 +101,7 @@ class UserController extends Controller
         $employee = Employee::create([
             'name'          => $request->input('name'),
             'email'         => $request->input('email'),
+            'email_address' => $request->input('email_address'),
             'address'       => $request->input('address'),
             'department_id' => $request->input('department'),
             'site_id'       => $request->input('site'),
@@ -189,14 +191,15 @@ class UserController extends Controller
     {
         $employeeId = $request->input('employee_id');
         $validator = Validator::make($request->all(), [
-            'name'      => 'required|max:100',
-            'email' => [
+            'name'              => 'required|max:100',
+            'email'             => [
                 'required',
                 'max:50',
                 'regex:/^\S*$/u',
                 Rule::unique('users')->ignore($user->id)
             ],
-            'address'   => 'max:200'
+            'email_address'     => 'required|email|max:50',
+            'address'           => 'max:200'
         ],[
             'email.unique'      => 'ID Login Akses telah terdaftar!',
             'email.regex'       => 'ID Login Akses harus tanpa spasi!',
@@ -215,6 +218,7 @@ class UserController extends Controller
         $employee = Employee::find($employeeId);
         $employee->name = $request->input('name');
         $employee->email = $request->input('email');
+        $employee->email_address = $request->input('email_address');
         $employee->address = $request->input('address');
         $employee->department_id = $request->input('department');
         $employee->site_id = $request->input('site');

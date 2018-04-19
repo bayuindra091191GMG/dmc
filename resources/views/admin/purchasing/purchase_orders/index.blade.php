@@ -11,10 +11,10 @@
                 <div class="form-group">
                     <label for="filter-status">Status:</label>
                     <select id="filter-status" class="form-control" onchange="filterStatus(this)">
-                        <option value="0" @if(!empty($filterStatus) || $filterStatus == '0') selected @endif>Semua</option>
-                        <option value="3" @if(empty($filterStatus) || (!empty($filterStatus) && $filterStatus == '3')) selected @endif>Open</option>
-                        <option value="4" @if(!empty($filterStatus) && $filterStatus == '4') selected @endif>Close</option>
-                        <option value="11" @if(!empty($filterStatus) && $filterStatus == '11') selected @endif>Close Manual</option>
+                        <option value="0" @if($filterStatus == '0') selected @endif>Semua</option>
+                        <option value="3" @if($filterStatus == '3') selected @endif>Open</option>
+                        <option value="4" @if($filterStatus == '4') selected @endif>Close</option>
+                        <option value="11" @if($filterStatus == '11') selected @endif>Close Manual</option>
                     </select>
                 </div>
             </form>

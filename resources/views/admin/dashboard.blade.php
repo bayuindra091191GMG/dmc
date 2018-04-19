@@ -160,20 +160,20 @@
                                     <div class="oaerror danger">
                                         <span>Prioritas {{ $pr->priority }} - Nomor PR</span>
                                         <a style="text-decoration: underline;" href="{{ route('admin.purchase_requests.show', ['purchase_request' => $pr->id]) }}" target="_blank">{{ $pr->code }}</a>
-                                        <span>sudah jatuh tempo</span>
+                                        <span>sudah jatuh tempo melewati {{ $pr->day_left }} hari</span>
                                     </div>
                                 @else
-                                    @if($pr->day_left == 1)
+                                    @if($pr->day_left > 0)
                                         <div class="oaerror warning">
                                             <span>Prioritas {{ $pr->priority }} - Nomor PR</span>
                                             <a style="text-decoration: underline;" href="{{ route('admin.purchase_requests.show', ['purchase_request' => $pr->id]) }}" target="_blank">{{ $pr->code }}</a>
-                                            <span>jatuh tempo 1 hari lagi</span>
+                                            <span>akan jatuh tempo {{ $pr->day_left }} hari lagi</span>
                                         </div>
                                     @elseif($pr->day_left == 0)
                                         <div class="oaerror warning">
                                             <span>Prioritas {{ $pr->priority }} - Nomor PR</span>
                                             <a style="text-decoration: underline;" href="{{ route('admin.purchase_requests.show', ['purchase_request' => $pr->id]) }}" target="_blank">{{ $pr->code }}</a>
-                                            <span>jatuh tempo hari ini</span>
+                                            <span>akan jatuh tempo hari ini</span>
                                         </div>
                                     @endif
                                 @endif

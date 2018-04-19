@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Admin\Purchasing;
 
 use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
+use App\Models\Department;
 use App\Models\NumberingSystem;
 use App\Models\PurchaseOrderDetail;
 use App\Models\PurchaseOrderHeader;
@@ -28,10 +29,11 @@ use PDF;
 
 class PurchaseOrderHeaderController extends Controller
 {
-    public function index(){
-        $filterStatus = '0';
-        if(!empty(request()->status)){
-            $filterStatus = request()->status;
+    public function index(Request $request){
+
+        $filterStatus = '3';
+        if($request->status != null){
+            $filterStatus = $request->status;
         }
 
         return View('admin.purchasing.purchase_orders.index', compact('filterStatus'));
@@ -442,7 +444,9 @@ class PurchaseOrderHeaderController extends Controller
     }
 
     public function report(){
-        return View('admin.purchasing.purchase_orders.report');
+        $departments = Department::all();
+
+        return View('admin.purchasing.purchase_orders.report', compact('departments'));
     }
 
     public function downloadReport(Request $request) {

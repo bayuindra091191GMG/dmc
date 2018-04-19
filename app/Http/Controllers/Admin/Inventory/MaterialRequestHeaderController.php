@@ -31,8 +31,14 @@ use PDF;
 
 class MaterialRequestHeaderController extends Controller
 {
-    public function indexOther(){
-        return View('admin.inventory.material_requests.other.index');
+    public function indexOther(Request $request){
+
+        $filterStatus = '3';
+        if($request->status != null){
+            $filterStatus = $request->status;
+        }
+
+        return View('admin.inventory.material_requests.other.index', compact('filterStatus'));
     }
 
     public function indexFuel(){
@@ -556,23 +562,32 @@ class MaterialRequestHeaderController extends Controller
         }
 
         $materialRequests = null;
-        if($type === 'part'){
-            $materialRequests = MaterialRequestHeader::where('type', 1);
-        }
-        else if($type === 'fuel'){
-            $materialRequests = MaterialRequestHeader::where('type', 2);
-        }
-        else if($type === 'oil'){
-            $materialRequests = MaterialRequestHeader::where('type', 3);
-        }
-        else if($type === 'service'){
-            $materialRequests = MaterialRequestHeader::where('type', 4);
-        }
-        else if($type === 'before_create' || $type === 'before_create_id'){
-            $materialRequests = MaterialRequestHeader::where('status_id', 3);
+
+        $status = '0';
+        if($request->filled('status')){
+            $status = $request->input('status');
+            if($status != '0'){
+                $materialRequests = MaterialRequestHeader::where('status_id', $status);
+            }
+            else{
+                $materialRequests = MaterialRequestHeader::where('status_id', 3);
+            }
         }
         else{
-            $materialRequests = MaterialRequestHeader::whereIn('status_id', [3,4,11]);
+            $materialRequests = MaterialRequestHeader::where('status_id', 3);
+        }
+
+        if($type === 'part'){
+            $materialRequests = $materialRequests->where('type', 1);
+        }
+        else if($type === 'fuel'){
+            $materialRequests = $materialRequests->where('type', 2);
+        }
+        else if($type === 'oil'){
+            $materialRequests = $materialRequests->where('type', 3);
+        }
+        else if($type === 'service'){
+            $materialRequests = $materialRequests->where('type', 4);
         }
 
         if($request->filled('is_mr_exists')){
@@ -582,7 +597,9 @@ class MaterialRequestHeaderController extends Controller
             }
         }
 
-        $materialRequests = $materialRequests->get();
+        $materialRequests = $materialRequests
+            ->dateDescending()
+            ->get();
 
         return DataTables::of($materialRequests)
             ->setTransformer(new MaterialRequestHeaderTransformer($type))

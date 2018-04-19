@@ -20,6 +20,7 @@ use Kyslik\ColumnSortable\Sortable;
  * @property string $name
  * @property string $username
  * @property string $email
+ * @property string $email_address
  * @property string $password
  * @property int $active
  * @property string $confirmation_code
@@ -92,6 +93,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'email_address',
         'password',
         'active',
         'confirmation_code',

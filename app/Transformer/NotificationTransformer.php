@@ -27,7 +27,7 @@ class NotificationTransformer extends TransformerAbstract
                 $route = route('admin.material_requests.fuel.show', ['material_request' => $notif->data['mr_id']]);
             }
             else{
-                $route = route('admin.material_requests.sergice.show', ['material_request' => $notif->data['mr_id']]);
+                $route = route('admin.material_requests.service.show', ['material_request' => $notif->data['mr_id']]);
             }
             $notification .= "<span>MR </span><a style='text-decoration: underline;' href='". $route. "'>". $notif->data['code']. "</a>" ;
         }

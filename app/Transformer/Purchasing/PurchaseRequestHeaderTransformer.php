@@ -35,7 +35,6 @@ class PurchaseRequestHeaderTransformer extends TransformerAbstract
         if($this->mode === 'default'){
             $action = "<a class='btn btn-xs btn-primary' href='purchase_requests/detil/". $header->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
             $action .= "<a class='btn btn-xs btn-info' href='purchase_requests/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
-            $action .= "<a class='btn btn-xs btn-success' href='". $route. "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i> Proses PO </a>";
         }
         else{
             $action = "<a class='btn btn-xs btn-success' href='". $route. "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i> Proses PO </a>";

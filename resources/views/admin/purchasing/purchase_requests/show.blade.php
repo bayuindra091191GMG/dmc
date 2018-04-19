@@ -17,7 +17,7 @@
                     <a class="btn btn-default" href="{{ route('admin.approval_rules.pr_approval',[ 'approval_rule' => $header->id]) }}">APPROVE</a>
                 @endif
 
-                @if($header->status_id == 3 && $permission)
+                @if($header->status_id == 3 && $permission && !$isPoCreated)
                     <a class="btn btn-success" href="{{ route('admin.purchase_orders.create',[ 'pr' => $header->id]) }}">PROSES PO</a>
                 @endif
 

@@ -17,7 +17,7 @@ class NotificationComposer
 
     public function __construct()
     {
-        $this->notifications = auth()->user()->unreadNotifications()->limit(5)->get();
+        $this->notifications = auth()->user()->notifications()->limit(5)->get();
     }
 
     public function compose(View $view)
