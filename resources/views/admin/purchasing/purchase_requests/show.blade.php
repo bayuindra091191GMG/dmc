@@ -21,8 +21,11 @@
                     <a class="btn btn-success" href="{{ route('admin.purchase_orders.create',[ 'pr' => $header->id]) }}">PROSES PO</a>
                 @endif
 
-                @if($header->status_id == 3)
+                @if($permission)
                     <a class="btn btn-default" href="{{ route('admin.purchase_requests.edit',[ 'purchase_request' => $header->id]) }}">UBAH</a>
+                @endif
+
+                @if($header->status_id == 3)
                     <a class="close-modal btn btn-danger" data-id="{{ $header->id }}">CLOSE</a>
                 @endif
             </div>

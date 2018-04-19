@@ -130,6 +130,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('approval_rules/simpan', 'ApprovalRuleController@store')->name('approval_rules.store');
     Route::get('approval_rules/pr_approval/{approval_rule}', 'ApprovalRuleController@prApproval')->name('approval_rules.pr_approval');
     Route::get('approval_rules/pr_approve/{approval_rule}', 'ApprovalRuleController@approvePr')->name('approval_rules.approve_pr');
+    Route::get('approval_rules/po_approval/{approval_rule}', 'ApprovalRuleController@poApproval')->name('approval_rules.po_approval');
+    Route::get('approval_rules/po_approve/{approval_rule}', 'ApprovalRuleController@approvePo')->name('approval_rules.approve_po');
 
     //Permission Menu
     Route::get('permission_menus', 'PermissionMenuController@index')->name('permission_menus');

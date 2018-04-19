@@ -11,8 +11,11 @@ namespace App\Http\Controllers\Admin\Purchasing;
 
 use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
+use App\Models\ApprovalPurchaseOrder;
+use App\Models\ApprovalRule;
 use App\Models\Department;
 use App\Models\NumberingSystem;
+use App\Models\PreferenceCompany;
 use App\Models\PurchaseOrderDetail;
 use App\Models\PurchaseOrderHeader;
 use App\Models\PurchaseRequestHeader;
@@ -47,9 +50,53 @@ class PurchaseOrderHeaderController extends Controller
     public function show(PurchaseOrderHeader $purchase_order){
         $date = Carbon::parse($purchase_order->date)->format('d M Y');
 
+        //Check Approval & Permission to Print
+        $user = \Auth::user();
+        $permission = true;
+        $approveOrder = false;
+        //Kondisi belum diapprove
+        $status = 0;
+
+        //All Approval Settings checked if On Or Not
+        $setting = PreferenceCompany::find(1);
+
+        if($setting->approval_setting == 1) {
+            $tempApprove = ApprovalRule::where('document_id', 4)->where('user_id', $user->id)->get();
+            $approvals = ApprovalRule::where('document_id', 4)->get();
+            $approvalPo = ApprovalPurchaseOrder::where('purchase_order_id', $purchase_order->id)->get();
+
+            if ($tempApprove != null && $tempApprove->count() != 0) {
+                $approveOrder = true;
+            }
+
+            $approvalData = ApprovalPurchaseOrder::where('purchase_order_id', $purchase_order->id)->where('user_id', $user->id)->first();
+            if($approvalData != null){
+                $approveOrder = false;
+            }
+
+            //Kondisi Approve Sebagian
+            $approvalPoData = ApprovalPurchaseOrder::where('purchase_order_id', $purchase_order->id)->get();
+            if($approvalData != null || $approvalPoData != null){
+                $status = $approvalPoData->count();
+
+                //Kondisi Semua sudah Approve
+                if($approvalPoData->count() == $approvals->count()){
+                    $status = 99;
+                }
+            }
+
+            if ($approvals->count() != $approvalPo->count()) {
+                $permission = false;
+            }
+        }
+
         $data = [
             'header'    => $purchase_order,
-            'date'      => $date
+            'date'      => $date,
+            'permission'        => $permission,
+            'approveOrder'      => $approveOrder,
+            'status'            => $status,
+            'setting'           => $setting->approval_setting
         ];
 
         return View('admin.purchasing.purchase_orders.show')->with($data);

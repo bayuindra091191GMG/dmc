@@ -29,6 +29,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property float $ppn_amount
  * @property float $total_payment
  * @property int $status_id
+ * @property int $is_approved
+ * @property \Carbon\Carbon $approved_date
  * @property \Carbon\Carbon $date
  * @property int $closed_by
  * @property string $close_reason
@@ -106,6 +108,8 @@ class PurchaseOrderHeader extends Eloquent
 		'total_payment',
 		'status_id',
 		'date',
+        'is_approved',
+        'approved_date',
 		'closed_by',
 		'close_reason',
 		'closing_date',

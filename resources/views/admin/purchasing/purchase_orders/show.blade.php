@@ -9,10 +9,28 @@
                 <a class="btn btn-default" href="{{ route('admin.purchase_orders') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
             </div>
             <div class="navbar-right">
-                <a class="btn btn-default" href="{{ route('admin.purchase_orders.print',[ 'purchase_order' => $header->id]) }}" target="_blank">CETAK</a>
-                @if($header->status_id == 3)
-                    <a class="btn btn-default" href="{{ route('admin.purchase_orders.edit',[ 'purchase_order' => $header->id]) }}">UBAH</a>
+                {{--<a class="btn btn-default" href="{{ route('admin.purchase_orders.print',[ 'purchase_order' => $header->id]) }}" target="_blank">CETAK</a>--}}
+                {{--@if($header->status_id == 3)--}}
+                    {{--<a class="btn btn-default" href="{{ route('admin.purchase_orders.edit',[ 'purchase_order' => $header->id]) }}">UBAH</a>--}}
+                    {{--<a class="btn btn-success" href="{{ route('admin.item_receipts.create',[ 'po' => $header->id]) }}">PROSES GOODS RECEIPT</a>--}}
+                    {{--<a class="close-modal btn btn-danger" data-id="{{ $header->id }}">CLOSE</a>--}}
+                {{--@endif--}}
+
+                @if($permission || $header->status_id != 3)
+                    <a class="btn btn-default" href="{{ route('admin.purchase_orders.print',[ 'purchase_order' => $header->id]) }}" target="_blank">CETAK</a>
+                @endif
+
+                @if($header->status_id == 3 && $approveOrder)
+                    <a class="btn btn-default" href="{{ route('admin.approval_rules.po_approval',[ 'approval_rule' => $header->id]) }}">APPROVE</a>
+                @endif
+
+                @if($header->status_id == 3 && $permission)
                     <a class="btn btn-success" href="{{ route('admin.item_receipts.create',[ 'po' => $header->id]) }}">PROSES GOODS RECEIPT</a>
+                @else
+                    <a class="btn btn-default" href="{{ route('admin.purchase_orders.edit',[ 'purchase_order' => $header->id]) }}">UBAH</a>
+                @endif
+
+                @if($header->status_id == 3)
                     <a class="close-modal btn btn-danger" data-id="{{ $header->id }}">CLOSE</a>
                 @endif
             </div>
@@ -42,6 +60,21 @@
                                 : <span style="font-weight: bold; color: red;">CLOSED</span>
                             @elseif($header->status_id == 11)
                                 : <span style="font-weight: bold; color: red;">CLOSED MANUAL</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 col-sm-3 col-xs-12">
+                            Approved
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @if($status == 99)
+                                : <span style="font-weight: bold; color: green;">Sudah Approved</span>
+                            @elseif($status < 99 && $status != 0)
+                                : <span style="font-weight: bold; color: #f4bf42;">Approved Sebagian</span>
+                            @elseif($status == 0)
+                                : <span style="font-weight: bold; color: red;">Belum Diapprove</span>
                             @endif
                         </div>
                     </div>
