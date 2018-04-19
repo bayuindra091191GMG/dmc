@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Mon, 19 Feb 2018 06:35:13 +0000.
+ * Date: Thu, 19 Apr 2018 14:10:09 +0700.
  */
 
 namespace App\Models;
@@ -11,16 +11,17 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class QuotationDetail
- *
+ * 
  * @property int $id
  * @property int $header_id
  * @property int $item_id
  * @property int $quantity
  * @property float $price
- * @property int $discount
+ * @property int $discount_percent
+ * @property float $discount_amount
  * @property float $subtotal
  * @property string $remark
- *
+ * 
  * @property \App\Models\Item $item
  * @property \App\Models\QuotationHeader $quotation_header
  *
@@ -28,20 +29,22 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  */
 class QuotationDetail extends Eloquent
 {
-    public $timestamps = false;
+	public $timestamps = false;
 
 	protected $casts = [
 		'header_id' => 'int',
 		'item_id' => 'int',
 		'quantity' => 'int',
 		'price' => 'float',
-		'discount' => 'int',
+		'discount_percent' => 'int',
+		'discount_amount' => 'float',
 		'subtotal' => 'float'
 	];
 
-	protected $appends = [
-	    'priceString',
+    protected $appends = [
+        'priceString',
         'discountString',
+        'discountAmountString',
         'subtotalString'
     ];
 
@@ -50,7 +53,8 @@ class QuotationDetail extends Eloquent
 		'item_id',
 		'quantity',
 		'price',
-		'discount',
+		'discount_percent',
+		'discount_amount',
 		'subtotal',
 		'remark'
 	];
@@ -60,12 +64,11 @@ class QuotationDetail extends Eloquent
     }
 
     public function getDiscountStringAttribute(){
-        if(!empty($this->attributes['discount']) && $this->attributes['discount'] !== 0){
-            return $this->attributes['discount']. '%';
-        }
-        else{
-            return '-';
-        }
+        return $this->attributes['discount_percent']. '%';
+    }
+
+    public function getDiscountAmountStringAttribute(){
+        return number_format($this->attributes['discount_amount'], 0, ",", ".");
     }
 
     public function getSubtotalStringAttribute(){
@@ -74,7 +77,7 @@ class QuotationDetail extends Eloquent
 
 	public function item()
 	{
-		return $this->belongsTo(\App\Models\Item::class, 'item_id');
+		return $this->belongsTo(\App\Models\Item::class);
 	}
 
 	public function quotation_header()

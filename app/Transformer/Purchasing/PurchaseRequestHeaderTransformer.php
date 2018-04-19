@@ -31,12 +31,17 @@ class PurchaseRequestHeaderTransformer extends TransformerAbstract
         $mrCode = "<a href='material_requests/detil/" . $header->id. "' style='text-decoration: underline;'>". $header->code. "</a>";
 
         $action = "";
-        $route = route('admin.purchase_orders.create', ['pr' => $header->id]);
+
         if($this->mode === 'default'){
             $action = "<a class='btn btn-xs btn-primary' href='purchase_requests/detil/". $header->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
             $action .= "<a class='btn btn-xs btn-info' href='purchase_requests/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
         }
+        elseif($this->mode === 'before_create_rfq'){
+            $route = route('admin.quotations.create', ['pr' => $header->id]);
+            $action = "<a class='btn btn-xs btn-success' href='". $route. "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i> Proses RFQ </a>";
+        }
         else{
+            $route = route('admin.purchase_orders.create', ['pr' => $header->id]);
             $action = "<a class='btn btn-xs btn-success' href='". $route. "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i> Proses PO </a>";
         }
 

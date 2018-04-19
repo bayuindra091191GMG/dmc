@@ -45,17 +45,14 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pr_code">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pr_code" >
                     Nomor PR
-                    <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="pr_code" name="pr_code" class="form-control col-md-7 col-xs-12 @if($errors->has('pr_code')) parsley-error @endif">
-                    </select>
+                    <input id="pr_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('pph')) parsley-error @endif"
+                           name="pr_code" value="{{ $purchaseRequest->code }}" readonly>
+                    <input type="hidden" id="pr_id" name="pr_id" value="{{ $purchaseRequest->id }}">
                 </div>
-                {{--<div id="check-pr-section" class="col-md-2 col-sm-2 col-xs-12">--}}
-                    {{--<button class="check-pr btn btn-info">Lihat PR</button>--}}
-                {{--</div>--}}
             </div>
 
             <div class="form-group">
@@ -68,6 +65,41 @@
                     </select>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="delivery_fee">
+                    Ongkos Kirim
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="delivery_fee" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('delivery_fee')) parsley-error @endif"
+                           name="delivery_fee" value="{{ old('delivery_fee') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="ppn">
+                    Tambah PPN
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" class="flat" id="ppn" name="ppn"> PPN sekarang: 10%
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pph">
+                    PPh
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="pph" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('pph')) parsley-error @endif"
+                           name="pph" value="{{ old('pph') }}">
+                </div>
+            </div>
+
+            <hr/>
 
             <div class="form-group">
                 <div class="col-lg-12 col-md-12 col-xs-12 box-section">

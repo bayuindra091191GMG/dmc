@@ -334,6 +334,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('quotations/detil/{quotation}', 'Purchasing\QuotationHeaderController@show')->name('quotations.show');
     Route::get('quotations/{quotation}/ubah', 'Purchasing\QuotationHeaderController@edit')->name('quotations.edit');
     Route::put('quotations/ubah/{quotation}', 'Purchasing\QuotationHeaderController@update')->name('quotations.update');
+    Route::get('quotations/pilihpr', 'Purchasing\QuotationHeaderController@beforeCreate')->name('quotations.before_create');
     Route::get('quotations/tambah', 'Purchasing\QuotationHeaderController@create')->name('quotations.create');
     Route::post('quotations/simpan', 'Purchasing\QuotationHeaderController@store')->name('quotations.store');
 

@@ -64,16 +64,6 @@
                            name="pr_code" value="{{ $purchaseRequest->code }}" readonly>
                     <input type="hidden" id="pr_id" name="pr_id" value="{{ $purchaseRequest->id }}">
                 </div>
-                {{--<div class="col-md-2 col-sm-2 col-xs-12">--}}
-                    {{--<a class="get-pr-data btn btn-info">--}}
-                        {{--Ambil Data--}}
-                    {{--</a>--}}
-                    {{--@if(!empty($purchaseRequest))--}}
-                        {{--<a class="clear-pr-data btn btn-info">--}}
-                            {{--Reset Data--}}
-                        {{--</a>--}}
-                    {{--@endif--}}
-                {{--</div>--}}
             </div>
 
             <div class="form-group">

@@ -17,9 +17,9 @@ class QuotationHeaderTransformer extends TransformerAbstract
 {
     public function transform(QuotationHeader $header){
         try{
-            $createdDate = Carbon::parse($header->created_at)->format('d M Y');
+            $createdDate = Carbon::parse($header->date)->format('d M Y');
 
-            $code = "<a href='quotations/detil/" . $header->id. "'>". $header->code. "</a>";
+            $code = "<a href='quotations/detil/" . $header->id. "' target='_blank'>". $header->code. "</a>";
             $action = "<a class='btn btn-xs btn-info' href='quotations/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
             return[

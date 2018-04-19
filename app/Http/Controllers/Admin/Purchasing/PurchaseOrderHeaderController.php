@@ -114,7 +114,7 @@ class PurchaseOrderHeaderController extends Controller
 
         // Numbering System
         $sysNo = NumberingSystem::where('doc_id', '4')->first();
-        $autoNumber = Utilities::GenerateNumberPurchaseOrder('PO', $sysNo->next_no);
+        $autoNumber = Utilities::GenerateNumberPurchaseOrder($sysNo->document->code, $sysNo->next_no);
 
         $data = [
             'purchaseRequest'   => $purchaseRequest,
@@ -150,27 +150,6 @@ class PurchaseOrderHeaderController extends Controller
 //            return redirect()->back()->withErrors('Nomor PR wajib diisi!', 'default')->withInput($request->all());
 //        }
 
-        // Generate auto number
-        $poCode = 'default';
-        if(Input::get('auto_number')){
-            $sysNo = NumberingSystem::where('doc_id', '4')->first();
-            $poCode = Utilities::GenerateNumberPurchaseOrder($sysNo->document->code, $sysNo->next_no);
-            $sysNo->next_no++;
-            $sysNo->save();
-        }
-        else{
-            $poCode = Input::get('po_code');
-        }
-
-        // Get PR id
-        $prId = $request->input('pr_id');
-
-        // Check existing number
-        $temp = PurchaseOrderHeader::where('code', $poCode)->first();
-        if(!empty($temp)){
-            return redirect()->back()->withErrors('Nomor PO sudah terdaftar!', 'default')->withInput($request->all());
-        }
-
         // Validate details
         $items = $request->input('item_value');
         $qtys = $request->input('qty');
@@ -194,6 +173,9 @@ class PurchaseOrderHeaderController extends Controller
             return redirect()->back()->withErrors('Detail inventory tidak boleh kembar!', 'default')->withInput($request->all());
         }
 
+        // Get PR id
+        $prId = $request->input('pr_id');
+
         // Validate PR relationship
         $validItem = true;
         $validQty = true;
@@ -214,6 +196,24 @@ class PurchaseOrderHeaderController extends Controller
                 }
                 $i++;
             }
+        }
+
+        // Generate auto number
+        $poCode = 'default';
+        if(Input::get('auto_number')){
+            $sysNo = NumberingSystem::where('doc_id', '4')->first();
+            $poCode = Utilities::GenerateNumberPurchaseOrder($sysNo->document->code, $sysNo->next_no);
+            $sysNo->next_no++;
+            $sysNo->save();
+        }
+        else{
+            $poCode = Input::get('po_code');
+        }
+
+        // Check existing number
+        $temp = PurchaseOrderHeader::where('code', $poCode)->first();
+        if(!empty($temp)){
+            return redirect()->back()->withErrors('Nomor PO sudah terdaftar!', 'default')->withInput($request->all());
         }
 
         if(!$validItem){
@@ -515,17 +515,18 @@ class PurchaseOrderHeaderController extends Controller
                 ->withInput();
         }
 
-        $tempStart = strtotime($request->input('start_date'));
-        $start = date('Y-m-d', $tempStart);
-        $tempEnd = strtotime($request->input('end_date'));
-        $end = date('Y-m-d', $tempEnd);
+        $start = Carbon::createFromFormat('d M Y', $request->input('start_date'), 'Asia/Jakarta');
+        $end = Carbon::createFromFormat('d M Y', $request->input('end_date'), 'Asia/Jakarta');
 
         // Validate date
-        if($start > $end){
+        if($start->gt($end)){
             return redirect()->back()->withErrors('Dari Tanggal tidak boleh lebih besar dari Sampai Tanggal!', 'default')->withInput($request->all());
         }
 
-        $data = PurchaseOrderHeader::whereBetween('created_at', array($start, $end));
+        $start = $start->addDays(-1);
+        $end = $end->addDays(1);
+
+        $data = PurchaseOrderHeader::whereBetween('date', array($start->toDateTimeString(), $end->toDateTimeString()));
 
         // Filter departemen
         $department = $request->input('department');

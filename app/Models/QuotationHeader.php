@@ -2,11 +2,12 @@
 
 /**
  * Created by Reliese Model.
- * Date: Mon, 19 Feb 2018 03:21:14 +0000.
+ * Date: Thu, 19 Apr 2018 14:10:00 +0700.
  */
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -16,10 +17,17 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $code
  * @property int $purchase_request_id
  * @property int $supplier_id
+ * @property float $delivery_fee
  * @property float $total_price
  * @property float $total_discount
+ * @property float $total_payment_before_tax
+ * @property int $pph_percent
+ * @property int $ppn_percent
+ * @property float $pph_amount
+ * @property float $ppn_amount
  * @property float $total_payment
  * @property int $status_id
+ * @property \Carbon\Carbon $date
  * @property int $created_by
  * @property \Carbon\Carbon $created_at
  * @property int $updated_by
@@ -39,31 +47,60 @@ class QuotationHeader extends Eloquent
 	protected $casts = [
 		'purchase_request_id' => 'int',
 		'supplier_id' => 'int',
+        'total_discount' => 'float',
 		'total_price' => 'float',
-		'total_discount' => 'float',
+		'delivery_fee' => 'float',
+		'total_payment_before_tax' => 'float',
+		'pph_percent' => 'int',
+		'ppn_percent' => 'int',
+		'pph_amount' => 'float',
+		'ppn_amount' => 'float',
 		'total_payment' => 'float',
 		'status_id' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
 	];
 
-	protected $appends = [
-	    'total_price_string',
+    protected $appends = [
+        'total_price_string',
         'total_discount_string',
-        'total_payment_string'
+        'ppn_string',
+        'pph_string',
+        'total_payment_string',
+        'delivery_fee_string',
+        'date_string',
     ];
+
+	protected $dates = [
+		'date'
+	];
 
 	protected $fillable = [
 		'code',
 		'purchase_request_id',
 		'supplier_id',
+        'delivery_fee',
 		'total_price',
 		'total_discount',
+		'total_payment_before_tax',
+		'pph_percent',
+		'ppn_percent',
+		'pph_amount',
+		'ppn_amount',
 		'total_payment',
 		'status_id',
+		'date',
 		'created_by',
 		'updated_by'
 	];
+
+    public function getDateStringAttribute(){
+        return Carbon::parse($this->attributes['date'])->format('d M Y');
+    }
+
+    public function getDeliveryFeeStringAttribute(){
+        return number_format($this->attributes['delivery_fee'], 0, ",", ".");
+    }
 
     public function getTotalPriceStringAttribute(){
         return number_format($this->attributes['total_price'], 0, ",", ".");
@@ -71,6 +108,14 @@ class QuotationHeader extends Eloquent
 
     public function getTotalDiscountStringAttribute(){
         return number_format($this->attributes['total_discount'], 0, ",", ".");
+    }
+
+    public function getPpnStringAttribute(){
+        return number_format($this->attributes['ppn_amount'], 0, ",", ".");
+    }
+
+    public function getPphStringAttribute(){
+        return number_format($this->attributes['pph_amount'], 0, ",", ".");
     }
 
     public function getTotalPaymentStringAttribute(){

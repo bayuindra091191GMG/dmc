@@ -122,7 +122,7 @@ class PurchaseOrderHeader extends Eloquent
     }
 
     public function getDateStringAttribute(){
-        return Carbon::parse($this->attributes['created_at'])->format('d M Y');
+        return Carbon::parse($this->attributes['date'])->format('d M Y');
     }
 
     public function getTotalPriceStringAttribute(){

@@ -455,17 +455,18 @@ class PurchaseRequestHeaderController extends Controller
                 ->withInput();
         }
 
-        $tempStart = strtotime($request->input('start_date'));
-        $start = date('Y-m-d', $tempStart);
-        $tempEnd = strtotime($request->input('end_date'));
-        $end = date('Y-m-d', $tempEnd);
+        $start = Carbon::createFromFormat('d M Y', $request->input('start_date'), 'Asia/Jakarta');
+        $end = Carbon::createFromFormat('d M Y', $request->input('end_date'), 'Asia/Jakarta');
 
         // Validate date
-        if($start > $end){
+        if($start->gt($end)){
             return redirect()->back()->withErrors('Dari Tanggal tidak boleh lebih besar dari Sampai Tanggal!', 'default')->withInput($request->all());
         }
 
-        $data = PurchaseRequestHeader::whereBetween('date', array($start, $end));
+        $start = $start->addDays(-1);
+        $end = $end->addDays(1);
+
+        $data = PurchaseRequestHeader::whereBetween('date', array($start->toDateTimeString(), $end->toDateTimeString()));
 
         // Filter departemen
         $department = $request->input('department');

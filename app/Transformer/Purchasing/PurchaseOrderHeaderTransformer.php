@@ -55,6 +55,8 @@ class PurchaseOrderHeaderTransformer extends TransformerAbstract
                 'total_price'       => $header->total_price_string,
                 'total_discount'    => $header->total_discount_string ?? '-',
                 'delivery_fee'      => $header->delivery_fee_string ?? '-',
+                'ppn'               => $header->ppn_string ?? '0',
+                'pph'               => $header->pph_string ?? '0',
                 'total_payment'     => $header->total_payment_string,
                 'created_at'        => $date,
                 'status'            => $header->status->description,
