@@ -73,19 +73,24 @@
                                 @if($status == 99)
                                     :
                                     <span style="font-weight: bold; color: green;">
-                                @foreach($approvalData as $data)
-                                            {{ $data->user->name }},
+                                    @foreach($approvalData as $data)
+                                            {{ $data }},
                                         @endforeach
-                            </span>
+                                </span>
                                 @elseif($status < 99 && $status != 0)
                                     :
                                     <span style="font-weight: bold; color: #f4bf42;">
-                                @foreach($approvalData as $data)
-                                            {{ $data->user->name }},
+                                    @foreach($approvalData as $data)
+                                            {{ $data }},
                                         @endforeach
-                            </span>
+                                </span>
                                 @elseif($status == 0)
-                                    : <span style="font-weight: bold; color: red;">Belum Diapprove</span>
+                                    :
+                                    <span style="font-weight: bold; color: red;">
+                                    @foreach($approvalData as $data)
+                                            {{ $data }},
+                                        @endforeach
+                                </span>
                                 @endif
                             </div>
                         </div>

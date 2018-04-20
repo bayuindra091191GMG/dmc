@@ -79,6 +79,7 @@ class PurchaseRequestHeaderController extends Controller
         $approveOrder = false;
         //Kondisi belum diapprove
         $status = 0;
+        $arrData = array();
 
         //All Approval Settings checked if On Or Not
         $setting = PreferenceCompany::find(1);
@@ -112,6 +113,25 @@ class PurchaseRequestHeaderController extends Controller
             if ($approvals->count() != $approvalPr->count()) {
                 $permission = false;
             }
+
+            foreach($approvals as $approval)
+            {
+                $flag = 0;
+                foreach($approvalPr as $data)
+                {
+                    if($data->user_id == $approval->user_id)
+                    {
+                        $flag = 1;
+                    }
+                }
+
+                if($flag == 1){
+                    $arrData[] = $approval->user->name . " - Sudah Approve";
+                }
+                else{
+                    $arrData[] = $approval->user->name . " - Belum Approve";
+                }
+            }
         }
 
         // Check PO created
@@ -127,7 +147,7 @@ class PurchaseRequestHeaderController extends Controller
             'permission'        => $permission,
             'approveOrder'      => $approveOrder,
             'status'            => $status,
-            'approvalData'      => $approvals,
+            'approvalData'      => $arrData,
             'setting'           => $setting->approval_setting,
             'isPoCreated'       => $isPoCreated
         ];

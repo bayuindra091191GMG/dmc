@@ -59,8 +59,9 @@ class PurchaseOrderHeaderController extends Controller
 
         //All Approval Settings checked if On Or Not
         $setting = PreferenceCompany::find(1);
-
         $approvals = null;
+        $arrData = array();
+
         if($setting->approval_setting == 1) {
             $tempApprove = ApprovalRule::where('document_id', 4)->where('user_id', $user->id)->get();
             $approvals = ApprovalRule::where('document_id', 4)->get();
@@ -88,6 +89,25 @@ class PurchaseOrderHeaderController extends Controller
 
             if ($approvals->count() != $approvalPo->count()) {
                 $permission = false;
+            }
+
+            foreach($approvals as $approval)
+            {
+                $flag = 0;
+                foreach($approvalPo as $data)
+                {
+                    if($data->user_id == $approval->user_id)
+                    {
+                        $flag = 1;
+                    }
+                }
+
+                if($flag == 1){
+                    $arrData[] = $approval->user->name . " - Approve";
+                }
+                else{
+                    $arrData[] = $approval->user->name . " - Belum Approve";
+                }
             }
         }
 
