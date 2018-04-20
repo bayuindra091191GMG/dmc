@@ -37,9 +37,9 @@
 <body>
 
 <div class="container">
-    <h2>Purchase Request Report</h2>
-    <p>Tanggal: {{ $start_date }} - {{ $finish_date }}</p>
-    <p>Total PR: {{ $data->count() }}</p>
+    <h3>Laporan Purchase Request</h3>
+    <span style="font-size: 12px;">Tanggal: {{ $start_date }} - {{ $finish_date }}</span><br/>
+    <span style="font-size: 12px;">Total PR: {{ $data->count() }}</span>
     <table class="table" style="font-size: 11px;">
         <thead>
         <tr>

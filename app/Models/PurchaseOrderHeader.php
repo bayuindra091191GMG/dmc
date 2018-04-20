@@ -44,7 +44,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\QuotationHeader $quotation_header
  * @property \App\Models\Status $status
  * @property \App\Models\Supplier $supplier
- * @property \App\Models\User $user
+ * @property \App\Models\Auth\User\User $user
  * @property \Illuminate\Database\Eloquent\Collection $item_receipt_headers
  * @property \Illuminate\Database\Eloquent\Collection $payment_requests_po_details
  * @property \Illuminate\Database\Eloquent\Collection $purchase_invoice_headers
@@ -191,10 +191,15 @@ class PurchaseOrderHeader extends Eloquent
 		return $this->belongsTo(\App\Models\Supplier::class);
 	}
 
-	public function user()
-	{
-		return $this->belongsTo(\App\Models\User::class, 'updated_by');
-	}
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
+    }
 
 	public function item_receipt_headers()
 	{

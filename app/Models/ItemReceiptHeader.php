@@ -74,10 +74,15 @@ class ItemReceiptHeader extends Eloquent
 		return $this->belongsTo(\App\Models\Status::class);
 	}
 
-	public function user()
-	{
-		return $this->belongsTo(\App\Models\User::class, 'updated_by');
-	}
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
+    }
 
 	public function warehouse()
 	{
@@ -88,14 +93,4 @@ class ItemReceiptHeader extends Eloquent
 	{
 		return $this->hasMany(\App\Models\ItemReceiptDetail::class, 'header_id');
 	}
-
-    public function createdBy()
-    {
-        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
-    }
-
-    public function updatedBy()
-    {
-        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
-    }
 }

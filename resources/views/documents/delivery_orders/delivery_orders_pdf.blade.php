@@ -28,56 +28,50 @@
  {{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">--}}
  {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>--}}
  {{--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>--}}
+    <style>
+        .table>tbody>tr>td{
+            padding: 2px;
+        }
+    </style>
 </head>
 <body>
 
 <div class="container">
- <h2>Delivery Order Report</h2>
- <p>Date: {{ $start_date }} - {{ $finish_date }}</p>
-    <p>Total Delivery Order : {{ $data->count() }}</p>
- <table class="table">
+ <h3>Laporan Surat Jalan</h3>
+    <span style="font-size: 12px;">Tanggal: {{ $start_date }} - {{ $finish_date }}</span><br/>
+    <span style="font-size: 12px;">Total Surat Jalan: {{ $data->count() }}</span>
+ <table class="table" style="font-size: 11px;">
   <thead>
   <tr>
-       <th>No</th>
-       <th>Code</th>
-       <th>No PR</th>
-       <th>From</th>
-       <th>To</th>
-       <th>Alat Berat</th>
-       <th>Keterangan</th>
-       <th>Status</th>
-       <th width="10%">Date</th>
-       <th width="10%">Dibuat Oleh</th>
+      <th class="text-center">Kode</th>
+      <th class="text-center">Keterangan</th>
+      <th class="text-center">Part Number</th>
+      <th class="text-center">QTY</th>
+
+       {{--<th>Code</th>--}}
+       {{--<th>No PR</th>--}}
+       {{--<th>From</th>--}}
+       {{--<th>To</th>--}}
+       {{--<th>Alat Berat</th>--}}
+       {{--<th>Keterangan</th>--}}
+       {{--<th>Status</th>--}}
+       {{--<th width="10%">Date</th>--}}
+       {{--<th width="10%">Dibuat Oleh</th>--}}
   </tr>
   </thead>
   <tbody>
-    @php($i=1)
     @foreach($data as $item)
         <tr>
-            <td>{{ $i }}</td>
-            <td>{{ $item->code }}</td>
-            <td>{{ $item->purchase_request_header->code }}</td>
-            <td>{{ $item->fromSite->name }}</td>
-            <td>{{ $item->toSite->name }}</td>
-            <td>
-                @if($item->machinery_id != null)
-                    {{ $item->machinery->code }}
-                @else
-                    -
-                @endif
-            </td>
-            <td>
-                @if($item->remark != null)
-                    {{ $item->remark }}
-                @else
-                    -
-                @endif
-            </td>
-            <td>{{ $item->status->description }}</td>
-            <td>{{ $item->date_string }}</td>
-            <td>{{ $item->createdBy->name }}</td>
+            <td colspan="4"><b>{{ $item->code }} - {{ $item->date_string }} - Nomor PR: {{ $item->purchase_request_header->code }} - Site: {{ $item->fromSite->name }} ke {{ $item->toSite->name }} - Status: {{ $item->status->description }}</b></td>
         </tr>
-        @php($i++)
+        @foreach($item->delivery_order_details as $detail)
+            <tr>
+                <td class="text-center">{{ $detail->item->code }}</td>
+                <td class="text-center">{{ str_limit($detail->item->name, 15) }}</td>
+                <td class="text-center">{{ $detail->part_number ?? '-' }}</td>
+                <td class="text-center">{{ $detail->quantity }} {{ $detail->item->uom }}</td>
+            </tr>
+        @endforeach
     @endforeach
   </tbody>
  </table>

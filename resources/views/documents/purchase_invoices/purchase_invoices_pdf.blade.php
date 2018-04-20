@@ -32,42 +32,87 @@
 <body>
 
 <div class="container">
- <h2>Purchase Invoice Report</h2>
- <p>Date: {{ $start_date }} - {{ $finish_date }}</p>
- <table class="table">
-  <thead>
-  <tr>
-       <th>No</th>
-       <th>Code</th>
-       <th>PO Code</th>
-       <th>Dibuat Oleh</th>
-       <th width="10%">Date</th>
-       <th>Total Price</th>
-       <th>Total Payment</th>
-  </tr>
-  </thead>
-  <tbody>
-    @php($i=1)
-    @php($total=0)
-    @foreach($data as $item)
+ <h3> LaporanPurchase Invoice</h3>
+    <span style="font-size: 12px;">Tanggal: {{ $start_date }} - {{ $finish_date }}</span><br/>
+    <span style="font-size: 12px;">Total PI: {{ $data->count() }}</span>
+    <table class="table" style="font-size: 11px;">
+        <thead>
         <tr>
-            <td>{{ $i }}</td>
-            <td>{{ $item->code }}</td>
-            <td>{{ $item->purchase_order_header->code }}</td>
-            <td>{{ $item->createdBy->name }}</td>
-            <td>{{ $item->date_string }}</td>
-            <td>Rp{{ $item->total_price_string }}</td>
-            <td>Rp{{ $item->total_payment_string }}</td>
+            <th class="text-center" style="width: 10%;">Kode</th>
+            <th class="text-center" style="width: 20%;">Nama</th>
+            <th class="text-center" style="width: 10%;">QTY</th>
+            <th class="text-center" style="width: 10%;">Harga</th>
+            <th class="text-center" style="width: 10%;">Diskon</th>
+            <th class="text-right" style="width: 10%;">Subtotal</th>
+            <th style="width: 30%;"></th>
         </tr>
-        @php($i++)
-        @php($total+=$item->total_payment)
-    @endforeach
-  <tr>
-      <td colspan="6" align="right"><b>Total</b></td>
-      <td><b>Rp{{ number_format($total, 0, ",", ".") }}</b></td>
-  </tr>
-  </tbody>
- </table>
+        </thead>
+        <tbody>
+        @php($i=1)
+        @foreach($data as $item)
+            <tr>
+                <td colspan="7"><b>{{ $item->code }} - {{ $item->date_string }} - Nomor PR: {{ $item->purchase_request_header->code }} - Vendor: {{ $item->supplier->name }}</b></td>
+            </tr>
+            @foreach($item->purchase_invoice_details as $detail)
+                <tr>
+                    <td class="text-center">{{ $detail->item->code }}</td>
+                    <td class="text-center">{{ $detail->item->name }}</td>
+                    <td class="text-center">{{ $detail->quantity }} {{ $detail->item->uom }}</td>
+                    <td class="text-center">{{ $detail->price_string }}</td>
+                    <td class="text-center">{{ !empty($detail->discount) && $detail->discount > 0 ? $detail->discount_amount_string : '0' }}</td>
+                    <td class="text-right">{{ $detail->subtotal_string }}</td>
+                    <td></td>
+                </tr>
+            @endforeach
+
+            @if(!empty($item->ppn_amount) && $item->ppn_amount > 0)
+                <tr>
+                    <td colspan="4"></td>
+                    <td class="text-right">PPN:</td>
+                    <td class="text-right">+{{ $item->ppn_string }}</td>
+                    <td></td>
+                </tr>
+            @endif
+
+            @if(!empty($item->pph_amount) && $item->pph_amount > 0)
+                <tr>
+                    <td colspan="4"></td>
+                    <td class="text-right">PPh:</td>
+                    <td class="text-right">-{{ $item->pph_string }}</td>
+                    <td></td>
+                </tr>
+            @endif
+
+            @if(!empty($item->delivery_fee) && $item->delivery_fee > 0)
+                <tr>
+                    <td colspan="4"></td>
+                    <td class="text-right">Ongkos Kirim:</td>
+                    <td class="text-right">+{{ $item->delivery_fee_string }}</td>
+                    <td></td>
+                </tr>
+            @endif
+
+            <tr>
+                <td colspan="4"></td>
+                <td class="text-right">Total Invoice:</td>
+                <td class="text-right">{{ $item->total_payment_string }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="6"></td>
+                <td class="text-right">{{ $item->total_payment_string }}</td>
+            </tr>
+        @endforeach
+        <tr>
+            <td colspan="6" class="text-right">
+                <b>Total Semua Invoice</b>
+            </td>
+            <td class="text-right">
+                {{ $total }}
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 <script type="text/php">
     if ( isset($pdf) ) {

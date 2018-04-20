@@ -419,24 +419,25 @@ class DocketController extends Controller
                 ->withInput();
         }
 
-        $tempStart = strtotime($request->input('start_date'));
-        $start = date('Y-m-d', $tempStart);
-        $tempEnd = strtotime($request->input('end_date'));
-        $end = date('Y-m-d', $tempEnd);
+        $start = Carbon::createFromFormat('d M Y', $request->input('start_date'), 'Asia/Jakarta');
+        $end = Carbon::createFromFormat('d M Y', $request->input('end_date'), 'Asia/Jakarta');
 
-        //Check date
-        if($start > $end){
+        // Validate date
+        if($start->gt($end)){
             return redirect()->back()->withErrors('Dari Tanggal tidak boleh lebih besar dari Sampai Tanggal!', 'default')->withInput($request->all());
         }
 
-        $data = IssuedDocketHeader::whereBetween('date', array($start, $end))->get();
+        $start = $start->addDays(-1);
+        $end = $end->addDays(1);
+
+        $data = IssuedDocketHeader::whereBetween('date', array($start->toDateTimeString(), $end->toDateTimeString()))->get();
 
         //Check Data
         if($data == null || $data->count() == 0){
             return redirect()->back()->withErrors('Data tidak ditemukan!', 'default')->withInput($request->all());
         }
 
-        $pdf = PDF::loadView('documents.issued_dockets.issued_docket_pdf', ['data' => $data, 'start_date' => Input::get('start_date'), 'finish_date' => Input::get('end_date')])
+        $pdf = PDF::loadView('documents.issued_dockets.issued_docket_pdf', ['data' => $data, 'start_date' => $request->input('start_date'), 'finish_date' => $request->input('end_date')])
             ->setPaper('a4', 'landscape');
         $now = Carbon::now('Asia/Jakarta');
         $filename = 'ISSUED_DOCKET_REPORT_' . $now->toDateTimeString();

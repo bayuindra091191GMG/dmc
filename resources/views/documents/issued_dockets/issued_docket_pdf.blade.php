@@ -28,39 +28,48 @@
  {{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">--}}
  {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>--}}
  {{--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>--}}
+    <style>
+        .table>tbody>tr>td{
+            padding: 2px;
+        }
+    </style>
 </head>
 <body>
 
 <div class="container">
- <h2>Issued Docket Report</h2>
- <p>Date: {{ $start_date }} - {{ $finish_date }}</p>
- <table class="table">
+ <h3>Laporan Issued Docket</h3>
+    <span style="font-size: 12px;">Tanggal: {{ $start_date }} - {{ $finish_date }}</span><br/>
+    <span style="font-size: 12px;">Total ID: {{ $data->count() }}</span>
+ <table class="table" style="font-size: 11px;">
   <thead>
   <tr>
-       <th class="text-center">No</th>
-       <th class="text-center">Nomor Docket</th>
-       <th class="text-center">Tanggal</th>
-       <th class="text-center">Nomor MR</th>
-       <th class="text-center">HM</th>
-       <th class="text-center">KM</th>
-       <th class="text-center">Departemen</th>
-       <th class="text-center">Divisi</th>
+      <th class="text-center">Kode</th>
+      <th class="text-center">Keterangan</th>
+      <th class="text-center">Part Number</th>
+      <th class="text-center">QTY</th>
+       {{--<th class="text-center">Nomor Docket</th>--}}
+       {{--<th class="text-center">Tanggal</th>--}}
+       {{--<th class="text-center">Nomor MR</th>--}}
+       {{--<th class="text-center">HM</th>--}}
+       {{--<th class="text-center">KM</th>--}}
+       {{--<th class="text-center">Departemen</th>--}}
+       {{--<th class="text-center">Divisi</th>--}}
   </tr>
   </thead>
   <tbody>
     @php($i=1)
     @foreach($data as $item)
         <tr>
-            <td class="text-center">{{ $i }}</td>
-            <td class="text-center">{{ $item->code }}</td>
-            <td class="text-center">{{ $item->date_string }}</td>
-            <td class="text-center">{{ $item->materil_request_header->code }}</td>
-            <td class="text-center">{{ $item->hm }}</td>
-            <td class="text-center">{{ $item->km }}</td>
-            <td class="text-center">{{ $item->department->name }}</td>
-            <td class="text-center">{{ $item->division }}</td>
+            <td colspan="4"><b>{{ $item->code }} - {{ $item->date_string }} - Nomor MR: {{ $item->materil_request_header->code }} - {{ $item->department->name }}</b></td>
         </tr>
-        @php($i++)
+        @foreach($item->issued_docket_details as $detail)
+            <tr>
+                <td class="text-center">{{ $detail->item->code }}</td>
+                <td class="text-center">{{ str_limit($detail->item->name, 15) }}</td>
+                <td class="text-center">{{ $detail->part_number ?? '-' }}</td>
+                <td class="text-center">{{ $detail->quantity }} {{ $detail->item->uom }}</td>
+            </tr>
+        @endforeach
     @endforeach
   <tr>
   </tbody>

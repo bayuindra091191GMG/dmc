@@ -42,6 +42,7 @@ class PurchaseInvoiceDetail extends Eloquent
     protected $appends = [
         'price_string',
         'discount_string',
+        'discount_amount_string',
         'subtotal_string'
     ];
 
@@ -66,6 +67,12 @@ class PurchaseInvoiceDetail extends Eloquent
         else{
             return '-';
         }
+    }
+
+    public function getDiscountAmountStringAttribute(){
+        $price = $this->attributes['price'];
+        $discountAmount = ($this->attributes['discount'] / 100) * $price;
+        return number_format($discountAmount, 0, ",", ".");
     }
 
     public function getSubtotalStringAttribute(){
