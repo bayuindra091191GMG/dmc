@@ -28,6 +28,12 @@
     {{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">--}}
     {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>--}}
     {{--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>--}}
+
+    <style>
+        .table>tbody>tr>td{
+            padding: 2px;
+        }
+    </style>
 </head>
 <body>
 
@@ -35,11 +41,12 @@
     <h2>Material Request Report</h2>
     <p>Tanggal: {{ $start_date }} - {{ $finish_date }}</p>
     <p>Total MR: {{ $data->count() }}</p>
-    <table class="table">
+    <table class="table" style="font-size: 11px;">
         <thead>
         <tr>
             <th class="text-center">Kode</th>
-            <th class="text-center">Nama</th>
+            <th class="text-center">Keterangan</th>
+            <th class="text-center">Part Number</th>
             <th class="text-center">QTY</th>
         </tr>
         {{--<tr>--}}
@@ -50,19 +57,18 @@
         {{--</tr>--}}
         </thead>
         <tbody>
-        @php($i=1)
         @foreach($data as $item)
             <tr>
-                <td colspan="3"><b>{{ $item->code }} {{ $item->date_string }} {{ $item->department->name }} Status: {{ $item->status->description }}</b></td>
+                <td colspan="4"><b>{{ $item->code }} - {{ $item->date_string }} - {{ $item->department->name }} - Status: {{ $item->status->description }}</b></td>
             </tr>
             @foreach($item->material_request_details as $detail)
                 <tr>
                     <td class="text-center">{{ $detail->item->code }}</td>
                     <td class="text-center">{{ str_limit($detail->item->name, 15) }}</td>
+                    <td class="text-center">{{ $detail->part_number ?? '-' }}</td>
                     <td class="text-center">{{ $detail->quantity }} {{ $detail->item->uom }}</td>
                 </tr>
             @endforeach
-            @php($i++)
         @endforeach
         </tbody>
     </table>

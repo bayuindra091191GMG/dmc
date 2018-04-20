@@ -7,6 +7,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
@@ -58,6 +59,10 @@ class MaterialRequestHeader extends Eloquent
 		'closed_at'
 	];
 
+    protected $appends = [
+        'date_string'
+    ];
+
 	protected $fillable = [
 		'code',
 		'type',
@@ -77,6 +82,10 @@ class MaterialRequestHeader extends Eloquent
 
     public function scopeDateDescending(Builder $query){
         return $query->orderBy('date','DESC');
+    }
+
+    public function getDateStringAttribute(){
+        return Carbon::parse($this->attributes['date'])->format('d M Y');
     }
 
 	public function department()

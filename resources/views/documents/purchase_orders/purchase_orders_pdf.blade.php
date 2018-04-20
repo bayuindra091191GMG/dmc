@@ -28,6 +28,11 @@
  {{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">--}}
  {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>--}}
  {{--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>--}}
+    <style>
+        .table>tbody>tr>td{
+            padding: 2px;
+        }
+    </style>
 </head>
 <body>
 
@@ -35,16 +40,16 @@
  <h2>Purchase Order Report</h2>
  <p>Tanggal: {{ $start_date }} - {{ $finish_date }}</p>
     <p>Total PO : {{ $data->count() }}</p>
- <table class="table">
+ <table class="table" style="font-size: 11px;">
   <thead>
   <tr>
-      <th class="text-center">Kode</th>
-      <th class="text-center">Nama</th>
-      <th class="text-center">QTY</th>
-      <th class="text-center">Harga</th>
-      <th class="text-center">Diskon</th>
-      <th class="text-center">Subtotal</th>
-      <th></th>
+      <th class="text-center" style="width: 10%;">Kode</th>
+      <th class="text-center" style="width: 20%;">Nama</th>
+      <th class="text-center" style="width: 10%;">QTY</th>
+      <th class="text-center" style="width: 10%;">Harga</th>
+      <th class="text-center" style="width: 10%;">Diskon</th>
+      <th class="text-right" style="width: 10%;">Subtotal</th>
+      <th style="width: 30%;"></th>
   </tr>
   {{--<tr>--}}
        {{--<th class="text-center">No</th>--}}
@@ -62,26 +67,56 @@
     @php($i=1)
     @foreach($data as $item)
         <tr>
-            <td colspan="5"><b>{{ $item->code }} - Nomor PR: {{ $item->purchase_request_header->code }} - {{ $item->supplier->name }} - {{ $item->date_string }}</b></td>
-            <td class="text-right">Total PO:</td>
-            <td class="text-right">{{ $item->total_payment_string }}</td>
+            <td colspan="7"><b>{{ $item->code }} - {{ $item->date_string }} - Nomor PR: {{ $item->purchase_request_header->code }} - Vendor: {{ $item->supplier->name }}</b></td>
         </tr>
         @foreach($item->purchase_order_details as $detail)
             <tr>
                 <td class="text-center">{{ $detail->item->code }}</td>
                 <td class="text-center">{{ $detail->item->name }}</td>
                 <td class="text-center">{{ $detail->quantity }} {{ $detail->item->uom }}</td>
-                <td class="text-right">{{ $detail->price_string }}</td>
-                <td class="text-center">{{ $detail->discount_string }}</td>
+                <td class="text-center">{{ $detail->price_string }}</td>
+                <td class="text-center">{{ !empty($detail->discount) && $detail->discount > 0 ? $detail->discount_amount_string : '0' }}</td>
                 <td class="text-right">{{ $detail->subtotal_string }}</td>
                 <td></td>
             </tr>
         @endforeach
+
+        @if(!empty($item->ppn_amount) && $item->ppn_amount > 0)
+            <tr>
+                <td colspan="4"></td>
+                <td class="text-right">PPN:</td>
+                <td class="text-right">+{{ $item->ppn_string }}</td>
+                <td></td>
+            </tr>
+        @endif
+
+        @if(!empty($item->pph_amount) && $item->pph_amount > 0)
+            <tr>
+                <td colspan="4"></td>
+                <td class="text-right">PPh:</td>
+                <td class="text-right">-{{ $item->pph_string }}</td>
+                <td></td>
+            </tr>
+        @endif
+
+        @if(!empty($item->delivery_fee) && $item->delivery_fee > 0)
+            <tr>
+                <td colspan="4"></td>
+                <td class="text-right">Ongkos Kirim:</td>
+                <td class="text-right">+{{ $item->delivery_fee_string }}</td>
+                <td></td>
+            </tr>
+        @endif
+
         <tr>
             <td colspan="4"></td>
-            <td class="text-right">PPN:</td>
-            <td class="text-right">{{ $item->ppn_string }}</td>
+            <td class="text-right">Total PO:</td>
+            <td class="text-right">{{ $item->total_payment_string }}</td>
             <td></td>
+        </tr>
+        <tr>
+            <td colspan="6"></td>
+            <td class="text-right">{{ $item->total_payment_string }}</td>
         </tr>
     @endforeach
     <tr>

@@ -551,6 +551,8 @@ class PurchaseOrderHeaderController extends Controller
         $total = $data->sum('total_payment');
         $totalStr = number_format($total, 0, ",", ".");
 
+//        return view('documents.purchase_orders.purchase_orders_pdf', ['data' => $data, 'start_date' => $request->input('start_date'), 'finish_date' => $request->input('end_date'), 'total' => $totalStr]);
+
         $pdf = PDF::loadView('documents.purchase_orders.purchase_orders_pdf', ['data' => $data, 'start_date' => $request->input('start_date'), 'finish_date' => $request->input('end_date'), 'total' => $totalStr])
             ->setPaper('a4', 'landscape');
         $now = Carbon::now('Asia/Jakarta');

@@ -28,7 +28,7 @@ class PurchaseRequestHeaderTransformer extends TransformerAbstract
         $priorityLimitDate = Carbon::parse($header->priority_limit_date)->format('d M Y');
 
         $code = "<a href='purchase_requests/detil/" . $header->id. "' style='text-decoration: underline;'>". $header->code. "</a>";
-        $mrCode = "<a href='material_requests/detil/" . $header->id. "' style='text-decoration: underline;'>". $header->code. "</a>";
+        $mrCode = "<a href='material_requests/detil/" . $header->id. "' style='text-decoration: underline;'>". $header->material_request_header->code. "</a>";
 
         $action = "";
 
