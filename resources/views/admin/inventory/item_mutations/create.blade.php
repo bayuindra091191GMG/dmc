@@ -61,7 +61,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="mutation_quantity">
-                    Jumlah Perpindahan
+                    QTY
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="mutation_quantity" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('mutation_quantity')) parsley-error @endif"
@@ -101,7 +101,7 @@
                 text: 'Pilih barang...'
             },
             width: '100%',
-            minimumInputLength: 2,
+            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('select.items') }}',
                 dataType: 'json',

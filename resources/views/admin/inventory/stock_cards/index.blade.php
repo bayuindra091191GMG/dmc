@@ -22,8 +22,8 @@
                 <th>Kode Item</th>
                 <th>Nama Item</th>
                 <th>Gudang</th>
-                <th>Jumlah Perubahan</th>
-                <th>Jumlah Stok Akhir</th>
+                <th>QTY Perubahan</th>
+                <th>QTY Stok Akhir</th>
                 <th>Dibuat Oleh</th>
                 <th>Tanggal Dibuat</th>
             </tr>

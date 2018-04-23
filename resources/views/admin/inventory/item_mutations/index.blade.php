@@ -23,7 +23,7 @@
                 <th>Nama Item</th>
                 <th>Gudang Asal</th>
                 <th>Gudang Tujuan</th>
-                <th>Total Barang</th>
+                <th>QTY Perpindahan</th>
                 <th>Dibuat Oleh</th>
                 <th>Tanggal Dibuat</th>
             </tr>

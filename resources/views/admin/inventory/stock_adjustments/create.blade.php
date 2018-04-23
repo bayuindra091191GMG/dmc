@@ -48,7 +48,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="depreciation">
-                    Jumlah Pengurangan
+                    QTY Pengurangan
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12 price-format">
                     <input id="depreciation" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('depreciation')) parsley-error @endif"

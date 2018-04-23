@@ -67,8 +67,11 @@ class ItemMutationController extends Controller
         $stockWarehouseFromDB = ItemStock::where('warehouse_id', Input::get('warehouse_from'))
             ->where('item_id', $selectedItem)->first();
 
+        if(empty($stockWarehouseFromDB)){
+            return redirect()->back()->withErrors('Kuantitas perpindahan tidak boleh melebihi stok gudang asal!', 'default')->withInput($request->all());
+        }
         if($stockWarehouseFromDB->stock < Input::get('mutation_quantity')){
-            return redirect()->back()->withErrors('Jumlah barang harus lebih dari stok gudang!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Kuantitas perpindahan tidak boleh melebihi stok gudang asal!', 'default')->withInput($request->all());
         }
 
         $user = Auth::user();

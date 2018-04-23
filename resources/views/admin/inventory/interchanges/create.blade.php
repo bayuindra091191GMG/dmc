@@ -64,6 +64,20 @@
                            name="name" value="{{ old('name') }}" required>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="group" >
+                    Kategori Inventory
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="group" name="group" class="form-control col-md-7 col-xs-12 @if($errors->has('group')) parsley-error @endif">
+                        <option value="-1" @if(empty(old('group'))) selected @endif> - Pilih group - </option>
+                        @foreach($groups as $group)
+                            <option value="{{ $group->id }}" {{ old('group') == $group->id ? "selected":"" }}>{{ $group->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">
@@ -87,23 +101,18 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="group" >
-                    Kategori Inventory
-                    <span class="required">*</span>
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="machinery_type" >
+                    Tipe Alat Berat
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="group" name="group" class="form-control col-md-7 col-xs-12 @if($errors->has('group')) parsley-error @endif">
-                        <option value="-1" @if(empty(old('group'))) selected @endif> - Pilih group - </option>
-                        @foreach($groups as $group)
-                            <option value="{{ $group->id }}" {{ old('group') == $group->id ? "selected":"" }}>{{ $group->name }}</option>
-                        @endforeach
-                    </select>
+                    <input id="machinery_type" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('machinery_type')) parsley-error @endif"
+                           name="machinery_type" value="{{ old('machinery_type') }}">
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="valuation" >
-                    Harga Beli per UOM
+                    Nilai Beli per UOM
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12 price-format">
                     <input id="valuation" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('code')) parsley-error @endif"

@@ -21,7 +21,7 @@
                 <th>No</th>
                 <th>Kode Item</th>
                 <th>Nama Item</th>
-                <th>Jumlah Pengurangan</th>
+                <th>QTY Pengurangan</th>
                 <th>Gudang</th>
                 <th>Dibuat Oleh</th>
                 <th>Tanggal Dibuat</th>

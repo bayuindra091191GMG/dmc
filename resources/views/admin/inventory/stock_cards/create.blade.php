@@ -58,7 +58,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="increase">
-                    Jumlah Penambahan
+                    QTY Penambahan
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12 price-format">
                     <input id="increase" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('increase')) parsley-error @endif"
