@@ -281,17 +281,30 @@ class UserController extends Controller
         try{
             $userAuth = Auth::user();
             $now = Carbon::now('Asia/Jakarta');
+            $flag = 1;
 
-            $user = User::find($request->input('id'));
-            $user->status_id = 10;
-            $user->updated_by = $userAuth->id;
-            $user->updated_at = $now->toDateTimeString();
-            $tempImg = public_path('storage/img_sign/'.$user->img_path);
-            if(file_exists($tempImg)) unlink($tempImg);
-            $user->save();
+            //Can't Delete Your own User ID when you Login
+            //Do Some Checking for the User
+            if($userAuth->id == $request->input('id')){
+                $flag = 0;
+            }
 
-            Session::flash('message', 'Berhasil menghapus data user '. $user->email);
-            return Response::json(array('success' => 'VALID'));
+            if($flag == 1){
+                $user = User::find($request->input('id'));
+                $user->status_id = 10;
+                $user->updated_by = $userAuth->id;
+                $user->updated_at = $now->toDateTimeString();
+                $tempImg = public_path('storage/img_sign/'.$user->img_path);
+                if(file_exists($tempImg)) unlink($tempImg);
+                $user->save();
+
+                Session::flash('message', 'Berhasil menghapus data user '. $user->email);
+                return Response::json(array('success' => 'VALID'));
+            }
+            else{
+                Session::flash('error', 'Tidak bisa menghapus data user sendiri!');
+                return Response::json(array('success' => 'VALID'));
+            }
         }
         catch(\Exception $ex){
             return Response::json(array('errors' => 'INVALID'));

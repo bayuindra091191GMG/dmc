@@ -5,6 +5,7 @@
 @section('content')
     <div class="row">
         @include('partials._success')
+        @include('partials._error')
         <div class="nav navbar-right">
             <a href="{{ route('admin.users.create') }}" class="btn btn-app">
                 <i class="fa fa-plus"></i> Tambah
