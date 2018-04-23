@@ -29,7 +29,7 @@ class MaterialRequestHeaderTransformer extends TransformerAbstract
         $url = 'default';
         if($header->type === 1){
             $url = 'inventory';
-            $typeStr = 'Inventory';
+            $typeStr = 'Part/Non-Part';
         }
         else if($header->type === 2){
             $url = 'bbm';

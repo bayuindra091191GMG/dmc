@@ -91,14 +91,28 @@ class DocketController extends Controller
             $sysNo = NumberingSystem::where('doc_id', '1')->first();
             $document = Document::where('id', '1')->first();
             $docketNumber = Utilities::GenerateNumber($document->code, $sysNo->next_no);
+
+            // Check existing number
+            $check = IssuedDocketHeader::where('code', $docketNumber)->first();
+            if($check != null){
+                return redirect()->back()->withErrors('Nomor Issued Docket sudah terdaftar!', 'default')->withInput($request->all());
+            }
+
             $sysNo->next_no++;
             $sysNo->save();
         }
         else{
             if(empty(Input::get('code'))){
-                return redirect()->back()->withErrors('No Issued Docket Wajib Diisi!', 'default')->withInput($request->all());
+                return redirect()->back()->withErrors('Nomor Issued Docket wajib diisi!', 'default')->withInput($request->all());
             }
+
             $docketNumber = Input::get('code');
+
+            // Check existing number
+            $check = IssuedDocketHeader::where('code', $docketNumber)->first();
+            if($check != null){
+                return redirect()->back()->withErrors('Nomor Issued Docket sudah terdaftar!', 'default')->withInput($request->all());
+            }
         }
 
         // Validate details

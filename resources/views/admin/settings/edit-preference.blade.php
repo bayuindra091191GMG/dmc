@@ -83,18 +83,13 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="ppn" >
-                    Approval Setting
-                    <span class="required">*</span>
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="approval_setting" >
+                    Fitur Approval Dokumen
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <select id="approval_setting" name="approval_setting" class="form-control col-md-7 col-xs-12">
-                        <option value="0">Not Active</option>
-                        @if($preference->approval_setting == 1)
-                            <option value="1" selected>Active</option>
-                        @else
-                            <option value="1">Active</option>
-                        @endif
+                        <option value="0" @if($preference->approval_setting == 0) selected @endif>OFF</option>
+                        <option value="1" @if($preference->approval_setting == 1) selected @endif>ON</option>
                     </select>
                 </div>
             </div>

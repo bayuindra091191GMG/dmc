@@ -110,11 +110,24 @@ class DeliveryOrderHeaderController extends Controller
         if($request->input('auto_number')){
             $sysNo = NumberingSystem::where('doc_id', '8')->first();
             $doCode = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
+
+            // Check existing number
+            $temp = DeliveryOrderHeader::where('code', $doCode)->first();
+            if(!empty($temp)){
+                return redirect()->back()->withErrors('Nomor Surat Jalan sudah terpakai!', 'default')->withInput($request->all());
+            }
+
             $sysNo->next_no++;
             $sysNo->save();
         }
         else{
             $doCode = $request->input('do_code');
+
+            // Check existing number
+            $temp = DeliveryOrderHeader::where('code', $doCode)->first();
+            if(!empty($temp)){
+                return redirect()->back()->withErrors('Nomor Surat Jalan sudah terpakai!', 'default')->withInput($request->all());
+            }
         }
 
         // Get PR id
@@ -124,12 +137,6 @@ class DeliveryOrderHeaderController extends Controller
         }
         else{
             $prId = $request->input('pr_id');
-        }
-
-        // Check existing number
-        $temp = DeliveryOrderHeader::where('code', $doCode)->first();
-        if(!empty($temp)){
-            return redirect()->back()->withErrors('Nomor Surat Jalan sudah terpakai!', 'default')->withInput($request->all());
         }
 
         // Validate details

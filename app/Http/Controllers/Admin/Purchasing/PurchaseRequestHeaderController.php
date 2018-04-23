@@ -183,28 +183,6 @@ class PurchaseRequestHeaderController extends Controller
             return redirect()->back()->withErrors('Pilih departemen!', 'default')->withInput($request->all());
         }
 
-        // Validate priority
-//        if($request->input('priority') === '-1'){
-//            return redirect()->back()->withErrors('Pilih prioritas!', 'default')->withInput($request->all());
-//        }
-
-        // Generate auto number
-        $prCode = 'default';
-        if($request->filled('auto_number')){
-            $sysNo = NumberingSystem::where('doc_id', '3')->first();
-            $prCode = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
-            $sysNo->next_no++;
-            $sysNo->save();
-        }
-        else{
-            $prCode = $request->input('pr_code');
-        }
-
-        // Check existing number
-        if(PurchaseOrderHeader::where('code', $prCode)->exists()){
-            return redirect()->back()->withErrors('Nomor PR sudah terdaftar!', 'default')->withInput($request->all());
-        }
-
         // Validate details
         $items = $request->input('item');
 
@@ -257,26 +235,51 @@ class PurchaseRequestHeaderController extends Controller
             return redirect()->back()->withErrors('Kuantitas inventory melebihi kuantitas MR!', 'default')->withInput($request->all());
         }
 
+        // Generate auto number
+        $prCode = 'default';
+        if($request->filled('auto_number')){
+            $sysNo = NumberingSystem::where('doc_id', '3')->first();
+            $prCode = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
+
+            // Check existing number
+            if(PurchaseOrderHeader::where('code', $prCode)->exists()){
+                return redirect()->back()->withErrors('Nomor PR sudah terdaftar!', 'default')->withInput($request->all());
+            }
+
+            $sysNo->next_no++;
+            $sysNo->save();
+        }
+        else{
+            $prCode = $request->input('pr_code');
+
+            // Check existing number
+            if(PurchaseOrderHeader::where('code', $prCode)->exists()){
+                return redirect()->back()->withErrors('Nomor PR sudah terdaftar!', 'default')->withInput($request->all());
+            }
+        }
+
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
         $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+        $limitDate = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
 
         $priority = $request->input('priority');
-
         if($priority == '1'){
-            $limitDate = $date->addDays(8);
+            $limitDate->addDays(8);
         }
         elseif($priority == '2'){
-            $limitDate = $date->addDays(15);
+            $limitDate->addDays(15);
         }
         else{
-            $limitDate = $date->addDays(22);
+            $limitDate->addDays(22);
         }
 
+        dd('date '. $date. ' limitDate '. $limitDate);
 
         $prHeader = PurchaseRequestHeader::create([
             'code'                  => $prCode,
             'material_request_id'   => $mrId,
+            'date'                  => $date->toDateTimeString(),
             'department_id'         => $request->input('department'),
             'priority'              => $request->input('priority'),
             'priority_limit_date'   => $limitDate->toDateTimeString(),
@@ -285,16 +288,12 @@ class PurchaseRequestHeaderController extends Controller
             'status_id'             => 3,
             'created_by'            => $user->id,
             'created_at'            => $now->toDateTimeString()
-
         ]);
 
         if($request->filled('machinery_id')){
             $prHeader->machinery_id = $request->input('machinery_id');
             $prHeader->save();
         }
-
-        $prHeader->date = $date->toDateTimeString();
-        $prHeader->save();
 
         // Create purchase request detail
         $qty = $request->input('qty');
@@ -354,27 +353,23 @@ class PurchaseRequestHeaderController extends Controller
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
         $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+        $limitDate = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
 
         if($purchase_request->priority == '1'){
-            $limitDate = $date->addDays(8);
+            $limitDate->addDays(8);
         }
         elseif($purchase_request->priority== '2'){
-            $limitDate = $date->addDays(15);
+            $limitDate->addDays(15);
         }
         else{
-            $limitDate = $date->addDays(22);
+            $limitDate->addDays(22);
         }
 
         $purchase_request->department_id = $request->input('department');
-        $purchase_request->priority = $request->input('priority');
         $purchase_request->priority_limit_date = $limitDate->toDateTimeString();
-        $purchase_request->km = $request->input('km');
-        $purchase_request->hm = $request->input('hm');
         $purchase_request->date = $date;
         $purchase_request->updated_by = $user->id;
         $purchase_request->updated_at = $now->toDateTimeString();
-        $purchase_request->machinery_id = $request->input('machinery_id');
-
         $purchase_request->save();
 
         Session::flash('message', 'Berhasil ubah purchase request!');

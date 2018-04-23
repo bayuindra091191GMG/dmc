@@ -90,21 +90,28 @@ class PurchaseInvoiceHeaderController extends Controller
         if($request->filled('auto_number')){
             $sysNo = NumberingSystem::where('doc_id', '6')->first();
             $invCode = Utilities::GenerateNumberPurchaseOrder($sysNo->document->code, $sysNo->next_no);
+
+            // Check existing number
+            if(PurchaseInvoiceHeader::where('code', $invCode)->exists()){
+                return redirect()->back()->withErrors('Nomor Invoice sudah terdaftar!', 'default')->withInput($request->all());
+            }
+
             $sysNo->next_no++;
             $sysNo->save();
         }
         else{
             $invCode = $request->input('code');
+
+            // Check existing number
+            if(PurchaseInvoiceHeader::where('code', $invCode)->exists()){
+                return redirect()->back()->withErrors('Nomor Invoice sudah terdaftar!', 'default')->withInput($request->all());
+            }
         }
 
         // Get PO id
         $poId = $request->input('po_id');
 
-        // Check existing number
-//        $temp = PurchaseInvoiceHeader::where('code', $invCode)->first();
-        if(PurchaseInvoiceHeader::where('code', $invCode)->exists()){
-            return redirect()->back()->withErrors('Nomor Invoice sudah terdaftar!', 'default')->withInput($request->all());
-        }
+
 
         // Validate details
         $items = $request->input('item_value');

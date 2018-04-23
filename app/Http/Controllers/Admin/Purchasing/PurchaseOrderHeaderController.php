@@ -161,14 +161,14 @@ class PurchaseOrderHeaderController extends Controller
         }
 
         // Validate PO number
-        if(empty(Input::get('auto_number')) && (empty(Input::get('po_code')) || Input::get('po_code') == "")){
+        if(!$request->filled('auto_number') && (!$request->filled('po_code') || $request->input('po_code') == "")){
             return redirect()->back()->withErrors('Nomor PO wajib diisi!', 'default')->withInput($request->all());
         }
 
-        // Validate PR number
-//        if(empty(Input::get('pr_code')) && empty(Input::get('pr_id'))){
-//            return redirect()->back()->withErrors('Nomor PR wajib diisi!', 'default')->withInput($request->all());
-//        }
+        // Validate Vendor
+        if(!$request->filled('supplier') || $request->input('supplier') === '-1'){
+            return redirect()->back()->withErrors('Pilih vendor!', 'default')->withInput($request->all());
+        }
 
         // Validate details
         $items = $request->input('item_value');
@@ -218,30 +218,39 @@ class PurchaseOrderHeaderController extends Controller
             }
         }
 
+        if(!$validItem){
+            return redirect()->back()->withErrors('Inventory tidak ada dalam PR!', 'default')->withInput($request->all());
+        }
+        if(!$validQty){
+            return redirect()->back()->withErrors('Kuantitas inventory melebihi kuantitas inventory pada PR!', 'default')->withInput($request->all());
+        }
+
         // Generate auto number
         $poCode = 'default';
         if(Input::get('auto_number')){
             $sysNo = NumberingSystem::where('doc_id', '4')->first();
             $poCode = Utilities::GenerateNumberPurchaseOrder($sysNo->document->code, $sysNo->next_no);
+
+            // Check existing number
+            $temp = PurchaseOrderHeader::where('code', $poCode)->first();
+            if(!empty($temp)){
+                return redirect()->back()->withErrors('Nomor PO sudah terdaftar!', 'default')->withInput($request->all());
+            }
+
             $sysNo->next_no++;
             $sysNo->save();
         }
         else{
-            $poCode = Input::get('po_code');
+            $poCode = $request->input('po_code');
+
+            // Check existing number
+            $temp = PurchaseOrderHeader::where('code', $poCode)->first();
+            if(!empty($temp)){
+                return redirect()->back()->withErrors('Nomor PO sudah terdaftar!', 'default')->withInput($request->all());
+            }
         }
 
-        // Check existing number
-        $temp = PurchaseOrderHeader::where('code', $poCode)->first();
-        if(!empty($temp)){
-            return redirect()->back()->withErrors('Nomor PO sudah terdaftar!', 'default')->withInput($request->all());
-        }
 
-        if(!$validItem){
-            return redirect()->back()->withErrors('Inventory tidak ada dalam PR!', 'default')->withInput($request->all());
-        }
-        if(!$validQty){
-            return redirect()->back()->withErrors('Kuantitas inventory melebihi kuantitas PR!', 'default')->withInput($request->all());
-        }
 
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');

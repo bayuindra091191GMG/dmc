@@ -129,6 +129,8 @@
                                         <li>{{ $stock->warehouse->name }} tersedia {{ $stock->item->code }} ({{ $stock->item->name }}) sebanyak {{ $stock->stock }} {{ $stock->item->uom }}</li>
                                     @endforeach
                                 </ul>
+                                <br/>
+                                <a class="btn btn-default" href="{{ route('admin.issued_dockets.create', ['mr' => $header->id]) }}">PROSES ISSUED DOCKET</a>
                             </div>
                         </div>
                     </div>

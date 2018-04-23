@@ -358,11 +358,11 @@
                         <input type="hidden" name="deleted_id"/>
                     </form>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger delete" data-dismiss="modal">
-                            <span id="" class='glyphicon glyphicon-trash'></span> Hapus
-                        </button>
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
                             <span class='glyphicon glyphicon-remove'></span> Batal
+                        </button>
+                        <button type="button" class="btn btn-danger delete" data-dismiss="modal">
+                            <span id="" class='glyphicon glyphicon-trash'></span> Hapus
                         </button>
                     </div>
                 </div>
@@ -558,7 +558,7 @@
             }
 
             if(!qtyAdd || qtyAdd === "" || qtyAdd === "0"){
-                alert('Mohon isi kuantitas...')
+                alert('Mohon isi kuantitas...');
                 return false;
             }
 
@@ -649,6 +649,11 @@
             var qtyEdit = $('#qty_edit').val();
             var remarkEdit = $('#remark_edit').val();
 
+            if(!qtyEdit || qtyEdit === ""){
+                alert('Mohon isi kuantitas!')
+                return false;
+            }
+
             // Split item value
             var data = "default";
             if(itemEdit && itemEdit !== ''){
@@ -698,7 +703,15 @@
             $('#deleteModal').modal('show');
         });
         $('.modal-footer').on('click', '.delete', function() {
-            // Decrease idx
+
+            // Validate table rows count
+            var rows = document.getElementById('detail_table').getElementsByTagName("tbody")[0].getElementsByTagName("tr").length;
+            if(rows === 1){
+                alert('Detail PR harus minimal satu!');
+                return false;
+            }
+
+            // Decrease idx counter
             var idx = $('#index_counter').val();
             idx--;
             $('#index_counter').val(idx);

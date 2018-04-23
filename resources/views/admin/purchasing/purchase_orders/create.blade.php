@@ -603,19 +603,19 @@
             var itemAdd = $('#item_add').val();
 
             if(!itemAdd || itemAdd === ""){
-                alert('Mohon pilih barang...');
+                alert('Mohon pilih barang!');
                 return false;
             }
 
             if(!qtyAdd || qtyAdd === "" || qtyAdd === "0"){
-                alert('Mohon isi jumlah...')
+                alert('Mohon isi kuantitas!')
                 return false;
             }
 
             var priceAdd = $('#price_add').val();
 
             if(!priceAdd || priceAdd === "" || priceAdd === "0"){
-                alert('Mohon isi harga...')
+                alert('Mohon isi harga!')
                 return false;
             }
 
@@ -761,7 +761,7 @@
             var remarkEdit = $('#remark_edit').val();
 
             if(!qtyEdit || qtyEdit === "" || qtyEdit === "0"){
-                alert('Mohon isi jumlah...')
+                alert('Mohon isi kuantitas...')
                 return false;
             }
 
@@ -773,7 +773,6 @@
             // Split item value
             var data = "default";
             if(itemEdit && itemEdit !== ''){
-                alert(itemEdit);
                 data = itemEdit;
             }
             else {
@@ -821,8 +820,6 @@
                 sbEdit.append("<td><input type='text' name='discount[]' class='form-control' value='0' readonly/></td>");
             }
 
-
-
             var subtotal = 0;
             var totalPrice = price * qty;
             if(discount > 0){
@@ -831,8 +828,6 @@
             else{
                 subtotal = totalPrice;
             }
-
-
 
             var subtotalString = rupiahFormat(subtotal);
 
@@ -859,6 +854,14 @@
             $('#deleteModal').modal('show');
         });
         $('.modal-footer').on('click', '.delete', function() {
+
+            // Validate table rows count
+            var rows = document.getElementById('detail_table').getElementsByTagName("tbody")[0].getElementsByTagName("tr").length;
+            if(rows === 1){
+                alert('Detail PO harus minimal satu!');
+                return false;
+            }
+
             // Decrease idx
             var idx = $('#index_counter').val();
             idx--;

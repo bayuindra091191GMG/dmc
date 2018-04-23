@@ -98,20 +98,28 @@ class ItemReceiptController extends Controller
             $sysNo = NumberingSystem::where('doc_id', '2')->first();
             $document = Document::where('id', '2')->first();
             $itemReceiptNumber = Utilities::GenerateNumber($document->code, $sysNo->next_no);
+
+            // Check existing number
+            $check = ItemReceiptHeader::where('code', $itemReceiptNumber)->first();
+            if($check != null){
+                return redirect()->back()->withErrors('Nomor Goods Receipt sudah terdaftar!', 'default')->withInput($request->all());
+            }
+
             $sysNo->next_no++;
             $sysNo->save();
         }
         else{
             if(empty(Input::get('code'))){
-                return redirect()->back()->withErrors('No Good Receipt Wajib Diisi!', 'default')->withInput($request->all());
+                return redirect()->back()->withErrors('Nomor Goods Receipt Wajib Diisi!', 'default')->withInput($request->all());
             }
-            $itemReceiptNumber = Input::get('code');
-        }
 
-        //Check Code
-        $check = ItemReceiptHeader::where('code', $itemReceiptNumber)->first();
-        if($check != null){
-            return redirect()->back()->withErrors('Nomor Good Receipt Sudah terdaftar!', 'default')->withInput($request->all());
+            $itemReceiptNumber = Input::get('code');
+
+            // Check existing number
+            $check = ItemReceiptHeader::where('code', $itemReceiptNumber)->first();
+            if($check != null){
+                return redirect()->back()->withErrors('Nomor Goods Receipt sudah terdaftar!', 'default')->withInput($request->all());
+            }
         }
 
         // Validate details

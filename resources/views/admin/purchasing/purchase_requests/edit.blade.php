@@ -43,11 +43,11 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
+                <label class="control-label col-lg-3 col-md-3 col-sm-3 col-xs-12" for="date">
                     Tanggal
                     <span class="required">*</span>
                 </label>
-                <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
                     <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
                            name="date" value="{{ $date }}" required>
                 </div>
@@ -80,7 +80,6 @@
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="machinery" >
                     Unit Alat Berat
-                    <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="machinery" type="text" class="form-control col-md-7 col-xs-12"
@@ -140,7 +139,7 @@
                 {{--<span class="glyphicon glyphicon-plus-sign"></span> Tambah--}}
             {{--</button>--}}
             <div class="table-responsive">
-                <table class="table table-bordered table-hover" id="detailTable">
+                <table class="table table-bordered table-hover" id="detail_table">
                     <thead>
                     <tr >
                         <th class="text-center">
@@ -364,29 +363,6 @@
 
         var i=1;
 
-        $('#machinery').select2({
-            placeholder: {
-                id: '{{ $header->machinery_id ?? '-1' }}',
-                text: '{{ $header->machinery_id !== null ? $header->machinery->code : ' - Pilih Alat Berat - ' }}'
-            },
-            width: '100%',
-            minimumInputLength: 1,
-            ajax: {
-                url: '{{ route('select.machineries') }}',
-                dataType: 'json',
-                data: function (params) {
-                    return {
-                        q: $.trim(params.term)
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                }
-            }
-        });
-
         $('#select0').select2({
             placeholder: {
                 id: '-1',
@@ -486,7 +462,7 @@
                         if (data.remark !== null) {
                             remarkAdd = data.remark;
                         }
-                        $('#detailTable').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uom + "</td><td>" + data.quantity + "</td><td>" + remarkAdd + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
+                        $('#detail_table').append("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td>" + data.item.uom + "</td><td>" + data.quantity + "</td><td>" + remarkAdd + "</td><td>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
 
                     }
                 },
@@ -534,6 +510,12 @@
             $('#editModal').modal('show');
         });
         $('.modal-footer').on('click', '.edit', function() {
+            var qtyEdit = $('#qty_edit').val();
+            if(!qtyEdit || qtyEdit === "" || qtyEdit === "0"){
+                alert('Mohon isi kuantitas!');
+                return false;
+            }
+
             $.ajax({
                 type: 'PUT',
                 url: '{{ route('admin.purchase_request_details.update') }}',
@@ -541,7 +523,7 @@
                     '_token': $('input[name=_token]').val(),
                     'id' : id,
                     'item': $("#item_edit").val(),
-                    'qty': $('#qty_edit').val(),
+                    'qty': qtyEdit,
                     'remark': $('#remark_edit').val()
                 },
                 success: function(data) {
@@ -585,6 +567,13 @@
             deletedId = $(this).data('id')
         });
         $('.modal-footer').on('click', '.delete', function() {
+            // Validate table rows count
+            var rows = document.getElementById('detail_table').getElementsByTagName("tbody")[0].getElementsByTagName("tr").length;
+            if(rows === 1){
+                alert('Detail PR harus minimal satu!');
+                return false;
+            }
+
             $.ajax({
                 type: 'POST',
                 url: '{{ route('admin.purchase_request_details.delete') }}',

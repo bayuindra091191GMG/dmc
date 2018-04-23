@@ -306,16 +306,22 @@ class MaterialRequestHeaderController extends Controller
         if($request->filled('auto_number')){
             $sysNo = NumberingSystem::where('doc_id', $docId)->first();
             $mrCode = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
+
+            // Check existing number
+            if(MaterialRequestHeader::where('code', $mrCode)->exists()){
+                return redirect()->back()->withErrors('Nomor MR sudah terdaftar!', 'default')->withInput($request->all());
+            }
+
             $sysNo->next_no++;
             $sysNo->save();
         }
         else{
             $mrCode = $request->input('mr_code');
-        }
 
-        // Check existing number
-        if(MaterialRequestHeader::where('code', $mrCode)->exists()){
-            return redirect()->back()->withErrors('Nomor MR sudah terdaftar!', 'default')->withInput($request->all());
+            // Check existing number
+            if(MaterialRequestHeader::where('code', $mrCode)->exists()){
+                return redirect()->back()->withErrors('Nomor MR sudah terdaftar!', 'default')->withInput($request->all());
+            }
         }
 
         // Validate details
@@ -335,7 +341,7 @@ class MaterialRequestHeaderController extends Controller
         }
 
         if(!$valid){
-            return redirect()->back()->withErrors('Detail inventory dan jumlah wajib diisi!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Detail inventory dan kuantitas wajib diisi!', 'default')->withInput($request->all());
         }
 
         // Check duplicate inventory

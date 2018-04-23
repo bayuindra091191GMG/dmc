@@ -16,7 +16,7 @@
             <tr>
                 <th>No</th>
                 <th>Nomor MR</th>
-                <th>Jenis</th>
+                <th>Jenis MR</th>
                 <th>Departemen</th>
                 <th>Kode Unit</th>
                 <th>Tanggal</th>
