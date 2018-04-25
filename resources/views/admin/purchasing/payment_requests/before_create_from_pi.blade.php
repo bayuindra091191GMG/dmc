@@ -20,16 +20,12 @@
                    width="100%" id="pi-table">
                 <thead>
                 <tr>
+                    <th class="text-center">Tindakan</th>
                     <th class="text-center">No</th>
                     <th class="text-center">Nomor Invoice</th>
                     <th class="text-center">Nomor PO</th>
-                    <th class="text-center">Nama Vendor</th>
-                    <th class="text-center">Total Harga</th>
-                    <th class="text-center">Total Diskon</th>
-                    <th class="text-center">Ongkos Kirim</th>
                     <th class="text-center">Total Invoice</th>
                     <th class="text-center">Tanggal</th>
-                    <th class="text-center">Perlunasan</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -66,16 +62,12 @@
                     }
                 },
                 columns: [
+                    { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center' },
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center' },
                     { data: 'code', name: 'code', class: 'text-center' },
                     { data: 'po_code', name: 'po_code', class: 'text-center' },
-                    { data: 'supplier', name: 'supplier', class: 'text-center' },
-                    { data: 'total_price', name: 'total_price', class: 'text-right' },
-                    { data: 'total_discount', name: 'total_discount', class: 'text-right' },
-                    { data: 'delivery_fee', name: 'delivery_fee', class: 'text-right' },
                     { data: 'total_payment', name: 'total_payment', class: 'text-right' },
-                    { data: 'created_at', name: 'created_at', class: 'text-center' },
-                    { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center' }
+                    { data: 'created_at', name: 'created_at', class: 'text-center' }
                 ],
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"
