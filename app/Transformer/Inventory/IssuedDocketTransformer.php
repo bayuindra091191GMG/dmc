@@ -17,7 +17,7 @@ use League\Fractal\TransformerAbstract;
 class IssuedDocketTransformer extends TransformerAbstract
 {
     public function transform(IssuedDocketHeader $header){
-        $createdDate = Carbon::parse($header->created_at)->format('d M Y');
+        $date = Carbon::parse($header->date)->format('d M Y');
 
         $code = "<a style='text-decoration: underline;' href='issued_dockets/detil/" . $header->id. "'>". $header->code. "</a>";
 
@@ -47,8 +47,8 @@ class IssuedDocketTransformer extends TransformerAbstract
             'department'        => $header->department->name,
             'no_unit'           => $machinery,
             'no_mr'             => $mrCode,
-            'division'          => $header->division,
-            'created_at'        => $createdDate,
+            'division'          => $header->division ?? '-',
+            'created_at'        => $date,
             'created_by'        => $header->createdBy->email,
             'action'            => $action
         ];

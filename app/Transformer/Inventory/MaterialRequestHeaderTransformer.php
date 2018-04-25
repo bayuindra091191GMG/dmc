@@ -53,7 +53,7 @@ class MaterialRequestHeaderTransformer extends TransformerAbstract
             $action .= "<a class='btn btn-xs btn-info' href='/admin/material_requests/". $url. "/". $header->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
         }
         else if($this->type === 'before_create_id'){
-            $route .= route('admin.issued_dockets.create', ['mr' => $header->id]);
+            $route = route('admin.issued_dockets.create', ['mr' => $header->id]);
             $action = "<a class='btn btn-xs btn-success' href='". $route . "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i> Proses Issued Docket </a>";
         }
         else{

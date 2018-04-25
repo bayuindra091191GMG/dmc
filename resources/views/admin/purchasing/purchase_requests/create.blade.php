@@ -649,7 +649,8 @@
             var qtyEdit = $('#qty_edit').val();
             var remarkEdit = $('#remark_edit').val();
 
-            if(!qtyEdit || qtyEdit === ""){
+            // Validate qty
+            if(!qtyEdit || qtyEdit === "" || qtyEdit === "0"){
                 alert('Mohon isi kuantitas!')
                 return false;
             }

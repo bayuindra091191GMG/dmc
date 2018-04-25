@@ -24,8 +24,7 @@
                 <th class="text-center">Nomor Unit Alat Berat</th>
                 <th class="text-center">Department</th>
                 <th class="text-center">Divisi</th>
-                <th class="text-center">Tanggal Dibuat</th>
-                <th class="text-center">Dibuat Oleh</th>
+                <th class="text-center">Tanggal</th>
                 <th class="text-center">Tindakan</th>
             </tr>
             </thead>
@@ -58,7 +57,6 @@
                     { data: 'department', name: 'department', class: 'text-center' },
                     { data: 'division', name: 'division', class: 'text-center' },
                     { data: 'created_at', name: 'created_at', class: 'text-center' },
-                    { data: 'created_by', name: 'created_by', class: 'text-center' },
                     { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center' }
                 ],
                 language: {

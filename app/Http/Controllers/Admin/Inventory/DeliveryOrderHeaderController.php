@@ -32,8 +32,13 @@ use PDF;
 
 class DeliveryOrderHeaderController extends Controller
 {
-    public function index(){
-        return View('admin.inventory.delivery_orders.index');
+    public function index(Request $request){
+        $filterStatus = '3';
+        if($request->status != null){
+            $filterStatus = $request->status;
+        }
+
+        return View('admin.inventory.delivery_orders.index', compact('filterStatus'));
     }
 
     public function create(){
@@ -105,42 +110,9 @@ class DeliveryOrderHeaderController extends Controller
             return redirect()->back()->withErrors('Gudang keberangkatan & tujuan harus berbeda!', 'default')->withInput($request->all());
         }
 
-        // Generate auto number
-        $doCode = 'default';
-        if($request->input('auto_number')){
-            $sysNo = NumberingSystem::where('doc_id', '8')->first();
-            $doCode = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
-
-            // Check existing number
-            $temp = DeliveryOrderHeader::where('code', $doCode)->first();
-            if(!empty($temp)){
-                return redirect()->back()->withErrors('Nomor Surat Jalan sudah terpakai!', 'default')->withInput($request->all());
-            }
-
-            $sysNo->next_no++;
-            $sysNo->save();
-        }
-        else{
-            $doCode = $request->input('do_code');
-
-            // Check existing number
-            $temp = DeliveryOrderHeader::where('code', $doCode)->first();
-            if(!empty($temp)){
-                return redirect()->back()->withErrors('Nomor Surat Jalan sudah terpakai!', 'default')->withInput($request->all());
-            }
-        }
-
-        // Get PR id
-        $prId = '0';
-        if($request->filled('pr_code')){
-            $prId = $request->input('pr_code');
-        }
-        else{
-            $prId = $request->input('pr_id');
-        }
-
         // Validate details
         $items = $request->input('item');
+        $remarks = $request->input('remark');
 
         if(count($items) == 0){
             return redirect()->back()->withErrors('Detail barang wajib diisi!', 'default')->withInput($request->all());
@@ -177,6 +149,40 @@ class DeliveryOrderHeaderController extends Controller
             return redirect()->back()->withErrors('Stok barang kosong atau tidak ada!', 'default')->withInput($request->all());
         }
 
+        // Generate auto number
+        $doCode = 'default';
+        if($request->input('auto_number')){
+            $sysNo = NumberingSystem::where('doc_id', '8')->first();
+            $doCode = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
+
+            // Check existing number
+            $temp = DeliveryOrderHeader::where('code', $doCode)->first();
+            if(!empty($temp)){
+                return redirect()->back()->withErrors('Nomor Surat Jalan sudah terpakai!', 'default')->withInput($request->all());
+            }
+
+            $sysNo->next_no++;
+            $sysNo->save();
+        }
+        else{
+            $doCode = $request->input('do_code');
+
+            // Check existing number
+            $temp = DeliveryOrderHeader::where('code', $doCode)->first();
+            if(!empty($temp)){
+                return redirect()->back()->withErrors('Nomor Surat Jalan sudah terpakai!', 'default')->withInput($request->all());
+            }
+        }
+
+        // Get PR id
+        $prId = '0';
+        if($request->filled('pr_code')){
+            $prId = $request->input('pr_code');
+        }
+        else{
+            $prId = $request->input('pr_id');
+        }
+
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
@@ -198,8 +204,13 @@ class DeliveryOrderHeaderController extends Controller
             $doHeader->purchase_request_id = $request->input('pr_id');
         }
 
-        if(!empty($request->input('machinery'))){
+        if($request->filled('machinery')){
             $doHeader->machinery_id = $request->input('machinery');
+        }
+        else{
+            if($request->filled('machinery_id')){
+                $doHeader->machinery_id = $request->input('machinery_id');
+            }
         }
 
         if($request->filled('remark')){
@@ -212,7 +223,6 @@ class DeliveryOrderHeaderController extends Controller
         $doHeader->save();
 
         // Create delivery order detail
-        $remarks = $request->input('remark');
         $idx = 0;
         foreach($request->input('item') as $item){
             if(!empty($item)){
@@ -327,8 +337,12 @@ class DeliveryOrderHeaderController extends Controller
 
             $header = DeliveryOrderHeader::find($request->input('id'));
 
-            foreach($header->delivery_order_details as $detail){
+            // Validate status
+            if($header->status_id != 3){
+                return Response::json(array('errors' => 'INVALID'));
+            }
 
+            foreach($header->delivery_order_details as $detail){
 
                 // Decrease transport warehouse stock
                 $stockTransport = ItemStock::where('warehouse_id', 0)
@@ -338,7 +352,7 @@ class DeliveryOrderHeaderController extends Controller
                 $stockTransport->save();
 
                 // Increase arrival warehouse stock
-                $stockArrival = ItemStock::where('warehouse_id', $header->toSite->warehouse_id)
+                $stockArrival = ItemStock::where('warehouse_id', $header->to_warehouse_id)
                     ->where('item_id', $detail->item_id)
                     ->first();
 
@@ -352,7 +366,7 @@ class DeliveryOrderHeaderController extends Controller
                 }
                 else{
                     $newStock = new ItemStock();
-                    $newStock->warehouse_id = $header->toSite->warehouse_id;
+                    $newStock->warehouse_id = $header->to_warehouse_id;
                     $newStock->item_id = $detail->item_id;
                     $newStock->stock = $detail->quantity;
                     $newStock->created_by = $user->id;
@@ -370,7 +384,7 @@ class DeliveryOrderHeaderController extends Controller
                     'stock'         => $stockResult,
                     'flag'          => '+',
                     'description'   => 'Surat Jalan '. $header->code,
-                    'warehouse_id'  => $header->toSite->warehouse_id,
+                    'warehouse_id'  => $header->to_warehouse_id,
                     'created_by'    => $user->id,
                     'created_at'    => $now->toDateTimeString()
                 ]);
@@ -388,6 +402,7 @@ class DeliveryOrderHeaderController extends Controller
             return Response::json(array('success' => 'VALID'));
         }
         catch(\Exception $ex){
+            error_log($ex);
             return Response::json(array('errors' => 'INVALID'));
         }
     }
@@ -399,6 +414,11 @@ class DeliveryOrderHeaderController extends Controller
 
             $header = DeliveryOrderHeader::find($request->input('id'));
 
+            // Validate status
+            if($header->status_id != 3){
+                return Response::json(array('errors' => 'INVALID'));
+            }
+
             foreach($header->delivery_order_details as $detail){
                 // Decrease transport warehouse stock
                 $stockTransport = ItemStock::where('warehouse_id', 0)
@@ -407,8 +427,8 @@ class DeliveryOrderHeaderController extends Controller
                 $stockTransport->stock -= $detail->quantity;
                 $stockTransport->save();
 
-                // Restore departure warehouse stock
-                $stockArrival = ItemStock::where('warehouse_id', $header->fromSite->warehouse_id)
+                // Restore from warehouse stock
+                $stockArrival = ItemStock::where('warehouse_id', $header->from_warehouse_id)
                     ->where('item_id', $detail->item_id)
                     ->first();
                 if(!empty($stockArrival)){
@@ -418,7 +438,7 @@ class DeliveryOrderHeaderController extends Controller
                 }
                 else{
                     $newStock = new ItemStock();
-                    $newStock->warehouse_id = $header->toSite->warehouse_id;
+                    $newStock->warehouse_id = $header->from_warehouse_id;
                     $newStock->item_id = $detail->item_id;
                     $newStock->stock = $detail->quantity;
                     $newStock->created_by = $user->id;
@@ -440,16 +460,33 @@ class DeliveryOrderHeaderController extends Controller
             return Response::json(array('success' => 'VALID'));
         }
         catch(\Exception $ex){
+            error_log($ex);
             return Response::json(array('errors' => 'INVALID'));
         }
     }
 
     /**
+     * @param Request $request
      * @return mixed
-     * @throws \Exception
      */
-    public function getIndex(){
-        $deliveryOrders = DeliveryOrderHeader::dateDescending()->get();
+    public function getIndex(Request $request){
+
+        $status = '0';
+        if($request->filled('status')){
+            $status = $request->input('status');
+            if($status != '0'){
+                $deliveryOrders = DeliveryOrderHeader::where('status_id', $status)
+                    ->dateDescending()
+                    ->get();
+            }
+            else{
+                $deliveryOrders = DeliveryOrderHeader::dateDescending()->get();
+            }
+        }
+        else{
+            $deliveryOrders = DeliveryOrderHeader::dateDescending()->get();
+        }
+
         return DataTables::of($deliveryOrders)
             ->setTransformer(new DeliveryOrderHeaderTransformer)
             ->addIndexColumn()

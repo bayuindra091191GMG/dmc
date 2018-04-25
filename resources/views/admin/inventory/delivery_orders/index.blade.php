@@ -6,6 +6,19 @@
 
     <div class="row">
         @include('partials._success')
+        <div class="nav navbar-left">
+            <form class="form-inline" style="margin-bottom: 10px;">
+                <div class="form-group">
+                    <label for="filter-status">Status:</label>
+                    <select id="filter-status" class="form-control" onchange="filterStatus(this)">
+                        <option value="0" @if($filterStatus == '0') selected @endif>Semua</option>
+                        <option value="3" @if($filterStatus == '3') selected @endif>Open</option>
+                        <option value="4" @if($filterStatus == '4') selected @endif>Close</option>
+                        <option value="5" @if($filterStatus == '5') selected @endif>Cancel</option>
+                    </select>
+                </div>
+            </form>
+        </div>
         <div class="nav navbar-right">
             <a href="{{ route('admin.delivery_orders.create') }}" class="btn btn-app">
                 <i class="fa fa-plus"></i> Tambah
@@ -80,7 +93,7 @@
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
                             <span class='glyphicon glyphicon-remove'></span> Tidak
                         </button>
-                        <button type="submit" class="btn btn-success confirm">
+                        <button type="submit" class="btn btn-success cancel">
                             <span class='glyphicon glyphicon-check'></span> Ya
                         </button>
                     </div>
@@ -94,17 +107,24 @@
 @section('styles')
     @parent
     {{ Html::style(mix('assets/admin/css/datatables.css')) }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 @endsection
 
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/datatables.js')) }}
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         $(function() {
             $('#pr-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('datatables.delivery_orders') !!}',
+                ajax: {
+                    url: '{!! route('datatables.delivery_orders') !!}',
+                    data: {
+                        'status': '{{ $filterStatus }}'
+                    }
+                },
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
                     { data: 'code', name: 'code', class: 'text-center'},
@@ -122,6 +142,15 @@
                 }
             });
         });
+
+        function filterStatus(e){
+            // Get status filter value
+            var status = e.value;
+
+            var url = "/admin/delivery_orders?status=" + status;
+
+            window.location = url;
+        }
 
         $(document).on('click', '.confirm-modal', function(){
             $('#confirm_modal').modal({
@@ -168,7 +197,7 @@
                 url: '{{ route('admin.delivery_orders.cancel') }}',
                 data: {
                     '_token': '{{ csrf_token() }}',
-                    'id': $('#confirmed-id').val(),
+                    'id': $('#canceled-id').val(),
                 },
                 success: function(data) {
                     if ((data.errors)){

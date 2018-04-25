@@ -114,6 +114,7 @@
                 <div class="col-md-4 col-sm-4 col-xs-12">
                     <select id="machinery" name="machinery" class="form-control col-md-7 col-xs-12 @if($errors->has('machinery')) parsley-error @endif">
                     </select>
+                    <input type="hidden" id="machinery_id" name="machinery_id" @if(!empty($purchaseRequest)) value="{{ $purchaseRequest->machinery_id }} @endif">
                 </div>
             </div>
 
@@ -183,10 +184,10 @@
                                         </td>
                                         <td>
                                             {{ $detail->remark }}
-                                            <input type='hidden' name='remark[]' value='$detail->remark'/>
+                                            <input type='hidden' name='remark[]' value='{{ $detail->remark }}'/>
                                         </td>
-                                        <td>
-                                            <?php $itemId = $detail->item_id. "#". $detail->item->code. "#". $detail->item->name ?>
+                                        <td class='text-center'>
+                                            <?php $itemId = $detail->item_id. "#". $detail->item->code. "#". $detail->item->name. "#". $detail->item->uom ?>
                                             <a class="edit-modal btn btn-info" data-id="{{ $idx }}" data-item-id="{{ $itemId }}" data-item-text="{{ $detail->item->code. ' - '. $detail->item->name }}" data-qty="{{ $detail->quantity }}" data-remark="{{ $detail->remark }}">
                                                 <span class="glyphicon glyphicon-edit"></span>
                                             </a>
@@ -236,7 +237,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="qty_add">Jumlah:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="qty_add" name="qty_add">
+                                <input type="text" class="form-control" id="qty_add" name="qty_add">
                             </div>
                         </div>
                         <div class="form-group">
@@ -329,11 +330,11 @@
                         <input type="hidden" name="deleted_id"/>
                     </form>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger delete" data-dismiss="modal">
-                            <span id="" class='glyphicon glyphicon-trash'></span> Hapus
-                        </button>
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
                             <span class='glyphicon glyphicon-remove'></span> Batal
+                        </button>
+                        <button type="button" class="btn btn-danger delete" data-dismiss="modal">
+                            <span id="" class='glyphicon glyphicon-trash'></span> Hapus
                         </button>
                     </div>
                 </div>
@@ -381,6 +382,19 @@
             }
         });
 
+        // AutoNumeric
+        qtyAddFormat = new AutoNumeric('#qty_add', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0
+        });
+
+        qtyEditFormat = new AutoNumeric('#qty_edit', {
+            minimumValue: '0',
+            digitGroupSeparator: '',
+            decimalPlaces: 0
+        });
+
         @if(!empty($purchaseRequest))
             $('#pr_code').select2({
                 placeholder: {
@@ -405,11 +419,36 @@
                     }
                 }
             });
+
+            // Get machinery data
+            $('#machinery').select2({
+                placeholder: {
+                    id: '{{ $purchaseRequest->machinery_id }}',
+                    text: '{{ $purchaseRequest->machinery->code }}'
+                },
+                width: '100%',
+                minimumInputLength: 1,
+                allowClear: true,
+                ajax: {
+                    url: '{{ route('select.machineries') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            q: $.trim(params.term)
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
         @else
             $('#pr_code').select2({
                 placeholder: {
                     id: '-1',
-                    text: 'Pilih Nomor PR...'
+                    text: ' - Pilih Nomor PR - '
                 },
                 width: '100%',
                 minimumInputLength: 1,
@@ -429,13 +468,12 @@
                     }
                 }
             });
-        @endif
 
         // Get machinery data
         $('#machinery').select2({
             placeholder: {
                 id: '-1',
-                text: 'Pilih Alat Berat...'
+                text: ' - Pilih Alat Berat - '
             },
             width: '100%',
             minimumInputLength: 1,
@@ -455,6 +493,7 @@
                 }
             }
         });
+        @endif
 
         // Get selected PR data
         $(document).on('click', '.get-pr-data', function(){
@@ -482,7 +521,7 @@
             $('#item_add').select2({
                 placeholder: {
                     id: '-1',
-                    text: 'Pilih barang...'
+                    text: ' - Pilih Inventory - '
                 },
                 width: '100%',
                 minimumInputLength: 1,
@@ -513,12 +552,12 @@
             var itemAdd = $('#item_add').val();
 
             if(!itemAdd || itemAdd === ""){
-                alert('Mohon pilih barang...');
+                alert('Mohon pilih barang!');
                 return false;
             }
 
             if(!qtyAdd || qtyAdd === "" || qtyAdd === "0"){
-                alert('Mohon isi kuantitas...')
+                alert('Mohon isi kuantitas!')
                 return false;
             }
 
@@ -550,7 +589,7 @@
             sbAdd.append("<td>" + remarkAdd);
             sbAdd.append("<input type='hidden' name='remark[]' value='" + remarkAdd + "'/></td>");
 
-            sbAdd.append("<td>");
+            sbAdd.append("<td class='text-center'>");
             sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd + "'><span class='glyphicon glyphicon-edit'></span></a>");
             sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-item-id='" + itemAdd + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyAdd + "' data-remark='" + remarkAdd + "'><span class='glyphicon glyphicon-trash'></span></a>");
             sbAdd.append("</td>");
@@ -594,7 +633,13 @@
                 }
             });
 
-            $('#qty_edit').val($(this).data('qty'));
+            qtyEditFormat.clear();
+            qtyEditFormat.set($(this).data('qty'),{
+                minimumValue: '0',
+                digitGroupSeparator: '',
+                decimalPlaces: 0
+            });
+
             $('#remark_edit').val($(this).data('remark'));
             $('#editModal').modal('show');
         });
@@ -602,6 +647,12 @@
             var itemEdit = $('#item_edit').val();
             var qtyEdit = $('#qty_edit').val();
             var remarkEdit = $('#remark_edit').val();
+
+            // Validate qty
+            if(!qtyEdit || qtyEdit === "" || qtyEdit === "0"){
+                alert('Mohon isi kuantitas!')
+                return false;
+            }
 
             // Split item value
             var data = "default";
@@ -632,7 +683,7 @@
             sbEdit.append("<td>" + remarkEdit);
             sbEdit.append("<input type='hidden' name='remark[]' value='" + remarkEdit + "'/></td>");
 
-            sbEdit.append("<td>");
+            sbEdit.append("<td class='text-center'>");
             sbEdit.append("<a class='edit-modal btn btn-info' data-id='" + id + "' data-item-id='" + itemEdit + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "'><span class='glyphicon glyphicon-edit'></span></a>");
             sbEdit.append("<a class='delete-modal btn btn-danger' data-id='" + id + "' data-item-id='" + itemEdit + "' data-item-text='" + splitted[1] + " " + splitted[2] + "' data-qty='" + qtyEdit + "' data-remark='" + remarkEdit + "'><span class='glyphicon glyphicon-trash'></span></a>");
             sbEdit.append("</td>");
@@ -652,6 +703,14 @@
             $('#deleteModal').modal('show');
         });
         $('.modal-footer').on('click', '.delete', function() {
+
+            // Validate table rows count
+            var rows = document.getElementById('detail_table').getElementsByTagName("tbody")[0].getElementsByTagName("tr").length;
+            if(rows === 1){
+                alert('Detail Surat Jalan harus minimal satu!');
+                return false;
+            }
+
             $('.item' + deletedId).remove();
         });
     </script>

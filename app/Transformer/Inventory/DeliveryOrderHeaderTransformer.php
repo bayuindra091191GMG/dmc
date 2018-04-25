@@ -28,7 +28,7 @@ class DeliveryOrderHeaderTransformer extends TransformerAbstract
 
             $action = "<a class='btn btn-xs btn-primary' href='delivery_orders/detil/". $header->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
             $action .= "<a class='confirm-modal btn btn-xs btn-success' data-id='". $header->id ."' ><i class='fa fa-check-square'></i></a>";
-            $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $header->id ."' ><i class='fa fa-times-circle'></i></a>";
+            $action .= "<a class='cancel-modal btn btn-xs btn-danger' data-id='". $header->id ."' ><i class='fa fa-times-circle'></i></a>";
 
             return[
                 'code'              => $code,

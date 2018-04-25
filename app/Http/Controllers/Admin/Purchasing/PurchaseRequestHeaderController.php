@@ -52,7 +52,14 @@ class PurchaseRequestHeaderController extends Controller
             return redirect()->route('admin.purchase_requests.before_create');
         }
 
-        $materialRequest = MaterialRequestHeader::find(request()->mr);
+        $mrId = request()->mr;
+
+        // Validate PR exists
+        if(PurchaseRequestHeader::where('material_request_id', $mrId)->exists()){
+            return redirect()->route('admin.purchase_requests.before_create');
+        }
+
+        $materialRequest = MaterialRequestHeader::find($mrId);
         $departments = Department::all();
 
         // Numbering System
@@ -273,8 +280,6 @@ class PurchaseRequestHeaderController extends Controller
         else{
             $limitDate->addDays(22);
         }
-
-        dd('date '. $date. ' limitDate '. $limitDate);
 
         $prHeader = PurchaseRequestHeader::create([
             'code'                  => $prCode,

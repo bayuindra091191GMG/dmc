@@ -82,8 +82,7 @@ class ItemReceiptController extends Controller
         $validator = Validator::make($request->all(),[
             'code'          => 'max:40',
             'date'          => 'required',
-            'po_code'       => 'required',
-            'warehouse'     => 'required'
+            'po_code'       => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -93,37 +92,13 @@ class ItemReceiptController extends Controller
                 ->withInput();
         }
 
-        //Generate AutoNumber
-        if(Input::get('auto_number')){
-            $sysNo = NumberingSystem::where('doc_id', '2')->first();
-            $document = Document::where('id', '2')->first();
-            $itemReceiptNumber = Utilities::GenerateNumber($document->code, $sysNo->next_no);
-
-            // Check existing number
-            $check = ItemReceiptHeader::where('code', $itemReceiptNumber)->first();
-            if($check != null){
-                return redirect()->back()->withErrors('Nomor Goods Receipt sudah terdaftar!', 'default')->withInput($request->all());
-            }
-
-            $sysNo->next_no++;
-            $sysNo->save();
-        }
-        else{
-            if(empty(Input::get('code'))){
-                return redirect()->back()->withErrors('Nomor Goods Receipt Wajib Diisi!', 'default')->withInput($request->all());
-            }
-
-            $itemReceiptNumber = Input::get('code');
-
-            // Check existing number
-            $check = ItemReceiptHeader::where('code', $itemReceiptNumber)->first();
-            if($check != null){
-                return redirect()->back()->withErrors('Nomor Goods Receipt sudah terdaftar!', 'default')->withInput($request->all());
-            }
+        // Validate warehouse
+        if(!$request->filled('warehouse') || $request->input('warehouse') === '-1'){
+            return redirect()->back()->withErrors('Mohon pilih gudang!', 'default')->withInput($request->all());
         }
 
         // Validate details
-        $items = Input::get('item_value');
+        $items = Input::get('item');
         $qtys = Input::get('qty');
         $valid = true;
         $i = 0;
@@ -176,6 +151,35 @@ class ItemReceiptController extends Controller
             return redirect()->back()->withErrors('Kuantitas inventory melebihi kuantitas PO!', 'default')->withInput($request->all());
         }
 
+        //Generate AutoNumber
+        if(Input::get('auto_number')){
+            $sysNo = NumberingSystem::where('doc_id', '2')->first();
+            $document = Document::where('id', '2')->first();
+            $itemReceiptNumber = Utilities::GenerateNumber($document->code, $sysNo->next_no);
+
+            // Check existing number
+            $check = ItemReceiptHeader::where('code', $itemReceiptNumber)->first();
+            if($check != null){
+                return redirect()->back()->withErrors('Nomor Goods Receipt sudah terdaftar!', 'default')->withInput($request->all());
+            }
+
+            $sysNo->next_no++;
+            $sysNo->save();
+        }
+        else{
+            if(empty(Input::get('code'))){
+                return redirect()->back()->withErrors('Nomor Goods Receipt Wajib Diisi!', 'default')->withInput($request->all());
+            }
+
+            $itemReceiptNumber = Input::get('code');
+
+            // Check existing number
+            $check = ItemReceiptHeader::where('code', $itemReceiptNumber)->first();
+            if($check != null){
+                return redirect()->back()->withErrors('Nomor Goods Receipt sudah terdaftar!', 'default')->withInput($request->all());
+            }
+        }
+
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
         $date = Carbon::parse(Input::get('date'));
@@ -195,7 +199,7 @@ class ItemReceiptController extends Controller
         // Create Item Receipt Detail
         $remark = Input::get('remark');
         $idx = 0;
-        foreach(Input::get('item_value') as $item){
+        foreach($items as $item){
             if(!empty($item)){
                 $qtyInt = (int) $qty[$idx];
 
@@ -287,7 +291,7 @@ class ItemReceiptController extends Controller
 //            $idx++;
 //        }
 
-        Session::flash('message', 'Berhasil membuat Item Receipt!');
+        Session::flash('message', 'Berhasil membuat Goods Receipt!');
 
         return redirect()->route('admin.item_receipts.show', ['item_receipts' => $itemReceiptHeader]);
     }
@@ -328,7 +332,7 @@ class ItemReceiptController extends Controller
         $itemReceiptHeader->updated_at = $now->toDateTimeString();
         $itemReceiptHeader->save();
 
-        Session::flash('message', 'Berhasil mengubah Item Receipt!');
+        Session::flash('message', 'Berhasil mengubah Goods Receipt!');
 
         return redirect()->route('admin.item_receipts.edit', ['item_receipts' => $itemReceiptHeader->id]);
     }

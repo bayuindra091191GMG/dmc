@@ -73,7 +73,8 @@ class DocketController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'code'          => 'max:40'
+            'code'          => 'max:40',
+            'date'          => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -81,38 +82,6 @@ class DocketController extends Controller
                 ->back()
                 ->withErrors($validator)
                 ->withInput();
-        }
-
-        $user = \Auth::user();
-        $now = Carbon::now('Asia/Jakarta');
-
-        //Generate AutoNumber
-        if(Input::get('auto_number')) {
-            $sysNo = NumberingSystem::where('doc_id', '1')->first();
-            $document = Document::where('id', '1')->first();
-            $docketNumber = Utilities::GenerateNumber($document->code, $sysNo->next_no);
-
-            // Check existing number
-            $check = IssuedDocketHeader::where('code', $docketNumber)->first();
-            if($check != null){
-                return redirect()->back()->withErrors('Nomor Issued Docket sudah terdaftar!', 'default')->withInput($request->all());
-            }
-
-            $sysNo->next_no++;
-            $sysNo->save();
-        }
-        else{
-            if(empty(Input::get('code'))){
-                return redirect()->back()->withErrors('Nomor Issued Docket wajib diisi!', 'default')->withInput($request->all());
-            }
-
-            $docketNumber = Input::get('code');
-
-            // Check existing number
-            $check = IssuedDocketHeader::where('code', $docketNumber)->first();
-            if($check != null){
-                return redirect()->back()->withErrors('Nomor Issued Docket sudah terdaftar!', 'default')->withInput($request->all());
-            }
         }
 
         // Validate details
@@ -179,8 +148,42 @@ class DocketController extends Controller
             return redirect()->back()->withErrors('Detail inventory tidak boleh kembar!', 'default')->withInput($request->all());
         }
 
+        //Generate AutoNumber
+        if(Input::get('auto_number')) {
+            $sysNo = NumberingSystem::where('doc_id', '1')->first();
+            $document = Document::where('id', '1')->first();
+            $docketNumber = Utilities::GenerateNumber($document->code, $sysNo->next_no);
+
+            // Check existing number
+            $check = IssuedDocketHeader::where('code', $docketNumber)->first();
+            if($check != null){
+                return redirect()->back()->withErrors('Nomor Issued Docket sudah terdaftar!', 'default')->withInput($request->all());
+            }
+
+            $sysNo->next_no++;
+            $sysNo->save();
+        }
+        else{
+            if(empty(Input::get('code'))){
+                return redirect()->back()->withErrors('Nomor Issued Docket wajib diisi!', 'default')->withInput($request->all());
+            }
+
+            $docketNumber = Input::get('code');
+
+            // Check existing number
+            $check = IssuedDocketHeader::where('code', $docketNumber)->first();
+            if($check != null){
+                return redirect()->back()->withErrors('Nomor Issued Docket sudah terdaftar!', 'default')->withInput($request->all());
+            }
+        }
+
+        $user = \Auth::user();
+        $now = Carbon::now('Asia/Jakarta');
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+
         $docketHeader = IssuedDocketHeader::create([
             'code'                          => $docketNumber,
+            'date'                          => $date->toDateTimeString(),
             'department_id'                 => $materialRequest->department_id,
             'unit_id'                       => $materialRequest->machinery_id,
             'division'                      => Input::get('division'),
@@ -191,11 +194,8 @@ class DocketController extends Controller
             'created_by'                    => $user->id,
             'updated_by'                    => $user->id,
             'created_at'                    => $now->toDateString(),
-            'date'                          => $now->toDateString(),
             'material_request_header_id'    => $materialRequest->id
         ]);
-
-        $docketHeader->save();
 
         // Create Issued Docket Detail
         $remark = Input::get('remark');
