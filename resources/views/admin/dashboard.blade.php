@@ -189,6 +189,65 @@
         </div>
     </div>
 
+    @if($approvalFeatured === 1)
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel tile overflow_hidden">
+                    <div class="x_title">
+                        <h2>Approval PR</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="error-notice">
+                            @if($approvalPurchaseRequests->count() > 0)
+                                @foreach($approvalPurchaseRequests as $pr)
+                                    <div class="oaerror warning">
+                                        <span>Nomor PR </span>
+                                        <a style="text-decoration: underline;" href="{{ route('admin.purchase_requests.show', ['purchase_request' => $pr->id]) }}" target="_blank">{{ $pr->code }}</a>
+                                        <span >membutuhkan approval anda</span>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="oaerror success">
+                                    <strong>Tidak ada PR yang membutuhkan approval anda</strong>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel tile overflow_hidden">
+                    <div class="x_title">
+                        <h2>Approval PO</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="error-notice">
+                            @if($approvalPurchaseOrders->count() > 0)
+                                @foreach($approvalPurchaseOrders as $po)
+                                    <div class="oaerror warning">
+                                        <span>Nomor PO </span>
+                                        <a style="text-decoration: underline;" href="{{ route('admin.purchase_orders.show', ['purchase_request' => $po->id]) }}" target="_blank">{{ $po->code }}</a>
+                                        <span >membutuhkan approval anda</span>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="oaerror success">
+                                    <strong>Tidak ada PO yang membutuhkan approval anda</strong>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    @endif
     {{--<div class="row">--}}
         {{--<div class="col-md-4 col-sm-4 col-xs-12">--}}
             {{--<div id="registration_usage" class="x_panel tile fixed_height_320 overflow_hidden">--}}

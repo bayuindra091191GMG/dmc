@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\ApprovalPurchaseOrder;
+use App\Models\ApprovalPurchaseRequest;
+use App\Models\ApprovalRule;
 use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
+use App\Models\PreferenceCompany;
+use App\Models\PurchaseOrderHeader;
 use App\Models\PurchaseRequestHeader;
 use Arcanedev\LogViewer\Entities\Log;
 use Arcanedev\LogViewer\Entities\LogEntry;
@@ -12,6 +17,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -45,6 +51,7 @@ class DashboardController extends Controller
 //            }
 //        }
 
+        // Get PR priority limit date warnings
         $purchaseRequests = new Collection();
         $prHeaders = PurchaseRequestHeader::where('status_id', 3)->get();
         foreach ($prHeaders as $header){
@@ -56,12 +63,44 @@ class DashboardController extends Controller
                     $purchaseRequests->add($header);
                 }
             }
-
         }
 
+        $user = Auth::user();
+
+        // Check Approval Feature
+        $preference = PreferenceCompany::find(1);
+        $approvalPurchaseRequests = new Collection();
+        $approvalPurchaseOrders = new Collection();
+
+        if($preference->approval_setting === 1){
+            // Get PR approval notifications
+            if(ApprovalRule::where('document_id', 3)->where('user_id', $user->id)->exists()){
+                foreach ($prHeaders as $header){
+                    if(!ApprovalPurchaseRequest::where('purchase_request_id', $header->id)->where('user_id', $user->id)->exists()){
+                        $approvalPurchaseRequests->add($header);
+                    }
+                }
+            }
+
+            // Get PO approval notifications
+            $poHeaders = PurchaseOrderHeader::where('status_id', 3)->get();
+            if(ApprovalRule::where('document_id', 4)->where('user_id', $user->id)->exists()){
+                foreach ($poHeaders as $header){
+                    if(!ApprovalPurchaseOrder::where('purchase_order_id', $header->id)->where('user_id', $user->id)->exists()){
+                        $approvalPurchaseOrders->add($header);
+                    }
+                }
+            }
+        }
+
+
+
         $data = [
-            'counts'    => $counts,
-            'prWarning' => $purchaseRequests
+            'counts'                    => $counts,
+            'prWarning'                 => $purchaseRequests,
+            'approvalFeatured'          => $preference->approval_setting,
+            'approvalPurchaseRequests'  => $approvalPurchaseRequests,
+            'approvalPurchaseOrders'    => $approvalPurchaseOrders
         ];
 
         return view('admin.dashboard')->with($data);

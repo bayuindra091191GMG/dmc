@@ -125,14 +125,12 @@ class LoginController extends Controller
         }
     }
 
-    public function loginForm(){
+    public function showLoginForm(){
 
         $redirect = "default";
         if(!empty(\request()->redirect)){
             $redirect = \request()->redirect;
         }
-
-        dd('test');
 
         return view('auth.login', compact('redirect'));
     }

@@ -169,7 +169,7 @@ class PurchaseRequestHeaderController extends Controller
             'approveOrder'      => $isUserMustApprove,
             'status'            => $status,
             'approvalData'      => $arrData,
-            'setting'           => $setting->approval_setting,
+            'setting'           => $preference->approval_setting,
             'isPoCreated'       => $isPoCreated
         ];
         //dd($status);
