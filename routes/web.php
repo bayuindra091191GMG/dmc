@@ -18,7 +18,7 @@
 Route::group(['namespace' => 'Auth'], function () {
 
     // Authentication Routes...
-    Route::get('login', 'LoginController@showLoginForm')->name('login');
+    Route::get('login', 'LoginController@loginForm')->name('login');
     Route::post('login', 'LoginController@login');
     Route::get('logout', 'LoginController@logout')->name('logout');
 
@@ -337,6 +337,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('quotations/pilihpr', 'Purchasing\QuotationHeaderController@beforeCreate')->name('quotations.before_create');
     Route::get('quotations/tambah', 'Purchasing\QuotationHeaderController@create')->name('quotations.create');
     Route::post('quotations/simpan', 'Purchasing\QuotationHeaderController@store')->name('quotations.store');
+    Route::get('quotations/print/{quotation}', 'Purchasing\QuotationHeaderController@print')->name('quotations.print');
+    Route::get('quotations/empty/pilihpr', 'Purchasing\QuotationHeaderController@beforeCreateEmpty')->name('quotations.before_create_empty');
+    Route::get('quotations/empty/tambah', 'Purchasing\QuotationHeaderController@createEmpty')->name('quotations.create_empty');
+    Route::post('quotations/empty/print', 'Purchasing\QuotationHeaderController@printEmpty')->name('quotations.print_empty');
 
     //Quotation Details
     Route::post('quotation_details/simpan', 'Purchasing\QuotationDetailController@store')->name('quotation_details.store');

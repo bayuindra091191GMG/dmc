@@ -45,7 +45,7 @@ class ApprovalRule extends Eloquent
 
 	public function user()
 	{
-		return $this->belongsTo(\App\Models\Auth\User\User::class);
+		return $this->belongsTo(\App\Models\Auth\User\User::class, 'user_id');
 	}
 
 	public function document()

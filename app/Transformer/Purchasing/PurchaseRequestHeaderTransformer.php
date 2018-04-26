@@ -54,6 +54,10 @@ class PurchaseRequestHeaderTransformer extends TransformerAbstract
             $route = route('admin.quotations.create', ['pr' => $header->id]);
             $action = "<a class='btn btn-xs btn-success' href='". $route. "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i> Proses RFQ </a>";
         }
+        elseif($this->mode === 'before_create_empty_rfq'){
+            $route = route('admin.quotations.create_empty', ['pr' => $header->id]);
+            $action = "<a class='btn btn-xs btn-success' href='". $route. "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i> Proses RFQ Kosong</a>";
+        }
         else{
             $route = route('admin.purchase_orders.create', ['pr' => $header->id]);
             $action = "<a class='btn btn-xs btn-success' href='". $route. "' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square'></i> Proses PO </a>";

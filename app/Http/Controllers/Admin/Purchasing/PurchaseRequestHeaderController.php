@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Admin\Purchasing;
 
 use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
+use App\Mail\ApprovalPurchaseRequestCreated;
 use App\Models\ApprovalPurchaseRequest;
 use App\Models\ApprovalRule;
 use App\Models\Department;
@@ -23,7 +24,9 @@ use App\Models\PurchaseRequestHeader;
 use App\Transformer\Purchasing\PurchaseRequestHeaderTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -77,33 +80,44 @@ class PurchaseRequestHeaderController extends Controller
 
     public function show(PurchaseRequestHeader $purchase_request){
         $header = $purchase_request;
+
+//        $prShowRoute = route('admin.purchase_requests.show', ['purchase_request' => $header->id]);
+//
+//        $data =[
+//            'purchase_request'      => $header,
+//            'user'                  => Auth::user(),
+//            'url'                   => route('login', ['redirect' => $prShowRoute])
+//        ];
+//
+//        return View('email.approval_purchase_request')->with($data);
+
         $date = Carbon::parse($purchase_request->date)->format('d M Y');
         $priorityLimitDate = Carbon::parse($purchase_request->priority_limit_date)->format('d M Y');
 
         //Check Approval & Permission to Print
         $user = \Auth::user();
         $permission = true;
-        $approveOrder = false;
+        $isUserMustApprove = false;
         //Kondisi belum diapprove
         $status = 0;
         $arrData = array();
 
-        //All Approval Settings checked if On Or Not
-        $setting = PreferenceCompany::find(1);
+        // Check Approval Feature
+        $preference = PreferenceCompany::find(1);
         $approvals = null;
 
-        if($setting->approval_setting == 1) {
+        if($preference->approval_setting == 1) {
             $tempApprove = ApprovalRule::where('document_id', 3)->where('user_id', $user->id)->get();
             $approvals = ApprovalRule::where('document_id', 3)->get();
             $approvalPr = ApprovalPurchaseRequest::where('purchase_request_id', $purchase_request->id)->get();
 
-            if ($tempApprove != null && $tempApprove->count() != 0) {
-                $approveOrder = true;
+            if ($tempApprove->count() > 0) {
+                $isUserMustApprove = true;
             }
 
             $approvalData = ApprovalPurchaseRequest::where('purchase_request_id', $header->id)->where('user_id', $user->id)->first();
-            if($approvalData != null){
-                $approveOrder = false;
+            if(!empty($approvalData)){
+                $isUserMustApprove = false;
             }
 
             //Kondisi Approve Sebagian
@@ -152,7 +166,7 @@ class PurchaseRequestHeaderController extends Controller
             'date'              => $date,
             'priorityLimitDate' => $priorityLimitDate,
             'permission'        => $permission,
-            'approveOrder'      => $approveOrder,
+            'approveOrder'      => $isUserMustApprove,
             'status'            => $status,
             'approvalData'      => $arrData,
             'setting'           => $setting->approval_setting,
@@ -318,6 +332,26 @@ class PurchaseRequestHeaderController extends Controller
             }
             $idx++;
         }
+
+        // Check Approval Feature
+        $preference = PreferenceCompany::find(1);
+
+        try{
+            if($preference->approval_setting == 1) {
+                $approvals = ApprovalRule::where('document_id', 3)->get();
+                if($approvals->count() > 0){
+                    foreach($approvals as $approval){
+                        if(!empty($approval->user->email_address)){
+                            Mail::to($approval->user->email_address)->send(new ApprovalPurchaseRequestCreated($prHeader, $approval->user));
+                        }
+                    }
+                }
+            }
+        }
+        catch (\Exception $ex){
+            error_log($ex);
+        }
+
 
         Session::flash('message', 'Berhasil membuat purchase request!');
 

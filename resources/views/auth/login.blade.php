@@ -25,6 +25,8 @@
                             </label>
                         </div>
 
+                        <input type="hidden" id="redirect" name="redirect" value="{{ $redirect }}"/>
+
                         @if (session('status'))
                             <div class="alert alert-success">
                                 {{ session('status') }}

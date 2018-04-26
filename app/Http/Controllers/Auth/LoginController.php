@@ -90,6 +90,7 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         try{
+
             $errors = [];
 
 //            if (config('auth.users.confirm_email') && !$user->confirmed) {
@@ -112,10 +113,27 @@ class LoginController extends Controller
                     ->withErrors($errors);
             }
 
+            if($request->input('redirect') !== 'default'){
+                $url = $request->input('redirect');
+                return redirect($url);
+            }
+
             return redirect('/admin');
         }
         catch(\Exception $ex){
             error_log($ex);
         }
+    }
+
+    public function loginForm(){
+
+        $redirect = "default";
+        if(!empty(\request()->redirect)){
+            $redirect = \request()->redirect;
+        }
+
+        dd('test');
+
+        return view('auth.login', compact('redirect'));
     }
 }

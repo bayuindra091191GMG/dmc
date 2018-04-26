@@ -15,6 +15,7 @@ use App\Models\NumberingSystem;
 use App\Models\PurchaseRequestHeader;
 use App\Models\QuotationDetail;
 use App\Models\QuotationHeader;
+use App\Models\Supplier;
 use App\Transformer\Purchasing\QuotationHeaderTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -39,6 +40,10 @@ class QuotationHeaderController extends Controller
         return View('admin.purchasing.quotations.before_create');
     }
 
+    public function beforeCreateEmpty(){
+        return View('admin.purchasing.quotations.before_create_empty');
+    }
+
     public function create(){
         if(empty(request()->pr)){
             return redirect()->route('admin.quotations.before_create');
@@ -56,6 +61,24 @@ class QuotationHeaderController extends Controller
         ];
 
         return View('admin.purchasing.quotations.create')->with($data);
+    }
+
+    public function createEmpty(){
+        if(empty(request()->pr)){
+            return redirect()->route('admin.quotations.before_create_empty');
+        }
+
+        $purchaseRequest = PurchaseRequestHeader::find(request()->pr);
+
+        // Numbering System
+//        $sysNo = NumberingSystem::where('doc_id', '5')->first();
+//        $autoNumber = Utilities::GenerateNumber($sysNo->document->code, $sysNo->next_no);
+
+        $data = [
+            'purchaseRequest'   => $purchaseRequest
+        ];
+
+        return View('admin.purchasing.quotations.create_empty')->with($data);
     }
 
     public function store(Request $request){
@@ -221,6 +244,116 @@ class QuotationHeaderController extends Controller
         return redirect()->route('admin.quotations.show', ['quotation' => $quotHeader]);
     }
 
+    public function printEmpty(Request $request){
+        $validator = Validator::make($request->all(),[
+            'pr_code'       => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Validate quotation number
+//        if(empty(Input::get('auto_number')) && (empty(Input::get('quot_code')) || Input::get('quot_code') == "")){
+//            return redirect()->back()->withErrors('Nomor kuotasi vendor wajib diisi!', 'default')->withInput($request->all());
+//        }
+
+        // Validate details
+        $items = $request->input('item');
+
+        if(count($items) == 0){
+            return redirect()->back()->withErrors('Detail inventory wajib diisi!', 'default')->withInput($request->all());
+        }
+
+        $qtys = $request->input('qty');
+        $valid = true;
+        $i = 0;
+        foreach($items as $item){
+            if(empty($item)) $valid = false;
+            if(empty($qtys[$i]) || $qtys[$i] == '0') $valid = false;
+            $i++;
+        }
+
+        if(!$valid){
+            return redirect()->back()->withErrors('Detail inventory & kuantitas wajib diisi!', 'default')->withInput($request->all());
+        }
+
+        // Check duplicate inventory
+        $valid = Utilities::arrayIsUnique($items);
+        if(!$valid){
+            return redirect()->back()->withErrors('Detail inventory tidak boleh kembar!', 'default')->withInput($request->all());
+        }
+
+        // Generate auto number
+//        $quotCode = 'default';
+//        if(Input::get('auto_number')){
+//            $sysNo = NumberingSystem::where('doc_id', '5')->first();
+//            $quotCode = Utilities::GenerateNumberPurchaseOrder($sysNo->document->code, $sysNo->next_no);
+//            $sysNo->next_no++;
+//            $sysNo->save();
+//        }
+//        else{
+//            $quotCode = Input::get('quot_code');
+//        }
+//
+//        // Check existing number
+//        if(QuotationHeader::where('code', $quotCode)->exists()){
+//            return redirect()->back()->withErrors('Nomor kuotasi vendor sudah terdaftar!', 'default')->withInput($request->all());
+//        }
+
+        $user = \Auth::user();
+        $now = Carbon::now('Asia/Jakarta');
+
+        $supplier = Supplier::find($request->input('supplier'));
+
+        $quotHeader = new QuotationHeader();
+        $quotHeader->purchase_request_id = $request->input('pr_id');
+        $quotHeader->supplier_id = $request->input('supplier');
+        $quotHeader->supplier = $supplier;
+        $quotHeader->status_id = 3;
+        $quotHeader->created_by = $user->id;
+        $quotHeader->created_at = $now->toDateTimeString();
+
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+        $quotHeader->date = $date->toDateTimeString();
+
+        // Create quotation detail
+        $totalPrice = 0;
+        $totalDiscount = 0;
+        $totalPayment = 0;
+        $discounts = Input::get('discount');
+        $remarks = Input::get('remark');
+        $idx = 0;
+        foreach($items as $item){
+            if(!empty($item)){
+                $qty = (double) $qtys[$idx];
+                $quotDetail = new QuotationDetail();
+                $quotDetail->header_id = 99;
+                $quotDetail->item_id = $item;
+                $quotDetail->quantity = $qty;
+
+                if(!empty($remarks[$idx])) $quotDetail->remark = $remarks[$idx];
+
+                $quotHeader->quotation_details->add($quotDetail);
+
+                // Accumulate subtotal
+                $totalPayment += $quotDetail->subtotal;
+            }
+            $idx++;
+        }
+
+        $data = [
+            'quotHeader'    => $quotHeader,
+            'now'           => $now->toDateTimeString()
+        ];
+
+        return View('documents.quotations.quotations_doc')->with($data);
+    }
+
+
     public function edit(QuotationHeader $quotation){
         $header = $quotation;
 
@@ -302,5 +435,10 @@ class QuotationHeaderController extends Controller
         catch(\Exception $ex){
             error_log($ex);
         }
+    }
+
+    public function print(QuotationHeader $quotation){
+        $quotHeader = $quotation;
+        return view('documents.quotations.quotations_doc', compact('quotHeader'));
     }
 }

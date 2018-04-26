@@ -10,6 +10,7 @@
             </div>
             <div class="navbar-right">
                 <a class="btn btn-default" href="{{ route('admin.quotations.edit',[ 'quotation' => $header->id]) }}">UBAH</a>
+                <a class="btn btn-default" href="{{ route('admin.quotations.print',[ 'quotation' => $header->id]) }}" target="_blank">CETAK</a>
             </div>
         </div>
     </div>
@@ -61,6 +62,15 @@
                         : <a style="text-decoration: underline;" href="{{ route('admin.suppliers.edit', ['supplier' => $header->supplier_id]) }}">{{ $header->supplier->name }}</a>
                     </div>
                 </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 col-sm-3 col-xs-12">
+                            Total Harga
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            : {{ !empty($header->total_price) ? 'Rp '. $header->total_price_string : '-' }}
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <label class="col-md-3 col-sm-3 col-xs-12">

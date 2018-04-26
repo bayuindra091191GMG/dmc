@@ -41,7 +41,7 @@
         <tr>
             <td width="55%">To: {{ $quotHeader->supplier->name }}</td>
             <td width="11%">No RFQ</td>
-            <td>: {{ $quotHeader->code }}</td>
+            <td>: {{ $quotHeader->code ?? ''}}</td>
         </tr>
     </table>
 
@@ -129,13 +129,13 @@
             <td colspan="2">Packing</td>
             <td colspan="3">&nbsp;</td>
             <td colspan="2">Sub Total</td>
-            <td class="text-right">{{ $quotHeader->total_price_string }}</td>
+            <td class="text-right">{{ !empty($quotHeader->total_price) ? $quotHeader->total_price_string : '' }}</td>
         </tr>
         <tr>
             <td colspan="2">Delivery Time</td>
             <td colspan="3">&nbsp;</td>
             <td colspan="2">Delivery Charge</td>
-            <td class="text-right">{{ $quotHeader->delivery_fee_string }}</td>
+            <td class="text-right">{{ !empty($quotHeader->delivery_fee) ? $quotHeader->delivery_fee_string : '' }}</td>
         </tr>
         <tr>
             <td colspan="2">Delivery Place</td>
@@ -153,7 +153,7 @@
             <td colspan="2">Special Note</td>
             <td colspan="3">&nbsp;</td>
             <td colspan="2">After Tax Total</td>
-            <td class="text-right">{{ !empty($quotHeader->total_payment) && $quotHeader->total_payment > 0 ? $purchaseOrder->total_payment_string }}</td>
+            <td class="text-right">{{ !empty($quotHeader->total_payment) && $quotHeader->total_payment > 0 ? $quotHeader->total_payment_string : ''}}</td>
         </tr>
         {{--<tr>--}}
         {{--<td colspan="5" rowspan="5" align="left">--}}
@@ -187,32 +187,32 @@
     </table>
 
     <br/>
-    <table class="table" border="1" style="font-weight: bold; text-align: center;">
-        <tr>
-            <td>Prepared by,</td>
-            <td>Checked by,</td>
-            <td>Approved by,</td>
-            <td>Approved by,</td>
-        </tr>
-        <tr>
-            <td height="80px;">&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-        <tr>
-            <td>Ginanjar</td>
-            <td>Ginanjar</td>
-            <td>Ginanjar</td>
-            <td>Ginanjar</td>
-        </tr>
-        <tr>
-            <td>{{ $now }}</td>
-            <td>{{ $now }}</td>
-            <td>{{ $now }}</td>
-            <td>{{ $now }}</td>
-        </tr>
-    </table>
+    {{--<table class="table" border="1" style="font-weight: bold; text-align: center;">--}}
+        {{--<tr>--}}
+            {{--<td>Prepared by,</td>--}}
+            {{--<td>Checked by,</td>--}}
+            {{--<td>Approved by,</td>--}}
+            {{--<td>Approved by,</td>--}}
+        {{--</tr>--}}
+        {{--<tr>--}}
+            {{--<td height="80px;">&nbsp;</td>--}}
+            {{--<td>&nbsp;</td>--}}
+            {{--<td>&nbsp;</td>--}}
+            {{--<td>&nbsp;</td>--}}
+        {{--</tr>--}}
+        {{--<tr>--}}
+            {{--<td>Ginanjar</td>--}}
+            {{--<td>Ginanjar</td>--}}
+            {{--<td>Ginanjar</td>--}}
+            {{--<td>Ginanjar</td>--}}
+        {{--</tr>--}}
+        {{--<tr>--}}
+            {{--<td>{{ $now }}</td>--}}
+            {{--<td>{{ $now }}</td>--}}
+            {{--<td>{{ $now }}</td>--}}
+            {{--<td>{{ $now }}</td>--}}
+        {{--</tr>--}}
+    {{--</table>--}}
 </div>
 
 </body>

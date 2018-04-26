@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Admin\Purchasing;
 
 use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
+use App\Mail\ApprovalPurchaseOrderCreated;
 use App\Models\ApprovalPurchaseOrder;
 use App\Models\ApprovalRule;
 use App\Models\Department;
@@ -23,6 +24,7 @@ use App\Transformer\Purchasing\PurchaseOrderHeaderTransformer;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -67,7 +69,7 @@ class PurchaseOrderHeaderController extends Controller
             $approvals = ApprovalRule::where('document_id', 4)->get();
             $approvalPo = ApprovalPurchaseOrder::where('purchase_order_id', $purchase_order->id)->get();
 
-            if ($tempApprove != null && $tempApprove->count() != 0) {
+            if ($tempApprove->count() != 0) {
                 $approveOrder = true;
             }
 
@@ -347,6 +349,25 @@ class PurchaseOrderHeaderController extends Controller
 
         $poHeader->total_payment = $totalPayment + $delivery + $ppnAmount - $pphAmount;
         $poHeader->save();
+
+        // Check Approval Feature
+        $preference = PreferenceCompany::find(1);
+
+        try{
+            if($preference->approval_setting == 1) {
+                $approvals = ApprovalRule::where('document_id', 4)->get();
+                if($approvals->count() > 0){
+                    foreach($approvals as $approval){
+                        if(!empty($approval->user->email_address)){
+                            Mail::to($approval->user->email_address)->send(new ApprovalPurchaseOrderCreated($poHeader, $approval->user));
+                        }
+                    }
+                }
+            }
+        }
+        catch (\Exception $ex){
+            error_log($ex);
+        }
 
         Session::flash('message', 'Berhasil membuat purchase order!');
 
