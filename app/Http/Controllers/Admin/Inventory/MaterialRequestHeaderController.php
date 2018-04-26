@@ -586,7 +586,7 @@ class MaterialRequestHeaderController extends Controller
                 $materialRequests = MaterialRequestHeader::where('status_id', $status);
             }
             else{
-                $materialRequests = MaterialRequestHeader::where('status_id', 3);
+                $materialRequests = MaterialRequestHeader::whereIn('status_id', [3,4,11]);
             }
         }
         else{
