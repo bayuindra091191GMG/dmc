@@ -72,7 +72,7 @@ class DashboardController extends Controller
         $approvalPurchaseRequests = new Collection();
         $approvalPurchaseOrders = new Collection();
 
-        if($preference->approval_setting === 1){
+        if($preference->approval_setting === "1"){
             // Get PR approval notifications
             if(ApprovalRule::where('document_id', 3)->where('user_id', $user->id)->exists()){
                 foreach ($prHeaders as $header){

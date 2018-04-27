@@ -23,6 +23,7 @@ use App\Models\PurchaseRequestDetail;
 use App\Models\PurchaseRequestHeader;
 use App\Transformer\Purchasing\PurchaseRequestHeaderTransformer;
 use Carbon\Carbon;
+use Hamcrest\Util;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
@@ -349,7 +350,7 @@ class PurchaseRequestHeaderController extends Controller
             }
         }
         catch (\Exception $ex){
-            error_log($ex);
+            dd($ex);
         }
 
 

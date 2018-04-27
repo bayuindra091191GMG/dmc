@@ -101,7 +101,6 @@ class UserController extends Controller
         $employee = Employee::create([
             'name'          => $request->input('name'),
             'email'         => $request->input('email'),
-            'email_address' => $request->input('email_address'),
             'address'       => $request->input('address'),
             'department_id' => $request->input('department'),
             'site_id'       => $request->input('site'),
@@ -114,6 +113,7 @@ class UserController extends Controller
         $user = new User();
         $user->name = $request->input('name');
         $user->email = $request->input('email');
+        $user->email_address = $request->input('email_address');
         $user->employee_id = $employee->id;
 
         if ($request->has('password')) {
@@ -218,7 +218,6 @@ class UserController extends Controller
         $employee = Employee::find($employeeId);
         $employee->name = $request->input('name');
         $employee->email = $request->input('email');
-        $employee->email_address = $request->input('email_address');
         $employee->address = $request->input('address');
         $employee->department_id = $request->input('department');
         $employee->site_id = $request->input('site');
@@ -253,6 +252,7 @@ class UserController extends Controller
             $user->img_path = $filename;
         }
 
+        $user->email_address = $request->input('email_address');
         $user->status_id = $request->input('status');
         $user->created_by = $userAuth->id;
         $user->updated_by = $userAuth->id;

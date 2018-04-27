@@ -26,6 +26,7 @@ class UserTransformer extends TransformerAbstract
         return[
             'code'          => $user->employee->code,
             'email'         => $user->email,
+            'email_address' => $user->email_address ?? '-',
             'name'          => $user->employee->name,
             'department'    => $user->employee->department->name,
             'site'          => $user->employee->site->name,

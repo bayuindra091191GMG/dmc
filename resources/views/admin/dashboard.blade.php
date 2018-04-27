@@ -189,7 +189,7 @@
         </div>
     </div>
 
-    @if($approvalFeatured === 1)
+    @if($approvalFeatured === "1")
 
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
