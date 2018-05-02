@@ -70,13 +70,23 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="supplier_name">
+                    Vendor
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="supplier_name" type="text" class="form-control col-md-7 col-xs-12" value="{{ $vendor->name }}" readonly />
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="bank_name" >
                     Nama Bank
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="bank_name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('bank_name')) parsley-error @endif"
-                           name="bank_name" required />
+                           name="bank_name" value="{{ $vendor->bank_name }}" readonly />
                 </div>
             </div>
 
@@ -86,8 +96,8 @@
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="account_no" type="number" min="0" class="form-control col-md-7 col-xs-12 @if($errors->has('account_no')) parsley-error @endif"
-                           name="account_no" required />
+                    <input id="account_no" type="text" min="0" class="form-control col-md-7 col-xs-12 @if($errors->has('account_no')) parsley-error @endif"
+                           name="account_no" value="{{ $vendor->bank_account_number }}" readonly />
                 </div>
             </div>
 
@@ -98,7 +108,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="account_name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('account_name')) parsley-error @endif"
-                           name="account_name" required />
+                           name="account_name" value="{{ $vendor->bank_account_name }}" readonly />
                 </div>
             </div>
 
@@ -282,7 +292,7 @@
             </div>
 
             <input id="index_counter" type="hidden" value="{{ $idx }}"/>
-            <input id="supplier" type="hidden" name="supplier" value="{{ $supplierId }}"/>
+            <input id="supplier" type="hidden" name="supplier" value="{{ $vendor->id }}"/>
 
             <hr/>
 

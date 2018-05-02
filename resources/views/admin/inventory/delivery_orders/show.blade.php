@@ -10,8 +10,8 @@
             </div>
             <div class="navbar-right">
                 @if($header->status_id == 3)
-                    <a class="confirm-modal btn btn-success">KONFIRMASI</a>
-                    <a class="cancel-modal btn btn-danger">BATAL</a>
+                    <a class="confirm-modal btn btn-success" data-id="{{ $header->id }}">KONFIRMASI</a>
+                    <a class="cancel-modal btn btn-danger" data-id="{{ $header->id }}">BATAL</a>
                 @endif
                 {{--<a class="btn btn-default" href="{{ route('admin.delivery_orders.edit',[ 'delivery_order' => $header->id]) }}">UBAH</a>--}}
                 {{--<a class="btn btn-default" href="{{ route('admin.purchase_requests.edit',[ 'purchase_request' => $header->id]) }}">CETAK</a>--}}

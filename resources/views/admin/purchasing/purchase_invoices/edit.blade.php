@@ -92,8 +92,7 @@
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" class="flat" id="ppn" name="ppn" @if(!empty($header->ppn_percent) && $header->ppn_percent > 0) checked @endif>
-                            PPN sekarang: 15%@if(!empty($header->ppn_percent) && $header->ppn_percent > 0), PPN tersimpan: {{ $header->ppn_percent }}% @endif
+                            <input type="checkbox" class="flat" id="ppn" name="ppn" @if(!empty($header->ppn_percent) && $header->ppn_percent > 0) checked @endif> PPN sekarang: 10%
                         </label>
                     </div>
                 </div>

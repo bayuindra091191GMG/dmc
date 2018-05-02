@@ -17,6 +17,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $id
  * @property string $code
  * @property \Carbon\Carbon $date
+ * @property string $type
  * @property int $supplier_id
  * @property float $amount
  * @property float $ppn
@@ -33,7 +34,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $updated_by
  * @property \Carbon\Carbon $updated_at
  * 
- * @property \App\Models\User $user
+ * @property \App\Models\Auth\User\User $user
  * @property \Illuminate\Database\Eloquent\Collection $approval_payment_requests
  * @property \Illuminate\Database\Eloquent\Collection $payment_installments
  * @property \Illuminate\Database\Eloquent\Collection $payment_requests_pi_details
@@ -70,6 +71,7 @@ class PaymentRequest extends Eloquent
 	protected $fillable = [
 		'code',
 		'date',
+        'type',
         'supplier_id',
 		'amount',
 		'ppn',
@@ -80,7 +82,6 @@ class PaymentRequest extends Eloquent
 		'requester_account_name',
 		'is_installment',
 		'note',
-        'type',
 		'status_id',
 		'created_by',
 		'updated_by'

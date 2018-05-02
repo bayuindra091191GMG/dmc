@@ -75,13 +75,13 @@ class SupplierController extends Controller
             'city'                  => 'max:30',
             'remark'                => 'max:150',
             'npwp'                  => 'max:30',
-            'bank_name'             => 'max:30',
-            'bank_account_number'   => 'max:30',
-            'bank_account_name'     => 'max:30',
+            'bank_name'             => 'required|max:30',
+            'bank_account_number'   => 'required|max:30',
+            'bank_account_name'     => 'required|max:30',
         ],[
-            'code.unique'       => 'Kode telah terpakai!',
-            'code.regex'        => 'Kode vendor harus tanpa spasi!',
-            'phone.required'       => 'Telepon harus diisi!',
+            'code.unique'                   => 'Kode telah terpakai!',
+            'code.regex'                    => 'Kode vendor harus tanpa spasi!',
+            'phone.required'                => 'Telepon harus diisi!',
             'contact_person.required'       => 'Contact Person harus diisi!'
         ]);
 
@@ -105,10 +105,10 @@ class SupplierController extends Controller
             'bank_name'             => $request->input('bank_name'),
             'bank_account_number'   => $request->input('bank_account_number'),
             'bank_account_name'     => $request->input('bank_account_name'),
-            'created_by'    => $user->id,
-            'created_at'    => $dateTimeNow->toDateTimeString(),
-            'updated_by'    => $user->id,
-            'updated_at'    => $dateTimeNow->toDateTimeString(),
+            'created_by'            => $user->id,
+            'created_at'            => $dateTimeNow->toDateTimeString(),
+            'updated_by'            => $user->id,
+            'updated_at'            => $dateTimeNow->toDateTimeString(),
         ]);
 
         Session::flash('message', 'berhasil membuat data vendor baru!');
@@ -166,9 +166,9 @@ class SupplierController extends Controller
             'city'                  => 'max:30',
             'remark'                => 'max:150',
             'npwp'                  => 'max:30',
-            'bank_name'             => 'max:30',
-            'bank_account_number'   => 'max:30',
-            'bank_account_name'     => 'max:30',
+            'bank_name'             => 'required|max:30',
+            'bank_account_number'   => 'required|max:30',
+            'bank_account_name'     => 'required|max:30',
         ],[
             'code.unique'       => 'Kode vendor telah terpakai!',
             'code.regex'        => 'Kode vendor harus tanpa spasi!'

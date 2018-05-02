@@ -1,12 +1,12 @@
 @extends('admin.layouts.admin')
 
-@section('title','Buat Payment Request Baru')
+@section('title','Ubah Payment Request '. $header->code)
 
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
 
-            {{ Form::open(['route'=>['admin.payment_requests.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.payment_requests.update'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
 
             @if(count($errors))
                 <div class="form-group">
@@ -57,13 +57,23 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="supplier_name">
+                    Vendor
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="supplier_name" type="text" class="form-control col-md-7 col-xs-12" value="{{ $header->supplier->name }}" readonly />
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="bank_name" >
                     Nama Bank
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="bank_name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('bank_name')) parsley-error @endif"
-                           name="bank_name" value="{{ $header->requester_bank_name }}" required />
+                           name="bank_name" value="{{ $header->supplier->bank_name }}" readonly />
                 </div>
             </div>
 
@@ -73,8 +83,8 @@
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="account_no" type="number" min="0" class="form-control col-md-7 col-xs-12 @if($errors->has('account_no')) parsley-error @endif"
-                           name="account_no" value="{{ $header->requester_bank_account }}" required />
+                    <input id="account_no" type="text" min="0" class="form-control col-md-7 col-xs-12 @if($errors->has('account_no')) parsley-error @endif"
+                           name="account_no" value="{{ $header->supplier->bank_account_number }}" readonly />
                 </div>
             </div>
 
@@ -85,7 +95,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="account_name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('account_name')) parsley-error @endif"
-                           name="account_name" value="{{ $header->requester_account_name }}" required />
+                           name="account_name" value="{{ $header->supplier->bank_account_name }}" readonly />
                 </div>
             </div>
 
@@ -94,7 +104,7 @@
                     Subject
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <textarea id="note" name="note" rows="5" style="resize: vertical;" class="form-control col-md-7 col-xs-12">{{ old('note') }}</textarea>
+                    <textarea id="note" name="note" rows="5" style="resize: vertical;" class="form-control col-md-7 col-xs-12">{{ $header->note }}</textarea>
                 </div>
             </div>
 

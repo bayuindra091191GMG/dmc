@@ -21,7 +21,6 @@ use App\Models\PurchaseOrderHeader;
 use App\Models\PurchaseRequestHeader;
 use App\Models\Supplier;
 use App\Transformer\Purchasing\PaymentRequestTransformer;
-use App\Transformer\Purchasing\PurchaseInvoiceTransformer;
 use App\Transformer\Purchasing\PurchaseOrderHeaderTransformer;
 use Carbon\Carbon;
 use Faker\Provider\Payment;
@@ -99,7 +98,7 @@ class PaymentRequestController extends Controller
         $purchaseInvoices = PurchaseInvoiceHeader::whereIn('id', $ids)->get();
 
         // Get supplier
-        $supplierId = $request->input('supplier');
+        $vendor = Supplier::find($request->input('supplier'));
 
         // Numbering System
         $sysNo = NumberingSystem::where('doc_id', '7')->first();
@@ -108,7 +107,7 @@ class PaymentRequestController extends Controller
         $data = [
             'purchaseInvoices'  => $purchaseInvoices,
             'autoNumber'        => $autoNumber,
-            'supplierId'        => $supplierId
+            'vendor'            => $vendor
         ];
 
         return View('admin.purchasing.payment_requests.create')->with($data);
@@ -125,7 +124,7 @@ class PaymentRequestController extends Controller
         $purchaseOrders = PurchaseOrderHeader::whereIn('id', $ids)->get();
 
         // Get supplier
-        $supplierId = $request->input('supplier');
+        $vendor = Supplier::find($request->input('supplier'));
 
         // Numbering System
         $sysNo = NumberingSystem::where('doc_id', '7')->first();
@@ -134,7 +133,7 @@ class PaymentRequestController extends Controller
         $data = [
             'purchaseOrders'    => $purchaseOrders,
             'autoNumber'        => $autoNumber,
-            'supplierId'        => $supplierId
+            'vendor'            => $vendor
         ];
 
         return View('admin.purchasing.payment_requests.create')->with($data);
@@ -143,9 +142,6 @@ class PaymentRequestController extends Controller
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
             'code'          => 'max:45|regex:/^\S*$/u',
-            'bank_name'     => 'required',
-            'account_no'    => 'required',
-            'account_name'  => 'required',
             'date'          => 'required',
         ],[
             'code.regex'     => 'Nomor PO harus tanpa spasi!'
@@ -187,7 +183,7 @@ class PaymentRequestController extends Controller
         $total_amount = 0;
         $amount = 0;
 
-        if($flag == "pi"){
+        if($flag === "pi"){
             foreach($ids as $id){
                 $temp = PurchaseInvoiceHeader::find($id);
                 $ppn += $temp->ppn_amount;
@@ -209,16 +205,17 @@ class PaymentRequestController extends Controller
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
         $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+        $vendor = Supplier::find($request->input('supplier'));
 
         $paymentRequest = PaymentRequest::create([
             'code'                      => $code,
             'date'                      => $date,
-            'supplier_id'               => $request->input('supplier'),
+            'supplier_id'               => $vendor->id,
             'amount'                    => $amount,
             'total_amount'              => $total_amount,
-            'requester_bank_name'       => $request->input('bank_name'),
-            'requester_bank_account'    => $request->input('account_no'),
-            'requester_account_name'    => $request->input('account_name'),
+            'requester_bank_name'       => $vendor->bank_name,
+            'requester_bank_account'    => $vendor->bank_account_number,
+            'requester_account_name'    => $vendor->bank_account_name,
             'note'                      => $request->input('note'),
             'type'                      => $request->input('type'),
             'status_id'                 => 3,
@@ -285,6 +282,77 @@ class PaymentRequestController extends Controller
         ];
 
         return View('admin.purchasing.payment_requests.edit')->with($data);
+    }
+
+    public function update(Request $request, PaymentRequest $payment_request){
+        $validator = Validator::make($request->all(),[
+            'bank_name'     => 'required',
+            'account_no'    => 'required',
+            'account_name'  => 'required',
+            'date'          => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $ids = $request->input('item');
+        $flag = $request->input('flag');
+        $ppn = 0;
+        $pph_23 = 0;
+        $totalAmount = 0;
+        $amount = 0;
+
+        if($flag == "pi"){
+            foreach($ids as $id){
+                $temp = PurchaseInvoiceHeader::find($id);
+                $ppn += $temp->ppn_amount;
+                $pph_23 += $temp->pph_amount;
+                $amount += $temp->total_price;
+                $totalAmount += $temp->total_payment;
+            }
+        }
+        else{
+            foreach($ids as $id){
+                $temp = PurchaseOrderHeader::find($id);
+                $ppn += $temp->ppn_amount;
+                $pph_23 += $temp->pph_amount;
+                $amount += $temp->total_price;
+                $totalAmount += $temp->total_payment;
+            }
+        }
+
+        $user = \Auth::user();
+        $now = Carbon::now('Asia/Jakarta');
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+
+        $payment_request->date = $date;
+        $payment_request->type = $request->input('type');
+        $payment_request->amount = $amount;
+        $payment_request->total_amount = $totalAmount;
+        $payment_request->note = $request->input('note');
+        $payment_request->updated_at = $now->toDateTimeString();
+        $payment_request->updated_by = $user->id;
+
+        //Check if DP or CBD
+        $type = $request->input('type');
+        if($type === "db" || $type === "cbd"){
+            $payment_request->ppn = 0;
+            $payment_request->pph_23 = 0;
+        }
+        else{
+            $payment_request->ppn = $ppn;
+            $payment_request->pph_23 = $pph_23;
+        }
+
+        $payment_request->save();
+
+        Session::flash('message', 'Berhasil mengubah Payment Request!');
+
+        return redirect()->route('admin.payment_requests.edit', ['payment_request' => $payment_request->id]);
     }
 
     public function report(){

@@ -140,7 +140,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="bank_name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('bank_name')) parsley-error @endif"
-                           name="bank_name" value="{{ $supplier->bank_name }}">
+                           name="bank_name" value="{{ $supplier->bank_name }}" required>
                 </div>
             </div>
 
@@ -150,7 +150,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="bank_account_number" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('bank_account_number')) parsley-error @endif"
-                           name="bank_account_number" value="{{ $supplier->bank_account_number }}">
+                           name="bank_account_number" value="{{ $supplier->bank_account_number }}" required>
                 </div>
             </div>
 
@@ -160,7 +160,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="bank_account_name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('bank_account_name')) parsley-error @endif"
-                           name="bank_account_name" value="{{ $supplier->bank_account_name }}">
+                           name="bank_account_name" value="{{ $supplier->bank_account_name }}" required>
                 </div>
             </div>
 
