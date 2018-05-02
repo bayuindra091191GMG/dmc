@@ -17,11 +17,13 @@ use App\Models\IssuedDocketDetail;
 use App\Models\Item;
 use App\Models\ItemReceiptDetail;
 use App\Models\ItemStock;
+use App\Models\ItemStockNotification;
 use App\Models\PurchaseOrderDetail;
 use App\Models\PurchaseRequestDetail;
 use App\Models\Uom;
 use App\Models\Warehouse;
 use App\Transformer\MasterData\ItemTransformer;
+use App\Transformer\Notification\ItemStockNotificationTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,6 +38,10 @@ class ItemController extends Controller
 {
     public function index(){
         return View('admin.items.index');
+    }
+
+    public function indexStockNotification(){
+        return View('admin.items.stock_notification_index');
     }
 
     public function show(Item $item){
@@ -77,7 +83,7 @@ class ItemController extends Controller
                 ->withInput();
         }
 
-        if(Input::get('group') === '-1'){
+        if($request->input('group') === '-1'){
             return redirect()->back()->withErrors('Pilih group!', 'default')->withInput($request->all());
         }
 
@@ -127,17 +133,37 @@ class ItemController extends Controller
         ]);
 
         if($request->filled('valuation') && $request->input('valuation') != "0"){
-            $value = str_replace('.','', Input::get('valuation'));
+            $value = str_replace('.','', $request->input('valuation'));
             $item->value = $value;
         }
 
+        $item->stock_minimum = 0;
+        if($request->filled('stock_min')){
+            $item->stock_minimum = $request->input('stock_min');
+        }
+
+        $item->stock_notification = 0;
+        if($request->filled('stock_notif')){
+            $item->stock_notification = 1;
+        }
 
         if($request->filled('description')){
-            $item->description = Input::get('description');
-
+            $item->description = $request->input('description');
         }
 
         $item->save();
+
+        // Add new item stock notification
+        if($request->filled('stock_notif')){
+
+            if(!ItemStockNotification::where('item_id', $item->id)->exists()){
+                ItemStockNotification::create([
+                    'item_id'       => $item->id,
+                    'created_at'    => $now->toDateTimeString(),
+                    'created_by'    => $user->id
+                ]);
+            }
+        }
 
         // Get stock
         if(count($warehouses) > 0){
@@ -219,11 +245,30 @@ class ItemController extends Controller
         $item->part_number = $request->input('part_number');
         $item->uom = $request->input('uom');
         $item->group_id = $request->input('group');
+        $item->stock_minimum = $request->input('stock_min');
+        $item->stock_notification = $request->filled('stock_notif') ? 1 : 0;
         $item->description = $request->input('description');
         $item->updated_by = $user->id;
         $item->updated_at = $now;
 
         $item->save();
+
+        // Delete item stock notification
+        if(!$request->filled('stock_notif')){
+            $itemNotification = $item->item_stock_notifications->first();
+            if(!empty($itemNotification)){
+                $itemNotification->delete();
+            }
+        }
+        else{
+            if(!ItemStockNotification::where('item_id', $item->id)->exists()){
+                ItemStockNotification::create([
+                    'item_id'       => $item->id,
+                    'created_at'    => $now->toDateTimeString(),
+                    'created_by'    => $user->id
+                ]);
+            }
+        }
 
         Session::flash('message', 'Berhasil mengubah data barang!');
 
@@ -270,6 +315,17 @@ class ItemController extends Controller
         $items = Item::all();
         return DataTables::of($items)
             ->setTransformer(new ItemTransformer)
+            ->addIndexColumn()
+            ->make(true);
+    }
+
+    public function getIndexStockNotification(){
+        $stockWarnings = ItemStockNotification::whereHas('item', function($query){
+                $query->whereColumn('items.stock', '<=', 'items.stock_minimum');
+            })->get();
+
+        return DataTables::of($stockWarnings)
+            ->setTransformer(new ItemStockNotificationTransformer)
             ->addIndexColumn()
             ->make(true);
     }

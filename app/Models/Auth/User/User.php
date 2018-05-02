@@ -41,6 +41,7 @@ use Kyslik\ColumnSortable\Sortable;
  * @property-read \App\Models\Protection\ProtectionValidation $protectionValidation
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Auth\User\SocialAccount[] $providers
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Auth\Role\Role[] $roles
+ * @property-read \Illuminate\Database\Eloquent\Collection $item_stock_notifications
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Auth\User\User sortable($defaultSortParameters = null)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Auth\User\User whereActive($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Auth\User\User whereConfirmationCode($value)
@@ -256,5 +257,10 @@ class User extends Authenticatable
     public function suppliers()
     {
         return $this->hasMany(\App\Models\Supplier::class, 'updated_by');
+    }
+
+    public function item_stock_notifications()
+    {
+        return $this->hasMany(\App\Models\ItemStockNotification::class);
     }
 }

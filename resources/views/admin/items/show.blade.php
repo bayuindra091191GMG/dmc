@@ -46,10 +46,28 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        QTY Stok
+                        Total QTY Stok
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         : {{ !empty($selectedItem->stock) && $selectedItem->stock > 0 ? $selectedItem->stock : '0'  }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        Minimum Stok
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ $selectedItem->stock_minimum  }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        Notifikasi Stok
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ $selectedItem->stock_notification === 1 ? 'AKTIF' : 'TIDAK AKTIF'  }}
                     </div>
                 </div>
 
@@ -82,7 +100,7 @@
                 <hr>
 
                 <div class="form-group">
-                    <label class="text-center col-lg-12 col-md-12 col-xs-12">Detil Barang</label>
+                    <label class="text-center col-lg-12 col-md-12 col-xs-12">Detil Stok</label>
                 </div>
                 <div class="form-group">
                     <div class="col-lg-12 col-md-12 col-xs-12 column">
@@ -101,10 +119,10 @@
 
                             @foreach($selectedItem->item_stocks as $detail)
                                 <tr>
-                                    <td class='field-item'>
+                                    <td class="text-center">
                                         {{ $detail->warehouse->name }}
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         {{ $detail->stock }}
                                     </td>
                                 </tr>

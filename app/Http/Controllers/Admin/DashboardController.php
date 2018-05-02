@@ -7,6 +7,7 @@ use App\Models\ApprovalPurchaseRequest;
 use App\Models\ApprovalRule;
 use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
+use App\Models\ItemStockNotification;
 use App\Models\PreferenceCompany;
 use App\Models\PurchaseOrderHeader;
 use App\Models\PurchaseRequestHeader;
@@ -51,6 +52,8 @@ class DashboardController extends Controller
 //            }
 //        }
 
+
+
         // Get PR priority limit date warnings
         $purchaseRequests = new Collection();
         $prHeaders = PurchaseRequestHeader::where('status_id', 3)->get();
@@ -64,6 +67,9 @@ class DashboardController extends Controller
                 }
             }
         }
+
+        // Get all active PR
+        $prActiveCount = $prHeaders->count();
 
         $user = Auth::user();
 
@@ -93,14 +99,21 @@ class DashboardController extends Controller
             }
         }
 
-
+        // Get item stock warning notification
+        $stockWarnings = ItemStockNotification::whereHas('item', function($query){
+                $query->whereColumn('items.stock', '<=', 'items.stock_minimum');
+            })
+            ->take(5)
+            ->get();
 
         $data = [
             'counts'                    => $counts,
+            'prActiveCount'             => $prActiveCount,
             'prWarning'                 => $purchaseRequests,
             'approvalFeatured'          => $preference->approval_setting,
             'approvalPurchaseRequests'  => $approvalPurchaseRequests,
-            'approvalPurchaseOrders'    => $approvalPurchaseOrders
+            'approvalPurchaseOrders'    => $approvalPurchaseOrders,
+            'stockWarnings'             => $stockWarnings
         ];
 
         return view('admin.dashboard')->with($data);

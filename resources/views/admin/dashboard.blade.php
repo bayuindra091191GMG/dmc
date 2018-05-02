@@ -10,7 +10,7 @@
         <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"> Total PR Aktif</span>
             {{--<div class="count green">{{ $counts['users'] }}</div>--}}
-            <div class="count green">0</div>
+            <div class="count green">{{ $prActiveCount }}</div>
         </div>
         <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"> Total Surat Jalan Aktif</span>
@@ -248,6 +248,39 @@
         </div>
 
     @endif
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel tile overflow_hidden">
+                <div class="x_title">
+                    <h2>Warning Stok {{ $stockWarnings->count() > 0 ? '('. $stockWarnings->count(). ')' : '' }}</h2>
+                    <div class="nav navbar-right">
+                        <a href="{{ route('admin.items.stock_notifications') }}" class="btn btn-default">
+                            Lihat Semua
+                        </a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="error-notice">
+                        @if($stockWarnings->count() > 0)
+                            @foreach($stockWarnings as $stockWarning)
+                                <div class="oaerror warning">
+                                    <span>Inventory </span>
+                                    <a style="text-decoration: underline;" href="{{ route('admin.items.show', ['item' => $stockWarning->item->id]) }}" target="_blank">{{ $stockWarning->item->code }}</a>
+                                    <span> ({{ $stockWarning->item->name }}) sisa kuantitas sebanyak {{ $stockWarning->item->stock }} {{ $stockWarning->item->uom }}</span>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="oaerror success">
+                                <strong>Tidak ada peringatan stok</strong>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     {{--<div class="row">--}}
         {{--<div class="col-md-4 col-sm-4 col-xs-12">--}}
             {{--<div id="registration_usage" class="x_panel tile fixed_height_320 overflow_hidden">--}}

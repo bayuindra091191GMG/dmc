@@ -116,6 +116,27 @@
             {{--</div>--}}
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="stock_min" >
+                    Minimal Stok
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="stock_min" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('stock_min')) parsley-error @endif"
+                           name="stock_min" value="{{ $item->stock_minimum }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="stock_notif"></label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" class="flat" id="stock_notif" name="stock_notif" @if($item->stock_notification === 1) checked @endif> Notifikasi Stok
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description" >
                     Keterangan Tambahan
                 </label>

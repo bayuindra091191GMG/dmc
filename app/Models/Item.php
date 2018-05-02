@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Wed, 21 Feb 2018 10:00:46 +0000.
+ * Date: Wed, 02 May 2018 10:52:46 +0700.
  */
 
 namespace App\Models;
@@ -17,6 +17,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $name
  * @property string $part_number
  * @property int $stock
+ * @property int $stock_minimum
+ * @property int $stock_notification
  * @property float $value
  * @property int $is_serial
  * @property string $uom
@@ -28,21 +30,26 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Carbon\Carbon $created_at
  * @property int $updated_by
  * @property \Carbon\Carbon $updated_at
- *
+ * 
  * @property \App\Models\Auth\User\User $user
  * @property \App\Models\Group $group
  * @property \App\Models\Warehouse $warehouse
- * @property \Illuminate\Database\Eloquent\Collection $delivery_note_details
+ * @property \Illuminate\Database\Eloquent\Collection $delivery_order_details
+ * @property \Illuminate\Database\Eloquent\Collection $interchanges
  * @property \Illuminate\Database\Eloquent\Collection $issued_docket_details
+ * @property \Illuminate\Database\Eloquent\Collection $item_mutations
  * @property \Illuminate\Database\Eloquent\Collection $item_receipt_details
+ * @property \Illuminate\Database\Eloquent\Collection $item_stock_notifications
+ * @property \Illuminate\Database\Eloquent\Collection $item_stocks
+ * @property \Illuminate\Database\Eloquent\Collection $material_request_details
+ * @property \Illuminate\Database\Eloquent\Collection $purchase_invoice_details
  * @property \Illuminate\Database\Eloquent\Collection $purchase_order_details
  * @property \Illuminate\Database\Eloquent\Collection $purchase_request_details
  * @property \Illuminate\Database\Eloquent\Collection $quotation_details
  * @property \Illuminate\Database\Eloquent\Collection $serials
  * @property \Illuminate\Database\Eloquent\Collection $stock_adjustments
+ * @property \Illuminate\Database\Eloquent\Collection $stock_cards
  * @property \Illuminate\Database\Eloquent\Collection $stock_ins
- * @property \Illuminate\Database\Eloquent\Collection $item_stocks
- * @property \Illuminate\Database\Eloquent\Collection $material_request_details
  *
  * @package App\Models
  */
@@ -50,6 +57,8 @@ class Item extends Eloquent
 {
 	protected $casts = [
 		'stock' => 'int',
+		'stock_minimum' => 'int',
+		'stock_notification' => 'int',
 		'value' => 'float',
 		'is_serial' => 'int',
 		'group_id' => 'int',
@@ -61,8 +70,10 @@ class Item extends Eloquent
 	protected $fillable = [
 		'code',
 		'name',
-        'part_number',
+		'part_number',
 		'stock',
+		'stock_minimum',
+		'stock_notification',
 		'value',
 		'is_serial',
 		'uom',
@@ -73,7 +84,6 @@ class Item extends Eloquent
 		'created_by',
 		'updated_by'
 	];
-
 
     public function createdBy()
     {
@@ -95,10 +105,14 @@ class Item extends Eloquent
 		return $this->belongsTo(\App\Models\Warehouse::class);
 	}
 
-
-	public function delivery_note_details()
+	public function delivery_order_details()
 	{
-		return $this->hasMany(\App\Models\DeliveryNoteDetail::class);
+		return $this->hasMany(\App\Models\DeliveryOrderDetail::class);
+	}
+
+	public function interchanges()
+	{
+		return $this->hasMany(\App\Models\Interchange::class, 'item_id_before');
 	}
 
 	public function issued_docket_details()
@@ -106,9 +120,34 @@ class Item extends Eloquent
 		return $this->hasMany(\App\Models\IssuedDocketDetail::class);
 	}
 
+	public function item_mutations()
+	{
+		return $this->hasMany(\App\Models\ItemMutation::class);
+	}
+
 	public function item_receipt_details()
 	{
 		return $this->hasMany(\App\Models\ItemReceiptDetail::class);
+	}
+
+	public function item_stock_notifications()
+	{
+		return $this->hasMany(\App\Models\ItemStockNotification::class);
+	}
+
+	public function item_stocks()
+	{
+		return $this->hasMany(\App\Models\ItemStock::class);
+	}
+
+	public function material_request_details()
+	{
+		return $this->hasMany(\App\Models\MaterialRequestDetail::class);
+	}
+
+	public function purchase_invoice_details()
+	{
+		return $this->hasMany(\App\Models\PurchaseInvoiceDetail::class);
 	}
 
 	public function purchase_order_details()
@@ -136,18 +175,13 @@ class Item extends Eloquent
 		return $this->hasMany(\App\Models\StockAdjustment::class);
 	}
 
+	public function stock_cards()
+	{
+		return $this->hasMany(\App\Models\StockCard::class);
+	}
+
 	public function stock_ins()
 	{
 		return $this->hasMany(\App\Models\StockIn::class);
 	}
-
-	public function item_stocks()
-	{
-		return $this->hasMany(\App\Models\ItemStock::class);
-	}
-
-    public function material_request_details()
-    {
-        return $this->hasMany(MaterialRequestDetail::class);
-    }
 }

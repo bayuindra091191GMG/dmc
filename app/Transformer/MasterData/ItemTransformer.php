@@ -25,16 +25,18 @@ class ItemTransformer extends TransformerAbstract
         $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $item->id ."' ><i class='fa fa-trash'></i></a>";
 
         return[
-            'code'              => $code,
-            'name'              => $item->name,
-            'uom'               => $item->uom,
-            'part_number'       => $item->part_number ?? '-',
-            'stock'             => $item->stock ?? '0',
-            'group'             => $item->group->name,
-            'machinery_type'    => $item->machinery_type,
-            'description'       => $item->description ?? '-',
-            'created_at'        => $createdDate,
-            'action'            => $action
+            'code'                  => $code,
+            'name'                  => $item->name,
+            'part_number'           => $item->part_number ?? '-',
+            'uom'                   => $item->uom,
+            'stock'                 => $item->stock ?? '0',
+            'stock_minimum'         => $item->stock_minimum ?? '0',
+            'stock_notification'    => $item->stock_notification === 1 ? 'AKTIF' : 'TIDAK AKTIF',
+            'group'                 => $item->group->name,
+            'machinery_type'        => $item->machinery_type,
+            'description'           => $item->description ?? '-',
+            'created_at'            => $createdDate,
+            'action'                => $action
         ];
     }
 }

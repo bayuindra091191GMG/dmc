@@ -102,6 +102,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('items/{item}/ubah', 'ItemController@edit')->name('items.edit');
     Route::put('items/ubah/{item}', 'ItemController@update')->name('items.update');
     Route::post('items/hapus', 'ItemController@destroy')->name('items.destroy');
+    Route::get('items/peringatan_stok', 'ItemController@indexStockNotification')->name('items.stock_notifications');
 
     //Item Stocks
     Route::post('item_stocks/tambah', 'ItemStockController@store')->name('item_stocks.store');
@@ -534,6 +535,7 @@ Route::get('/datatables-menu_headers', 'Admin\MenuHeaderController@anyData')->na
 Route::get('/datatables-menu_subs', 'Admin\MenuSubController@anyData')->name('datatables.menu_subs');
 Route::get('/datatables-statuses', 'Admin\StatusController@getIndex')->name('datatables.statuses');
 Route::get('/datatables-notifications', 'Admin\NotificationController@getIndex')->name('datatables.notifications');
+Route::get('/datatables-item_stock_notifications', 'Admin\ItemController@getIndexStockNotification')->name('datatables.item_stock_notifications');
 
 // PURCHASING
 Route::get('/datatables-purchase_requests', 'Admin\Purchasing\PurchaseRequestHeaderController@getIndex')->name('datatables.purchase_requests');
