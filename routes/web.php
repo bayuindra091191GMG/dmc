@@ -11,6 +11,7 @@
 |
 */
 
+Route::get('redirect','RedirectController@redirect')->name('redirect');
 
 /**
  * Auth routes

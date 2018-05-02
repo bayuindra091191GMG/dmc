@@ -267,7 +267,7 @@ class UserController extends Controller
 
         Session::flash('message', 'Berhasil mengubah data user!');
 
-        return redirect()->intended(route('admin.users'));
+        return redirect()->route('admin.users');
     }
 
     /**

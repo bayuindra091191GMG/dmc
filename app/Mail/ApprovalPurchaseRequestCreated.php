@@ -37,7 +37,7 @@ class ApprovalPurchaseRequestCreated extends Mailable
         $data =[
             'purchase_request'      => $this->purchaseRequest,
             'user'                  => $this->user,
-            'url'                   => route('login', ['redirect' => $prShowRoute])
+            'url'                   => route('redirect', ['url' => $prShowRoute])
         ];
 
         return $this->from('hellbardx444@gmail.com')
