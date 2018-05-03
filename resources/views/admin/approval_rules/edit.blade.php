@@ -19,9 +19,9 @@
                             <option value="-1" @if(empty(old('user'))) selected @endif>Pilih User</option>
                             @foreach($users as $user)
                                 @if($user->id == $approvalRule->user_id)
-                                    <option value="{{ $user->id }}" selected >{{ $user->name }}</option>
+                                    <option value="{{ $user->id }}" selected >{{ $user->email }} - {{ $user->name }}</option>
                                 @else
-                                    <option value="{{ $user->id }}" {{ old('user') == $user->id ? "selected":"" }}>{{ $user->name }}</option>
+                                    <option value="{{ $user->id }}" {{ old('user') == $user->id ? "selected":"" }}>{{ $user->email }} - {{ $user->name }}</option>
                                 @endif
                             @endforeach
                         </select>

@@ -200,10 +200,6 @@ class PurchaseRequestHeaderController extends Controller
 //            return redirect()->back()->withErrors('Nomor MR wajib diisi!', 'default')->withInput($request->all());
 //        }
 
-        // Validate department
-        if($request->input('department') === '-1'){
-            return redirect()->back()->withErrors('Pilih departemen!', 'default')->withInput($request->all());
-        }
 
         // Validate details
         $items = $request->input('item');
@@ -296,15 +292,17 @@ class PurchaseRequestHeaderController extends Controller
             $limitDate->addDays(22);
         }
 
+        $mrHeader = MaterialRequestHeader::find($mrId);
+
         $prHeader = PurchaseRequestHeader::create([
             'code'                  => $prCode,
             'material_request_id'   => $mrId,
             'date'                  => $date->toDateTimeString(),
-            'department_id'         => $request->input('department'),
-            'priority'              => $request->input('priority'),
+            'department_id'         => $mrHeader->department_id,
+            'priority'              => $mrHeader->priority,
             'priority_limit_date'   => $limitDate->toDateTimeString(),
-            'km'                    => $request->input('km'),
-            'hm'                    => $request->input('hm'),
+            'km'                    => $mrHeader->km,
+            'hm'                    => $mrHeader->hm,
             'status_id'             => 3,
             'created_by'            => $user->id,
             'created_at'            => $now->toDateTimeString()
@@ -385,11 +383,6 @@ class PurchaseRequestHeaderController extends Controller
                 ->withInput();
         }
 
-        // Validate department
-        if($request->input('department') === '-1'){
-            return redirect()->back()->withErrors('Pilih departemen!', 'default')->withInput($request->all());
-        }
-
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
         $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
@@ -405,9 +398,8 @@ class PurchaseRequestHeaderController extends Controller
             $limitDate->addDays(22);
         }
 
-        $purchase_request->department_id = $request->input('department');
-        $purchase_request->priority_limit_date = $limitDate->toDateTimeString();
         $purchase_request->date = $date;
+        $purchase_request->priority_limit_date = $limitDate->toDateTimeString();
         $purchase_request->updated_by = $user->id;
         $purchase_request->updated_at = $now->toDateTimeString();
         $purchase_request->save();

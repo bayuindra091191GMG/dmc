@@ -69,11 +69,12 @@
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="department" name="department" class="form-control col-md-7 col-xs-12 @if($errors->has('priority')) parsley-error @endif">
-                        @foreach($departments as $department)
-                            <option value="{{ $department->id }}" {{ $header->department_id == $department->id ? "selected":"" }}>{{ $department->name }}</option>
-                        @endforeach
-                    </select>
+                    {{--<select id="department" name="department" class="form-control col-md-7 col-xs-12 @if($errors->has('priority')) parsley-error @endif">--}}
+                        {{--@foreach($departments as $department)--}}
+                            {{--<option value="{{ $department->id }}" {{ $header->department_id == $department->id ? "selected":"" }}>{{ $department->name }}</option>--}}
+                        {{--@endforeach--}}
+                    {{--</select>--}}
+                    <input type="text" name="department" class="form-control col-md-7 col-xs-12" value="{{ $materialRequest->department->name }}" readonly>
                 </div>
             </div>
 

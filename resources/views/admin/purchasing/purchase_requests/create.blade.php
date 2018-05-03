@@ -69,19 +69,20 @@
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="department" >
                     Departemen
-                    <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="department" name="department" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">
-                        <option value="-1" @if(empty(old('department'))) selected @endif> - Pilih departemen - </option>
-                        @foreach($departments as $department)
-                            @if(!empty($materialRequest))
-                                <option value="{{ $department->id }}" {{ $materialRequest->department_id == $department->id ? "selected":"" }}>{{ $department->name }}</option>
-                            @else
-                                <option value="{{ $department->id }}" {{ old('department') == $department->id ? "selected":"" }}>{{ $department->name }}</option>
-                            @endif
-                        @endforeach
-                    </select>
+                    {{--<select id="department" name="department" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">--}}
+                        {{--<option value="-1" @if(empty(old('department'))) selected @endif> - Pilih departemen - </option>--}}
+                        {{--@foreach($departments as $department)--}}
+                            {{--@if(!empty($materialRequest))--}}
+                                {{--<option value="{{ $department->id }}" {{ $materialRequest->department_id == $department->id ? "selected":"" }}>{{ $department->name }}</option>--}}
+                            {{--@else--}}
+                                {{--<option value="{{ $department->id }}" {{ old('department') == $department->id ? "selected":"" }}>{{ $department->name }}</option>--}}
+                            {{--@endif--}}
+                        {{--@endforeach--}}
+                    {{--</select>--}}
+                    <input type="text" name="department" class="form-control col-md-7 col-xs-12" value="{{ $materialRequest->department->name }}" readonly>
+                    <input type="hidden" id="department_id" name="department_id" value="{{ $materialRequest->department_id }}">
                 </div>
             </div>
 
@@ -93,7 +94,7 @@
                     {{--<select id="machinery" name="machinery" class="form-control col-md-7 col-xs-12 @if($errors->has('machinery')) parsley-error @endif">--}}
                     {{--</select>--}}
                     <input type="text" name="machinery" class="form-control col-md-7 col-xs-12" @if(!empty($materialRequest->machinery_id)) value="{{ $materialRequest->machinery->code }}" @endif  readonly>
-                    <input type="hidden" id="machinery_id" name="machinery_id" @if(!empty($materialRequest->machinery_id)) value="{{ $materialRequest->machinery_id }} @endif">
+                    <input type="hidden" id="machinery_id" name="machinery_id" @if(!empty($materialRequest->machinery_id)) value="{{ $materialRequest->machinery_id }}" @endif>
                 </div>
             </div>
 

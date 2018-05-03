@@ -124,10 +124,8 @@ class ApprovalRuleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(ApprovalRule $approvalRule)
     {
-        //
-        $approvalRule = ApprovalRule::find($id);
         $users = User::all();
         $documents = Document::all();
 
