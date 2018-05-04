@@ -7,7 +7,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             @include('partials._success')
             @include('partials._error')
-            {{ Form::open(['route'=>['admin.sites.update', $site->id],'method' => 'put','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.sites.update', $site->id],'method' => 'put','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
             {{ csrf_field() }}
 
             @if(count($errors))

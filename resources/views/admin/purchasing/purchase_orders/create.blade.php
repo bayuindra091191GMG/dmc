@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
 
-            {{ Form::open(['route'=>['admin.purchase_orders.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.purchase_orders.store'],'method' => 'post','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
 
             @if(count($errors))
                 <div class="form-group">
@@ -134,7 +134,7 @@
                                     Harga
                                 </th>
                                 <th class="text-center" style="width: 10%">
-                                    Diskon (%)
+                                    Diskon
                                 </th>
                                 <th class="text-center" style="width: 15%">
                                     Subtotal
@@ -233,7 +233,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="discount_add">Diskon(%):</label>
+                            <label class="control-label col-sm-2" for="discount_add">Diskon:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="discount_add" name="discount_add">
                             </div>
@@ -288,7 +288,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="discount_edit">Diskon(%):</label>
+                            <label class="control-label col-sm-2" for="discount_edit">Diskon:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="discount_edit" name="discount_edit">
                             </div>
@@ -535,13 +535,15 @@
         });
 
         discountAddFormat = new AutoNumeric('#discount_add', {
-            maximumValue: '100',
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
             minimumValue: '0',
             decimalPlaces: 0
         });
 
         discountEditFormat = new AutoNumeric('#discount_edit', {
-            maximumValue: '100',
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
             minimumValue: '0',
             decimalPlaces: 0
         });
@@ -603,7 +605,7 @@
             var itemAdd = $('#item_add').val();
 
             if(!itemAdd || itemAdd === ""){
-                alert('Mohon pilih barang!');
+                alert('Mohon pilih inventory!');
                 return false;
             }
 
@@ -626,6 +628,7 @@
             var splitted = itemAdd.split('#');
 
             // Filter variables
+            var qty = parseFloat(qtyAdd);
             var price = 0;
             if(priceAdd && priceAdd !== "" && priceAdd !== "0"){
                 var priceClean = priceAdd.replace(/\./g,'');
@@ -633,9 +636,15 @@
             }
             var discount = 0;
             if(discountAdd && discountAdd !== "" && discountAdd !== "0"){
-                discount = parseFloat(discountAdd);
+                var discountClean = discountAdd.replace(/\./g,'');
+                discount = parseFloat(discountClean);
+
+                // Validate discount
+                if(discount > (price * qty)){
+                    alert('Diskon tidak boleh melebihi harga!')
+                    return false;
+                }
             }
-            var qty = parseFloat(qtyAdd);
 
             // Increase idx
             var idx = $('#index_counter').val();
@@ -661,8 +670,7 @@
                 sbAdd.append("<td><input type='text' name='price[]' class='form-control' value='0' readonly/></td>");
             }
 
-            if(discountAdd && discountAdd !== "" && discountAdd !== "0"){
-                discount = parseFloat(discountAdd);
+            if(discount > 0){
                 sbAdd.append("<td><input type='text' name='discount[]' class='form-control' value='" + discountAdd + "' readonly/></td>");
             }
             else{
@@ -672,7 +680,7 @@
             var subtotal = 0;
             var totalPrice = price * qty;
             if(discount > 0){
-                subtotal = totalPrice - (totalPrice * discount / 100);
+                subtotal = totalPrice - discount;
             }
             else{
                 subtotal = totalPrice;
@@ -741,12 +749,14 @@
             priceEditFormat.set($(this).data('price'), {
                 decimalCharacter: ',',
                 digitGroupSeparator: '.',
+                minimumValue: '0',
                 decimalPlaces: 0
             });
 
             discountEditFormat.clear();
             discountEditFormat.set($(this).data('discount'), {
-                maximumValue: '100',
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
                 minimumValue: '0',
                 decimalPlaces: 0
             });
@@ -782,6 +792,7 @@
             var splitted = data.split('#');
 
             // Filter variables
+            var qty = parseFloat(qtyEdit);
             var price = 0;
             if(priceEdit && priceEdit !== "" && priceEdit !== "0"){
                 var priceClean = priceEdit.replace(/\./g,'');
@@ -789,9 +800,15 @@
             }
             var discount = 0;
             if(discountEdit && discountEdit !== "" && discountEdit !== "0"){
-                discount = parseFloat(discountEdit);
+                var discountClean = discountEdit.replace(/\./g,'');
+                discount = parseFloat(discountClean);
+
+                // Validate discount
+                if(discount > (price * qty)){
+                    alert('Diskon tidak boleh melebihi harga!')
+                    return false;
+                }
             }
-            var qty = parseFloat(qtyEdit);
 
             var sbEdit = new stringbuilder();
 
@@ -812,8 +829,7 @@
                 sbEdit.append("<td><input type='text' name='price[]' class='form-control' value='0' readonly/></td>");
             }
 
-            if(discountEdit && discountEdit !== "" && discountEdit !== "0"){
-                discount = parseFloat(discountEdit);
+            if(discount > 0){
                 sbEdit.append("<td><input type='text' name='discount[]' class='form-control' value='" + discountEdit + "' readonly/></td>");
             }
             else{
@@ -823,7 +839,7 @@
             var subtotal = 0;
             var totalPrice = price * qty;
             if(discount > 0){
-                subtotal = totalPrice - (totalPrice * discount / 100);
+                subtotal = totalPrice - discount;
             }
             else{
                 subtotal = totalPrice;

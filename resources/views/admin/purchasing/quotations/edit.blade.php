@@ -6,7 +6,7 @@
     <div class="row" style="margin-bottom: 10px;">
         <div class="col-md-12 col-sm-12 col-xs-12">
 
-            {{ Form::open(['route'=>['admin.quotations.update', $header->id],'method' => 'put','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.quotations.update', $header->id],'method' => 'put','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
 
             @if(\Illuminate\Support\Facades\Session::has('message'))
                 <div class="form-group">
@@ -218,7 +218,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="discount_add">Diskon(%):</label>
+                            <label class="control-label col-sm-2" for="discount_add">Diskon:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="discount_add" name="discount_add">
                                 <p class="errorDiscount text-center alert alert-danger hidden"></p>
@@ -276,7 +276,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="discount_edit">Diskon(%):</label>
+                            <label class="control-label col-sm-2" for="discount_edit">Diskon:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="discount_edit" name="discount_edit">
                                 <p class="errorDiscount text-center alert alert-danger hidden"></p>
@@ -396,7 +396,7 @@
                 text: ' - Pilih Inventory - '
             },
             width: '100%',
-            minimumInputLength: 2,
+            minimumInputLength: 1,
             ajax: {
                 url: '{{ route('select.items') }}',
                 dataType: 'json',
@@ -477,13 +477,15 @@
         });
 
         discountAddFormat = new AutoNumeric('#discount_add', {
-            maximumValue: '100',
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
             minimumValue: '0',
             decimalPlaces: 0
         });
 
         discountEditFormat = new AutoNumeric('#discount_edit', {
-            maximumValue: '100',
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
             minimumValue: '0',
             decimalPlaces: 0
         });
@@ -629,7 +631,8 @@
 
             discountEditFormat.clear();
             discountEditFormat.set($(this).data('discount'), {
-                maximumValue: '100',
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
                 minimumValue: '0',
                 decimalPlaces: 0
             });

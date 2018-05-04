@@ -48,9 +48,9 @@ class PurchaseInvoiceDetailController extends Controller
             $finalSubtotal = 0;
             $discountAmount = 0;
             if($request->filled('discount')){
-                $discount = (double) $request->input('discount');
-                $detail->discount = $discount;
-                $discountAmount = ($qty * $price) * $discount/ 100;
+                $discountStr = str_replace('.','', $request->input('discount'));
+                $discountAmount = (double) $discountStr;
+                $detail->discount = $discountAmount;
                 $finalSubtotal = ($qty * $price) - $discountAmount;
                 $detail->subtotal = $finalSubtotal;
             }
@@ -148,11 +148,12 @@ class PurchaseInvoiceDetailController extends Controller
             $discountAmount = 0;
             if($request->filled('discount')){
                 // Get old discount
-                $oldDiscountAmount = ($oldQty * $oldPrice) * $detail->discount / 100;
+                $oldDiscountAmount = $detail->discount;
 
-                $discount = (double) $request->input('discount');
-                $detail->discount = $discount;
-                $discountAmount = ($qty * $price) * $discount/ 100;
+                $discountStr = str_replace('.','', $request->input('discount'));
+
+                $discountAmount = (double) $discountStr;
+                $detail->discount = $discountAmount;
                 $finalSubtotal = ($qty * $price) - $discountAmount;
                 $detail->subtotal = $finalSubtotal;
             }

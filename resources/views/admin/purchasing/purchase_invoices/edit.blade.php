@@ -6,7 +6,7 @@
     <div class="row" style="margin-bottom: 10px;">
         <div class="col-md-12 col-sm-12 col-xs-12">
 
-            {{ Form::open(['route'=>['admin.purchase_invoices.update', $header->id],'method' => 'put','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.purchase_invoices.update', $header->id],'method' => 'put','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
 
             @if(\Illuminate\Support\Facades\Session::has('message'))
                 <div class="form-group">
@@ -232,7 +232,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="discount_add">Diskon(%):</label>
+                            <label class="control-label col-sm-2" for="discount_add">Diskon:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="discount_add" name="discount_add">
                                 <p class="errorDiscount text-center alert alert-danger hidden"></p>
@@ -290,7 +290,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="discount_edit">Diskon(%):</label>
+                            <label class="control-label col-sm-2" for="discount_edit">Diskon:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="discount_edit" name="discount_edit">
                                 <p class="errorDiscount text-center alert alert-danger hidden"></p>
@@ -437,7 +437,7 @@
         $('#select0').select2({
             placeholder: {
                 id: '-1',
-                text: 'Pilih barang...'
+                text: ' - Pilih Inventory - '
             },
             width: '100%',
             minimumInputLength: 1,
@@ -521,13 +521,15 @@
         });
 
         discountAddFormat = new AutoNumeric('#discount_add', {
-            maximumValue: '100',
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
             minimumValue: '0',
             decimalPlaces: 0
         });
 
         discountEditFormat = new AutoNumeric('#discount_edit', {
-            maximumValue: '100',
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
             minimumValue: '0',
             decimalPlaces: 0
         });
@@ -662,13 +664,15 @@
             priceEditFormat.set($(this).data('price'), {
                 decimalCharacter: ',',
                 digitGroupSeparator: '.',
+                minimumValue: '0',
                 decimalPlaces: 0
             });
 
             discountEditFormat.clear();
 
             discountEditFormat.set($(this).data('discount'), {
-                maximumValue: '100',
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
                 minimumValue: '0',
                 decimalPlaces: 0
             });
@@ -722,7 +726,7 @@
                         if (data.remark !== null) {
                             remarkEdit = data.remark;
                         }
-                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='field-item'>" + data.item.code + " - " + data.item.name + "</td><td class='text-center'>" + data.item.uom + "</td><td class='text-center'>" + data.quantity + "</td><td class='text-right'>" + data.price_string + "</td><td class='text-center'>" + data.discount_string + "</td><td class='text-right'>" + data.subtotal_string + "</td><td>" + remarkEdit + "</td><td class='text-center'>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
+                        $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td class='text-center'>" + data.item.code + " - " + data.item.name + "</td><td class='text-center'>" + data.item.uom + "</td><td class='text-center'>" + data.quantity + "</td><td class='text-right'>" + data.price_string + "</td><td class='text-center'>" + data.discount_string + "</td><td class='text-right'>" + data.subtotal_string + "</td><td>" + remarkEdit + "</td><td class='text-center'>" + "<button class='edit-modal btn btn-info' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " " + data.item.name + "' data-qty='" + data.quantity + "' data-remark='" + data.remark + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-edit'></span></button><button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-item-id='" + data.item_id + "' data-item-text='" + data.item.code + " - "  + data.item.name + "' data-qty='" + data.quantity + "' data-price='" + data.price + "' data-discount='" + data.discount + "'><span class='glyphicon glyphicon-trash'></span></button></td></tr>");
                     }
                 }
             });

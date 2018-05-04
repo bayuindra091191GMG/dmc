@@ -10,9 +10,9 @@
             </div>
             <div class="navbar-right">
                 <a class="btn btn-default" href="{{ route('admin.item_receipts.print',[ 'material_request' => $header->id]) }}" target="_blank">CETAK</a>
-                @if($header->status_id == 3)
-                    <a class="btn btn-default" href="{{ route('admin.item_receipts.edit',[ 'material_request' => $header->id]) }}">UBAH</a>
-                @endif
+                {{--@if($header->status_id == 3)--}}
+                    {{--<a class="btn btn-default" href="{{ route('admin.item_receipts.edit',[ 'material_request' => $header->id]) }}">UBAH</a>--}}
+                {{--@endif--}}
             </div>
         </div>
     </div>

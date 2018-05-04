@@ -5,7 +5,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            {{ Form::open(['route'=>['admin.suppliers.update', $supplier->id],'method' => 'put','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.suppliers.update', $supplier->id],'method' => 'put','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
 
             @include('partials._success')
 
@@ -97,6 +97,49 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="npwp" >
+                    NPWP
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="npwp" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('npwp')) parsley-error @endif"
+                           name="npwp" value="{{ $supplier->npwp }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="bank_name" >
+                    Nama Bank
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="bank_name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('bank_name')) parsley-error @endif"
+                           name="bank_name" value="{{ $supplier->bank_name }}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="bank_account_number" >
+                    No. Rekening Bank
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="bank_account_number" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('bank_account_number')) parsley-error @endif"
+                           name="bank_account_number" value="{{ $supplier->bank_account_number }}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="bank_account_name" >
+                    Nama Rekening
+                    <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="bank_account_name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('bank_account_name')) parsley-error @endif"
+                           name="bank_account_name" value="{{ $supplier->bank_account_name }}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="city" >
                     Kota
                 </label>
@@ -121,46 +164,6 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <textarea id="remark" name="remark" rows="5" class="form-control col-md-7 col-xs-12 @if($errors->has('remark')) parsley-error @endif" style="resize: vertical">{{ $supplier->remark }}</textarea>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="npwp" >
-                    NPWP
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="npwp" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('npwp')) parsley-error @endif"
-                           name="npwp" value="{{ $supplier->npwp }}">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="bank_name" >
-                    Nama Bank
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="bank_name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('bank_name')) parsley-error @endif"
-                           name="bank_name" value="{{ $supplier->bank_name }}" required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="bank_account_number" >
-                    No. Rekening Bank
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="bank_account_number" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('bank_account_number')) parsley-error @endif"
-                           name="bank_account_number" value="{{ $supplier->bank_account_number }}" required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="bank_account_name" >
-                    Nama Rekening
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="bank_account_name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('bank_account_name')) parsley-error @endif"
-                           name="bank_account_name" value="{{ $supplier->bank_account_name }}" required>
                 </div>
             </div>
 

@@ -176,12 +176,19 @@ class PurchaseOrderHeaderController extends Controller
         $items = $request->input('item_value');
         $qtys = $request->input('qty');
         $prices = $request->input('price');
+        $discounts = $request->input('discount');
         $valid = true;
         $i = 0;
         foreach($items as $item){
             if(empty($item)) $valid = false;
             if(empty($qtys[$i]) || $qtys[$i] == '0') $valid = false;
             if(empty($prices[$i]) || $prices[$i] == '0') $valid = false;
+
+            // Validate discount
+            $priceVad = str_replace('.','', $prices[$i]);
+            $discountVad = str_replace('.','', $discounts[$i]);
+            if((double) $discountVad > ((double) $priceVad * (double) $qtys[$i])) return redirect()->back()->withErrors('Diskon tidak boleh melebihi harga!', 'default')->withInput($request->all());
+
             $i++;
         }
 
@@ -252,8 +259,6 @@ class PurchaseOrderHeaderController extends Controller
             }
         }
 
-
-
         $user = \Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
@@ -282,7 +287,6 @@ class PurchaseOrderHeaderController extends Controller
         $totalPrice = 0;
         $totalDiscount = 0;
         $totalPayment = 0;
-        $discounts = Input::get('discount');
         $remarks = Input::get('remark');
         $idx = 0;
 
@@ -301,17 +305,17 @@ class PurchaseOrderHeaderController extends Controller
 
                 // Check discount
                 if(!empty($discounts[$idx]) && $discounts[$idx] !== '0'){
-                    $poDetail->discount = $discounts[$idx];
+                    $discountStr = str_replace('.','', $discounts[$idx]);
+                    $poDetail->discount = $discountStr;
 
-                    $discount = (double) $discounts[$idx];
-                    $discountAmount = ($qty * $price) * $discount / 100;
-                    $poDetail->subtotal = ($qty * $price) - $discountAmount;
+                    $discount = (double) $discountStr;
+                    $poDetail->subtotal = ($qty * $price) - $discount;
 
                     // Accumulate total price
                     $totalPrice += $qty * $price;
 
                     // Accumulate total discount
-                    $totalDiscount += $discountAmount;
+                    $totalDiscount += $discount;
                 }
                 else{
                     $poDetail->subtotal = $qty * $price;

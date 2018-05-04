@@ -48,10 +48,10 @@ class QuotationDetailController extends Controller
             // Check discount and subtotal
             $finalSubtotal = 0;
             $discountAmount = 0;
-            if($request->filled('discount')){
-                $discount = (double) $request->input('discount');
+            if($request->filled('discount') && $request->input('discount') !== '0'){
+                $discountStr = str_replace('.','', $request->input('discount'));
+                $discountAmount = (double) $discountStr;
                 $detail->discount_percent = $discount;
-                $discountAmount = ($qty * $price) * $discount/ 100;
                 $detail->discount_amount = $discountAmount;
                 $finalSubtotal = ($qty * $price) - $discountAmount;
                 $detail->subtotal = $finalSubtotal;

@@ -110,11 +110,20 @@ class QuotationHeaderController extends Controller
 
         $qtys = $request->input('qty');
         $prices = $request->input('price');
+        $discounts = $request->input('discount');
         $valid = true;
         $i = 0;
         foreach($items as $item){
             if(empty($item)) $valid = false;
             if(empty($qtys[$i]) || $qtys[$i] == '0') $valid = false;
+
+            // Validate discount
+            if(!empty($prices[$i]) && $prices[$i] !== '' && $prices[$i] !== '0' && !empty($discounts[$i]) && $discounts[$i] !== '' && $discounts[$i] !== '0'){
+                $priceVad = str_replace('.','', $prices[$i]);
+                $discountVad = str_replace('.','', $discounts[$i]);
+                if((double) $discountVad > ((double) $priceVad * (double) $qtys[$i])) return redirect()->back()->withErrors('Diskon tidak boleh melebihi harga!', 'default')->withInput($request->all());
+            }
+
             $i++;
         }
 
@@ -173,7 +182,6 @@ class QuotationHeaderController extends Controller
         $totalPrice = 0;
         $totalDiscount = 0;
         $totalPayment = 0;
-        $discounts = Input::get('discount');
         $remarks = Input::get('remark');
         $idx = 0;
         foreach($items as $item){
@@ -190,17 +198,17 @@ class QuotationHeaderController extends Controller
 
                 // Check discount
                 if(!empty($discounts[$idx]) && $discounts[$idx] !== '0'){
-                    $quotDetail->discount = $discounts[$idx];
+                    $discountStr = str_replace('.','', $discounts[$idx]);
+                    $quotDetail->discount = $discountStr;
 
-                    $discount = (double) $discounts[$idx];
-                    $discountAmount = ($qty * $price) * $discount / 100;
-                    $quotDetail->subtotal = ($qty * $price) - $discountAmount;
+                    $discount = (double) $discountStr;
+                    $quotDetail->subtotal = ($qty * $price) - $discount;
 
                     // Accumulate total price
                     $totalPrice += $qty * $price;
 
                     // Accumulate total discount
-                    $totalDiscount += $discountAmount;
+                    $totalDiscount += $discount;
                 }
                 else{
                     $quotDetail->subtotal = $qty * $price;

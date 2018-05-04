@@ -21,6 +21,7 @@ use App\Models\PreferenceCompany;
 use App\Models\PurchaseOrderHeader;
 use App\Models\PurchaseRequestDetail;
 use App\Models\PurchaseRequestHeader;
+use App\Models\Status;
 use App\Transformer\Purchasing\PurchaseRequestHeaderTransformer;
 use Carbon\Carbon;
 use Hamcrest\Util;
@@ -513,30 +514,42 @@ class PurchaseRequestHeaderController extends Controller
         $start = $start->addDays(-1);
         $end = $end->addDays(1);
 
-        $data = PurchaseRequestHeader::whereBetween('date', array($start->toDateTimeString(), $end->toDateTimeString()));
+        $prHeaders = PurchaseRequestHeader::whereBetween('date', array($start->toDateTimeString(), $end->toDateTimeString()));
 
         // Filter departemen
+        $filterDepartment = 'Semua';
         $department = $request->input('department');
         if($department != '0'){
-            $data = $data->where('department_id', $department);
+            $prHeaders = $prHeaders->where('department_id', $department);
+            $filterDepartment = Department::find($department)->name;
         }
 
         // Filter status
         $status = $request->input('status');
+        $filterStatus = 'Semua';
         if($status != '0'){
-            $data = $data->where('status_id', $status);
+            $prHeaders = $prHeaders->where('status_id', $status);
+            $filterStatus = Status::find($status)->description;
         }
 
-        $data = $data->orderByDesc('date')
+        $prHeaders = $prHeaders->orderByDesc('date')
                     ->get();
 
         // Validate Data
-        if(empty($data) || $data->count() == 0){
+        if($prHeaders->count() == 0){
             return redirect()->back()->withErrors('Data tidak ditemukan!', 'default')->withInput($request->all());
         }
 
-        $pdf = PDF::loadView('documents.purchase_requests.purchase_requests_pdf', ['data' => $data, 'start_date' => Input::get('start_date'), 'finish_date' => Input::get('end_date')])
-            ->setPaper('a4', 'landscape');
+        $data =[
+            'prHeaders'         => $prHeaders,
+            'start_date'        => $request->input('start_date'),
+            'finish_date'       => $request->input('end_date'),
+            'filterDepartment'  => $filterDepartment,
+            'filterStatus'      => $filterStatus
+        ];
+
+        $pdf = PDF::loadView('documents.purchase_requests.purchase_requests_pdf', $data)
+            ->setPaper('a4', 'portrait');
         $now = Carbon::now('Asia/Jakarta');
         $filename = 'PURCHASE_REQUEST_REPORT_' . $now->toDateTimeString();
         $pdf->setOptions(["isPhpEnabled"=>true]);

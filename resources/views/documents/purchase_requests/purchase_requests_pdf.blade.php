@@ -38,9 +38,11 @@
 
 <div class="container">
     <h3>Laporan Purchase Request</h3>
-    <span style="font-size: 12px;">Tanggal: {{ $start_date }} - {{ $finish_date }}</span><br/>
-    <span style="font-size: 12px;">Total PR: {{ $data->count() }}</span>
-    <table class="table" style="font-size: 11px;">
+    <span style="font-size: 10px;">Tanggal: {{ $start_date }} - {{ $finish_date }}</span><br/>
+    <span style="font-size: 10px;">Departemen: {{ $filterDepartment }}</span><br/>
+    <span style="font-size: 10px;">Status: {{ $filterStatus }}</span><br/>
+    <span style="font-size: 10px;">Total PR: {{ $prHeaders->count() }}</span>
+    <table class="table" style="font-size: 10px;">
         <thead>
         <tr>
             <th class="text-center">Kode</th>
@@ -51,11 +53,11 @@
         </thead>
         <tbody>
         @php($i=1)
-        @foreach($data as $item)
+        @foreach($prHeaders as $header)
             <tr>
-                <td colspan="4"><b>{{ $item->code }} {{ $item->date_string }} {{ $item->department->name }} Status: {{ $item->status->description }}</b></td>
+                <td colspan="4"><b>{{ $header->code }} {{ $header->date_string }} - Departemen: {{ $header->department->name }} - Status: {{ $header->status->description }} - Dibuat Oleh: {{ $header->createdBy->email }}</b></td>
             </tr>
-            @foreach($item->purchase_request_details as $detail)
+            @foreach($header->purchase_request_details as $detail)
                 <tr>
                     <td class="text-center">{{ $detail->item->code }}</td>
                     <td class="text-center">{{ str_limit($detail->item->name, 15) }}</td>

@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             @include('partials._success')
-            {{ Form::open(['route'=>['admin.permission_documents.update', $permissionDocument->id],'method' => 'put','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.permission_documents.update', $permissionDocument->id],'method' => 'put','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
             {{ csrf_field() }}
                 <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="department" >

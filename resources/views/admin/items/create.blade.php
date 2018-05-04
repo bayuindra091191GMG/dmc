@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
 
-            {{ Form::open(['route'=>['admin.items.store'],'method' => 'post','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.items.store'],'method' => 'post','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
 
             @if(\Illuminate\Support\Facades\Session::has('message'))
                 <div class="form-group">
@@ -126,7 +126,7 @@
                 <div class="col-md-4 col-sm-4 col-xs-12">
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" class="flat" id="stock_notif" name="stock_notif" checked="checked"> Notifikasi Stok
+                            <input type="checkbox" class="flat" id="stock_notif" name="stock_notif"> Notifikasi Stok
                         </label>
                     </div>
                 </div>

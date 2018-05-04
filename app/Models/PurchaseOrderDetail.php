@@ -37,7 +37,7 @@ class PurchaseOrderDetail extends Eloquent
 		'item_id' => 'int',
 		'quantity' => 'int',
 		'price' => 'float',
-		'discount' => 'int',
+		'discount' => 'float',
         'received_quantity' => 'int',
         'quantity_invoiced' => 'int',
 		'subtotal' => 'float'
@@ -67,18 +67,11 @@ class PurchaseOrderDetail extends Eloquent
     }
 
     public function getDiscountStringAttribute(){
-        if(!empty($this->attributes['discount']) && $this->attributes['discount'] !== 0){
-            return $this->attributes['discount']. '%';
-        }
-        else{
-            return '-';
-        }
+        return number_format($this->attributes['discount'], 0, ",", ".");
     }
 
     public function getDiscountAmountStringAttribute(){
-        $price = $this->attributes['price'];
-        $discountAmount = ($this->attributes['discount'] / 100) * $price;
-        return number_format($discountAmount, 0, ",", ".");
+        return number_format($this->attributes['discount'], 0, ",", ".");
     }
 
     public function getSubtotalStringAttribute(){

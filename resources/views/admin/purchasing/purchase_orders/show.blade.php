@@ -20,14 +20,20 @@
                     <a class="btn btn-default" href="{{ route('admin.purchase_orders.print',[ 'purchase_order' => $header->id]) }}" target="_blank">CETAK</a>
                 @endif
 
-                @if($header->status_id == 3 && $approveOrder)
+                @if($header->status_id === 3 && $approveOrder)
                     <a class="btn btn-default" href="{{ route('admin.approval_rules.po_approval',[ 'approval_rule' => $header->id]) }}">APPROVE</a>
                 @endif
 
-                @if($header->status_id == 3 && $permission)
-                    <a class="btn btn-success" href="{{ route('admin.item_receipts.create',[ 'po' => $header->id]) }}">PROSES GOODS RECEIPT</a>
-                @else
-                    <a class="btn btn-default" href="{{ route('admin.purchase_orders.edit',[ 'purchase_order' => $header->id]) }}">UBAH</a>
+                @if($header->status_id === 3)
+                    @if($setting === 1)
+                        @if($permission)
+                            <a class="btn btn-success" href="{{ route('admin.item_receipts.create',[ 'po' => $header->id]) }}">PROSES GOODS RECEIPT</a>
+                            <a class="btn btn-default" href="{{ route('admin.purchase_orders.edit',[ 'purchase_order' => $header->id]) }}">UBAH</a>
+                        @endif
+                    @else
+                        <a class="btn btn-success" href="{{ route('admin.item_receipts.create',[ 'po' => $header->id]) }}">PROSES GOODS RECEIPT</a>
+                        <a class="btn btn-default" href="{{ route('admin.purchase_orders.edit',[ 'purchase_order' => $header->id]) }}">UBAH</a>
+                    @endif
                 @endif
 
                 @if($header->status_id == 3)

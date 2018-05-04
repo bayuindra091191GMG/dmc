@@ -5,7 +5,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            {{ Form::open(['route'=>['admin.users.update', $user->id],'method' => 'put','class'=>'form-horizontal form-label-left', 'enctype'=>'multipart/form-data']) }}
+            {{ Form::open(['route'=>['admin.users.update', $user->id],'method' => 'put','id' => 'general-form','class'=>'form-horizontal form-label-left', 'enctype'=>'multipart/form-data']) }}
             {{ csrf_field()}}
 
             @if(\Illuminate\Support\Facades\Session::has('message'))
