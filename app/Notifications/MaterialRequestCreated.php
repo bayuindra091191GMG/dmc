@@ -51,12 +51,14 @@ class MaterialRequestCreated extends Notification implements ShouldQueue
             $documentType = 'Material Request Servis';
         }
 
-        if(!$this->isInStock){
-            $roleIds = [4,5];
-        }
-        else{
-            $roleIds = [4,6];
-        }
+//        if(!$this->isInStock){
+//            $roleIds = [4,5];
+//        }
+//        else{
+//            $roleIds = [4,6];
+//        }
+
+        $roleIds = [4,5,12];
 
         return [
             'document_type'     => $documentType,

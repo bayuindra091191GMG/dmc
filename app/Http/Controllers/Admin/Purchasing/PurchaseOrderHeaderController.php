@@ -14,12 +14,14 @@ use App\Libs\Utilities;
 use App\Mail\ApprovalPurchaseOrderCreated;
 use App\Models\ApprovalPurchaseOrder;
 use App\Models\ApprovalRule;
+use App\Models\Auth\Role\Role;
 use App\Models\Department;
 use App\Models\NumberingSystem;
 use App\Models\PreferenceCompany;
 use App\Models\PurchaseOrderDetail;
 use App\Models\PurchaseOrderHeader;
 use App\Models\PurchaseRequestHeader;
+use App\Notifications\PurchaseOrderCreated;
 use App\Transformer\Purchasing\PurchaseOrderHeaderTransformer;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -370,6 +372,27 @@ class PurchaseOrderHeaderController extends Controller
             }
         }
         catch (\Exception $ex){
+            error_log($ex);
+        }
+
+        try{
+            // Send notification
+            $mrCreator = $poHeader->purchase_request_header->material_request_header->createdBy;
+            $mrCreator->notify(new PurchaseOrderCreated($poHeader, 'true'));
+
+            $roles = Role::where('id', 13)->get();
+            foreach($roles as $role){
+                $users =  $role->users()->get();
+                if($users->count() > 0){
+                    foreach ($users as $notifiedUser){
+                        if($notifiedUser->id !== $mrCreator->id){
+                            $notifiedUser->notify(new PurchaseOrderCreated($poHeader, 'false'));
+                        }
+                    }
+                }
+            }
+        }
+        catch(\Exception $ex){
             error_log($ex);
         }
 

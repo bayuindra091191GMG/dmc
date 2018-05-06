@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Inventory;
 
 use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
+use App\Models\Auth\Role\Role;
 use App\Models\DeliveryNoteHeader;
 use App\Models\DeliveryOrderHeader;
 use App\Models\Document;
@@ -16,6 +17,7 @@ use App\Models\PurchaseOrderDetail;
 use App\Models\PurchaseOrderHeader;
 use App\Models\StockCard;
 use App\Models\Warehouse;
+use App\Notifications\GoodsReceiptCreated;
 use App\Transformer\Inventory\ItemReceiptTransformer;
 use App\Transformer\Inventory\PurchaseOrderTransformer;
 use Carbon\Carbon;
@@ -289,6 +291,30 @@ class ItemReceiptController extends Controller
 //                }
 //            }
 //            $idx++;
+//        }
+
+//        try{
+//            // Send notification
+//            $mrCreator = $itemReceiptHeader->purchase_order_header->purchase_request_header->material_request_header->createdBy;
+//            $mrCreator->notify(new GoodsReceiptCreated($itemReceiptHeader, 'true', 'false'));
+//
+//            $prCreator = $itemReceiptHeader->purchase_order_header->purchase_request_header->createdBy;
+//            $prCreator->notify(new GoodsReceiptCreated($itemReceiptHeader, 'false', 'true'));
+//
+//            $roles = Role::where('id', 13)->get();
+//            foreach($roles as $role){
+//                $users =  $role->users()->get();
+//                if($users->count() > 0){
+//                    foreach ($users as $notifiedUser){
+//                        if($notifiedUser->id !== $mrCreator->id && $notifiedUser->id !== $prCreator->id){
+//                            $notifiedUser->notify(new GoodsReceiptCreated($itemReceiptHeader, 'false', 'false'));
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        catch (\Exception $ex){
+//            error_log($ex);
 //        }
 
         Session::flash('message', 'Berhasil membuat Goods Receipt!');

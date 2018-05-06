@@ -14,6 +14,7 @@ use App\Libs\Utilities;
 use App\Mail\ApprovalPurchaseRequestCreated;
 use App\Models\ApprovalPurchaseRequest;
 use App\Models\ApprovalRule;
+use App\Models\Auth\Role\Role;
 use App\Models\Department;
 use App\Models\MaterialRequestHeader;
 use App\Models\NumberingSystem;
@@ -22,6 +23,7 @@ use App\Models\PurchaseOrderHeader;
 use App\Models\PurchaseRequestDetail;
 use App\Models\PurchaseRequestHeader;
 use App\Models\Status;
+use App\Notifications\PurchaseRequestCreated;
 use App\Transformer\Purchasing\PurchaseRequestHeaderTransformer;
 use Carbon\Carbon;
 use Hamcrest\Util;
@@ -352,6 +354,27 @@ class PurchaseRequestHeaderController extends Controller
             dd($ex);
         }
 
+        try{
+            // Send notification
+            $mrCreator = $prHeader->material_request_header->createdBy;
+            $mrCreator->notify(new PurchaseRequestCreated($prHeader, 'true'));
+
+            $roleIds = [12,13];
+            $roles = Role::whereIn('id', $roleIds)->get();
+            foreach($roles as $role){
+                $users =  $role->users()->get();
+                if($users->count() > 0){
+                    foreach ($users as $notifiedUser){
+                        if($notifiedUser->id !== $mrCreator->id){
+                            $notifiedUser->notify(new PurchaseRequestCreated($prHeader, 'false'));
+                        }
+                    }
+                }
+            }
+        }
+        catch(\Exception $ex){
+            error_log($ex);
+        }
 
         Session::flash('message', 'Berhasil membuat purchase request!');
 

@@ -14,14 +14,26 @@ use Illuminate\View\View;
 class NotificationComposer
 {
     public $notifications;
+    public $data;
 
     public function __construct()
     {
         $this->notifications = auth()->user()->notifications()->limit(5)->get();
+        $isRead = true;
+        foreach($this->notifications as $notification){
+            if($notification->unread()){
+                $isRead = false;
+            }
+        }
+
+        $this->data = [
+            'notifications' => $this->notifications,
+            'isRead'        => $isRead
+        ];
     }
 
     public function compose(View $view)
     {
-        $view->with('notifications', $this->notifications);
+        $view->with($this->data);
     }
 }

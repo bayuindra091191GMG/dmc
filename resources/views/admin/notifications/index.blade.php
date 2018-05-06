@@ -9,9 +9,9 @@
                width="100%" id="machinery-types-table">
             <thead>
             <tr>
-                <th class="text-center" style="width: 20%;">No</th>
+                <th class="text-center" style="width: 10%;">No</th>
                 <th class="text-center" style="width: 20%;">Dokumen</th>
-                <th class="text-center" style="width: 35%;">Notifikasi</th>
+                <th class="text-center" style="width: 45%;">Notifikasi</th>
                 <th class="text-center" style="width: 25%;">Pengirim</th>
             </tr>
             </thead>

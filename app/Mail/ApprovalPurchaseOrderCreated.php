@@ -40,7 +40,7 @@ class ApprovalPurchaseOrderCreated extends Mailable
             'url'                   => route('redirect', ['url' => $poShowRoute])
         ];
 
-        return $this->from('hellbardx444@gmail.com')
+        return $this->from('system@bayu159753.com')
             ->subject('Permintaan Approval PR')
             ->view('email.approval_purchase_order_created')
             ->with($data);

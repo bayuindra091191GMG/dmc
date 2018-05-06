@@ -250,9 +250,15 @@ class MaterialRequestHeaderController extends Controller
         $header = $material_request;
         $date = Carbon::parse($material_request->date)->format('d M Y');
 
+        $isPrCreated = false;
+        if(PurchaseRequestHeader::where('material_request_id', $header->id)->exists()){
+            $isPrCreated = true;
+        }
+
         $data = [
             'header'        => $header,
-            'date'          => $date
+            'date'          => $date,
+            'isPrCreated'   => $isPrCreated
         ];
 
         return View('admin.inventory.material_requests.service.show')->with($data);
@@ -410,13 +416,15 @@ class MaterialRequestHeaderController extends Controller
             $idx++;
         }
 
-        // Notification
-        if(!$isInStock){
-            $roleIds = [4,5];
-        }
-        else{
-            $roleIds = [4,6];
-        }
+        // Send notification
+//        if(!$isInStock){
+//            $roleIds = [4,5];
+//        }
+//        else{
+//            $roleIds = [4,6];
+//        }
+        $roleIds = [4,5,12];
+
         $roles = Role::whereIn('id', $roleIds)->get();
         foreach($roles as $role){
             $users =  $role->users()->get();

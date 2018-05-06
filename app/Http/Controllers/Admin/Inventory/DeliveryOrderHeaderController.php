@@ -97,9 +97,9 @@ class DeliveryOrderHeaderController extends Controller
         }
 
         // Validate PR number
-        if(empty($request->input('pr_code')) && empty($request->input('pr_id'))){
-            return redirect()->back()->withErrors('Nomor PR wajib diisi!', 'default')->withInput($request->all());
-        }
+//        if(empty($request->input('pr_code')) && empty($request->input('pr_id'))){
+//            return redirect()->back()->withErrors('Nomor PR wajib diisi!', 'default')->withInput($request->all());
+//        }
 
         // Validate from & to warehouse
         if($request->input('from_warehouse') === '-1' || $request->input('to_warehouse') === '-1'){
@@ -180,7 +180,9 @@ class DeliveryOrderHeaderController extends Controller
             $prId = $request->input('pr_code');
         }
         else{
-            $prId = $request->input('pr_id');
+            if($request->filled('pr_id')){
+                $prId = $request->input('pr_id');
+            }
         }
 
         $user = \Auth::user();
@@ -188,7 +190,6 @@ class DeliveryOrderHeaderController extends Controller
 
         $doHeader = DeliveryOrderHeader::create([
             'code'                  => $doCode,
-            'purchase_request_id'   => $prId,
             'from_warehouse_id'     => $request->input('from_warehouse'),
             'to_warehouse_id'       => $request->input('to_warehouse'),
             'status_id'             => 3,
@@ -197,12 +198,7 @@ class DeliveryOrderHeaderController extends Controller
             'updated_by'            => $user->id
         ]);
 
-        if($request->filled('pr_code')){
-            $doHeader->purchase_request_id = $request->input('pr_code');
-        }
-        else{
-            $doHeader->purchase_request_id = $request->input('pr_id');
-        }
+        $doHeader->purchase_request_id = $prId !== '0' ? $prId : null;
 
         if($request->filled('machinery')){
             $doHeader->machinery_id = $request->input('machinery');
