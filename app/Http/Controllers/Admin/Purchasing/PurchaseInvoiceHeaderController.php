@@ -14,11 +14,13 @@ use App\Libs\Utilities;
 use App\Models\NumberingSystem;
 use App\Models\PurchaseInvoiceDetail;
 use App\Models\PurchaseInvoiceHeader;
+use App\Models\PurchaseInvoiceRepayment;
 use App\Models\PurchaseOrderHeader;
 use App\Transformer\Purchasing\PurchaseInvoiceHeaderTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
@@ -33,8 +35,9 @@ class PurchaseInvoiceHeaderController extends Controller
 
     public function show(PurchaseInvoiceHeader $purchase_invoice){
         $header = $purchase_invoice;
+        $repayment = PurchaseInvoiceRepayment::where('purchase_invoice_header_id', $header->id)->get();
 
-        return View('admin.purchasing.purchase_invoices.show', compact('header'));
+        return View('admin.purchasing.purchase_invoices.show', compact('header', 'repayment'));
     }
 
     public function beforeCreate(){
@@ -507,5 +510,47 @@ class PurchaseInvoiceHeaderController extends Controller
         $pdf->setOptions(["isPhpEnabled"=>true]);
 
         return $pdf->download($filename.'.pdf');
+    }
+
+    /**
+     * Add Repayment into Purchase Invoice.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function repayment(Request $request)
+    {
+        try{
+            $purchaseInvoice = PurchaseInvoiceHeader::find($request->get('id'));
+
+            //Check Repayment Value
+            $repaymentTemp = $purchaseInvoice->repayment_amount;
+            $temp = $request->get('repayment_amount');
+            $totalTemp = $repaymentTemp + $temp;
+
+            if($totalTemp > $purchaseInvoice->total_payment){
+                Session::flash('message', 'Total yang dimasukan tidak valid');
+                return Response::json(array('success' => 'INVALID'));
+            }
+            $purchaseInvoice->repayment_amount += $request->get('repayment_amount');
+            $purchaseInvoice->save();
+
+            //Create History
+            $user = \Auth::user();
+            $now = Carbon::now('Asia/Jakarta');
+            PurchaseInvoiceRepayment::create([
+                'purchase_invoice_header_id'    => $purchaseInvoice->id,
+                'repayment_amount'              => $temp,
+                'date'                          => $now->toDateTimeString(),
+                'created_by'                    => $user->id
+            ]);
+
+            Session::flash('message', 'Berhasil menambahkan pelunasan Sebesar '. $request->get('repayment_amount') . ' pada purchase invoice '. $purchaseInvoice->code);
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
+
     }
 }

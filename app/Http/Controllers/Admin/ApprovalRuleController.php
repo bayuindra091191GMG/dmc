@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Session;
@@ -175,12 +176,22 @@ class ApprovalRuleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param Request $request
      * @return \Illuminate\Http\Response
+     * @internal param int $id
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try{
+            $approvalRule = ApprovalRule::find($request->input('id'));
+            $approvalRule->delete();
+
+            Session::flash('message', 'Berhasil menghapus Approval Rule '. $approvalRule->user->name . ' - ' . $approvalRule->document->description);
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 
     //Purchase Request Approval

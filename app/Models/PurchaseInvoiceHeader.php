@@ -64,6 +64,7 @@ class PurchaseInvoiceHeader extends Eloquent
         'ppn_string',
         'pph_string',
         'total_payment_string',
+        'repayment_amount_string',
         'delivery_fee_string',
         'date_string',
         'show_url',
@@ -84,6 +85,7 @@ class PurchaseInvoiceHeader extends Eloquent
 		'ppn_amount',
 		'total_payment',
         'date',
+        'repayment_amount',
 		'status_id',
 		'created_by',
 		'updated_by'
@@ -91,6 +93,10 @@ class PurchaseInvoiceHeader extends Eloquent
 
     public function getDateStringAttribute(){
         return Carbon::parse($this->attributes['created_at'])->format('d M Y');
+    }
+
+    public function getRepaymentAmountStringAttribute(){
+        return number_format($this->attributes['repayment_amount'], 0, ",", ".");
     }
 
     public function getTotalPriceStringAttribute(){
@@ -158,4 +164,9 @@ class PurchaseInvoiceHeader extends Eloquent
 	{
 		return $this->hasMany(\App\Models\PurchaseInvoiceDetail::class, 'header_id');
 	}
+
+    public function purchase_invoice_repayments()
+    {
+        return $this->hasMany(\App\Models\PurchaseInvoiceRepayment::class, 'purchase_invoice_header_id');
+    }
 }

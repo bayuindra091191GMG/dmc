@@ -130,6 +130,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('approval_rules/ubah/{approval_rule}', 'ApprovalRuleController@update')->name('approval_rules.update');
     Route::get('approval_rules/tambah', 'ApprovalRuleController@create')->name('approval_rules.create');
     Route::post('approval_rules/simpan', 'ApprovalRuleController@store')->name('approval_rules.store');
+    Route::post('approval_rules/hapus', 'ApprovalRuleController@destroy')->name('approval_rules.destroy');
     Route::get('approval_rules/pr_approval/{approval_rule}', 'ApprovalRuleController@prApproval')->name('approval_rules.pr_approval');
     Route::get('approval_rules/pr_approve/{approval_rule}', 'ApprovalRuleController@approvePr')->name('approval_rules.approve_pr');
     Route::get('approval_rules/po_approval/{approval_rule}', 'ApprovalRuleController@poApproval')->name('approval_rules.po_approval');
@@ -357,6 +358,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('purchase_invoices/pilihpo', 'Purchasing\PurchaseInvoiceHeaderController@beforeCreate')->name('purchase_invoices.before_create');
     Route::get('purchase_invoices/tambah', 'Purchasing\PurchaseInvoiceHeaderController@create')->name('purchase_invoices.create');
     Route::post('purchase_invoices/simpan', 'Purchasing\PurchaseInvoiceHeaderController@store')->name('purchase_invoices.store');
+    Route::post('purchase_invoices/pelunasan', 'Purchasing\PurchaseInvoiceHeaderController@repayment')->name('purchase_invoices.repayment');
     Route::get('purchase_invoices/report', 'Purchasing\PurchaseInvoiceHeaderController@report')->name('purchase_invoices.report');
     Route::post('purchase_invoices/download_report', 'Purchasing\PurchaseInvoiceHeaderController@downloadReport')->name('purchase_invoices.download-report');
 

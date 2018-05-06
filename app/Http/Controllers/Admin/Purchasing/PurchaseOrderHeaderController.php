@@ -119,7 +119,7 @@ class PurchaseOrderHeaderController extends Controller
             'permission'        => $permission,
             'approveOrder'      => $approveOrder,
             'status'            => $status,
-            'approvalData'      => $approvals,
+            'approvalData'      => $arrData,
             'setting'           => $setting->approval_setting
         ];
 

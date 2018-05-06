@@ -116,6 +116,54 @@
                     </div>
                 </div>
 
+                    <div class="form-group">
+                        <div class="col-lg-12 col-md-12 col-xs-12 column">
+                            <h4 class="text-center">Detil Pelunasan</h4>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr >
+                                        <th class="text-center" style="width: 15%;">
+                                            No
+                                        </th>
+                                        <th class="text-center" style="width: 15%;">
+                                            Jumlah Pelunasan
+                                        </th>
+                                        <th class="text-center" style="width: 10%;">
+                                            Dibuat Oleh
+                                        </th>
+                                        <th class="text-center" style="width: 10%;">
+                                            Tanggal
+                                        </th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @php($no = 1)
+                                    @foreach($repayment as $data)
+                                        <tr>
+                                            <td class="text-center">
+                                                {{ $no }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $data->repayment_amount_string }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $data->user->name }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $data->date_string }}
+                                            </td>
+                                        </tr>
+                                        @php($no++)
+                                    @endforeach
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                 <hr>
 
                 <div class="form-group">

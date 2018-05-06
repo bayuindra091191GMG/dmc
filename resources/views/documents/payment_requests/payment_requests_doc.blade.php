@@ -32,7 +32,7 @@
             :
         </td>
         <td width="80%">
-            PAYMENTREQ0010001
+            {{ $paymentRequest->code }}
         </td>
     </tr>
     <tr>
@@ -43,7 +43,7 @@
             :
         </td>
         <td>
-            23 Januari 2018
+            {{ $paymentRequest->date_string }}
         </td>
     </tr>
     <tr>
@@ -54,18 +54,7 @@
             :
         </td>
         <td>
-            Bayu Indra
-        </td>
-    </tr>
-    <tr>
-        <td>
-            SUBJECT
-        </td>
-        <td>
-            :
-        </td>
-        <td align="justify">
-            <b>Testing untuk bla bla bla blabla Testing untuk bla bla bla blabla Testing untuk bla bla bla blabla Testing untuk bla bla bla blabla Testing untuk bla bla bla blabla Testing untuk bla bla bla blabla Testing untuk bla bla bla blabla Testing untuk bla bla bla blabla Testing untuk bla bla bla blablaTesting untuk bla bla bla blablaTestingTesting untuk bla bla bla blablaTesting untuk bla bla bla blablaTesting untuk bla bla bla blablaTesting untuk bla bla bla </b>
+            {{ $paymentRequest->createdBy->name }}
         </td>
     </tr>
     <tr>
@@ -87,7 +76,7 @@
             :
         </td>
         <td>
-            Rp3.000.000
+            Rp{{ $paymentRequest->amount_string }}
         </td>
     </tr>
     <tr>
@@ -98,7 +87,11 @@
             :
         </td>
         <td>
-            -
+            @if($paymentRequest->ppn_string == null || $paymentRequest->ppn_string == "")
+                -
+            @else
+                Rp{{ $paymentRequest->ppn_string }}
+            @endif
         </td>
     </tr>
     <tr>
@@ -109,7 +102,11 @@
             :
         </td>
         <td>
-            --
+            @if($paymentRequest->ppn_23_string == null || $paymentRequest->ppn_23_string == "")
+                -
+            @else
+                Rp{{ $paymentRequest->ppn_23_string }}
+            @endif
         </td>
     </tr>
     <tr>
@@ -120,7 +117,11 @@
             :
         </td>
         <td>
-            Rp3.000.000
+            @if($paymentRequest->total_amount_string == null || $paymentRequest->total_amount_string == "")
+                -
+            @else
+                Rp{{ $paymentRequest->total_amount_string }}
+            @endif
         </td>
     </tr>
 </table>
@@ -137,30 +138,34 @@
             No PO/PI
         </th>
     </tr>
-    <tr>
-        <td>
-            1
-        </td>
-        <td>
-            PO/03/2018/0001
-        </td>
-    </tr>
-    <tr>
-        <td>
-            2
-        </td>
-        <td>
-            PO/03/2018/0002
-        </td>
-    </tr>
-    <tr>
-        <td>
-            3
-        </td>
-        <td>
-            PO/03/2018/0003
-        </td>
-    </tr>
+    @php($no = 1)
+    @if($poDetails != null)
+        @foreach($poDetails as $detail)
+            <tr>
+                <td>
+                    {{ $no }}
+                </td>
+                <td>
+                    {{ $detail->purchase_order_header->code }}
+                </td>
+            </tr>
+            @php($no++)
+        @endforeach
+    @endif
+
+    @if($piDetails != null)
+        @foreach($piDetails as $detail)
+            <tr>
+                <td>
+                    {{ $no }}
+                </td>
+                <td>
+                    {{ $detail->purchase_invoice_header->code }}
+                </td>
+            </tr>
+            @php($no++)
+        @endforeach
+    @endif
 </table>
 <hr style="display: block; height: 1px; background: transparent; width: 100%; border: none; border-top: solid 1px #aaa;" />
 
@@ -182,12 +187,12 @@
             1
         </td>
         <td>
-            NAMA BANK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: BCA <br/>
-            NO REKENING&nbsp;&nbsp;: 370 1124 772 <br/>
-            ATAS NAMA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <b>Supendi</b>
+            NAMA BANK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ $paymentRequest->requester_bank_name }} <br/>
+            NO REKENING&nbsp;&nbsp;: {{ $paymentRequest->requester_bank_account }} <br/>
+            ATAS NAMA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <b>{{ $paymentRequest->requester_account_name }}</b>
         </td>
         <td>
-            <b>Rp3.000.000</b>
+            <b>Rp{{ $paymentRequest->total_amount_string }}</b>
         </td>
     </tr>
     <tr>
@@ -198,7 +203,7 @@
             <b>TOTAL</b>
         </td>
         <td>
-            <b>Rp3.000.000</b>
+            <b>Rp{{ $paymentRequest->total_amount_string }}</b>
         </td>
     </tr>
 </table>
@@ -212,7 +217,7 @@
             :
         </td>
         <td width="80%" class="heading" style="background: #e6e9ef;">
-            <i><b>Tiga Juta Rupiah</b></i>
+            <i><b>{{ $terbilang }}</b></i>
         </td>
     </tr>
     <tr>
@@ -223,7 +228,7 @@
             :
         </td>
         <td width="80%" align="justify">
-            <b>Testing untuk bla bla bla blabla Testing untuk bla bla bla blabla Testing untuk bla bla bla blabla Testing untuk bla bla bla blabla Testing untuk bla bla bla blabla Testing untuk bla bla bla blabla Testing untuk bla bla bla blabla Testing untuk bla bla bla blabla Testing untuk bla bla bla blablaTesting untuk bla bla bla blablaTestingTesting untuk bla bla bla blablaTesting untuk bla bla bla blablaTesting untuk bla bla bla blablaTesting untuk bla bla bla </b>
+            <b>{{ $paymentRequest->note }}</b>
         </td>
     </tr>
 </table>

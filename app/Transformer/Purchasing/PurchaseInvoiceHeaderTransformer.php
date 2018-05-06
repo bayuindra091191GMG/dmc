@@ -40,6 +40,8 @@ class PurchaseInvoiceHeaderTransformer extends TransformerAbstract
                 $action .= "<input type='text' id='" . $header->id ."' hidden='true' name='ids[]' value='' readonly />";
             }
 
+            $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $header->id ."' ><i class='fa fa-dollar'></i></a>";
+
             return[
                 'code'              => $code,
                 'po_code'           => $poCode,
@@ -48,6 +50,7 @@ class PurchaseInvoiceHeaderTransformer extends TransformerAbstract
                 'total_discount'    => $header->total_discount_string ?? '-',
                 'delivery_fee'      => $header->delivery_fee_string ?? '-',
                 'total_payment'     => $header->total_payment_string,
+                'repayment_amount'  => $header->repayment_amount_string,
                 'created_at'        => $date,
                 'action'            => $action
             ];
