@@ -31,7 +31,8 @@ class PurchaseInvoiceRepayment extends Eloquent
 	protected $casts = [
 		'purchase_invoice_header_id' => 'int',
 		'repayment_amount' => 'float',
-		'created_by' => 'int'
+		'created_by' => 'int',
+        'updated_by' => 'int'
 	];
 
     protected $appends = [
@@ -47,7 +48,8 @@ class PurchaseInvoiceRepayment extends Eloquent
 		'purchase_invoice_header_id',
 		'repayment_amount',
 		'date',
-		'created_by'
+		'created_by',
+        'updated_by'
 	];
 
     public function getDateStringAttribute(){
@@ -67,4 +69,9 @@ class PurchaseInvoiceRepayment extends Eloquent
 	{
 		return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
 	}
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
+    }
 }

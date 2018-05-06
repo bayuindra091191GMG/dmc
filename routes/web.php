@@ -359,6 +359,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('purchase_invoices/tambah', 'Purchasing\PurchaseInvoiceHeaderController@create')->name('purchase_invoices.create');
     Route::post('purchase_invoices/simpan', 'Purchasing\PurchaseInvoiceHeaderController@store')->name('purchase_invoices.store');
     Route::post('purchase_invoices/pelunasan', 'Purchasing\PurchaseInvoiceHeaderController@repayment')->name('purchase_invoices.repayment');
+    Route::post('purchase_invoices/pelunasan-ubah', 'Purchasing\PurchaseInvoiceHeaderController@repaymentUpdate')->name('purchase_invoices.repayment-update');
     Route::get('purchase_invoices/report', 'Purchasing\PurchaseInvoiceHeaderController@report')->name('purchase_invoices.report');
     Route::post('purchase_invoices/download_report', 'Purchasing\PurchaseInvoiceHeaderController@downloadReport')->name('purchase_invoices.download-report');
 

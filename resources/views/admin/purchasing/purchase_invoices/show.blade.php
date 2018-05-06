@@ -116,6 +116,15 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        Total Pelunasan
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ $header->repayment_amount_string ?? '-' }}
+                    </div>
+                </div>
+
                     <div class="form-group">
                         <div class="col-lg-12 col-md-12 col-xs-12 column">
                             <h4 class="text-center">Detil Pelunasan</h4>
@@ -135,7 +144,9 @@
                                         <th class="text-center" style="width: 10%;">
                                             Tanggal
                                         </th>
-
+                                        <th class="text-center" style="width: 10%;">
+                                            Tindakan
+                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -153,6 +164,9 @@
                                             </td>
                                             <td class="text-center">
                                                 {{ $data->date_string }}
+                                            </td>
+                                            <td class="text-center">
+                                                <a class="delete-modal btn btn-xs btn-success" data-id="{{ $data->id }}" data-amount="{{ $data->repayment_amount }}"><i class="fa fa-pencil"></i></a>
                                             </td>
                                         </tr>
                                         @php($no++)
@@ -238,6 +252,43 @@
             </form>
         </div>
     </div>
+
+    <div id="repaymentModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+                <div class="modal-body">
+                    <h3 class="text-center">Apakah anda yakin ingin merubah pelunasan ini?</h3>
+                    <br />
+
+                    <form role="form" class="form-horizontal form-label-left">
+                        <input type="hidden" id="purchase-invoice-id" name="purchase-invoice-id"/>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="amount">
+                            Amount
+                            <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="repayment-amount" type="text" class="form-control col-md-7 col-xs-12"
+                                   name="repayment-amount" value="" required/>
+                        </div>
+                    </form>
+
+                    <br/>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">
+                            <span class='glyphicon glyphicon-remove'></span> Batal
+                        </button>
+                        <button type="submit" class="btn btn-success submit">
+                            <span class='glyphicon glyphicon-send'></span> Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('styles')
@@ -257,6 +308,36 @@
     @parent
     {{ Html::script(mix('assets/admin/js/datatables.js')) }}
     <script type="text/javascript">
+        $(document).on('click', '.delete-modal', function(){
+            $('#repaymentModal').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
 
+            $('#purchase-invoice-id').val($(this).data('id'));
+            $('#repayment-amount').val($(this).data('amount'));
+        });
+
+        $('.modal-footer').on('click', '.submit', function() {
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('admin.purchase_invoices.repayment-update') }}',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'id': $('#purchase-invoice-id').val(),
+                    'repayment_amount': $('#repayment-amount').val()
+                },
+                success: function(data) {
+                    if ((data.errors)){
+                        setTimeout(function () {
+                            toastr.error('Gagal menghapus, data sudah terpakai!!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                        }, 500);
+                    }
+                    else{
+                        window.location = '{{ route('admin.purchase_invoices.show', ['purchase_invoice' => $header->id])}}';
+                    }
+                }
+            });
+        });
     </script>
 @endsection

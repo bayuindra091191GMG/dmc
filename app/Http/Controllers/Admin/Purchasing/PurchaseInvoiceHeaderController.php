@@ -553,4 +553,53 @@ class PurchaseInvoiceHeaderController extends Controller
         }
 
     }
+
+    /**
+     * Edit Repayment into Purchase Invoice.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function repaymentUpdate(Request $request)
+    {
+        try{
+            $repaymentData = PurchaseInvoiceRepayment::find($request->get('id'));
+            $purchaseInvoice = PurchaseInvoiceHeader::find($repaymentData->purchase_invoice_header_id);
+
+            //Check Repayment Value
+            $repaymentTemp = $purchaseInvoice->repayment_amount;
+            $temp = $request->get('repayment_amount');
+            $totalTemp = $repaymentTemp + $temp;
+            $currentRepaymentTemp = $repaymentData->repayment_amount;
+
+            if($totalTemp > $purchaseInvoice->total_payment){
+                Session::flash('message', 'Total yang dimasukan tidak valid');
+                return Response::json(array('success' => 'INVALID'));
+            }
+
+            //Update History
+            $user = \Auth::user();
+            $now = Carbon::now('Asia/Jakarta');
+            $repaymentData->repayment_amount = $temp;
+            $repaymentData->date = $now->toDateTimeString();
+            $repaymentData->updated_by = $user->id;
+            $repaymentData->save();
+
+            //Get all Repayment Amount
+            $tempTotal = 0;
+            $allRepayment = PurchaseInvoiceRepayment::where('purchase_invoice_header_id', $purchaseInvoice->id)->get();
+            foreach ($allRepayment as $data){
+                $tempTotal += $data->repayment_amount;
+            }
+            $purchaseInvoice->repayment_amount = $tempTotal;
+            $purchaseInvoice->save();
+
+            Session::flash('message', 'Berhasil mengubah pelunasan');
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
+
+    }
 }
