@@ -67,11 +67,24 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
+                        Nomor Goods Receipt (GR)
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        @if(!empty($header->item_receipt_id))
+                            : <a style="text-decoration: underline;" href="{{ route('admin.item_receipts.show', ['item_receipt' => $header->item_receipt_id]) }}" target="_blank">{{ $header->item_receipt_header->code }}</a>
+                        @else
+                            : -
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
                         Nomor PR
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        @if(!empty($header->purchase_request_id))
-                            : <a style="text-decoration: underline;" href="{{ route('admin.purchase_requests.show', ['purchase_request' => $header->purchase_request_id]) }}" target="_blank">{{ $header->purchase_request_header->code }}</a>
+                        @if(!empty($header->item_receipt_id))
+                            : <a style="text-decoration: underline;" href="{{ route('admin.purchase_requests.show', ['purchase_request' => $header->item_receipt_header->purchase_order_header->purchase_request_id]) }}" target="_blank">{{ $header->item_receipt_header->purchase_order_header->purchase_request_header->code }}</a>
                         @else
                             : -
                         @endif

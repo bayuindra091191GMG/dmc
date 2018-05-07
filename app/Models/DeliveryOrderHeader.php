@@ -15,7 +15,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property int $id
  * @property string $code
- * @property int $purchase_request_id
+ * @property int $item_receipt_id
  * @property int $from_site_id
  * @property int $to_site_id
  * @property int $from_warehouse_id
@@ -34,7 +34,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Carbon\Carbon $updated_at
  * 
  * @property \App\Models\Machinery $machinery
- * @property \App\Models\PurchaseRequestHeader $purchase_request_header
+ * @property \App\Models\ItemReceiptHeader $item_receipt_header
  * @property \App\Models\Site $site
  * @property \App\Models\Status $status
  * @property \App\Models\Auth\User\User $user
@@ -46,7 +46,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 class DeliveryOrderHeader extends Eloquent
 {
 	protected $casts = [
-		'purchase_request_id' => 'int',
+		'item_receipt_id' => 'int',
 		'from_site_id' => 'int',
 		'to_site_id' => 'int',
 		'from_warehouse_id' => 'int',
@@ -66,7 +66,7 @@ class DeliveryOrderHeader extends Eloquent
 
 	protected $fillable = [
 		'code',
-		'purchase_request_id',
+		'item_receipt_id',
 		'from_site_id',
 		'to_site_id',
 		'from_warehouse_id',
@@ -90,11 +90,6 @@ class DeliveryOrderHeader extends Eloquent
 	public function machinery()
 	{
 		return $this->belongsTo(\App\Models\Machinery::class);
-	}
-
-	public function purchase_request_header()
-	{
-		return $this->belongsTo(\App\Models\PurchaseRequestHeader::class, 'purchase_request_id');
 	}
 
     public function toSite()
@@ -147,4 +142,8 @@ class DeliveryOrderHeader extends Eloquent
 	{
 		return $this->hasMany(\App\Models\DeliveryOrderDetail::class, 'header_id');
 	}
+
+	public function item_receipt_header(){
+        return $this->belongsTo(\App\Models\ItemReceiptHeader::class, 'item_receipt_id');
+    }
 }

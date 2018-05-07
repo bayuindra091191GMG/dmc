@@ -512,6 +512,7 @@ Route::get('/select-purchase_requests', 'Admin\Purchasing\PurchaseRequestHeaderC
 Route::get('/select-purchase_orders', 'Admin\Purchasing\PurchaseOrderHeaderController@getPurchaseOrders')->name('select.purchase_orders');
 Route::get('/select-delivery_orders', 'Admin\Inventory\DeliveryOrderHeaderController@getDeliveryOrders')->name('select.delivery_orders');
 Route::get('/select-purchase_invoices', 'Admin\Purchasing\PurchaseInvoiceHeaderController@getPurchaseInvoices')->name('select.purchase_invoices');
+Route::get('/select-item_receipts', 'Admin\Inventory\ItemReceiptController@getItemReceipts')->name('select.item_receipts');
 
 /**
  * Datatables

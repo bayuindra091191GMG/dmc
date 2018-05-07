@@ -367,6 +367,28 @@ class ItemReceiptController extends Controller
 
     }
 
+    public function getIndex(){
+        $itemReceipts = ItemReceiptHeader::all();
+        return DataTables::of($itemReceipts)
+            ->setTransformer(new ItemReceiptTransformer())
+            ->addIndexColumn()
+            ->make(true);
+    }
+
+    public function getItemReceipts(Request $request){
+        $term = trim($request->q);
+        $itemReceipts = ItemReceiptHeader::where('code', 'LIKE', '%'. $term. '%')
+            ->get();
+
+        $formatted_tags = [];
+
+        foreach ($itemReceipts as $itemReceipt) {
+            $formatted_tags[] = ['id' => $itemReceipt->id, 'text' => $itemReceipt->code];
+        }
+
+        return \Response::json($formatted_tags);
+    }
+
     public function printDocument($id){
         $itemReceipt = ItemReceiptHeader::find($id);
         $itemReceiptDetails = ItemReceiptDetail::where('header_id', $itemReceipt->id)->get();
@@ -420,13 +442,5 @@ class ItemReceiptController extends Controller
         $filename = $itemReceipt->code. '_' . $now->toDateTimeString();
 
         return $pdf->download($filename.'.pdf');
-    }
-
-    public function getIndex(){
-        $itemReceipts = ItemReceiptHeader::all();
-        return DataTables::of($itemReceipts)
-            ->setTransformer(new ItemReceiptTransformer())
-            ->addIndexColumn()
-            ->make(true);
     }
 }

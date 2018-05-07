@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Fri, 23 Mar 2018 16:55:00 +0700.
+ * Date: Mon, 07 May 2018 13:22:03 +0700.
  */
 
 namespace App\Models;
@@ -29,14 +29,13 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\Status $status
  * @property \App\Models\Auth\User\User $user
  * @property \App\Models\Warehouse $warehouse
+ * @property \Illuminate\Database\Eloquent\Collection $delivery_order_headers
  * @property \Illuminate\Database\Eloquent\Collection $item_receipt_details
  *
  * @package App\Models
  */
 class ItemReceiptHeader extends Eloquent
 {
-    protected $appends = ['date_string'];
-
 	protected $casts = [
 		'purchase_order_id' => 'int',
 		'warehouse_id' => 'int',
@@ -48,6 +47,8 @@ class ItemReceiptHeader extends Eloquent
 	protected $dates = [
 		'date'
 	];
+
+    protected $appends = ['date_string'];
 
 	protected $fillable = [
 		'code',
@@ -87,6 +88,11 @@ class ItemReceiptHeader extends Eloquent
 	public function warehouse()
 	{
 		return $this->belongsTo(\App\Models\Warehouse::class);
+	}
+
+	public function delivery_order_headers()
+	{
+		return $this->hasMany(\App\Models\DeliveryOrderHeader::class, 'item_receipt_id');
 	}
 
 	public function item_receipt_details()

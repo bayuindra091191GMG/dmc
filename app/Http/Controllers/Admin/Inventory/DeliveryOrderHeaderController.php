@@ -14,6 +14,7 @@ use App\Libs\Utilities;
 use App\Models\DeliveryOrderDetail;
 use App\Models\DeliveryOrderHeader;
 use App\Models\Item;
+use App\Models\ItemReceiptHeader;
 use App\Models\ItemStock;
 use App\Models\NumberingSystem;
 use App\Models\PurchaseRequestHeader;
@@ -44,10 +45,10 @@ class DeliveryOrderHeaderController extends Controller
     public function create(){
         $warehouses = Warehouse::where('id', '>', 0)->get();
 
-        // Get PR data if exist
-        $purchaseRequest = null;
-        if(!empty(request()->pr)){
-            $purchaseRequest = PurchaseRequestHeader::find(request()->pr);
+        // Get GR data if exist
+        $itemReceipt = null;
+        if(!empty(request()->gr)){
+            $itemReceipt = ItemReceiptHeader::find(request()->gr);
         }
 
         // Numbering System
@@ -57,7 +58,7 @@ class DeliveryOrderHeaderController extends Controller
         $data =[
             'warehouses'        => $warehouses,
             'autoNumber'        => $autoNumber,
-            'purchaseRequest'   => $purchaseRequest
+            'itemReceipt'       => $itemReceipt
         ];
 
         return View('admin.inventory.delivery_orders.create')->with($data);
@@ -133,13 +134,13 @@ class DeliveryOrderHeaderController extends Controller
 
         $valid = true;
         // Validate stock
-        $warehouse = Warehouse::find($request->input('from_warehouse'));
+        $fromWarehouse = Warehouse::find($request->input('from_warehouse'));
         $i = 0;
         foreach($items as $item){
             if(!empty($item)){
-                $valid = ItemStock::where('warehouse_id', $warehouse->id)
+                $valid = ItemStock::where('warehouse_id', $fromWarehouse->id)
                     ->where('item_id', $item)
-                    ->where('stock', '>', $qtys[$i])
+                    ->where('stock', '>=', $qtys[$i])
                     ->exists();
             }
             $i++;
@@ -174,14 +175,14 @@ class DeliveryOrderHeaderController extends Controller
             }
         }
 
-        // Get PR id
-        $prId = '0';
-        if($request->filled('pr_code')){
-            $prId = $request->input('pr_code');
+        // Get GR id
+        $grId = '0';
+        if($request->filled('gr_code')){
+            $grId = $request->input('gr_code');
         }
         else{
-            if($request->filled('pr_id')){
-                $prId = $request->input('pr_id');
+            if($request->filled('gr_id')){
+                $grId = $request->input('gr_id');
             }
         }
 
@@ -198,7 +199,7 @@ class DeliveryOrderHeaderController extends Controller
             'updated_by'            => $user->id
         ]);
 
-        $doHeader->purchase_request_id = $prId !== '0' ? $prId : null;
+        $doHeader->item_receipt_id = $grId !== '0' ? $grId : null;
 
         if($request->filled('machinery')){
             $doHeader->machinery_id = $request->input('machinery');
@@ -214,6 +215,7 @@ class DeliveryOrderHeaderController extends Controller
         }
 
         $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+
         $doHeader->date = $date->toDateTimeString();
 
         $doHeader->save();
@@ -234,11 +236,13 @@ class DeliveryOrderHeaderController extends Controller
                 }
 
                 // Change stock
-                $stock = ItemStock::where('warehouse_id', $warehouse->id)
+                $stock = ItemStock::where('warehouse_id', $fromWarehouse->id)
                     ->where('item_id', $item)
-                    ->where('stock', '>', $qtys[$idx])
                     ->first();
-                $stock->stock -= intval($qtys[$idx]);
+
+                $qtyInt = (int) $qtys[$idx];
+
+                $stock->stock -= $qtyInt;
                 $stock->save();
 
                 // Add stock card
@@ -248,7 +252,7 @@ class DeliveryOrderHeaderController extends Controller
                     'stock'         => $stock->stock,
                     'flag'          => '-',
                     'description'   => 'Surat Jalan '. $doHeader->code,
-                    'warehouse_id'  => $warehouse->id,
+                    'warehouse_id'  => $fromWarehouse->id,
                     'created_by'    => $user->id,
                     'created_at'    => $now->toDateTimeString()
                 ]);

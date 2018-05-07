@@ -27,7 +27,7 @@
                     Nomor Surat Jalan
                     <span class="required">*</span>
                 </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="do_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('do_code')) parsley-error @endif"
                            name="do_code" value="{{ $autoNumber }}" readonly>
                 </div>
@@ -56,32 +56,44 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pr_code" >
-                    Nomor PR
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="gr_code" >
+                    Nomor Goods Receipt (GR)
                 </label>
                 <div class="col-md-4 col-sm-4 col-xs-12">
-                    <select id="pr_code" name="pr_code" class="form-control col-md-7 col-xs-12 @if($errors->has('pr_code')) parsley-error @endif">
+                    <select id="gr_code" name="gr_code" class="form-control col-md-7 col-xs-12 @if($errors->has('gr_code')) parsley-error @endif">
                     </select>
-                    <input type="hidden" id="pr_id" name="pr_id" @if(!empty($purchaseRequest)) value="{{ $purchaseRequest->id }} @endif">
+                    <input type="hidden" id="gr_id" name="gr_id" @if(!empty($itemReceipt)) value="{{ $itemReceipt->id }}" @endif>
                 </div>
                 <div class="col-md-2 col-sm-2 col-xs-12">
-                    <a class="get-pr-data btn btn-info">
+                    <a class="get-gr-data btn btn-info">
                         Ambil Data
                     </a>
-                    @if(!empty($purchaseRequest))
-                        <a class="clear-pr-data btn btn-info">
+                    @if(!empty($itemReceipt))
+                        <a class="clear-gr-data btn btn-info">
                             Reset Data
                         </a>
                     @endif
                 </div>
             </div>
 
+            @if(!empty($itemReceipt))
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pr_code">
+                        Nomor PR
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input id="pr_code" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
+                               name="pr_code" value="{{ $itemReceipt->purchase_order_header->purchase_request_header->code }}" readonly>
+                    </div>
+                </div>
+            @endif
+
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="from_warehouse" >
                     Gudang Keberangkatan
                     <span class="required">*</span>
                 </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="from_warehouse" name="from_warehouse" class="form-control col-md-7 col-xs-12 @if($errors->has('from_warehouse')) parsley-error @endif">
                         <option value="-1" @if(empty(old('from_warehouse'))) selected @endif> - Pilih gudang - </option>
                         @foreach($warehouses as $warehouse)
@@ -96,7 +108,7 @@
                     Gudang Tujuan
                     <span class="required">*</span>
                 </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="to_warehouse" name="to_warehouse" class="form-control col-md-7 col-xs-12 @if($errors->has('to_warehouse')) parsley-error @endif">
                         <option value="-1" @if(empty(old('to_warehouse'))) selected @endif> - Pilih gudang - </option>
                         @foreach($warehouses as $warehouse)
@@ -110,10 +122,10 @@
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="machinery" >
                     Unit Alat Berat
                 </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="machinery" name="machinery" class="form-control col-md-7 col-xs-12 @if($errors->has('machinery')) parsley-error @endif">
                     </select>
-                    <input type="hidden" id="machinery_id" name="machinery_id" @if(!empty($purchaseRequest)) value="{{ $purchaseRequest->machinery_id }} @endif">
+                    <input type="hidden" id="machinery_id" name="machinery_id" @if(!empty($itemReceipt)) value="{{ $itemReceipt->purchase_order_header->purchase_request_header->machinery_id }} @endif">
                 </div>
             </div>
 
@@ -160,8 +172,8 @@
                             </thead>
                             <tbody>
                             <?php $idx = 0; ?>
-                            @if(!empty($purchaseRequest))
-                                @foreach($purchaseRequest->purchase_request_details as $detail)
+                            @if(!empty($itemReceipt))
+                                @foreach($itemReceipt->item_receipt_details as $detail)
                                     <?php $idx++; ?>
                                     <tr class='item{{ $idx }}'>
                                         <td class='text-center'>
@@ -394,17 +406,17 @@
             decimalPlaces: 0
         });
 
-        @if(!empty($purchaseRequest))
-            $('#pr_code').select2({
+        @if(!empty($itemReceipt))
+            $('#gr_code').select2({
                 placeholder: {
-                    id: '{{ $purchaseRequest->id }}',
-                    text: '{{ $purchaseRequest->code }}'
+                    id: '{{ $itemReceipt->id }}',
+                    text: '{{ $itemReceipt->code }}'
                 },
                 width: '100%',
                 minimumInputLength: 1,
                 allowClear: true,
                 ajax: {
-                    url: '{{ route('select.purchase_requests') }}',
+                    url: '{{ route('select.item_receipts') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {
@@ -422,8 +434,8 @@
             // Get machinery data
             $('#machinery').select2({
                 placeholder: {
-                    id: '{{ $purchaseRequest->machinery_id }}',
-                    text: '{{ $purchaseRequest->machinery->code }}'
+                    id: '{{ $itemReceipt->purchase_order_header->purchase_request_header->machinery_id }}',
+                    text: '{{ $itemReceipt->purchase_order_header->purchase_request_header->machinery->code }}'
                 },
                 width: '100%',
                 minimumInputLength: 1,
@@ -444,16 +456,16 @@
                 }
             });
         @else
-            $('#pr_code').select2({
+            $('#gr_code').select2({
                 placeholder: {
                     id: '-1',
-                    text: ' - Pilih Nomor PR - '
+                    text: ' - Pilih Nomor GR - '
                 },
                 width: '100%',
                 minimumInputLength: 1,
                 allowClear: true,
                 ajax: {
-                    url: '{{ route('select.purchase_requests') }}',
+                    url: '{{ route('select.item_receipts') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {
@@ -494,23 +506,23 @@
         });
         @endif
 
-        // Get selected PR data
-        $(document).on('click', '.get-pr-data', function(){
+        // Get selected GR data
+        $(document).on('click', '.get-gr-data', function(){
             var url = '{{ route('admin.delivery_orders.create') }}';
-            if($('#pr_code').val() && $('#pr_code').val() !== ""){
-                url += "?pr=" + $('#pr_code').val();
+            if($('#gr_code').val() && $('#gr_code').val() !== ""){
+                url += "?gr=" + $('#gr_code').val();
                 window.location = url;
             }
             else{
-                if($('#pr_id').val() && $('#pr_id').val() !== ""){
-                    url += "?pr=" + $('#pr_id').val();
+                if($('#gr_id').val() && $('#gr_id').val() !== ""){
+                    url += "?gr=" + $('#gr_id').val();
                     window.location = url;
                 }
             }
         });
 
         // Clear selected PR data
-        $(document).on('click', '.clear-pr-data', function(){
+        $(document).on('click', '.clear-gr-data', function(){
             var url = '{{ route('admin.delivery_orders.create') }}';
             window.location = url;
         });
