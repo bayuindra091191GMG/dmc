@@ -89,6 +89,36 @@ class NotificationTransformer extends TransformerAbstract
                 }
             }
         }
+        elseif($notif->type === 'App\Notifications\GoodsReceiptCreated'){
+            if($user->roles->pluck('id')[0] === 13){
+                $route = route('admin.item_receipts.show', ['item_receipt' => $notif->data['gr_id']]);
+                $notification .= "<span>GR </span><a style='text-decoration: underline;' href='". $route. "'>". $notif->data['code']. "</a> telah dibuat";
+            }
+            else{
+                if($notif->data['receiver_is_mr_creator'] === 'true'){
+                    $mrType = 'default';
+                    if($notif->data['mr_type'] === 1){
+                        $mrType = 'other';
+                    }
+                    elseif($notif->data['mr_type'] === 2){
+                        $mrType = 'fuel';
+                    }
+                    elseif($notif->data['mr_type'] === 3){
+                        $mrType = 'oil';
+                    }
+                    else{
+                        $mrType = 'service';
+                    }
+                    $mrRouteStr = 'admin.material_requests.'. $mrType. '.show';
+                    $mrRoute = route($mrRouteStr, ['material_request' => $notif->data['mr_id']]);
+                    $notification .= "<span>MR </span><a style='text-decoration: underline;' href='". $mrRoute. "'>". $notif->data['mr_code']. "</a> anda telah diproses ke GR";
+                }
+                elseif($notif->data['receiver_is_pr_creator'] === 'true'){
+                    $prRoute = route('admin.purchase_requests.show', ['purchase_request' => $notif->data['pr_id']]);
+                    $notification .= "<span>PR </span><a style='text-decoration: underline;' href='". $prRoute. "'>". $notif->data['pr_code']. "</a> anda telah diproses ke GR";
+                }
+            }
+        }
 
         return[
             'document'      => $notif->data['document_type'],

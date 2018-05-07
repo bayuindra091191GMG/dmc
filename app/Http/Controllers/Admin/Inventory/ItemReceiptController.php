@@ -293,29 +293,29 @@ class ItemReceiptController extends Controller
 //            $idx++;
 //        }
 
-//        try{
-//            // Send notification
-//            $mrCreator = $itemReceiptHeader->purchase_order_header->purchase_request_header->material_request_header->createdBy;
-//            $mrCreator->notify(new GoodsReceiptCreated($itemReceiptHeader, 'true', 'false'));
-//
-//            $prCreator = $itemReceiptHeader->purchase_order_header->purchase_request_header->createdBy;
-//            $prCreator->notify(new GoodsReceiptCreated($itemReceiptHeader, 'false', 'true'));
-//
-//            $roles = Role::where('id', 13)->get();
-//            foreach($roles as $role){
-//                $users =  $role->users()->get();
-//                if($users->count() > 0){
-//                    foreach ($users as $notifiedUser){
-//                        if($notifiedUser->id !== $mrCreator->id && $notifiedUser->id !== $prCreator->id){
-//                            $notifiedUser->notify(new GoodsReceiptCreated($itemReceiptHeader, 'false', 'false'));
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        catch (\Exception $ex){
-//            error_log($ex);
-//        }
+        try{
+            // Send notification
+            $mrCreator = $itemReceiptHeader->purchase_order_header->purchase_request_header->material_request_header->createdBy;
+            $mrCreator->notify(new GoodsReceiptCreated($itemReceiptHeader, 'true', 'false'));
+
+            $prCreator = $itemReceiptHeader->purchase_order_header->purchase_request_header->createdBy;
+            $prCreator->notify(new GoodsReceiptCreated($itemReceiptHeader, 'false', 'true'));
+
+            $roles = Role::where('id', 13)->get();
+            foreach($roles as $role){
+                $users =  $role->users()->get();
+                if($users->count() > 0){
+                    foreach ($users as $notifiedUser){
+                        if($notifiedUser->id !== $mrCreator->id && $notifiedUser->id !== $prCreator->id){
+                            $notifiedUser->notify(new GoodsReceiptCreated($itemReceiptHeader, 'false', 'false'));
+                        }
+                    }
+                }
+            }
+        }
+        catch (\Exception $ex){
+            error_log($ex);
+        }
 
         Session::flash('message', 'Berhasil membuat Goods Receipt!');
 

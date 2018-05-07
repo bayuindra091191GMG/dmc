@@ -72,9 +72,36 @@
                                                 @php( $mrType = 'default' )
                                                 @if($notif->data['mr_type'] === 1)
                                                     @php( $mrType = 'other' )
+                                                @elseif($notif->data['mr_type'] === 2)
+                                                    @php( $mrType = 'fuel' )
+                                                @elseif($notif->data['mr_type'] === 3)
+                                                    @php( $mrType = 'oil' )
+                                                @else
+                                                    @php( $mrType = 'service' )
                                                 @endif
                                                 @php( $routeStr = 'admin.material_requests.'. $mrType. '.show' )
                                                 <a href="{{ route($routeStr, ['material_request' => $notif->data['mr_id']]) }}">MR {{ $notif->data['mr_code'] }} anda telah diproses ke PO</a>
+                                            @endif
+                                        @endif
+                                    @elseif($notif->type === 'App\Notifications\GoodsReceiptCreated')
+                                        @if(auth()->user()->roles->pluck('id')[0] === 13)
+                                            <a href="{{ route('admin.item_receipts.show', ['purchase_order' => $notif->data['gr_id']]) }}">GR {{ $notif->data['code'] }} telah dibuat</a>
+                                        @else
+                                            @if($notif->data['receiver_is_mr_creator'] === 'true')
+                                                @php( $mrType = 'default' )
+                                                @if($notif->data['mr_type'] === 1)
+                                                    @php( $mrType = 'other' )
+                                                @elseif($notif->data['mr_type'] === 2)
+                                                    @php( $mrType = 'fuel' )
+                                                @elseif($notif->data['mr_type'] === 3)
+                                                    @php( $mrType = 'oil' )
+                                                @else
+                                                    @php( $mrType = 'service' )
+                                                @endif
+                                                @php( $routeStr = 'admin.material_requests.'. $mrType. '.show' )
+                                                <a href="{{ route($routeStr, ['material_request' => $notif->data['mr_id']]) }}">MR {{ $notif->data['mr_code'] }} anda telah diproses ke GR</a>
+                                            @elseif($notif->data['receiver_is_pr_creator'] === 'true')
+                                                <a href="{{ route('admin.purchase_requests.show', ['purchase_request' => $notif->data['pr_id']]) }}">PR {{ $notif->data['pr_code'] }} anda telah diproses ke GR</a>
                                             @endif
                                         @endif
                                     @endif
