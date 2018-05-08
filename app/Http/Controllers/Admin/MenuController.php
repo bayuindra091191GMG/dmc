@@ -10,6 +10,7 @@ use App\Transformer\MasterData\MenuTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
@@ -137,11 +138,21 @@ class MenuController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param Request $request
      * @return \Illuminate\Http\Response
+     * @internal param int $id
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try{
+            $menu = Menu::find($request->input('id'));
+            $menu->delete();
+
+            Session::flash('message', 'Berhasil menghapus data menu '. $menu->name);
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 }

@@ -12,6 +12,7 @@ use App\Transformer\MasterData\MenuTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
@@ -111,8 +112,9 @@ class MenuSubController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param Menu $machinery_type
+     * @param MenuSub $menuSub
      * @return mixed
+     * @internal param Menu $machinery_type
      */
     public function update(Request $request, MenuSub $menuSub)
     {
@@ -137,11 +139,21 @@ class MenuSubController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param Request $request
      * @return \Illuminate\Http\Response
+     * @internal param int $id
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try{
+            $menuSub = MenuSub::find($request->input('id'));
+            $menuSub->delete();
+
+            Session::flash('message', 'Berhasil menghapus data Menu Sub '. $menuSub->name);
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 }
