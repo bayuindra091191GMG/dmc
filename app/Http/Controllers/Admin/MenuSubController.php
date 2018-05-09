@@ -112,9 +112,8 @@ class MenuSubController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param MenuSub $menuSub
+     * @param Menu $machinery_type
      * @return mixed
-     * @internal param Menu $machinery_type
      */
     public function update(Request $request, MenuSub $menuSub)
     {

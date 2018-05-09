@@ -6,6 +6,7 @@ use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
 use App\Models\Menu;
 use App\Models\MenuHeader;
+use App\Models\MenuSub;
 use App\Transformer\MasterData\MenuTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -146,6 +147,9 @@ class MenuController extends Controller
     {
         try{
             $menu = Menu::find($request->input('id'));
+
+            //Deleting all the Sub Menus
+            MenuSub::where('menu_id', $menu->id)->delete();
             $menu->delete();
 
             Session::flash('message', 'Berhasil menghapus data menu '. $menu->name);

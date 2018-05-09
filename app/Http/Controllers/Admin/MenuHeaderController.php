@@ -6,6 +6,7 @@ use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
 use App\Models\Menu;
 use App\Models\MenuHeader;
+use App\Models\MenuSub;
 use App\Transformer\MasterData\MenuHeaderTransformer;
 use App\Transformer\MasterData\MenuTransformer;
 use Illuminate\Http\Request;
@@ -139,6 +140,19 @@ class MenuHeaderController extends Controller
     {
         try{
             $menuHeader = MenuHeader::find($request->input('id'));
+            $menus = Menu::where('menu_header_id', $menuHeader->id)->get();
+
+            if($menus != null || $menus->count() > 0) {
+                foreach ($menus as $menu) {
+                    //Deleting all the Sub Menus
+                    MenuSub::where('menu_id', $menu->id)->delete();
+                }
+
+                //Delete all Menu from the Header Menu
+                Menu::where('menu_header_id', $menuHeader->id)->delete();
+            }
+
+            //Delete header Menu
             $menuHeader->delete();
 
             Session::flash('message', 'Berhasil menghapus data Menu Header '. $menuHeader->name);

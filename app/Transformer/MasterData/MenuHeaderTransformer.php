@@ -18,6 +18,7 @@ class MenuHeaderTransformer extends TransformerAbstract
 
         $action =
             "<a class='btn btn-xs btn-info' href='menu_headers/".$menuHeader->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+        $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $menuHeader->id ."' ><i class='fa fa-trash'></i></a>";
 
         return[
             'name'           => $menuHeader->name,

@@ -27,35 +27,38 @@
             </thead>
             <tbody>
             {{--@foreach($machinery_types as $machinery_type)--}}
-                {{--<tr>--}}
-                    {{--<td>{{ $machinery_type->id }}</td>--}}
-                    {{--<td>{{ $machinery_type->description }}</td>--}}
-                    {{--<td>--}}
-                        {{--<a class="btn btn-xs btn-info" href="{{ route('admin.machinery_types.edit', [$machinery_type->id]) }}" data-toggle="tooltip" data-placement="top" data-title="Ubah">--}}
-                            {{--<i class="fa fa-pencil"></i>--}}
-                        {{--</a>--}}
-                        {{--@if(!$user->hasRole('administrator'))--}}
-                            {{--<button class="btn btn-xs btn-danger user_destroy"--}}
-                                    {{--data-url="{{ route('admin.users.destroy', [$user->id]) }}" data-toggle="tooltip" data-placement="top" data-title="{{ __('views.admin.users.index.delete') }}">--}}
-                                {{--<i class="fa fa-trash"></i>--}}
-                            {{--</button>--}}
-                        {{--@endif--}}
-                    {{--</td>--}}
-                {{--</tr>--}}
+            {{--<tr>--}}
+            {{--<td>{{ $machinery_type->id }}</td>--}}
+            {{--<td>{{ $machinery_type->description }}</td>--}}
+            {{--<td>--}}
+            {{--<a class="btn btn-xs btn-info" href="{{ route('admin.machinery_types.edit', [$machinery_type->id]) }}" data-toggle="tooltip" data-placement="top" data-title="Ubah">--}}
+            {{--<i class="fa fa-pencil"></i>--}}
+            {{--</a>--}}
+            {{--@if(!$user->hasRole('administrator'))--}}
+            {{--<button class="btn btn-xs btn-danger user_destroy"--}}
+            {{--data-url="{{ route('admin.users.destroy', [$user->id]) }}" data-toggle="tooltip" data-placement="top" data-title="{{ __('views.admin.users.index.delete') }}">--}}
+            {{--<i class="fa fa-trash"></i>--}}
+            {{--</button>--}}
+            {{--@endif--}}
+            {{--</td>--}}
+            {{--</tr>--}}
             {{--@endforeach--}}
             </tbody>
         </table>
     </div>
+    @include('partials._delete')
 @endsection
 
 @section('styles')
     @parent
     {{ Html::style(mix('assets/admin/css/datatables.css')) }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 @endsection
 
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/datatables.js')) }}
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         $(function() {
             $('#menus-table').DataTable({
@@ -74,5 +77,14 @@
                 }
             });
         });
+        $(document).on('click', '.delete-modal', function(){
+            $('#deleteModal').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+
+            $('#deleted-id').val($(this).data('id'));
+        });
     </script>
+    @include('partials._deleteJs', ['routeUrl' => 'admin.menus.destroy', 'redirectUrl' => 'admin.menus'])
 @endsection
