@@ -13,10 +13,10 @@ class ComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        view()->composer(
-            'admin.sections.header',
-            'App\Http\ViewComposers\NotificationComposer'
-        );
+//        view()->composer(
+//            'admin.sections.header',
+//            'App\Http\ViewComposers\NotificationComposer'
+//        );
         view()->composer(
             'admin.sections.navigation',
             'App\Http\ViewComposers\NavigationComposer'

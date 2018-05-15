@@ -7,6 +7,8 @@ use App\Models\ApprovalPurchaseRequest;
 use App\Models\ApprovalRule;
 use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
+use App\Models\Course;
+use App\Models\Customer;
 use App\Models\ItemStockNotification;
 use App\Models\PreferenceCompany;
 use App\Models\PurchaseOrderHeader;
@@ -46,74 +48,13 @@ class DashboardController extends Controller
             'protected_pages' => 0,
         ];
 
-//        foreach (\Route::getRoutes() as $route) {
-//            foreach ($route->middleware() as $middleware) {
-//                if (preg_match("/protection/", $middleware, $matches)) $counts['protected_pages']++;
-//            }
-//        }
-
-
-
-        // Get PR priority limit date warnings
-        $purchaseRequests = new Collection();
-        $prHeaders = PurchaseRequestHeader::where('status_id', 3)->get();
-        foreach ($prHeaders as $header){
-            if($header->priority_expired){
-                $purchaseRequests->add($header);
-            }
-            else{
-                if($header->day_left <= 3){
-                    $purchaseRequests->add($header);
-                }
-            }
-        }
-
-        // Get all active PR
-        $prActiveCount = $prHeaders->count();
-
-        $user = Auth::user();
-
-        // Check Approval Feature
-        $preference = PreferenceCompany::find(1);
-        $approvalPurchaseRequests = new Collection();
-        $approvalPurchaseOrders = new Collection();
-
-        if($preference->approval_setting === "1"){
-            // Get PR approval notifications
-            if(ApprovalRule::where('document_id', 3)->where('user_id', $user->id)->exists()){
-                foreach ($prHeaders as $header){
-                    if(!ApprovalPurchaseRequest::where('purchase_request_id', $header->id)->where('user_id', $user->id)->exists()){
-                        $approvalPurchaseRequests->add($header);
-                    }
-                }
-            }
-
-            // Get PO approval notifications
-            $poHeaders = PurchaseOrderHeader::where('status_id', 3)->get();
-            if(ApprovalRule::where('document_id', 4)->where('user_id', $user->id)->exists()){
-                foreach ($poHeaders as $header){
-                    if(!ApprovalPurchaseOrder::where('purchase_order_id', $header->id)->where('user_id', $user->id)->exists()){
-                        $approvalPurchaseOrders->add($header);
-                    }
-                }
-            }
-        }
-
-        // Get item stock warning notification
-        $stockWarnings = ItemStockNotification::whereHas('item', function($query){
-                $query->whereColumn('items.stock', '<=', 'items.stock_minimum');
-            })
-            ->take(5)
-            ->get();
+        $totalCustomer = Customer::all();
+        $totalCourse = Course::all();
 
         $data = [
             'counts'                    => $counts,
-            'prActiveCount'             => $prActiveCount,
-            'prWarning'                 => $purchaseRequests,
-            'approvalFeatured'          => $preference->approval_setting,
-            'approvalPurchaseRequests'  => $approvalPurchaseRequests,
-            'approvalPurchaseOrders'    => $approvalPurchaseOrders,
-            'stockWarnings'             => $stockWarnings
+            'totalCustomer'             => $totalCustomer->count(),
+            'totalClass'                => $totalCourse->count()
         ];
 
         return view('admin.dashboard')->with($data);
