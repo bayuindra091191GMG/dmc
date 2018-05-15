@@ -37,6 +37,7 @@
                         <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
+
                         <input id="name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('name')) parsley-error @endif"
                                name="name" value="{{ $menuHeader->name }}" required>
                     </div>

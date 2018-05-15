@@ -100,7 +100,7 @@ class MenuHeaderController extends Controller
      */
     public function edit(MenuHeader $menuHeader)
     {
-        return view('admin.menu_headers.edit', ['menu' => $menuHeader]);
+        return view('admin.menu_headers.edit', ['menuHeader' => $menuHeader]);
     }
 
     /**
@@ -114,8 +114,7 @@ class MenuHeaderController extends Controller
     public function update(Request $request, MenuHeader $menuHeader)
     {
         $validator = Validator::make($request->all(), [
-            'name'              => 'required|max:50',
-            'menu_header_id'    => 'required'
+            'name'              => 'required|max:50'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());

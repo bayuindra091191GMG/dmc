@@ -237,6 +237,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('menus/ubah/{menu}', 'MenuController@update')->name('menus.update');
     Route::get('menus/tambah', 'MenuController@create')->name('menus.create');
     Route::post('menus/simpan', 'MenuController@store')->name('menus.store');
+    Route::post('menus/hapus', 'MenuController@destroy')->name('menus.destroy');
 
     //Menu Headers
     Route::get('menu_headers', 'MenuHeaderController@index')->name('menu_headers');
@@ -244,6 +245,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('menu_headers/ubah/{menu_header}', 'MenuHeaderController@update')->name('menu_headers.update');
     Route::get('menu_headers/tambah', 'MenuHeaderController@create')->name('menu_headers.create');
     Route::post('menu_headers/simpan', 'MenuHeaderController@store')->name('menu_headers.store');
+    Route::post('menu_headers/hapus', 'MenuHeaderController@destroy')->name('menu_headers.destroy');
 
     //Menu Subs
     Route::get('menu_subs', 'MenuSubController@index')->name('menu_subs');
@@ -251,6 +253,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('menu_subs/ubah/{menu_sub}', 'MenuSubController@update')->name('menu_subs.update');
     Route::get('menu_subs/tambah', 'MenuSubController@create')->name('menu_subs.create');
     Route::post('menu_subs/simpan', 'MenuSubController@store')->name('menu_subs.store');
+    Route::post('menu_subs/hapus', 'MenuSubController@destroy')->name('menu_subs.destroy');
 
     //Material Request Headers Primary
     Route::post('material_requests/simpan', 'Inventory\MaterialRequestHeaderController@store')->name('material_requests.store');
