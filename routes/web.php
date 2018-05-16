@@ -51,6 +51,18 @@ Route::group(['namespace' => 'Auth'], function () {
  */
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => 'auth'], function () {
 
+    //DMC Starts
+
+    //Customer
+    Route::get('customers', 'CustomerController@index')->name('customers');
+    Route::get('customers/tambah', 'CustomerController@create')->name('customers.create');
+    Route::post('customers/simpan', 'CustomerController@store')->name('customers.store');
+    Route::get('customers/{customer}/ubah/', 'CustomerController@edit')->name('customers.edit');
+    Route::put('customers/ubah/{customer}', 'CustomerController@update')->name('customers.update');
+    Route::post('customers/hapus', 'CustomerController@destroy')->name('customers.destroy');
+
+    //DMC End
+
     // Notification
     Route::get('/notifications', 'NotificationController@notifications');
     Route::get('/test_notify', 'NotificationController@testNotify')->name('notify');
@@ -522,6 +534,11 @@ Route::get('/select-item_receipts', 'Admin\Inventory\ItemReceiptController@getIt
  */
 
 // MASTER DATA
+
+//DMC Start
+Route::get('/datatables-customers', 'Admin\CustomerController@anyData')->name('datatables.customers');
+//DMC End
+
 Route::get('/datatables-users', 'Admin\UserController@getIndex')->name('datatables.users');
 Route::get('/datatables-employees', 'Admin\EmployeeController@getIndex')->name('datatables.employees');
 Route::get('/datatables-items', 'Admin\ItemController@getIndex')->name('datatables.items');

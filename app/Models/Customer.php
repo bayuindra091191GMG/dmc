@@ -16,6 +16,10 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $name
  * @property string $username
  * @property string $email
+ * @property string $phone
+ * @property string $parent_name
+ * @property string $age
+ * @property string $address
  * @property string $image_profile
  * @property int $status_id
  * @property \Carbon\Carbon $created_at
@@ -43,6 +47,10 @@ class Customer extends Eloquent
 		'username',
 		'email',
 		'image_profile',
+        'age',
+        'phone',
+        'parent_name',
+        'address',
 		'status_id',
 		'created_by',
 		'updated_by'

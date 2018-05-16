@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
+use App\Models\Customer;
 use App\Models\Menu;
 use App\Models\MenuHeader;
 use App\Models\MenuSub;
-use App\Transformer\MasterData\MenuTransformer;
+use App\Models\TransactionHeader;
+use App\Transformer\MasterData\CustomerTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
@@ -39,9 +40,9 @@ class CustomerController extends Controller
      */
     public function anyData()
     {
-        $menus = Menu::all();
-        return DataTables::of($menus)
-            ->setTransformer(new MenuTransformer())
+        $customers = Customer::all();
+        return DataTables::of($customers)
+            ->setTransformer(new CustomerTransformer())
             ->addIndexColumn()
             ->make(true);
     }
@@ -53,8 +54,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        $header = MenuHeader::all();
-        return view('admin.customers.create', compact('header'));
+        return view('admin.customers.create');
     }
 
     /**
@@ -67,18 +67,24 @@ class CustomerController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'              => 'required|max:50',
-            'menu_header_id'    => 'required'
+            'phone'             => 'required',
+            'age'               => 'required',
+            'email'             => 'required|email',
+            'address'           => 'required'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
-        Menu::create([
-            'name'              => $request->get('name'),
-            'menu_header_id'    => $request->get('menu_header_id'),
-            'route'             => $request->get('route')
+        Customer::create([
+            'name'          => $request->get('name'),
+            'phone'         => $request->get('phone'),
+            'email'         => $request->get('email'),
+            'address'       => $request->get('address'),
+            'age'           => $request->get('age'),
+            'parent_name'   => $request->get('parent_name')
         ]);
 
-        Session::flash('message', 'Berhasil membuat data menu baru!');
+        Session::flash('message', 'Berhasil membuat data Customer baru!');
 
         return redirect()->route('admin.customers');
     }
@@ -97,43 +103,47 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Menu $menu
+     * @param Customer $customer
      * @return \Illuminate\Http\Response
      */
-    public function edit(Menu $menu)
+    public function edit(Customer $customer)
     {
-        $header = MenuHeader::all();
-        return view('admin.menus.edit', ['menu' => $menu, 'header' => $header]);
+        return view('admin.customers.edit', ['customer' => $customer]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param Menu $machinery_type
+     * @param Customer $customer
      * @return mixed
      */
-    public function update(Request $request, Menu $menu)
+    public function update(Request $request, Customer $customer)
     {
         $validator = Validator::make($request->all(), [
             'name'              => 'required|max:50',
-            'menu_header_id'    => 'required',
-            'route'             => 'required'
+            'phone'             => 'required',
+            'age'               => 'required',
+            'email'             => 'required|email',
+            'address'           => 'required'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
-        $menu->name = $request->get('name');
-        $menu->menu_header_id = $request->get('menu_header_id');
-        $menu->route = $request->get('route');
-        $menu->save();
+        $customer->name = $request->get('name');
+        $customer->email = $request->get('email');
+        $customer->age = $request->get('age');
+        $customer->parent_name = $request->get('parent_name');
+        $customer->address = $request->get('address');
+        $customer->phone = $request->get('phone');
+        $customer->updated_at = $dateTimeNow;
+        $customer->save();
 
-//        return redirect()->intended(route('admin.menus'));
-        Session::flash('message', 'Berhasil mengubah data menu!');
+        Session::flash('message', 'Berhasil mengubah data Customer!');
 
-        return redirect()->route('admin.customers.edit', ['menu' => $menu]);
+        return redirect()->route('admin.customers.edit', ['customer' => $customer]);
     }
 
     /**
@@ -146,13 +156,17 @@ class CustomerController extends Controller
     public function destroy(Request $request)
     {
         try{
-            $menu = Menu::find($request->input('id'));
+            $customer = Menu::find($request->input('id'));
 
-            //Deleting all the Sub Menus
-            MenuSub::where('menu_id', $menu->id)->delete();
-            $menu->delete();
+            //Check first if User already in Transaction
+            $transaction = TransactionHeader::where('customer_id', $request->input('id'))->get();
+            if($transaction != null){
+                Session::flash('error', 'Data Customer '. $customer->name . ' Tidak dapat dihapus karena masih memiliki Kelas atau Paket!');
+                return Response::json(array('success' => 'VALID'));
+            }
+            $customer->delete();
 
-            Session::flash('message', 'Berhasil menghapus data menu '. $menu->name);
+            Session::flash('message', 'Berhasil menghapus data Customer '. $customer->name);
             return Response::json(array('success' => 'VALID'));
         }
         catch(\Exception $ex){
