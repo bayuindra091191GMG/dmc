@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 15 May 2018 15:30:28 +0700.
+ * Date: Wed, 16 May 2018 11:08:18 +0700.
  */
 
 namespace App\Models;
@@ -25,7 +25,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property \App\Models\Status $status
  * @property \App\Models\User $user
- * @property \Illuminate\Database\Eloquent\Collection $classes
+ * @property \Illuminate\Database\Eloquent\Collection $courses
  *
  * @package App\Models
  */
@@ -57,8 +57,8 @@ class Coach extends Eloquent
 		return $this->belongsTo(\App\Models\User::class, 'updated_by');
 	}
 
-	public function classes()
+	public function courses()
 	{
-		return $this->hasMany(\App\Models\Class::class);
+		return $this->hasMany(\App\Models\Course::class);
 	}
 }

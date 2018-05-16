@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Auth\User\User;
+use App\Models\Coach;
+use App\Models\Course;
 use App\Models\Customer;
 use App\Models\TransactionHeader;
+use App\Transformer\MasterData\CourseTransformer;
 use App\Transformer\MasterData\CustomerTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,7 +17,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
-class CustomerController extends Controller
+class CourseController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,7 +26,7 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.customers.index');
+        return view('admin.courses.index');
     }
 
 
@@ -37,9 +40,9 @@ class CustomerController extends Controller
      */
     public function anyData()
     {
-        $customers = Customer::all();
-        return DataTables::of($customers)
-            ->setTransformer(new CustomerTransformer())
+        $courses = Course::all();
+        return DataTables::of($courses)
+            ->setTransformer(new CourseTransformer())
             ->addIndexColumn()
             ->make(true);
     }
@@ -51,7 +54,8 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return view('admin.customers.create');
+        $coaches = Coach::all();
+        return view('admin.courses.create', compact('coaches'));
     }
 
     /**
@@ -64,26 +68,24 @@ class CustomerController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'              => 'required|max:50',
-            'phone'             => 'required',
-            'age'               => 'required',
-            'email'             => 'required|email',
-            'address'           => 'required'
+            'type'              => 'required',
+            'price'             => 'required',
+            'meeting_amount'    => 'required'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
         Customer::create([
-            'name'          => $request->get('name'),
-            'phone'         => $request->get('phone'),
-            'email'         => $request->get('email'),
-            'address'       => $request->get('address'),
-            'age'           => $request->get('age'),
-            'parent_name'   => $request->get('parent_name')
+            'name'              => $request->get('name'),
+            'type'              => $request->get('type'),
+            'price'             => $request->get('price'),
+            'coach_id'          => $request->get('coach'),
+            'meeting_amount'    => $request->get('meeting_amount'),
         ]);
 
-        Session::flash('message', 'Berhasil membuat data Customer baru!');
+        Session::flash('message', 'Berhasil membuat data Kelas baru!');
 
-        return redirect()->route('admin.customers');
+        return redirect()->route('admin.courses');
     }
 
     /**
@@ -100,22 +102,22 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Customer $customer
+     * @param Course $course
      * @return \Illuminate\Http\Response
      */
-    public function edit(Customer $customer)
+    public function edit(Course $course)
     {
-        return view('admin.customers.edit', ['customer' => $customer]);
+        return view('admin.courses.edit', ['course' => $course]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param Customer $customer
+     * @param Course $course
      * @return mixed
      */
-    public function update(Request $request, Customer $customer)
+    public function update(Request $request, Course $course)
     {
         $validator = Validator::make($request->all(), [
             'name'              => 'required|max:50',
@@ -129,18 +131,17 @@ class CustomerController extends Controller
 
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
-        $customer->name = $request->get('name');
-        $customer->email = $request->get('email');
-        $customer->age = $request->get('age');
-        $customer->parent_name = $request->get('parent_name');
-        $customer->address = $request->get('address');
-        $customer->phone = $request->get('phone');
-        $customer->updated_at = $dateTimeNow;
-        $customer->save();
+        $course->name = $request->get('name');
+        $course->type = $request->get('type');
+        $course->price = $request->get('price');
+        $course->coach_id = $request->get('coach');
+        $course->meeting_amount = $request->get('meeting_amount');
+        $course->updated_at = $dateTimeNow;
+        $course->save();
 
-        Session::flash('message', 'Berhasil mengubah data Customer!');
+        Session::flash('message', 'Berhasil mengubah data Kelas!');
 
-        return redirect()->route('admin.customers.edit', ['customer' => $customer]);
+        return redirect()->route('admin.courses.edit', ['course' => $course]);
     }
 
     /**
@@ -153,7 +154,7 @@ class CustomerController extends Controller
     public function destroy(Request $request)
     {
         try{
-            $customer = Customer::find($request->input('id'));
+            $customer = Menu::find($request->input('id'));
 
             //Check first if User already in Transaction
             $transaction = TransactionHeader::where('customer_id', $request->input('id'))->get();

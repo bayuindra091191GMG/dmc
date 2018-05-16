@@ -24,10 +24,11 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $created_by
  * @property \Carbon\Carbon $updated_at
  * @property int $updated_by
+ * @property string $price_string
  * 
  * @property \App\Models\Coach $coach
  * @property \App\Models\Status $status
- * @property \App\Models\User $user
+ * @property \App\Models\Auth\User\User $user
  * @property \Illuminate\Database\Eloquent\Collection $attendances
  * @property \Illuminate\Database\Eloquent\Collection $transaction_details
  *
@@ -45,6 +46,10 @@ class Course extends Eloquent
 		'updated_by' => 'int'
 	];
 
+    protected $appends = [
+        'price_string'
+    ];
+
 	protected $fillable = [
 		'name',
 		'type',
@@ -57,6 +62,10 @@ class Course extends Eloquent
 		'updated_by'
 	];
 
+    public function getPriceStringAttribute(){
+        return number_format($this->attributes['price'], 0, ",", ".");
+    }
+
 	public function coach()
 	{
 		return $this->belongsTo(\App\Models\Coach::class);
@@ -67,10 +76,10 @@ class Course extends Eloquent
 		return $this->belongsTo(\App\Models\Status::class);
 	}
 
-	public function user()
-	{
-		return $this->belongsTo(\App\Models\User::class, 'updated_by');
-	}
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
+    }
 
 	public function attendances()
 	{

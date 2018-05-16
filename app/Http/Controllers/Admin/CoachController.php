@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Auth\User\User;
-use App\Models\Customer;
-use App\Models\TransactionHeader;
-use App\Transformer\MasterData\CustomerTransformer;
+use App\Models\Coach;
+use App\Models\Course;
+use App\Models\TransactionDetail;
+use App\Transformer\MasterData\CoachTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
-class CustomerController extends Controller
+class CoachController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,7 +24,7 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.customers.index');
+        return view('admin.coaches.index');
     }
 
 
@@ -37,9 +38,9 @@ class CustomerController extends Controller
      */
     public function anyData()
     {
-        $customers = Customer::all();
-        return DataTables::of($customers)
-            ->setTransformer(new CustomerTransformer())
+        $coaches = Coach::all();
+        return DataTables::of($coaches)
+            ->setTransformer(new CoachTransformer())
             ->addIndexColumn()
             ->make(true);
     }
@@ -51,7 +52,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return view('admin.customers.create');
+        return view('admin.coaches.create');
     }
 
     /**
@@ -64,26 +65,22 @@ class CustomerController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'              => 'required|max:50',
-            'phone'             => 'required',
-            'age'               => 'required',
-            'email'             => 'required|email',
-            'address'           => 'required'
+            'email'             => 'email'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
-        Customer::create([
+        Coach::create([
             'name'          => $request->get('name'),
             'phone'         => $request->get('phone'),
             'email'         => $request->get('email'),
             'address'       => $request->get('address'),
-            'age'           => $request->get('age'),
-            'parent_name'   => $request->get('parent_name')
+            'status_id'     => 1
         ]);
 
-        Session::flash('message', 'Berhasil membuat data Customer baru!');
+        Session::flash('message', 'Berhasil membuat data Trainer baru!');
 
-        return redirect()->route('admin.customers');
+        return redirect()->route('admin.coaches');
     }
 
     /**
@@ -100,47 +97,42 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Customer $customer
+     * @param Coach $coach
      * @return \Illuminate\Http\Response
      */
-    public function edit(Customer $customer)
+    public function edit(Coach $coach)
     {
-        return view('admin.customers.edit', ['customer' => $customer]);
+        return view('admin.coaches.edit', ['coach' => $coach]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param Customer $customer
+     * @param Coach $coach
      * @return mixed
      */
-    public function update(Request $request, Customer $customer)
+    public function update(Request $request, Coach $coach)
     {
         $validator = Validator::make($request->all(), [
             'name'              => 'required|max:50',
-            'phone'             => 'required',
-            'age'               => 'required',
-            'email'             => 'required|email',
-            'address'           => 'required'
+            'email'             => 'email'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
-        $customer->name = $request->get('name');
-        $customer->email = $request->get('email');
-        $customer->age = $request->get('age');
-        $customer->parent_name = $request->get('parent_name');
-        $customer->address = $request->get('address');
-        $customer->phone = $request->get('phone');
-        $customer->updated_at = $dateTimeNow;
-        $customer->save();
+        $coach->name = $request->get('name');
+        $coach->email = $request->get('email');
+        $coach->address = $request->get('address');
+        $coach->phone = $request->get('phone');
+        $coach->updated_at = $dateTimeNow;
+        $coach->save();
 
-        Session::flash('message', 'Berhasil mengubah data Customer!');
+        Session::flash('message', 'Berhasil mengubah data Trainer!');
 
-        return redirect()->route('admin.customers.edit', ['customer' => $customer]);
+        return redirect()->route('admin.coaches.edit', ['coach' => $coach]);
     }
 
     /**
@@ -153,17 +145,22 @@ class CustomerController extends Controller
     public function destroy(Request $request)
     {
         try{
-            $customer = Customer::find($request->input('id'));
+            $coach = Coach::find($request->input('id'));
 
-            //Check first if User already in Transaction
-            $transaction = TransactionHeader::where('customer_id', $request->input('id'))->get();
-            if($transaction != null){
-                Session::flash('error', 'Data Customer '. $customer->name . ' Tidak dapat dihapus karena masih memiliki Kelas atau Paket!');
-                return Response::json(array('success' => 'VALID'));
+            //Check first if Trainer already in Transaction
+            $classes = Course::where('coach_id', $coach->id)->get();
+            if($classes != null){
+                foreach ($classes as $data){
+                    $transaction = TransactionDetail::where('class_id', $data->id)->get();
+                    if($transaction != null){
+                        Session::flash('error', 'Data Trainer '. $coach->name . ' Tidak dapat dihapus karena masih wajib mengajar!');
+                        return Response::json(array('success' => 'VALID'));
+                    }
+                }
             }
-            $customer->delete();
+            $coach->delete();
 
-            Session::flash('message', 'Berhasil menghapus data Customer '. $customer->name);
+            Session::flash('message', 'Berhasil menghapus data Trainer '. $coach->name);
             return Response::json(array('success' => 'VALID'));
         }
         catch(\Exception $ex){

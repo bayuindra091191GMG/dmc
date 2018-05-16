@@ -61,6 +61,22 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('customers/ubah/{customer}', 'CustomerController@update')->name('customers.update');
     Route::post('customers/hapus', 'CustomerController@destroy')->name('customers.destroy');
 
+    //Coach
+    Route::get('coaches', 'CoachController@index')->name('coaches');
+    Route::get('coaches/tambah', 'CoachController@create')->name('coaches.create');
+    Route::post('coaches/simpan', 'CoachController@store')->name('coaches.store');
+    Route::get('coaches/{coach}/ubah/', 'CoachController@edit')->name('coaches.edit');
+    Route::put('coaches/ubah/{coach}', 'CoachController@update')->name('coaches.update');
+    Route::post('coaches/hapus', 'CoachController@destroy')->name('coaches.destroy');
+
+    //Courses
+    Route::get('courses', 'CourseController@index')->name('courses');
+    Route::get('courses/tambah', 'CourseController@create')->name('courses.create');
+    Route::post('courses/simpan', 'CourseController@store')->name('courses.store');
+    Route::get('courses/{course}/ubah/', 'CourseController@edit')->name('courses.edit');
+    Route::put('courses/ubah/{course}', 'CourseController@update')->name('courses.update');
+    Route::post('courses/hapus', 'CourseController@destroy')->name('courses.destroy');
+
     //DMC End
 
     // Notification
@@ -537,6 +553,8 @@ Route::get('/select-item_receipts', 'Admin\Inventory\ItemReceiptController@getIt
 
 //DMC Start
 Route::get('/datatables-customers', 'Admin\CustomerController@anyData')->name('datatables.customers');
+Route::get('/datatables-coaches', 'Admin\CoachController@anyData')->name('datatables.coaches');
+Route::get('/datatables-courses', 'Admin\CourseController@anyData')->name('datatables.courses');
 //DMC End
 
 Route::get('/datatables-users', 'Admin\UserController@getIndex')->name('datatables.users');
