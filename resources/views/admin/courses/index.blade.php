@@ -1,13 +1,13 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Data Trainer')
+@section('title', 'Data Kelas')
 
 @section('content')
 
     <div class="row">
         @include('partials._success')
         <div class="nav navbar-right">
-            <a href="{{ route('admin.coaches.create') }}" class="btn btn-app">
+            <a href="{{ route('admin.courses.create') }}" class="btn btn-app">
                 <i class="fa fa-plus"></i> Tambah
             </a>
         </div>
@@ -20,9 +20,10 @@
                 <tr>
                     <th class="text-center" style="width: 10%;">No</th>
                     <th class="text-center" style="width: 10%;">Nama</th>
-                    <th class="text-center" style="width: 10%;">Email</th>
-                    <th class="text-center" style="width: 10%;">No Telepon</th>
-                    <th class="text-center" style="width: 20%;">Alamat</th>
+                    <th class="text-center" style="width: 10%;">Type</th>
+                    <th class="text-center" style="width: 10%;">Trainer</th>
+                    <th class="text-center" style="width: 20%;">Fee</th>
+                    <th class="text-center" style="width: 20%;">Jumlah Pertemuan</th>
                     <th class="text-center" style="width: 10%;">Tanggal Dibuat</th>
                     <th class="text-center" style="width: 10%;">Action</th>
                 </tr>
@@ -50,7 +51,7 @@
             $('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('datatables.coaches') !!}',
+                ajax: '{!! route('datatables.courses') !!}',
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
                     { data: 'name', name: 'name', class: 'text-center'},
@@ -75,5 +76,5 @@
             $('#deleted-id').val($(this).data('id'));
         });
     </script>
-    @include('partials._deleteJs', ['routeUrl' => 'admin.coaches.destroy', 'redirectUrl' => 'admin.coaches'])
+    @include('partials._deleteJs', ['routeUrl' => 'admin.courses.destroy', 'redirectUrl' => 'admin.courses'])
 @endsection
