@@ -24,13 +24,8 @@ class UserTransformer extends TransformerAbstract
         $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $user->id ."' ><i class='fa fa-trash'></i></a>";
 
         return[
-            'code'          => $user->employee->code,
             'email'         => $user->email,
-            'email_address' => $user->email_address ?? '-',
-            'name'          => $user->employee->name,
-            'department'    => $user->employee->department->name,
-            'site'          => $user->employee->site->name,
-            'role'          => $user->roles->pluck('name')->implode(','),
+            'name'          => $user->name,
             'status'        => $user->status->description,
             'created_at'    => $createdDate,
             'action'        => $action

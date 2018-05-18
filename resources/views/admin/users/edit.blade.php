@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Ubah data user ', $employee->code )
+@section('title', 'Ubah data user ', $user->name )
 
 @section('content')
     <div class="row">
@@ -34,7 +34,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">
-                    ID Login Akses
+                    Email
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -50,20 +50,20 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('name')) parsley-error @endif"
-                           name="name" value="{{ $employee->name }}" required>
+                           name="name" value="{{ $user->name }}" required>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_address">
-                    Alamat Email
-                    <span class="required">*</span>
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="email_address" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('email_address')) parsley-error @endif"
-                           name="email_address" value="{{ $user->email_address }}" required>
-                </div>
-            </div>
+            {{--<div class="form-group">--}}
+                {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_address">--}}
+                    {{--Alamat Email--}}
+                    {{--<span class="required">*</span>--}}
+                {{--</label>--}}
+                {{--<div class="col-md-6 col-sm-6 col-xs-12">--}}
+                    {{--<input id="email_address" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('email_address')) parsley-error @endif"--}}
+                           {{--name="email_address" value="{{ $user->email_address }}" required>--}}
+                {{--</div>--}}
+            {{--</div>--}}
 
             {{--<div class="form-group">--}}
                 {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="employee">--}}
@@ -82,7 +82,7 @@
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="role" name="role" class="form-control col-md-7 col-xs-12">
                         @foreach($roles as $role)
-                            <option value="{{ $role->id }}" @if($user->roles->pluck('id')[0] == $role->id) selected @endif>{{ $role->name }}</option>
+                            <option value="{{ $role->id }}" @if($user->roles->pluck('id')[0] == $role->id) selected @endif>{{ $role->description }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -108,40 +108,40 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="department" >
-                    Departemen
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="department" name="department" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">
-                        @foreach($departments as $dep)
-                            <option value="{{ $dep->id }}" {{ $employee->department_id == $dep->id ? "selected":"" }}>{{ $dep->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
+            {{--<div class="form-group">--}}
+                {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="department" >--}}
+                    {{--Departemen--}}
+                {{--</label>--}}
+                {{--<div class="col-md-6 col-sm-6 col-xs-12">--}}
+                    {{--<select id="department" name="department" class="form-control col-md-7 col-xs-12 @if($errors->has('department')) parsley-error @endif">--}}
+                        {{--@foreach($departments as $dep)--}}
+                            {{--<option value="{{ $dep->id }}" {{ $employee->department_id == $dep->id ? "selected":"" }}>{{ $dep->name }}</option>--}}
+                        {{--@endforeach--}}
+                    {{--</select>--}}
+                {{--</div>--}}
+            {{--</div>--}}
 
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="site" >
-                    Site
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="site" name="site" class="form-control col-md-7 col-xs-12 @if($errors->has('site')) parsley-error @endif">
-                        @foreach($sites as $site)
-                            <option value="{{ $site->id }}" {{ $employee->site_id == $site->id ? "selected":"" }}>{{ $site->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
+            {{--<div class="form-group">--}}
+                {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="site" >--}}
+                    {{--Site--}}
+                {{--</label>--}}
+                {{--<div class="col-md-6 col-sm-6 col-xs-12">--}}
+                    {{--<select id="site" name="site" class="form-control col-md-7 col-xs-12 @if($errors->has('site')) parsley-error @endif">--}}
+                        {{--@foreach($sites as $site)--}}
+                            {{--<option value="{{ $site->id }}" {{ $employee->site_id == $site->id ? "selected":"" }}>{{ $site->name }}</option>--}}
+                        {{--@endforeach--}}
+                    {{--</select>--}}
+                {{--</div>--}}
+            {{--</div>--}}
 
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >
-                    Alamat
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <textarea id="address" name="address" rows="5" class="form-control col-md-7 col-xs-12 @if($errors->has('address')) parsley-error @endif" style="resize: vertical">{{ $employee->address }}</textarea>
-                </div>
-            </div>
+            {{--<div class="form-group">--}}
+                {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >--}}
+                    {{--Alamat--}}
+                {{--</label>--}}
+                {{--<div class="col-md-6 col-sm-6 col-xs-12">--}}
+                    {{--<textarea id="address" name="address" rows="5" class="form-control col-md-7 col-xs-12 @if($errors->has('address')) parsley-error @endif" style="resize: vertical">{{ $employee->address }}</textarea>--}}
+                {{--</div>--}}
+            {{--</div>--}}
 
 
             <div class="form-group">
@@ -158,15 +158,13 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >
-                    Gambar Tanda Tangan
+                    Gambar Profile
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <img src="{{ URL::asset('storage/img_sign/'.$user->img_path) }}" width="200px"/>
-                    {!! Form::file('user_image', array('id' => 'photo', 'class' => 'file')) !!}
+                    <img src="{{ URL::asset('storage/img/'.$user->image_profile) }}" width="200px"/>
+                    {!! Form::file('image_profile', array('id' => 'photo', 'class' => 'file')) !!}
                 </div>
             </div>
-
-            <input type="hidden" id="employee_id" name="employee_id" value="{{ $employee->id }}"/>
 
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">

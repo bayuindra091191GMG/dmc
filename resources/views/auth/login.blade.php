@@ -78,7 +78,7 @@
                                 <div>
                                     {{--<div class="h1">{{ config('app.name') }}</div>--}}
                                     {{--<p>&copy; {{ date('Y') }} {{ config('app.name') }}. {{ __('views.auth.login.copyright') }}</p>--}}
-                                    <div class="h1">DMC Registration System</div>
+                                    <div class="h1">DMC System</div>
                                     <p>&copy; {{ date('Y') }} DMC. {{ __('views.auth.login.copyright') }}</p>
                                 </div>
                             </div>

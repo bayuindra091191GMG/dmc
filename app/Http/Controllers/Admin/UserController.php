@@ -44,16 +44,11 @@ class UserController extends Controller
      */
     public function create()
     {
-        $departments = Department::all();
-        $sites = Site::all();
         $roles = Role::all();
 
         $data = [
-          'departments'     => $departments,
-          'sites'           => $sites,
-          'roles'           => $roles
+            'roles'           => $roles
         ];
-
         return View('admin.users.create')->with($data);
     }
 
@@ -68,9 +63,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name'              => 'required|max:100',
             'email'             => 'required|regex:/^\S*$/u|unique:users|max:50',
-            'email_address'     => 'required|email|max:50',
-            'password'          => 'required',
-            'address'           => 'max:200'
+            'password'          => 'required'
         ],[
             'email.unique'      => 'ID Login Akses telah terdaftar!',
             'email.regex'       => 'ID Login Akses harus tanpa spasi!'
@@ -82,14 +75,6 @@ class UserController extends Controller
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
-        if($request->input('department') === '-1'){
-            return redirect()->back()->withErrors('Pilih departemen!', 'default')->withInput($request->all());
-        }
-
-        if($request->input('site') === '-1'){
-            return redirect()->back()->withErrors('Pilih site!', 'default')->withInput($request->all());
-        }
-
         if($request->input('role') === '-1'){
             return redirect()->back()->withErrors('Pilih level akses!', 'default')->withInput($request->all());
         }
@@ -97,39 +82,27 @@ class UserController extends Controller
         $user = Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
-        // Create new employee
-        $employee = Employee::create([
-            'name'          => $request->input('name'),
-            'email'         => $request->input('email'),
-            'address'       => $request->input('address'),
-            'department_id' => $request->input('department'),
-            'site_id'       => $request->input('site'),
-            'status_id'     => 1,
-            'created_by'    => $user->id,
-            'created_at'    => $now
-        ]);
-
         // Create new user
         $user = new User();
         $user->name = $request->input('name');
         $user->email = $request->input('email');
-        $user->email_address = $request->input('email_address');
-        $user->employee_id = $employee->id;
+        $user->status_id = 1;
+        $user->active = 1;
 
         if ($request->has('password')) {
             $user->password = bcrypt($request->input('password'));
         }
 
         //Image
-        if($request->file('user_image') != null) {
-            $img = Image::make($request->file('user_image'));
+        if($request->file('image_profile') != null) {
+            $img = Image::make($request->file('image_profile'));
             $extStr = $img->mime();
             $ext = explode('/', $extStr, 2);
 
-            $filename = $user->name . '_Signature' . Carbon::now('Asia/Jakarta')->format('Ymdhms') . '.' . $ext[1];
+            $filename = $user->name . '_profile' . Carbon::now('Asia/Jakarta')->format('Ymdhms') . '.' . $ext[1];
 
-            $img->save(public_path('storage/img_sign/' . $filename), 75);
-            $user->img_path = $filename;
+            $img->save(public_path('storage/img/' . $filename), 75);
+            $user->image_profile = $filename;
         }
 
         $user->created_by = $user->id;
@@ -162,18 +135,9 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $employee = $user->employee;
-        $departments = Department::all();
-        $sites = Site::all();
         $roles = Role::all();
-        $dob = Carbon::parse($employee->date_of_birth)->format('d M Y');
-
         $data = [
             'user'          => $user,
-            'employee'      => $employee,
-            'departments'   => $departments,
-            'sites'         => $sites,
-            'dob'           => $dob,
             'roles'         => $roles
         ];
 
@@ -197,9 +161,7 @@ class UserController extends Controller
                 'max:50',
                 'regex:/^\S*$/u',
                 Rule::unique('users')->ignore($user->id)
-            ],
-            'email_address'     => 'required|email|max:50',
-            'address'           => 'max:200'
+            ]
         ],[
             'email.unique'      => 'ID Login Akses telah terdaftar!',
             'email.regex'       => 'ID Login Akses harus tanpa spasi!',
@@ -211,21 +173,8 @@ class UserController extends Controller
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
-        // Update employee
         $userAuth = Auth::user();
         $now = Carbon::now('Asia/Jakarta');
-
-        $employee = Employee::find($employeeId);
-        $employee->name = $request->input('name');
-        $employee->email = $request->input('email');
-        $employee->address = $request->input('address');
-        $employee->department_id = $request->input('department');
-        $employee->site_id = $request->input('site');
-        $employee->status_id = $request->input('status');
-        $employee->updated_by = $userAuth->id;
-        $employee->updated_at = $now;
-
-        $employee->save();
 
         // Update user
         $user->name = $request->input('name');
@@ -236,23 +185,22 @@ class UserController extends Controller
         }
 
         //Image
-        if($request->file('user_image') != null) {
-            $tempImg = public_path('storage/img_sign/'.$user->img_path);
+        if($request->file('image_profile') != null) {
+            $tempImg = public_path('storage/img/'.$user->image_profile);
             if(file_exists($tempImg)){
                 unlink($tempImg);
             }
 
-            $img = Image::make($request->file('user_image'));
+            $img = Image::make($request->file('image_profile'));
             $extStr = $img->mime();
             $ext = explode('/', $extStr, 2);
 
-            $filename = $user->name . '_Signature' . Carbon::now('Asia/Jakarta')->format('Ymdhms') . '.' . $ext[1];
+            $filename = $user->name . '_Profile' . Carbon::now('Asia/Jakarta')->format('Ymdhms') . '.' . $ext[1];
 
-            $img->save(public_path('storage/img_sign/' . $filename), 75);
+            $img->save(public_path('storage/img/' . $filename), 75);
             $user->img_path = $filename;
         }
 
-        $user->email_address = $request->input('email_address');
         $user->status_id = $request->input('status');
         $user->created_by = $userAuth->id;
         $user->updated_by = $userAuth->id;
@@ -294,7 +242,7 @@ class UserController extends Controller
                 $user->status_id = 10;
                 $user->updated_by = $userAuth->id;
                 $user->updated_at = $now->toDateTimeString();
-                $tempImg = public_path('storage/img_sign/'.$user->img_path);
+                $tempImg = public_path('storage/img/'.$user->image_profile);
                 if(file_exists($tempImg)) unlink($tempImg);
                 $user->save();
 

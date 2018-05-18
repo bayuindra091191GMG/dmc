@@ -32,7 +32,6 @@ use Kyslik\ColumnSortable\Sortable;
  * @property int $created_by
  * @property \Carbon\Carbon $updated_at
  * @property int $updated_by
- * @property string $deleted_at
  * @property-read mixed $avatar
  * @property-read mixed $licensee_name
  * @property-read mixed $licensee_number
@@ -71,7 +70,6 @@ class User extends Authenticatable
     public $sortable = ['username', 'created_at', 'updated_at'];
 
     protected $casts = [
-        'employee_id' => 'int',
         'active' => 'int',
         'confirmed' => 'bool',
         'status_id' => 'int',

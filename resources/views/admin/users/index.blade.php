@@ -38,12 +38,8 @@
                width="100%" id="users-table">
             <thead>
             <tr>
-                <th class="text-center">ID Login</th>
-                <th class="text-center">Nama</th>
                 <th class="text-center">Email</th>
-                <th class="text-center">Departemen</th>
-                <th class="text-center">Site</th>
-                <th class="text-center">Level Akses</th>
+                <th class="text-center">Nama</th>
                 <th class="text-center">Status</th>
                 <th class="text-center">Tanggal Dibuat</th>
                 <th class="text-center">Tindakan</th>
@@ -81,10 +77,6 @@
                 columns: [
                     { data: 'email', name: 'email' },
                     { data: 'name', name: 'name' },
-                    { data: 'email_address', name: 'email_address' },
-                    { data: 'department', name: 'department', class: 'text-center' },
-                    { data: 'site', name: 'site', class: 'text-center' },
-                    { data: 'role', name: 'role', class: 'text-center' },
                     { data: 'status', name: 'status', class: 'text-center' },
                     { data: 'created_at', name: 'created_at', class: 'text-center' },
                     { data: 'action', name:'action', orderable: false, searchable: false, class: 'text-center' }
