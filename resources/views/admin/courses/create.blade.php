@@ -5,7 +5,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-            <h2>Buat Trainer Baru</h2>
+            <h2>Buat Kelas Baru</h2>
             <hr/>
         </div>
     </div>
@@ -13,7 +13,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             @include('partials._success')
             @include('partials._error')
-            {{ Form::open(['route'=>['admin.coaches.store'],'method' => 'post','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.courses.store'],'method' => 'post','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
 
             @if(count($errors))
                 <div class="form-group">
@@ -41,33 +41,139 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email" >
-                    Email
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="type" >
+                    Tipe Kelas
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="email" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('email')) parsley-error @endif"
-                           name="email" value="{{ old('email') }}" required>
+                    <select id="type" name="type" class="form-control col-md-7 col-xs-12">
+                        <option value="-1"> - Pilih Tipe - </option>
+                        <option value="1">Package</option>
+                        <option value="2">Class</option>
+                    </select>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone" >
-                    No Telepon
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="coach_id" >
+                    Trainer
+                    <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="phone" type="number" class="form-control col-md-7 col-xs-12 @if($errors->has('phone')) parsley-error @endif"
-                           name="phone" value="{{ old('phone') }}" required>
+                    <select id="coach_id" name="coach_id" class="form-control col-md-7 col-xs-12">
+                        <option value="-1"> - Pilih Trainer - </option>
+                        @foreach($coaches as $coach)
+                            <option value="{{ $coach->id }}">{{ $coach->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="price" >
+                    Harga
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="price" class="form-control col-md-7 col-xs-12 @if($errors->has('price')) parsley-error @endif"
+                              name="price" value="{{ old('price') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="meeting_amount" >
+                    Jumlah Pertemuan
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="meeting_amount" class="form-control col-md-7 col-xs-12 @if($errors->has('meeting_amount')) parsley-error @endif"
+                           name="meeting_amount" value="{{ old('meeting_amount') }}">
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >
-                    Alamat
+                    Hari Pertemuan
+                </label>
+
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    @php($idx = 0)
+                    <table class="table">
+                        <thead>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" class="flat" id="chk1" name="chk[]" value="Senin"> Senin
+                                        {{--<input type="checkbox" class="flat" id="chk1" name="chk[]" value="Senin" onchange="changeInput('1')" > Senin--}}
+                                        {{--<input type="text" hidden="true" value="Senin" id="ids1" name="ids[]" disabled/>--}}
+                                        {{--<input type="text" hidden="true" value="Senin" id="idsDelete1" name="idsDelete[]"/>--}}
+                                    </label>
+                                </td>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" class="flat" id="chk2" name="chk[]" value="Selasa"> Selasa
+                                        {{--<input type="checkbox" class="flat" id="chk2" name="chk[]" value="Selasa" onchange="changeInput('2')" > Selasa--}}
+                                        {{--<input type="text" hidden="true" value="Selasa" id="ids2" name="ids[]" disabled/>--}}
+                                        {{--<input type="text" hidden="true" value="Selasa" id="idsDelete2" name="idsDelete[]"/>--}}
+                                    </label>
+                                </td>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" class="flat" id="chk3" name="chk[]" value="Rabu"> Rabu
+                                        {{--<input type="checkbox" class="flat" id="chk3" name="chk[]" value="Rabu" onchange="changeInput('3')" > Rabu--}}
+                                        {{--<input type="text" hidden="true" value="Rabu" id="ids3" name="ids[]" disabled/>--}}
+                                        {{--<input type="text" hidden="true" value="Rabu" id="idsDelete3" name="idsDelete[]"/>--}}
+                                    </label>
+                                </td>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" class="flat" id="chk4" name="chk[]" value="Kamis"> Kamis
+                                        {{--<input type="checkbox" class="flat" id="chk4" name="chk[]" value="Kamis" onchange="changeInput('4')" > Kamis--}}
+                                        {{--<input type="text" hidden="true" value="Kamis" id="ids4" name="ids[]" disabled/>--}}
+                                        {{--<input type="text" hidden="true" value="Kamis" id="idsDelete4" name="idsDelete[]"/>--}}
+                                    </label>
+                            </td>
+                            </tr>
+                                <tr>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" class="flat" id="chk5" name="chk[]" value="Jumat" > Jumat
+                                        {{--<input type="checkbox" class="flat" id="chk5" name="chk[]" value="Jumat" onchange="changeInput('5')" > Jumat--}}
+                                        {{--<input type="text" hidden="true" value="Jumat" id="ids5" name="ids[]" disabled/>--}}
+                                        {{--<input type="text" hidden="true" value="Jumat" id="idsDelete5" name="idsDelete[]"/>--}}
+                                    </label>
+                                </td>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" class="flat" id="chk6" name="chk[]" value="Sabtu"> Sabtu
+                                        {{--<input type="checkbox" class="flat" id="chk6" name="chk[]" value="Sabtu" onchange="changeInput('6')" > Sabtu--}}
+                                        {{--<input type="text" hidden="true" value="Sabtu" id="ids6" name="ids[]" disabled/>--}}
+                                        {{--<input type="text" hidden="true" value="Sabtu" id="idsDelete6" name="idsDelete[]"/>--}}
+                                    </label>
+                                </td>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" class="flat" id="chk7" name="chk[]" value="Minggu"> Minggu
+                                        {{--<input type="checkbox" class="flat" id="chk7" name="chk[]" value="Minggu" onchange="changeInput('7')" > Minggu--}}
+                                        {{--<input type="text" hidden="true" value="Minggu" id="ids7" name="ids[]" disabled/>--}}
+                                        {{--<input type="text" hidden="true" value="Minggu" id="idsDelete7" name="idsDelete[]"/>--}}
+                                    </label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >
+                    Status
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <textarea id="address" rows="5" class="form-control col-md-7 col-xs-12 @if($errors->has('address')) parsley-error @endif"
-                              name="address">{{ old('address') }}</textarea>
+                    <select id="status" name="status" class="form-control col-md-7 col-xs-12">
+                        <option value="1" selected>Aktif</option>
+                        <option value="2">Non Aktif</option>
+                    </select>
                 </div>
             </div>
 

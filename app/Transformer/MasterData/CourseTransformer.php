@@ -31,7 +31,7 @@ class CourseTransformer extends TransformerAbstract
             'name'              => $course->name,
             'type'              => $type,
             'coach'             => $course->coach->name,
-            'price'             => 'Rp'.$course->price_string,
+            'price'             => 'Rp '.$course->price_string,
             'meeting_amount'    => $course->meeting_amount,
             'status'            => $course->status->description,
             'created_at'        => $createdDate,

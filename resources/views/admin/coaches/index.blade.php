@@ -15,7 +15,7 @@
     </div>
     <div class="row">
         <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
-               width="100%" id="users-table">
+               width="100%" id="coaches-table">
             <thead>
                 <tr>
                     <th class="text-center" style="width: 10%;">No</th>
@@ -47,7 +47,7 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         $(function() {
-            $('#users-table').DataTable({
+            $('#coaches-table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: '{!! route('datatables.coaches') !!}',

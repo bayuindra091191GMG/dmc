@@ -55,9 +55,10 @@
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
                     { data: 'name', name: 'name', class: 'text-center'},
-                    { data: 'email', name: 'email', class: 'text-center'},
-                    { data: 'phone', name: 'phone', class: 'text-center'},
-                    { data: 'address', name: 'address', class: 'text-center'},
+                    { data: 'type', name: 'type', class: 'text-center'},
+                    { data: 'coach', name: 'coach', class: 'text-center'},
+                    { data: 'price', name: 'price', class: 'text-center'},
+                    { data: 'meeting_amount', name: 'meeting_amount', class: 'text-center'},
                     { data: 'created_at', name: 'created_at', class: 'text-center'},
                     { data: 'action', name:'action', orderable: false, searchable: false, class: 'text-center'}
                 ],

@@ -68,19 +68,34 @@ class CourseController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'              => 'required|max:50',
-            'type'              => 'required',
             'price'             => 'required',
             'meeting_amount'    => 'required'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
-        Customer::create([
+        if($request->input('type') === '-1'){
+            return redirect()->back()->withErrors('Pilih Tipe Kelas', 'default')->withInput($request->all());
+        }
+
+        $selectedDays = "";
+        if($request->input('type') != 1){
+            $days = $request->get('chk');
+            if($days == null){
+                return redirect()->back()->withErrors('Belum ada hari yang dipilih', 'default')->withInput($request->all());
+            }
+            foreach ($days as $day){
+                $selectedDays.=$day.";";
+            }
+        }
+
+        Course::create([
             'name'              => $request->get('name'),
             'type'              => $request->get('type'),
             'price'             => $request->get('price'),
-            'coach_id'          => $request->get('coach'),
+            'coach_id'          => $request->get('coach_id'),
             'meeting_amount'    => $request->get('meeting_amount'),
+            'day'    => $selectedDays,
         ]);
 
         Session::flash('message', 'Berhasil membuat data Kelas baru!');
@@ -107,7 +122,8 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        return view('admin.courses.edit', ['course' => $course]);
+        $coaches = Coach::all();
+        return view('admin.courses.edit',compact('course', 'coaches'));
     }
 
     /**
@@ -121,21 +137,34 @@ class CourseController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'              => 'required|max:50',
-            'phone'             => 'required',
-            'age'               => 'required',
-            'email'             => 'required|email',
-            'address'           => 'required'
+            'price'             => 'required',
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
+        if($request->input('type') === '-1'){
+            return redirect()->back()->withErrors('Pilih Tipe Kelas', 'default')->withInput($request->all());
+        }
+
+        $selectedDays = "";
+        if($request->input('type') != 1){
+            $days = $request->get('chk');
+            if($days == null){
+                return redirect()->back()->withErrors('Belum ada hari yang dipilih', 'default')->withInput($request->all());
+            }
+            foreach ($days as $day){
+                $selectedDays.=$day.";";
+            }
+        }
+
         $course->name = $request->get('name');
         $course->type = $request->get('type');
         $course->price = $request->get('price');
-        $course->coach_id = $request->get('coach');
+        $course->coach_id = $request->get('coach_id');
         $course->meeting_amount = $request->get('meeting_amount');
+        $course->day = $selectedDays;
         $course->updated_at = $dateTimeNow;
         $course->save();
 
