@@ -555,9 +555,9 @@ Route::get('/select-item_receipts', 'Admin\Inventory\ItemReceiptController@getIt
 Route::get('/datatables-customers', 'Admin\CustomerController@anyData')->name('datatables.customers');
 Route::get('/datatables-coaches', 'Admin\CoachController@anyData')->name('datatables.coaches');
 Route::get('/datatables-courses', 'Admin\CourseController@anyData')->name('datatables.courses');
+Route::get('/datatables-users', 'Admin\UserController@getIndex')->name('datatables.users');
 //DMC End
 
-Route::get('/datatables-users', 'Admin\UserController@getIndex')->name('datatables.users');
 Route::get('/datatables-employees', 'Admin\EmployeeController@getIndex')->name('datatables.employees');
 Route::get('/datatables-items', 'Admin\ItemController@getIndex')->name('datatables.items');
 Route::get('/datatables-groups', 'Admin\GroupController@anyData')->name('datatables.groups');
