@@ -77,6 +77,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('courses/ubah/{course}', 'CourseController@update')->name('courses.update');
     Route::post('courses/hapus', 'CourseController@destroy')->name('courses.destroy');
 
+    //Transaction
+    Route::get('transactions', 'TransactionController@index')->name('transactions');
+    Route::get('transactions/tambah', 'TransactionController@create')->name('transactions.create');
+    Route::post('transactions/simpan', 'TransactionController@store')->name('transactions.store');
+    Route::get('transactions/{transaction}/ubah/', 'TransactionController@edit')->name('transactions.edit');
+    Route::put('transactions/ubah/{transaction}', 'TransactionController@update')->name('transactions.update');
+    Route::post('transactions/hapus', 'TransactionController@destroy')->name('transactions.destroy');
+
     //DMC End
 
     // Notification
@@ -528,6 +536,10 @@ Route::group(['as' => 'protection.'], function () {
 /**
  * Select2
  */
+
+Route::get('/select-days', 'Admin\CourseController@getDays')->name('select.days');
+Route::get('/select-customers', 'Admin\CustomerController@getCustomers')->name('select.customers');
+Route::get('/select-courses', 'Admin\CourseController@getCourses')->name('select.courses');
 
 Route::get('/select-employees', 'Admin\EmployeeController@getEmployees')->name('select.employees');
 Route::get('/select-items', 'Admin\ItemController@getItems')->name('select.items');

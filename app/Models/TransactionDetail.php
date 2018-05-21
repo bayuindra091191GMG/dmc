@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 15 May 2018 15:31:03 +0700.
+ * Date: Mon, 21 May 2018 16:00:18 +0700.
  */
 
 namespace App\Models;
@@ -15,6 +15,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $id
  * @property int $header_id
  * @property int $class_id
+ * @property string $day
  * @property int $meeting_amounts
  * @property int $meeting_attendeds
  * @property \Carbon\Carbon $class_start_date
@@ -25,7 +26,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Carbon\Carbon $updated_at
  * @property int $updated_by
  * 
- * @property \App\Models\Class $class
+ * @property \App\Models\Course $course
  * @property \App\Models\TransactionHeader $transaction_header
  * @property \App\Models\User $user
  * @property \Illuminate\Database\Eloquent\Collection $attendances
@@ -55,6 +56,7 @@ class TransactionDetail extends Eloquent
 	protected $fillable = [
 		'header_id',
 		'class_id',
+		'day',
 		'meeting_amounts',
 		'meeting_attendeds',
 		'class_start_date',
@@ -65,9 +67,9 @@ class TransactionDetail extends Eloquent
 		'updated_by'
 	];
 
-	public function class()
+	public function course()
 	{
-		return $this->belongsTo(\App\Models\Class::class);
+		return $this->belongsTo(\App\Models\Course::class, 'class_id');
 	}
 
 	public function transaction_header()

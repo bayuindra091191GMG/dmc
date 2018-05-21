@@ -12,6 +12,7 @@ use App\Transformer\MasterData\CustomerTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -199,5 +200,27 @@ class CourseController extends Controller
         catch(\Exception $ex){
             return Response::json(array('errors' => 'INVALID'));
         }
+    }
+
+    public function getCourses(Request $request){
+        $term = trim($request->q);
+        $courses= Course::where('name', 'LIKE', '%'. $term. '%')
+            ->get();
+
+        $formatted_tags = [];
+
+        foreach ($courses as $course) {
+            $formatted_tags[] = ['id' => $course->id, 'text' => $course->name. ' - '. $course->coach->name];
+        }
+
+        return \Response::json($formatted_tags);
+    }
+
+    public function getDays(Request $request){
+        $id = Input::get('id');
+        $course = Course::where('id', $id)->first();
+        $days = preg_split('@;@', $course->day, NULL, PREG_SPLIT_NO_EMPTY);
+
+        return \Response::json($days);
     }
 }

@@ -170,4 +170,18 @@ class CustomerController extends Controller
             return Response::json(array('errors' => 'INVALID'));
         }
     }
+
+    public function getCustomers(Request $request){
+        $term = trim($request->q);
+        $customers= Customer::where('name', 'LIKE', '%'. $term. '%')
+            ->get();
+
+        $formatted_tags = [];
+
+        foreach ($customers as $customer) {
+            $formatted_tags[] = ['id' => $customer->id, 'text' => $customer->name. ' - '. $customer->parent_name];
+        }
+
+        return \Response::json($formatted_tags);
+    }
 }
