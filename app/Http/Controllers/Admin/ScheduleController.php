@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Libs\Utilities;
-use App\Models\Auth\User\User;
 use App\Models\Coach;
 use App\Models\Course;
-use App\Models\Customer;
-use App\Models\NumberingSystem;
+use App\Models\Schedule;
 use App\Models\TransactionDetail;
-use App\Models\TransactionHeader;
-use App\Transformer\MasterData\CoachTransformer;
+use App\Transformer\ScheduleTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
@@ -19,7 +15,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
-class TransactionController extends Controller
+class ScheduleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -28,7 +24,7 @@ class TransactionController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.transactions.index');
+        return view('admin.schedules.index');
     }
 
 
@@ -42,9 +38,9 @@ class TransactionController extends Controller
      */
     public function anyData()
     {
-        $coaches = Coach::all();
-        return DataTables::of($coaches)
-            ->setTransformer(new CoachTransformer())
+        $schedules = Schedule::all();
+        return DataTables::of($schedules)
+            ->setTransformer(new ScheduleTransformer())
             ->addIndexColumn()
             ->make(true);
     }
@@ -56,7 +52,7 @@ class TransactionController extends Controller
      */
     public function create()
     {
-        return view('admin.transactions.create', compact('customers'));
+        return view('admin.schedules.create', compact('customers'));
     }
 
     /**
@@ -67,61 +63,60 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-//        $validator = Validator::make($request->all(), [
-//            'name'              => 'required|max:50',
-//            'email'             => 'email'
-//        ]);
-//
-//        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
-
-
         // Validate details
+        $customer = $request->get('customer_id');
         $courses = $request->input('course_id');
-        $days = $request->input('day');
         $startDates = $request->input('start_date');
         $finishDates = $request->input('finish_date');
-        $detailPrices = $request->input('total_price');
-        $detailDiscount = $request->input('discount');
         $valid = true;
-        $tmpTotal = 0;
-        $tmpDiscount = 0;
+        $validClass = true;
+        $validDate = true;
         $idx = 0;
 
         foreach($courses as $item){
             if(empty($item)) $valid = false;
-            $tmpTotal = $detailPrices[$idx];
-            $tmpDiscount = $detailDiscount[$idx];
+
+            //Check if the customer already take that class
+            $tmpCourse = Schedule::where('customer_id', $customer)->where('course_id', $item)->first();
+            if($tmpCourse != null){
+                $validClass = false;
+            }
+
+            $tempStart = strtotime($startDates[$idx]);
+            $tempFinish = strtotime($finishDates[$idx]);
+
+            $year1 = date('Y', $tempStart);
+            $year2 = date('Y', $tempFinish);
+
+            $month1 = date('m', $tempStart);
+            $month2 = date('m', $tempFinish);
+
+            $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
+
+            if($diff <= 0){
+                $validDate = false;
+            }
 
             $idx++;
         }
 
-        if($tmpTotal < $tmpDiscount){
-            return redirect()->back()->withErrors('Diskon Tidak boleh lebih kecil daripada Biaya!', 'default')->withInput($request->all());
+        if($customer == null){
+            return redirect()->back()->withErrors("Pilih Murid terlebih dahulu!");
         }
 
         if(!$valid){
-            return redirect()->back()->withErrors('Kelas Wajib dipilih!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors("Kelas Wajib dipilih!");
         }
 
-        $customer = $request->get('customer_id');
-        if($customer == null){
-            return redirect()->back()->withErrors("Pilih Murid terlebih dahulu!")->withInput($request->all());
+        if(!$validClass){
+            return redirect()->back()->withErrors("Sudah ada Kelas yang diambil!");
+        }
+
+        if(!$validDate){
+            return redirect()->back()->withErrors("Tanggal yang dimasukan salah!");
         }
 
         //Get All Data and store
-        $totalPrice = 0;
-        $totalDiscount = 0;
-        $sysNo = NumberingSystem::find(1);
-        $invCode = Utilities::GenerateNumberPurchaseOrder($sysNo->document, $sysNo->next_no);
-        $now = Carbon::now('Asia/Jakarta');
-        $header = TransactionHeader::create([
-            'customer_id'   => $request->get('customer_id'),
-            'date'          => $now->toDateString(),
-            'invoice_number'=> $invCode,
-            'status_id'     => 3
-        ]);
-
-        //Details
         $i = 0;
         foreach ($courses as $course){
             $courseData = Course::find($course);
@@ -131,46 +126,41 @@ class TransactionController extends Controller
             $tempFinish = strtotime($finishDates[$i]);
             $finish = date('Y-m-d', $tempFinish);
 
-            $dtlPrice = str_replace('.', '', $detailPrices[$i]);
-            $detailDisc = str_replace('.', '', $detailPrices[$i]);
-            $subTotal = $dtlPrice - $detailDisc;
+            $year1 = date('Y', $tempStart);
+            $year2 = date('Y', $tempFinish);
 
-            TransactionDetail::create([
-                'header_id'         => $header->id,
-                'class_id'          => $courseData->id,
-                'day'               => $days[$i],
-                'meeting_amounts'   => $courseData->meeting_amounts,
-                'meeting_attendeds' => 0,
-                'class_start_date'  => $start,
-                'class_end_date'    => $finish,
-                'price'             => $dtlPrice,
-                'discount'          => $detailDisc,
-                'subtotal'          => $subTotal
+            $month1 = date('m', $tempStart);
+            $month2 = date('m', $tempFinish);
+
+            $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
+
+            Schedule::create([
+                'customer_id'       => $request->get('customer_id'),
+                'course_id'         => $course,
+                'start_date'        => $start,
+                'finish_date'       => $finish,
+                'meeting_amount'    => $courseData->meeting_amount,
+                'month_amount'      => $diff,
+                'status_id'         => 3
             ]);
 
-            $totalPrice += $dtlPrice;
-            $totalDiscount += $detailDisc;
             $i++;
         }
 
-        $header->total_price = $totalPrice;
-        $header->total_discount = $totalDiscount;
-        $header->save();
         Session::flash('message', 'Berhasil membuat data Jadwal baru!');
-
-        return redirect()->route('admin.transactions');
+        return redirect()->route('admin.schedules');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param User $user
+     * @param Schedule $schedule
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-//    public function show(User $user)
-//    {
-//        return view('admin.users.show', ['user' => $user]);
-//    }
+    public function show(Schedule $schedule)
+    {
+        return view('admin.schedules.show', ['schedule' => $schedule]);
+    }
 
     /**
      * Show the form for editing the specified resource.

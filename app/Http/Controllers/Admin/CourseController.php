@@ -219,7 +219,12 @@ class CourseController extends Controller
     public function getDays(Request $request){
         $id = Input::get('id');
         $course = Course::where('id', $id)->first();
-        $days = preg_split('@;@', $course->day, NULL, PREG_SPLIT_NO_EMPTY);
+        if($course->type == 1){
+            $days[0] = "Bebas";
+        }
+        else {
+            $days = preg_split('@;@', $course->day, NULL, PREG_SPLIT_NO_EMPTY);
+        }
 
         return \Response::json($days);
     }

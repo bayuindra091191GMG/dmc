@@ -77,6 +77,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('courses/ubah/{course}', 'CourseController@update')->name('courses.update');
     Route::post('courses/hapus', 'CourseController@destroy')->name('courses.destroy');
 
+    //Schedules
+    Route::get('schedules', 'ScheduleController@index')->name('schedules');
+    Route::get('schedules/tambah', 'ScheduleController@create')->name('schedules.create');
+    Route::post('schedules/simpan', 'ScheduleController@store')->name('schedules.store');
+    Route::get('schedules/{schedule}/ubah/', 'ScheduleController@edit')->name('schedules.edit');
+    Route::put('schedules/ubah/{schedule}', 'ScheduleController@update')->name('schedules.update');
+    Route::post('schedules/hapus', 'ScheduleController@destroy')->name('schedules.destroy');
+
     //Transaction
     Route::get('transactions', 'TransactionController@index')->name('transactions');
     Route::get('transactions/tambah', 'TransactionController@create')->name('transactions.create');
@@ -568,6 +576,7 @@ Route::get('/datatables-customers', 'Admin\CustomerController@anyData')->name('d
 Route::get('/datatables-coaches', 'Admin\CoachController@anyData')->name('datatables.coaches');
 Route::get('/datatables-courses', 'Admin\CourseController@anyData')->name('datatables.courses');
 Route::get('/datatables-users', 'Admin\UserController@getIndex')->name('datatables.users');
+Route::get('/datatables-schedules', 'Admin\ScheduleController@anyData')->name('datatables.schedules');
 //DMC End
 
 Route::get('/datatables-employees', 'Admin\EmployeeController@getIndex')->name('datatables.employees');

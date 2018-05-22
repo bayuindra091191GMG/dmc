@@ -13,7 +13,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             @include('partials._success')
             @include('partials._error')
-            {{ Form::open(['route'=>['admin.transactions.store'],'method' => 'post','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.schedules.store'],'method' => 'post','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
 
             @if(count($errors))
                 <div class="form-group">
@@ -63,12 +63,6 @@
                                 <th class="text-center" style="width: 10%;">
                                     Tanggal Selesai
                                 </th>
-                                <th class="text-center" style="width: 10%;">
-                                    Biaya
-                                </th>
-                                <th class="text-center" style="width: 10%;">
-                                    Diskon
-                                </th>
                                 <th class="text-center" style="width: 15%;">
                                     Tindakan
                                 </th>
@@ -83,7 +77,7 @@
 
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a class="btn btn-danger" href="{{ route('admin.coaches') }}"> Batal</a>
+                    <a class="btn btn-danger" href="{{ route('admin.schedules') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>
@@ -130,20 +124,6 @@
                                        name="finish_date" value="{{ old('finish_date') }}">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="total_price">Biaya</label>
-                            <div class="col-sm-10">
-                                <input id="total_price" type="text" class="form-control col-md-7 col-xs-12"
-                                       name="total_price" value="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="discount">Diskon</label>
-                            <div class="col-sm-10">
-                                <input id="discount" type="text" class="form-control col-md-7 col-xs-12"
-                                       name="discount" value="0">
-                            </div>
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
@@ -180,20 +160,6 @@
 
         $('#finish_date').datetimepicker({
             format: "DD MMM Y"
-        });
-
-        // Add autonumeric
-        priceFormat = new AutoNumeric('#total_price', {
-            decimalCharacter: ',',
-            digitGroupSeparator: '.',
-            minimumValue: '0',
-            decimalPlaces: 0
-        });
-        discountFormat = new AutoNumeric('#discount', {
-            decimalCharacter: ',',
-            digitGroupSeparator: '.',
-            minimumValue: '0',
-            decimalPlaces: 0
         });
 
         //Add Murid
@@ -277,8 +243,6 @@
                 "<td><input type='text' name='day[]' class='form-control' value='" + $('select[name=day_add]').val() +"' readonly/></td>" +
                 "<td><input type='text' name='start_date[]' class='form-control' value='" + $('#start_date').val() +"' readonly/></td>" +
                 "<td><input type='text' name='finish_date[]' class='form-control' value='" + $('#finish_date').val() +"' readonly/></td>" +
-                "<td><input type='text' name='total_price[]' class='form-control' value='" + $('#total_price').val() +"' readonly/></td>" +
-                "<td><input type='text' name='discount[]' class='form-control' value='" + $('#discount').val() +"' readonly/></td>" +
                 "<td><span id='delete_row" + i + "' class='delete-modal btn btn-danger'><span class='glyphicon glyphicon-trash'></span></span></td></tr>");
 
             $('#day_add').empty();
