@@ -7,6 +7,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -15,6 +16,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $id
  * @property int $customer_id
  * @property int $course_id
+ * @property string $day
  * @property \Carbon\Carbon $start_date
  * @property \Carbon\Carbon $finish_date
  * @property int $meeting_amount
@@ -44,6 +46,11 @@ class Schedule extends Eloquent
 		'status_id' => 'int'
 	];
 
+    protected $appends = [
+        'start_date_string',
+        'finish_date_string'
+    ];
+
 	protected $dates = [
 		'start_date',
 		'finish_date'
@@ -52,6 +59,7 @@ class Schedule extends Eloquent
 	protected $fillable = [
 		'customer_id',
 		'course_id',
+        'day',
 		'start_date',
 		'finish_date',
 		'meeting_amount',
@@ -60,6 +68,14 @@ class Schedule extends Eloquent
 		'updated_by',
 		'status_id'
 	];
+
+    public function getStartDateStringAttribute(){
+        return Carbon::parse($this->attributes['start_date'])->format('d M Y');
+    }
+
+    public function getFinishDateStringAttribute(){
+        return Carbon::parse($this->attributes['finish_date'])->format('d M Y');
+    }
 
 	public function user()
 	{

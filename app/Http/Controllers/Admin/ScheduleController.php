@@ -68,6 +68,7 @@ class ScheduleController extends Controller
         $courses = $request->input('course_id');
         $startDates = $request->input('start_date');
         $finishDates = $request->input('finish_date');
+        $dayAdd = $request->get('day');
         $valid = true;
         $validClass = true;
         $validDate = true;
@@ -137,6 +138,7 @@ class ScheduleController extends Controller
             Schedule::create([
                 'customer_id'       => $request->get('customer_id'),
                 'course_id'         => $course,
+                'day'               => $dayAdd[$i],
                 'start_date'        => $start,
                 'finish_date'       => $finish,
                 'meeting_amount'    => $courseData->meeting_amount,
