@@ -6,6 +6,7 @@ use App\Models\Auth\User\User;
 use App\Models\Coach;
 use App\Models\Course;
 use App\Models\Customer;
+use App\Models\Schedule;
 use App\Models\TransactionHeader;
 use App\Transformer\MasterData\CourseTransformer;
 use App\Transformer\MasterData\CustomerTransformer;
@@ -107,13 +108,22 @@ class CourseController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param User $user
+     * @param Course $course
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-//    public function show(User $user)
-//    {
-//        return view('admin.users.show', ['user' => $user]);
-//    }
+    public function show(Course $course)
+    {
+        if($course->type == 1){
+            $days[0] = "Bebas";
+        }
+        else {
+            $days = preg_split('@;@', $course->day, NULL, PREG_SPLIT_NO_EMPTY);
+        }
+
+        //Get customer/murid
+        $customers = Schedule::where('course_id', $course->id)->get();
+        return view('admin.courses.show', ['course' => $course, 'days' => $days, 'customers' => $customers]);
+    }
 
     /**
      * Show the form for editing the specified resource.

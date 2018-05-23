@@ -55,35 +55,36 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     //Customer
     Route::get('customers', 'CustomerController@index')->name('customers');
-    Route::get('customers/tambah', 'CustomerController@create')->name('customers.create');
-    Route::post('customers/simpan', 'CustomerController@store')->name('customers.store');
-    Route::get('customers/{customer}/ubah/', 'CustomerController@edit')->name('customers.edit');
-    Route::put('customers/ubah/{customer}', 'CustomerController@update')->name('customers.update');
-    Route::post('customers/hapus', 'CustomerController@destroy')->name('customers.destroy');
+    Route::get('customers/create', 'CustomerController@create')->name('customers.create');
+    Route::post('customers/store', 'CustomerController@store')->name('customers.store');
+    Route::get('customers/{customer}/edit/', 'CustomerController@edit')->name('customers.edit');
+    Route::put('customers/edit/{customer}', 'CustomerController@update')->name('customers.update');
+    Route::post('customers/delete', 'CustomerController@destroy')->name('customers.destroy');
 
     //Coach
     Route::get('coaches', 'CoachController@index')->name('coaches');
-    Route::get('coaches/tambah', 'CoachController@create')->name('coaches.create');
-    Route::post('coaches/simpan', 'CoachController@store')->name('coaches.store');
-    Route::get('coaches/{coach}/ubah/', 'CoachController@edit')->name('coaches.edit');
-    Route::put('coaches/ubah/{coach}', 'CoachController@update')->name('coaches.update');
-    Route::post('coaches/hapus', 'CoachController@destroy')->name('coaches.destroy');
+    Route::get('coaches/create', 'CoachController@create')->name('coaches.create');
+    Route::post('coaches/store', 'CoachController@store')->name('coaches.store');
+    Route::get('coaches/{coach}/edit/', 'CoachController@edit')->name('coaches.edit');
+    Route::put('coaches/edit/{coach}', 'CoachController@update')->name('coaches.update');
+    Route::post('coaches/delete', 'CoachController@destroy')->name('coaches.destroy');
 
     //Courses
     Route::get('courses', 'CourseController@index')->name('courses');
-    Route::get('courses/tambah', 'CourseController@create')->name('courses.create');
-    Route::post('courses/simpan', 'CourseController@store')->name('courses.store');
-    Route::get('courses/{course}/ubah/', 'CourseController@edit')->name('courses.edit');
-    Route::put('courses/ubah/{course}', 'CourseController@update')->name('courses.update');
-    Route::post('courses/hapus', 'CourseController@destroy')->name('courses.destroy');
+    Route::get('courses/show/{course}', 'CourseController@show')->name('courses.show');
+    Route::get('courses/create', 'CourseController@create')->name('courses.create');
+    Route::post('courses/store', 'CourseController@store')->name('courses.store');
+    Route::get('courses/{course}/edit/', 'CourseController@edit')->name('courses.edit');
+    Route::put('courses/edit/{course}', 'CourseController@update')->name('courses.update');
+    Route::post('courses/delete', 'CourseController@destroy')->name('courses.destroy');
 
     //Schedules
     Route::get('schedules', 'ScheduleController@index')->name('schedules');
-    Route::get('schedules/tambah', 'ScheduleController@create')->name('schedules.create');
-    Route::post('schedules/simpan', 'ScheduleController@store')->name('schedules.store');
-    Route::get('schedules/{schedule}/ubah/', 'ScheduleController@edit')->name('schedules.edit');
-    Route::put('schedules/ubah/{schedule}', 'ScheduleController@update')->name('schedules.update');
-    Route::post('schedules/hapus', 'ScheduleController@destroy')->name('schedules.destroy');
+    Route::get('schedules/create', 'ScheduleController@create')->name('schedules.create');
+    Route::post('schedules/store', 'ScheduleController@store')->name('schedules.store');
+    Route::get('schedules/{schedule}/edit/', 'ScheduleController@edit')->name('schedules.edit');
+    Route::put('schedules/edit/{schedule}', 'ScheduleController@update')->name('schedules.update');
+    Route::post('schedules/delete', 'ScheduleController@destroy')->name('schedules.destroy');
 
     //Transaction
     Route::get('transactions', 'TransactionController@index')->name('transactions');

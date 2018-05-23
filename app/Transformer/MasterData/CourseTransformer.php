@@ -17,9 +17,10 @@ class CourseTransformer extends TransformerAbstract
     public function transform(Course $course){
 
         $createdDate = Carbon::parse($course->created_at)->format('d M Y');
-
-        $action =
-            "<a class='btn btn-xs btn-info' href='courses/".$course->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+        $name = "<a href='/admin/courses/show/" . $course->id. "' style='text-decoration: underline;'>". $course->name. "</a>";
+        $action = "<a class='btn btn-xs btn-primary' href='courses/show/". $course->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
+        $action .=
+            "<a class='btn btn-xs btn-info' href='courses/".$course->id."/edit' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
         $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $course->id ."' ><i class='fa fa-trash'></i></a>";
 
         $type = 'class';
@@ -28,7 +29,7 @@ class CourseTransformer extends TransformerAbstract
         }
 
         return[
-            'name'              => $course->name,
+            'name'              => $name,
             'type'              => $type,
             'coach'             => $course->coach->name,
             'price'             => 'Rp '.$course->price_string,
