@@ -55,6 +55,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     //Customer
     Route::get('customers', 'CustomerController@index')->name('customers');
+    Route::get('customers/show/{customer}', 'CustomerController@show')->name('customers.show');
     Route::get('customers/create', 'CustomerController@create')->name('customers.create');
     Route::post('customers/store', 'CustomerController@store')->name('customers.store');
     Route::get('customers/{customer}/edit/', 'CustomerController@edit')->name('customers.edit');
@@ -63,6 +64,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     //Coach
     Route::get('coaches', 'CoachController@index')->name('coaches');
+    Route::get('coaches/show/{coach}', 'CoachController@show')->name('coaches.show');
     Route::get('coaches/create', 'CoachController@create')->name('coaches.create');
     Route::post('coaches/store', 'CoachController@store')->name('coaches.store');
     Route::get('coaches/{coach}/edit/', 'CoachController@edit')->name('coaches.edit');

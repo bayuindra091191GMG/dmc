@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Auth\User\User;
 use App\Models\Coach;
 use App\Models\Course;
+use App\Models\Schedule;
 use App\Models\TransactionDetail;
 use App\Transformer\MasterData\CoachTransformer;
 use Illuminate\Http\Request;
@@ -86,13 +87,14 @@ class CoachController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param User $user
+     * @param Coach $coach
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-//    public function show(User $user)
-//    {
-//        return view('admin.users.show', ['user' => $user]);
-//    }
+    public function show(Coach $coach)
+    {
+        $courses = Course::where('coach_id', $coach->id)->get();
+        return view('admin.coaches.show', ['coach' => $coach, 'courses' => $courses]);
+    }
 
     /**
      * Show the form for editing the specified resource.

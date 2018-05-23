@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Auth\User\User;
 use App\Models\Customer;
+use App\Models\Schedule;
 use App\Models\TransactionHeader;
 use App\Transformer\MasterData\CustomerTransformer;
 use Illuminate\Http\Request;
@@ -89,13 +90,14 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param User $user
+     * @param Customer $customer
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-//    public function show(User $user)
-//    {
-//        return view('admin.users.show', ['user' => $user]);
-//    }
+    public function show(Customer $customer)
+    {
+        $courses = Schedule::where('customer_id', $customer->id)->get();
+        return view('admin.customers.show', ['customer' => $customer, 'courses' => $courses]);
+    }
 
     /**
      * Show the form for editing the specified resource.
