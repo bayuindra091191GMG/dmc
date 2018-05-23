@@ -11,6 +11,7 @@ use App\Models\NumberingSystem;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use App\Transformer\MasterData\CoachTransformer;
+use App\Transformer\MasterData\TransactionHeaderTranformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
-class TransactionController extends Controller
+class TransactionHeaderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,9 +32,6 @@ class TransactionController extends Controller
         return view('admin.transactions.index');
     }
 
-
-    //DataTables
-
     /**
      * Process datatables ajax request.
      *
@@ -42,9 +40,9 @@ class TransactionController extends Controller
      */
     public function anyData()
     {
-        $coaches = Coach::all();
-        return DataTables::of($coaches)
-            ->setTransformer(new CoachTransformer())
+        $headers = TransactionHeader::all();
+        return DataTables::of($headers)
+            ->setTransformer(new TransactionHeaderTranformer)
             ->addIndexColumn()
             ->make(true);
     }

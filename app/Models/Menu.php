@@ -16,6 +16,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $menu_header_id
  * @property string $name
  * @property string $route
+ * @property int $index
  * 
  * @property \App\Models\MenuHeader $menu_header
  * @property \Illuminate\Database\Eloquent\Collection $menu_subs
@@ -28,13 +29,15 @@ class Menu extends Eloquent
 	public $timestamps = false;
 
 	protected $casts = [
-		'menu_header_id' => 'int'
+		'menu_header_id' => 'int',
+		'index' => 'int'
 	];
 
 	protected $fillable = [
 		'menu_header_id',
 		'name',
-        'route'
+        'route',
+        'index'
 	];
 
 	public function menu_header()

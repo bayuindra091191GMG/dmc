@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Mon, 21 May 2018 16:00:18 +0700.
+ * Date: Wed, 23 May 2018 13:55:57 +0700.
  */
 
 namespace App\Models;
@@ -14,9 +14,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property int $id
  * @property int $header_id
- * @property int $class_id
+ * @property int $schedule_id
  * @property string $day
- * @property int $meeting_amounts
  * @property int $meeting_attendeds
  * @property \Carbon\Carbon $class_start_date
  * @property \Carbon\Carbon $class_end_date
@@ -26,10 +25,9 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Carbon\Carbon $updated_at
  * @property int $updated_by
  * 
- * @property \App\Models\Course $course
  * @property \App\Models\TransactionHeader $transaction_header
- * @property \App\Models\User $user
- * @property \Illuminate\Database\Eloquent\Collection $attendances
+ * @property \App\Models\Course $course
+ * @property \App\Models\Auth\User\User $user
  *
  * @package App\Models
  */
@@ -39,8 +37,7 @@ class TransactionDetail extends Eloquent
 
 	protected $casts = [
 		'header_id' => 'int',
-		'class_id' => 'int',
-		'meeting_amounts' => 'int',
+		'schedule_id' => 'int',
 		'meeting_attendeds' => 'int',
 		'price' => 'float',
 		'discount' => 'float',
@@ -55,9 +52,8 @@ class TransactionDetail extends Eloquent
 
 	protected $fillable = [
 		'header_id',
-		'class_id',
+		'schedule_id',
 		'day',
-		'meeting_amounts',
 		'meeting_attendeds',
 		'class_start_date',
 		'class_end_date',
@@ -67,23 +63,23 @@ class TransactionDetail extends Eloquent
 		'updated_by'
 	];
 
-	public function course()
-	{
-		return $this->belongsTo(\App\Models\Course::class, 'class_id');
-	}
-
 	public function transaction_header()
 	{
 		return $this->belongsTo(\App\Models\TransactionHeader::class, 'header_id');
 	}
 
-	public function user()
+	public function course()
 	{
-		return $this->belongsTo(\App\Models\User::class, 'updated_by');
+		return $this->belongsTo(\App\Models\Course::class, 'schedule_id');
 	}
 
-	public function attendances()
-	{
-		return $this->hasMany(\App\Models\Attendance::class);
-	}
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
+    }
 }

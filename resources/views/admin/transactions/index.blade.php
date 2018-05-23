@@ -1,13 +1,13 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Data Kelas')
+@section('title', 'Daftar Transaksi')
 
 @section('content')
 
     <div class="row">
         @include('partials._success')
         <div class="nav navbar-right">
-            <a href="{{ route('admin.courses.create') }}" class="btn btn-app">
+            <a href="{{ route('admin.transactions.create') }}" class="btn btn-app">
                 <i class="fa fa-plus"></i> Tambah
             </a>
         </div>
@@ -15,17 +15,17 @@
     </div>
     <div class="row">
         <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
-               width="100%" id="users-table">
+               width="100%" id="transaction-table">
             <thead>
                 <tr>
                     <th class="text-center" style="width: 10%;">No</th>
-                    <th class="text-center" style="width: 10%;">Nama</th>
-                    <th class="text-center" style="width: 10%;">Type</th>
-                    <th class="text-center" style="width: 10%;">Trainer</th>
-                    <th class="text-center" style="width: 20%;">Fee</th>
-                    <th class="text-center" style="width: 20%;">Jumlah Pertemuan</th>
-                    <th class="text-center" style="width: 10%;">Tanggal Dibuat</th>
-                    <th class="text-center" style="width: 10%;">Action</th>
+                    <th class="text-center" style="width: 10%;">Nomor Transaksi</th>
+                    <th class="text-center" style="width: 10%;">Nomor Invoice</th>
+                    <th class="text-center" style="width: 10%;">Tanggal</th>
+                    <th class="text-center" style="width: 15%;">Total Harga</th>
+                    <th class="text-center" style="width: 15%;">Total Diskon</th>
+                    <th class="text-center" style="width: 15%;">Total Pembayaran</th>
+                    <th class="text-center" style="width: 15%;">Tindakan</th>
                 </tr>
             </thead>
             <tbody>
@@ -44,22 +44,22 @@
 
 @section('scripts')
     @parent
-    {{ Html::script(mix('assets/admin/js/datatables.js')) }}
+    {{ HTML::script(mix('assets/admin/js/datatables.js')) }}
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         $(function() {
-            $('#users-table').DataTable({
+            $('#transaction-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('datatables.courses') !!}',
+                ajax: '{!! route('datatables.transactions') !!}',
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
-                    { data: 'name', name: 'name', class: 'text-center'},
-                    { data: 'type', name: 'type', class: 'text-center'},
-                    { data: 'coach', name: 'coach', class: 'text-center'},
-                    { data: 'price', name: 'price', class: 'text-center'},
-                    { data: 'meeting_amount', name: 'meeting_amount', class: 'text-center'},
-                    { data: 'created_at', name: 'created_at', class: 'text-center'},
+                    { data: 'code', name: 'code', class: 'text-center'},
+                    { data: 'invoice', name: 'invoice', class: 'text-center'},
+                    { data: 'date', name: 'date', class: 'text-center'},
+                    { data: 'total_price', name: 'total_price', class: 'text-center'},
+                    { data: 'total_discount', name: 'total_discount', class: 'text-center'},
+                    { data: 'total_payment', name: 'total_payment', class: 'text-center'},
                     { data: 'action', name:'action', orderable: false, searchable: false, class: 'text-center'}
                 ],
                 language: {
@@ -67,15 +67,5 @@
                 }
             });
         });
-
-        $(document).on('click', '.delete-modal', function(){
-            $('#deleteModal').modal({
-                backdrop: 'static',
-                keyboard: false
-            });
-
-            $('#deleted-id').val($(this).data('id'));
-        });
     </script>
-    @include('partials._deleteJs', ['routeUrl' => 'admin.courses.destroy', 'redirectUrl' => 'admin.courses'])
 @endsection

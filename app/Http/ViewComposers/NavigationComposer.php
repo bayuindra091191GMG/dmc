@@ -21,11 +21,13 @@ class NavigationComposer
     {
         $user = auth()->user();
         $role = $user->roles()->pluck('id')[0];
-        $this->menus = PermissionMenu::where('role_id', $role)
-            ->orderBy('menu_id')
+        $this->menus = PermissionMenu::join('menus', 'permission_menus.menu_id', '=', 'menus.id')
+            ->where('permission_menus.role_id', $role)
+            ->orderBy('menus.index')
             ->get();
-        $this->menuHeader = PermissionMenuHeader::where('role_id', $role)->orderby('menu_header_id')
-            ->orderBy('menu_header_id')
+        $this->menuHeader = PermissionMenuHeader::join('menu_headers', 'permission_menu_headers.menu_header_id', '=', 'menu_headers.id')
+            ->where('permission_menu_headers.role_id', $role)
+            ->orderBy('menu_headers.index')
             ->get();
     }
 

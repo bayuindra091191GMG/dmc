@@ -25,6 +25,16 @@
         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
             <div class="menu_section">
                 <ul class="nav side-menu">
+                    <li>
+                        <a href="{{ route('admin.dashboard') }}">
+                            <i class="fa fa-home" aria-hidden="true"></i>
+                            {{ __('views.backend.section.navigation.menu_0_1') }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="menu_section">
+                <ul class="nav side-menu">
                     @foreach($menuHeader as $header)
                         <li>
                             <a style="font-weight: bold;">

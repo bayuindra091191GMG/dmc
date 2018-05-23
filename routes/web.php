@@ -299,66 +299,25 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('menu_subs/simpan', 'MenuSubController@store')->name('menu_subs.store');
     Route::post('menu_subs/hapus', 'MenuSubController@destroy')->name('menu_subs.destroy');
 
-    //Material Request Headers Primary
-    Route::post('material_requests/simpan', 'Inventory\MaterialRequestHeaderController@store')->name('material_requests.store');
-    Route::put('material_requests/ubah/{material_request}', 'Inventory\MaterialRequestHeaderController@update')->name('material_requests.update');
-    Route::post('material_requests/tutup', 'Inventory\MaterialRequestHeaderController@close')->name('material_requests.close');
-    Route::get('material_requests/print/{material_request}', 'Inventory\MaterialRequestHeaderController@printDocument')->name('material_requests.print');
+    //Attendances
+    Route::get('attendances', 'TransactionHeaderController@index')->name('attendances');
 
-    //Material Request Details Primary
-    Route::post('material_request_details/simpan', 'Inventory\MaterialRequestDetailController@store')->name('material_request_details.store');
-    Route::put('material_request_details/ubah', 'Inventory\MaterialRequestDetailController@update')->name('material_request_details.update');
-    Route::post('material_request_details/hapus', 'Inventory\MaterialRequestDetailController@delete')->name('material_request_details.delete');
-    Route::get('material_requests/report', 'Inventory\MaterialRequestHeaderController@report')->name('material_requests.report');
-    Route::post('material_requests/download_report', 'Inventory\MaterialRequestHeaderController@downloadReport')->name('material_requests.download-report');
+    //Transaction Header
+    Route::get('transactions', 'TransactionHeaderController@index')->name('transactions');
+    Route::get('transactions/show/{transaction}', 'TransactionHeaderController@show')->name('transactions.show');
+    Route::get('transactions/edit/{transaction}', 'TransactionHeaderController@edit')->name('transactions.edit');
+    Route::put('transactions/update/{transaction}', 'TransactionHeaderController@update')->name('transactions.update');
+    Route::get('transactions/create', 'TransactionHeaderController@create')->name('transactions.create');
+    Route::post('transactions/store', 'TransactionHeaderController@store')->name('transactions.store');
+    Route::get('transactions/print/{purchase_request}', 'TransactionHeaderController@printDocument')->name('transactions.print');
+    Route::get('transactions/report', 'TransactionHeaderController@report')->name('transactions.report');
+    Route::post('transactions/report/download', 'TransactionHeaderController@downloadReport')->name('transactions.download-report');
 
-    //Material Request Headers for Other
-    Route::get('material_requests/inventory', 'Inventory\MaterialRequestHeaderController@indexOther')->name('material_requests.other');
-    Route::get('material_requests/inventory/detil/{material_request}', 'Inventory\MaterialRequestHeaderController@showOther')->name('material_requests.other.show');
-    Route::get('material_requests/inventory/{material_request}/ubah', 'Inventory\MaterialRequestHeaderController@editOther')->name('material_requests.other.edit');
-    Route::get('material_requests/inventory/tambah', 'Inventory\MaterialRequestHeaderController@createOther')->name('material_requests.other.create');
-    Route::get('material_requests/inventory/download/{material_request}', 'Inventory\MaterialRequestHeaderController@downloadOther')->name('material_requests.other.download');
-
-    //Material Request Headers for Fuel
-    Route::get('material_requests/bbm', 'Inventory\MaterialRequestHeaderController@indexFuel')->name('material_requests.fuel');
-    Route::get('material_requests/bbm/detil/{material_request}', 'Inventory\MaterialRequestHeaderController@showFuel')->name('material_requests.fuel.show');
-    Route::get('material_requests/bbm/{material_request}/ubah', 'Inventory\MaterialRequestHeaderController@editFuel')->name('material_requests.fuel.edit');
-    Route::get('material_requests/bbm/tambah', 'Inventory\MaterialRequestHeaderController@createFuel')->name('material_requests.fuel.create');
-    Route::get('material_requests/bbm/download/{material_request}', 'Inventory\MaterialRequestHeaderController@downloadFuel')->name('material_requests.fuel.download');
-
-    //Material Request Headers for Oil
-    Route::get('material_requests/oli', 'Inventory\MaterialRequestHeaderController@indexOil')->name('material_requests.oil');
-    Route::get('material_requests/oli/detil/{material_request}', 'Inventory\MaterialRequestHeaderController@showOil')->name('material_requests.oil.show');
-    Route::get('material_requests/oli/{material_request}/ubah', 'Inventory\MaterialRequestHeaderController@editOil')->name('material_requests.oil.edit');
-    Route::get('material_requests/oli/tambah', 'Inventory\MaterialRequestHeaderController@createOil')->name('material_requests.oil.create');
-    Route::get('material_requests/oli/download/{material_request}', 'Inventory\MaterialRequestHeaderController@downloadOil')->name('material_requests.oil.download');
-
-    //Material Request Headers for Service
-    Route::get('material_requests/servis', 'Inventory\MaterialRequestHeaderController@indexService')->name('material_requests.service');
-    Route::get('material_requests/servis/detil/{material_request}', 'Inventory\MaterialRequestHeaderController@showService')->name('material_requests.service.show');
-    Route::get('material_requests/servis/{material_request}/ubah', 'Inventory\MaterialRequestHeaderController@editService')->name('material_requests.service.edit');
-    Route::get('material_requests/servis/tambah', 'Inventory\MaterialRequestHeaderController@createService')->name('material_requests.service.create');
-    Route::get('material_requests/servis/download/{material_request}', 'Inventory\MaterialRequestHeaderController@downloadService')->name('material_requests.service.download');
-
-    //Purchase Request Headers
-    Route::get('purchase_requests', 'Purchasing\PurchaseRequestHeaderController@index')->name('purchase_requests');
-    Route::get('purchase_requests/detil/{purchase_request}', 'Purchasing\PurchaseRequestHeaderController@show')->name('purchase_requests.show');
-    Route::get('purchase_requests/{purchase_request}/ubah', 'Purchasing\PurchaseRequestHeaderController@edit')->name('purchase_requests.edit');
-    Route::put('purchase_requests/ubah/{purchase_request}', 'Purchasing\PurchaseRequestHeaderController@update')->name('purchase_requests.update');
-    Route::get('purchase_requests/pilihmr', 'Purchasing\PurchaseRequestHeaderController@beforeCreate')->name('purchase_requests.before_create');
-    Route::get('purchase_requests/tambah', 'Purchasing\PurchaseRequestHeaderController@create')->name('purchase_requests.create');
-    Route::post('purchase_requests/simpan', 'Purchasing\PurchaseRequestHeaderController@store')->name('purchase_requests.store');
-    Route::post('purchase_requests/tutup', 'Purchasing\PurchaseRequestHeaderController@close')->name('purchase_requests.close');
-    Route::get('purchase_requests/print/{purchase_request}', 'Purchasing\PurchaseRequestHeaderController@printDocument')->name('purchase_requests.print');
-    Route::get('purchase_requests/download/{purchase_request}', 'Purchasing\PurchaseRequestHeaderController@download')->name('purchase_requests.download');
-    Route::get('purchase_requests/report', 'Purchasing\PurchaseRequestHeaderController@report')->name('purchase_requests.report');
-    Route::post('purchase_requests/download_report', 'Purchasing\PurchaseRequestHeaderController@downloadReport')->name('purchase_requests.download-report');
-
-    //Purchase Request Details
-    Route::get('purchase_request_details', 'Purchasing\PurchaseRequestDetailController@index')->name('purchase_request_details');
-    Route::post('purchase_request_details/simpan', 'Purchasing\PurchaseRequestDetailController@store')->name('purchase_request_details.store');
-    Route::put('purchase_request_details/ubah', 'Purchasing\PurchaseRequestDetailController@update')->name('purchase_request_details.update');
-    Route::post('purchase_request_details/hapus', 'Purchasing\PurchaseRequestDetailController@delete')->name('purchase_request_details.delete');
+    //Transaction Details
+    Route::get('transaction_details', 'TransactionDetailController@index')->name('transaction_details');
+    Route::post('transaction_details/store', 'TransactionDetailController@store')->name('transaction_details.store');
+    Route::put('transaction_details/update', 'TransactionDetailController@update')->name('transaction_details.update');
+    Route::post('transaction_details/delete', 'TransactionDetailController@delete')->name('transaction_details.delete');
 
     //Purchase Order Headers
     Route::get('purchase_orders', 'Purchasing\PurchaseOrderHeaderController@index')->name('purchase_orders');
@@ -577,6 +536,7 @@ Route::get('/datatables-coaches', 'Admin\CoachController@anyData')->name('datata
 Route::get('/datatables-courses', 'Admin\CourseController@anyData')->name('datatables.courses');
 Route::get('/datatables-users', 'Admin\UserController@getIndex')->name('datatables.users');
 Route::get('/datatables-schedules', 'Admin\ScheduleController@anyData')->name('datatables.schedules');
+Route::get('/datatables-transactions', 'Admin\TransactionHeaderController@anyData')->name('datatables.transactions');
 //DMC End
 
 Route::get('/datatables-employees', 'Admin\EmployeeController@getIndex')->name('datatables.employees');

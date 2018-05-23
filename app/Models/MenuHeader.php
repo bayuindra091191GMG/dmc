@@ -14,6 +14,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property int $id
  * @property string $name
+ * @property int $index
  * 
  * @property \Illuminate\Database\Eloquent\Collection $menus
  *
@@ -23,8 +24,13 @@ class MenuHeader extends Eloquent
 {
 	public $timestamps = false;
 
+    protected $casts = [
+        'index' => 'int'
+    ];
+
 	protected $fillable = [
-		'name'
+		'name',
+        'index'
 	];
 
 	public function menus()
