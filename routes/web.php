@@ -86,13 +86,25 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('schedules/edit/{schedule}', 'ScheduleController@update')->name('schedules.update');
     Route::post('schedules/delete', 'ScheduleController@destroy')->name('schedules.destroy');
 
-    //Transaction
-    Route::get('transactions', 'TransactionController@index')->name('transactions');
-    Route::get('transactions/tambah', 'TransactionController@create')->name('transactions.create');
-    Route::post('transactions/simpan', 'TransactionController@store')->name('transactions.store');
-    Route::get('transactions/{transaction}/ubah/', 'TransactionController@edit')->name('transactions.edit');
-    Route::put('transactions/ubah/{transaction}', 'TransactionController@update')->name('transactions.update');
-    Route::post('transactions/hapus', 'TransactionController@destroy')->name('transactions.destroy');
+    //Attendances
+    Route::get('attendances', 'TransactionHeaderController@index')->name('attendances');
+
+    //Transaction Header
+    Route::get('transactions', 'TransactionHeaderController@index')->name('transactions');
+    Route::get('transactions/show/{transaction}', 'TransactionHeaderController@show')->name('transactions.show');
+    Route::get('transactions/edit/{transaction}', 'TransactionHeaderController@edit')->name('transactions.edit');
+    Route::put('transactions/update/{transaction}', 'TransactionHeaderController@update')->name('transactions.update');
+    Route::get('transactions/create', 'TransactionHeaderController@create')->name('transactions.create');
+    Route::post('transactions/store', 'TransactionHeaderController@store')->name('transactions.store');
+    Route::get('transactions/print/{purchase_request}', 'TransactionHeaderController@printDocument')->name('transactions.print');
+    Route::get('transactions/report', 'TransactionHeaderController@report')->name('transactions.report');
+    Route::post('transactions/report/download', 'TransactionHeaderController@downloadReport')->name('transactions.download-report');
+
+    //Transaction Details
+    Route::get('transaction_details', 'TransactionDetailController@index')->name('transaction_details');
+    Route::post('transaction_details/store', 'TransactionDetailController@store')->name('transaction_details.store');
+    Route::put('transaction_details/update', 'TransactionDetailController@update')->name('transaction_details.update');
+    Route::post('transaction_details/delete', 'TransactionDetailController@delete')->name('transaction_details.delete');
 
     //DMC End
 
@@ -299,26 +311,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('menu_subs/tambah', 'MenuSubController@create')->name('menu_subs.create');
     Route::post('menu_subs/simpan', 'MenuSubController@store')->name('menu_subs.store');
     Route::post('menu_subs/hapus', 'MenuSubController@destroy')->name('menu_subs.destroy');
-
-    //Attendances
-    Route::get('attendances', 'TransactionHeaderController@index')->name('attendances');
-
-    //Transaction Header
-    Route::get('transactions', 'TransactionHeaderController@index')->name('transactions');
-    Route::get('transactions/show/{transaction}', 'TransactionHeaderController@show')->name('transactions.show');
-    Route::get('transactions/edit/{transaction}', 'TransactionHeaderController@edit')->name('transactions.edit');
-    Route::put('transactions/update/{transaction}', 'TransactionHeaderController@update')->name('transactions.update');
-    Route::get('transactions/create', 'TransactionHeaderController@create')->name('transactions.create');
-    Route::post('transactions/store', 'TransactionHeaderController@store')->name('transactions.store');
-    Route::get('transactions/print/{purchase_request}', 'TransactionHeaderController@printDocument')->name('transactions.print');
-    Route::get('transactions/report', 'TransactionHeaderController@report')->name('transactions.report');
-    Route::post('transactions/report/download', 'TransactionHeaderController@downloadReport')->name('transactions.download-report');
-
-    //Transaction Details
-    Route::get('transaction_details', 'TransactionDetailController@index')->name('transaction_details');
-    Route::post('transaction_details/store', 'TransactionDetailController@store')->name('transaction_details.store');
-    Route::put('transaction_details/update', 'TransactionDetailController@update')->name('transaction_details.update');
-    Route::post('transaction_details/delete', 'TransactionDetailController@delete')->name('transaction_details.delete');
 
     //Purchase Order Headers
     Route::get('purchase_orders', 'Purchasing\PurchaseOrderHeaderController@index')->name('purchase_orders');
