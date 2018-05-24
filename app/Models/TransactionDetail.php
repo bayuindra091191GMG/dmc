@@ -17,8 +17,6 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $schedule_id
  * @property string $day
  * @property int $meeting_attendeds
- * @property \Carbon\Carbon $class_start_date
- * @property \Carbon\Carbon $class_end_date
  * @property float $price
  * @property float $discount
  * @property float $subtotal
@@ -55,8 +53,6 @@ class TransactionDetail extends Eloquent
 		'schedule_id',
 		'day',
 		'meeting_attendeds',
-		'class_start_date',
-		'class_end_date',
 		'price',
 		'discount',
 		'subtotal',

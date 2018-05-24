@@ -8,6 +8,7 @@ use App\Models\Coach;
 use App\Models\Course;
 use App\Models\Customer;
 use App\Models\NumberingSystem;
+use App\Models\Schedule;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use App\Transformer\MasterData\CoachTransformer;
@@ -15,6 +16,7 @@ use App\Transformer\MasterData\TransactionHeaderTranformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -54,7 +56,21 @@ class TransactionHeaderController extends Controller
      */
     public function create()
     {
-        return view('admin.transactions.create', compact('customers'));
+        $customer = null;
+        if(!empty(request()->customer)){
+            $customer = Customer::find(request()->customer);
+        }
+
+        // Numbering System
+        $sysNo = NumberingSystem::find(2);
+        $autoNumber = Utilities::GenerateNumberPurchaseOrder($sysNo->document, $sysNo->next_no);
+
+        $data = [
+            'customer'          => $customer,
+            'autoNumber'        => $autoNumber
+        ];
+
+        return view('admin.transactions.create')->with($data);
     }
 
     /**
@@ -63,100 +79,149 @@ class TransactionHeaderController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-//        $validator = Validator::make($request->all(), [
-//            'name'              => 'required|max:50',
-//            'email'             => 'email'
-//        ]);
-//
-//        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
-
-
-        // Validate details
-        $courses = $request->input('course_id');
-        $days = $request->input('day');
-        $startDates = $request->input('start_date');
-        $finishDates = $request->input('finish_date');
-        $detailPrices = $request->input('total_price');
-        $detailDiscount = $request->input('discount');
-        $valid = true;
-        $tmpTotal = 0;
-        $tmpDiscount = 0;
-        $idx = 0;
-
-        foreach($courses as $item){
-            if(empty($item)) $valid = false;
-            $tmpTotal = $detailPrices[$idx];
-            $tmpDiscount = $detailDiscount[$idx];
-
-            $idx++;
-        }
-
-        if($tmpTotal < $tmpDiscount){
-            return redirect()->back()->withErrors('Diskon Tidak boleh lebih kecil daripada Biaya!', 'default')->withInput($request->all());
-        }
-
-        if(!$valid){
-            return redirect()->back()->withErrors('Kelas Wajib dipilih!', 'default')->withInput($request->all());
-        }
-
-        $customer = $request->get('customer_id');
-        if($customer == null){
-            return redirect()->back()->withErrors("Pilih Murid terlebih dahulu!")->withInput($request->all());
-        }
-
-        //Get All Data and store
-        $totalPrice = 0;
-        $totalDiscount = 0;
-        $sysNo = NumberingSystem::find(1);
-        $invCode = Utilities::GenerateNumberPurchaseOrder($sysNo->document, $sysNo->next_no);
-        $now = Carbon::now('Asia/Jakarta');
-        $header = TransactionHeader::create([
-            'customer_id'   => $request->get('customer_id'),
-            'date'          => $now->toDateString(),
-            'invoice_number'=> $invCode,
-            'status_id'     => 3
+    public function store(Request $request){
+        $validator = Validator::make($request->all(),[
+            'code'        => 'required|max:45|regex:/^\S*$/u',
+            'date'        => 'required'
+        ],[
+            'code.regex'  => 'Nomor Transaksi harus tanpa spasi!'
         ]);
 
-        //Details
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Validate Retur number
+        if(!$request->filled('auto_number') && (!$request->filled('code') || $request->input('retur_code') == "")){
+            return redirect()->back()->withErrors('Nomor Transaksi wajib diisi!', 'default')->withInput($request->all());
+        }
+
+        // Validate details
+        $schedules = $request->input('schedule');
+        $prices = $request->input('price');
+        $discounts = $request->input('discount');
+        $valid = true;
         $i = 0;
-        foreach ($courses as $course){
-            $courseData = Course::find($course);
+        foreach($schedules as $schedule){
+            if(empty($schedule)) $valid = false;
+            if(empty($prices[$i]) || $prices[$i] == '0') $valid = false;
 
-            $tempStart = strtotime($startDates[$i]);
-            $start = date('Y-m-d', $tempStart);
-            $tempFinish = strtotime($finishDates[$i]);
-            $finish = date('Y-m-d', $tempFinish);
+            // Validate discount
+            $priceVad = str_replace('.','', $prices[$i]);
+            $discountVad = str_replace('.','', $discounts[$i]);
+            if((double) $discountVad > (double) $priceVad) return redirect()->back()->withErrors('Diskon tidak boleh melebihi harga!', 'default')->withInput($request->all());
 
-            $dtlPrice = str_replace('.', '', $detailPrices[$i]);
-            $detailDisc = str_replace('.', '', $detailPrices[$i]);
-            $subTotal = $dtlPrice - $detailDisc;
-
-            TransactionDetail::create([
-                'header_id'         => $header->id,
-                'class_id'          => $courseData->id,
-                'day'               => $days[$i],
-                'meeting_amounts'   => $courseData->meeting_amounts,
-                'meeting_attendeds' => 0,
-                'class_start_date'  => $start,
-                'class_end_date'    => $finish,
-                'price'             => $dtlPrice,
-                'discount'          => $detailDisc,
-                'subtotal'          => $subTotal
-            ]);
-
-            $totalPrice += $dtlPrice;
-            $totalDiscount += $detailDisc;
             $i++;
         }
 
-        $header->total_price = $totalPrice;
-        $header->total_discount = $totalDiscount;
-        $header->save();
-        Session::flash('message', 'Berhasil membuat data Jadwal baru!');
+        if(!$valid){
+            return redirect()->back()->withErrors('Detail kuantitas dan harga wajib diisi!', 'default')->withInput($request->all());
+        }
 
-        return redirect()->route('admin.transactions');
+        // Check duplicate inventory
+        $valid = Utilities::arrayIsUnique($schedules);
+        if(!$valid){
+            return redirect()->back()->withErrors('Detail transaksi tidak boleh kembar!', 'default')->withInput($request->all());
+        }
+
+        // Generate auto number
+        $trxCode = 'default';
+        if($request->filled('auto_number')){
+            $sysNo = NumberingSystem::find(2);
+            $trxCode = Utilities::GenerateNumber($sysNo->document, $sysNo->next_no);
+
+            // Check existing number
+            if(TransactionHeader::where('code', $trxCode)->exists()){
+                return redirect()->back()->withErrors('Nomor Transaksi sudah terdaftar!', 'default')->withInput($request->all());
+            }
+
+            $sysNo->next_no++;
+            $sysNo->save();
+        }
+        else{
+            $trxCode = $request->input('code');
+
+            // Check existing number
+            if(TransactionHeader::where('code', $trxCode)->exists()){
+                return redirect()->back()->withErrors('Nomor Transaksi sudah terdaftar!', 'default')->withInput($request->all());
+            }
+        }
+
+        $user = Auth::user();
+        $now = Carbon::now('Asia/Jakarta');
+
+        $trxHeader = TransactionHeader::create([
+            'code'                  => $trxCode,
+            'customer_id'           => $request->input('customer_id'),
+            'status_id'             => 1,
+            'created_by'            => $user->id,
+            'created_at'            => $now->toDateTimeString(),
+            'updated_by'            => $user->id,
+            'updated_at'            => $now->toDateTimeString()
+        ]);
+
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+        $trxHeader->date = $date->toDateTimeString();
+
+        $trxHeader->save();
+
+        // Create transaction detail
+        $totalPrice = 0;
+        $totalDiscount = 0;
+        $totalPayment = 0;
+        $idx = 0;
+
+        foreach($schedules as $schedule){
+            if(!empty($schedule)){
+                $priceStr = str_replace('.','', $prices[$idx]);
+                $price = (double) $priceStr;
+                $scheduleObj = Schedule::find($schedule);
+                $trxDetail = TransactionDetail::create([
+                    'header_id'             => $trxHeader->id,
+                    'schedule_id'           => $schedule,
+                    'day'                   => $scheduleObj->day,
+                    'meeting_attendeds'     => 0,
+                    'price'                 => $priceStr
+                ]);
+
+                // Check discount
+                if(!empty($discounts[$idx]) && $discounts[$idx] !== '0'){
+                    $discountStr = str_replace('.','', $discounts[$idx]);
+                    $trxDetail->discount = $discountStr;
+
+                    $discount = (double) $discountStr;
+                    $trxDetail->subtotal = $price - $discount;
+
+                    // Accumulate total price
+                    $totalPrice += $price;
+
+                    // Accumulate total discount
+                    $totalDiscount += $discount;
+                }
+                else{
+                    $trxDetail->subtotal = $price;
+                    $totalPrice += $price;
+                }
+
+                $trxDetail->save();
+
+                // Accumulate subtotal
+                $totalPayment += $trxDetail->subtotal;
+            }
+            $idx++;
+        }
+
+        if($totalDiscount > 0) $trxHeader->total_discount = $totalDiscount;
+        $trxHeader->total_price = $totalPrice;
+        $trxHeader->total_payment = $totalPayment;
+        $trxHeader->save();
+
+        Session::flash('message', 'Berhasil membuat transaksi!');
+
+        return redirect()->route('admin.transactions.show', ['transaction' => $trxHeader]);
     }
 
     /**

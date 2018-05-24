@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Coach;
 use App\Models\Course;
+use App\Models\Customer;
 use App\Models\Schedule;
 use App\Models\TransactionDetail;
 use App\Transformer\ScheduleTransformer;
@@ -236,5 +237,36 @@ class ScheduleController extends Controller
         catch(\Exception $ex){
             return Response::json(array('errors' => 'INVALID'));
         }
+    }
+
+    public function getSchedules(Request $request){
+        $term = trim($request->q);
+
+        $schedules = null;
+        if(!empty($request->customer)) {
+            $customerId = $request->customer;
+            if(Customer::where('id', $customerId)->exists()){
+                $schedules = Schedule::where('customer_id', $customerId)
+                    ->where('status_id', 3)
+                    ->whereHas('course', function ($query) use ($term){
+                        $query->where('name','LIKE', '%'. $term. '%');
+                    })
+                    ->get();
+
+            }
+        }
+        else{
+            $schedules = Schedule::whereHas('courses', function ($query) use ($term){
+                    $query->where('name','LIKE', '%'. $term. '%');
+                })
+                ->get();
+        }
+        $formatted_tags = [];
+
+        foreach ($schedules as $schedule) {
+            $formatted_tags[] = ['id' => $schedule->id. '#'. $schedule->course->name. '#'. $schedule->course->coach->name. '#'. $schedule->day, 'text' => $schedule->course->name];
+        }
+
+        return Response::json($formatted_tags);
     }
 }
