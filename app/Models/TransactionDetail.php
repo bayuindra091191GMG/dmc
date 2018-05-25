@@ -24,7 +24,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $updated_by
  * 
  * @property \App\Models\TransactionHeader $transaction_header
- * @property \App\Models\Course $course
+ * @property \App\Models\Schedule $schedule
  * @property \App\Models\Auth\User\User $user
  *
  * @package App\Models
@@ -59,14 +59,32 @@ class TransactionDetail extends Eloquent
 		'updated_by'
 	];
 
+    protected $appends = [
+        'price_string',
+        'discount_string',
+        'subtotal_string'
+    ];
+
+    public function getPriceStringAttribute(){
+        return number_format($this->attributes['price'], 0, ",", ".");
+    }
+
+    public function getDiscountStringAttribute(){
+        return number_format($this->attributes['discount'], 0, ",", ".");
+    }
+
+    public function getSubtotalStringAttribute(){
+        return number_format($this->attributes['subtotal'], 0, ",", ".");
+    }
+
 	public function transaction_header()
 	{
 		return $this->belongsTo(\App\Models\TransactionHeader::class, 'header_id');
 	}
 
-	public function course()
+	public function schedule()
 	{
-		return $this->belongsTo(\App\Models\Course::class, 'schedule_id');
+		return $this->belongsTo(\App\Models\Schedule::class, 'schedule_id');
 	}
 
     public function createdBy()

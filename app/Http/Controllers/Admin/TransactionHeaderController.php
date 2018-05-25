@@ -49,6 +49,16 @@ class TransactionHeaderController extends Controller
             ->make(true);
     }
 
+    public function show(TransactionHeader $transaction){
+        $header = $transaction;
+
+        $data = [
+            'header'            => $header
+        ];
+
+        return View('admin.transactions.show')->with($data);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -94,7 +104,7 @@ class TransactionHeaderController extends Controller
                 ->withInput();
         }
 
-        // Validate Retur number
+        // Validate transaction number
         if(!$request->filled('auto_number') && (!$request->filled('code') || $request->input('retur_code') == "")){
             return redirect()->back()->withErrors('Nomor Transaksi wajib diisi!', 'default')->withInput($request->all());
         }
@@ -150,12 +160,19 @@ class TransactionHeaderController extends Controller
             }
         }
 
+        // Generate invoice number
+        $sysNoInvoice = NumberingSystem::find(1);
+        $invNumber = Utilities::GenerateNumber($sysNoInvoice->document, $sysNoInvoice->next_no);
+        $sysNoInvoice->next_no++;
+        $sysNoInvoice->save();
+
         $user = Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
         $trxHeader = TransactionHeader::create([
             'code'                  => $trxCode,
             'customer_id'           => $request->input('customer_id'),
+            'invoice_number'        => $invNumber,
             'status_id'             => 1,
             'created_by'            => $user->id,
             'created_at'            => $now->toDateTimeString(),
@@ -238,12 +255,20 @@ class TransactionHeaderController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Coach $coach
+     * @param TransactionHeader $transaction
      * @return \Illuminate\Http\Response
      */
-    public function edit(Coach $coach)
+    public function edit(TransactionHeader $transaction)
     {
-        return view('admin.coaches.edit', ['coach' => $coach]);
+        $header = $transaction;
+        $date = Carbon::parse($transaction->date)->format('d M Y');
+
+        $data = [
+            'header'    => $header,
+            'date'      => $date
+        ];
+
+        return view('admin.transactions.edit')->with($data);
     }
 
     /**
@@ -253,27 +278,33 @@ class TransactionHeaderController extends Controller
      * @param Coach $coach
      * @return mixed
      */
-    public function update(Request $request, Coach $coach)
+    public function update(Request $request, TransactionHeader $transaction)
     {
-        $validator = Validator::make($request->all(), [
-            'name'              => 'required|max:50',
-            'email'             => 'email'
+        $validator = Validator::make($request->all(),[
+            'date'        => 'required'
         ]);
 
-        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
 
-        $dateTimeNow = Carbon::now('Asia/Jakarta');
+        $user = Auth::user();
+        $now = Carbon::now('Asia/Jakarta');
 
-        $coach->name = $request->get('name');
-        $coach->email = $request->get('email');
-        $coach->address = $request->get('address');
-        $coach->phone = $request->get('phone');
-        $coach->updated_at = $dateTimeNow;
-        $coach->save();
+        $trxHeader = $transaction;
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+        $trxHeader->date = $date->toDateTimeString();
+        $trxHeader->updated_by = $user->id;
+        $trxHeader->updated_at = $now->toDateTimeString();
 
-        Session::flash('message', 'Berhasil mengubah data Trainer!');
+        $trxHeader->save();
 
-        return redirect()->route('admin.coaches.edit', ['coach' => $coach]);
+        Session::flash('message', 'Berhasil mengubah transaksi!');
+
+        return redirect()->route('admin.transactions.show', ['transaction' => $trxHeader]);
     }
 
     /**

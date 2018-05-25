@@ -98,7 +98,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('transactions/update/{transaction}', 'TransactionHeaderController@update')->name('transactions.update');
     Route::get('transactions/create', 'TransactionHeaderController@create')->name('transactions.create');
     Route::post('transactions/store', 'TransactionHeaderController@store')->name('transactions.store');
-    Route::get('transactions/print/{purchase_request}', 'TransactionHeaderController@printDocument')->name('transactions.print');
+    Route::get('transactions/print/{transaction}', 'TransactionHeaderController@printDocument')->name('transactions.print');
     Route::get('transactions/report', 'TransactionHeaderController@report')->name('transactions.report');
     Route::post('transactions/report/download', 'TransactionHeaderController@downloadReport')->name('transactions.download-report');
 

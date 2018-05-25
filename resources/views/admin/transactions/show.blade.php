@@ -16,8 +16,7 @@
             </div>
             <div class="navbar-right">
                 <a class="btn btn-default" href="{{ route('admin.transactions.print',[ 'transaction' => $header->id]) }}" target="_blank">CETAK</a>
-                <a class="btn btn-default" href="{{ route('admin.transactions.edit',[ 'transaction' => $header->id]) }}" target="_blank">UBAH</a>
-                {{--<a class="btn btn-default" href="#" target="_blank">CETAK</a>--}}
+                <a class="btn btn-default" href="{{ route('admin.transactions.edit',[ 'transaction' => $header->id]) }}">UBAH</a>
             </div>
         </div>
     </div>
@@ -40,6 +39,15 @@
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         : {{ $header->code }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        Nomor Invoice
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ $header->invoice_number }}
                     </div>
                 </div>
 
@@ -133,7 +141,7 @@
                                         <td class="text-right">
                                             {{ $detail->price_string }}
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-right">
                                             {{ $detail->discount_string }}
                                         </td>
                                         <td class="text-right">

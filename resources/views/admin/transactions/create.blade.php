@@ -51,6 +51,16 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="customer" >
+                    Customer
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select type="text" id="customer" name="customer" class="form-control col-md-7 col-xs-12"></select>
+                    <input type="hidden" id="customer_id" name="customer_id" class="form-control col-md-7 col-xs-12" value="{{ $customer->id ?? '-1' }}">
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
                     Tanggal
                     <span class="required">*</span>
@@ -58,16 +68,6 @@
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
                            name="date" value="{{ old('date') }}" required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="customer" >
-                    Customer
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select type="text" id="customer" name="customer" class="form-control col-md-7 col-xs-12"></select>
-                    <input type="hidden" id="customer_id" name="customer_id" class="form-control col-md-7 col-xs-12" value="{{ $customer->id ?? '-1' }}">
                 </div>
             </div>
 
@@ -123,7 +123,7 @@
             <div class="form-group">
                 <div class="col-md-12 col-sm-12 col-xs-12 text-center">
                     <a class="btn btn-danger" href="{{ route('admin.transactions') }}"> Batal</a>
-                    <a class="btn btn-success confirm-modal">Simpan</a>
+                    <input type="submit" class="btn btn-success" value="Simpan">
                 </div>
             </div>
             {{ Form::close() }}
@@ -155,7 +155,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="price_add">Harga:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="price_add" name="price_add">
+                                <input type="text" class="form-control" id="price_add" name="price_add" readonly>
                             </div>
                         </div>
                         <div class="form-group">
@@ -205,7 +205,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="price_edit">Harga:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="price_edit" name="price_edit">
+                                <input type="text" class="form-control" id="price_edit" name="price_edit" readonly>
                             </div>
                         </div>
                         <div class="form-group">
@@ -273,6 +273,7 @@
     @parent
     {{ Html::style(mix('assets/admin/css/select2.css')) }}
     {{ Html::style(mix('assets/admin/css/bootstrap-datetimepicker.css')) }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <style>
         .box-section{
             background-color: #ffffff;
@@ -373,7 +374,7 @@
                     text: ' - Pilih Kelas - '
                 },
                 width: '100%',
-                minimumInputLength: 1,
+                minimumInputLength: 0,
                 ajax: {
                     url: '{{ route('select.schedules') }}',
                     dataType: 'json',
@@ -395,6 +396,14 @@
                 var data = e.params.data;
                 var splitted = data.id.split('#');
                 $('#trainer_add').val(splitted[2]);
+
+                priceAddFormat.clear();
+                priceAddFormat.set(splitted[4], {
+                    decimalCharacter: ',',
+                    digitGroupSeparator: '.',
+                    minimumValue: '0',
+                    decimalPlaces: 0
+                });
             });
 
             $('.modal-title').text('Tambah Detail');
@@ -503,7 +512,7 @@
                     text: splitted[1]
                 },
                 width: '100%',
-                minimumInputLength: 1,
+                minimumInputLength: 0,
                 ajax: {
                     url: '{{ route('select.schedules') }}',
                     dataType: 'json',
@@ -525,6 +534,14 @@
                 var data = e.params.data;
                 var splitted = data.id.split('#');
                 $('#trainer_edit').val(splitted[2]);
+
+                priceEditFormat.clear();
+                priceEditFormat.set(splitted[4], {
+                    decimalCharacter: ',',
+                    digitGroupSeparator: '.',
+                    minimumValue: '0',
+                    decimalPlaces: 0
+                });
             });
 
             priceEditFormat.clear();
