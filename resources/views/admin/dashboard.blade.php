@@ -36,6 +36,45 @@
             {{--</div>--}}
         </div>
     </div>
+
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="dashboard_graph">
+
+                <div class="row x_title">
+                    <div class="col-md-6">
+                        <h3>Selamat Datang</h3>
+                    </div>
+                    {{--<div class="col-md-6">--}}
+                    {{--<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">--}}
+                    {{--<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>--}}
+                    {{--<span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>--}}
+                    {{--</div>--}}
+                    {{--</div>--}}
+                </div>
+
+                <div class="col-md-9 col-sm-9 col-xs-12">
+
+                    <div class="alert alert-success alert-dismissible fade in" role="alert">
+                        Absensi Customer, klik <a style="color: red;" href="{{ route('admin.attendances.create') }}"><strong>disini</strong></a>
+                    </div>
+                    <div class="alert alert-success alert-dismissible fade in" role="alert">
+                        Tambah Customer baru, klik <a style="color: red;" href="{{ route('admin.customers.create') }}"><strong>disini</strong></a>
+                    </div>
+
+                    @if($walletWithdraw > 0)
+                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                            Terdapat {{ $walletWithdraw }} penarikan dompet baru
+                            , Anda dapat mengecek statusnya <a style="color: dodgerblue;" href="{{ route('dompet-request') }}"><strong>disini</strong></a>
+                        </div>
+                    @endif
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+    </div>
 @endsection
 
 @section('scripts')

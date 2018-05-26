@@ -89,7 +89,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('schedules/delete', 'ScheduleController@destroy')->name('schedules.destroy');
 
     //Attendances
-    Route::get('attendances', 'TransactionHeaderController@index')->name('attendances');
+    Route::get('attendances', 'AttendanceController@index')->name('attendances');
+    Route::get('attendances/create', 'AttendanceController@create')->name('attendances.create');
+    Route::post('attendances/store', 'AttendanceController@store')->name('attendances.store');
+    Route::get('attendances/{schedule}/edit/', 'AttendanceController@edit')->name('attendances.edit');
+    Route::put('attendances/edit/{schedule}', 'AttendanceController@update')->name('attendances.update');
+    Route::post('attendances/delete', 'AttendanceController@destroy')->name('attendances.destroy');
 
     //Transaction Header
     Route::get('transactions', 'TransactionHeaderController@index')->name('transactions');
@@ -503,6 +508,7 @@ Route::get('/select-days', 'Admin\CourseController@getDays')->name('select.days'
 Route::get('/select-customers', 'Admin\CustomerController@getCustomers')->name('select.customers');
 Route::get('/select-courses', 'Admin\CourseController@getCourses')->name('select.courses');
 Route::get('/select-schedules', 'Admin\ScheduleController@getSchedules')->name('select.schedules');
+Route::get('/select-customer_attendances', 'Admin\CustomerController@getCustomerAttendances')->name('select.customer_attendances');
 
 Route::get('/select-employees', 'Admin\EmployeeController@getEmployees')->name('select.employees');
 Route::get('/select-items', 'Admin\ItemController@getItems')->name('select.items');
@@ -533,6 +539,7 @@ Route::get('/datatables-courses', 'Admin\CourseController@anyData')->name('datat
 Route::get('/datatables-users', 'Admin\UserController@getIndex')->name('datatables.users');
 Route::get('/datatables-schedules', 'Admin\ScheduleController@anyData')->name('datatables.schedules');
 Route::get('/datatables-transactions', 'Admin\TransactionHeaderController@anyData')->name('datatables.transactions');
+Route::get('/datatables-attendances', 'Admin\AttendanceController@anyData')->name('datatables.attendances');
 //DMC End
 
 Route::get('/datatables-employees', 'Admin\EmployeeController@getIndex')->name('datatables.employees');

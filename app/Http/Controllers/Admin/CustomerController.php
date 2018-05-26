@@ -186,4 +186,20 @@ class CustomerController extends Controller
 
         return \Response::json($formatted_tags);
     }
+
+    public function getCustomerAttendances(Request $request){
+        $term = trim($request->q);
+        $customers= Customer::where('name', 'LIKE', '%'. $term. '%')
+            ->orwhere('phone', 'LIKE', '%'. $term. '%')
+            ->orwhere('email', 'LIKE', '%'. $term. '%')
+            ->get();
+
+        $formatted_tags = [];
+
+        foreach ($customers as $customer) {
+            $formatted_tags[] = ['id' => $customer->id, 'text' => $customer->name. ' - '. $customer->email. ' - '. $customer->phone];
+        }
+
+        return \Response::json($formatted_tags);
+    }
 }
