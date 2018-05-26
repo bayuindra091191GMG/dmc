@@ -17,9 +17,10 @@ class AttendanceTransformer extends TransformerAbstract
 {
     public function transform(Attendance $attendance){
 
-        $date = Carbon::parse($attendance->date)->format('d M Y');
+        $date = Carbon::parse($attendance->date)->format('d M Y, H:i');
 //        $action = "<a class='btn btn-xs btn-info' href='attendances/show/".$attendance->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
-        $action = "<a class='btn btn-xs btn-info' href='attendances/edit/".$attendance->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+//        $action = "<a class='btn btn-xs btn-info' href='attendances/edit/".$attendance->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+        $action = "<a class='btn btn-xs btn-info' href='#' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
         return[
             'name'              => $attendance->Customer->name,
