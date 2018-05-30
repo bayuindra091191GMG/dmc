@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
+use PDF;
 
 class TransactionHeaderController extends Controller
 {
@@ -338,5 +339,81 @@ class TransactionHeaderController extends Controller
         catch(\Exception $ex){
             return Response::json(array('errors' => 'INVALID'));
         }
+    }
+
+    public function report(){
+        return View('admin.transactions.report', compact('departments'));
+    }
+
+    public function downloadReport(Request $request) {
+        $validator = Validator::make($request->all(),[
+            'start_date'        => 'required',
+            'end_date'          => 'required',
+        ],[
+            'start_date.required'   => 'Dari Tanggal wajib diisi!',
+            'end_date.required'     => 'Sampai Tanggal wajib diisi!',
+
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $start = Carbon::createFromFormat('d M Y', $request->input('start_date'), 'Asia/Jakarta');
+        $end = Carbon::createFromFormat('d M Y', $request->input('end_date'), 'Asia/Jakarta');
+
+        // Validate date
+        if($start->gt($end)){
+            return redirect()->back()->withErrors('Dari Tanggal tidak boleh lebih besar dari Sampai Tanggal!', 'default')->withInput($request->all());
+        }
+
+        $start = $start->addDays(-1);
+        $end = $end->addDays(1);
+
+        $headers = TransactionHeader::whereBetween('date', array($start->toDateTimeString(), $end->toDateTimeString()));
+
+        $headers = $headers->orderByDesc('date')
+            ->get();
+
+        // Validate Data
+        if($headers->count() == 0){
+            return redirect()->back()->withErrors('Data tidak ditemukan!', 'default')->withInput($request->all());
+        }
+
+        $total = $headers->sum('total_payment');
+        $totalStr = number_format($total, 0, ",", ".");
+
+        $data =[
+            'header'         => $headers,
+            'start_date'        => $request->input('start_date'),
+            'finish_date'       => $request->input('end_date'),
+            'total'             => $totalStr
+        ];
+
+        //return view('documents.purchase_orders.purchase_orders_pdf')->with($data);
+
+        $pdf = PDF::loadView('documents.transactions.trx_report', $data)
+            ->setPaper('a4', 'portrait');
+        $now = Carbon::now('Asia/Jakarta');
+        $filename = 'DMC_TRANSACTION_REPORT_' . $now->toDateTimeString();
+        $pdf->setOptions(["isPhpEnabled"=>true]);
+
+        return $pdf->download($filename.'.pdf');
+    }
+
+    public function printDocument($id){
+        $header = TransactionHeader::find($id);
+        $dateNow = Carbon::now('Asia/Jakarta');
+        $now = $dateNow->format('d-M-Y');
+
+        $data = [
+            'header'         => $header,
+            'now'            => $now
+        ];
+
+        return view('documents.transactions.invoice_doc')->with($data);
     }
 }
