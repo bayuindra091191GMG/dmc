@@ -13,6 +13,7 @@ use App\Models\ItemStockNotification;
 use App\Models\PreferenceCompany;
 use App\Models\PurchaseOrderHeader;
 use App\Models\PurchaseRequestHeader;
+use App\Models\Schedule;
 use Arcanedev\LogViewer\Entities\Log;
 use Arcanedev\LogViewer\Entities\LogEntry;
 use Carbon\Carbon;
@@ -41,6 +42,16 @@ class DashboardController extends Controller
      */
     public function index()
     {
+
+        //get nearly finish schedule
+        $temp = Carbon::now('Asia/Jakarta');
+        $start = Carbon::parse(date_format($temp,'d M Y'));
+
+        $temp2 = Carbon::now('Asia/Jakarta')->addDays(14);
+        $end = Carbon::parse(date_format($temp2,'d M Y'));
+        $scheduleFinishCount = Schedule::whereBetween('finish_date', array($start->toDateTimeString(), $end->toDateTimeString()))->count();
+
+
         $counts = [
             'users' => \DB::table('users')->count(),
             'users_unconfirmed' => \DB::table('users')->where('confirmed', false)->count(),
@@ -53,6 +64,7 @@ class DashboardController extends Controller
 
         $data = [
             'counts'                    => $counts,
+            'scheduleFinishCount'       => $scheduleFinishCount,
             'totalCustomer'             => $totalCustomer->count(),
             'totalClass'                => $totalCourse->count()
         ];

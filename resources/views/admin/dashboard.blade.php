@@ -56,12 +56,18 @@
 
                 <div class="col-md-9 col-sm-9 col-xs-12">
 
+                    @if($scheduleFinishCount > 0)
+                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                            Terdapat {{ $scheduleFinishCount }} jadwal Customer hampir selesai.
+                        </div>
+                    @endif
                     <div class="alert alert-success alert-dismissible fade in" role="alert">
                         Absensi Customer, klik <a style="color: red;" href="{{ route('admin.attendances.create') }}"><strong>disini</strong></a>
                     </div>
                     <div class="alert alert-success alert-dismissible fade in" role="alert">
                         Tambah Customer baru, klik <a style="color: red;" href="{{ route('admin.customers.create') }}"><strong>disini</strong></a>
                     </div>
+
                 </div>
                 <div class="clearfix"></div>
             </div>
