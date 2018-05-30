@@ -41,7 +41,7 @@
                 @if(!empty($schedules))
                     <div class="form-group">
                         <div class="col-lg-12 col-md-12 col-xs-12 box-section">
-                            <h3 class="text-center">Detil Transaksi</h3>
+                            <h3 class="text-center">Pilihan Kelas</h3>
                             {{--<a class="add-modal btn btn-info" style="margin-bottom: 10px;">--}}
                             {{--<span class="glyphicon glyphicon-plus-sign"></span> Tambah--}}
                             {{--</a>--}}

@@ -44,7 +44,7 @@ class AttendanceController extends Controller
      */
     public function anyData()
     {
-        $attendances = Attendance::all();
+        $attendances = Attendance::dateDescending()->get();
         return DataTables::of($attendances)
             ->setTransformer(new AttendanceTransformer())
             ->addIndexColumn()

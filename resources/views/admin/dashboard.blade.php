@@ -62,13 +62,6 @@
                     <div class="alert alert-success alert-dismissible fade in" role="alert">
                         Tambah Customer baru, klik <a style="color: red;" href="{{ route('admin.customers.create') }}"><strong>disini</strong></a>
                     </div>
-
-                    @if($walletWithdraw > 0)
-                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
-                            Terdapat {{ $walletWithdraw }} penarikan dompet baru
-                            , Anda dapat mengecek statusnya <a style="color: dodgerblue;" href="{{ route('dompet-request') }}"><strong>disini</strong></a>
-                        </div>
-                    @endif
                 </div>
                 <div class="clearfix"></div>
             </div>
