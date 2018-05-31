@@ -2,80 +2,6 @@
 
 @section('content')
     <!-- page content -->
-    <!-- top tiles -->
-    <div id="testNotif" class="row tile_count">
-        <h1>DASHBOARD</h1>
-    </div>
-    <div class="row tile_count">
-        <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-            <span class="count_top"> Total Customer</span>
-            {{--<div class="count green">{{ $counts['users'] }}</div>--}}
-            <div class="count green">{{ $totalCustomer }}</div>
-        </div>
-        <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-            <span class="count_top"> Total Class</span>
-            <div>
-                <span class="count green">{{ $totalClass }}</span>
-                {{--<span class="count green">{{  $counts['users'] - $counts['users_unconfirmed'] }}</span>--}}
-                {{--<span class="count">/</span>--}}
-                {{--<span class="count red">{{ $counts['users_unconfirmed'] }}</span>--}}
-            </div>
-        </div>
-        <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-            {{--<span class="count_top"><i class="fa fa-user-times "></i> {{ __('views.admin.dashboard.count_2') }}</span>--}}
-            {{--<div>--}}
-                {{--<span class="count green">{{  $counts['users'] - $counts['users_inactive'] }}</span>--}}
-                {{--<span class="count">/</span>--}}
-                {{--<span class="count red">{{ $counts['users_inactive'] }}</span>--}}
-            {{--</div>--}}
-        </div>
-        <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-            {{--<span class="count_top"><i class="fa fa-lock"></i> {{ __('views.admin.dashboard.count_3') }}</span>--}}
-            {{--<div>--}}
-                {{--<span class="count green">{{  $counts['protected_pages'] }}</span>--}}
-            {{--</div>--}}
-        </div>
-    </div>
-
-
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="dashboard_graph">
-
-                <div class="row x_title">
-                    <div class="col-md-6">
-                        <h3>Selamat Datang</h3>
-                    </div>
-                    {{--<div class="col-md-6">--}}
-                    {{--<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">--}}
-                    {{--<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>--}}
-                    {{--<span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>--}}
-                    {{--</div>--}}
-                    {{--</div>--}}
-                </div>
-
-                <div class="col-md-9 col-sm-9 col-xs-12">
-
-                    {{--@if($scheduleFinishCount->count() > 0)--}}
-                        {{--<div class="alert alert-warning alert-dismissible fade in" role="alert">--}}
-                            {{--Terdapat {{ $scheduleFinishCount->count() }} jadwal Customer hampir selesai.--}}
-                        {{--</div>--}}
-                    {{--@endif--}}
-                    <div class="alert alert-success alert-dismissible fade in" role="alert">
-                        Absensi Customer, klik <a style="color: red;" href="{{ route('admin.attendances.create') }}"><strong>disini</strong></a>
-                    </div>
-                    <div class="alert alert-success alert-dismissible fade in" role="alert">
-                        Tambah Customer baru, klik <a style="color: red;" href="{{ route('admin.customers.create') }}"><strong>disini</strong></a>
-                    </div>
-
-                </div>
-
-
-                <div class="clearfix"></div>
-            </div>
-        </div>
-    </div>
-    <br/>
 
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
@@ -95,8 +21,8 @@
 
                 <div class="x_content">
                     <div class="error-notice">
-                        @if($scheduleFinishCount->count() > 0)
-                            @foreach($scheduleFinishCount as $warning)
+                        @if($allWarning->count() > 0)
+                            @foreach($allWarning as $warning)
                                 @if($warning->course->type == 1)
                                     <div class="oaerror danger">
                                         <span>{{ $warning->customer->name }},</span>
@@ -113,9 +39,6 @@
                                     </div>
                                 @endif
                             @endforeach
-                            <div>
-                                <span><a style="text-decoration: underline;" href="{{ route('admin.warnings') }}" target="_blank">Klik di sini untuk melihat semua</a></span>
-                            </div>
                         @else
                             <div class="oaerror success">
                                 <strong>Tidak ada peringatan</strong>

@@ -121,6 +121,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Dashboard
     Route::get('/', 'DashboardController@index')->name('dashboard');
+    Route::get('/warnings', 'DashboardController@getAllWarning')->name('warnings');
 
     //Users
     Route::get('users', 'UserController@index')->name('users');

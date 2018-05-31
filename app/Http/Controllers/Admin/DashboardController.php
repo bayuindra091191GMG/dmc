@@ -49,8 +49,7 @@ class DashboardController extends Controller
 
         $temp2 = Carbon::now('Asia/Jakarta')->addDays(14);
         $end = Carbon::parse(date_format($temp2,'d M Y'));
-        $scheduleFinishCount = Schedule::whereBetween('finish_date', array($start->toDateTimeString(), $end->toDateTimeString()))->count();
-
+        $scheduleFinishCount = Schedule::whereBetween('finish_date', array($start->toDateTimeString(), $end->toDateTimeString()))->take(5)->get();
 
         $counts = [
             'users' => \DB::table('users')->count(),
@@ -72,6 +71,21 @@ class DashboardController extends Controller
         return view('admin.dashboard')->with($data);
     }
 
+    public function getAllWarning(){
+        //get nearly finish schedule
+        $temp = Carbon::now('Asia/Jakarta');
+        $start = Carbon::parse(date_format($temp,'d M Y'));
+
+        $temp2 = Carbon::now('Asia/Jakarta')->addDays(14);
+        $end = Carbon::parse(date_format($temp2,'d M Y'));
+        $allWarning = Schedule::whereBetween('finish_date', array($start->toDateTimeString(), $end->toDateTimeString()))->get();
+
+        $data = [
+            'allWarning'               => $allWarning
+        ];
+
+        return view('admin.warning')->with($data);
+    }
 
     public function getLogChartData(Request $request)
     {
