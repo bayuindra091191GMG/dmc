@@ -224,7 +224,7 @@
             $('#closed-id').val($(this).data('id'));
         });
 
-        $('.modal-footer').on('click', '.closed', function() {
+        /*$('.modal-footer').on('click', '.closed', function() {
             $.ajax({
                 type: 'POST',
                 url: '{{ route('admin.material_requests.close') }}',
@@ -244,6 +244,6 @@
                     }
                 }
             });
-        });
+        });*/
     </script>
 @endsection

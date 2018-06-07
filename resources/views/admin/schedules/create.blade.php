@@ -57,12 +57,6 @@
                                 <th class="text-center" style="width: 10%;">
                                     Hari
                                 </th>
-                                <th class="text-center" style="width: 10%;">
-                                    Tanggal Dimulai
-                                </th>
-                                <th class="text-center" style="width: 10%;">
-                                    Tanggal Selesai
-                                </th>
                                 <th class="text-center" style="width: 15%;">
                                     Tindakan
                                 </th>
@@ -110,20 +104,6 @@
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="start_date">Tanggal Mulai</label>
-                            <div class="col-sm-10">
-                                <input id="start_date" type="text" class="form-control col-md-7 col-xs-12"
-                                       name="start_date" value="{{ old('start_date') }}">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="finish_date">Tanggal Selesai</label>
-                            <div class="col-sm-10">
-                                <input id="finish_date" type="text" class="form-control col-md-7 col-xs-12"
-                                       name="finish_date" value="{{ old('finish_date') }}">
-                            </div>
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
@@ -154,14 +134,6 @@
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
 
     <script type="text/javascript">
-        $('#start_date').datetimepicker({
-            format: "DD MMM Y"
-        });
-
-        $('#finish_date').datetimepicker({
-            format: "DD MMM Y"
-        });
-
         //Add Murid
         $('#customer_id').select2({
             placeholder: {
@@ -241,8 +213,6 @@
             $('#detailTable').append("<tr id='" + i + "' class='item" + $('select[name=course_add]').val() + "' align='center'>" +
                 "<td><input type='text' name='course[]' class='form-control' value='"+ $('select[name=course_add]').text() + "' readonly/> <input type='hidden' name='course_id[]' value='" + $('select[name=course_add]').val() +"'/></td>" +
                 "<td><input type='text' name='day[]' class='form-control' value='" + $('select[name=day_add]').val() +"' readonly/></td>" +
-                "<td><input type='text' name='start_date[]' class='form-control' value='" + $('#start_date').val() +"' readonly/></td>" +
-                "<td><input type='text' name='finish_date[]' class='form-control' value='" + $('#finish_date').val() +"' readonly/></td>" +
                 "<td><span id='delete_row" + i + "' class='delete-modal btn btn-danger'><span class='glyphicon glyphicon-trash'></span></span></td></tr>");
 
             $('#day_add').empty();

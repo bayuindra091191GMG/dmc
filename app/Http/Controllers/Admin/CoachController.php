@@ -39,7 +39,7 @@ class CoachController extends Controller
      */
     public function anyData()
     {
-        $coaches = Coach::all();
+        $coaches = Coach::where('id', '!=', 0)->get();
         return DataTables::of($coaches)
             ->setTransformer(new CoachTransformer())
             ->addIndexColumn()

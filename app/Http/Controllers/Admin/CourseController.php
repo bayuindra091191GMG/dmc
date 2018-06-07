@@ -56,7 +56,7 @@ class CourseController extends Controller
      */
     public function create()
     {
-        $coaches = Coach::all();
+        $coaches = Coach::where('id', '!=', 0)->get();
         return view('admin.courses.create', compact('coaches'));
     }
 
@@ -70,8 +70,7 @@ class CourseController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'              => 'required|max:50',
-            'price'             => 'required',
-            'meeting_amount'    => 'required'
+            'price'             => 'required'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
@@ -91,13 +90,28 @@ class CourseController extends Controller
             }
         }
 
+        $meetingAmounts = 4;
+        $validAmount = 0;
+        if($request->get('type') == 1){
+            $meetingAmounts = $request->get('meeting_amount');
+            $trainer = 0;
+            $validAmount = $request->get('valid');
+        }
+        else{
+            $trainer = $request->get('coach_id');
+        }
+
+        $price = str_replace('.','', $request->get('price'));
+
         Course::create([
             'name'              => $request->get('name'),
             'type'              => $request->get('type'),
-            'price'             => $request->get('price'),
-            'coach_id'          => $request->get('coach_id'),
-            'meeting_amount'    => $request->get('meeting_amount'),
-            'day'    => $selectedDays,
+            'price'             => $price,
+            'coach_id'          => $trainer,
+            'meeting_amount'    => $meetingAmounts,
+            'valid'             => $validAmount,
+            'day'               => $selectedDays,
+            'status_id'         => 1
         ]);
 
         Session::flash('message', 'Berhasil membuat data Kelas baru!');
@@ -194,17 +208,18 @@ class CourseController extends Controller
     public function destroy(Request $request)
     {
         try{
-            $customer = Menu::find($request->input('id'));
+            $course = Course::find($request->input('id'));
 
-            //Check first if User already in Transaction
-            $transaction = TransactionHeader::where('customer_id', $request->input('id'))->get();
-            if($transaction != null){
-                Session::flash('error', 'Data Customer '. $customer->name . ' Tidak dapat dihapus karena masih memiliki Kelas atau Paket!');
+            //Check if course already in Transactions
+            $schedule = Schedule::where('course_id', $course->id)->get();
+            if($schedule != null && $schedule->count() != 0){
+                Session::flash('error', 'Data Kelas '. $course->name . ' Tidak dapat dihapus karena masih memiliki Jadwal!');
                 return Response::json(array('success' => 'VALID'));
             }
-            $customer->delete();
 
-            Session::flash('message', 'Berhasil menghapus data Customer '. $customer->name);
+            $course->delete();
+
+            Session::flash('message', 'Berhasil menghapus data Kelas '. $course->name);
             return Response::json(array('success' => 'VALID'));
         }
         catch(\Exception $ex){

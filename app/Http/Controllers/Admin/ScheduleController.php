@@ -67,13 +67,9 @@ class ScheduleController extends Controller
         // Validate details
         $customer = $request->get('customer_id');
         $courses = $request->input('course_id');
-        $startDates = $request->input('start_date');
-        $finishDates = $request->input('finish_date');
         $dayAdd = $request->get('day');
         $valid = true;
         $validClass = true;
-        $validDate = true;
-        $idx = 0;
 
         foreach($courses as $item){
             if(empty($item)) $valid = false;
@@ -83,23 +79,6 @@ class ScheduleController extends Controller
             if($tmpCourse != null){
                 $validClass = false;
             }
-
-            $tempStart = strtotime($startDates[$idx]);
-            $tempFinish = strtotime($finishDates[$idx]);
-
-            $year1 = date('Y', $tempStart);
-            $year2 = date('Y', $tempFinish);
-
-            $month1 = date('m', $tempStart);
-            $month2 = date('m', $tempFinish);
-
-            $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
-
-            if($diff <= 0){
-                $validDate = false;
-            }
-
-            $idx++;
         }
 
         if($customer == null){
@@ -114,36 +93,29 @@ class ScheduleController extends Controller
             return redirect()->back()->withErrors("Sudah ada Kelas yang diambil!");
         }
 
-        if(!$validDate){
-            return redirect()->back()->withErrors("Tanggal yang dimasukan salah!");
-        }
-
         //Get All Data and store
         $i = 0;
+        $dateTimeNow = Carbon::now('Asia/Jakarta');
         foreach ($courses as $course){
             $courseData = Course::find($course);
 
-            $tempStart = strtotime($startDates[$i]);
-            $start = date('Y-m-d', $tempStart);
-            $tempFinish = strtotime($finishDates[$i]);
-            $finish = date('Y-m-d', $tempFinish);
-
-            $year1 = date('Y', $tempStart);
-            $year2 = date('Y', $tempFinish);
-
-            $month1 = date('m', $tempStart);
-            $month2 = date('m', $tempFinish);
-
-            $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
+            if($courseData->type == 2) {
+                $finish = $dateTimeNow;
+                $finish->addDays(30);
+            }
+            else{
+                $finish = $dateTimeNow;
+                $finish->addDays($courseData->valid);
+            }
 
             Schedule::create([
                 'customer_id'       => $request->get('customer_id'),
                 'course_id'         => $course,
                 'day'               => $dayAdd[$i],
-                'start_date'        => $start,
-                'finish_date'       => $finish,
+                'start_date'        => $dateTimeNow->toDateTimeString(),
+                'finish_date'       => $finish->toDateTimeString(),
                 'meeting_amount'    => $courseData->meeting_amount,
-                'month_amount'      => $diff,
+                'month_amount'      => 1,
                 'status_id'         => 3
             ]);
 

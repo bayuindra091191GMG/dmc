@@ -188,26 +188,26 @@
             $('#closed-id').val($(this).data('id'));
         });
 
-        $('.modal-footer').on('click', '.closed', function() {
-            $.ajax({
-                type: 'POST',
-                url: '{{ route('admin.material_requests.close') }}',
-                data: {
-                    '_token': '{{ csrf_token() }}',
-                    'id': $('#closed-id').val(),
-                    'reason': $('#reason').val()
-                },
-                success: function(data) {
-                    if ((data.errors)){
-                        setTimeout(function () {
-                            toastr.error('Gagal menutup MR!!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
-                        }, 500);
-                    }
-                    else{
-                        window.location.reload();
-                    }
-                }
-            });
-        });
+        {{--$('.modal-footer').on('click', '.closed', function() {--}}
+            {{--$.ajax({--}}
+                {{--type: 'POST',--}}
+                {{--url: '{{ route('admin.material_requests.close') }}',--}}
+                {{--data: {--}}
+                    {{--'_token': '{{ csrf_token() }}',--}}
+                    {{--'id': $('#closed-id').val(),--}}
+                    {{--'reason': $('#reason').val()--}}
+                {{--},--}}
+                {{--success: function(data) {--}}
+                    {{--if ((data.errors)){--}}
+                        {{--setTimeout(function () {--}}
+                            {{--toastr.error('Gagal menutup MR!!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});--}}
+                        {{--}, 500);--}}
+                    {{--}--}}
+                    {{--else{--}}
+                        {{--window.location.reload();--}}
+                    {{--}--}}
+                {{--}--}}
+            {{--});--}}
+        {{--});--}}
     </script>
 @endsection

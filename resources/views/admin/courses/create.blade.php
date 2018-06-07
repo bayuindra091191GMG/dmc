@@ -47,7 +47,6 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="type" name="type" class="form-control col-md-7 col-xs-12">
-                        <option value="-1"> - Pilih Tipe - </option>
                         <option value="1">Package</option>
                         <option value="2">Class</option>
                     </select>
@@ -61,7 +60,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="coach_id" name="coach_id" class="form-control col-md-7 col-xs-12">
-                        <option value="-1"> - Pilih Trainer - </option>
+                        <option value="-1">Bebas</option>
                         @foreach($coaches as $coach)
                             <option value="{{ $coach->id }}">{{ $coach->name }}</option>
                         @endforeach
@@ -79,15 +78,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="meeting_amount" >
-                    Jumlah Pertemuan
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="meeting_amount" class="form-control col-md-7 col-xs-12 @if($errors->has('meeting_amount')) parsley-error @endif"
-                           name="meeting_amount" value="{{ old('meeting_amount') }}">
-                </div>
-            </div>
+
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >
@@ -166,14 +157,23 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >
-                    Status
+                <h4 class="col-md-12 col-xs-12" style="text-align: center">Bagian ini diisi jika Paket</h4>
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="meeting_amount" >
+                    Jumlah Pertemuan
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="status" name="status" class="form-control col-md-7 col-xs-12">
-                        <option value="1" selected>Aktif</option>
-                        <option value="2">Non Aktif</option>
-                    </select>
+                    <input id="meeting_amount" class="form-control col-md-7 col-xs-12 @if($errors->has('meeting_amount')) parsley-error @endif"
+                           name="meeting_amount" value="{{ old('meeting_amount') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="valid" >
+                    Valid
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="valid" class="form-control col-md-7 col-xs-12 @if($errors->has('price')) parsley-error @endif"
+                           name="valid" value="{{ old('price') }}">
                 </div>
             </div>
 
@@ -196,4 +196,15 @@
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/users/edit.js')) }}
+    {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
+
+    <script type="text/javascript">
+        // Add autonumeric
+        priceAddFormat = new AutoNumeric('#price', {
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+            minimumValue: '0',
+            decimalPlaces: 0
+        });
+    </script>
 @endsection

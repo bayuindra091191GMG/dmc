@@ -76,6 +76,17 @@
                     </div>
                 </div>
 
+                @if($course->type == 1)
+                    <div class="form-group">
+                        <label class="col-md-3 col-sm-3 col-xs-12">
+                            Valid
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            : {{ $course->valid }} Hari
+                        </div>
+                    </div>
+                @endif
+
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
                         Hari
@@ -232,26 +243,26 @@
             $('#closed-id').val($(this).data('id'));
         });
 
-        $('.modal-footer').on('click', '.closed', function() {
-            $.ajax({
-                type: 'POST',
-                url: '{{ route('admin.material_requests.close') }}',
-                data: {
-                    '_token': '{{ csrf_token() }}',
-                    'id': $('#closed-id').val(),
-                    'reason': $('#reason').val()
-                },
-                success: function(data) {
-                    if ((data.errors)){
-                        setTimeout(function () {
-                            toastr.error('Gagal menutup MR!!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
-                        }, 500);
-                    }
-                    else{
-                        window.location.reload();
-                    }
-                }
-            });
-        });
+        {{--$('.modal-footer').on('click', '.closed', function() {--}}
+            {{--$.ajax({--}}
+                {{--type: 'POST',--}}
+                {{--url: '{{ route('admin.material_requests.close') }}',--}}
+                {{--data: {--}}
+                    {{--'_token': '{{ csrf_token() }}',--}}
+                    {{--'id': $('#closed-id').val(),--}}
+                    {{--'reason': $('#reason').val()--}}
+                {{--},--}}
+                {{--success: function(data) {--}}
+                    {{--if ((data.errors)){--}}
+                        {{--setTimeout(function () {--}}
+                            {{--toastr.error('Gagal menutup MR!!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});--}}
+                        {{--}, 500);--}}
+                    {{--}--}}
+                    {{--else{--}}
+                        {{--window.location.reload();--}}
+                    {{--}--}}
+                {{--}--}}
+            {{--});--}}
+        {{--});--}}
     </script>
 @endsection
