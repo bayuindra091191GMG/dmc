@@ -80,22 +80,33 @@ class CourseController extends Controller
         }
 
         $selectedDays = "";
+        $selectedHours = "";
         if($request->input('type') != 1){
             $days = $request->get('chk');
+            $hours = $request->get('hour');
             if($days == null){
                 return redirect()->back()->withErrors('Belum ada hari yang dipilih', 'default')->withInput($request->all());
             }
+            if($hours == null){
+                return redirect()->back()->withErrors('Belum ada jam yang dipilih', 'default')->withInput($request->all());
+            }
             foreach ($days as $day){
                 $selectedDays.=$day.";";
+            }
+            foreach ($hours as $hour){
+                $selectedHours.=$hour.";";
             }
         }
 
         $meetingAmounts = 4;
         $validAmount = 0;
+
+        //Package
         if($request->get('type') == 1){
             $meetingAmounts = $request->get('meeting_amount');
             $trainer = 0;
             $validAmount = $request->get('valid');
+            $hour = "NONE";
         }
         else{
             $trainer = $request->get('coach_id');
@@ -111,6 +122,7 @@ class CourseController extends Controller
             'meeting_amount'    => $meetingAmounts,
             'valid'             => $validAmount,
             'day'               => $selectedDays,
+            'hour'              => $selectedHours,
             'status_id'         => 1
         ]);
 
@@ -129,14 +141,16 @@ class CourseController extends Controller
     {
         if($course->type == 1){
             $days[0] = "Bebas";
+            $hours[0] = "Bebas";
         }
         else {
             $days = preg_split('@;@', $course->day, NULL, PREG_SPLIT_NO_EMPTY);
+            $hours = preg_split('@;@', $course->hour, NULL, PREG_SPLIT_NO_EMPTY);
         }
 
         //Get customer/murid
         $customers = Schedule::where('course_id', $course->id)->get();
-        return view('admin.courses.show', ['course' => $course, 'days' => $days, 'customers' => $customers]);
+        return view('admin.courses.show', ['course' => $course, 'days' => $days, 'hours' => $hours, 'customers' => $customers]);
     }
 
     /**

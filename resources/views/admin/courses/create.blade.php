@@ -78,81 +78,69 @@
                 </div>
             </div>
 
-
-
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >
                     Hari Pertemuan
                 </label>
 
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    @php($idx = 0)
-                    <table class="table">
-                        <thead>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <label>
-                                        <input type="checkbox" class="flat" id="chk1" name="chk[]" value="Senin"> Senin
-                                        {{--<input type="checkbox" class="flat" id="chk1" name="chk[]" value="Senin" onchange="changeInput('1')" > Senin--}}
-                                        {{--<input type="text" hidden="true" value="Senin" id="ids1" name="ids[]" disabled/>--}}
-                                        {{--<input type="text" hidden="true" value="Senin" id="idsDelete1" name="idsDelete[]"/>--}}
-                                    </label>
-                                </td>
-                                <td>
-                                    <label>
-                                        <input type="checkbox" class="flat" id="chk2" name="chk[]" value="Selasa"> Selasa
-                                        {{--<input type="checkbox" class="flat" id="chk2" name="chk[]" value="Selasa" onchange="changeInput('2')" > Selasa--}}
-                                        {{--<input type="text" hidden="true" value="Selasa" id="ids2" name="ids[]" disabled/>--}}
-                                        {{--<input type="text" hidden="true" value="Selasa" id="idsDelete2" name="idsDelete[]"/>--}}
-                                    </label>
-                                </td>
-                                <td>
-                                    <label>
-                                        <input type="checkbox" class="flat" id="chk3" name="chk[]" value="Rabu"> Rabu
-                                        {{--<input type="checkbox" class="flat" id="chk3" name="chk[]" value="Rabu" onchange="changeInput('3')" > Rabu--}}
-                                        {{--<input type="text" hidden="true" value="Rabu" id="ids3" name="ids[]" disabled/>--}}
-                                        {{--<input type="text" hidden="true" value="Rabu" id="idsDelete3" name="idsDelete[]"/>--}}
-                                    </label>
-                                </td>
-                                <td>
-                                    <label>
-                                        <input type="checkbox" class="flat" id="chk4" name="chk[]" value="Kamis"> Kamis
-                                        {{--<input type="checkbox" class="flat" id="chk4" name="chk[]" value="Kamis" onchange="changeInput('4')" > Kamis--}}
-                                        {{--<input type="text" hidden="true" value="Kamis" id="ids4" name="ids[]" disabled/>--}}
-                                        {{--<input type="text" hidden="true" value="Kamis" id="idsDelete4" name="idsDelete[]"/>--}}
-                                    </label>
-                            </td>
-                            </tr>
-                                <tr>
-                                <td>
-                                    <label>
-                                        <input type="checkbox" class="flat" id="chk5" name="chk[]" value="Jumat" > Jumat
-                                        {{--<input type="checkbox" class="flat" id="chk5" name="chk[]" value="Jumat" onchange="changeInput('5')" > Jumat--}}
-                                        {{--<input type="text" hidden="true" value="Jumat" id="ids5" name="ids[]" disabled/>--}}
-                                        {{--<input type="text" hidden="true" value="Jumat" id="idsDelete5" name="idsDelete[]"/>--}}
-                                    </label>
-                                </td>
-                                <td>
-                                    <label>
-                                        <input type="checkbox" class="flat" id="chk6" name="chk[]" value="Sabtu"> Sabtu
-                                        {{--<input type="checkbox" class="flat" id="chk6" name="chk[]" value="Sabtu" onchange="changeInput('6')" > Sabtu--}}
-                                        {{--<input type="text" hidden="true" value="Sabtu" id="ids6" name="ids[]" disabled/>--}}
-                                        {{--<input type="text" hidden="true" value="Sabtu" id="idsDelete6" name="idsDelete[]"/>--}}
-                                    </label>
-                                </td>
-                                <td>
-                                    <label>
-                                        <input type="checkbox" class="flat" id="chk7" name="chk[]" value="Minggu"> Minggu
-                                        {{--<input type="checkbox" class="flat" id="chk7" name="chk[]" value="Minggu" onchange="changeInput('7')" > Minggu--}}
-                                        {{--<input type="text" hidden="true" value="Minggu" id="ids7" name="ids[]" disabled/>--}}
-                                        {{--<input type="text" hidden="true" value="Minggu" id="idsDelete7" name="idsDelete[]"/>--}}
-                                    </label>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <input type="checkbox" onchange="changeInput('hourMonday', 'chk1')" class="flat" id="chk1" name="chk[]" value="Senin"/> Senin
+                        </div>
+                        <div class="col-sm-4">
+                            <input id="hourMonday" class="form-control" name="hour[]" disabled="disabled"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <input type="checkbox" onchange="changeInput('hourTuesday', 'chk2')" class="flat" id="chk2" name="chk[]" value="Selasa"/> Selasa
+                        </div>
+                        <div class="col-sm-4">
+                            <input id="hourTuesday" class="form-control" name="hour[]" disabled="disabled"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <input type="checkbox" onchange="changeInput('hourWednesday', 'chk3')" class="flat" id="chk3" name="chk[]" value="Selasa"/> Rabu
+                        </div>
+                        <div class="col-sm-4">
+                            <input id="hourWednesday" class="form-control" name="hour[]" disabled="disabled"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <input type="checkbox" onchange="changeInput('hourThursday', 'chk4')" class="flat" id="chk4" name="chk[]" value="Selasa"/> Kamis
+                        </div>
+                        <div class="col-sm-4">
+                            <input id="hourThursday" class="form-control" name="hour[]" disabled="disabled"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <input type="checkbox" onchange="changeInput('hourFriday', 'chk5')" class="flat" id="chk5" name="chk[]" value="Selasa"/> Jumat
+                        </div>
+                        <div class="col-sm-4">
+                            <input id="hourFriday" class="form-control" name="hour[]" disabled="disabled"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <input type="checkbox" onchange="changeInput('hourSaturday', 'chk6')" class="flat" id="chk6" name="chk[]" value="Selasa"/> Sabtu
+                        </div>
+                        <div class="col-sm-4">
+                            <input id="hourSaturday" class="form-control" name="hour[]" disabled="disabled"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <input type="checkbox" onchange="changeInput('hourSunday', 'chk7')" class="flat" id="chk7" name="chk[]" value="Selasa"/> Minggu
+                        </div>
+                        <div class="col-sm-4">
+                            <input id="hourSunday" class="form-control" name="hour[]" disabled="disabled"/>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -191,14 +179,47 @@
 @section('styles')
     @parent
     {{ Html::style(mix('assets/admin/css/users/edit.css')) }}
+    {{ Html::style(mix('assets/admin/css/bootstrap-datetimepicker.css')) }}
 @endsection
 
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/users/edit.js')) }}
     {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
+    {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
 
     <script type="text/javascript">
+        //function to enable disable
+        function changeInput(ipt, chk){
+            if(document.getElementById('' + chk).checked) {
+                document.getElementById('' + ipt).disabled = false;
+            }
+            else{
+                document.getElementById('' + ipt).disabled = true;
+            }
+        }
+
+        $('#hourMonday').datetimepicker({
+            format: "HH:mm"
+        });
+        $('#hourTuesday').datetimepicker({
+            format: "HH:mm"
+        });
+        $('#hourWednesday').datetimepicker({
+            format: "HH:mm"
+        });
+        $('#hourThursday').datetimepicker({
+            format: "HH:mm"
+        });
+        $('#hourFriday').datetimepicker({
+            format: "HH:mm"
+        });
+        $('#hourSaturday').datetimepicker({
+            format: "HH:mm"
+        });
+        $('#hourSunday').datetimepicker({
+            format: "HH:mm"
+        });
         // Add autonumeric
         priceAddFormat = new AutoNumeric('#price', {
             decimalCharacter: ',',

@@ -89,7 +89,7 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Hari
+                        Hari & Jam
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         :
@@ -97,7 +97,7 @@
                             Bebas
                         @else
                             @for($i = 0; $i<count($days); $i++)
-                                {{ $days[$i] }},
+                                {{ $days[$i] }} - {{ $hours[$i] }},
                             @endfor
                         @endif
                     </div>

@@ -19,6 +19,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property float $price
  * @property int $meeting_amount
  * @property string $day
+ * @property string $hour
  * @property int $valid
  * @property int $status_id
  * @property \Carbon\Carbon $created_at
@@ -58,6 +59,7 @@ class Course extends Eloquent
 		'price',
 		'meeting_amount',
         'valid',
+        'hour',
 		'day',
 		'status_id',
 		'created_by',
