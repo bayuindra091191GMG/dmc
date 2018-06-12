@@ -77,6 +77,14 @@ class Schedule extends Eloquent
         return Carbon::parse($this->attributes['finish_date'])->format('d M Y');
     }
 
+    public function getStartDateNumberAttribute(){
+        return Carbon::parse($this->attributes['start_date'])->format('d/m/y');
+    }
+
+    public function getFinishDateNumberAttribute(){
+        return Carbon::parse($this->attributes['finish_date'])->format('d/m/y');
+    }
+
 	public function user()
 	{
 		return $this->belongsTo(\App\Models\User::class, 'updated_by');

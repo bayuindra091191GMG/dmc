@@ -61,8 +61,9 @@
                                 <td><strong>Kelas</strong></td>
                                 <td class="text-center"><strong>Trainer</strong></td>
                                 <td class="text-center"><strong>Tanggal Berlaku</strong></td>
+                                <td class="text-center"><strong>Jumlah Pertemuan</strong></td>
                                 <td class="text-center"><strong>Price</strong></td>
-                                <td class="text-center"><strong>Diskon</strong></td>
+                                {{--<td class="text-center"><strong>Diskon</strong></td>--}}
                                 <td class="text-center"><strong>Subtotal</strong></td>
                             </tr>
                             </thead>
@@ -74,9 +75,10 @@
                                 <tr>
                                     <td>{{ $detail->schedule->course->name }}</td>
                                     <td class="text-center">{{ $detail->schedule->course->coach->name }}</td>
-                                    <td class="text-center">{{ $detail->schedule->start_date_string }} - {{ $detail->schedule->finish_date_string }}</td>
+                                    <td class="text-center">{{ $detail->schedule->start_date_number }} - {{ $detail->schedule->finish_date_number }}</td>
+                                    <td class="text-center">{{ $detail->schedule->meeting_amount ?? 'bebas' }}</td>
                                     <td class="text-right">Rp{{ $detail->price_string }}</td>
-                                    <td class="text-right">Rp{{ $detail->discount_string }}</td>
+                                    {{--<td class="text-right">Rp{{ $detail->discount_string }}</td>--}}
                                     <td class="text-right">Rp{{ $detail->subtotal_string }}</td>
                                 </tr>
                             @endforeach

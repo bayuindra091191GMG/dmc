@@ -143,7 +143,7 @@
                             <span class='glyphicon glyphicon-remove'></span> Batal
                         </button>
                         <button id="submit" type="submit" class="btn btn-success">
-                            <span id="" class='glyphicon glyphicon-check'></span> Simpan
+                            <span id="" class='glyphicon glyphicon-check'></span> Hadir
                         </button>
                     </div>
                     {{ Form::close() }}
