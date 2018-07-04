@@ -73,6 +73,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     //Courses
     Route::get('courses', 'CourseController@index')->name('courses');
+    Route::get('courses/this-day', 'CourseController@thisDayCourses')->name('courses.this_day');
     Route::get('courses/show/{course}', 'CourseController@show')->name('courses.show');
     Route::get('courses/create', 'CourseController@create')->name('courses.create');
     Route::post('courses/store', 'CourseController@store')->name('courses.store');
@@ -537,6 +538,7 @@ Route::get('/select-item_receipts', 'Admin\Inventory\ItemReceiptController@getIt
 Route::get('/datatables-customers', 'Admin\CustomerController@anyData')->name('datatables.customers');
 Route::get('/datatables-coaches', 'Admin\CoachController@anyData')->name('datatables.coaches');
 Route::get('/datatables-courses', 'Admin\CourseController@anyData')->name('datatables.courses');
+Route::get('/datatables-courses-this-day', 'Admin\CourseController@getThisDayCourses')->name('datatables.courses.this_day');
 Route::get('/datatables-users', 'Admin\UserController@getIndex')->name('datatables.users');
 Route::get('/datatables-schedules', 'Admin\ScheduleController@anyData')->name('datatables.schedules');
 Route::get('/datatables-transactions', 'Admin\TransactionHeaderController@anyData')->name('datatables.transactions');

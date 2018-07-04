@@ -19,6 +19,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Carbon\Carbon $date
  * @property float $total_price
  * @property float $total_discount
+ * @property float $registration_fee
  * @property float $total_payment
  * @property string $invoice_number
  * @property int $status_id
@@ -41,6 +42,7 @@ class TransactionHeader extends Eloquent
 		'total_price' => 'float',
 		'total_discount' => 'float',
 		'total_payment' => 'float',
+        'registration_fee' => 'float',
 		'status_id' => 'int',
 		'created_by' => 'int',
 		'updated_by' => 'int'
@@ -57,6 +59,7 @@ class TransactionHeader extends Eloquent
 		'total_price',
 		'total_discount',
 		'total_payment',
+        'registration_fee',
 		'invoice_number',
 		'status_id',
 		'created_by',
@@ -67,11 +70,16 @@ class TransactionHeader extends Eloquent
         'total_price_string',
         'total_discount_string',
         'total_payment_string',
+        'registration_fee_string',
         'date_string',
     ];
 
     public function getDateStringAttribute(){
         return Carbon::parse($this->attributes['date'])->format('d M Y');
+    }
+
+    public function getRegistrationFeeStringAttribute(){
+        return number_format($this->attributes['registration_fee'], 0, ",", ".");
     }
 
     public function getTotalPriceStringAttribute(){

@@ -71,6 +71,15 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
+                        Registration Fee
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : Rp {{ $header->registration_fee_string }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
                         Total Harga
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">

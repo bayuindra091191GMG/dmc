@@ -13,6 +13,7 @@ use App\Transformer\MasterData\CustomerTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
@@ -266,5 +267,41 @@ class CourseController extends Controller
         }
 
         return \Response::json($days);
+    }
+
+    public function thisDayCourses(){
+
+        return view('admin.courses.thisday');
+    }
+
+    public function getThisDayCourses(){
+        $now = Carbon::now('Asia/Jakarta');
+        $day = $now->format('l');
+
+        //Convert Day from English to Indonesian
+        switch ($day){
+            case 'Monday': $dayQuery = 'Senin';
+                            break;
+            case 'Tuesday': $dayQuery = 'Selasa';
+                            break;
+            case 'Wednesday': $dayQuery = 'Rabu';
+                break;
+            case 'Thursday': $dayQuery = 'Kamis';
+                break;
+            case 'Friday': $dayQuery = 'Jumat';
+                break;
+            case 'Saturday': $dayQuery = 'Sabtu';
+                break;
+            case 'Sunday': $dayQuery = 'Minggu';
+                break;
+            default: $dayQuery = 'Senin';
+                break;
+        }
+
+        $courses = Course::where('type', 2)->where('day', 'LIKE', '%'. $dayQuery . '%')->get();
+        return DataTables::of($courses)
+            ->setTransformer(new CourseTransformer())
+            ->addIndexColumn()
+            ->make(true);
     }
 }
