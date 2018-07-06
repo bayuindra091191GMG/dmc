@@ -109,6 +109,9 @@ class AttendanceController extends Controller
         $customerID = $request->input('customer_id');
         $scheduleID = $request->input('schedule_id');
 
+        //Check payment due or not
+
+
         //check attendance and schedule meeting amount
         $scheduleDB = Schedule::find($scheduleID);
         $attendanceCount = Attendance::where('customer_id', $customerID)->where('schedule_id', $scheduleID)->count();

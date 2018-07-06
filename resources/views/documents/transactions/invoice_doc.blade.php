@@ -69,12 +69,18 @@
                             </thead>
                             <tbody>
                             <!-- foreach ($order->lineItems as $line) or some such thing here -->
-                            @php($total = 0)
+                            @php($total = $header->registration_fee)
                             @foreach($header->transaction_details as $detail)
                                 @php( $total+= $detail->subtotal )
                                 <tr>
                                     <td>{{ $detail->schedule->course->name }}</td>
-                                    <td class="text-center">{{ $detail->schedule->course->coach->name }}</td>
+                                    <td class="text-center">
+                                        @if($detail->schedule->course->coach->name == 'Default')
+                                            Bebas
+                                        @else
+                                            {{ $detail->schedule->course->coach->name }}
+                                        @endif
+                                    </td>
                                     <td class="text-center">{{ $detail->schedule->start_date_number }} - {{ $detail->schedule->finish_date_number }}</td>
                                     <td class="text-center">{{ $detail->schedule->meeting_amount ?? 'bebas' }}</td>
                                     <td class="text-right">Rp{{ $detail->price_string }}</td>
@@ -82,6 +88,14 @@
                                     <td class="text-right">Rp{{ $detail->subtotal_string }}</td>
                                 </tr>
                             @endforeach
+                            <tr>
+                                <td>Registration Fee</td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-right">Rp{{ $header->registration_fee_string }}</td>
+                            </tr>
                             <tr>
                                 <td class="thick-line"></td>
                                 <td class="thick-line"></td>

@@ -185,6 +185,7 @@
 
             $('#course_add').on('select2:select', function(){
                 $('#day_add').empty();
+                //Get Days Options
                 $.ajax({
                     url: '{{ route('select.days') }}',
                     dataType: 'json',

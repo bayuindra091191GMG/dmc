@@ -260,14 +260,25 @@ class CourseController extends Controller
     public function getDays(Request $request){
         $id = Input::get('id');
         $course = Course::where('id', $id)->first();
+        $data[0] = "";
+
         if($course->type == 1){
             $days[0] = "Bebas";
+            $data[0] = "Bebas";
         }
         else {
             $days = preg_split('@;@', $course->day, NULL, PREG_SPLIT_NO_EMPTY);
+            $hours = preg_split('@;@', $course->hour, NULL, PREG_SPLIT_NO_EMPTY);
+
+            $i = 0;
+            foreach ($days as $day){
+                $data[$i] = $day . '-' . $hours[$i];
+
+                $i++;
+            }
         }
 
-        return \Response::json($days);
+        return \Response::json($data);
     }
 
     public function thisDayCourses(){
@@ -347,8 +358,9 @@ class CourseController extends Controller
         }
 
         //Get Schedule yang berkaitan
-        $schedule = Schedule::where('course_id', $course->id)->where('day', $dayQuery)->first();
+        $schedule = Schedule::where('course_id', $course->id)->where('day', 'LIKE', '%'. $dayQuery . '%')->first();
+
         $customers = Attendance::where('schedule_id', $schedule->id)->whereDate('created_at', Carbon::today())->get();
-        return view('admin.courses.show', ['course' => $course, 'days' => $days, 'hours' => $hours, 'customers' => $customers]);
+        return view('admin.courses.thisdayshow', ['course' => $course, 'days' => $days, 'hours' => $hours, 'customers' => $customers]);
     }
 }

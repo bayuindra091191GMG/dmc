@@ -1,12 +1,12 @@
 @extends('admin.layouts.admin')
 
-@section('title','Data Kelas Hari ini'. $course->name)
+@section('title','Data Kelas Hari ini '. $course->name)
 
 @section('content')
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="navbar-left">
-                <a class="btn btn-default" href="{{ route('admin.this_day') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
+                <a class="btn btn-default" href="{{ route('admin.courses.this_day') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
             </div>
             <div class="navbar-right">
             </div>

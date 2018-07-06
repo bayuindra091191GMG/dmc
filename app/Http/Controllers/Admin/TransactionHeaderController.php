@@ -233,9 +233,11 @@ class TransactionHeaderController extends Controller
         }
 
         if($totalDiscount > 0) $trxHeader->total_discount = $totalDiscount;
+        $fee = str_replace('.','', $request->input('registration_fee'));
+        $totalPayment += $fee;
         $trxHeader->total_price = $totalPrice;
         $trxHeader->total_payment = $totalPayment;
-        $trxHeader->registration_fee = $request->input('registration_fee');
+        $trxHeader->registration_fee = $fee;
         $trxHeader->save();
 
         Session::flash('message', 'Berhasil membuat transaksi!');

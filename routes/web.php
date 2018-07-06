@@ -75,7 +75,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('courses', 'CourseController@index')->name('courses');
     Route::get('courses/this-day', 'CourseController@thisDayCourses')->name('courses.this_day');
     Route::get('courses/show/{course}', 'CourseController@show')->name('courses.show');
-    Route::get('courses/show-this-day/{course}', 'CourseController@show')->name('courses.show_this_day');
+    Route::get('courses/show-this-day/{course}', 'CourseController@showThisDay')->name('courses.show_this_day');
     Route::get('courses/create', 'CourseController@create')->name('courses.create');
     Route::post('courses/store', 'CourseController@store')->name('courses.store');
     Route::get('courses/{course}/edit/', 'CourseController@edit')->name('courses.edit');
