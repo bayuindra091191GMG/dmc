@@ -25,6 +25,7 @@
                     <th class="text-center" style="width: 20%;">Fee</th>
                     <th class="text-center" style="width: 20%;">Jumlah Pertemuan</th>
                     <th class="text-center" style="width: 10%;">Tanggal Dibuat</th>
+                    <th class="text-center" style="width: 10%;">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -58,7 +59,8 @@
                     { data: 'coach', name: 'coach', class: 'text-center'},
                     { data: 'price', name: 'price', class: 'text-center'},
                     { data: 'meeting_amount', name: 'meeting_amount', class: 'text-center'},
-                    { data: 'created_at', name: 'created_at', class: 'text-center'}
+                    { data: 'created_at', name: 'created_at', class: 'text-center'},
+                    { data: 'action', name:'action', orderable: false, searchable: false, class: 'text-center'}
                 ],
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"

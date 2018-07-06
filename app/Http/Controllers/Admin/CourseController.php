@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Attendance;
 use App\Models\Auth\User\User;
 use App\Models\Coach;
 use App\Models\Course;
@@ -45,7 +46,7 @@ class CourseController extends Controller
     {
         $courses = Course::all();
         return DataTables::of($courses)
-            ->setTransformer(new CourseTransformer())
+            ->setTransformer(new CourseTransformer(1))
             ->addIndexColumn()
             ->make(true);
     }
@@ -270,7 +271,6 @@ class CourseController extends Controller
     }
 
     public function thisDayCourses(){
-
         return view('admin.courses.thisday');
     }
 
@@ -300,8 +300,55 @@ class CourseController extends Controller
 
         $courses = Course::where('type', 2)->where('day', 'LIKE', '%'. $dayQuery . '%')->get();
         return DataTables::of($courses)
-            ->setTransformer(new CourseTransformer())
+            ->setTransformer(new CourseTransformer(2))
             ->addIndexColumn()
             ->make(true);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param Course $course
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showThisDay(Course $course)
+    {
+        if($course->type == 1){
+            $days[0] = "Bebas";
+            $hours[0] = "Bebas";
+        }
+        else {
+            $days = preg_split('@;@', $course->day, NULL, PREG_SPLIT_NO_EMPTY);
+            $hours = preg_split('@;@', $course->hour, NULL, PREG_SPLIT_NO_EMPTY);
+        }
+
+        //Get murid yang sudah hadir hari ini
+        $now = Carbon::now('Asia/Jakarta');
+        $day = $now->format('l');
+
+        //Convert Day from English to Indonesian
+        switch ($day){
+            case 'Monday': $dayQuery = 'Senin';
+                break;
+            case 'Tuesday': $dayQuery = 'Selasa';
+                break;
+            case 'Wednesday': $dayQuery = 'Rabu';
+                break;
+            case 'Thursday': $dayQuery = 'Kamis';
+                break;
+            case 'Friday': $dayQuery = 'Jumat';
+                break;
+            case 'Saturday': $dayQuery = 'Sabtu';
+                break;
+            case 'Sunday': $dayQuery = 'Minggu';
+                break;
+            default: $dayQuery = 'Senin';
+                break;
+        }
+
+        //Get Schedule yang berkaitan
+        $schedule = Schedule::where('course_id', $course->id)->where('day', $dayQuery)->first();
+        $customers = Attendance::where('schedule_id', $schedule->id)->whereDate('created_at', Carbon::today())->get();
+        return view('admin.courses.show', ['course' => $course, 'days' => $days, 'hours' => $hours, 'customers' => $customers]);
     }
 }
