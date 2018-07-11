@@ -5,14 +5,14 @@
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-            <h2>Buat Transaksi Baru</h2>
+            <h2>Buat Transaksi Prorate Baru</h2>
             <hr/>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
 
-            {{ Form::open(['route'=>['admin.transactions.store'],'method' => 'post','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.transactions.prorate.store'],'method' => 'post','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
 
             @if(count($errors))
                 <div class="form-group">
@@ -95,14 +95,17 @@
                             <table class="table table-bordered table-hover" id="detail_table">
                                 <thead>
                                 <tr>
-                                    <th class="text-center" style="width: 15%">
+                                    <th class="text-center" style="width: 10%">
                                         Kelas
                                     </th>
                                     <th class="text-center" style="width: 15%">
                                         Trainer
                                     </th>
-                                    <th class="text-center" style="width: 15%">
+                                    <th class="text-center" style="width: 10%">
                                         Hari
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        Prorate
                                     </th>
                                     <th class="text-center" style="width: 15%">
                                         Harga
@@ -164,6 +167,18 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="control-label col-sm-2" for="prorate_add">Prorate:</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="prorate_add" name="prorate_add">
+                                    <option value="-1">- Pilih Berapa Pertemuan -</option>
+                                    <option value="1">1 Pertemuan</option>
+                                    <option value="2">2 Pertemuan</option>
+                                    <option value="3">3 Pertemuan</option>
+                                </select>
+                            </div>
+                        </div>
+                        <input type="hidden" id="normal_price_add" name="normal_price_add"/>
+                        <div class="form-group">
                             <label class="control-label col-sm-2" for="price_add">Harga:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="price_add" name="price_add" readonly>
@@ -213,6 +228,17 @@
                                 <input type="text" class="form-control" id="trainer_edit" name="trainer_edit" readonly>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="prorate_edit">Prorate:</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="prorate_edit" name="prorate_edit">
+                                    <option value="1">1 Pertemuan</option>
+                                    <option value="2">2 Pertemuan</option>
+                                    <option value="3">3 Pertemuan</option>
+                                </select>
+                            </div>
+                        </div>
+                        <input type="hidden" id="normal_price_edit" name="normal_price_edit"/>
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="price_edit">Harga:</label>
                             <div class="col-sm-10">
@@ -344,7 +370,8 @@
 
         $('#customer').on('select2:select', function (e) {
             var data = e.params.data;
-            window.location.replace('/admin/transactions/create?customer=' + data.id);
+            var createUrl = '{{ route('admin.transactions.prorate.create') }}';
+            window.location.replace(createUrl + '?customer=' + data.id);
         });
 
         // Add autonumeric
@@ -383,6 +410,59 @@
             decimalPlaces: 0
         });
 
+        // Count prorate price for add
+        $('#prorate_add').on('change', function (e) {
+            var valueProrateAdd = this.value;
+
+            var normalPriceAdd = parseFloat($('#normal_price_add').val());
+
+            if(normalPriceAdd && normalPriceAdd !== 0){
+                var finalPriceAdd = 0;
+                if(valueProrateAdd === '1'){
+                    finalPriceAdd = normalPriceAdd / 4;
+                }
+                else if(valueProrateAdd === '2'){
+                    finalPriceAdd = normalPriceAdd / 2;
+                }
+                else{
+                    finalPriceAdd = normalPriceAdd * 3 / 4;
+                }
+
+                priceAddFormat.clear();
+                priceAddFormat.set(finalPriceAdd, {
+                    decimalCharacter: ',',
+                    digitGroupSeparator: '.',
+                    minimumValue: '0',
+                    decimalPlaces: 0
+                });
+            }
+        });
+
+        // Count prorate price for edit
+        $('#prorate_edit').on('change', function (e) {
+            var valueProrateEdit = this.value;
+
+            var normalPriceEdit = parseFloat($('#normal_price_edit').val());
+            var finalPriceEdit = 0;
+            if(valueProrateEdit === '1'){
+                finalPriceEdit = normalPriceEdit / 4;
+            }
+            else if(valueProrateEdit === '2'){
+                finalPriceEdit = normalPriceEdit / 2;
+            }
+            else{
+                finalPriceEdit = normalPriceEdit * 3 / 4;
+            }
+
+            priceEditFormat.clear();
+            priceEditFormat.set(finalPriceEdit, {
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
+                minimumValue: '0',
+                decimalPlaces: 0
+            });
+        });
+
         // Add new detail
         $(document).on('click', '.add-modal', function() {
             var customerId = $('#customer_id').val();
@@ -400,7 +480,7 @@
                         return {
                             q: $.trim(params.term),
                             customer: customerId,
-                            course_type: 0
+                            course_type: 2
                         };
                     },
                     processResults: function (data) {
@@ -416,13 +496,31 @@
                 var splitted = data.id.split('#');
                 $('#trainer_add').val(splitted[2]);
 
-                priceAddFormat.clear();
-                priceAddFormat.set(splitted[4], {
-                    decimalCharacter: ',',
-                    digitGroupSeparator: '.',
-                    minimumValue: '0',
-                    decimalPlaces: 0
-                });
+                $('#normal_price_add').val(splitted[4]);
+
+                if($('#prorate_add').val() !== '-1'){
+                    // Automatically count final prorate price
+                    var valueProrateAdd = $('#prorate_add').val();
+                    var normalPriceAdd = parseFloat(splitted[4]);
+                    var finalPriceAdd = 0;
+                    if(valueProrateAdd === '1'){
+                        finalPriceAdd = normalPriceAdd / 4;
+                    }
+                    else if(valueProrateAdd === '2'){
+                        finalPriceAdd = normalPriceAdd / 2;
+                    }
+                    else{
+                        finalPriceAdd = normalPriceAdd * 3 / 4;
+                    }
+
+                    priceAddFormat.clear();
+                    priceAddFormat.set(finalPriceAdd, {
+                        decimalCharacter: ',',
+                        digitGroupSeparator: '.',
+                        minimumValue: '0',
+                        decimalPlaces: 0
+                    });
+                }
             });
 
             $('.modal-title').text('Tambah Detail');
@@ -433,12 +531,20 @@
         });
         $('.modal-footer').on('click', '.add', function() {
             var scheduleAdd = $('#schedule_add').val();
+            var normalPriceAdd = $('#normal_price_add').val();
             var priceAdd = $('#price_add').val();
             var discountAdd = $('#discount_add').val();
+            var prorateAdd = $('#prorate_add').val();
 
             // Validate schedule
             if(!scheduleAdd || scheduleAdd === ""){
                 alert('Mohon pilih kelas!');
+                return false;
+            }
+
+            // Validate prorate
+            if(prorateAdd === "-1"){
+                alert('Mohon pilih prorate!');
                 return false;
             }
 
@@ -480,6 +586,7 @@
             sbAdd.append("<td class='text-center'>" + splitted[1] + "<input type='hidden' name='schedule[]'  value='" + splitted[0] + "'/>")
             sbAdd.append("<td class='text-center'>" + splitted[2] + "</td>");
             sbAdd.append("<td class='text-center'>" + splitted[3] + "</td>");
+            sbAdd.append("<td class='text-center'>" + prorateAdd + " Pertemuan</td>");
             sbAdd.append("<td class='text-right'>" + priceAdd + "<input type='hidden' name='price[]' value='" + priceAdd + "'/></td>");
 
             if(discount > 0){
@@ -501,8 +608,8 @@
             sbAdd.append("<td class='text-right'>" + subtotalString + "<input type='hidden' value='" + subtotalString + "'/></td>");
 
             sbAdd.append("<td class='text-center'>");
-            sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-schedule='" + scheduleAdd + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-edit'></span></a>");
-            sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-schedule='" + scheduleAdd + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-trash'></span></a>");
+            sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-schedule='" + scheduleAdd + "' data-prorate='" + prorateAdd + "' data-normal-price='" + normalPriceAdd + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-edit'></span></a>");
+            sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-schedule='" + scheduleAdd + "' data-prorate='" + prorateAdd + "' data-normal-price='" + normalPriceAdd + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-trash'></span></a>");
             sbAdd.append("</td>");
             sbAdd.append("</tr>");
 
@@ -511,6 +618,8 @@
             // Reset add form modal
             $('#schedule_add').val(null).trigger('change');
             $('#trainer_add').val('');
+            document.getElementById('prorate_add').value = '-1';
+            $('#normal_price_add').val('');
             priceAddFormat.clear();
             $('#discount_add').val('');
         });
@@ -554,8 +663,24 @@
                 var splitted = data.id.split('#');
                 $('#trainer_edit').val(splitted[2]);
 
+                $('#normal_price_edit').val(splitted[4]);
+
+                // Automatically count final prorate price
+                var valueProrateEdit = $('#prorate_edit').val();
+                var normalPriceEdit = parseFloat(splitted[4]);
+                var finalPriceEdit = 0;
+                if(valueProrateEdit === '1'){
+                    finalPriceEdit = normalPriceEdit / 4;
+                }
+                else if(valueProrateEdit === '2'){
+                    finalPriceEdit = normalPriceEdit / 2;
+                }
+                else{
+                    finalPriceEdit = normalPriceEdit * 3 / 4;
+                }
+
                 priceEditFormat.clear();
-                priceEditFormat.set(splitted[4], {
+                priceEditFormat.set(finalPriceEdit, {
                     decimalCharacter: ',',
                     digitGroupSeparator: '.',
                     minimumValue: '0',
@@ -563,6 +688,10 @@
                 });
             });
 
+            // Get current price
+            $('#normal_price_edit').val($(this).data('normal-price'));
+
+            // Get edited final price
             priceEditFormat.clear();
             priceEditFormat.set($(this).data('price'), {
                 decimalCharacter: ',',
@@ -570,6 +699,8 @@
                 minimumValue: '0',
                 decimalPlaces: 0
             });
+
+            document.getElementById('prorate_edit').value = $(this).data('prorate');
 
             discountEditFormat.clear();
             discountEditFormat.set($(this).data('discount'), {
@@ -584,9 +715,11 @@
         });
         $('.modal-footer').on('click', '.edit', function() {
             var scheduleEdit = $('#schedule_edit').val();
+            var normalPriceEdit = $('#normal_price_edit').val();
             var priceEdit = $('#price_edit').val();
             var discountEdit = $('#discount_edit').val();
             var editedRowId = $('#edited_row_id').val();
+            var prorateEdit = $('#prorate_edit').val();
 
             // Validate price
             if(!priceEdit || priceEdit === "" || priceEdit === "0"){
@@ -629,6 +762,7 @@
             sbEdit.append("<td class='text-center'>" + splitted[1] + "<input type='hidden' name='schedule[]'  value='" + splitted[0] + "'/>")
             sbEdit.append("<td class='text-center'>" + splitted[2] + "</td>");
             sbEdit.append("<td class='text-center'>" + splitted[3] + "</td>");
+            sbEdit.append("<td class='text-center'>" + prorateEdit + " Pertemuan<input type='hidden' name='prorate[]' value='" + prorateEdit + "'/><input type='hidden' name='normal_price[]' value='" + normalPriceEdit + "'/></td>");
             sbEdit.append("<td class='text-right'>" + priceEdit + "<input type='hidden' name='price[]' value='" + priceEdit + "'/></td>");
 
             if(discount > 0){
@@ -650,8 +784,8 @@
             sbEdit.append("<td class='text-right'>" + subtotalString + "<input type='hidden' value='" + subtotalString + "'/></td>");
 
             sbEdit.append("<td class='text-center'>");
-            sbEdit.append("<a class='edit-modal btn btn-info' data-id='" + editedRowId + "' data-schedule='" + scheduleValue + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-edit'></span></a>");
-            sbEdit.append("<a class='delete-modal btn btn-danger' data-id='" + editedRowId + "' data-schedule='" + scheduleValue + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-trash'></span></a>");
+            sbEdit.append("<a class='edit-modal btn btn-info' data-id='" + editedRowId + "' data-schedule='" + scheduleValue + "' data-prorate='" + prorateEdit + "' data-normal-price='" + normalPriceEdit + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-edit'></span></a>");
+            sbEdit.append("<a class='delete-modal btn btn-danger' data-id='" + editedRowId + "' data-schedule='" + scheduleValue + "' data-prorate='" + prorateEdit + "' data-normal-price='" + normalPriceEdit + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-trash'></span></a>");
             sbEdit.append("</td>");
             sbEdit.append("</tr>");
 

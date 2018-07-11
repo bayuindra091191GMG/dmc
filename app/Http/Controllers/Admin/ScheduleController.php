@@ -214,6 +214,11 @@ class ScheduleController extends Controller
     public function getSchedules(Request $request){
         $term = trim($request->q);
 
+        $courseType = 0;
+        if(!empty($request->course_type)){
+            $classType = (int) $request->course_type;
+        }
+
         $schedules = null;
         if(!empty($request->customer)) {
             $customerId = $request->customer;
@@ -222,17 +227,33 @@ class ScheduleController extends Controller
                     ->where('status_id', 3)
                     ->whereHas('course', function ($query) use ($term){
                         $query->where('name','LIKE', '%'. $term. '%');
-                    })
-                    ->get();
+                    });
 
+                if($courseType !== 0){
+                    $schedules = $schedules->whereHas('course', function ($query) use ($courseType){
+                        $query->where('type', $courseType);
+                    })->get();
+                }
+                else{
+                    $schedules = $schedules->get();
+                }
             }
         }
         else{
             $schedules = Schedule::whereHas('courses', function ($query) use ($term){
                     $query->where('name','LIKE', '%'. $term. '%');
-                })
-                ->get();
+                });
+
+            if($courseType !== 0){
+                $schedules = $schedules->whereHas('course', function ($query) use ($courseType){
+                    $query->where('type', $courseType);
+                })->get();
+            }
+            else{
+                $schedules = $schedules->get();
+            }
         }
+
         $formatted_tags = [];
 
         foreach ($schedules as $schedule) {

@@ -115,6 +115,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('transaction_details/update', 'TransactionDetailController@update')->name('transaction_details.update');
     Route::post('transaction_details/delete', 'TransactionDetailController@delete')->name('transaction_details.delete');
 
+    //Transaction Prorate
+    Route::get('prorates/create', 'TransactionProrateHeaderController@create')->name('transactions.prorate.create');
+    Route::post('prorates/store', 'TransactionProrateHeaderController@store')->name('transactions.prorate.store');
+    Route::post('prorates/edit/{prorate}', 'TransactionProrateHeaderController@edit')->name('transactions.prorate.edit');
+
     //DMC End
 
     // Notification

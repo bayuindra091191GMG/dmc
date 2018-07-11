@@ -15,9 +15,11 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $id
  * @property int $header_id
  * @property int $schedule_id
+ * @property int $prorate
  * @property string $day
  * @property int $meeting_attendeds
  * @property float $price
+ * @property float $prorate_price
  * @property float $discount
  * @property float $subtotal
  * @property \Carbon\Carbon $updated_at
@@ -51,9 +53,11 @@ class TransactionDetail extends Eloquent
 	protected $fillable = [
 		'header_id',
 		'schedule_id',
+        'prorate',
 		'day',
 		'meeting_attendeds',
 		'price',
+        'prorate_price',
 		'discount',
 		'subtotal',
 		'updated_by'
@@ -61,12 +65,17 @@ class TransactionDetail extends Eloquent
 
     protected $appends = [
         'price_string',
+        'prorate_price_string',
         'discount_string',
         'subtotal_string'
     ];
 
     public function getPriceStringAttribute(){
         return number_format($this->attributes['price'], 0, ",", ".");
+    }
+
+    public function getProratePriceStringAttribute(){
+        return number_format($this->attributes['prorate_price'], 0, ",", ".");
     }
 
     public function getDiscountStringAttribute(){

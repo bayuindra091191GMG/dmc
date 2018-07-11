@@ -15,6 +15,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property int $id
  * @property string $code
+ * @property int $type
  * @property int $customer_id
  * @property \Carbon\Carbon $date
  * @property float $total_price
@@ -38,6 +39,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 class TransactionHeader extends Eloquent
 {
 	protected $casts = [
+	    'type' => 'int',
 		'customer_id' => 'int',
 		'total_price' => 'float',
 		'total_discount' => 'float',
@@ -54,6 +56,7 @@ class TransactionHeader extends Eloquent
 
 	protected $fillable = [
 	    'code',
+        'type',
 		'customer_id',
 		'date',
 		'total_price',

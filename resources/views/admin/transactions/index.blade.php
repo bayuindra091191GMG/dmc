@@ -21,9 +21,10 @@
                     <th class="text-center" style="width: 10%;">No</th>
                     <th class="text-center" style="width: 10%;">Nomor Transaksi</th>
                     <th class="text-center" style="width: 10%;">Nomor Invoice</th>
+                    <th class="text-center" style="width: 10%;">Jenis Transaksi</th>
                     <th class="text-center" style="width: 10%;">Tanggal</th>
-                    <th class="text-center" style="width: 15%;">Total Harga</th>
-                    <th class="text-center" style="width: 15%;">Total Diskon</th>
+                    <th class="text-center" style="width: 10%;">Total Harga</th>
+                    <th class="text-center" style="width: 10%;">Total Diskon</th>
                     <th class="text-center" style="width: 15%;">Total Pembayaran</th>
                     <th class="text-center" style="width: 15%;">Tindakan</th>
                 </tr>
@@ -56,6 +57,7 @@
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
                     { data: 'code', name: 'code', class: 'text-center'},
                     { data: 'invoice', name: 'invoice', class: 'text-center'},
+                    { data: 'type', name: 'type', class: 'text-center'},
                     { data: 'date', name: 'date', class: 'text-center'},
                     { data: 'total_price', name: 'total_price', class: 'text-center'},
                     { data: 'total_discount', name: 'total_discount', class: 'text-center'},
