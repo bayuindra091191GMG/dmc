@@ -258,27 +258,38 @@ class CourseController extends Controller
     }
 
     public function getDays(Request $request){
-        $id = Input::get('id');
-        $course = Course::where('id', $id)->first();
-        $data[0] = "";
+        try{
 
-        if($course->type == 1){
-            $days[0] = "Bebas";
-            $data[0] = "Bebas";
-        }
-        else {
-            $days = preg_split('@;@', $course->day, NULL, PREG_SPLIT_NO_EMPTY);
-            $hours = preg_split('@;@', $course->hour, NULL, PREG_SPLIT_NO_EMPTY);
+            $id = Input::get('id');
+            $course = Course::where('id', $id)->first();
+            $data = array();
 
-            $i = 0;
-            foreach ($days as $day){
-                $data[$i] = $day . '-' . $hours[$i];
-
-                $i++;
+            if($course->type == 1){
+                $days[0] = "Bebas";
+                array_push($data,"Bebas");
             }
-        }
+            else {
+                $days = preg_split('@;@', $course->day, NULL, PREG_SPLIT_NO_EMPTY);
+                $hours = preg_split('@;@', $course->hour, NULL, PREG_SPLIT_NO_EMPTY);
+                $i = 0;
+                foreach ($days as $day){
+                    if(!empty($course->hour))
+                    {
+                        array_push($data,$day . '-' . $hours[$i]);
+                        $i++;
+                    }
+                    else{
+                        array_push($data,$day);
+                        $i++;
+                    }
+                }
+            }
 
-        return \Response::json($data);
+            return \Response::json($data);
+        }
+        catch(\Exception $ex){
+            return error_log($ex);
+        }
     }
 
     public function thisDayCourses(){

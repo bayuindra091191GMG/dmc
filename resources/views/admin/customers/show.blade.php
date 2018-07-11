@@ -91,7 +91,7 @@
 
                 <hr/>
 
-                @if($courses != null)
+                @if($schedules != null)
                     <div class="form-group">
                         <div class="col-lg-12 col-md-12 col-xs-12 column">
                             <h4 class="text-center">Kelas</h4>
@@ -120,37 +120,45 @@
                                         <th class="text-center" style="width: 10%">
                                             Masa Kelas
                                         </th>
+                                        <th class="text-center" style="width: 10%">
+                                            Action
+                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody>
 
                                     @php($no = 1)
-                                    @foreach($courses as $course)
+                                    @foreach($schedules as $schedule)
                                         <tr>
                                             <td class="text-center">
                                                 {{ $no }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $course->course->name }}
+                                                {{ $schedule->course->name }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $course->course->coach->name }}
+                                                {{ $schedule->course->coach->name }}
                                             </td>
                                             <td class="text-center">
-                                                @if($course->type == 1)
+                                                @if($schedule->course->type == 1)
                                                     Paket
                                                 @else
                                                     Kelas
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                Rp{{ $course->course->price_string }}
+                                                Rp{{ $schedule->course->price_string }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $course->day }}
+                                                {{ $schedule->day }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $course->start_date_string }} - {{ $course->finish_date_string }}
+                                                {{ $schedule->start_date_string }} - {{ $schedule->finish_date_string }}
+                                            </td>
+                                            <td class="text-center">
+                                                @if($schedule->course->type == 2)
+                                                    <a class='btn btn-xs btn-info' href="{{route('admin.schedules.edit', ['schedule'=>$schedule->id])}}" data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>
+                                                @endif
                                             </td>
                                         </tr>
                                         @php($no++)

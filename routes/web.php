@@ -89,6 +89,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('schedules/{schedule}/edit/', 'ScheduleController@edit')->name('schedules.edit');
     Route::put('schedules/edit/{schedule}', 'ScheduleController@update')->name('schedules.update');
     Route::post('schedules/delete', 'ScheduleController@destroy')->name('schedules.destroy');
+    Route::get('schedules/customer/{schedule}/edit/', 'ScheduleController@edit')->name('schedules.user.edit');
+    Route::put('schedules/customer/edit/{schedule}', 'ScheduleController@update')->name('schedules.user.update');
 
     //Attendances
     Route::get('attendances', 'AttendanceController@index')->name('attendances');

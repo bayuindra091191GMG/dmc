@@ -95,8 +95,8 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
-        $courses = Schedule::where('customer_id', $customer->id)->get();
-        return view('admin.customers.show', ['customer' => $customer, 'courses' => $courses]);
+        $schedules = Schedule::where('customer_id', $customer->id)->get();
+        return view('admin.customers.show', ['customer' => $customer, 'schedules' => $schedules]);
     }
 
     /**

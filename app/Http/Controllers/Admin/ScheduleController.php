@@ -143,9 +143,34 @@ class ScheduleController extends Controller
      * @param Coach $coach
      * @return \Illuminate\Http\Response
      */
-    public function edit(Coach $coach)
+    public function edit(Schedule $schedule)
     {
-        return view('admin.coaches.edit', ['coach' => $coach]);
+        $course = Course::find($schedule->course_id);
+
+        $days = preg_split('@;@', $course->day, NULL, PREG_SPLIT_NO_EMPTY);
+        $hours = preg_split('@;@', $course->hour, NULL, PREG_SPLIT_NO_EMPTY);
+        $dayTime = array();
+
+        $i = 0;
+        foreach ($days as $day){
+            if(!empty($course->hour))
+            {
+                array_push($dayTime,$day . '-' . $hours[$i]);
+                $i++;
+            }
+            else{
+                array_push($dayTime,$day);
+                $i++;
+            }
+        }
+
+        $data = [
+            'schedule'      => $schedule,
+            'course'      => $course,
+            'dayTime'      => $dayTime
+        ];
+//        dd($data);
+        return view('admin.schedules.edit')->with($data);
     }
 
     /**
@@ -155,27 +180,21 @@ class ScheduleController extends Controller
      * @param Coach $coach
      * @return mixed
      */
-    public function update(Request $request, Coach $coach)
+    public function update(Request $request, Schedule $schedule)
     {
-        $validator = Validator::make($request->all(), [
-            'name'              => 'required|max:50',
-            'email'             => 'email'
-        ]);
-
-        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
+        $courseDB = Course::find($request->get('course_add'));
+        if($courseDB->type == 1) return redirect()->back()->withErrors("Kelas Wajib dipilih!");
 
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
-        $coach->name = $request->get('name');
-        $coach->email = $request->get('email');
-        $coach->address = $request->get('address');
-        $coach->phone = $request->get('phone');
-        $coach->updated_at = $dateTimeNow;
-        $coach->save();
+        $schedule->day = $request->get('day_add');
+        $schedule->course_id = $request->get('course_add');
+        $schedule->updated_at = $dateTimeNow;
+        $schedule->save();
 
-        Session::flash('message', 'Berhasil mengubah data Trainer!');
+        Session::flash('message', 'Berhasil mengubah data Jadwal!');
 
-        return redirect()->route('admin.coaches.edit', ['coach' => $coach]);
+        return redirect()->route('admin.customers.show', ['customer' => $schedule->customer_id]);
     }
 
     /**
