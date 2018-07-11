@@ -227,9 +227,9 @@
         /*$('.modal-footer').on('click', '.closed', function() {
             $.ajax({
                 type: 'POST',
-                url: '{{ route('admin.material_requests.close') }}',
+                url: 'asdf',
                 data: {
-                    '_token': '{{ csrf_token() }}',
+                    '_token': 'asdf',
                     'id': $('#closed-id').val(),
                     'reason': $('#reason').val()
                 },

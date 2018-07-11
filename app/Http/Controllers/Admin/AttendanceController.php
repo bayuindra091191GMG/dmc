@@ -116,11 +116,43 @@ class AttendanceController extends Controller
         $scheduleDB = Schedule::find($scheduleID);
         $attendanceCount = Attendance::where('customer_id', $customerID)->where('schedule_id', $scheduleID)->count();
 
-        if($scheduleDB->meeting_amount == $attendanceCount){
-            return redirect()
-                ->back()
-                ->withErrors('Pertemuan sudah habis', 'default')
-                ->withInput();
+        //check user already payment or not
+        if($scheduleDB->status_id == 2){
+            if($scheduleDB->meeting_amount == 0){
+                return redirect()
+                    ->back()
+                    ->withErrors('Harap Melakukan Pembayaran Pada Kelas ini.', 'default')
+                    ->withInput();
+            }
+        }
+
+        if($scheduleDB->day == "Bebas"){
+            if($scheduleDB->meeting_amount == 0){
+                return redirect()
+                    ->back()
+                    ->withErrors('Pertemuan sudah habis', 'default')
+                    ->withInput();
+            }
+
+            //change schedule amount (package increase, class decrese)
+            $temp = $scheduleDB->meeting_amount;
+            $scheduleDB->meeting_amount = $temp-1;
+            $scheduleDB->save();
+        }
+        else{
+
+            if($scheduleDB->meeting_amount == $scheduleDB->course->meeting_amount){
+                return redirect()
+                    ->back()
+                    ->withErrors('Pertemuan sudah habis', 'default')
+                    ->withInput();
+            }
+
+            //change schedule amount (package increase, class decrese)
+            $temp = $scheduleDB->meeting_amount;
+            $scheduleDB->meeting_amount = $temp+1;
+            $scheduleDB->save();
+
         }
 
         //save the attendance
@@ -137,10 +169,20 @@ class AttendanceController extends Controller
         ]);
         $attendance->save();
 
-        //change schedule status if attendance is done
-        if($scheduleDB->meeting_amount == $attendanceCount){
-            $scheduleDB->status_id = 4;
-            $scheduleDB->save();
+
+        //check if user meeting done
+        if($scheduleDB->day == "Bebas"){
+            if($scheduleDB->meeting_amount == 0){
+                $scheduleDB->status_id = 4;
+                $scheduleDB->save();
+            }
+        }
+        else{
+
+            if($scheduleDB->meeting_amount == $scheduleDB->course->meeting_amount){
+                $scheduleDB->status_id = 4;
+                $scheduleDB->save();
+            }
         }
 
         Session::flash('message', 'Berhasil membuat absensi!');
