@@ -22,7 +22,7 @@ class TransactionHeaderTranformer extends TransformerAbstract
         $trxShowUrl = route('admin.transactions.show', ['transaction' => $header->id]);
         $trxEditUrl = route('admin.transactions.edit', ['transaction' => $header->id]);
 
-        $action = "<a class='btn btn-xs btn-info' href='". $trxShowUrl."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
+        $action = "<a class='btn btn-xs btn-primary' href='". $trxShowUrl."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
         $action .= "<a class='btn btn-xs btn-info' href='". $trxEditUrl."' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
         $type = $header->type === 1 ? 'NORMAL' : 'PRORATE';
@@ -32,7 +32,8 @@ class TransactionHeaderTranformer extends TransformerAbstract
             'invoice'           => $header->invoice_number,
             'type'              => $type,
             'date'              => $date,
-            'total_price'       => $header->total_price_string,
+            'fee'               => $header->registration_fee_string,
+            'total_price'       => $header->type === 1 ? $header->total_price_string : $header->total_prorate_price_string,
             'total_discount'    => $header->total_discount_string,
             'total_payment'     => $header->total_payment_string,
             'action'            => $action

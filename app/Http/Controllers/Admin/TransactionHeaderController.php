@@ -43,7 +43,7 @@ class TransactionHeaderController extends Controller
      */
     public function anyData()
     {
-        $headers = TransactionHeader::all();
+        $headers = TransactionHeader::orderBy('date')->get();
         return DataTables::of($headers)
             ->setTransformer(new TransactionHeaderTranformer)
             ->addIndexColumn()

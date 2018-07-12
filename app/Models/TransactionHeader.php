@@ -74,6 +74,7 @@ class TransactionHeader extends Eloquent
 
     protected $appends = [
         'total_price_string',
+        'total_prorate_price_string',
         'total_discount_string',
         'total_payment_string',
         'registration_fee_string',

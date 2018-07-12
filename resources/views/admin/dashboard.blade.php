@@ -13,7 +13,7 @@
             <div class="count green">{{ $totalCustomer }}</div>
         </div>
         <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-            <span class="count_top"> Total Class</span>
+            <span class="count_top"> Total Kelas</span>
             <div>
                 <span class="count green">{{ $totalClass }}</span>
                 {{--<span class="count green">{{  $counts['users'] - $counts['users_unconfirmed'] }}</span>--}}
@@ -94,20 +94,20 @@
                 </div>
 
                 <div class="x_content">
-                    <div class="error-notice">
+                    <div class="col-md-9 col-sm-9 col-xs-12">
                         @if($scheduleFinishCount->count() > 0)
                             @foreach($scheduleFinishCount as $warning)
                                 @if($warning->course->type == 1)
-                                    <div class="oaerror danger">
+                                    <div class="alert alert-danger fade in" role="alert">
                                         <span>{{ $warning->customer->name }},</span>
-                                        <a>{{ $warning->course->name }}</a>
+                                        <strong>{{ $warning->course->name }}</strong>
                                         <span>Sudah mendekati tanggal expired paket.</span>
                                         <span>Tanggal Expired: {{ $warning->finish_date_string }}</span>
                                     </div>
                                 @else
-                                    <div class="oaerror danger">
+                                    <div class="alert alert-danger fade in" role="alert">
                                         <span>{{ $warning->customer->name }},</span>
-                                        <a>{{ $warning->course->name }}</a>
+                                        <strong>{{ $warning->course->name }}</strong>
                                         <span>Sudah mendekati Tanggal Tagihan Bulanan.</span>
                                         <span>Tanggal Expired: {{ $warning->finish_date_string }}</span>
                                     </div>
@@ -117,11 +117,10 @@
                                 <span><a style="text-decoration: underline;" href="{{ route('admin.warnings') }}" target="_blank">Klik di sini untuk melihat semua</a></span>
                             </div>
                         @else
-                            <div class="oaerror success">
+                            <div class="alert alert-success fade in" role="alert">
                                 <strong>Tidak ada peringatan</strong>
                             </div>
                         @endif
-
                     </div>
                 </div>
 
