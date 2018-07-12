@@ -229,6 +229,9 @@ class TransactionHeaderController extends Controller
 
                 // Accumulate subtotal
                 $totalPayment += $trxDetail->subtotal;
+
+                // Activate schedule
+                $scheduleObj->status_id = 3;
             }
             $idx++;
         }

@@ -11,6 +11,7 @@ use App\Transformer\ScheduleTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -79,7 +80,10 @@ class ScheduleController extends Controller
             $tmpCourse = Schedule::where('customer_id', $customer)
                 ->where('course_id', $item)
                 ->where('day', $dayAdd[$idx])
-                ->where('status_id', 3)
+                ->where(function ($q) {
+                    $q->where('status_id', 2)
+                        ->orWhere('status_id', 3);
+                })
                 ->first();
             if($tmpCourse != null){
                 $validClass = false;
@@ -99,7 +103,9 @@ class ScheduleController extends Controller
             return redirect()->back()->withErrors("Sudah ada Kelas yang diambil!");
         }
 
-        //Get All Data and store
+        $user = Auth::user();
+        $now = Carbon::now('Asia/Jakarta');
+
         $i = 0;
         $dateTimeNow = Carbon::now('Asia/Jakarta');
         foreach ($courses as $course){
@@ -122,13 +128,17 @@ class ScheduleController extends Controller
                 'finish_date'       => $finish->toDateTimeString(),
                 'meeting_amount'    => $courseData->meeting_amount,
                 'month_amount'      => 1,
-                'status_id'         => 3
+                'status_id'         => 2,
+                'created_by'        => $user->id,
+                'created_at'        => $now->toDateTimeString(),
+                'updated_by'        => $user->id,
+                'updated_at'        => $now->toDateTimeString()
             ]);
 
             $i++;
         }
 
-        Session::flash('message', 'Berhasil membuat data Jadwal baru!');
+        Session::flash('message', 'Berhasil membuat jadwal baru!');
         return redirect()->route('admin.schedules');
     }
 

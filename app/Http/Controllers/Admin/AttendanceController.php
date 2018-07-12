@@ -31,7 +31,7 @@ class AttendanceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         return view('admin.attendances.index');
     }
@@ -80,9 +80,9 @@ class AttendanceController extends Controller
         }
 
         $data = [
-            'customer'          => $customer,
-            'customerPlaceholder'          => $customerPlaceholder,
-            'schedules'          => $schedules
+            'customer'              => $customer,
+            'customerPlaceholder'   => $customerPlaceholder,
+            'schedules'             => $schedules
         ];
 
         return view('admin.attendances.create')->with($data);
@@ -118,12 +118,10 @@ class AttendanceController extends Controller
 
         //check user already payment or not
         if($scheduleDB->status_id == 2){
-            if($scheduleDB->meeting_amount == 0){
-                return redirect()
-                    ->back()
-                    ->withErrors('Harap Melakukan Pembayaran Pada Kelas ini.', 'default')
-                    ->withInput();
-            }
+            return redirect()
+                ->back()
+                ->withErrors('Harap Melakukan Pembayaran Pada Kelas ini.', 'default')
+                ->withInput();
         }
 
         if($scheduleDB->day == "Bebas"){
