@@ -75,11 +75,22 @@ class TransactionDetail extends Eloquent
     }
 
     public function getProratePriceStringAttribute(){
-        return number_format($this->attributes['prorate_price'], 0, ",", ".");
+        if(!empty($this->attributes['prorate_price'])){
+            return number_format($this->attributes['prorate_price'], 0, ",", ".");
+        }
+        else{
+            return null;
+        }
+
     }
 
     public function getDiscountStringAttribute(){
-        return number_format($this->attributes['discount'], 0, ",", ".");
+        if(!empty($this->attributes['discount'])){
+            return number_format($this->attributes['discount'], 0, ",", ".");
+        }
+        else{
+            return null;
+        }
     }
 
     public function getSubtotalStringAttribute(){

@@ -19,6 +19,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $customer_id
  * @property \Carbon\Carbon $date
  * @property float $total_price
+ * @property float $total_prorate_price
  * @property float $total_discount
  * @property float $registration_fee
  * @property float $total_payment
@@ -42,6 +43,7 @@ class TransactionHeader extends Eloquent
 	    'type' => 'int',
 		'customer_id' => 'int',
 		'total_price' => 'float',
+        'total_prorate_price' => 'float',
 		'total_discount' => 'float',
 		'total_payment' => 'float',
         'registration_fee' => 'float',
@@ -60,6 +62,7 @@ class TransactionHeader extends Eloquent
 		'customer_id',
 		'date',
 		'total_price',
+        'total_prorate_price',
 		'total_discount',
 		'total_payment',
         'registration_fee',
@@ -87,6 +90,10 @@ class TransactionHeader extends Eloquent
 
     public function getTotalPriceStringAttribute(){
         return number_format($this->attributes['total_price'], 0, ",", ".");
+    }
+
+    public function getTotalProratePriceStringAttribute(){
+        return number_format($this->attributes['total_prorate_price'], 0, ",", ".");
     }
 
     public function getTotalDiscountStringAttribute(){

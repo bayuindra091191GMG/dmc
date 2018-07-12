@@ -12,9 +12,14 @@ use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
 use App\Models\Customer;
 use App\Models\NumberingSystem;
+use App\Models\Schedule;
+use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
 use App\Transformer\MasterData\TransactionHeaderTranformer;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -46,8 +51,9 @@ class TransactionProrateHeaderController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
-            'code'        => 'required|max:45|regex:/^\S*$/u',
-            'date'        => 'required'
+            'code'              => 'required|max:45|regex:/^\S*$/u',
+            'date'              => 'required',
+            'registration_fee'  => 'required'
         ],[
             'code.regex'  => 'Nomor Transaksi harus tanpa spasi!'
         ]);
@@ -74,6 +80,7 @@ class TransactionProrateHeaderController extends Controller
         $i = 0;
         foreach($schedules as $schedule){
             if(empty($schedule)) $valid = false;
+            if(empty($prorate)) $valid = false;
             if(empty($prices[$i]) || $prices[$i] == '0') $valid = false;
 
             // Validate discount
@@ -85,7 +92,7 @@ class TransactionProrateHeaderController extends Controller
         }
 
         if(!$valid){
-            return redirect()->back()->withErrors('Detail kuantitas dan harga wajib diisi!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Detail prorate dan harga wajib diisi!', 'default')->withInput($request->all());
         }
 
         // Check duplicate inventory
@@ -128,6 +135,7 @@ class TransactionProrateHeaderController extends Controller
 
         $trxHeader = TransactionHeader::create([
             'code'                  => $trxCode,
+            'type'                  => 2,
             'customer_id'           => $request->input('customer_id'),
             'invoice_number'        => $invNumber,
             'status_id'             => 1,
@@ -144,6 +152,7 @@ class TransactionProrateHeaderController extends Controller
 
         // Create transaction detail
         $totalPrice = 0;
+        $totalProratePrice = 0;
         $totalDiscount = 0;
         $totalPayment = 0;
         $idx = 0;
@@ -151,14 +160,17 @@ class TransactionProrateHeaderController extends Controller
         foreach($schedules as $schedule){
             if(!empty($schedule)){
                 $priceStr = str_replace('.','', $prices[$idx]);
-                $price = (double) $priceStr;
+                $proratePrice = (double) $priceStr;
+                $normalPrice = (double) $normPrices[$idx];
                 $scheduleObj = Schedule::find($schedule);
                 $trxDetail = TransactionDetail::create([
                     'header_id'             => $trxHeader->id,
                     'schedule_id'           => $schedule,
                     'day'                   => $scheduleObj->day,
+                    'prorate'               => $prorate[$idx],
                     'meeting_attendeds'     => 0,
-                    'price'                 => $priceStr
+                    'price'                 => $normalPrice,
+                    'prorate_price'         => $proratePrice
                 ]);
 
                 // Check discount
@@ -167,18 +179,20 @@ class TransactionProrateHeaderController extends Controller
                     $trxDetail->discount = $discountStr;
 
                     $discount = (double) $discountStr;
-                    $trxDetail->subtotal = $price - $discount;
-
-                    // Accumulate total price
-                    $totalPrice += $price;
+                    $trxDetail->subtotal = $proratePrice - $discount;
 
                     // Accumulate total discount
                     $totalDiscount += $discount;
                 }
                 else{
-                    $trxDetail->subtotal = $price;
-                    $totalPrice += $price;
+                    $trxDetail->subtotal = $proratePrice;
                 }
+
+                // Accumulate total normal price
+                $totalPrice += $normalPrice;
+
+                // Accumulate total prorate price
+                $totalProratePrice += $proratePrice;
 
                 $trxDetail->save();
 
@@ -190,15 +204,65 @@ class TransactionProrateHeaderController extends Controller
 
         if($totalDiscount > 0) $trxHeader->total_discount = $totalDiscount;
         $fee = str_replace('.','', $request->input('registration_fee'));
-        $totalPayment += $fee;
+        $totalPayment += (double) $fee;
         $trxHeader->total_price = $totalPrice;
+        $trxHeader->total_prorate_price = $totalProratePrice;
         $trxHeader->total_payment = $totalPayment;
         $trxHeader->registration_fee = $fee;
         $trxHeader->save();
 
-        Session::flash('message', 'Berhasil membuat transaksi!');
+        Session::flash('message', 'Berhasil membuat transaksi prorate!');
 
         return redirect()->route('admin.transactions.show', ['transaction' => $trxHeader]);
+    }
+
+    public function edit(TransactionHeader $prorate)
+    {
+        $header = $prorate;
+        $date = Carbon::parse($prorate->date)->format('d M Y');
+
+        $data = [
+            'header'    => $header,
+            'date'      => $date
+        ];
+
+        return view('admin.transactions.prorate.edit')->with($data);
+    }
+
+    public function update(Request $request, TransactionHeader $transaction)
+    {
+        $validator = Validator::make($request->all(),[
+            'date'              => 'required',
+            'registration_fee'  => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $user = Auth::user();
+        $now = Carbon::now('Asia/Jakarta');
+
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+        $transaction->date = $date->toDateTimeString();
+
+        $oldRegFee = $transaction->registration_fee;
+        $regFeeStr = str_replace('.','', $request->input('registration_fee'));
+        $regFee = (double) $regFeeStr;
+        $transaction->registration_fee = $regFee;
+        $transaction->total_payment = $transaction->total_payment - $oldRegFee + $regFee;
+
+        $transaction->updated_by = $user->id;
+        $transaction->updated_at = $now->toDateTimeString();
+
+        $transaction->save();
+
+        Session::flash('message', 'Berhasil mengubah transaksi!');
+
+        return redirect()->route('admin.transactions.show', ['transaction' => $transaction]);
     }
 
 

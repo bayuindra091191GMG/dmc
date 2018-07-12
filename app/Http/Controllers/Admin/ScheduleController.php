@@ -71,14 +71,20 @@ class ScheduleController extends Controller
         $valid = true;
         $validClass = true;
 
+        $idx = 0;
         foreach($courses as $item){
             if(empty($item)) $valid = false;
 
             //Check if the customer already take that class
-            $tmpCourse = Schedule::where('customer_id', $customer)->where('course_id', $item)->first();
+            $tmpCourse = Schedule::where('customer_id', $customer)
+                ->where('course_id', $item)
+                ->where('day', $dayAdd[$idx])
+                ->where('status_id', 3)
+                ->first();
             if($tmpCourse != null){
                 $validClass = false;
             }
+            $idx++;
         }
 
         if($customer == null){
@@ -235,7 +241,7 @@ class ScheduleController extends Controller
 
         $courseType = 0;
         if(!empty($request->course_type)){
-            $classType = (int) $request->course_type;
+            $courseType = (int) $request->course_type;
         }
 
         $schedules = null;

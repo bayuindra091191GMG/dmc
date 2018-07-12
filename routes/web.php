@@ -117,10 +117,17 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('transaction_details/update', 'TransactionDetailController@update')->name('transaction_details.update');
     Route::post('transaction_details/delete', 'TransactionDetailController@delete')->name('transaction_details.delete');
 
-    //Transaction Prorate
+    //Transaction Prorate Header
     Route::get('prorates/create', 'TransactionProrateHeaderController@create')->name('transactions.prorate.create');
     Route::post('prorates/store', 'TransactionProrateHeaderController@store')->name('transactions.prorate.store');
-    Route::post('prorates/edit/{prorate}', 'TransactionProrateHeaderController@edit')->name('transactions.prorate.edit');
+    Route::get('prorates/edit/{prorate}', 'TransactionProrateHeaderController@edit')->name('transactions.prorate.edit');
+    Route::put('prorates/update/{prorate}', 'TransactionProrateHeaderController@update')->name('transactions.prorate.update');
+
+    //Transaction Prorate Details
+    Route::get('prorate_details', 'TransactionProrateDetailController@index')->name('prorate_details');
+    Route::post('prorate_details/store', 'TransactionProrateDetailController@store')->name('prorate_details.store');
+    Route::put('prorate_details/update', 'TransactionProrateDetailController@update')->name('prorate_details.update');
+    Route::post('prorate_details/delete', 'TransactionProrateDetailController@delete')->name('prorate_details.delete');
 
     //DMC End
 

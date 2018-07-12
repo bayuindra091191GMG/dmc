@@ -78,7 +78,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="registration_fee" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('registration_fee')) parsley-error @endif"
-                           name="registration_fee"/>
+                           name="registration_fee" required/>
                 </div>
             </div>
 
@@ -108,7 +108,7 @@
                                         Prorate
                                     </th>
                                     <th class="text-center" style="width: 15%">
-                                        Harga
+                                        Harga Prorate
                                     </th>
                                     <th class="text-center" style="width: 10%">
                                         Diskon
@@ -336,12 +336,12 @@
         // Auto Numbering
         $('#auto_number').change(function(){
             if(this.checked){
-                $('#retur_code').val('{{ $autoNumber }}');
-                $('#retur_code').prop('readonly', true);
+                $('#code').val('{{ $autoNumber }}');
+                $('#code').prop('readonly', true);
             }
             else{
-                $('#retur_code').val('');
-                $('#retur_code').prop('readonly', false);
+                $('#code').val('');
+                $('#code').prop('readonly', false);
             }
         });
 
@@ -375,12 +375,26 @@
         });
 
         // Add autonumeric
-        feeAddFormat = new AutoNumeric('#registration_fee', {
+        regisrationFeeFormat = new AutoNumeric('#registration_fee', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
             minimumValue: '0',
             decimalPlaces: 0
         });
+
+        @if(!empty(old('registration_fee')))
+            regisrationFeeFormat.clear();
+
+            var fee = '{{ old('registration_fee') }}';
+            var feeClean = fee.replace(/\./g,'');
+
+            regisrationFeeFormat.set(feeClean, {
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
+                minimumValue: '0',
+                decimalPlaces: 0
+            });
+        @endif
 
         priceAddFormat = new AutoNumeric('#price_add', {
             decimalCharacter: ',',
@@ -586,7 +600,7 @@
             sbAdd.append("<td class='text-center'>" + splitted[1] + "<input type='hidden' name='schedule[]'  value='" + splitted[0] + "'/>")
             sbAdd.append("<td class='text-center'>" + splitted[2] + "</td>");
             sbAdd.append("<td class='text-center'>" + splitted[3] + "</td>");
-            sbAdd.append("<td class='text-center'>" + prorateAdd + " Pertemuan</td>");
+            sbAdd.append("<td class='text-center'>" + prorateAdd + " Pertemuan<input type='hidden' name='prorate[]' value='" + prorateAdd + "'/><input type='hidden' name='normal_price[]' value='" + normalPriceAdd + "'/></td>");
             sbAdd.append("<td class='text-right'>" + priceAdd + "<input type='hidden' name='price[]' value='" + priceAdd + "'/></td>");
 
             if(discount > 0){
@@ -615,6 +629,16 @@
 
             $('#detail_table').append(sbAdd.toString());
 
+            // Reset add form modal
+            $('#schedule_add').val(null).trigger('change');
+            $('#trainer_add').val('');
+            document.getElementById('prorate_add').value = '-1';
+            $('#normal_price_add').val('');
+            priceAddFormat.clear();
+            $('#discount_add').val('');
+        });
+
+        $("#addModal").on('hidden.bs.modal', function () {
             // Reset add form modal
             $('#schedule_add').val(null).trigger('change');
             $('#trainer_add').val('');
@@ -791,6 +815,16 @@
 
             $('.item' + editedRowId).replaceWith(sbEdit.toString());
 
+            // Reset edit form modal
+            $('#edited_row_id').val('');
+            $('#schedule_edit').val(null).trigger('change');
+            $('#trainer_edit').val('');
+            $('#normal_price_edit').val('');
+            $('#price_edit').val('');
+            $('#discount_edit').val('');
+        });
+
+        $("#editModal").on('hidden.bs.modal', function () {
             // Reset edit form modal
             $('#edited_row_id').val('');
             $('#schedule_edit').val(null).trigger('change');

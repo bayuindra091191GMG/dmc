@@ -70,7 +70,7 @@
             </div>
 
             <div class="form-group">
-                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                <div class="col-md-12 col-sm-12 col-xs-12 text-center">
                     <a class="btn btn-danger" href="{{ route('admin.schedules') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
@@ -166,7 +166,7 @@
                     text: 'Pilih Kelas...'
                 },
                 width: '100%',
-                minimumInputLength: 1,
+                minimumInputLength: 0,
                 ajax: {
                     url: '{{ route('select.courses') }}',
                     dataType: 'json',

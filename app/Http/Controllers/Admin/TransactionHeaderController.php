@@ -129,7 +129,7 @@ class TransactionHeaderController extends Controller
         }
 
         if(!$valid){
-            return redirect()->back()->withErrors('Detail kuantitas dan harga wajib diisi!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Detail harga wajib diisi!', 'default')->withInput($request->all());
         }
 
         // Check duplicate inventory
@@ -172,6 +172,7 @@ class TransactionHeaderController extends Controller
 
         $trxHeader = TransactionHeader::create([
             'code'                  => $trxCode,
+            'type'                  => 1,
             'customer_id'           => $request->input('customer_id'),
             'invoice_number'        => $invNumber,
             'status_id'             => 1,
@@ -285,7 +286,8 @@ class TransactionHeaderController extends Controller
     public function update(Request $request, TransactionHeader $transaction)
     {
         $validator = Validator::make($request->all(),[
-            'date'        => 'required'
+            'date'              => 'required',
+            'registration_fee'  => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -298,17 +300,23 @@ class TransactionHeaderController extends Controller
         $user = Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
-        $trxHeader = $transaction;
         $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
-        $trxHeader->date = $date->toDateTimeString();
-        $trxHeader->updated_by = $user->id;
-        $trxHeader->updated_at = $now->toDateTimeString();
+        $transaction->date = $date->toDateTimeString();
 
-        $trxHeader->save();
+        $oldRegFee = $transaction->registration_fee;
+        $regFeeStr = str_replace('.','', $request->input('registration_fee'));
+        $regFee = (double) $regFeeStr;
+        $transaction->registration_fee = $regFee;
+        $transaction->total_payment = $transaction->total_payment - $oldRegFee + $regFee;
+
+        $transaction->updated_by = $user->id;
+        $transaction->updated_at = $now->toDateTimeString();
+
+        $transaction->save();
 
         Session::flash('message', 'Berhasil mengubah transaksi!');
 
-        return redirect()->route('admin.transactions.show', ['transaction' => $trxHeader]);
+        return redirect()->route('admin.transactions.show', ['transaction' => $transaction]);
     }
 
     /**

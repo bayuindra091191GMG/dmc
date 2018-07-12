@@ -348,12 +348,27 @@
         });
 
         // Add autonumeric
-        feeAddFormat = new AutoNumeric('#registration_fee', {
+        regisrationFeeFormat = new AutoNumeric('#registration_fee', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
             minimumValue: '0',
             decimalPlaces: 0
         });
+
+        @if(!empty(old('registration_fee')))
+
+            regisrationFeeFormat.clear();
+
+            var fee = '{{ old('registration_fee') }}';
+            var feeClean = fee.replace(/\./g,'');
+
+            regisrationFeeFormat.set(feeClean, {
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
+                minimumValue: '0',
+                decimalPlaces: 0
+            });
+        @endif
 
         priceAddFormat = new AutoNumeric('#price_add', {
             decimalCharacter: ',',
@@ -515,6 +530,14 @@
             $('#discount_add').val('');
         });
 
+        $("#addModal").on('hidden.bs.modal', function () {
+            // Reset add form modal
+            $('#schedule_add').val(null).trigger('change');
+            $('#trainer_add').val('');
+            priceAddFormat.clear();
+            $('#discount_add').val('');
+        });
+
         // Edit detail
         $(document).on('click', '.edit-modal', function() {
 
@@ -657,6 +680,15 @@
 
             $('.item' + editedRowId).replaceWith(sbEdit.toString());
 
+            // Reset edit form modal
+            $('#edited_row_id').val('');
+            $('#schedule_edit').val(null).trigger('change');
+            $('#trainer_edit').val('');
+            $('#price_edit').val('');
+            $('#discount_edit').val('');
+        });
+
+        $("#editModal").on('hidden.bs.modal', function () {
             // Reset edit form modal
             $('#edited_row_id').val('');
             $('#schedule_edit').val(null).trigger('change');

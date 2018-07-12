@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: GMG-Developer
- * Date: 25/05/2018
- * Time: 13:22
+ * Date: 12/07/2018
+ * Time: 11:26
  */
 
 namespace App\Http\Controllers\Admin;
@@ -20,10 +20,18 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
-class TransactionDetailController extends Controller
+class TransactionProrateDetailController extends Controller
 {
     public function store(Request $request){
         try{
+            $validator = Validator::make($request->all(),[
+                'schedule'      => 'required'
+            ]);
+
+            if ($validator->fails()) {
+                return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
+            }
+
             $now = Carbon::now('Asia/Jakarta');
             $user = Auth::user();
 
@@ -46,29 +54,34 @@ class TransactionDetailController extends Controller
 
             $schedule = Schedule::find($scheduleArr[0]);
 
+            $proratePriceStr = str_replace('.','', $request->input('prorate_price'));
+            $proratePrice = (double) $proratePriceStr;
+
             $detail->schedule_id = $scheduleArr[0];
+            $detail->prorate = $request->input('prorate');
             $detail->price = $schedule->course->price;
-            $price = $schedule->course->price;
+            $detail->prorate_price = $proratePrice;
+            $normalPrice = $schedule->course->price;
 
             // Check discount and subtotal
-            $finalSubtotal = 0;
             $discount = 0;
             if($request->filled('discount')){
                 $discountStr = str_replace('.','', $request->input('discount'));
                 $discount = (double) $discountStr;
                 $detail->discount = $discount;
-                $finalSubtotal = $price - $discount;
+                $finalSubtotal = $proratePrice - $discount;
                 $detail->subtotal = $finalSubtotal;
             }
             else{
-                $finalSubtotal = $price;
+                $finalSubtotal = $proratePrice;
                 $detail->subtotal = $finalSubtotal;
             }
 
             $detail->save();
 
             // Accumulate total price, discount & payment
-            $header->total_price += $price;
+            $header->total_price += $normalPrice;
+            $header->total_prorate_price += $proratePrice;
 
             $header->total_payment += $finalSubtotal;
             if($request->filled('discount')){
@@ -93,9 +106,16 @@ class TransactionDetailController extends Controller
             $detail->updated_by = $user->id;
             $detail->updated_at = $now->toDateTimeString();
 
+            $proratePriceStr = str_replace('.','', $request->input('prorate_price'));
+            $proratePrice = (double) $proratePriceStr;
+
             // Get old value
             $oldPrice = $detail->price;
+            $oldProratePrice = $detail->prorate_price;
             $oldDiscountAmount =  $detail->discount ?? 0;
+
+            $detail->prorate = $request->input('prorate');
+            $detail->prorate_price =  $proratePrice;
 
             $price = 0;
             if($request->filled('schedule')){
@@ -128,12 +148,12 @@ class TransactionDetailController extends Controller
                 $discountStr = str_replace('.','', $request->input('discount'));
                 $discountAmount = (double) $discountStr;
                 $detail->discount = $discountAmount;
-                $finalSubtotal = $price - $discountAmount;
+                $finalSubtotal = $proratePrice - $discountAmount;
                 $detail->subtotal = $finalSubtotal;
             }
             else{
                 $detail->discount = 0;
-                $finalSubtotal = $price;
+                $finalSubtotal = $proratePrice;
                 $detail->subtotal = $finalSubtotal;
             }
 
@@ -141,10 +161,15 @@ class TransactionDetailController extends Controller
 
             // Accumulate total price, discount & payment
             $header = TransactionHeader::find($detail->header_id);
+
             $totalPrice = $header->total_price - $oldPrice + $price;
             $header->total_price = $totalPrice;
+
+            $totalProratePrice = $header->total_prorate_price - $oldProratePrice + $proratePrice;
+            $header->total_prorate_price = $totalProratePrice;
+
             $header->total_discount = $header->total_discount - $oldDiscountAmount + $discountAmount;
-            $header->total_payment = $header->registration_fee + $totalPrice - $header->total_discount;
+            $header->total_payment = $header->registration_fee + $totalProratePrice - $header->total_discount;
 
             $header->updated_by = $user->id;
             $header->updated_at = $now->toDateTimeString();
@@ -170,12 +195,14 @@ class TransactionDetailController extends Controller
 
             // Get old value
             $oldPrice = $detail->price;
-            $oldDiscountAmount = $detail->discount;
+            $oldProratePrice = $detail->prorate_price;
+            $oldDiscountAmount = $detail->discount ?? 0;
             $oldSubtotal = $detail->subtotal;
 
             // Minus header total values
             $header = $detail->transaction_header;
             $header->total_price -= $oldPrice;
+            $header->total_prorate_price -= $oldProratePrice;
             $header->total_discount -= $oldDiscountAmount;
             $header->total_payment -= $oldSubtotal;
 
