@@ -156,9 +156,7 @@
                                                 {{ $schedule->start_date_string }} - {{ $schedule->finish_date_string }}
                                             </td>
                                             <td class="text-center">
-                                                @if($schedule->course->type == 2)
-                                                    <a class='btn btn-xs btn-info' href="{{route('admin.schedules.edit', ['schedule'=>$schedule->id])}}" data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>
-                                                @endif
+                                                <a class='btn btn-xs btn-info' href="{{route('admin.schedules.edit', ['schedule'=>$schedule->id])}}" data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>
                                             </td>
                                         </tr>
                                         @php($no++)

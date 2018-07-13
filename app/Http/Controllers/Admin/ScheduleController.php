@@ -165,6 +165,7 @@ class ScheduleController extends Controller
 
         $days = preg_split('@;@', $course->day, NULL, PREG_SPLIT_NO_EMPTY);
         $hours = preg_split('@;@', $course->hour, NULL, PREG_SPLIT_NO_EMPTY);
+        $date = Carbon::parse($schedule->finish_date)->format('d M Y');
         $dayTime = array();
 
         $i = 0;
@@ -183,7 +184,8 @@ class ScheduleController extends Controller
         $data = [
             'schedule'      => $schedule,
             'course'      => $course,
-            'dayTime'      => $dayTime
+            'dayTime'      => $dayTime,
+            'date'      => $date
         ];
 //        dd($data);
         return view('admin.schedules.edit')->with($data);
@@ -198,14 +200,18 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, Schedule $schedule)
     {
+        dd($request);
         $courseDB = Course::find($request->get('course_add'));
         if($courseDB->type == 1) return redirect()->back()->withErrors("Kelas Wajib dipilih!");
 
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
+        $date = Carbon::createFromFormat('d M Y', $request->input('finish_date'), 'Asia/Jakarta');
+
         $schedule->day = $request->get('day_add');
         $schedule->course_id = $request->get('course_add');
         $schedule->updated_at = $dateTimeNow;
+        $schedule->finish_date = $date->toDateTimeString();
         $schedule->save();
 
         Session::flash('message', 'Berhasil mengubah data Jadwal!');

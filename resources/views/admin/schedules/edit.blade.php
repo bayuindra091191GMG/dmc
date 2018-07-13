@@ -31,30 +31,43 @@
             @endif
 
 
+            @if($schedule->course->type == 2)
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="type" >
+                        Tipe Kelas
+                        <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <select class="form-control" id="course_add" name="course_add">
+                            <option value="{{$schedule->course_id}}">{{$schedule->course->name}} - {{$schedule->course->coach->name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >
+                        Hari Pertemuan
+                    </label>
+
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <select id="day_add" name="day_add" class="form-control col-md-7 col-xs-12">
+                            @foreach($dayTime as $day)
+                                <option value="{{$day}}" {{ $schedule->day === $day ? 'selected' : '' }}>{{$day}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            @endif
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="type" >
-                    Tipe Kelas
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
+                    Tanggal Berakhir
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select class="form-control" id="course_add" name="course_add"></select>
+                    <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
+                           name="finish_date" value="{{ $date }}" required>
                 </div>
             </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >
-                    Hari Pertemuan
-                </label>
-
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select id="day_add" name="day_add" class="form-control col-md-7 col-xs-12">
-                        @foreach($dayTime as $day)
-                            <option value="{{$day}}" {{ $schedule->day === $day ? 'selected' : '' }}>{{$day}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-
 
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
@@ -71,6 +84,7 @@
     @parent
     {{ Html::style(mix('assets/admin/css/users/edit.css')) }}
     {{ Html::style(mix('assets/admin/css/select2.css')) }}
+    {{ Html::style(mix('assets/admin/css/bootstrap-datetimepicker.css')) }}
 @endsection
 
 @section('scripts')
@@ -82,16 +96,21 @@
 
 
     <script type="text/javascript">
+        $('#date').datetimepicker({
+            format: "DD MMM Y"
+        });
+
         $('input[type="checkbox"]').on('change', function() {
             $('input[type="checkbox"]').not(this).prop('checked', false);
         });
 
-        //Add Murid
+        //Add kelas
         $('#course_add').select2({
             placeholder: {
-                id: '-1',
+                id: '{{$schedule->course_id}}',
                 text: '{{$schedule->course->name}} - {{$schedule->course->coach->name}}'
             },
+            val: '{{$schedule->course_id}}',
             width: '100%',
             minimumInputLength: 1,
             ajax: {
