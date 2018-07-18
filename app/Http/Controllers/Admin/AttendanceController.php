@@ -111,10 +111,22 @@ class AttendanceController extends Controller
 
         //Check payment due or not
 
+        $now = Carbon::now('Asia/Jakarta');
 
-        //check attendance and schedule meeting amount
+        //Check if schedule date still
         $scheduleDB = Schedule::find($scheduleID);
-        $attendanceCount = Attendance::where('customer_id', $customerID)->where('schedule_id', $scheduleID)->count();
+        $nowFormated = Carbon::parse(date_format($now,'Y-m-d'));
+        $scheduleFinishDate = Carbon::parse(date_format($scheduleDB->finish_date, 'Y-m-d'));
+//        dd($scheduleFinishDate." - ".$nowFormated);
+        if($scheduleFinishDate < $nowFormated){
+            $scheduleDB->status_id = 4;
+            $scheduleDB->save();
+
+            return redirect()
+                ->back()
+                ->withErrors('Masa Berlaku Kelas sudah Habis.', 'default')
+                ->withInput();
+        }
 
         //check user already payment or not
         if($scheduleDB->status_id == 2){
@@ -154,8 +166,8 @@ class AttendanceController extends Controller
         }
 
         //save the attendance
+        $attendanceCount = Attendance::where('customer_id', $customerID)->where('schedule_id', $scheduleID)->count();
         $user = Auth::user();
-        $now = Carbon::now('Asia/Jakarta');
         $attendanceCount++;
         $attendance = Attendance::create([
             'customer_id'           => $customerID,
