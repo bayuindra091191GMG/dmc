@@ -129,6 +129,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('prorate_details/update', 'TransactionProrateDetailController@update')->name('prorate_details.update');
     Route::post('prorate_details/delete', 'TransactionProrateDetailController@delete')->name('prorate_details.delete');
 
+    //Reminders
+    Route::get('reminders', 'ReminderController@index')->name('reminders');
+
     //DMC End
 
     // Notification
@@ -558,6 +561,7 @@ Route::get('/datatables-users', 'Admin\UserController@getIndex')->name('datatabl
 Route::get('/datatables-schedules', 'Admin\ScheduleController@anyData')->name('datatables.schedules');
 Route::get('/datatables-transactions', 'Admin\TransactionHeaderController@anyData')->name('datatables.transactions');
 Route::get('/datatables-attendances', 'Admin\AttendanceController@anyData')->name('datatables.attendances');
+Route::get('/datatables-reminders', 'Admin\ReminderController@getIndex')->name('datatables.reminders');
 //DMC End
 
 Route::get('/datatables-employees', 'Admin\EmployeeController@getIndex')->name('datatables.employees');

@@ -48,7 +48,9 @@ class Schedule extends Eloquent
 
     protected $appends = [
         'start_date_string',
-        'finish_date_string'
+        'finish_date_string',
+        'day_left',
+        'is_expired'
     ];
 
 	protected $dates = [
@@ -85,9 +87,25 @@ class Schedule extends Eloquent
         return Carbon::parse($this->attributes['finish_date'])->format('d/m/y');
     }
 
-	public function user()
+    public function getDayLeftAttribute(){
+        $limitDate = Carbon::parse($this->attributes['finish_date']);
+        return $limitDate->diffInDays();
+    }
+
+    public function getIsExpiredAttribute(){
+        $now = Carbon::now('Asia/Jakarta')->startOfDay();
+        $limitDate = Carbon::parse($this->attributes['finish_date']);
+        return $now->gt($limitDate->startOfDay());
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
+    }
+
+	public function updatedBy()
 	{
-		return $this->belongsTo(\App\Models\User::class, 'updated_by');
+		return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
 	}
 
 	public function customer()

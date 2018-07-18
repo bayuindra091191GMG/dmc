@@ -44,12 +44,12 @@ class DashboardController extends Controller
     {
 
         //get nearly finish schedule
-        $temp = Carbon::now('Asia/Jakarta');
-        $start = Carbon::parse(date_format($temp,'d M Y'));
-
-        $temp2 = Carbon::now('Asia/Jakarta')->addDays(14);
-        $end = Carbon::parse(date_format($temp2,'d M Y'));
-        $scheduleFinishCount = Schedule::whereBetween('finish_date', array($start->toDateTimeString(), $end->toDateTimeString()))->take(5)->get();
+//        $temp = Carbon::now('Asia/Jakarta');
+//        $start = Carbon::parse(date_format($temp,'d M Y'));
+//
+//        $temp2 = Carbon::now('Asia/Jakarta')->addDays(14);
+//        $end = Carbon::parse(date_format($temp2,'d M Y'));
+//        $scheduleFinishCount = Schedule::whereBetween('finish_date', array($start->toDateTimeString(), $end->toDateTimeString()))->take(5)->get();
 
         $counts = [
             'users' => \DB::table('users')->count(),
@@ -61,11 +61,29 @@ class DashboardController extends Controller
         $totalCustomer = Customer::all();
         $totalCourse = Course::all();
 
+        $expDate = Carbon::now('Asia/Jakarta')->subDays(5);
+
+        $packageReminders = Schedule::where('status_id', 3)
+            ->whereHas('course', function($query){
+                $query->where('type', 1);
+            })
+                ->whereDate('finish_date', '>=', $expDate)
+                ->get();
+
+        $classReminders = Schedule::where('status_id', 3)
+            ->whereHas('course', function($query){
+                $query->where('type', 2);
+            })
+                ->whereDate('finish_date', '>=', $expDate)
+                ->get();
+
         $data = [
             'counts'                    => $counts,
-            'scheduleFinishCount'       => $scheduleFinishCount,
+//            'scheduleFinishCount'       => $scheduleFinishCount,
             'totalCustomer'             => $totalCustomer->count(),
-            'totalClass'                => $totalCourse->count()
+            'totalClass'                => $totalCourse->count(),
+            'packageReminders'          => $packageReminders,
+            'classReminders'            => $classReminders
         ];
 
         return view('admin.dashboard')->with($data);

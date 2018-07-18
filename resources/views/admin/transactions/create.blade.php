@@ -201,7 +201,7 @@
                     <form class="form-horizontal" role="form">
                         <input type="hidden" id="edited_row_id"/>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="schedule_edit">Barang:</label>
+                            <label class="control-label col-sm-2" for="schedule_edit">Kelas:</label>
                             <div class="col-sm-10">
                                 <select class="form-control" id="schedule_edit" name="schedule_edit"></select>
                                 <input type="hidden" id="schedule_old_value"/>
