@@ -113,15 +113,19 @@ class ScheduleController extends Controller
 
             if($courseData->type == 2) {
                 $now = $dateTimeNow;
-
                 if($now->day < 10){
                     $finish = Carbon::createFromFormat('Y-m-d', $now->year.'-'.$now->month.'-10');
                 }
                 else{
                     $newMonth = $now->month + 1;
-                    $finish = Carbon::createFromFormat('Y-m-d', $now->year.'-'.$newMonth.'-10');
+                    if($newMonth > 12){
+                        $newYear = $now->year + 1;
+                        $finish = Carbon::createFromFormat('Y-m-d', $newYear.'-1-10');
+                    }
+                    else{
+                        $finish = Carbon::createFromFormat('Y-m-d', $now->year.'-'.$newMonth.'-10');
+                    }
                 }
-//
 //                $finish = $dateTimeNow;
 //                $finish->addDays(30);
             }
