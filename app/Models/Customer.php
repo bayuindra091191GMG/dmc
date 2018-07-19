@@ -28,7 +28,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $updated_by
  * 
  * @property \App\Models\Status $status
- * @property \App\Models\User $user
+ * @property \App\Models\Auth\User\User $user
  * @property \Illuminate\Database\Eloquent\Collection $attendances
  * @property \Illuminate\Database\Eloquent\Collection $transaction_headers
  *
@@ -61,9 +61,14 @@ class Customer extends Eloquent
 		return $this->belongsTo(\App\Models\Status::class);
 	}
 
-	public function user()
+    public function createdBy()
+    {
+        return $this->belongsTo(\App\Models\Auth\User\User::class, 'created_by');
+    }
+
+	public function updatedBy()
 	{
-		return $this->belongsTo(\App\Models\User::class, 'updated_by');
+		return $this->belongsTo(\App\Models\Auth\User\User::class, 'updated_by');
 	}
 
 	public function attendances()

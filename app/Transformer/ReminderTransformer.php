@@ -19,7 +19,8 @@ class ReminderTransformer extends TransformerAbstract
 
         $finishDate = Carbon::parse($schedule->finish_date)->format('d M Y');
 
-        $action = "<a class='btn btn-xs btn-info' href='#' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+        $action = "<button class='btn btn-success modal-renew' data-schedule-id='". $schedule->id. "' data-course='". $schedule->course->name. "' data-customer='". $schedule->customer->name. "' data-customer-parent='". $schedule->customer->parent_name. "'>PERBARUI</button>";
+        $action .= "<button class='btn btn-danger modal-disable' data-schedule-id='". $schedule->id. "' data-course='". $schedule->course->name. "' data-customer='". $schedule->customer->name. "' data-customer-parent='". $schedule->customer->parent_name. "'>HAPUS</button>";
 
         if($schedule->course->type === 1){
             $meetingAmount = $schedule->meeting_amount;

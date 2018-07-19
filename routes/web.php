@@ -131,6 +131,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     //Reminders
     Route::get('reminders', 'ReminderController@index')->name('reminders');
+    Route::post('reminders/renew', 'ReminderController@renew')->name('reminders.renew');
+    Route::post('reminders/disable', 'ReminderController@disable')->name('reminders.disable');
 
     //DMC End
 

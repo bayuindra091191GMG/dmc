@@ -13,6 +13,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Schedule;
 use App\Transformer\ReminderTransformer;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\DataTables;
 
 class ReminderController extends Controller
@@ -21,33 +26,107 @@ class ReminderController extends Controller
         return view('admin.reminders.index');
     }
 
+    /**
+     * Get list of reminder
+     *
+     * @return JsonResponse
+     * @throws \Exception
+     */
     public function getIndex()
     {
-        $expDate = Carbon::now('Asia/Jakarta')->subDays(5);
+        $schedules = Schedule::where('status_id', 3)->get();
         $now = Carbon::now('Asia/Jakarta');
-        $headers = Schedule::where('status_id', 3)
-            ->where(function ($q) use ($expDate, $now){
-                $q->where(function ($q) use ($expDate, $now){
-                    $q->whereHas('course', function($query){
-                        $query->where('type', 1);
-                    })
-                        ->whereDate('finish_date', '>=', $expDate);
-                })
-                ->orWhere(function ($q) use ($expDate, $now){
-                    $q->whereHas('course', function($query){
-                        $query->where('type', 2);
-                    })
-                        ->where('meeting_amount', '>', 5)
-                        ->whereDate('finish_date', '>=', $expDate);
-                });
-            })
 
-            ->get();
+        $reminders = new Collection();
+        foreach ($schedules as $schedule){
+            $remindDate = Carbon::parse($schedule->finish_date)->subDays(5);
+            if($schedule->course->type === 1){
+                if($now->greaterThanOrEqualTo($remindDate)){
+                    if($schedule->meeting_amount > 5){
+                        $reminders->add($schedule);
+                    }
+                }
+            }
+            else{
+                if($now->greaterThanOrEqualTo($remindDate)){
+                    $reminders->add($schedule);
+                }
+            }
+        }
 
 
-        return DataTables::of($headers)
+        return DataTables::of($reminders)
             ->setTransformer(new ReminderTransformer)
             ->addIndexColumn()
             ->make(true);
+    }
+
+    /**
+     * Renew customer schedule based on taken course
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function renew(Request $request){
+        try{
+            $scheduleId = $request->input('schedule_id');
+
+            $schedule = Schedule::find($scheduleId);
+
+            if($schedule->status_id !== 3){
+                return Response::json(array('errors' => 'INVALID'));
+            }
+
+            // If course type is package
+            if($schedule->course->type === 1){
+                $finishDate = Carbon::parse($schedule->finish_date)->addDays($schedule->course->valid);
+                $schedule->finish_date = $finishDate->toDateTimeString();
+                $schedule->meeting_amount += $schedule->course->meeting_amount;
+            }
+            else{
+                $finishDate = Carbon::parse($schedule->finish_date)->addMonths(1);
+                $schedule->finish_date = $finishDate->toDateTimeString();
+                $schedule->meeting_amount = 0;
+            }
+
+            $schedule->save();
+
+            Session::flash('message', 'Berhasil memperbarui jadwal customer!');
+
+            return new JsonResponse($schedule);
+        }
+        catch (\Exception $ex){
+            error_log($ex);
+            return Response::json(array('errors' => 'INVALID'));
+        }
+    }
+
+    /**
+     * Disable customer schedule based on taken course
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function disable(Request $request){
+        try{
+            $scheduleId = $request->input('schedule_id');
+
+            $schedule = Schedule::find($scheduleId);
+
+            if($schedule->status_id !== 3){
+                return Response::json(array('errors' => 'INVALID'));
+            }
+
+            $schedule->status_id = 5;
+            $schedule->save();
+
+            Session::flash('message', 'Berhasil menghapus jadwal customer!');
+
+            return new JsonResponse($schedule);
+        }
+        catch (\Exception $ex){
+            error_log($ex);
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 }

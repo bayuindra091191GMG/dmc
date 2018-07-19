@@ -61,21 +61,37 @@ class DashboardController extends Controller
         $totalCustomer = Customer::all();
         $totalCourse = Course::all();
 
-        $expDate = Carbon::now('Asia/Jakarta')->subDays(5);
 
-        $packageReminders = Schedule::where('status_id', 3)
-            ->whereHas('course', function($query){
-                $query->where('type', 1);
-            })
-                ->whereDate('finish_date', '>=', $expDate)
-                ->get();
 
-        $classReminders = Schedule::where('status_id', 3)
-            ->whereHas('course', function($query){
-                $query->where('type', 2);
-            })
-                ->whereDate('finish_date', '>=', $expDate)
-                ->get();
+
+        $schedules = Schedule::where('status_id', 3)->get();
+        $now = Carbon::now('Asia/Jakarta');
+
+        $packageReminders = new Collection();
+        $classReminders = new Collection();
+        foreach ($schedules as $schedule){
+            $remindDate = Carbon::parse($schedule->finish_date)->subDays(5);
+            if($schedule->course->type === 1){
+                if($packageReminders->count() < 5){
+                    if($now->greaterThanOrEqualTo($remindDate)){
+                        if($schedule->meeting_amount > 5){
+                            $packageReminders->add($schedule);
+                        }
+                    }
+                }
+            }
+            else{
+                if($classReminders->count() < 5){
+                    if($now->greaterThanOrEqualTo($remindDate)){
+                        $classReminders->add($schedule);
+                    }
+                }
+            }
+
+            if($packageReminders->count() == 5 && $classReminders->count() == 5){
+                break 1;
+            }
+        }
 
         $data = [
             'counts'                    => $counts,
