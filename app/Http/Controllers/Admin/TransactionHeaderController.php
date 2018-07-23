@@ -93,7 +93,8 @@ class TransactionHeaderController extends Controller
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
             'code'        => 'required|max:45|regex:/^\S*$/u',
-            'date'        => 'required'
+            'date'        => 'required',
+            'registration_fee' => 'required'
         ],[
             'code.regex'  => 'Nomor Transaksi harus tanpa spasi!'
         ]);
@@ -116,6 +117,11 @@ class TransactionHeaderController extends Controller
         $discounts = $request->input('discount');
         $valid = true;
         $i = 0;
+
+        if($schedules == null || $schedules->count() == 0){
+            return redirect()->back()->withErrors('Detail kelas wajib diisi!', 'default')->withInput($request->all());
+        }
+
         foreach($schedules as $schedule){
             if(empty($schedule)) $valid = false;
             if(empty($prices[$i]) || $prices[$i] == '0') $valid = false;

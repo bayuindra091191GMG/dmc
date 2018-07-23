@@ -167,7 +167,7 @@
 
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a class="btn btn-danger" href="{{ route('admin.coaches') }}"> Batal</a>
+                    <a class="btn btn-danger" href="{{ route('admin.courses') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>

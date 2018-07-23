@@ -46,7 +46,7 @@
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="age" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('age')) parsley-error @endif"
+                    <input id="age" type="number" class="form-control col-md-7 col-xs-12 @if($errors->has('age')) parsley-error @endif"
                            name="age" value="{{ old('age') }}" required>
                 </div>
             </div>
