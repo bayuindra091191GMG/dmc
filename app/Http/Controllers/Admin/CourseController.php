@@ -371,7 +371,13 @@ class CourseController extends Controller
         //Get Schedule yang berkaitan
         $schedule = Schedule::where('course_id', $course->id)->where('day', 'LIKE', '%'. $dayQuery . '%')->first();
 
-        $customers = Attendance::where('schedule_id', $schedule->id)->whereDate('created_at', Carbon::today())->get();
+        if($schedule != null)
+        {
+            $customers = Attendance::where('schedule_id', $schedule->id)->whereDate('created_at', Carbon::today())->get();
+        }
+        else{
+            $customers = null;
+        }
         return view('admin.courses.thisdayshow', ['course' => $course, 'days' => $days, 'hours' => $hours, 'customers' => $customers]);
     }
 }
