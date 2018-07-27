@@ -214,7 +214,7 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, Schedule $schedule)
     {
-        dd($request);
+//        dd($request);
         $courseDB = Course::find($request->get('course_add'));
         if($courseDB->type == 1) return redirect()->back()->withErrors("Kelas Wajib dipilih!");
 
@@ -222,11 +222,19 @@ class ScheduleController extends Controller
 
         $date = Carbon::createFromFormat('d M Y', $request->input('finish_date'), 'Asia/Jakarta');
 
-        $schedule->day = $request->get('day_add');
-        $schedule->course_id = $request->get('course_add');
-        $schedule->updated_at = $dateTimeNow;
-        $schedule->finish_date = $date->toDateTimeString();
-        $schedule->save();
+        //if course type = class
+        if($courseDB->type == 2){
+            $schedule->day = $request->get('day_add');
+            $schedule->course_id = $request->get('course_add');
+            $schedule->updated_at = $dateTimeNow;
+            $schedule->finish_date = $date->toDateTimeString();
+            $schedule->save();
+        }
+        else{
+            $schedule->updated_at = $dateTimeNow;
+            $schedule->finish_date = $date->toDateTimeString();
+            $schedule->save();
+        }
 
         Session::flash('message', 'Berhasil mengubah data Jadwal!');
 
