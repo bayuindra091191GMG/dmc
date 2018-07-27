@@ -130,7 +130,8 @@ class ScheduleController extends Controller
 //                $finish->addDays(30);
             }
             else{
-                $finish = $dateTimeNow;
+                $dateTimeNowFinish = Carbon::now('Asia/Jakarta');
+                $finish = $dateTimeNowFinish;
                 $finish->addDays($courseData->valid);
             }
 

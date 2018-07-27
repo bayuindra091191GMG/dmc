@@ -298,4 +298,18 @@ class AttendanceController extends Controller
             return Response::json(array('errors' => 'INVALID'));
         }
     }
+
+    public function printDocument(Request $request){
+        $customers = Schedule::where('course_id', $request->input('course_id'))->get();
+        $header = Attendance::find($request->input('course_id'));
+        $dateNow = Carbon::now('Asia/Jakarta');
+        $now = $dateNow->format('d-M-Y');
+
+        $data = [
+            'header'         => $header,
+            'now'            => $now
+        ];
+
+        return view('documents.transactions.invoice_doc')->with($data);
+    }
 }
