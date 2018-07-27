@@ -57,17 +57,29 @@
                         </select>
                     </div>
                 </div>
-            @endif
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
-                    Tanggal Berakhir
-                    <span class="required">*</span>
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
-                           name="finish_date" value="{{ $date }}" required>
+                {{--<div class="form-group">--}}
+                    {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">--}}
+                        {{--Tanggal Berakhir Kelas--}}
+                        {{--<span class="required">*</span>--}}
+                    {{--</label>--}}
+                    {{--<div class="col-md-6 col-sm-6 col-xs-12">--}}
+                        {{--<input id="date1" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"--}}
+                               {{--name="finish_date" value="{{ $date }}" required>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            @else
+                <input type="hidden" name="course_add" value="{{$schedule->course_id}}">
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
+                        Tanggal Berakhir Paket
+                        <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input id="date2" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
+                               name="finish_date" value="{{ $date }}" required>
+                    </div>
                 </div>
-            </div>
+            @endif
 
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
@@ -96,7 +108,10 @@
 
 
     <script type="text/javascript">
-        $('#date').datetimepicker({
+        $('#date1').datetimepicker({
+            format: "10 MMM Y"
+        });
+        $('#date2').datetimepicker({
             format: "DD MMM Y"
         });
 
