@@ -155,7 +155,6 @@
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         @if($packageReminders->count() > 0)
                             @foreach($packageReminders as $package)
-                                @if($package->course->type == 1)
                                     <div class="alert alert-danger fade in" role="alert">
                                         <span>{{ $package->customer->name }}, </span>
                                         <strong>kelas {{ $package->course->name }}. </strong>
@@ -164,16 +163,51 @@
                                         <button class="btn btn-success modal-renew" data-schedule-id="{{ $package->id }}" data-course="{{ $package->course->name }}" data-customer="{{ $package->customer->name }}" data-customer-parent="{{ $package->customer->parent_name }}">PERBARUI</button>
                                         <button class="btn btn-warning modal-disable" data-schedule-id="{{ $package->id }}" data-course="{{ $package->course->name }}" data-customer="{{ $package->customer->name }}" data-customer-parent="{{ $package->customer->parent_name }}">HAPUS</button>
                                     </div>
-                                @else
-                                    <div class="alert alert-danger fade in" role="alert">
-                                        <span>{{ $package->customer->name }}  ,</span>
-                                        <strong>kelas{{ $package->course->name }}. </strong>
-                                        <span>Sudah mendekati Tanggal Tagihan Bulanan.</span>
-                                        <span>Tanggal Expired: {{ $package->finish_date_string }}.</span>
-                                        <button class="btn btn-success modal-renew" data-schedule-id="{{ $package->id }}" data-course="{{ $package->course->name }}" data-customer="{{ $package->customer->name }}" data-customer-parent="{{ $package->customer->parent_name }}">PERBARUI</button>
-                                        <button class="btn btn-warning modal-disable" data-schedule-id="{{ $package->id }}" data-course="{{ $package->course->name }}" data-customer="{{ $package->customer->name }}" data-customer-parent="{{ $package->customer->parent_name }}">HAPUS</button>
-                                    </div>
-                                @endif
+                            @endforeach
+                            <div>
+                                <span><a style="text-decoration: underline;" href="{{ route('admin.reminders') }}" target="_blank">Klik di sini untuk melihat semua</a></span>
+                            </div>
+                        @else
+                            <div class="alert alert-success fade in" role="alert">
+                                <strong>Tidak ada peringatan</strong>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="dashboard_graph">
+
+                <div class="row x_title">
+                    <div class="col-md-6">
+                        <h3>Class Reminder</h3>
+                    </div>
+                    {{--<div class="col-md-6">--}}
+                    {{--<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">--}}
+                    {{--<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>--}}
+                    {{--<span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>--}}
+                    {{--</div>--}}
+                    {{--</div>--}}
+                </div>
+
+                <div class="x_content">
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        @if($classReminders->count() > 0)
+                            @foreach($classReminders as $class)
+                                <div class="alert alert-danger fade in" role="alert">
+                                    <span>{{ $class->customer->name }}  ,</span>
+                                    <strong>kelas{{ $class->course->name }}. </strong>
+                                    <span>Sudah mendekati Tanggal Tagihan Bulanan.</span>
+                                    <span>Tanggal Expired: {{ $class->finish_date_string }}.</span>
+                                    <button class="btn btn-success modal-renew" data-schedule-id="{{ $class->id }}" data-course="{{ $class->course->name }}" data-customer="{{ $class->customer->name }}" data-customer-parent="{{ $class->customer->parent_name }}">PERBARUI</button>
+                                    <button class="btn btn-warning modal-disable" data-schedule-id="{{ $class->id }}" data-course="{{ $class->course->name }}" data-customer="{{ $class->customer->name }}" data-customer-parent="{{ $class->customer->parent_name }}">HAPUS</button>
+                                </div>
                             @endforeach
                             <div>
                                 <span><a style="text-decoration: underline;" href="{{ route('admin.reminders') }}" target="_blank">Klik di sini untuk melihat semua</a></span>
