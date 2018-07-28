@@ -1,12 +1,12 @@
 @extends('admin.layouts.admin')
 
-@section('title','Data Kelas '. $course->name)
+@section('title','Data Absensi '. $course->name . ' Bulan ' . $chosenDate)
 
 @section('content')
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="navbar-left">
-                <a class="btn btn-default" href="{{ route('admin.courses') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
+                <a class="btn btn-default" href="{{ route('admin.attendances.report') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
             </div>
             <div class="navbar-right">
             </div>
@@ -119,72 +119,55 @@
 
                 <hr/>
 
-                @if($customers != null)
-                    <div class="form-group">
-                        <div class="col-lg-12 col-md-12 col-xs-12 column">
-                            <h4 class="text-center">Murid</h4>
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-hover">
-                                    <thead>
-                                    <tr >
-                                        <th class="text-center" style="width: 3%">
-                                            No
-                                        </th>
-                                        <th class="text-center" style="width: 20%">
-                                            Nama
-                                        </th>
-                                        <th class="text-center" style="width: 20%">
-                                            Nama Orang Tua
-                                        </th>
-                                        <th class="text-center" style="width: 10%">
-                                            Email
-                                        </th>
-                                        <th class="text-center" style="width: 10%">
-                                            Nomor Telepon
-                                        </th>
-                                        <th class="text-center" style="width: 10%">
-                                            Hari yang diambil
-                                        </th>
-                                        <th class="text-center" style="width: 10%">
-                                            Masa Kelas
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    @php($no = 1)
-                                    @foreach($customers as $customer)
+                @if($attendanceData != null)
+                        <div class="form-group">
+                            <div class="col-lg-12 col-md-12 col-xs-12 column">
+                                <h4 class="text-center">Absensi</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
                                         <tr>
-                                            <td class="text-center">
-                                                {{ $no }}
-                                            </td>
-                                            <td class="text-center">
-                                                {{ $customer->customer->name }}
-                                            </td>
-                                            <td class="text-center">
-                                                {{ $customer->customer->parent_name }}
-                                            </td>
-                                            <td class="text-center">
-                                                {{ $customer->customer->email }}
-                                            </td>
-                                            <td class="text-center">
-                                                {{ $customer->customer->phone }}
-                                            </td>
-                                            <td class="text-center">
-                                                {{ $customer->day }}
-                                            </td>
-                                            <td class="text-center">
-                                                {{ $customer->start_date_string }} - {{ $customer->finish_date_string }}
-                                            </td>
+                                            <th>
+                                                Name
+                                            </th>
+                                            <th>
+                                                Pertemuan ke 1
+                                            </th>
+                                            <th>
+                                                Pertemuan ke 2
+                                            </th>
+                                            <th>
+                                                Pertemuan ke 3
+                                            </th>
+                                            <th>
+                                                Pertemuan ke 4
+                                            </th>
                                         </tr>
-                                        @php($no++)
-                                    @endforeach
-
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                        @php($idx = 0)
+                                        @foreach($customers as $customer)
+                                            <tr>
+                                                <td>
+                                                    {{ $customer->customer->name }}
+                                                </td>
+                                                @for($j=0; $j<4; $j++)
+                                                    <td>
+                                                        @if(count($attendanceData[$idx]) > $j)
+                                                            {{ $attendanceData[$idx][$j]->created_at }}
+                                                        @else
+                                                            <span>-</span>
+                                                        @endif
+                                                    </td>
+                                                @endfor
+                                            </tr>
+                                            @php($idx++)
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
                 @endif
             </form>
         </div>

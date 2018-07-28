@@ -299,17 +299,45 @@ class AttendanceController extends Controller
         }
     }
 
-    public function printDocument(Request $request){
-        $customers = Schedule::where('course_id', $request->input('course_id'))->get();
-        $header = Attendance::find($request->input('course_id'));
-        $dateNow = Carbon::now('Asia/Jakarta');
-        $now = $dateNow->format('d-M-Y');
+    public function report(){
+        return view('admin.attendances.report');
+    }
 
-        $data = [
-            'header'         => $header,
-            'now'            => $now
-        ];
+    public function showDocument(Request $request){
+        $course = Course::find($request->input('course'));
 
-        return view('documents.transactions.invoice_doc')->with($data);
+        if($course->type == 1){
+            $days[0] = "Bebas";
+            $hours[0] = "Bebas";
+        }
+        else {
+            $days = preg_split('@;@', $course->day, NULL, PREG_SPLIT_NO_EMPTY);
+            $hours = preg_split('@;@', $course->hour, NULL, PREG_SPLIT_NO_EMPTY);
+        }
+
+        //Get customer/murid
+        $customers = Schedule::where('course_id', $course->id)->get();
+
+        //Get Attendance
+        $startDate = Carbon::parse($request->input('date'))->format('Y-m');
+        $finishDate = Carbon::parse($request->input('date'))->addMonth()->format('Y-m');
+        $attendanceData = [];
+        foreach ($customers as $customer){
+            $attendance = Attendance::
+                where([
+                    ['customer_id', $customer->customer_id],
+                    ['created_at', '>=', $startDate],
+                    ['created_at', '<', $finishDate],
+                    ['schedule_id', $customer->id]
+                ])
+                ->orderBy('created_at')
+                ->get();
+
+            array_push($attendanceData, $attendance);
+        }
+        $chosenDate = Carbon::parse($request->input('date'))->format('M Y');
+        //dd($attendanceData[0]);
+
+        return view('admin.attendances.show-report', ['course' => $course, 'days' => $days, 'hours' => $hours, 'customers' => $customers, 'attendanceData' => $attendanceData, 'chosenDate' => $chosenDate]);
     }
 }
