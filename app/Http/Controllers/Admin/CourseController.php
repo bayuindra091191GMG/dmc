@@ -270,7 +270,16 @@ class CourseController extends Controller
         $formatted_tags = [];
 
         foreach ($courses as $course) {
-            $formatted_tags[] = ['id' => $course->id, 'text' => $course->name. ' - '. $course->coach->name];
+            if($course->type == 1){
+                $courseType = "Package";
+            }
+            else if($course->type == 2){
+                $courseType = "Class";
+            }
+            else{
+                $courseType = "Private";
+            }
+            $formatted_tags[] = ['id' => $course->id, 'text' => $course->name.'('.$courseType. ') - '. $course->coach->name];
         }
 
         return \Response::json($formatted_tags);
