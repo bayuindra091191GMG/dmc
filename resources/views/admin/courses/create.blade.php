@@ -49,6 +49,7 @@
                     <select id="type" name="type" class="form-control col-md-7 col-xs-12">
                         <option value="1">Package</option>
                         <option value="2">Class</option>
+                        <option value="3">Private</option>
                     </select>
                 </div>
             </div>
