@@ -137,17 +137,25 @@ class AttendanceController extends Controller
         }
 
         if($scheduleDB->day == "Bebas"){
-            if($scheduleDB->meeting_amount == 0){
-                return redirect()
-                    ->back()
-                    ->withErrors('Pertemuan sudah habis', 'default')
-                    ->withInput();
+            if($scheduleDB->course->type == 3){
+                //change schedule amount (package increase, class decrese)
+                $temp = $scheduleDB->meeting_amount;
+                $scheduleDB->meeting_amount = $temp+1;
+                $scheduleDB->save();
             }
+            else{
+                if($scheduleDB->meeting_amount == 0){
+                    return redirect()
+                        ->back()
+                        ->withErrors('Pertemuan sudah habis', 'default')
+                        ->withInput();
+                }
 
-            //change schedule amount (package increase, class decrese)
-            $temp = $scheduleDB->meeting_amount;
-            $scheduleDB->meeting_amount = $temp-1;
-            $scheduleDB->save();
+                //change schedule amount (package increase, class decrese)
+                $temp = $scheduleDB->meeting_amount;
+                $scheduleDB->meeting_amount = $temp-1;
+                $scheduleDB->save();
+            }
         }
         else{
 
