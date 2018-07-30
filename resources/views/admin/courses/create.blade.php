@@ -103,7 +103,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-2">
-                            <input type="checkbox" onchange="changeInput('hourWednesday', 'chk3')" class="flat" id="chk3" name="chk[]" value="Selasa"/> Rabu
+                            <input type="checkbox" onchange="changeInput('hourWednesday', 'chk3')" class="flat" id="chk3" name="chk[]" value="Rabu"/> Rabu
                         </div>
                         <div class="col-sm-4">
                             <input id="hourWednesday" class="form-control" name="hour[]" disabled="disabled"/>
@@ -111,7 +111,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-2">
-                            <input type="checkbox" onchange="changeInput('hourThursday', 'chk4')" class="flat" id="chk4" name="chk[]" value="Selasa"/> Kamis
+                            <input type="checkbox" onchange="changeInput('hourThursday', 'chk4')" class="flat" id="chk4" name="chk[]" value="Kamis"/> Kamis
                         </div>
                         <div class="col-sm-4">
                             <input id="hourThursday" class="form-control" name="hour[]" disabled="disabled"/>
@@ -119,7 +119,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-2">
-                            <input type="checkbox" onchange="changeInput('hourFriday', 'chk5')" class="flat" id="chk5" name="chk[]" value="Selasa"/> Jumat
+                            <input type="checkbox" onchange="changeInput('hourFriday', 'chk5')" class="flat" id="chk5" name="chk[]" value="Jumat"/> Jumat
                         </div>
                         <div class="col-sm-4">
                             <input id="hourFriday" class="form-control" name="hour[]" disabled="disabled"/>
@@ -127,7 +127,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-2">
-                            <input type="checkbox" onchange="changeInput('hourSaturday', 'chk6')" class="flat" id="chk6" name="chk[]" value="Selasa"/> Sabtu
+                            <input type="checkbox" onchange="changeInput('hourSaturday', 'chk6')" class="flat" id="chk6" name="chk[]" value="Sabtu"/> Sabtu
                         </div>
                         <div class="col-sm-4">
                             <input id="hourSaturday" class="form-control" name="hour[]" disabled="disabled"/>
@@ -135,7 +135,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-2">
-                            <input type="checkbox" onchange="changeInput('hourSunday', 'chk7')" class="flat" id="chk7" name="chk[]" value="Selasa"/> Minggu
+                            <input type="checkbox" onchange="changeInput('hourSunday', 'chk7')" class="flat" id="chk7" name="chk[]" value="Minggu"/> Minggu
                         </div>
                         <div class="col-sm-4">
                             <input id="hourSunday" class="form-control" name="hour[]" disabled="disabled"/>

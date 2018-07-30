@@ -118,7 +118,8 @@ class TransactionHeaderController extends Controller
         $valid = true;
         $i = 0;
 
-        if($schedules == null || $schedules->count() == 0){
+//        if($schedules == null || $schedules->count() == 0){
+        if($schedules == null){
             return redirect()->back()->withErrors('Detail kelas wajib diisi!', 'default')->withInput($request->all());
         }
 
@@ -238,6 +239,7 @@ class TransactionHeaderController extends Controller
 
                 // Activate schedule
                 $scheduleObj->status_id = 3;
+                $scheduleObj->save();
             }
             $idx++;
         }

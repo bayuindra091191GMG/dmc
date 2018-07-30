@@ -43,8 +43,10 @@
                         :
                         @if($course->type == 1)
                             Package
-                        @else
+                        @elseif($course->type == 2)
                             Class
+                        @else
+                            Private
                         @endif
                     </div>
                 </div>

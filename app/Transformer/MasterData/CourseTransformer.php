@@ -38,6 +38,9 @@ class CourseTransformer extends TransformerAbstract
         if($course->type == 1){
             $type = 'package';
         }
+        if($course->type == 3){
+            $type = 'private';
+        }
 
         return[
             'name'              => $name,

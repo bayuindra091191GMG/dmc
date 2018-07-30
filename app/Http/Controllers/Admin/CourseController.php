@@ -83,7 +83,7 @@ class CourseController extends Controller
 
         $selectedDays = "";
         $selectedHours = "";
-        if($request->input('type') != 1){
+        if($request->input('type') == 2){
             $days = $request->get('chk');
             $hours = $request->get('hour');
             if($days == null){
@@ -99,7 +99,12 @@ class CourseController extends Controller
                 $selectedHours.=$hour.";";
             }
         }
-
+        if($request->input('type') == 3){
+            if($request->input('coach_id') === '-1'){
+                return redirect()->back()->withErrors('Pilih Trainer', 'default')->withInput($request->all());
+            }
+        }
+//dd($request);
         $meetingAmounts = 4;
         $validAmount = 0;
 
@@ -109,6 +114,20 @@ class CourseController extends Controller
             $trainer = 0;
             $validAmount = $request->get('valid');
             $hour = "NONE";
+        }
+        else if($request->get('type') == 3){
+            $meetingAmounts = 0;
+            $trainer = $request->get('coach_id');
+            $days = $request->get('chk');
+            $hours = $request->get('hour');
+            if($days != null && $hours != null){
+                foreach ($days as $day){
+                    $selectedDays.=$day.";";
+                }
+                foreach ($hours as $hour){
+                    $selectedHours.=$hour.";";
+                }
+            }
         }
         else{
             $trainer = $request->get('coach_id');
@@ -141,7 +160,7 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        if($course->type == 1){
+        if($course->type == 1 || $course->type == 3){
             $days[0] = "Bebas";
             $hours[0] = "Bebas";
         }
@@ -268,7 +287,7 @@ class CourseController extends Controller
                 $days[0] = "Bebas";
                 array_push($data,"Bebas");
             }
-            else {
+            else if($course->type == 2){
                 $days = preg_split('@;@', $course->day, NULL, PREG_SPLIT_NO_EMPTY);
                 $hours = preg_split('@;@', $course->hour, NULL, PREG_SPLIT_NO_EMPTY);
                 $i = 0;
@@ -282,6 +301,28 @@ class CourseController extends Controller
                         array_push($data,$day);
                         $i++;
                     }
+                }
+            }
+            else{
+                if($course->day != null && $course->hour != null){
+                    $days = preg_split('@;@', $course->day, NULL, PREG_SPLIT_NO_EMPTY);
+                    $hours = preg_split('@;@', $course->hour, NULL, PREG_SPLIT_NO_EMPTY);
+                    $i = 0;
+                    foreach ($days as $day){
+                        if(!empty($course->hour))
+                        {
+                            array_push($data,$day . ' - ' . $hours[$i]);
+                            $i++;
+                        }
+                        else{
+                            array_push($data,$day);
+                            $i++;
+                        }
+                    }
+                }
+                else{
+                    $days[0] = "Bebas";
+                    array_push($data,"Bebas");
                 }
             }
 

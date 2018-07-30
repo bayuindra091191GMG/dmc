@@ -289,7 +289,7 @@ class ScheduleController extends Controller
             $customerId = $request->customer;
             if(Customer::where('id', $customerId)->exists()){
                 $schedules = Schedule::where('customer_id', $customerId)
-                    ->where('status_id', 3)
+                    ->where('status_id', 2)
                     ->whereHas('course', function ($query) use ($term){
                         $query->where('name','LIKE', '%'. $term. '%');
                     });
