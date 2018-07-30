@@ -195,7 +195,6 @@
                     success: function (data) {
                         var i;
                         for(i=0; i<data.length; i++){
-                            $('#day_add').empty();
                             $('#day_add')
                                 .append($("<option></option>")
                                     .attr("value",data[i])
