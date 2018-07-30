@@ -195,6 +195,13 @@ class AttendanceController extends Controller
             }
         }
 
+        if($scheduleDB->course->type == 1){
+            //Print Absen
+            $customerData = Customer::find($customerID);
+            $date = $now->toDateTimeString();
+            return view('admin.attendances.paper', compact('scheduleDB', 'customerData', 'date'));
+        }
+
         Session::flash('message', 'Berhasil membuat absensi!');
 
         return redirect()->route('admin.attendances');
@@ -339,5 +346,9 @@ class AttendanceController extends Controller
         //dd($attendanceData[0]);
 
         return view('admin.attendances.show-report', ['course' => $course, 'days' => $days, 'hours' => $hours, 'customers' => $customers, 'attendanceData' => $attendanceData, 'chosenDate' => $chosenDate]);
+    }
+
+    public function printAttendancePaper(){
+        return view('admin.attendances.paper');
     }
 }
