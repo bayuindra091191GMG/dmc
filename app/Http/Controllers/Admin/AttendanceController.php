@@ -207,7 +207,7 @@ class AttendanceController extends Controller
             //Print Absen
             $customerData = Customer::find($customerID);
             $date = $now->toDateTimeString();
-            return view('admin.attendances.paper', compact('scheduleDB', 'customerData', 'date'));
+            return view('admin.attendances.paper', compact('scheduleDB', 'customerData', 'date', 'attendanceCount'));
         }
 
         Session::flash('message', 'Berhasil membuat absensi!');

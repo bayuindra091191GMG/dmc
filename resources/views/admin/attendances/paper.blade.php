@@ -71,7 +71,7 @@
 
         <table style="text-align: center; width: 100%">
             <tr>
-                <td width="30%">For</td>
+                <td width="30%">Nama</td>
                 <td width="10%">:</td>
                 <td width="60%">{{ $customerData->name }}</td>
             </tr>
@@ -84,6 +84,21 @@
                 <td>Package</td>
                 <td>:</td>
                 <td>{{ $scheduleDB->course->name }}</td>
+            </tr>
+            <tr>
+                <td>Pertemuan Ke</td>
+                <td>:</td>
+                <td>{{ $attendanceCount }}</td>
+            </tr>
+            <tr>
+                <td>Sisa Pertemuan</td>
+                <td>:</td>
+                <td>{{ $scheduleDB->meeting_amount }}</td>
+            </tr>
+            <tr>
+                <td>Expired</td>
+                <td>:</td>
+                <td>{{ $scheduleDB->finish_date_string }}</td>
             </tr>
         </table>
     </article>
