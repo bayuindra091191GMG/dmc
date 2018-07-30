@@ -132,6 +132,18 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('prorate_details/update', 'TransactionProrateDetailController@update')->name('prorate_details.update');
     Route::post('prorate_details/delete', 'TransactionProrateDetailController@delete')->name('prorate_details.delete');
 
+    //Transaction Private Header
+    Route::get('private/create', 'TransactionPrivateHeaderController@create')->name('transactions.private.create');
+    Route::post('private/store', 'TransactionPrivateHeaderController@store')->name('transactions.private.store');
+    Route::get('private/edit/{prorate}', 'TransactionPrivateHeaderController@edit')->name('transactions.private.edit');
+    Route::put('private/update/{prorate}', 'TransactionPrivateHeaderController@update')->name('transactions.private.update');
+
+    //Transaction Private Details
+    Route::get('private_details', 'TransactionPrivateDetailController@index')->name('private_details');
+    Route::post('private_details/store', 'TransactionPrivateDetailController@store')->name('private_details.store');
+    Route::put('private_details/update', 'TransactionPrivateDetailController@update')->name('private_details.update');
+    Route::post('private_details/delete', 'TransactionPrivateDetailController@delete')->name('private_details.delete');
+
     //Reminders
     Route::get('reminders', 'ReminderController@index')->name('reminders');
     Route::post('reminders/renew', 'ReminderController@renew')->name('reminders.renew');

@@ -25,7 +25,22 @@ class TransactionHeaderTranformer extends TransformerAbstract
         $action = "<a class='btn btn-xs btn-primary' href='". $trxShowUrl."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
         $action .= "<a class='btn btn-xs btn-info' href='". $trxEditUrl."' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
-        $type = $header->type === 1 ? 'NORMAL' : 'PRORATE';
+        if($header->type === 1){
+            $type = 'NORMAL';
+        }
+        else if($header->type === 2){
+            $type = 'PRORATE';
+        }
+        else{
+            $type = 'PRIVATE';
+        }
+
+        if($header->type === 1 || $header->type === 3){
+            $totalPrice = $header->total_price_string;
+        }
+        else{
+            $totalPrice = $header->total_prorate_price_string;
+        }
 
         return[
             'code'              => $header->code,
@@ -33,8 +48,8 @@ class TransactionHeaderTranformer extends TransformerAbstract
             'type'              => $type,
             'date'              => $date,
             'fee'               => $header->registration_fee_string,
-            'total_price'       => $header->type === 1 ? $header->total_price_string : $header->total_prorate_price_string,
-            'total_discount'    => $header->total_discount_string,
+            'total_price'       => $totalPrice,
+//            'total_discount'    => $header->total_discount_string,
             'total_payment'     => $header->total_payment_string,
             'action'            => $action
         ];

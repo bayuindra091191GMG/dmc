@@ -13,6 +13,9 @@
             <a href="{{ route('admin.transactions.prorate.create') }}" class="btn btn-app">
                 <i class="fa fa-plus"></i> Tambah Prorate
             </a>
+            <a href="{{ route('admin.transactions.private.create') }}" class="btn btn-app">
+                <i class="fa fa-plus"></i> Tambah Private
+            </a>
         </div>
         <div class="clearfix"></div>
     </div>
@@ -28,7 +31,7 @@
                     <th class="text-center" style="width: 10%;">Tanggal</th>
                     <th class="text-center" style="width: 10%;">Registration Fee</th>
                     <th class="text-center" style="width: 10%;">Total Harga</th>
-                    <th class="text-center" style="width: 10%;">Total Diskon</th>
+                    {{--<th class="text-center" style="width: 10%;">Total Diskon</th>--}}
                     <th class="text-center" style="width: 10%;">Total Pembayaran</th>
                     <th class="text-center" style="width: 15%;">Tindakan</th>
                 </tr>
@@ -66,7 +69,7 @@
                     { data: 'date', name: 'date', class: 'text-center'},
                     { data: 'fee', name: 'fee', class: 'text-right'},
                     { data: 'total_price', name: 'total_price', class: 'text-right'},
-                    { data: 'total_discount', name: 'total_discount', class: 'text-right'},
+                    // { data: 'total_discount', name: 'total_discount', class: 'text-right'},
                     { data: 'total_payment', name: 'total_payment', class: 'text-right'},
                     { data: 'action', name:'action', orderable: false, searchable: false, class: 'text-center'}
                 ],

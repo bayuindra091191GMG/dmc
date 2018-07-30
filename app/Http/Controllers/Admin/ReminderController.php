@@ -54,7 +54,6 @@ class ReminderController extends Controller
             }
         }
 
-
         return DataTables::of($reminders)
             ->setTransformer(new ReminderTransformer)
             ->addIndexColumn()
@@ -81,7 +80,17 @@ class ReminderController extends Controller
             if($schedule->course->type === 1){
                 $finishDate = Carbon::parse($schedule->finish_date)->addDays($schedule->course->valid);
                 $schedule->finish_date = $finishDate->toDateTimeString();
-                $schedule->meeting_amount += $schedule->course->meeting_amount;
+
+                $remindDate = Carbon::parse($schedule->finish_date)->subDays(5);
+                $realFinishDate = Carbon::parse($schedule->finish_date);
+                $now = Carbon::now('Asia/Jakarta');
+
+                if($now->greaterThanOrEqualTo($remindDate) && $now->lessThanOrEqualTo($realFinishDate)){
+                    $schedule->meeting_amount += $schedule->course->meeting_amount;
+                }
+                else{
+                    $schedule->meeting_amount = $schedule->course->meeting_amount;
+                }
             }
             else{
                 $finishDate = Carbon::parse($schedule->finish_date)->addMonths(1);
@@ -89,6 +98,7 @@ class ReminderController extends Controller
                 $schedule->meeting_amount = 0;
             }
 
+            $schedule->status_id = 2;
             $schedule->save();
 
             Session::flash('message', 'Berhasil memperbarui jadwal customer!');

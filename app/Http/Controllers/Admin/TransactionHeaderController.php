@@ -26,7 +26,7 @@ use PDF;
 class TransactionHeaderController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of transaction.
      *
      * @return \Illuminate\Http\Response
      */
@@ -61,7 +61,7 @@ class TransactionHeaderController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new normal transaction.
      *
      * @return \Illuminate\Http\Response
      */
@@ -85,7 +85,7 @@ class TransactionHeaderController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created normal transaction in storage.
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
