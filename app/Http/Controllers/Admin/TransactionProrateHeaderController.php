@@ -67,15 +67,20 @@ class TransactionProrateHeaderController extends Controller
 
         // Validate transaction number
         if(!$request->filled('auto_number') && (!$request->filled('code') || $request->input('retur_code') == "")){
-            return redirect()->back()->withErrors('Nomor Transaksi wajib diisi!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Nomor transaksi wajib diisi!', 'default')->withInput($request->all());
         }
 
         // Validate details
         $schedules = $request->input('schedule');
+
+        if(empty($schedules) || count($schedules) == 0){
+            return redirect()->back()->withErrors('Detail kelas wajib diisi!', 'default')->withInput($request->all());
+        }
+
         $prorate = $request->input('prorate');
         $prices = $request->input('price');
         $normPrices = $request->input('normal_price');
-        $discounts = $request->input('discount');
+//        $discounts = $request->input('discount');
         $valid = true;
         $i = 0;
         foreach($schedules as $schedule){
@@ -84,9 +89,9 @@ class TransactionProrateHeaderController extends Controller
             if(empty($prices[$i]) || $prices[$i] == '0') $valid = false;
 
             // Validate discount
-            $priceVad = str_replace('.','', $prices[$i]);
-            $discountVad = str_replace('.','', $discounts[$i]);
-            if((double) $discountVad > (double) $priceVad) return redirect()->back()->withErrors('Diskon tidak boleh melebihi harga!', 'default')->withInput($request->all());
+//            $priceVad = str_replace('.','', $prices[$i]);
+//            $discountVad = str_replace('.','', $discounts[$i]);
+//            if((double) $discountVad > (double) $priceVad) return redirect()->back()->withErrors('Diskon tidak boleh melebihi harga!', 'default')->withInput($request->all());
 
             $i++;
         }
@@ -153,7 +158,7 @@ class TransactionProrateHeaderController extends Controller
         // Create transaction detail
         $totalPrice = 0;
         $totalProratePrice = 0;
-        $totalDiscount = 0;
+//        $totalDiscount = 0;
         $totalPayment = 0;
         $idx = 0;
 
@@ -182,7 +187,7 @@ class TransactionProrateHeaderController extends Controller
                     $trxDetail->subtotal = $proratePrice - $discount;
 
                     // Accumulate total discount
-                    $totalDiscount += $discount;
+//                    $totalDiscount += $discount;
                 }
                 else{
                     $trxDetail->subtotal = $proratePrice;
@@ -205,7 +210,7 @@ class TransactionProrateHeaderController extends Controller
             $idx++;
         }
 
-        if($totalDiscount > 0) $trxHeader->total_discount = $totalDiscount;
+//        if($totalDiscount > 0) $trxHeader->total_discount = $totalDiscount;
         $fee = str_replace('.','', $request->input('registration_fee'));
         $totalPayment += (double) $fee;
         $trxHeader->total_price = $totalPrice;

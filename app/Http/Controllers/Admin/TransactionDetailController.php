@@ -76,6 +76,11 @@ class TransactionDetailController extends Controller
             }
             $header->save();
 
+            // Activate related schedule
+            $schedule = $detail->schedule;
+            $schedule->status_id = 3;
+            $schedule->save();
+
             return new JsonResponse($detail);
         }
         catch (\Exception $ex){

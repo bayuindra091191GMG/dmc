@@ -108,7 +108,7 @@ class TransactionHeaderController extends Controller
 
         // Validate transaction number
         if(!$request->filled('auto_number') && (!$request->filled('code') || $request->input('retur_code') == "")){
-            return redirect()->back()->withErrors('Nomor Transaksi wajib diisi!', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Nomor transaksi wajib diisi!', 'default')->withInput($request->all());
         }
 
         // Validate details
@@ -119,7 +119,7 @@ class TransactionHeaderController extends Controller
         $i = 0;
 
 //        if($schedules == null || $schedules->count() == 0){
-        if($schedules == null){
+        if(empty($schedules) || count($schedules) == 0){
             return redirect()->back()->withErrors('Detail kelas wajib diisi!', 'default')->withInput($request->all());
         }
 
@@ -269,7 +269,7 @@ class TransactionHeaderController extends Controller
 //    }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified transaction.
      *
      * @param TransactionHeader $transaction
      * @return \Illuminate\Http\Response
@@ -288,10 +288,10 @@ class TransactionHeaderController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified transaction in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param Coach $coach
+     * @param TransactionHeader $transaction
      * @return mixed
      */
     public function update(Request $request, TransactionHeader $transaction)

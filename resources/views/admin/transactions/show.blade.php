@@ -18,8 +18,10 @@
                 <a class="btn btn-default" href="{{ route('admin.transactions.print',[ 'transaction' => $header->id]) }}" target="_blank">CETAK</a>
                 @if($header->type === 1)
                     <a class="btn btn-default" href="{{ route('admin.transactions.edit',[ 'transaction' => $header->id]) }}">UBAH</a>
-                @else
+                @elseif($header->type === 2)
                     <a class="btn btn-default" href="{{ route('admin.transactions.prorate.edit',[ 'prorate' => $header->id]) }}">UBAH</a>
+                @else
+                    <a class="btn btn-default" href="{{ route('admin.transactions.private.edit',[ 'private' => $header->id]) }}">UBAH</a>
                 @endif
             </div>
         </div>
@@ -43,6 +45,22 @@
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         : {{ $header->code }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        Jenis Transaksi
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        :
+                        @if($header->type === 1)
+                            NORMAL
+                        @elseif($header->type === 2)
+                            PRORATE
+                        @else
+                            PRIVATE
+                        @endif
                     </div>
                 </div>
 
@@ -82,16 +100,8 @@
                     </div>
                 </div>
 
-                @if($header->type === 1)
-                    <div class="form-group">
-                        <label class="col-md-3 col-sm-3 col-xs-12">
-                            Total Harga
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            : Rp {{ $header->total_price_string }}
-                        </div>
-                    </div>
-                @else
+
+                @if($header->type === 2)
                     <div class="form-group">
                         <label class="col-md-3 col-sm-3 col-xs-12">
                             Total harga Prorate
@@ -100,16 +110,25 @@
                             : Rp {{ $header->total_prorate_price_string }}
                         </div>
                     </div>
+                @else
+                    <div class="form-group">
+                        <label class="col-md-3 col-sm-3 col-xs-12">
+                            Total Harga
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            : Rp {{ $header->total_price_string }}
+                        </div>
+                    </div>
                 @endif
 
-                <div class="form-group">
-                    <label class="col-md-3 col-sm-3 col-xs-12">
-                        Total Diskon
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ !empty($header->total_discount) && $header->total_discount > 0 ? 'Rp '. $header->total_discount_string : '-' }}
-                    </div>
-                </div>
+                {{--<div class="form-group">--}}
+                    {{--<label class="col-md-3 col-sm-3 col-xs-12">--}}
+                        {{--Total Diskon--}}
+                    {{--</label>--}}
+                    {{--<div class="col-md-6 col-sm-6 col-xs-12">--}}
+                        {{--: {{ !empty($header->total_discount) && $header->total_discount > 0 ? 'Rp '. $header->total_discount_string : '-' }}--}}
+                    {{--</div>--}}
+                {{--</div>--}}
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
@@ -130,6 +149,47 @@
                                 <thead>
                                 <tr >
                                     @if($header->type === 1)
+                                        <th class="text-center" style="width: 20%">
+                                            Kelas
+                                        </th>
+                                        <th class="text-center" style="width: 20%">
+                                            Trainer
+                                        </th>
+                                        <th class="text-center" style="width: 15%">
+                                            Hari
+                                        </th>
+                                        <th class="text-center" style="width: 15%">
+                                            Harga
+                                        </th>
+                                        {{--<th class="text-center" style="width: 10%">--}}
+                                            {{--Diskon--}}
+                                        {{--</th>--}}
+                                        <th class="text-center" style="width: 15%">
+                                            Subtotal
+                                        </th>
+                                    @elseif($header->type === 2)
+                                        <th class="text-center" style="width: 15%">
+                                            Kelas
+                                        </th>
+                                        <th class="text-center" style="width: 15%">
+                                            Trainer
+                                        </th>
+                                        <th class="text-center" style="width: 10%">
+                                            Hari
+                                        </th>
+                                        <th class="text-center" style="width: 15%">
+                                            Prorate
+                                        </th>
+                                        <th class="text-center" style="width: 15%">
+                                            Harga Prorate
+                                        </th>
+                                        {{--<th class="text-center" style="width: 10%">--}}
+                                            {{--Diskon--}}
+                                        {{--</th>--}}
+                                        <th class="text-center" style="width: 15%">
+                                            Subtotal
+                                        </th>
+                                    @else
                                         <th class="text-center" style="width: 15%">
                                             Kelas
                                         </th>
@@ -143,29 +203,7 @@
                                             Harga
                                         </th>
                                         <th class="text-center" style="width: 10%">
-                                            Diskon
-                                        </th>
-                                        <th class="text-center" style="width: 15%">
-                                            Subtotal
-                                        </th>
-                                    @else
-                                        <th class="text-center" style="width: 10%">
-                                            Kelas
-                                        </th>
-                                        <th class="text-center" style="width: 15%">
-                                            Trainer
-                                        </th>
-                                        <th class="text-center" style="width: 10%">
-                                            Hari
-                                        </th>
-                                        <th class="text-center" style="width: 10%">
-                                            Prorate
-                                        </th>
-                                        <th class="text-center" style="width: 15%">
-                                            Harga Prorate
-                                        </th>
-                                        <th class="text-center" style="width: 10%">
-                                            Diskon
+                                            Jumlah Pertemuan
                                         </th>
                                         <th class="text-center" style="width: 15%">
                                             Subtotal
@@ -190,13 +228,13 @@
                                             <td class="text-right">
                                                 {{ $detail->price_string }}
                                             </td>
-                                            <td class="text-right">
-                                                {{ $detail->discount_string ?? '0' }}
-                                            </td>
+                                            {{--<td class="text-right">--}}
+                                                {{--{{ $detail->discount_string ?? '0' }}--}}
+                                            {{--</td>--}}
                                             <td class="text-right">
                                                 {{ $detail->subtotal_string }}
                                             </td>
-                                        @else
+                                        @elseif($header->type === 2)
                                             <td class="text-center">
                                                 {{ $detail->schedule->course->name }}
                                             </td>
@@ -212,8 +250,27 @@
                                             <td class="text-right">
                                                 {{ $detail->prorate_price_string }}
                                             </td>
+                                            {{--<td class="text-right">--}}
+                                                {{--{{ $detail->discount_string ?? '0' }}--}}
+                                            {{--</td>--}}
                                             <td class="text-right">
-                                                {{ $detail->discount_string ?? '0' }}
+                                                {{ $detail->subtotal_string }}
+                                            </td>
+                                        @else
+                                            <td class="text-center">
+                                                {{ $detail->schedule->course->name }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $detail->schedule->course->coach->name }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $detail->schedule->day }}
+                                            </td>
+                                            <td class="text-right">
+                                                {{ $detail->price_string }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $detail->meeting_amount }}
                                             </td>
                                             <td class="text-right">
                                                 {{ $detail->subtotal_string }}

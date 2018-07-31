@@ -1,11 +1,9 @@
 @extends('admin.layouts.admin')
 
-{{--@section('title','Buat Retur Baru')--}}
-
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-            <h2>Ubah Transaksi {{ $header->code }}</h2>
+            <h2>Ubah Transaksi Private {{ $header->code }}</h2>
             <hr/>
         </div>
     </div>
@@ -88,21 +86,24 @@
                         <table class="table table-bordered table-hover" id="detail_table">
                             <thead>
                             <tr>
-                                <th class="text-center" style="width: 15%">
+                                <th class="text-center" style="width: 20%">
                                     Kelas
                                 </th>
-                                <th class="text-center" style="width: 15%">
+                                <th class="text-center" style="width: 20%">
                                     Trainer
                                 </th>
-                                <th class="text-center" style="width: 15%">
-                                    Hari
-                                </th>
+                                {{--<th class="text-center" style="width: 15%">--}}
+                                    {{--Hari--}}
+                                {{--</th>--}}
                                 <th class="text-center" style="width: 15%">
                                     Harga
                                 </th>
-                                <th class="text-center" style="width: 10%">
-                                    Diskon
+                                <th class="text-center" style="width: 15%">
+                                    Jumlah Pertemuan
                                 </th>
+                                {{--<th class="text-center" style="width: 10%">--}}
+                                    {{--Diskon--}}
+                                {{--</th>--}}
                                 <th class="text-center" style="width: 15%">
                                     Subtotal
                                 </th>
@@ -116,14 +117,15 @@
                                 <tr class="item{{ $detail->id }}">
                                     <td class="text-center">{{ $detail->schedule->course->name }}</td>
                                     <td class="text-center">{{ $detail->schedule->course->coach->name }}</td>
-                                    <td class="text-center">{{ $detail->schedule->day }}</td>
+                                    {{--<td class="text-center">{{ $detail->schedule->day }}</td>--}}
                                     <td class="text-right">{{ $detail->price_string }}</td>
-                                    <td class="text-right">{{ $detail->discount_string ?? '0' }}</td>
+                                    <td class="text-center">{{ $detail->meeting_amount }}</td>
+                                    {{--<td class="text-right">{{ $detail->discount_string ?? '0' }}</td>--}}
                                     <td class="text-right">{{ $detail->subtotal_string }}</td>
                                     <td class="text-center">
                                         @php( $scheduleValue = $detail->schedule->id. '#'. $detail->schedule->course->name. '#'. $detail->schedule->course->coach->name. '#'. $detail->schedule->day. '#'. $detail->schedule->course->price )
-                                        <a class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-schedule="{{ $scheduleValue }}" data-price="{{ $detail->price }}" data-discount="{{ $detail->discount }}"><span class="glyphicon glyphicon-edit"></span></a>
-                                        {{--<a class="delete-modal btn btn-danger" data-id="{{ $detail->id }}" data-schedule="{{ $scheduleValue }}" data-price="{{ $detail->price }}" data-discount="{{ $detail->discount }}"><span class="glyphicon glyphicon-trash"></span></a>--}}
+                                        <a class="edit-modal btn btn-info" data-id="{{ $detail->id }}" data-schedule="{{ $scheduleValue }}" data-price="{{ $detail->price }}" data-meeting-amount="{{ $detail->meeting_amount }}"><span class="glyphicon glyphicon-edit"></span></a>
+                                        {{--<a class="delete-modal btn btn-danger" data-id="{{ $detail->id }}" data-schedule="{{ $scheduleValue }}" data-price="{{ $detail->price }}" data-meeting-amount="{{ $detail->meeting_amount }}"><span class="glyphicon glyphicon-trash"></span></a>--}}
                                     </td>
                                 </tr>
                             @endforeach
@@ -166,11 +168,17 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="discount_add">Diskon:</label>
+                            <label class="control-label col-sm-2" for="meeting_amount_add">Jumlah Pertemuan:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="discount_add" name="discount_add">
+                                <input type="text" class="form-control" id="meeting_amount_add" name="meeting_amount_add">
                             </div>
                         </div>
+                        {{--<div class="form-group">--}}
+                            {{--<label class="control-label col-sm-2" for="discount_add">Diskon:</label>--}}
+                            {{--<div class="col-sm-10">--}}
+                                {{--<input type="text" class="form-control" id="discount_add" name="discount_add">--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
@@ -217,11 +225,17 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="discount_edit">Diskon:</label>
+                            <label class="control-label col-sm-2" for="meeting_amount_edit">Jumlah Pertemuan:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="discount_edit" name="discount_edit">
+                                <input type="text" class="form-control" id="meeting_amount_edit" name="meeting_amount_edit">
                             </div>
                         </div>
+                        {{--<div class="form-group">--}}
+                            {{--<label class="control-label col-sm-2" for="discount_edit">Diskon:</label>--}}
+                            {{--<div class="col-sm-10">--}}
+                                {{--<input type="text" class="form-control" id="discount_edit" name="discount_edit">--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
@@ -258,6 +272,12 @@
                             <label class="control-label col-sm-2" for="trainer_delete">Trainer:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="trainer_delete" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="meeting_amount_delete">Jumlah Pertemuan:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="meeting_amount_delete" name="meeting_amount_delete" readonly>
                             </div>
                         </div>
                         <input type="hidden" name="deleted_id"/>
@@ -306,19 +326,10 @@
         });
 
         // Add autonumeric
-        regisrationFeeFormat = new AutoNumeric('#registration_fee', {
-            decimalCharacter: ',',
-            digitGroupSeparator: '.',
-            minimumValue: '0',
-            decimalPlaces: 0
-        });
-
-        regisrationFeeFormat.clear();
-
         var fee = '{{ $header->registration_fee }}';
         var feeClean = fee.replace(/\./g,'');
 
-        regisrationFeeFormat.set(feeClean, {
+        regisrationFeeFormat = new AutoNumeric('#registration_fee', feeClean, {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
             minimumValue: '0',
@@ -339,17 +350,31 @@
             decimalPlaces: 0
         });
 
-        discountAddFormat = new AutoNumeric('#discount_add', {
-            decimalCharacter: ',',
-            digitGroupSeparator: '.',
+        // discountAddFormat = new AutoNumeric('#discount_add', {
+        //     decimalCharacter: ',',
+        //     digitGroupSeparator: '.',
+        //     minimumValue: '0',
+        //     decimalPlaces: 0
+        // });
+        //
+        // discountEditFormat = new AutoNumeric('#discount_edit', {
+        //     decimalCharacter: ',',
+        //     digitGroupSeparator: '.',
+        //     minimumValue: '0',
+        //     decimalPlaces: 0
+        // });
+
+        meetingAmountAddFormat = new AutoNumeric('#meeting_amount_add', {
+            maximumValue: '99',
             minimumValue: '0',
+            digitGroupSeparator: '',
             decimalPlaces: 0
         });
 
-        discountEditFormat = new AutoNumeric('#discount_edit', {
-            decimalCharacter: ',',
-            digitGroupSeparator: '.',
+        meetingAmountEditFormat = new AutoNumeric('#meeting_amount_edit', {
+            maximumValue: '99',
             minimumValue: '0',
+            digitGroupSeparator: '',
             decimalPlaces: 0
         });
 
@@ -403,7 +428,8 @@
         $('.modal-footer').on('click', '.add', function() {
             var scheduleAdd = $('#schedule_add').val();
             var priceAdd = $('#price_add').val();
-            var discountAdd = $('#discount_add').val();
+            // var discountAdd = $('#discount_add').val();
+            var meetingAdd = $('#meeting_amount_add').val();
 
             // Validate schedule
             if(!scheduleAdd || scheduleAdd === ""){
@@ -413,18 +439,24 @@
 
             // Validate price
             if(!priceAdd || priceAdd === "" || priceAdd === "0"){
-                alert('Mohon isi harga!')
+                alert('Mohon isi harga!');
+                return false;
+            }
+
+            // Validate meeting amount
+            if(!meetingAdd || meetingAdd === "" || meetingAdd === "0"){
+                alert('Mohon isi jumlah pertemuan!');
                 return false;
             }
 
             $.ajax({
                 type: 'POST',
-                url: '{{ route('admin.transaction_details.store') }}',
+                url: '{{ route('admin.private_details.store') }}',
                 data: {
                     '_token': $('input[name=_token]').val(),
                     'header_id': '{{ $header->id }}',
                     'schedule': scheduleAdd,
-                    'discount': discountAdd
+                    'meeting': meetingAdd
                 },
                 success: function(data) {
                     $('.errorSchedule').addClass('hidden');
@@ -458,17 +490,17 @@
                             var priceClean = priceAdd.replace(/\./g,'');
                             price = parseFloat(priceClean);
                         }
-                        var discount = 0;
-                        if(discountAdd && discountAdd !== "" && discountAdd !== "0"){
-                            var discountClean = discountAdd.replace(/\./g,'');
-                            discount = parseFloat(discountClean);
-
-                            // Validate discount
-                            if(discount > price){
-                                alert('Diskon tidak boleh melebihi harga!')
-                                return false;
-                            }
-                        }
+                        // var discount = 0;
+                        // if(discountAdd && discountAdd !== "" && discountAdd !== "0"){
+                        //     var discountClean = discountAdd.replace(/\./g,'');
+                        //     discount = parseFloat(discountClean);
+                        //
+                        //     // Validate discount
+                        //     if(discount > price){
+                        //         alert('Diskon tidak boleh melebihi harga!')
+                        //         return false;
+                        //     }
+                        // }
 
                         // Increase idx
                         var idx = $('#index_counter').val();
@@ -478,32 +510,36 @@
                         var sbAdd = new stringbuilder();
 
                         sbAdd.append("<tr class='item" + data.id + "'>");
-                        sbAdd.append("<td class='text-center'>" + splitted[1] + "</td>");
+                        sbAdd.append("<td class='text-center'>" + splitted[1] + "</td>")
                         sbAdd.append("<td class='text-center'>" + splitted[2] + "</td>");
-                        sbAdd.append("<td class='text-center'>" + splitted[3] + "</td>");
+                        // sbAdd.append("<td class='text-center'>" + splitted[3] + "</td>");
                         sbAdd.append("<td class='text-right'>" + priceAdd + "</td>");
+                        sbAdd.append("<td class='text-center'>" + meetingAdd + "</td>");
 
-                        if(discount > 0){
-                            sbAdd.append("<td class='text-right'>" + discountAdd + "<input type='hidden' name='discount[]' value='" + discountAdd + "'/></td>");
-                        }
-                        else{
-                            sbAdd.append("<td class='text-right'>0<input type='hidden' name='discount[]' value='0'/></td>");
-                        }
+                        var meetingAddInt = parseInt(meetingAdd);
+                        var subtotal = meetingAddInt * price;
 
-                        var subtotal = 0;
-                        if(discount > 0){
-                            subtotal = price - discount;
-                        }
-                        else{
-                            subtotal = price;
-                        }
+                        // if(discount > 0){
+                        //     sbAdd.append("<td class='text-right'>" + discountAdd + "<input type='hidden' name='discount[]' value='" + discountAdd + "'/></td>");
+                        // }
+                        // else{
+                        //     sbAdd.append("<td class='text-right'>0<input type='hidden' name='discount[]' value='0'/></td>");
+                        // }
+                        //
+                        // var subtotal = 0;
+                        // if(discount > 0){
+                        //     subtotal = price - discount;
+                        // }
+                        // else{
+                        //     subtotal = price;
+                        // }
                         var subtotalString = rupiahFormat(subtotal);
 
                         sbAdd.append("<td class='text-right'>" + subtotalString + "<input type='hidden' value='" + subtotalString + "'/></td>");
 
                         sbAdd.append("<td class='text-center'>");
-                        sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-schedule='" + scheduleAdd + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-edit'></span></a>");
-                        // sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-schedule='" + scheduleAdd + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-trash'></span></a>");
+                        sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-schedule='" + scheduleAdd + "' data-price='" + price + "' data-meeting-amount='" + meetingAdd + "'><span class='glyphicon glyphicon-edit'></span></a>");
+                        // sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-schedule='" + scheduleAdd + "' data-price='" + price + "' data-meeting-amount='" + meetingAdd + "'><span class='glyphicon glyphicon-trash'></span></a>");
                         sbAdd.append("</td>");
                         sbAdd.append("</tr>");
 
@@ -513,7 +549,8 @@
                         $('#schedule_add').val(null).trigger('change');
                         $('#trainer_add').val('');
                         priceAddFormat.clear();
-                        $('#discount_add').val('');
+                        // $('#discount_add').val('');
+                        meetingAmountAddFormat.clear();
                     }
                 },
             });
@@ -524,7 +561,8 @@
             $('#schedule_add').val(null).trigger('change');
             $('#trainer_add').val('');
             priceAddFormat.clear();
-            $('#discount_add').val('');
+            // $('#discount_add').val('');
+            meetingAmountAddFormat.clear();
         });
 
         // Edit detail
@@ -583,22 +621,30 @@
                 decimalPlaces: 0
             });
 
-            discountEditFormat.clear();
-            discountEditFormat.set($(this).data('discount'), {
-                decimalCharacter: ',',
-                digitGroupSeparator: '.',
-                minimumValue: '0',
-                decimalPlaces: 0
-            });
+            // discountEditFormat.clear();
+            // discountEditFormat.set($(this).data('discount'), {
+            //     decimalCharacter: ',',
+            //     digitGroupSeparator: '.',
+            //     minimumValue: '0',
+            //     decimalPlaces: 0
+            // });
 
             $('#trainer_edit').val(splitted[2]);
+            $('#meeting_amount_edit').val($(this).data('meeting-amount'));
             $('#editModal').modal('show');
         });
         $('.modal-footer').on('click', '.edit', function() {
             var scheduleEdit = $('#schedule_edit').val();
             var priceEdit = $('#price_edit').val();
-            var discountEdit = $('#discount_edit').val();
+            // var discountEdit = $('#discount_edit').val();
+            var meetingEdit = $('#meeting_amount_edit').val();
             var editedRowId = $('#edited_row_id').val();
+
+            // Validate meeting amount
+            if(!meetingEdit || meetingEdit === "" || meetingEdit === "0"){
+                alert('Mohon isi jumlah pertemuan!');
+                return false;
+            }
 
             var scheduleValue = '';
             if(scheduleEdit && scheduleEdit !== '-1'){
@@ -610,12 +656,12 @@
 
             $.ajax({
                 type: 'PUT',
-                url: '{{ route('admin.transaction_details.update') }}',
+                url: '{{ route('admin.private_details.update') }}',
                 data: {
                     '_token': $('input[name=_token]').val(),
                     'id' : editedRowId,
                     'schedule': scheduleEdit,
-                    'discount': $('#discount_edit').val()
+                    'meeting': meetingEdit
                 },
                 success: function(data) {
                     $('.errorSchedule').addClass('hidden');
@@ -650,47 +696,51 @@
                             var priceClean = priceEdit.replace(/\./g,'');
                             price = parseFloat(priceClean);
                         }
-                        var discount = 0;
-                        if(discountEdit && discountEdit !== "" && discountEdit !== "0"){
-                            var discountClean = discountEdit.replace(/\./g,'');
-                            discount = parseFloat(discountClean);
-
-                            // Validate discount
-                            if(discount > price){
-                                alert('Diskon tidak boleh melebihi harga!')
-                                return false;
-                            }
-                        }
+                        // var discount = 0;
+                        // if(discountEdit && discountEdit !== "" && discountEdit !== "0"){
+                        //     var discountClean = discountEdit.replace(/\./g,'');
+                        //     discount = parseFloat(discountClean);
+                        //
+                        //     // Validate discount
+                        //     if(discount > price){
+                        //         alert('Diskon tidak boleh melebihi harga!')
+                        //         return false;
+                        //     }
+                        // }
 
                         var sbEdit = new stringbuilder();
 
                         sbEdit.append("<tr class='item" + editedRowId + "'>");
                         sbEdit.append("<td class='text-center'>" + splitted[1] + "<input type='hidden' name='schedule[]'  value='" + splitted[0] + "'/>")
                         sbEdit.append("<td class='text-center'>" + splitted[2] + "</td>");
-                        sbEdit.append("<td class='text-center'>" + splitted[3] + "</td>");
-                        sbEdit.append("<td class='text-right'>" + priceEdit + "<input type='hidden' name='price[]' value='" + priceEdit + "'/></td>");
+                        // sbEdit.append("<td class='text-center'>" + splitted[3] + "</td>");
+                        sbEdit.append("<td class='text-right'>" + priceEdit + "</td>");
+                        sbEdit.append("<td class='text-center'>" + meetingEdit + "</td>");
 
-                        if(discount > 0){
-                            sbEdit.append("<td class='text-right'>" + discountEdit + "<input type='hidden' name='discount[]' value='" + discountEdit + "'/></td>");
-                        }
-                        else{
-                            sbEdit.append("<td class='text-right'>0<input type='hidden' name='discount[]' value='0'/></td>");
-                        }
+                        // if(discount > 0){
+                        //     sbEdit.append("<td class='text-right'>" + discountEdit + "<input type='hidden' name='discount[]' value='" + discountEdit + "'/></td>");
+                        // }
+                        // else{
+                        //     sbEdit.append("<td class='text-right'>0<input type='hidden' name='discount[]' value='0'/></td>");
+                        // }
+                        //
+                        // var subtotal = 0;
+                        // if(discount > 0){
+                        //     subtotal = price - discount;
+                        // }
+                        // else{
+                        //     subtotal = price;
+                        // }
 
-                        var subtotal = 0;
-                        if(discount > 0){
-                            subtotal = price - discount;
-                        }
-                        else{
-                            subtotal = price;
-                        }
+                        var meetingEditInt = parseInt(meetingEdit);
+                        var subtotal = meetingEditInt * price;
                         var subtotalString = rupiahFormat(subtotal);
 
                         sbEdit.append("<td class='text-right'>" + subtotalString + "<input type='hidden' value='" + subtotalString + "'/></td>");
 
                         sbEdit.append("<td class='text-center'>");
-                        sbEdit.append("<a class='edit-modal btn btn-info' data-id='" + editedRowId + "' data-schedule='" + scheduleValue + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-edit'></span></a>");
-                        // sbEdit.append("<a class='delete-modal btn btn-danger' data-id='" + editedRowId + "' data-schedule='" + scheduleValue + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-trash'></span></a>");
+                        sbEdit.append("<a class='edit-modal btn btn-info' data-id='" + editedRowId + "' data-schedule='" + scheduleValue + "' data-price='" + price + "' data-meeting-amount='" + meetingEdit + "'><span class='glyphicon glyphicon-edit'></span></a>");
+                        // sbEdit.append("<a class='delete-modal btn btn-danger' data-id='" + editedRowId + "' data-schedule='" + scheduleValue + "' data-price='" + price + "' data-meeting-amount='" + meetingEdit + "'><span class='glyphicon glyphicon-trash'></span></a>");
                         sbEdit.append("</td>");
                         sbEdit.append("</tr>");
 
@@ -700,8 +750,9 @@
                         $('#edited_row_id').val('');
                         $('#schedule_edit').val(null).trigger('change');
                         $('#trainer_edit').val('');
-                        $('#price_edit').val('');
-                        $('#discount_edit').val('');
+                        priceEditFormat.clear();
+                        meetingAmountEditFormat.clear();
+                        // $('#discount_edit').val('');
                     }
                 }
             });
@@ -712,8 +763,9 @@
             $('#edited_row_id').val('');
             $('#schedule_edit').val(null).trigger('change');
             $('#trainer_edit').val('');
-            $('#price_edit').val('');
-            $('#discount_edit').val('');
+            priceEditFormat.clear();
+            meetingAmountEditFormat.clear();
+            // $('#discount_edit').val('');
         });
 
         // Delete detail
@@ -725,22 +777,33 @@
             var splitted = scheduleDelete.split('#');
             $('#schedule_delete').val(splitted[1]);
             $('#trainer_delete').val(splitted[2]);
+            $('#meeting_amount_delete').val($(this).data('meeting-amount'))
             $('#deleteModal').modal('show');
         });
         $('.modal-footer').on('click', '.delete', function() {
             $.ajax({
                 type: 'POST',
-                url: '{{ route('admin.transaction_details.delete') }}',
+                url: '{{ route('admin.private_details.delete') }}',
                 data: {
                     '_token': $('input[name=_token]').val(),
                     'detail_id': deletedId,
                     'header_id': '{{ $header->id }}'
                 },
                 success: function(data) {
+
                     if ((data.errors)){
-                        setTimeout(function () {
-                            toastr.error('Gagal hapus detail!', 'Peringatan', {timeOut: 5000});
-                        }, 500);
+                        if(data.errors === 'USED'){
+                            setTimeout(function () {
+                                $('#editModal').modal('show');
+                                toastr.error('Jadwal sudah berjalan!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                            }, 500);
+                        }
+                        else{
+                            setTimeout(function () {
+                                toastr.error('Gagal hapus detail!', 'Peringatan', {timeOut: 5000});
+                            }, 500);
+                        }
+
                     }
                     else{
                         toastr.success('Berhasil menghapus detail!', 'Sukses', {timeOut: 5000});

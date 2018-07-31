@@ -83,8 +83,7 @@ class TransactionPrivateHeaderController extends Controller
         $valid = true;
         $i = 0;
 
-//        if($schedules == null || $schedules->count() == 0){
-        if(empty($schedules)){
+        if(empty($schedules) || count($schedules) == 0){
             return redirect()->back()->withErrors('Detail kelas wajib diisi!', 'default')->withInput($request->all());
         }
 
@@ -178,6 +177,7 @@ class TransactionPrivateHeaderController extends Controller
                     'schedule_id'           => $schedule,
                     'day'                   => $scheduleObj->day,
                     'meeting_attendeds'     => 0,
+                    'meeting_amount'        => $meeting,
                     'price'                 => $price
                 ]);
 
@@ -227,5 +227,67 @@ class TransactionPrivateHeaderController extends Controller
         Session::flash('message', 'Berhasil membuat transaksi!');
 
         return redirect()->route('admin.transactions.show', ['transaction' => $trxHeader]);
+    }
+
+    /**
+     * Show the form for editing the specified private transaction.
+     *
+     * @param TransactionHeader $private
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(TransactionHeader $private)
+    {
+        $header = $private;
+        $date = Carbon::parse($header->date)->format('d M Y');
+
+        $data = [
+            'header'    => $header,
+            'date'      => $date
+        ];
+
+        return view('admin.transactions.private.edit')->with($data);
+    }
+
+    /**
+     * Update the specified private transaction in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param TransactionHeader $transaction
+     * @return mixed
+     */
+    public function update(Request $request, TransactionHeader $transaction)
+    {
+        $validator = Validator::make($request->all(),[
+            'date'              => 'required',
+            'registration_fee'  => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $user = Auth::user();
+        $now = Carbon::now('Asia/Jakarta');
+
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+        $transaction->date = $date->toDateTimeString();
+
+        $oldRegFee = $transaction->registration_fee;
+        $regFeeStr = str_replace('.','', $request->input('registration_fee'));
+        $regFee = (double) $regFeeStr;
+        $transaction->registration_fee = $regFee;
+        $transaction->total_payment = $transaction->total_payment - $oldRegFee + $regFee;
+
+        $transaction->updated_by = $user->id;
+        $transaction->updated_at = $now->toDateTimeString();
+
+        $transaction->save();
+
+        Session::flash('message', 'Berhasil mengubah transaksi!');
+
+        return redirect()->route('admin.transactions.show', ['transaction' => $transaction]);
     }
 }

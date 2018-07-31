@@ -59,11 +59,11 @@
                         <table class="table table-condensed" style="font-size: 12px;">
                             <thead>
                             <tr>
-                                <td><strong>Kelas</strong></td>
+                                <td class="text-center"><strong>Kelas</strong></td>
                                 <td class="text-center"><strong>Trainer</strong></td>
                                 <td class="text-center"><strong>Tanggal Berlaku</strong></td>
-                                <td class="text-center"><strong>Jumlah Pertemuan</strong></td>
-                                <td class="text-center"><strong>Price</strong></td>
+                                <td class="text-center"><strong>Jumlah {{ $header->type === 2 ? 'Prorate' : 'Pertemuan' }}</strong></td>
+                                <td class="text-center"><strong>Harga</strong></td>
                                 {{--<td class="text-center"><strong>Diskon</strong></td>--}}
                                 <td class="text-center"><strong>Subtotal</strong></td>
                             </tr>
@@ -72,7 +72,7 @@
                             <!-- foreach ($order->lineItems as $line) or some such thing here -->
                             @php($total = $header->registration_fee)
                             @foreach($header->transaction_details as $detail)
-                                @php( $total+= $detail->subtotal )
+                                @php( $total += $detail->subtotal )
                                 <tr>
                                     <td>{{ $detail->schedule->course->name }}</td>
                                     <td class="text-center">
@@ -83,8 +83,14 @@
                                         @endif
                                     </td>
                                     <td class="text-center">{{ $detail->schedule->start_date_number }} - {{ $detail->schedule->finish_date_number }}</td>
-                                    <td class="text-center">{{ $detail->schedule->meeting_amount ?? 'bebas' }}</td>
-                                    <td class="text-right">Rp{{ $detail->price_string }}</td>
+
+                                    @if($header->type === 1 || $header->type === 2)
+                                        <td class="text-center">{{ $detail->schedule->meeting_amount ?? 'BEBAS' }}</td>
+                                    @else
+                                        <td class="text-center">{{ $detail->meeting_amount }}</td>
+                                    @endif
+
+                                    <td class="text-right">Rp{{ $header->type === 2 ? $detail->prorate_price_string : $detail->price_string }}</td>
                                     {{--<td class="text-right">Rp{{ $detail->discount_string }}</td>--}}
                                     <td class="text-right">Rp{{ $detail->subtotal_string }}</td>
                                 </tr>

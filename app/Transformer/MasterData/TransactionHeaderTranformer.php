@@ -20,20 +20,22 @@ class TransactionHeaderTranformer extends TransformerAbstract
         $date = Carbon::parse($header->date)->format('d M Y');
 
         $trxShowUrl = route('admin.transactions.show', ['transaction' => $header->id]);
-        $trxEditUrl = route('admin.transactions.edit', ['transaction' => $header->id]);
-
-        $action = "<a class='btn btn-xs btn-primary' href='". $trxShowUrl."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
-        $action .= "<a class='btn btn-xs btn-info' href='". $trxEditUrl."' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
         if($header->type === 1){
             $type = 'NORMAL';
+            $trxEditUrl = route('admin.transactions.edit', ['transaction' => $header->id]);
         }
         else if($header->type === 2){
             $type = 'PRORATE';
+            $trxEditUrl = route('admin.transactions.prorate.edit', ['prorate' => $header->id]);
         }
         else{
             $type = 'PRIVATE';
+            $trxEditUrl = route('admin.transactions.private.edit', ['private' => $header->id]);
         }
+
+        $action = "<a class='btn btn-xs btn-primary' href='". $trxShowUrl."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
+        $action .= "<a class='btn btn-xs btn-info' href='". $trxEditUrl."' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
         if($header->type === 1 || $header->type === 3){
             $totalPrice = $header->total_price_string;

@@ -484,7 +484,7 @@
         $('.modal-footer').on('click', '.add', function() {
             var scheduleAdd = $('#schedule_add').val();
             var priceAdd = $('#price_add').val();
-            var discountAdd = $('#discount_add').val();
+            // var discountAdd = $('#discount_add').val();
             var meetingAdd = $('#meeting_amount_add').val();
 
             // Validate schedule
@@ -495,7 +495,13 @@
 
             // Validate price
             if(!priceAdd || priceAdd === "" || priceAdd === "0"){
-                alert('Mohon isi harga!')
+                alert('Mohon isi harga!');
+                return false;
+            }
+
+            // Validate meeting amount
+            if(!meetingAdd || meetingAdd === "" || meetingAdd === "0"){
+                alert('Mohon isi jumlah pertemuan!');
                 return false;
             }
 
@@ -508,17 +514,17 @@
                 var priceClean = priceAdd.replace(/\./g,'');
                 price = parseFloat(priceClean);
             }
-            var discount = 0;
-            if(discountAdd && discountAdd !== "" && discountAdd !== "0"){
-                var discountClean = discountAdd.replace(/\./g,'');
-                discount = parseFloat(discountClean);
-
-                // Validate discount
-                if(discount > price){
-                    alert('Diskon tidak boleh melebihi harga!')
-                    return false;
-                }
-            }
+            // var discount = 0;
+            // if(discountAdd && discountAdd !== "" && discountAdd !== "0"){
+            //     var discountClean = discountAdd.replace(/\./g,'');
+            //     discount = parseFloat(discountClean);
+            //
+            //     // Validate discount
+            //     if(discount > price){
+            //         alert('Diskon tidak boleh melebihi harga!')
+            //         return false;
+            //     }
+            // }
 
             // Increase idx
             var idx = $('#index_counter').val();
@@ -660,6 +666,12 @@
                 return false;
             }
 
+            // Validate meeting amount
+            if(!meetingEdit || meetingEdit === "" || meetingEdit === "0"){
+                alert('Mohon isi jumlah pertemuan!');
+                return false;
+            }
+
             var scheduleValue = '';
             if(scheduleEdit && scheduleEdit !== '-1'){
                 scheduleValue = scheduleEdit;
@@ -696,7 +708,7 @@
             sbEdit.append("<td class='text-center'>" + splitted[2] + "</td>");
             // sbEdit.append("<td class='text-center'>" + splitted[3] + "</td>");
             sbEdit.append("<td class='text-right'>" + priceEdit + "<input type='hidden' name='price[]' value='" + priceEdit + "'/></td>");
-            sbAdd.append("<td class='text-center'>" + meetingEdit + "<input type='hidden' name='meeting_amount[]' value='" + meetingEdit + "'/></td>");
+            sbEdit.append("<td class='text-center'>" + meetingEdit + "<input type='hidden' name='meeting_amount[]' value='" + meetingEdit + "'/></td>");
 
             // if(discount > 0){
             //     sbEdit.append("<td class='text-right'>" + discountEdit + "<input type='hidden' name='discount[]' value='" + discountEdit + "'/></td>");
