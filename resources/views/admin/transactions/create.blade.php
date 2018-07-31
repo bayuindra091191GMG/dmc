@@ -95,10 +95,10 @@
                             <table class="table table-bordered table-hover" id="detail_table">
                                 <thead>
                                 <tr>
-                                    <th class="text-center" style="width: 15%">
+                                    <th class="text-center" style="width: 20%">
                                         Kelas
                                     </th>
-                                    <th class="text-center" style="width: 15%">
+                                    <th class="text-center" style="width: 20%">
                                         Trainer
                                     </th>
                                     <th class="text-center" style="width: 15%">
@@ -107,9 +107,9 @@
                                     <th class="text-center" style="width: 15%">
                                         Harga
                                     </th>
-                                    <th class="text-center" style="width: 10%">
-                                        Diskon
-                                    </th>
+                                    {{--<th class="text-center" style="width: 10%">--}}
+                                        {{--Diskon--}}
+                                    {{--</th>--}}
                                     <th class="text-center" style="width: 15%">
                                         Subtotal
                                     </th>
@@ -169,12 +169,12 @@
                                 <input type="text" class="form-control" id="price_add" name="price_add" readonly>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="discount_add">Diskon:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="discount_add" name="discount_add">
-                            </div>
-                        </div>
+                        {{--<div class="form-group">--}}
+                            {{--<label class="control-label col-sm-2" for="discount_add">Diskon:</label>--}}
+                            {{--<div class="col-sm-10">--}}
+                                {{--<input type="text" class="form-control" id="discount_add" name="discount_add">--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
@@ -219,12 +219,12 @@
                                 <input type="text" class="form-control" id="price_edit" name="price_edit" readonly>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="discount_edit">Diskon:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="discount_edit" name="discount_edit">
-                            </div>
-                        </div>
+                        {{--<div class="form-group">--}}
+                            {{--<label class="control-label col-sm-2" for="discount_edit">Diskon:</label>--}}
+                            {{--<div class="col-sm-10">--}}
+                                {{--<input type="text" class="form-control" id="discount_edit" name="discount_edit">--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
@@ -384,19 +384,19 @@
             decimalPlaces: 0
         });
 
-        discountAddFormat = new AutoNumeric('#discount_add', {
-            decimalCharacter: ',',
-            digitGroupSeparator: '.',
-            minimumValue: '0',
-            decimalPlaces: 0
-        });
-
-        discountEditFormat = new AutoNumeric('#discount_edit', {
-            decimalCharacter: ',',
-            digitGroupSeparator: '.',
-            minimumValue: '0',
-            decimalPlaces: 0
-        });
+        // discountAddFormat = new AutoNumeric('#discount_add', {
+        //     decimalCharacter: ',',
+        //     digitGroupSeparator: '.',
+        //     minimumValue: '0',
+        //     decimalPlaces: 0
+        // });
+        //
+        // discountEditFormat = new AutoNumeric('#discount_edit', {
+        //     decimalCharacter: ',',
+        //     digitGroupSeparator: '.',
+        //     minimumValue: '0',
+        //     decimalPlaces: 0
+        // });
 
         // Add new detail
         $(document).on('click', '.add-modal', function() {
@@ -449,7 +449,7 @@
         $('.modal-footer').on('click', '.add', function() {
             var scheduleAdd = $('#schedule_add').val();
             var priceAdd = $('#price_add').val();
-            var discountAdd = $('#discount_add').val();
+            // var discountAdd = $('#discount_add').val();
 
             // Validate schedule
             if(!scheduleAdd || scheduleAdd === ""){
@@ -472,17 +472,17 @@
                 var priceClean = priceAdd.replace(/\./g,'');
                 price = parseFloat(priceClean);
             }
-            var discount = 0;
-            if(discountAdd && discountAdd !== "" && discountAdd !== "0"){
-                var discountClean = discountAdd.replace(/\./g,'');
-                discount = parseFloat(discountClean);
-
-                // Validate discount
-                if(discount > price){
-                    alert('Diskon tidak boleh melebihi harga!')
-                    return false;
-                }
-            }
+            // var discount = 0;
+            // if(discountAdd && discountAdd !== "" && discountAdd !== "0"){
+            //     var discountClean = discountAdd.replace(/\./g,'');
+            //     discount = parseFloat(discountClean);
+            //
+            //     // Validate discount
+            //     if(discount > price){
+            //         alert('Diskon tidak boleh melebihi harga!')
+            //         return false;
+            //     }
+            // }
 
             // Increase idx
             var idx = $('#index_counter').val();
@@ -497,27 +497,27 @@
             sbAdd.append("<td class='text-center'>" + splitted[3] + "</td>");
             sbAdd.append("<td class='text-right'>" + priceAdd + "<input type='hidden' name='price[]' value='" + priceAdd + "'/></td>");
 
-            if(discount > 0){
-                sbAdd.append("<td class='text-right'>" + discountAdd + "<input type='hidden' name='discount[]' value='" + discountAdd + "'/></td>");
-            }
-            else{
-                sbAdd.append("<td class='text-right'>0<input type='hidden' name='discount[]' value='0'/></td>");
-            }
-
-            var subtotal = 0;
-            if(discount > 0){
-                subtotal = price - discount;
-            }
-            else{
-                subtotal = price;
-            }
-            var subtotalString = rupiahFormat(subtotal);
+            // if(discount > 0){
+            //     sbAdd.append("<td class='text-right'>" + discountAdd + "<input type='hidden' name='discount[]' value='" + discountAdd + "'/></td>");
+            // }
+            // else{
+            //     sbAdd.append("<td class='text-right'>0<input type='hidden' name='discount[]' value='0'/></td>");
+            // }
+            //
+            // var subtotal = 0;
+            // if(discount > 0){
+            //     subtotal = price - discount;
+            // }
+            // else{
+            //     subtotal = price;
+            // }
+            var subtotalString = rupiahFormat(price);
 
             sbAdd.append("<td class='text-right'>" + subtotalString + "<input type='hidden' value='" + subtotalString + "'/></td>");
 
             sbAdd.append("<td class='text-center'>");
-            sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-schedule='" + scheduleAdd + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-edit'></span></a>");
-            sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-schedule='" + scheduleAdd + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-trash'></span></a>");
+            sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-schedule='" + scheduleAdd + "' data-price='" + price + "'><span class='glyphicon glyphicon-edit'></span></a>");
+            sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-schedule='" + scheduleAdd + "' data-price='" + price + "'><span class='glyphicon glyphicon-trash'></span></a>");
             sbAdd.append("</td>");
             sbAdd.append("</tr>");
 
@@ -527,7 +527,7 @@
             $('#schedule_add').val(null).trigger('change');
             $('#trainer_add').val('');
             priceAddFormat.clear();
-            $('#discount_add').val('');
+            // $('#discount_add').val('');
         });
 
         $("#addModal").on('hidden.bs.modal', function () {
@@ -535,7 +535,7 @@
             $('#schedule_add').val(null).trigger('change');
             $('#trainer_add').val('');
             priceAddFormat.clear();
-            $('#discount_add').val('');
+            // $('#discount_add').val('');
         });
 
         // Edit detail
@@ -594,13 +594,13 @@
                 decimalPlaces: 0
             });
 
-            discountEditFormat.clear();
-            discountEditFormat.set($(this).data('discount'), {
-                decimalCharacter: ',',
-                digitGroupSeparator: '.',
-                minimumValue: '0',
-                decimalPlaces: 0
-            });
+            // discountEditFormat.clear();
+            // discountEditFormat.set($(this).data('discount'), {
+            //     decimalCharacter: ',',
+            //     digitGroupSeparator: '.',
+            //     minimumValue: '0',
+            //     decimalPlaces: 0
+            // });
 
             $('#trainer_edit').val(splitted[2]);
             $('#editModal').modal('show');
@@ -608,7 +608,7 @@
         $('.modal-footer').on('click', '.edit', function() {
             var scheduleEdit = $('#schedule_edit').val();
             var priceEdit = $('#price_edit').val();
-            var discountEdit = $('#discount_edit').val();
+            // var discountEdit = $('#discount_edit').val();
             var editedRowId = $('#edited_row_id').val();
 
             // Validate price
@@ -634,17 +634,17 @@
                 var priceClean = priceEdit.replace(/\./g,'');
                 price = parseFloat(priceClean);
             }
-            var discount = 0;
-            if(discountEdit && discountEdit !== "" && discountEdit !== "0"){
-                var discountClean = discountEdit.replace(/\./g,'');
-                discount = parseFloat(discountClean);
-
-                // Validate discount
-                if(discount > price){
-                    alert('Diskon tidak boleh melebihi harga!')
-                    return false;
-                }
-            }
+            // var discount = 0;
+            // if(discountEdit && discountEdit !== "" && discountEdit !== "0"){
+            //     var discountClean = discountEdit.replace(/\./g,'');
+            //     discount = parseFloat(discountClean);
+            //
+            //     // Validate discount
+            //     if(discount > price){
+            //         alert('Diskon tidak boleh melebihi harga!')
+            //         return false;
+            //     }
+            // }
 
             var sbEdit = new stringbuilder();
 
@@ -654,27 +654,27 @@
             sbEdit.append("<td class='text-center'>" + splitted[3] + "</td>");
             sbEdit.append("<td class='text-right'>" + priceEdit + "<input type='hidden' name='price[]' value='" + priceEdit + "'/></td>");
 
-            if(discount > 0){
-                sbEdit.append("<td class='text-right'>" + discountEdit + "<input type='hidden' name='discount[]' value='" + discountEdit + "'/></td>");
-            }
-            else{
-                sbEdit.append("<td class='text-right'>0<input type='hidden' name='discount[]' value='0'/></td>");
-            }
-
-            var subtotal = 0;
-            if(discount > 0){
-                subtotal = price - discount;
-            }
-            else{
-                subtotal = price;
-            }
-            var subtotalString = rupiahFormat(subtotal);
+            // if(discount > 0){
+            //     sbEdit.append("<td class='text-right'>" + discountEdit + "<input type='hidden' name='discount[]' value='" + discountEdit + "'/></td>");
+            // }
+            // else{
+            //     sbEdit.append("<td class='text-right'>0<input type='hidden' name='discount[]' value='0'/></td>");
+            // }
+            //
+            // var subtotal = 0;
+            // if(discount > 0){
+            //     subtotal = price - discount;
+            // }
+            // else{
+            //     subtotal = price;
+            // }
+            var subtotalString = rupiahFormat(price);
 
             sbEdit.append("<td class='text-right'>" + subtotalString + "<input type='hidden' value='" + subtotalString + "'/></td>");
 
             sbEdit.append("<td class='text-center'>");
-            sbEdit.append("<a class='edit-modal btn btn-info' data-id='" + editedRowId + "' data-schedule='" + scheduleValue + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-edit'></span></a>");
-            sbEdit.append("<a class='delete-modal btn btn-danger' data-id='" + editedRowId + "' data-schedule='" + scheduleValue + "' data-price='" + price + "' data-discount='" + discount + "'><span class='glyphicon glyphicon-trash'></span></a>");
+            sbEdit.append("<a class='edit-modal btn btn-info' data-id='" + editedRowId + "' data-schedule='" + scheduleValue + "' data-price='" + price + "'><span class='glyphicon glyphicon-edit'></span></a>");
+            sbEdit.append("<a class='delete-modal btn btn-danger' data-id='" + editedRowId + "' data-schedule='" + scheduleValue + "' data-price='" + price + "'><span class='glyphicon glyphicon-trash'></span></a>");
             sbEdit.append("</td>");
             sbEdit.append("</tr>");
 
@@ -684,8 +684,8 @@
             $('#edited_row_id').val('');
             $('#schedule_edit').val(null).trigger('change');
             $('#trainer_edit').val('');
-            $('#price_edit').val('');
-            $('#discount_edit').val('');
+            priceEditFormat.clear();
+            // $('#discount_edit').val('');
         });
 
         $("#editModal").on('hidden.bs.modal', function () {
@@ -693,8 +693,8 @@
             $('#edited_row_id').val('');
             $('#schedule_edit').val(null).trigger('change');
             $('#trainer_edit').val('');
-            $('#price_edit').val('');
-            $('#discount_edit').val('');
+            priceEditFormat.clear();
+            // $('#discount_edit').val('');
         });
 
         // Delete detail

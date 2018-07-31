@@ -337,19 +337,10 @@
         });
 
         // Add autonumeric
-        regisrationFeeFormat = new AutoNumeric('#registration_fee', {
-            decimalCharacter: ',',
-            digitGroupSeparator: '.',
-            minimumValue: '0',
-            decimalPlaces: 0
-        });
-
-        regisrationFeeFormat.clear();
-
         var fee = '{{ $header->registration_fee }}';
         var feeClean = fee.replace(/\./g,'');
 
-        regisrationFeeFormat.set(feeClean, {
+        regisrationFeeFormat = new AutoNumeric('#registration_fee', feeClean, {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
             minimumValue: '0',
