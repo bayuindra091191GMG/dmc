@@ -285,6 +285,30 @@ class CourseController extends Controller
         return \Response::json($formatted_tags);
     }
 
+    public function getCoursesPackage(Request $request){
+        $term = trim($request->q);
+        $courses= Course::where('name', 'LIKE', '%'. $term. '%')
+            ->where('type', 1)
+            ->get();
+
+        $formatted_tags = [];
+
+        foreach ($courses as $course) {
+            if($course->type == 1){
+                $courseType = "Package";
+            }
+            else if($course->type == 2){
+                $courseType = "Class";
+            }
+            else{
+                $courseType = "Private";
+            }
+            $formatted_tags[] = ['id' => $course->id, 'text' => $course->name];
+        }
+
+        return \Response::json($formatted_tags);
+    }
+
     public function getDays(Request $request){
         try{
 

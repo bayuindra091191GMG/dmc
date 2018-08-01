@@ -80,7 +80,7 @@
             width: '100%',
             minimumInputLength: 0,
             ajax: {
-                url: '{{ route('select.courses') }}',
+                url: '{{ route('select.courses_package') }}',
                 dataType: 'json',
                 data: function (params) {
                     return {

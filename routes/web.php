@@ -544,6 +544,7 @@ Route::group(['as' => 'protection.'], function () {
 Route::get('/select-days', 'Admin\CourseController@getDays')->name('select.days');
 Route::get('/select-customers', 'Admin\CustomerController@getCustomers')->name('select.customers');
 Route::get('/select-courses', 'Admin\CourseController@getCourses')->name('select.courses');
+Route::get('/select-courses-package', 'Admin\CourseController@getCoursesPackage')->name('select.courses_package');
 Route::get('/select-schedules', 'Admin\ScheduleController@getSchedules')->name('select.schedules');
 Route::get('/select-customer_attendances', 'Admin\CustomerController@getCustomerAttendances')->name('select.customer_attendances');
 

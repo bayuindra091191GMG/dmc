@@ -130,18 +130,13 @@
                                             <th>
                                                 Name
                                             </th>
-                                            <th>
-                                                Pertemuan ke 1
-                                            </th>
-                                            <th>
-                                                Pertemuan ke 2
-                                            </th>
-                                            <th>
-                                                Pertemuan ke 3
-                                            </th>
-                                            <th>
-                                                Pertemuan ke 4
-                                            </th>
+                                            @php($no = 1)
+                                            @for($k = 0; $k<$course->meeting_amount; $k++)
+                                                <th>
+                                                    Pertemuan ke {{ $no }}
+                                                </th>
+                                                @php($no++)
+                                            @endfor
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -151,7 +146,7 @@
                                                 <td>
                                                     {{ $customer->customer->name }}
                                                 </td>
-                                                @for($j=0; $j<4; $j++)
+                                                @for($j=0; $j<$course->meeting_amount; $j++)
                                                     <td>
                                                         @if(count($attendanceData[$idx]) > $j)
                                                             {{ $attendanceData[$idx][$j]->created_at }}
@@ -168,6 +163,12 @@
                                 </div>
                             </div>
                         </div>
+                @else
+                    <div class="form-group">
+                        <div class="col-lg-12 col-md-12 col-xs-12 column">
+                            <h4 class="text-center">Belum ada Absensi</h4>
+                        </div>
+                    </div>
                 @endif
             </form>
         </div>

@@ -334,24 +334,33 @@ class AttendanceController extends Controller
         $customers = Schedule::where('course_id', $course->id)->get();
 
         //Get Attendance
-        $startDate = Carbon::parse($request->input('date'))->format('Y-m');
-        $finishDate = Carbon::parse($request->input('date'))->addMonth()->format('Y-m');
+        $startDate = Carbon::parse($request->input('date'))->format('m');
+        $finishDate = Carbon::parse($request->input('date'))->addMonth()->format('m');
         $attendanceData = [];
         foreach ($customers as $customer){
-            $attendance = Attendance::
+            if(Attendance::
                 where([
                     ['customer_id', $customer->customer_id],
-                    ['created_at', '>=', $startDate],
-                    ['created_at', '<', $finishDate],
                     ['schedule_id', $customer->id]
                 ])
-                ->orderBy('created_at')
-                ->get();
-
-            array_push($attendanceData, $attendance);
+                    ->whereMonth('created_at', '>=', $startDate)
+                    ->whereMonth('created_at', '<', $finishDate)
+                    ->orderBy('created_at')
+                    ->exists())
+            {
+                $attendance = Attendance::
+                where([
+                    ['customer_id', $customer->customer_id],
+                    ['schedule_id', $customer->id]
+                ])
+                    ->whereMonth('created_at', '>=', $startDate)
+                    ->whereMonth('created_at', '<', $finishDate)
+                    ->orderBy('created_at')
+                    ->get();
+                array_push($attendanceData, $attendance);
+            }
         }
         $chosenDate = Carbon::parse($request->input('date'))->format('M Y');
-        //dd($attendanceData[0]);
 
         return view('admin.attendances.show-report', ['course' => $course, 'days' => $days, 'hours' => $hours, 'customers' => $customers, 'attendanceData' => $attendanceData, 'chosenDate' => $chosenDate]);
     }
