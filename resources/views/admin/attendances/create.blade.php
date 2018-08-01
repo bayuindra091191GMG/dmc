@@ -111,7 +111,7 @@
                     <h4 class="modal-title"></h4>
                 </div>
                 <div class="modal-body">
-                    {{ Form::open(['route'=>['admin.attendances.store'],'method' => 'post','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
+                    {{ Form::open(['route'=>['admin.attendances.store'],'method' => 'post','id' => 'general-form','class'=>'form-horizontal form-label-left','target'=>'_blank']) }}
 
                     <h3 class="text-center">Apakah anda yakin memproses absensi berikut ini?</h3>
                     <br />

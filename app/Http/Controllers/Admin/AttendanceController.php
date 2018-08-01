@@ -112,6 +112,18 @@ class AttendanceController extends Controller
         //Check payment due or not
 
         $now = Carbon::now('Asia/Jakarta');
+        //Check if already absence
+        $attendanceExist = Attendance::where('customer_id', $customerID)
+            ->where('schedule_id', $scheduleID)
+            ->whereDay('date', $now->day)
+            ->exists();
+//        dd($attendanceExist);
+        if($attendanceExist){
+            return redirect()
+                ->back()
+                ->withErrors('Sudah Melakukan Absensi di Hari ini', 'default')
+                ->withInput();
+        }
 
         //Check if schedule date still
         $scheduleDB = Schedule::find($scheduleID);
