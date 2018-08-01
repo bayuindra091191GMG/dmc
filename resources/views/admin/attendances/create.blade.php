@@ -111,7 +111,7 @@
                     <h4 class="modal-title"></h4>
                 </div>
                 <div class="modal-body">
-                    {{ Form::open(['route'=>['admin.attendances.store'],'method' => 'post','id' => 'general-form','class'=>'form-horizontal form-label-left','target'=>'_blank']) }}
+                    {{ Form::open(['route'=>['admin.attendances.store'],'method' => 'post','id' => 'general-form','class'=>'form-horizontal form-label-left', 'target'=>'_blank']) }}
 
                     <h3 class="text-center">Apakah anda yakin memproses absensi berikut ini?</h3>
                     <br />
@@ -142,9 +142,9 @@
                         <button type="button" class="btn btn-danger" data-dismiss="modal">
                             <span class='glyphicon glyphicon-remove'></span> Batal
                         </button>
-                        <button id="submit" type="submit" class="btn btn-success">
+                        <a id="submit" onclick="formsubmit()" class="btn btn-success">
                             <span id="" class='glyphicon glyphicon-check'></span> Hadir
-                        </button>
+                        </a>
                     </div>
                     {{ Form::close() }}
                 </div>
@@ -176,6 +176,12 @@
     {{ Html::script(mix('assets/admin/js/stringbuilder.js')) }}
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
     <script type="text/javascript">
+        function formsubmit(){
+            $('#general-form').submit();
+            //reload current page
+            location.reload();
+        }
+
         // Date Picker
         $('#date').datetimepicker({
             format: "DD MMM Y"
