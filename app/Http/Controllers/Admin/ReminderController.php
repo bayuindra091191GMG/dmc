@@ -85,7 +85,7 @@ class ReminderController extends Controller
                 $realFinishDate = Carbon::parse($schedule->finish_date);
                 $now = Carbon::now('Asia/Jakarta');
 
-                if($now->greaterThanOrEqualTo($remindDate) && $now->lessThanOrEqualTo($realFinishDate)){
+                if($now->lessThanOrEqualTo($realFinishDate)){
                     $schedule->meeting_amount += $schedule->course->meeting_amount;
                 }
                 else{
