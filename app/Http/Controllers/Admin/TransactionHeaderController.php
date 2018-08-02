@@ -94,7 +94,6 @@ class TransactionHeaderController extends Controller
         $validator = Validator::make($request->all(),[
             'code'        => 'required|max:45|regex:/^\S*$/u',
             'date'        => 'required',
-            'registration_fee' => 'required'
         ],[
             'code.regex'  => 'Nomor Transaksi harus tanpa spasi!'
         ]);
@@ -245,7 +244,14 @@ class TransactionHeaderController extends Controller
         }
 
         if($totalDiscount > 0) $trxHeader->total_discount = $totalDiscount;
-        $fee = str_replace('.','', $request->input('registration_fee'));
+
+        if($request->filled('registration_fee')){
+            $fee = str_replace('.','', $request->input('registration_fee'));
+        }
+        else{
+            $fee = 0;
+        }
+
         $totalPayment += $fee;
         $trxHeader->total_price = $totalPrice;
         $trxHeader->total_payment = $totalPayment;
@@ -298,7 +304,6 @@ class TransactionHeaderController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'date'              => 'required',
-            'registration_fee'  => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -315,8 +320,15 @@ class TransactionHeaderController extends Controller
         $transaction->date = $date->toDateTimeString();
 
         $oldRegFee = $transaction->registration_fee;
-        $regFeeStr = str_replace('.','', $request->input('registration_fee'));
-        $regFee = (double) $regFeeStr;
+
+        if($request->filled('registration_fee')){
+            $regFeeStr = str_replace('.','', $request->input('registration_fee'));
+            $regFee = (double) $regFeeStr;
+        }
+        else{
+            $regFee = 0;
+        }
+
         $transaction->registration_fee = $regFee;
         $transaction->total_payment = $transaction->total_payment - $oldRegFee + $regFee;
 

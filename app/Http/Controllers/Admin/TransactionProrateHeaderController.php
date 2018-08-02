@@ -52,8 +52,7 @@ class TransactionProrateHeaderController extends Controller
     public function store(Request $request){
         $validator = Validator::make($request->all(),[
             'code'              => 'required|max:45|regex:/^\S*$/u',
-            'date'              => 'required',
-            'registration_fee'  => 'required'
+            'date'              => 'required'
         ],[
             'code.regex'  => 'Nomor Transaksi harus tanpa spasi!'
         ]);
@@ -211,7 +210,13 @@ class TransactionProrateHeaderController extends Controller
         }
 
 //        if($totalDiscount > 0) $trxHeader->total_discount = $totalDiscount;
-        $fee = str_replace('.','', $request->input('registration_fee'));
+        if($request->filled('registration_fee')){
+            $fee = str_replace('.','', $request->input('registration_fee'));
+        }
+        else{
+            $fee = 0;
+        }
+
         $totalPayment += (double) $fee;
         $trxHeader->total_price = $totalPrice;
         $trxHeader->total_prorate_price = $totalProratePrice;
@@ -240,8 +245,7 @@ class TransactionProrateHeaderController extends Controller
     public function update(Request $request, TransactionHeader $transaction)
     {
         $validator = Validator::make($request->all(),[
-            'date'              => 'required',
-            'registration_fee'  => 'required'
+            'date'              => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -258,8 +262,15 @@ class TransactionProrateHeaderController extends Controller
         $transaction->date = $date->toDateTimeString();
 
         $oldRegFee = $transaction->registration_fee;
-        $regFeeStr = str_replace('.','', $request->input('registration_fee'));
-        $regFee = (double) $regFeeStr;
+
+        if($request->filled('registration_fee')){
+            $regFeeStr = str_replace('.','', $request->input('registration_fee'));
+            $regFee = (double) $regFeeStr;
+        }
+        else{
+            $regFee = 0;
+        }
+
         $transaction->registration_fee = $regFee;
         $transaction->total_payment = $transaction->total_payment - $oldRegFee + $regFee;
 
