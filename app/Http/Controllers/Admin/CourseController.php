@@ -104,7 +104,7 @@ class CourseController extends Controller
                 return redirect()->back()->withErrors('Pilih Trainer', 'default')->withInput($request->all());
             }
         }
-//dd($request);
+
         $meetingAmounts = 4;
         $validAmount = 0;
 
@@ -183,6 +183,11 @@ class CourseController extends Controller
     public function edit(Course $course)
     {
         $coaches = Coach::all();
+        if($course->type == 2){
+            $days = preg_split('@;@', $course->day, NULL, PREG_SPLIT_NO_EMPTY);
+            $hours = preg_split('@;@', $course->hour, NULL, PREG_SPLIT_NO_EMPTY);
+            return view('admin.courses.edit',compact('course', 'coaches', 'days', 'hours'));
+        }
         return view('admin.courses.edit',compact('course', 'coaches'));
     }
 
@@ -209,13 +214,27 @@ class CourseController extends Controller
         }
 
         $selectedDays = "";
-        if($request->input('type') != 1){
+        $selectedHours = "";
+
+        if($request->input('type') == 2){
             $days = $request->get('chk');
+            $hours = $request->get('hour');
             if($days == null){
                 return redirect()->back()->withErrors('Belum ada hari yang dipilih', 'default')->withInput($request->all());
             }
+            if($hours == null){
+                return redirect()->back()->withErrors('Belum ada jam yang dipilih', 'default')->withInput($request->all());
+            }
             foreach ($days as $day){
                 $selectedDays.=$day.";";
+            }
+            foreach ($hours as $hour){
+                $selectedHours.=$hour.";";
+            }
+        }
+        if($request->input('type') == 3){
+            if($request->input('coach_id') === '-1'){
+                return redirect()->back()->withErrors('Pilih Trainer', 'default')->withInput($request->all());
             }
         }
 
@@ -225,6 +244,7 @@ class CourseController extends Controller
         $course->coach_id = $request->get('coach_id');
         $course->meeting_amount = $request->get('meeting_amount');
         $course->day = $selectedDays;
+        $course->hour = $selectedHours;
         $course->updated_at = $dateTimeNow;
         $course->save();
 

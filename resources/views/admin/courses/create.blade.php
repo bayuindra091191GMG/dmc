@@ -161,7 +161,7 @@
                     Valid
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="valid" class="form-control col-md-7 col-xs-12 @if($errors->has('price')) parsley-error @endif"
+                    <input id="valid" type="number" class="form-control col-md-7 col-xs-12 @if($errors->has('price')) parsley-error @endif"
                            name="valid" value="{{ old('price') }}">
                 </div>
             </div>
@@ -221,6 +221,7 @@
         $('#hourSunday').datetimepicker({
             format: "HH:mm"
         });
+
         // Add autonumeric
         priceAddFormat = new AutoNumeric('#price', {
             decimalCharacter: ',',
