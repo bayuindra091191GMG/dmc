@@ -80,7 +80,7 @@ class DashboardController extends Controller
                     }
                 }
             }
-            else{
+            elseif($schedule->course->type === 2){
                 if($classReminders->count() < 5){
                     if($now->greaterThanOrEqualTo($remindDate)){
                         $classReminders->add($schedule);
