@@ -202,7 +202,7 @@
                             @foreach($classReminders as $class)
                                 <div class="alert alert-danger fade in" role="alert">
                                     <span>{{ $class->customer->name }}  ,</span>
-                                    <strong>kelas{{ $class->course->name }}. </strong>
+                                    <strong>kelas {{ $class->course->name }}. </strong>
                                     <span>Sudah mendekati Tanggal Tagihan Bulanan.</span>
                                     <span>Tanggal Expired: {{ $class->finish_date_string }}.</span>
                                     <button class="btn btn-success modal-renew" data-schedule-id="{{ $class->id }}" data-course="{{ $class->course->name }}" data-customer="{{ $class->customer->name }}" data-customer-parent="{{ $class->customer->parent_name }}">PERBARUI</button>
