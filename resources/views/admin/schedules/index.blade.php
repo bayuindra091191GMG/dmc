@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Data Kelas')
+@section('title', 'Daftar Registrasi')
 
 @section('content')
 
