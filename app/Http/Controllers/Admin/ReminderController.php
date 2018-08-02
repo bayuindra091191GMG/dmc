@@ -47,7 +47,7 @@ class ReminderController extends Controller
                     }
                 }
             }
-            else{
+            elseif($schedule->course->type === 2){
                 if($now->greaterThanOrEqualTo($remindDate)){
                     $reminders->add($schedule);
                 }
