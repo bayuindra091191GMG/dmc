@@ -213,19 +213,28 @@
             $('#detailTable').append("<tr id='" + i + "' class='item" + $('select[name=course_add]').val() + "' align='center'>" +
                 "<td><input type='text' name='course[]' class='form-control' value='"+ $('select[name=course_add]').text() + "' readonly/> <input type='hidden' name='course_id[]' value='" + $('select[name=course_add]').val() +"'/></td>" +
                 "<td><input type='text' name='day[]' class='form-control' value='" + $('select[name=day_add]').val() +"' readonly/></td>" +
-                "<td><span id='delete_row" + i + "' class='delete-modal btn btn-danger'><span class='glyphicon glyphicon-trash'></span></span></td></tr>");
+                "<td><a class='delete-schedule btn btn-danger' data-id='" + i + "'><span class='glyphicon glyphicon-trash'></span></a></td></tr>");
 
             $('#day_add').empty();
             $('#course_add').empty();
 
-            $("#delete_row" + i).click(function(){
-                if(i>1){
-                    $("#"+(i-1)).html('');
-                    i--;
-                }
-            });
+            // $("#delete_row" + i).click(function(){
+            //     if(i>1){
+            //         $("#"+(i-2)).html('');
+            //         i--;
+            //     }
+            // });
 
             i++;
+        });
+
+        $(document).on('click', '.delete-schedule', function() {
+            var deletedId = $(this).data('id');
+
+            // Decrease idx
+            i--;
+
+            $('#' + deletedId).remove();
         });
     </script>
 @endsection
