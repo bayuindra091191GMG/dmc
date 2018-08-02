@@ -59,7 +59,7 @@
                         <table class="table table-condensed" style="font-size: 12px;">
                             <thead>
                             <tr>
-                                <td class="text-center"><strong>Kelas</strong></td>
+                                <td class="text-left"><strong>Kelas</strong></td>
                                 <td class="text-center"><strong>Trainer</strong></td>
                                 <td class="text-center"><strong>Tanggal Berlaku</strong></td>
                                 <td class="text-center"><strong>Jumlah {{ $header->type === 2 ? 'Prorate' : 'Pertemuan' }}</strong></td>
@@ -84,8 +84,18 @@
                                     </td>
                                     <td class="text-center">{{ $detail->schedule->start_date_number }} - {{ $detail->schedule->finish_date_number }}</td>
 
-                                    @if($header->type === 1 || $header->type === 2)
+                                    @if($header->type === 1)
                                         <td class="text-center">{{ $detail->schedule->meeting_amount ?? 'BEBAS' }}</td>
+                                    @elseif($header->type === 2)
+                                        <td class="text-center">
+                                            @if($detail->prorate == 1)
+                                                1/4
+                                            @elseif($detail->prorate == 2)
+                                                1/2
+                                            @elseif($detail->prorate == 3)
+                                                3/4
+                                            @endif
+                                        </td>
                                     @else
                                         <td class="text-center">{{ $detail->meeting_amount }}</td>
                                     @endif
