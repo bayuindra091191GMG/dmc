@@ -210,6 +210,9 @@ class TransactionPrivateHeaderController extends Controller
 
                 // Activate schedule
                 $scheduleObj->status_id = 3;
+
+                // Add meeting amounts
+                $scheduleObj->meeting_amount += $meeting;
                 $scheduleObj->save();
             }
             $idx++;
