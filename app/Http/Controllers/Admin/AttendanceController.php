@@ -378,6 +378,11 @@ class AttendanceController extends Controller
     }
 
     public function printAttendancePaper(){
-        return view('admin.attendances.paper');
+        $attendanceData = Attendance::find(request()->attendanceId);
+        $scheduleDB = Schedule::find(request()->scheduleId);
+        $customerData = Customer::find(request()->customerId);
+        $attendanceCount = Attendance::where('customer_id', $customerData->id)->where('schedule_id', $scheduleDB->id)->count();
+        $date = $attendanceData->date->toDateTimeString();
+        return view('admin.attendances.paper', compact('scheduleDB', 'customerData', 'date', 'attendanceCount'));
     }
 }

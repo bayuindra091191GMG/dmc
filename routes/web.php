@@ -108,7 +108,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('attendances/delete', 'AttendanceController@destroy')->name('attendances.destroy');
     Route::get('attendances/report', 'AttendanceController@report')->name('attendances.report');
     Route::post('attendances/report/download', 'AttendanceController@showDocument')->name('attendances.show-report');
-    Route::get('attendances/paper', 'AttendanceController@printAttendancePaper')->name('attendances.paper');
+    Route::get('attendances/paper/', 'AttendanceController@printAttendancePaper')->name('attendances.paper');
 
     //Transaction Header
     Route::get('transactions', 'TransactionHeaderController@index')->name('transactions');
