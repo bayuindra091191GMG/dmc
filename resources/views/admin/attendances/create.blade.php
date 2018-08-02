@@ -179,7 +179,8 @@
         function formsubmit(){
             $('#general-form').submit();
             //reload current page
-            location.reload();
+            // location.reload();
+            $('#addModal').modal('hide');
         }
 
         // Date Picker
