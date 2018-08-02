@@ -9,34 +9,17 @@
             {{ Form::open(['route'=>['admin.roles.update', $role->id],'method' => 'put','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
             {{ csrf_field() }}
                 <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name" >
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description" >
                         Nama Level Akses
                         <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input id="name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('name')) parsley-error @endif"
-                               name="name" value="{{ $role->name }}" required>
-                        @if($errors->has('name'))
-                            <ul class="parsley-errors-list filled">
-                                @foreach($errors->get('name') as $error)
-                                        <li class="parsley-required">{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        @endif
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description">
-                        Deskripsi
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
                         <input id="description" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('description')) parsley-error @endif"
-                               name="description" value="{{ $role->description }}">
+                               name="description" value="{{ $role->description }}" required>
                         @if($errors->has('description'))
                             <ul class="parsley-errors-list filled">
                                 @foreach($errors->get('description') as $error)
-                                    <li class="parsley-required">{{ $error }}</li>
+                                        <li class="parsley-required">{{ $error }}</li>
                                 @endforeach
                             </ul>
                         @endif

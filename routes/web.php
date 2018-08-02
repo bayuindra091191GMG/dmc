@@ -62,6 +62,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('customers/edit/{customer}', 'CustomerController@update')->name('customers.update');
     Route::post('customers/delete', 'CustomerController@destroy')->name('customers.destroy');
 
+    //Roles - Level Akses
+    Route::get('level_akses', 'RoleController@index')->name('roles');
+    Route::get('level_akses/{role}/ubah', 'RoleController@edit')->name('roles.edit');
+    Route::put('level_akses/ubah/{role}', 'RoleController@update')->name('roles.update');
+    Route::get('level_akses/tambah', 'RoleController@create')->name('roles.create');
+    Route::post('level_akses/simpan', 'RoleController@store')->name('roles.store');
+
     //Coach
     Route::get('coaches', 'CoachController@index')->name('coaches');
     Route::get('coaches/show/{coach}', 'CoachController@show')->name('coaches.show');
@@ -217,13 +224,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('statuses/{status}/ubah', 'StatusController@edit')->name('statuses.edit');
     Route::put('statuses/ubah/{status}', 'StatusController@update')->name('statuses.update');
     Route::post('statuses/hapus', 'StatusController@destroy')->name('statuses.destroy');
-
-    //Roles
-    Route::get('roles', 'RoleController@index')->name('roles');
-    Route::get('roles/{role}/ubah', 'RoleController@edit')->name('roles.edit');
-    Route::put('roles/ubah/{role}', 'RoleController@update')->name('roles.update');
-    Route::get('roles/tambah', 'RoleController@create')->name('roles.create');
-    Route::post('roles/simpan', 'RoleController@store')->name('roles.store');
 
     //Approval Rule
     Route::get('approval_rules', 'ApprovalRuleController@index')->name('approval_rules');

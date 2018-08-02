@@ -54,18 +54,16 @@ class RoleController extends Controller
     {
         //
         $validator = Validator::make($request->all(), [
-            'name' => 'required|max:255',
-            'description' => 'required|max:255'
+            'description' => 'required|max:100'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
         Role::create([
-            'name'          => $request->get('name'),
             'description'   => $request->get('description')
         ]);
 
-        Session::flash('message', 'berhasil membuat data role baru!');
+        Session::flash('message', 'berhasil membuat level akses baru!');
 
         return redirect(route('admin.roles'));
     }
@@ -107,19 +105,17 @@ class RoleController extends Controller
     {
         //
         $validator = Validator::make($request->all(), [
-            'name' => 'required|max:255',
-            'description' => 'required|max:255',
+            'description' => 'required|max:100',
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
         $role = Role::find($id);
-        $role->name = $request->get('name');
         $role->description = $request->get('description');
 
         $role->save();
 
-        Session::flash('message', 'Sukses Mengubah Data!');
+        Session::flash('message', 'Sukses mengubah level akses!');
 
         return redirect(route('admin.roles.edit', ['role' => $role->id]));
     }
@@ -139,13 +135,14 @@ class RoleController extends Controller
      * Process datatables ajax request.
      *
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function getIndex()
     {
         $roles = Role::all();
         return DataTables::of($roles)
             ->addColumn('action', function ($role) {
-                return "<a class='btn btn-xs btn-info' href='roles/".$role->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+                return "<a class='btn btn-xs btn-info' href='level_akses/".$role->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
             })->make(true);
     }
 }
