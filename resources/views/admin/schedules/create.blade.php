@@ -211,6 +211,11 @@
             $('#addModal').modal('show');
         });
 
+        $("#addModal").on('hide.bs.modal', function () {
+            $('#day_add').empty();
+            $('#course_add').val(null).trigger('change');
+        });
+
         var i = 1;
         $('.modal-footer').on('click', '.add', function() {
             if($('select[name=day_add]').val() != null || $('select[name=course_add]').val() != null){
