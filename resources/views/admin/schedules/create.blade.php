@@ -96,7 +96,7 @@
                                 <p class="errorItem text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" id="day_add_section" style="display: none;">
                             <label class="control-label col-sm-2" for="day_add">Hari</label>
                             <div class="col-sm-10">
                                 <select id="day_add" name="day_add" class="form-control col-md-7 col-xs-12">
@@ -159,6 +159,7 @@
         });
         // Add new detail
         $(document).on('click', '.add-modal', function() {
+            $('#day_add_section').hide();
             $('#day_add').empty();
             $('#course_add').select2({
                 placeholder: {
@@ -194,12 +195,14 @@
                     },
                     success: function (data) {
                         var i;
+                        $('#day_add').empty();
                         for(i=0; i<data.length; i++){
                             $('#day_add')
                                 .append($("<option></option>")
                                     .attr("value",data[i])
                                     .text(data[i]));
                         }
+                        $('#day_add_section').show();
                     }
                 });
             });
@@ -212,7 +215,7 @@
         $('.modal-footer').on('click', '.add', function() {
             if($('select[name=day_add]').val() != null || $('select[name=course_add]').val() != null){
                 $('#detailTable').append("<tr id='" + i + "' class='item" + $('select[name=course_add]').val() + "' align='center'>" +
-                    "<td><input type='text' name='course[]' class='form-control' value='"+ $('select[name=course_add]').text() + "' readonly/> <input type='hidden' name='course_id[]' value='" + $('select[name=course_add]').val() +"'/></td>" +
+                    "<td><input type='text' name='course[]' class='form-control' value='"+ $('select[name=course_add] :selected').text() + "' readonly/> <input type='hidden' name='course_id[]' value='" + $('select[name=course_add]').val() +"'/></td>" +
                     "<td><input type='text' name='day[]' class='form-control' value='" + $('select[name=day_add]').val() +"' readonly/></td>" +
                     "<td><a class='delete-schedule btn btn-danger' data-id='" + i + "'><span class='glyphicon glyphicon-trash'></span></a></td></tr>");
 
