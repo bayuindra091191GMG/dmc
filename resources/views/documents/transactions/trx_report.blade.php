@@ -42,11 +42,11 @@
     <table class="table" style="font-size: 10px;">
         <thead>
         <tr>
-            <th class="text-center" style="width: 10%;">Kelas</th>
+            <th class="text-center" style="width: 15%;">Kelas</th>
             <th class="text-center" style="width: 20%;">Trainer</th>
             <th class="text-center" style="width: 20%;">Tanggal Berlaku</th>
-            <th class="text-center" style="width: 10%;">Harga</th>
-            <th class="text-center" style="width: 10%;">Diskon</th>
+            <th class="text-center" style="width: 15%;">Jumlah Pertemuan</th>
+            <th class="text-center" style="width: 20%;">Harga</th>
             <th class="text-right" style="width: 10%;">Subtotal</th>
             <th></th>
         </tr>
@@ -64,17 +64,48 @@
         </thead>
         <tbody>
         @php($i=1)
-        @foreach($header as $item)
+        @foreach($header as $hdr)
             <tr>
-                <td colspan="7"><b>{{ $item->code }} - {{ $item->date_string }} - {{ $item->invoice_number }} - Dibuat Oleh: {{ $item->createdBy->email }}</b></td>
+                <td colspan="7">
+                    <b>
+                        {{ $hdr->code }} - {{ $hdr->date_string }} - {{ $hdr->invoice_number }} - Dibuat Oleh: {{ $hdr->createdBy->email }}
+                         - Tipe:
+                        @if($hdr->type == 1)
+                            Normal
+                        @elseif($hdr->type == 2)
+                            Prorate
+                        @else
+                            Private
+                        @endif
+                    </b>
+                </td>
             </tr>
-            @foreach($item->transaction_details as $detail)
+            @foreach($hdr->transaction_details as $detail)
                 <tr>
                     <td class="text-center">{{ $detail->schedule->course->name }}</td>
                     <td class="text-center">{{ $detail->schedule->course->coach->name }}</td>
                     <td class="text-center">{{ $detail->schedule->start_date_string }} - {{ $detail->schedule->finish_date_string }}</td>
-                    <td class="text-center">Rp{{ $detail->price_string }}</td>
-                    <td class="text-center">Rp{{ $detail->discount_string }}</td>
+                    <td class="text-center">
+                        @if($hdr->type == 1)
+                            {{ $detail->schedule->course->meeting_amount }}
+                            @if($detail->schedule->course->type == 1)
+                                ({{ $detail->schedule->course->valid }} hari)
+                            @endif
+                        @elseif($hdr->type == 2)
+                            @if($detail->prorate == 1)
+                                1/4
+                            @elseif($detail->prorate == 2)
+                                1/2
+                            @elseif($detail->prorate == 3)
+                                3/4
+                            @endif
+                        @else
+                            {{ $detail->meeting_amount }}
+                        @endif
+                    </td>
+                    <td class="text-center">
+                            Rp{{ $detail->price_string }}
+                    </td>
                     <td class="text-right">Rp{{ $detail->subtotal_string }}</td>
                     <td></td>
                 </tr>
@@ -82,17 +113,17 @@
 
             <tr>
                 <td colspan="4"></td>
-                <td class="text-right">Total Transaction:</td>
-                <td class="text-right">Rp{{ $item->total_payment_string }}</td>
+                <td class="text-center">Registration Fee:</td>
+                <td class="text-right">Rp{{ $hdr->registration_fee_string }}</td>
                 <td></td>
             </tr>
             <tr>
-                <td colspan="6"></td>
-                <td class="text-right">Rp{{ $item->total_payment_string }}</td>
+                <td colspan="5"></td>
+                <td class="text-center">Rp{{ $hdr->total_payment_string }}</td>
             </tr>
         @endforeach
         <tr>
-            <td colspan="6" class="text-right">
+            <td colspan="5" class="text-right">
                 <b>Total Semua Transaksi</b>
             </td>
             <td class="text-right">
