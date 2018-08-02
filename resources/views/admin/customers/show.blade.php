@@ -118,6 +118,9 @@
                                             Hari yang diambil
                                         </th>
                                         <th class="text-center" style="width: 10%">
+                                            Jumlah Pertemuan
+                                        </th>
+                                        <th class="text-center" style="width: 10%">
                                             Masa Kelas
                                         </th>
                                         <th class="text-center" style="width: 10%">
@@ -151,6 +154,9 @@
                                             </td>
                                             <td class="text-center">
                                                 {{ $schedule->day }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $schedule->meeting_amount }}
                                             </td>
                                             <td class="text-center">
                                                 {{ $schedule->start_date_string }} - {{ $schedule->finish_date_string }}
