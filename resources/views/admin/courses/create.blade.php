@@ -45,12 +45,19 @@
                     Tipe Kelas
                     <span class="required">*</span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-3 col-sm-3 col-xs-12">
                     <select id="type" name="type" class="form-control col-md-7 col-xs-12">
                         <option value="1">Package</option>
                         <option value="2">Class</option>
                         <option value="3">Private</option>
                     </select>
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" class="flat" id="is_baby" name="is_baby" @if(old('is_baby') != null) checked @endif> Kelas Bayi
+                        </label>
+                    </div>
                 </div>
             </div>
 

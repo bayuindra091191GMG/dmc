@@ -85,9 +85,17 @@ class CourseController extends Controller
 
         $selectedDays = "";
         $selectedHours = "";
+        $baby = $request->input('is_baby');
+        if($request->input('type') != 2 && $baby != null){
+            return redirect()->back()->withErrors('Tipe Kelas Package dan Private tidak bisa untuk Bayi', 'default')->withInput($request->all());
+        }
+
         if($request->input('type') == 2){
             $days = $request->get('chk');
 
+            if($request->input('coach_id') === '-1'){
+                return redirect()->back()->withErrors('Pilih Trainer', 'default')->withInput($request->all());
+            }
             if($days == null){
                 return redirect()->back()->withErrors('Belum ada hari yang dipilih', 'default')->withInput($request->all());
             }
@@ -140,7 +148,12 @@ class CourseController extends Controller
             }
         }
 
-        $meetingAmounts = 4;
+        if($baby == null){
+            $meetingAmounts = 4;
+        }
+        else{
+            $meetingAmounts = 8;
+        }
         $validAmount = 0;
 
         //Package

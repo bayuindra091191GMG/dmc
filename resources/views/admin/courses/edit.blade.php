@@ -46,12 +46,21 @@
                     Tipe Kelas
                     <span class="required">*</span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-3 col-sm-3 col-xs-12">
                     <select id="type" name="type" class="form-control col-md-7 col-xs-12">
                         <option value="-1"> - Pilih Tipe - </option>
                         <option value="1" @if($course->type == 1) selected @endif>Package</option>
                         <option value="2" @if($course->type == 2) selected @endif>Class</option>
+                        <option value="3" @if($course->type == 3) selected @endif>Private</option>
                     </select>
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" class="flat" id="is_baby" name="is_baby"
+                                   @if($course->type == 2 && $course->meeting_amount == 8) checked @endif> Kelas Bayi
+                        </label>
+                    </div>
                 </div>
             </div>
 
