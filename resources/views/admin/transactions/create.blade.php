@@ -309,12 +309,12 @@
         // Auto Numbering
         $('#auto_number').change(function(){
             if(this.checked){
-                $('#retur_code').val('{{ $autoNumber }}');
-                $('#retur_code').prop('readonly', true);
+                $('#code').val('{{ $autoNumber }}');
+                $('#code').prop('readonly', true);
             }
             else{
-                $('#retur_code').val('');
-                $('#retur_code').prop('readonly', false);
+                $('#code').val('');
+                $('#code').prop('readonly', false);
             }
         });
 

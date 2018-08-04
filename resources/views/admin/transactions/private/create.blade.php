@@ -330,12 +330,12 @@
         // Auto Numbering
         $('#auto_number').change(function(){
             if(this.checked){
-                $('#retur_code').val('{{ $autoNumber }}');
-                $('#retur_code').prop('readonly', true);
+                $('#code').val('{{ $autoNumber }}');
+                $('#code').prop('readonly', true);
             }
             else{
-                $('#retur_code').val('');
-                $('#retur_code').prop('readonly', false);
+                $('#code').val('');
+                $('#code').prop('readonly', false);
             }
         });
 
@@ -449,7 +449,7 @@
                         return {
                             q: $.trim(params.term),
                             customer: customerId,
-                            course_type: 0
+                            course_type: '3'
                         };
                     },
                     processResults: function (data) {

@@ -493,7 +493,7 @@
                         return {
                             q: $.trim(params.term),
                             customer: customerId,
-                            course_type: 2
+                            course_type: '2'
                         };
                     },
                     processResults: function (data) {
@@ -670,7 +670,8 @@
                     data: function (params) {
                         return {
                             q: $.trim(params.term),
-                            customer: $('#customer_id').val()
+                            customer: $('#customer_id').val(),
+                            course_type: '2'
                         };
                     },
                     processResults: function (data) {
