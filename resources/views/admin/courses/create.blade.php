@@ -88,58 +88,79 @@
 
                     <div class="row">
                         <div class="col-sm-2">
-                            <input type="checkbox" onchange="changeInput('hourMonday', 'chk1')" class="flat" id="chk1" name="chk[]" value="Senin"/> Senin
+                            <input type="checkbox" onchange="changeInput('hourMonday1', 'hourMonday2', 'chk1')" class="flat" id="chk1" name="chk[]" value="Senin"/> Senin
                         </div>
-                        <div class="col-sm-4">
-                            <input id="hourMonday" class="form-control" name="hour[]" disabled="disabled"/>
+                        <div class="col-sm-2">
+                            <input id="hourMonday1" class="form-control" name="hourMonday1" disabled="disabled"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <input id="hourMonday2" class="form-control" name="hourMonday2" disabled="disabled"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-2">
-                            <input type="checkbox" onchange="changeInput('hourTuesday', 'chk2')" class="flat" id="chk2" name="chk[]" value="Selasa"/> Selasa
+                            <input type="checkbox" onchange="changeInput('hourTuesday1', 'hourTuesday2', 'chk2')" class="flat" id="chk2" name="chk[]" value="Selasa"/> Selasa
                         </div>
-                        <div class="col-sm-4">
-                            <input id="hourTuesday" class="form-control" name="hour[]" disabled="disabled"/>
+                        <div class="col-sm-2">
+                            <input id="hourTuesday1" class="form-control" name="hourTuesday1" disabled="disabled"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <input id="hourTuesday2" class="form-control" name="hourTuesday2" disabled="disabled"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-2">
-                            <input type="checkbox" onchange="changeInput('hourWednesday', 'chk3')" class="flat" id="chk3" name="chk[]" value="Rabu"/> Rabu
+                            <input type="checkbox" onchange="changeInput('hourWednesday1', 'hourWednesday2', 'chk3')" class="flat" id="chk3" name="chk[]" value="Rabu"/> Rabu
                         </div>
-                        <div class="col-sm-4">
-                            <input id="hourWednesday" class="form-control" name="hour[]" disabled="disabled"/>
+                        <div class="col-sm-2">
+                            <input id="hourWednesday1" class="form-control" name="hourWednesday1" disabled="disabled"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <input id="hourWednesday2" class="form-control" name="hourWednesday2" disabled="disabled"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-2">
-                            <input type="checkbox" onchange="changeInput('hourThursday', 'chk4')" class="flat" id="chk4" name="chk[]" value="Kamis"/> Kamis
+                            <input type="checkbox" onchange="changeInput('hourThursday1', 'hourThursday2', 'chk4')" class="flat" id="chk4" name="chk[]" value="Kamis"/> Kamis
                         </div>
-                        <div class="col-sm-4">
-                            <input id="hourThursday" class="form-control" name="hour[]" disabled="disabled"/>
+                        <div class="col-sm-2">
+                            <input id="hourThursday1" class="form-control" name="hourThursday1" disabled="disabled"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <input id="hourThursday2" class="form-control" name="hourThursday2" disabled="disabled"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-2">
-                            <input type="checkbox" onchange="changeInput('hourFriday', 'chk5')" class="flat" id="chk5" name="chk[]" value="Jumat"/> Jumat
+                            <input type="checkbox" onchange="changeInput('hourFriday1', 'hourFriday2', 'chk5')" class="flat" id="chk5" name="chk[]" value="Jumat"/> Jumat
                         </div>
-                        <div class="col-sm-4">
-                            <input id="hourFriday" class="form-control" name="hour[]" disabled="disabled"/>
+                        <div class="col-sm-2">
+                            <input id="hourFriday1" class="form-control" name="hourFriday1" disabled="disabled"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <input id="hourFriday2" class="form-control" name="hourFriday2" disabled="disabled"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-2">
-                            <input type="checkbox" onchange="changeInput('hourSaturday', 'chk6')" class="flat" id="chk6" name="chk[]" value="Sabtu"/> Sabtu
+                            <input type="checkbox" onchange="changeInput('hourSaturday1', 'hourSaturday2', 'chk6')" class="flat" id="chk6" name="chk[]" value="Sabtu"/> Sabtu
                         </div>
-                        <div class="col-sm-4">
-                            <input id="hourSaturday" class="form-control" name="hour[]" disabled="disabled"/>
+                        <div class="col-sm-2">
+                            <input id="hourSaturday1" class="form-control" name="hourSaturday1" disabled="disabled"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <input id="hourSaturday2" class="form-control" name="hourSaturday2" disabled="disabled"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-2">
-                            <input type="checkbox" onchange="changeInput('hourSunday', 'chk7')" class="flat" id="chk7" name="chk[]" value="Minggu"/> Minggu
+                            <input type="checkbox" onchange="changeInput('hourSunday1', 'hourSunday2', 'chk7')" class="flat" id="chk7" name="chk[]" value="Minggu"/> Minggu
                         </div>
-                        <div class="col-sm-4">
-                            <input id="hourSunday" class="form-control" name="hour[]" disabled="disabled"/>
+                        <div class="col-sm-2">
+                            <input id="hourSunday1" class="form-control" name="hourSunday1" disabled="disabled"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <input id="hourSunday2" class="form-control" name="hourSunday2" disabled="disabled"/>
                         </div>
                     </div>
                 </div>
@@ -191,34 +212,58 @@
 
     <script type="text/javascript">
         //function to enable disable
-        function changeInput(ipt, chk){
+        function changeInput(ipt1, ipt2, chk){
             if(document.getElementById('' + chk).checked) {
-                document.getElementById('' + ipt).disabled = false;
+                document.getElementById('' + ipt1).disabled = false;
+                document.getElementById('' + ipt2).disabled = false;
             }
             else{
-                document.getElementById('' + ipt).disabled = true;
+                document.getElementById('' + ipt1).disabled = true;
+                document.getElementById('' + ipt2).disabled = true;
             }
         }
 
-        $('#hourMonday').datetimepicker({
+        $('#hourMonday1').datetimepicker({
             format: "HH:mm"
         });
-        $('#hourTuesday').datetimepicker({
+        $('#hourTuesday1').datetimepicker({
             format: "HH:mm"
         });
-        $('#hourWednesday').datetimepicker({
+        $('#hourWednesday1').datetimepicker({
             format: "HH:mm"
         });
-        $('#hourThursday').datetimepicker({
+        $('#hourThursday1').datetimepicker({
             format: "HH:mm"
         });
-        $('#hourFriday').datetimepicker({
+        $('#hourFriday1').datetimepicker({
             format: "HH:mm"
         });
-        $('#hourSaturday').datetimepicker({
+        $('#hourSaturday1').datetimepicker({
             format: "HH:mm"
         });
-        $('#hourSunday').datetimepicker({
+        $('#hourSunday1').datetimepicker({
+            format: "HH:mm"
+        });
+
+        $('#hourMonday2').datetimepicker({
+            format: "HH:mm"
+        });
+        $('#hourTuesday2').datetimepicker({
+            format: "HH:mm"
+        });
+        $('#hourWednesday2').datetimepicker({
+            format: "HH:mm"
+        });
+        $('#hourThursday2').datetimepicker({
+            format: "HH:mm"
+        });
+        $('#hourFriday2').datetimepicker({
+            format: "HH:mm"
+        });
+        $('#hourSaturday2').datetimepicker({
+            format: "HH:mm"
+        });
+        $('#hourSunday2').datetimepicker({
             format: "HH:mm"
         });
 

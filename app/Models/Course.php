@@ -90,6 +90,11 @@ class Course extends Eloquent
 		return $this->hasMany(\App\Models\Attendance::class, 'class_id');
 	}
 
+    public function days()
+    {
+        return $this->hasMany(\App\Models\Day::class);
+    }
+
 	public function transaction_details()
 	{
 		return $this->hasMany(\App\Models\TransactionDetail::class, 'class_id');

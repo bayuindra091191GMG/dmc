@@ -106,6 +106,12 @@
                             @for($i = 0; $i<count($days); $i++)
                                 {{ $days[$i] }} - {{ $hours[$i] }},
                             @endfor
+                            @foreach($course->days as $day)
+                                {{ $day->day_string }} - {{ $day->hours[0]->hour_string }},
+                                @if(count($day->hours) > 1)
+                                        {{ $day->day_string }} - {{ $day->hours[1]->hour_string }},
+                                @endif
+                            @endforeach
                         @endif
                     </div>
                 </div>

@@ -98,144 +98,284 @@
                 <div class="col-md-6 col-sm-6 col-xs-12">
 
                     <div class="row">
-                        <div class="col-sm-2">
-                            <input type="checkbox" onchange="changeInput('hourMonday', 'chk1')" class="flat" id="chk1" name="chk[]" value="Senin" @if(strpos($course->day, 'Senin') !== false) checked @endif/> Senin
-                        </div>
-                        <div class="col-sm-4">
-                            @if(strpos($course->day, 'Senin') !== false)
-                                @php($ctr = 0)
-                                @foreach($days as $day)
-                                    @if($day === 'Senin')
-                                        @break
-                                    @else
-                                        @php($ctr++)
-                                    @endif
-                                @endforeach
-                                <input id="hourMonday" class="form-control" name="hour[]" value="{{ $hours[$ctr] }}"/>
-                            @else
-                                <input id="hourMonday" class="form-control" name="hour[]" disabled="disabled"/>
+                        @php($chk = 0)
+                        @if(count($course->days) > 0)
+                            @foreach($course->days as $day)
+                                @if($day->day_string == 'Senin')
+                                    <div class="col-sm-2">
+                                        <input type="checkbox" onchange="changeInput('hourMonday1', 'hourMonday2', 'chk1')" class="flat" id="chk1" name="monday" value="{{ $day->id }}" checked/> Senin
+                                    </div>
+                                    @php($chk = 1)
+                                @endif
+                            @endforeach
+                            @if($chk == 0)
+                                <div class="col-sm-2">
+                                    <input type="checkbox" onchange="changeInput('hourMonday1', 'hourMonday2', 'chk1')" class="flat" id="chk1" name="chk[]" value="Senin"/> Senin
+                                </div>
+                                <div class="col-sm-2">
+                                    <input id="hourMonday1" class="form-control" name="hourMonday1" disabled="disabled"/>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input id="hourMonday2" class="form-control" name="hourMonday2" disabled="disabled"/>
+                                </div>
                             @endif
-                        </div>
+                            @foreach($course->days as $day)
+                                @if($day->day_string == 'Senin')
+                                    <div class="col-sm-2">
+                                        <input id="hourMonday1" class="form-control" name="hourMonday1" value="{{ $day->hours[0]->hour_string }}"/>
+                                    </div>
+                                    @if(count($day->hours) > 1)
+                                        <div class="col-sm-2">
+                                            <input id="hourMonday2" class="form-control" name="hourMonday2" value="{{ $day->hours[1]->hour_string }}"/>
+                                        </div>
+                                    @else
+                                        <div class="col-sm-2">
+                                            <input id="hourMonday2" class="form-control" name="hourMonday2" disabled="disabled"/>
+                                        </div>
+                                    @endif
+                                @endif
+                            @endforeach
+                        @endif
                     </div>
                     <div class="row">
-                        <div class="col-sm-2">
-                            <input type="checkbox" onchange="changeInput('hourTuesday', 'chk2')" class="flat" id="chk2" name="chk[]" value="Selasa" @if(strpos($course->day, 'Selasa') !== false) checked @endif/> Selasa
-                        </div>
-                        <div class="col-sm-4">
-                            @if(strpos($course->day, 'Selasa') !== false)
-                                @php($ctr = 0)
-                                @foreach($days as $day)
-                                    @if($day === 'Selasa')
-                                        @break
-                                    @else
-                                        @php($ctr++)
-                                    @endif
-                                @endforeach
-                                <input id="hourTuesday" class="form-control" name="hour[]" value="{{ $hours[$ctr] }}"/>
-                            @else
-                                <input id="hourTuesday" class="form-control" name="hour[]" disabled="disabled"/>
+                        @php($chk = 0)
+                        @if(count($course->days) > 0)
+                            @foreach($course->days as $day)
+                                @if($day->day_string == 'Selasa')
+                                    <div class="col-sm-2">
+                                        <input type="checkbox" onchange="changeInput('hourTuesday1', 'hourTuesday2', 'chk1')" class="flat" id="chk1" name="tuesday" value="{{ $day->id }}" checked/> Selasa
+                                    </div>
+                                    @php($chk = 1)
+                                @endif
+                            @endforeach
+                            @if($chk == 0)
+                                <div class="col-sm-2">
+                                    <input type="checkbox" onchange="changeInput('hourTuesday1', 'hourTuesday2', 'chk1')" class="flat" id="chk1" name="chk[]" value="Selasa"/> Selasa
+                                </div>
+                                <div class="col-sm-2">
+                                    <input id="hourTuesday1" class="form-control" name="hourTuesday1" disabled="disabled"/>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input id="hourTuesday2" class="form-control" name="hourTuesday2" disabled="disabled"/>
+                                </div>
                             @endif
-                        </div>
+                            @foreach($course->days as $day)
+                                @if($day->day_string == 'Selasa')
+                                    <div class="col-sm-2">
+                                        <input id="hourTuesday1" class="form-control" name="hourTuesday1" value="{{ $day->hours[0]->hour_string }}"/>
+                                    </div>
+                                    @if(count($day->hours) > 1)
+                                        <div class="col-sm-2">
+                                            <input id="hourTuesday2" class="form-control" name="hourTuesday2" value="{{ $day->hours[1]->hour_string }}"/>
+                                        </div>
+                                    @else
+                                        <div class="col-sm-2">
+                                            <input id="hourTuesday2" class="form-control" name="hourTuesday2" disabled="disabled"/>
+                                        </div>
+                                    @endif
+                                @endif
+                            @endforeach
+                        @endif
                     </div>
                     <div class="row">
-                        <div class="col-sm-2">
-                            <input type="checkbox" onchange="changeInput('hourWednesday', 'chk3')" class="flat" id="chk3" name="chk[]" value="Rabu" @if(strpos($course->day, 'Rabu') !== false) checked @endif /> Rabu
-                        </div>
-                        <div class="col-sm-4">
-                            @if(strpos($course->day, 'Rabu') !== false)
-                                @php($ctr = 0)
-                                @foreach($days as $day)
-                                    @if($day === 'Rabu')
-                                        @break
-                                    @else
-                                        @php($ctr++)
-                                    @endif
-                                @endforeach
-                                <input id="hourWednesday" class="form-control" name="hour[]" value="{{ $hours[$ctr] }}"/>
-                            @else
-                                <input id="hourWednesday" class="form-control" name="hour[]" disabled="disabled"/>
+                        @php($chk = 0)
+                        @if(count($course->days) > 0)
+                            @foreach($course->days as $day)
+                                @if($day->day_string == 'Rabu')
+                                    <div class="col-sm-2">
+                                        <input type="checkbox" onchange="changeInput('hourWednesday1', 'hourWednesday2', 'chk1')" class="flat" id="chk1" name="wednesday" value="{{ $day->id }}" checked/> Rabu
+                                    </div>
+                                    @php($chk = 1)
+                                @endif
+                            @endforeach
+                            @if($chk == 0)
+                                <div class="col-sm-2">
+                                    <input type="checkbox" onchange="changeInput('hourWednesday1', 'hourWednesday2', 'chk1')" class="flat" id="chk1" name="chk[]" value="Rabu"/> Rabu
+                                </div>
+                                <div class="col-sm-2">
+                                    <input id="hourWednesday1" class="form-control" name="hourWednesday1" disabled="disabled"/>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input id="hourWednesday2" class="form-control" name="hourWednesday2" disabled="disabled"/>
+                                </div>
                             @endif
-                        </div>
+                            @foreach($course->days as $day)
+                                @if($day->day_string == 'Rabu')
+                                    <div class="col-sm-2">
+                                        <input id="hourWednesday1" class="form-control" name="hourWednesday1" value="{{ $day->hours[0]->hour_string }}"/>
+                                    </div>
+                                    @if(count($day->hours) > 1)
+                                        <div class="col-sm-2">
+                                            <input id="hourWednesday2" class="form-control" name="hourWednesday2" value="{{ $day->hours[1]->hour_string }}"/>
+                                        </div>
+                                    @else
+                                        <div class="col-sm-2">
+                                            <input id="hourWednesday2" class="form-control" name="hourWednesday2" disabled="disabled"/>
+                                        </div>
+                                    @endif
+                                @endif
+                            @endforeach
+                        @endif
                     </div>
                     <div class="row">
-                        <div class="col-sm-2">
-                            <input type="checkbox" onchange="changeInput('hourThursday', 'chk4')" class="flat" id="chk4" name="chk[]" value="Kamis" @if(strpos($course->day, 'Kamis') !== false) checked @endif/> Kamis
-                        </div>
-                        <div class="col-sm-4">
-                            @if(strpos($course->day, 'Kamis') !== false)
-                                @php($ctr = 0)
-                                @foreach($days as $day)
-                                    @if($day === 'Kamis')
-                                        @break
-                                    @else
-                                        @php($ctr++)
-                                    @endif
-                                @endforeach
-                                <input id="hourThursday" class="form-control" name="hour[]" value="{{ $hours[$ctr] }}"/>
-                            @else
-                                <input id="hourThursday" class="form-control" name="hour[]" disabled="disabled"/>
+                        @php($chk = 0)
+                        @if(count($course->days) > 0)
+                            @foreach($course->days as $day)
+                                @if($day->day_string == 'Kamis')
+                                    <div class="col-sm-2">
+                                        <input type="checkbox" onchange="changeInput('hourThursday1', 'hourThursday2', 'chk1')" class="flat" id="chk1" name="thursday" value="{{ $day->id }}" checked/> Kamis
+                                    </div>
+                                    @php($chk = 1)
+                                @endif
+                            @endforeach
+                            @if($chk == 0)
+                                <div class="col-sm-2">
+                                    <input type="checkbox" onchange="changeInput('hourThursday1', 'hourThursday2', 'chk1')" class="flat" id="chk1" name="chk[]" value="Kamis"/> Kamis
+                                </div>
+                                <div class="col-sm-2">
+                                    <input id="hourThursday1" class="form-control" name="hourThursday1" disabled="disabled"/>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input id="hourThursday2" class="form-control" name="hourThursday2" disabled="disabled"/>
+                                </div>
                             @endif
-                        </div>
+                            @foreach($course->days as $day)
+                                @if($day->day_string == 'Kamis')
+                                    <div class="col-sm-2">
+                                        <input id="hourThursday1" class="form-control" name="hourThursday1" value="{{ $day->hours[0]->hour_string }}"/>
+                                    </div>
+                                    @if(count($day->hours) > 1)
+                                        <div class="col-sm-2">
+                                            <input id="hourThursday2" class="form-control" name="hourThursday2" value="{{ $day->hours[1]->hour_string }}"/>
+                                        </div>
+                                    @else
+                                        <div class="col-sm-2">
+                                            <input id="hourThursday2" class="form-control" name="hourThursday2" disabled="disabled"/>
+                                        </div>
+                                    @endif
+                                @endif
+                            @endforeach
+                        @endif
                     </div>
                     <div class="row">
-                        <div class="col-sm-2">
-                            <input type="checkbox" onchange="changeInput('hourFriday', 'chk5')" class="flat" id="chk5" name="chk[]" value="Jumat" @if(strpos($course->day, 'Jumat') !== false) checked @endif/> Jumat
-                        </div>
-                        <div class="col-sm-4">
-                            @if(strpos($course->day, 'Jumat') !== false)
-                                @php($ctr = 0)
-                                @foreach($days as $day)
-                                    @if($day === 'Jumat')
-                                        @break
-                                    @else
-                                        @php($ctr++)
-                                    @endif
-                                @endforeach
-                                <input id="hourFriday" class="form-control" name="hour[]" value="{{ $hours[$ctr] }}"/>
-                            @else
-                                <input id="hourFriday" class="form-control" name="hour[]" disabled="disabled"/>
+                        @php($chk = 0)
+                        @if(count($course->days) > 0)
+                            @foreach($course->days as $day)
+                                @if($day->day_string == 'Jumat')
+                                    <div class="col-sm-2">
+                                        <input type="checkbox" onchange="changeInput('hourFriday1', 'hourFriday12', 'chk1')" class="flat" id="chk1" name="friday" value="{{ $day->id }}" checked/> Jumat
+                                    </div>
+                                    @php($chk = 1)
+                                @endif
+                            @endforeach
+                            @if($chk == 0)
+                                <div class="col-sm-2">
+                                    <input type="checkbox" onchange="changeInput('hourFriday1', 'hourFriday12', 'chk1')" class="flat" id="chk1" name="chk[]" value="Jumat"/> Jumat
+                                </div>
+                                <div class="col-sm-2">
+                                    <input id="hourFriday1" class="form-control" name="hourFriday1" disabled="disabled"/>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input id="hourFriday2" class="form-control" name="hourFriday2" disabled="disabled"/>
+                                </div>
                             @endif
-                        </div>
+                            @foreach($course->days as $day)
+                                @if($day->day_string == 'Jumat')
+                                    <div class="col-sm-2">
+                                        <input id="hourFriday1" class="form-control" name="hourFriday1" value="{{ $day->hours[0]->hour_string }}"/>
+                                    </div>
+                                    @if(count($day->hours) > 1)
+                                        <div class="col-sm-2">
+                                            <input id="hourFriday2" class="form-control" name="hourFriday2" value="{{ $day->hours[1]->hour_string }}"/>
+                                        </div>
+                                    @else
+                                        <div class="col-sm-2">
+                                            <input id="hourFriday2" class="form-control" name="hourFriday2" disabled="disabled"/>
+                                        </div>
+                                    @endif
+                                @endif
+                            @endforeach
+                        @endif
                     </div>
                     <div class="row">
-                        <div class="col-sm-2">
-                            <input type="checkbox" onchange="changeInput('hourSaturday', 'chk6')" class="flat" id="chk6" name="chk[]" value="Sabtu" @if(strpos($course->day, 'Sabtu') !== false) checked @endif/> Sabtu
-                        </div>
-                        <div class="col-sm-4">
-                            @if(strpos($course->day, 'Sabtu') !== false)
-                                @php($ctr = 0)
-                                @foreach($days as $day)
-                                    @if($day === 'Sabtu')
-                                        @break
-                                    @else
-                                        @php($ctr++)
-                                    @endif
-                                @endforeach
-                                <input id="hourSaturday" class="form-control" name="hour[]" value="{{ $hours[$ctr] }}"/>
-                            @else
-                                <input id="hourSaturday" class="form-control" name="hour[]" disabled="disabled"/>
+                        @php($chk = 0)
+                        @if(count($course->days) > 0)
+                            @foreach($course->days as $day)
+                                @if($day->day_string == 'Sabtu')
+                                    <div class="col-sm-2">
+                                        <input type="checkbox" onchange="changeInput('hourSaturday1', 'hourSaturday2', 'chk1')" class="flat" id="chk1" name="saturday" value="{{ $day->id }}" checked/> Sabtu
+                                    </div>
+                                    @php($chk = 1)
+                                @endif
+                            @endforeach
+                            @if($chk == 0)
+                                <div class="col-sm-2">
+                                    <input type="checkbox" onchange="changeInput('hourSaturday1', 'hourSaturday2', 'chk1')" class="flat" id="chk1" name="chk[]" value="Sabtu"/> Sabtu
+                                </div>
+                                <div class="col-sm-2">
+                                    <input id="hourSaturday1" class="form-control" name="hourSaturday1" disabled="disabled"/>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input id="hourSaturday2" class="form-control" name="hourSaturday2" disabled="disabled"/>
+                                </div>
                             @endif
-                        </div>
+                            @foreach($course->days as $day)
+                                @if($day->day_string == 'Sabtu')
+                                    <div class="col-sm-2">
+                                        <input id="hourSaturday1" class="form-control" name="hourSaturday1" value="{{ $day->hours[0]->hour_string }}"/>
+                                    </div>
+                                    @if(count($day->hours) > 1)
+                                        <div class="col-sm-2">
+                                            <input id="hourSaturday2" class="form-control" name="hourSaturday2" value="{{ $day->hours[1]->hour_string }}"/>
+                                        </div>
+                                    @else
+                                        <div class="col-sm-2">
+                                            <input id="hourSaturday2" class="form-control" name="hourSaturday2" disabled="disabled"/>
+                                        </div>
+                                    @endif
+                                @endif
+                            @endforeach
+                        @endif
                     </div>
                     <div class="row">
-                        <div class="col-sm-2">
-                            <input type="checkbox" onchange="changeInput('hourSunday', 'chk7')" class="flat" id="chk7" name="chk[]" value="Minggu" @if(strpos($course->day, 'Minggu') !== false) checked @endif/> Minggu
-                        </div>
-                        <div class="col-sm-4">
-                            @if(strpos($course->day, 'Minggu') !== false)
-                                @php($ctr = 0)
-                                @foreach($days as $day)
-                                    @if($day === 'Minggu')
-                                        @break
-                                    @else
-                                        @php($ctr++)
-                                    @endif
-                                @endforeach
-                                <input id="hourSunday" class="form-control" name="hour[]" value="{{ $hours[$ctr] }}"/>
-                            @else
-                                <input id="hourSunday" class="form-control" name="hour[]" disabled="disabled"/>
+                        @php($chk = 0)
+                        @if(count($course->days) > 0)
+                            @foreach($course->days as $day)
+                                @if($day->day_string == 'Minggu')
+                                    <div class="col-sm-2">
+                                        <input type="checkbox" onchange="changeInput('hourSunday1', 'hourSunday2', 'chk1')" class="flat" id="chk1" name="sunday" value="{{ $day->id }}" checked/> Minggu
+                                    </div>
+                                    @php($chk = 1)
+                                @endif
+                            @endforeach
+                            @if($chk == 0)
+                                <div class="col-sm-2">
+                                    <input type="checkbox" onchange="changeInput('hourSunday1', 'hourSunday2', 'chk1')" class="flat" id="chk1" name="chk[]" value="Minggu"/> Minggu
+                                </div>
+                                <div class="col-sm-2">
+                                    <input id="hourSunday1" class="form-control" name="hourSunday1" disabled="disabled"/>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input id="hourSunday2" class="form-control" name="hourSunday2" disabled="disabled"/>
+                                </div>
                             @endif
-                        </div>
+                            @foreach($course->days as $day)
+                                @if($day->day_string == 'Minggu')
+                                    <div class="col-sm-2">
+                                        <input id="hourSunday1" class="form-control" name="hourSunday1" value="{{ $day->hours[0]->hour_string }}"/>
+                                    </div>
+                                    @if(count($day->hours) > 1)
+                                        <div class="col-sm-2">
+                                            <input id="hourSunday2" class="form-control" name="hourSunday2" value="{{ $day->hours[1]->hour_string }}"/>
+                                        </div>
+                                    @else
+                                        <div class="col-sm-2">
+                                            <input id="hourSunday2" class="form-control" name="hourSunday2" disabled="disabled"/>
+                                        </div>
+                                    @endif
+                                @endif
+                            @endforeach
+                        @endif
                     </div>
                 </div>
             </div>
@@ -274,34 +414,58 @@
     {{ Html::script(mix('assets/admin/js/users/edit.js')) }}
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
     <script>
-        function changeInput(ipt, chk){
+        function changeInput(ipt1, ipt2, chk){
             if(document.getElementById('' + chk).checked) {
-                document.getElementById('' + ipt).disabled = false;
+                document.getElementById('' + ipt1).disabled = false;
+                document.getElementById('' + ipt2).disabled = false;
             }
             else{
-                document.getElementById('' + ipt).disabled = true;
+                document.getElementById('' + ipt1).disabled = true;
+                document.getElementById('' + ipt2).disabled = true;
             }
         }
 
-        $('#hourMonday').datetimepicker({
+        $('#hourMonday1').datetimepicker({
             format: "HH:mm"
         });
-        $('#hourTuesday').datetimepicker({
+        $('#hourTuesday1').datetimepicker({
             format: "HH:mm"
         });
-        $('#hourWednesday').datetimepicker({
+        $('#hourWednesday1').datetimepicker({
             format: "HH:mm"
         });
-        $('#hourThursday').datetimepicker({
+        $('#hourThursday1').datetimepicker({
             format: "HH:mm"
         });
-        $('#hourFriday').datetimepicker({
+        $('#hourFriday1').datetimepicker({
             format: "HH:mm"
         });
-        $('#hourSaturday').datetimepicker({
+        $('#hourSaturday1').datetimepicker({
             format: "HH:mm"
         });
-        $('#hourSunday').datetimepicker({
+        $('#hourSunday1').datetimepicker({
+            format: "HH:mm"
+        });
+
+        $('#hourMonday2').datetimepicker({
+            format: "HH:mm"
+        });
+        $('#hourTuesday2').datetimepicker({
+            format: "HH:mm"
+        });
+        $('#hourWednesday2').datetimepicker({
+            format: "HH:mm"
+        });
+        $('#hourThursday2').datetimepicker({
+            format: "HH:mm"
+        });
+        $('#hourFriday2').datetimepicker({
+            format: "HH:mm"
+        });
+        $('#hourSaturday2').datetimepicker({
+            format: "HH:mm"
+        });
+        $('#hourSunday2').datetimepicker({
             format: "HH:mm"
         });
     </script>

@@ -26,7 +26,7 @@
         <div class="col-xs-12">
             <div class="invoice-title">
                 <h2><img src="{{URL::asset('assets/admin/images/DMC Clean.jpg')}}" width="50px"/> <br/></h2>
-                <h3 class="pull-right">Invoice <br/>{{ $header->invoice_number }}</h3>
+                <h4 class="pull-right">Invoice <br/>{{ $header->invoice_number }}</h4>
             </div>
             <hr>
             <div class="row">
