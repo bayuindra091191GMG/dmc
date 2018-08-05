@@ -173,6 +173,10 @@
                                     <option value="1">1 Pertemuan</option>
                                     <option value="2">2 Pertemuan</option>
                                     <option value="3">3 Pertemuan</option>
+                                    <option value="4">4 Pertemuan</option>
+                                    <option value="5">5 Pertemuan</option>
+                                    <option value="6">6 Pertemuan</option>
+                                    <option value="7">7 Pertemuan</option>
                                 </select>
                             </div>
                         </div>
@@ -234,6 +238,10 @@
                                     <option value="1">1 Pertemuan</option>
                                     <option value="2">2 Pertemuan</option>
                                     <option value="3">3 Pertemuan</option>
+                                    <option value="4">4 Pertemuan</option>
+                                    <option value="5">5 Pertemuan</option>
+                                    <option value="6">6 Pertemuan</option>
+                                    <option value="7">7 Pertemuan</option>
                                 </select>
                             </div>
                         </div>

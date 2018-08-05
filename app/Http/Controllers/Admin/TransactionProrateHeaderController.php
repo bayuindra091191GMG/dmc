@@ -81,12 +81,17 @@ class TransactionProrateHeaderController extends Controller
         $normPrices = $request->input('normal_price');
 //        $discounts = $request->input('discount');
         $valid = true;
+        $validClass = true;
         $i = 0;
         foreach($schedules as $schedule){
-            if(empty($schedule)) $valid = false;
+            if(empty($schedule)){ $valid = false; }
+            else{
+                $scheduleDB = Schedule::find($schedule);
+                if($scheduleDB->course->meeting_amount == 4 && $prorate[$i] > 3) $validClass = false;
+            }
+
             if(empty($prorate)) $valid = false;
             if(empty($prices[$i]) || $prices[$i] == '0') $valid = false;
-
             // Validate discount
 //            $priceVad = str_replace('.','', $prices[$i]);
 //            $discountVad = str_replace('.','', $discounts[$i]);
@@ -97,6 +102,9 @@ class TransactionProrateHeaderController extends Controller
 
         if(!$valid){
             return redirect()->back()->withErrors('Detail prorate dan harga wajib diisi!', 'default')->withInput($request->all());
+        }
+        if(!$validClass){
+            return redirect()->back()->withErrors('Prorate dengan pertemuan lebih dari 3 hanya untuk Kelas Bayi!', 'default')->withInput($request->all());
         }
 
         // Check duplicate inventory
