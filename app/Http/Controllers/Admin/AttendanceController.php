@@ -169,7 +169,12 @@ class AttendanceController extends Controller
                 ->withErrors('Harap Melakukan Pembayaran Pada Kelas ini.', 'default')
                 ->withInput();
         }
-        //for gymnastic checking only 2 times per week
+
+        $attendancePending = Attendance::where('customer_id', $customerID)
+            ->where('schedule_id', $scheduleID)
+            ->where('status_id', 2)
+            ->orderBy('created_at')
+            ->first();
         if($scheduleDB->course->type == 4){
             $startWeek = Carbon::now()->startOfWeek()->toDateTimeString();
             $endWeek = Carbon::now()->endOfWeek()->toDateTimeString();
@@ -180,11 +185,25 @@ class AttendanceController extends Controller
                 ->whereBetween('date', [$startWeek, $endWeek])
                 ->count();
 
+            //for gymnastic checking only 2 times per week
             if($countAttendanceOfWeek >= 2){
                 return redirect()
                     ->back()
                     ->withErrors('Absensi pada Kelas Gymnastic maksimal 2 kali per minggu.', 'default')
                     ->withInput();
+            }
+
+            $splitDay = explode (' - ',$scheduleDB->day);
+            $today = Carbon::now('Asia/Jakarta')->format('N');
+
+            //for gymnastic checking for today attendance
+            if($attendancePending == null){
+                if($splitDay[0] != $hari[$today]){
+                    return redirect()
+                        ->back()
+                        ->withErrors('Tidak dapat Melakukan Absensi di Hari ini', 'default')
+                        ->withInput();
+                }
             }
         }
 
@@ -226,11 +245,6 @@ class AttendanceController extends Controller
 
         }
 
-        $attendancePending = Attendance::where('customer_id', $customerID)
-            ->where('schedule_id', $scheduleID)
-            ->where('status_id', 2)
-            ->orderBy('created_at')
-            ->first();
         if($attendancePending == null){
             //save the attendance
             $attendanceCount = Attendance::where('customer_id', $customerID)->where('schedule_id', $scheduleID)->count();
