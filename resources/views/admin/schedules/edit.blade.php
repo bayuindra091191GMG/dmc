@@ -51,8 +51,16 @@
 
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         <select id="day_add" name="day_add" class="form-control col-md-7 col-xs-12">
-                            @foreach($dayTime as $day)
-                                <option value="{{$day}}" {{ $schedule->day === $day ? 'selected' : '' }}>{{$day}}</option>
+                            @foreach($course->days as $day)
+                                @if(count($day->hours) > 1)
+                                    <option value="{{$day->day_string}} - {{ $day->hours[1]->hour_string }}">
+                                        {{ $day->day_string }} - {{ $day->hours[1]->hour_string }}
+                                    </option>
+                                @else
+                                    <option value="{{$day->day_string}} - {{ $day->hours[0]->hour_string }}">
+                                        {{ $day->day_string }} - {{ $day->hours[0]->hour_string }}
+                                    </option>
+                                @endif
                             @endforeach
                         </select>
                     </div>
