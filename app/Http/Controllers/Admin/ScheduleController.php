@@ -41,7 +41,9 @@ class ScheduleController extends Controller
      */
     public function anyData()
     {
-        $schedules = Schedule::all();
+        $schedules = Schedule::join('customers', 'schedules.customer_id', '=', 'customers.id')->orderBy('customers.name')
+            ->select('schedules.*')
+            ->get();
         return DataTables::of($schedules)
             ->setTransformer(new ScheduleTransformer())
             ->addIndexColumn()
@@ -303,7 +305,7 @@ class ScheduleController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param Coach $coach
+     * @param Schedule $schedule
      * @return mixed
      */
     public function updateChange(Request $request, Schedule $schedule)
@@ -334,6 +336,30 @@ class ScheduleController extends Controller
             Session::flash('message', 'Berhasil mengubah data Jadwal!');
 
             return redirect()->route('admin.schedules');
+        }
+    }
+
+    public function stop(Request $request){
+        try{
+            $now = Carbon::now('Asia/Jakarta');
+            $user = Auth::user();
+            $schedule = Schedule::find($request->input('schedule_id'));
+            if(empty($schedule)) return Response::json(array('errors' => 'EMPTY'));
+
+            if($schedule->status_id === 6) return Response::json(array('errors' => 'STOPPED'));
+
+            $schedule->status_id = 6;
+            $schedule->updated_at = $now->toDateTimeString();
+            $schedule->updated_by = $user->id;
+            $schedule->save();
+
+            Session::flash('message', 'Berhasil membatalkan jadwal kelas'. $schedule->course->name);
+
+            return Response::json(array('success' => 'VALID'));
+        }
+        catch(\Exception $ex){
+            error_log($ex);
+            return Response::json(array('errors' => 'INVALID'));
         }
     }
 

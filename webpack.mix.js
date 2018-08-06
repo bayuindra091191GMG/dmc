@@ -143,7 +143,8 @@ mix.styles([
 // DATATABLES
 mix.scripts([
     'node_modules/datatables.net/js/jquery.dataTables.js',
-    'node_modules/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js'
+    'node_modules/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js',
+    'node_modules/gentelella/production/js/moment/moment.min.js'
 ], 'public/assets/admin/js/datatables.js').version();
 
 mix.styles([

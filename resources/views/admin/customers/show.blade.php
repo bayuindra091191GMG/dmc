@@ -40,7 +40,7 @@
                         Nama Orang Tua
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $customer->parent_name }}
+                        : {{ $customer->parent_name ?? '-' }}
                     </div>
                 </div>
 
@@ -58,7 +58,7 @@
                         Nomor Telepon
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $customer->phone }}
+                        : {{ $customer->phone ?? '-' }}
                     </div>
                 </div>
 
@@ -76,7 +76,7 @@
                         Alamat
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $customer->address }}
+                        : {{ $customer->address ?? '-' }}
                     </div>
                 </div>
 
@@ -94,34 +94,37 @@
                 @if($schedules != null)
                     <div class="form-group">
                         <div class="col-lg-12 col-md-12 col-xs-12 column">
-                            <h4 class="text-center">Kelas</h4>
+                            <h4 class="text-center">DAFTAR KELAS YANG DIIKUTI</h4>
                             <div class="table-responsive">
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                     <tr >
-                                        <th class="text-center" style="width: 3%">
+                                        <th class="text-center" style="width: 5%">
                                             No
                                         </th>
-                                        <th class="text-center" style="width: 20%">
+                                        <th class="text-center" style="width: 10%">
                                             Nama
                                         </th>
-                                        <th class="text-center" style="width: 20%">
+                                        <th class="text-center" style="width: 10%">
                                             Trainer
                                         </th>
                                         <th class="text-center" style="width: 10%">
                                             Tipe
                                         </th>
                                         <th class="text-center" style="width: 10%">
-                                            Fee
-                                        </th>
-                                        <th class="text-center" style="width: 10%">
-                                            Hari yang diambil
+                                            Hari
                                         </th>
                                         <th class="text-center" style="width: 10%">
                                             Jumlah Pertemuan
                                         </th>
-                                        <th class="text-center" style="width: 10%">
+                                        <th class="text-center" style="width: 15%">
                                             Masa Kelas
+                                        </th>
+                                        <th class="text-center" style="width: 10%">
+                                            Fee
+                                        </th>
+                                        <th class="text-center" style="width: 10%">
+                                            Status
                                         </th>
                                         <th class="text-center" style="width: 10%">
                                             Action
@@ -140,20 +143,23 @@
                                                 {{ $schedule->course->name }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $schedule->course->coach->name }}
-                                            </td>
-                                            <td class="text-center">
                                                 @if($schedule->course->type == 1)
-                                                    Paket
+                                                    BEBAS
                                                 @else
-                                                    Kelas
+                                                    {{ $schedule->course->coach->name }}
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                Rp{{ $schedule->course->price_string }}
+                                                @if($schedule->course->type == 1)
+                                                    PAKET
+                                                @elseif($schedule->course->type == 2)
+                                                    KELAS
+                                                @else
+                                                    PRIVATE
+                                                @endif
                                             </td>
                                             <td class="text-center">
-                                                {{ $schedule->day }}
+                                                {{ strtoupper($schedule->day) }}
                                             </td>
                                             <td class="text-center">
                                                 {{ $schedule->meeting_amount }}
@@ -161,8 +167,17 @@
                                             <td class="text-center">
                                                 {{ $schedule->start_date_string }} - {{ $schedule->finish_date_string }}
                                             </td>
+                                            <td class="text-right">
+                                                {{ $schedule->course->price_string }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ strtoupper($schedule->status->description) }}
+                                            </td>
                                             <td class="text-center">
                                                 <a class='btn btn-xs btn-info' href="{{route('admin.schedules.edit', ['schedule'=>$schedule->id])}}" data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>
+                                                @if($schedule->status_id !== 6)
+                                                    <a class='btn btn-xs btn-danger stop-modal' data-toggle='tooltip' data-placement='top' data-schedule-id="{{ $schedule->id }}"><i class='fa fa-times'></i></a>
+                                                @endif
                                             </td>
                                         </tr>
                                         @php($no++)
@@ -178,27 +193,25 @@
         </div>
     </div>
 
-    <div id="closeModal" class="modal fade" role="dialog">
+    <div id="stopModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">×</button>
                 </div>
                 <div class="modal-body">
-                    <h3 class="text-center">Apakah anda yakin ingin menutup dokumen MR ini secara manual?</h3>
+                    <h3 class="text-center">Apakah anda yakin ingin membatalkan jadwal kelas ini?</h3>
                     <br />
 
                     <form role="form">
-                        <input type="hidden" id="closed-id" name="closed-id"/>
-                        <label for="reason">Alasan Hapus:</label>
-                        <textarea id="reason" name="reason" rows="5" class="form-control col-md-7 col-xs-12" style="resize: vertical"></textarea>
+                        <input type="hidden" id="schedule_id" name="schedule_id"/>
                     </form>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
                             <span class='glyphicon glyphicon-remove'></span> Tidak
                         </button>
-                        <button type="submit" class="btn btn-danger closed">
+                        <button type="submit" class="btn btn-danger stop">
                             <span class='glyphicon glyphicon-trash'></span> Ya
                         </button>
                     </div>
@@ -227,35 +240,41 @@
     {{ Html::script(mix('assets/admin/js/datatables.js')) }}
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript">
-        $(document).on('click', '.close-modal', function(){
-            $('#closeModal').modal({
+        $(document).on('click', '.stop-modal', function(){
+            $('#stopModal').modal({
                 backdrop: 'static',
                 keyboard: false
             });
 
-            $('#closed-id').val($(this).data('id'));
+            $('#schedule_id').val($(this).data('schedule-id'));
         });
 
-        /*$('.modal-footer').on('click', '.closed', function() {
+        $('.modal-footer').on('click', '.stop', function() {
             $.ajax({
                 type: 'POST',
-                url: 'asdf',
+                url: '{{ route('admin.schedules.user.stop') }}',
                 data: {
-                    '_token': 'asdf',
-                    'id': $('#closed-id').val(),
-                    'reason': $('#reason').val()
+                    '_token': '{{ csrf_token() }}',
+                    'schedule_id': $('#schedule_id').val()
                 },
                 success: function(data) {
                     if ((data.errors)){
-                        setTimeout(function () {
-                            toastr.error('Gagal menutup MR!!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
-                        }, 500);
+                        if(data.errors === "STOPPED"){
+                            setTimeout(function () {
+                                toastr.error('Jadwal kelas sudah dibatalkan!!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                            }, 500);
+                        }
+                        else{
+                            setTimeout(function () {
+                                toastr.error('Gagal membatalkan jadwal kelas!!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                            }, 500);
+                        }
                     }
                     else{
                         window.location.reload();
                     }
                 }
             });
-        });*/
+        });
     </script>
 @endsection

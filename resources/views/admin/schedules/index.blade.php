@@ -15,7 +15,7 @@
     </div>
     <div class="row">
         <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
-               width="100%" id="users-table">
+               width="100%" id="schedule_table">
             <thead>
                 <tr>
                     <th class="text-center">No</th>
@@ -52,10 +52,29 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         $(function() {
-            $('#users-table').DataTable({
+            $('#schedule_table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: '{!! route('datatables.schedules') !!}',
+                createdRow: function(row, data, dataIndex) {
+                    var $dateCellStart = $(row).find('td:eq(5)');
+                    var dateOrderStart = $dateCellStart.text();
+                    $dateCellStart
+                        .attr('data-order', dateOrderStart)
+                        .text(moment(dateOrderStart).format('DD MMM YYYY'));
+
+                    var $dateCellFinish = $(row).find('td:eq(6)');
+                    var dateOrderFinish = $dateCellFinish.text();
+                    $dateCellFinish
+                        .attr('data-order', dateOrderFinish)
+                        .text(moment(dateOrderFinish).format('DD MMM YYYY'));
+
+                    var $dateCellCreated = $(row).find('td:eq(10)');
+                    var dateOrderCreated = $dateCellCreated.text();
+                    $dateCellCreated
+                        .attr('data-order', dateOrderCreated)
+                        .text(moment(dateOrderCreated).format('DD MMM YYYY'));
+                },
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
                     { data: 'customer_name', name: 'customer_name', class: 'text-center'},

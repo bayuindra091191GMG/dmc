@@ -21,15 +21,15 @@ window.Vue = require('vue');
 //     el: '#app'
 // });
 
-import Echo from 'laravel-echo';
-import Pusher from 'pusher-js';
-
-Pusher.logToConsole = true;
-
-window.Echo = new Echo({
-    broadcaster: 'pusher',
-    key: 'e8d312137b74ece60a85',
-    cluster: 'ap1',
-    encrypted: false,
-    disableStats: false
-});
+// import Echo from 'laravel-echo';
+// import Pusher from 'pusher-js';
+//
+// Pusher.logToConsole = true;
+//
+// window.Echo = new Echo({
+//     broadcaster: 'pusher',
+//     key: 'e8d312137b74ece60a85',
+//     cluster: 'ap1',
+//     encrypted: false,
+//     disableStats: false
+// });
