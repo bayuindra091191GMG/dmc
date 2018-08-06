@@ -111,6 +111,8 @@ class AttendanceController extends Controller
 
         //Check payment due or not
 
+
+
         $now = Carbon::now('Asia/Jakarta');
         //Check if already absence today
         $attendanceExist = Attendance::where('customer_id', $customerID)
@@ -124,11 +126,32 @@ class AttendanceController extends Controller
                 ->withInput();
         }
 
-        //Check if schedule date still
         $scheduleDB = Schedule::find($scheduleID);
+        //check if schedule is today
+        $hari = array ( 1 =>    'Senin',
+            'Selasa',
+            'Rabu',
+            'Kamis',
+            'Jumat',
+            'Sabtu',
+            'Minggu'
+        );
+
+        if($scheduleDB->course->type != 4 && $scheduleDB->day != "Bebas"){
+            $splitDay = explode (' - ',$scheduleDB->day);
+            $today = Carbon::now('Asia/Jakarta')->format('N');
+            if($splitDay[0] != $hari[$today]){
+                return redirect()
+                    ->back()
+                    ->withErrors('Tidak dapat Melakukan Absensi di Hari ini', 'default')
+                    ->withInput();
+            }
+        }
+
+
+        //Check if schedule date still
         $nowFormated = Carbon::parse(date_format($now,'Y-m-d'));
         $scheduleFinishDate = Carbon::parse(date_format($scheduleDB->finish_date, 'Y-m-d'));
-//        dd($scheduleFinishDate." - ".$nowFormated);
         if($scheduleFinishDate < $nowFormated){
             $scheduleDB->status_id = 4;
             $scheduleDB->save();
