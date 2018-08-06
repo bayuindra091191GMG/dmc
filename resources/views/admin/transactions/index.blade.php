@@ -61,19 +61,19 @@
                 serverSide: true,
                 pageLength: 50,
                 ajax: '{!! route('datatables.transactions') !!}',
-                createdRow: function(row, data, dataIndex) {
-                    var $dateCell = $(row).find('td:eq(4)'); // get first column
-                    var dateOrder = $dateCell.text(); // get the ISO date
-                    $dateCell
-                        .attr('data-order', dateOrder) // set it to data-order
-                        .text(moment(dateOrder).format('DD MMM YYYY')); // and set the formatted text
-                },
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
                     { data: 'code', name: 'code', class: 'text-center'},
                     { data: 'invoice', name: 'invoice', class: 'text-center'},
                     { data: 'type', name: 'type', class: 'text-center'},
-                    { data: 'date', name: 'date', class: 'text-center'},
+                    { data: 'date', name: 'date', class: 'text-center',
+                        render: function ( data, type, row ){
+                            if ( type === 'display' || type === 'filter' ){
+                                return moment(data).format('DD MMM YYYY');
+                            }
+                            return data;
+                        }
+                    },
                     { data: 'fee', name: 'fee', class: 'text-right'},
                     { data: 'total_price', name: 'total_price', class: 'text-right'},
                     // { data: 'total_discount', name: 'total_discount', class: 'text-right'},

@@ -57,25 +57,6 @@
                 processing: true,
                 serverSide: true,
                 ajax: '{!! route('datatables.schedules') !!}',
-                createdRow: function(row, data, dataIndex) {
-                    var $dateCellStart = $(row).find('td:eq(6)');
-                    var dateOrderStart = $dateCellStart.text();
-                    $dateCellStart
-                        .attr('data-order', dateOrderStart)
-                        .text(moment(dateOrderStart).format('DD MMM YYYY'));
-
-                    var $dateCellFinish = $(row).find('td:eq(7)');
-                    var dateOrderFinish = $dateCellFinish.text();
-                    $dateCellFinish
-                        .attr('data-order', dateOrderFinish)
-                        .text(moment(dateOrderFinish).format('DD MMM YYYY'));
-
-                    var $dateCellCreated = $(row).find('td:eq(11)');
-                    var dateOrderCreated = $dateCellCreated.text();
-                    $dateCellCreated
-                        .attr('data-order', dateOrderCreated)
-                        .text(moment(dateOrderCreated).format('DD MMM YYYY'));
-                },
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
                     { data: 'customer_name', name: 'customer_name', class: 'text-center'},
@@ -83,12 +64,33 @@
                     { data: 'course_name', name: 'course_name', class: 'text-center'},
                     { data: 'coach_name', name: 'coach_name', class: 'text-center'},
                     { data: 'day', name: 'day', class: 'text-center'},
-                    { data: 'start_date', name: 'start_date', class: 'text-center'},
-                    { data: 'finish_date', name: 'finish_date', class: 'text-center'},
+                    { data: 'start_date', name: 'start_date', class: 'text-center',
+                        render: function ( data, type, row ){
+                            if ( type === 'display' || type === 'filter' ){
+                                return moment(data).format('DD MMM YYYY');
+                            }
+                            return data;
+                        }
+                    },
+                    { data: 'finish_date', name: 'finish_date', class: 'text-center',
+                        render: function ( data, type, row ){
+                            if ( type === 'display' || type === 'filter' ){
+                                return moment(data).format('DD MMM YYYY');
+                            }
+                            return data;
+                        }
+                    },
                     { data: 'meeting_amount', name: 'meeting_amount', class: 'text-center'},
                     { data: 'month_amount', name: 'month_amount', class: 'text-center'},
                     { data: 'status', name: 'status', class: 'text-center'},
-                    { data: 'created_at', name: 'created_at', class: 'text-center'},
+                    { data: 'created_at', name: 'created_at', class: 'text-center',
+                        render: function ( data, type, row ){
+                            if ( type === 'display' || type === 'filter' ){
+                                return moment(data).format('DD MMM YYYY');
+                            }
+                            return data;
+                        }
+                    },
                     { data: 'action', name:'action', orderable: false, searchable: false, class: 'text-center'}
                 ],
                 language: {
