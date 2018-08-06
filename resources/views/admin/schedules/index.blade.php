@@ -29,7 +29,7 @@
                     <th class="text-center">Jumlah Bulan</th>
                     <th class="text-center">Status</th>
                     <th class="text-center">Tanggal Dibuat</th>
-                    {{--<th class="text-center">Action</th>--}}
+                    <th class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -68,7 +68,7 @@
                     { data: 'month_amount', name: 'month_amount', class: 'text-center'},
                     { data: 'status', name: 'status', class: 'text-center'},
                     { data: 'created_at', name: 'created_at', class: 'text-center'},
-                    // { data: 'action', name:'action', orderable: false, searchable: false, class: 'text-center'}
+                    { data: 'action', name:'action', orderable: false, searchable: false, class: 'text-center'}
                 ],
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian-Alternative.json"

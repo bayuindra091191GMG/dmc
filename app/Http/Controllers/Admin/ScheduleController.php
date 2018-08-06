@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Attendance;
 use App\Models\Coach;
 use App\Models\Course;
 use App\Models\Customer;
@@ -111,7 +112,7 @@ class ScheduleController extends Controller
         foreach ($courses as $course){
             $courseData = Course::find($course);
 
-            if($courseData->type == 2) {
+            if($courseData->type == 2 || $courseData->type == 4) {
                 $now = $dateTimeNow;
                 if($now->day < 10){
                     $finish = Carbon::createFromFormat('Y-m-d', $now->year.'-'.$now->month.'-10');
@@ -276,6 +277,66 @@ class ScheduleController extends Controller
         }
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param Coach $coach
+     * @return \Illuminate\Http\Response
+     */
+    public function change(Schedule $schedule)
+    {
+        $course = Course::find($schedule->course_id);
+        $dateTimeNow = Carbon::now('Asia/Jakarta');
+
+        $date = Carbon::parse($dateTimeNow)->format('d M Y hh:mm');
+
+        $data = [
+            'schedule'      => $schedule,
+            'course'      => $course,
+            'date'      => $date
+        ];
+//        dd($data);
+        return view('admin.schedules.changes.edit')->with($data);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param Coach $coach
+     * @return mixed
+     */
+    public function updateChange(Request $request, Schedule $schedule)
+    {
+        $dateTimeNow = Carbon::now('Asia/Jakarta');
+
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+        //save the attendance
+        $attendanceCount = Attendance::where('customer_id', $schedule->customer_id)->where('schedule_id', $schedule->id)->count();
+
+        if($attendanceCount == 4){
+            return redirect()->back()->withErrors("Absensi Pada Kelas ini telah 4 kali!");
+        }
+        else{
+            $user = Auth::user();
+            $attendanceCount++;
+            $attendance = Attendance::create([
+                'customer_id'           => $schedule->customer_id,
+                'schedule_id'           => $schedule->id,
+                'date'                  => $date->toDateTimeString(),
+                'meeting_number'        => $attendanceCount,
+                'status_id'             => 2,
+                'created_by'            => $user->id,
+                'created_at'            => $dateTimeNow->toDateTimeString()
+            ]);
+            $attendance->save();
+
+            Session::flash('message', 'Berhasil mengubah data Jadwal!');
+
+            return redirect()->route('admin.schedules');
+        }
+    }
+
     public function getSchedules(Request $request){
         $term = trim($request->q);
 
@@ -311,7 +372,8 @@ class ScheduleController extends Controller
 
             if($courseType !== 0){
                 $schedules = $schedules->whereHas('course', function ($query) use ($courseType){
-                    $query->where('type', $courseType);
+                    $query->where('type', 2);
+                    $query->orWhere('type', 4);
                 })->get();
             }
             else{

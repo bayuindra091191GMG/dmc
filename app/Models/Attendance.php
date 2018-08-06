@@ -18,6 +18,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $schedule_id
  * @property \Carbon\Carbon $date
  * @property int $meeting_number
+ * @property int $status_id
  * @property \Carbon\Carbon $created_at
  * @property int $created_by
  * @property \Carbon\Carbon $updated_at
@@ -25,6 +26,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property \App\Models\Customer $customer
  * @property \App\Models\Schedule $schedule
+ * @property \App\Models\Status $status
  * @property \App\Models\Auth\User\User $user
  *
  * @package App\Models
@@ -36,7 +38,8 @@ class Attendance extends Eloquent
 		'schedule_id' => 'int',
 		'meeting_number' => 'int',
 		'created_by' => 'int',
-		'updated_by' => 'int'
+		'updated_by' => 'int',
+		'status_id' => 'int'
 	];
 
 	protected $dates = [
@@ -48,6 +51,7 @@ class Attendance extends Eloquent
 		'schedule_id',
 		'date',
 		'meeting_number',
+		'status_id',
 		'created_by',
 		'updated_by'
 	];
@@ -59,6 +63,11 @@ class Attendance extends Eloquent
 	public function customer()
 	{
 		return $this->belongsTo(\App\Models\Customer::class);
+	}
+
+	public function status()
+	{
+		return $this->belongsTo(\App\Models\Status::class);
 	}
 
 	public function schedule()

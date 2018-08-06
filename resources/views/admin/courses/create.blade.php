@@ -47,9 +47,10 @@
                 </label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
                     <select id="type" name="type" class="form-control col-md-7 col-xs-12">
-                        <option value="1">Package</option>
-                        <option value="2">Class</option>
-                        <option value="3">Private</option>
+                        <option value="1" @if(old('type') == 1) selected @endif>Package</option>
+                        <option value="2" @if(old('type') == 2) selected @endif>Class</option>
+                        <option value="4" @if(old('type') == 4) selected @endif>Gymnastic</option>
+                        <option value="3" @if(old('type') == 3) selected @endif>Private</option>
                     </select>
                 </div>
                 <div class="col-md-3 col-sm-3 col-xs-12">

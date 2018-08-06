@@ -112,12 +112,11 @@ class AttendanceController extends Controller
         //Check payment due or not
 
         $now = Carbon::now('Asia/Jakarta');
-        //Check if already absence
+        //Check if already absence today
         $attendanceExist = Attendance::where('customer_id', $customerID)
             ->where('schedule_id', $scheduleID)
             ->whereDay('date', $now->day)
             ->exists();
-//        dd($attendanceExist);
         if($attendanceExist){
             return redirect()
                 ->back()
@@ -146,6 +145,10 @@ class AttendanceController extends Controller
                 ->back()
                 ->withErrors('Harap Melakukan Pembayaran Pada Kelas ini.', 'default')
                 ->withInput();
+        }
+        //for gymnastic
+        if($scheduleDB->course->type == 4){
+
         }
 
         if($scheduleDB->day == "Bebas"){
@@ -185,20 +188,33 @@ class AttendanceController extends Controller
 
         }
 
-        //save the attendance
-        $attendanceCount = Attendance::where('customer_id', $customerID)->where('schedule_id', $scheduleID)->count();
-        $user = Auth::user();
-        $attendanceCount++;
-        $attendance = Attendance::create([
-            'customer_id'           => $customerID,
-            'schedule_id'           => $scheduleID,
-            'date'                  => $now->toDateTimeString(),
-            'meeting_number'        => $attendanceCount,
-            'created_by'            => $user->id,
-            'created_at'            => $now->toDateTimeString()
-        ]);
-        $attendance->save();
 
+        $attendancePending = Attendance::where('customer_id', $customerID)
+            ->where('schedule_id', $scheduleID)
+            ->where('status_id', 2)
+            ->orderBy('created_at')
+            ->first();
+        if($attendancePending == null){
+            //save the attendance
+            $attendanceCount = Attendance::where('customer_id', $customerID)->where('schedule_id', $scheduleID)->count();
+            $user = Auth::user();
+            $attendanceCount++;
+            $attendance = Attendance::create([
+                'customer_id'           => $customerID,
+                'schedule_id'           => $scheduleID,
+                'date'                  => $now->toDateTimeString(),
+                'meeting_number'        => $attendanceCount,
+                'status_id'             => 1,
+                'created_by'            => $user->id,
+                'created_at'            => $now->toDateTimeString()
+            ]);
+            $attendance->save();
+        }
+        else{
+            $attendancePending->date = 1;
+            $attendancePending->status_id = 1;
+            $attendancePending->save();
+        }
 
         //check if user meeting done
         if($scheduleDB->day == "Bebas"){
@@ -215,7 +231,7 @@ class AttendanceController extends Controller
             }
         }
 
-        if($scheduleDB->course->type == 1){
+        if($scheduleDB->course->type == 1 || $scheduleDB->course->type == 4){
             //Print Absen
             $customerData = Customer::find($customerID);
             $date = $now->toDateTimeString();

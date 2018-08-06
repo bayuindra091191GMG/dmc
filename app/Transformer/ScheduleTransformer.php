@@ -19,11 +19,15 @@ class ScheduleTransformer extends TransformerAbstract
         $createdDate = Carbon::parse($schedule->created_at)->format('d M Y');
         $startDate = Carbon::parse($schedule->start_date)->format('d M Y');
         $finishDate = Carbon::parse($schedule->finish_date)->format('d M Y');
+        if($schedule->course->type == 4){
+            $action =
+                "<a class='btn btn-xs btn-info' href='schedules/".$schedule->id."/change' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+//            $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $schedule->id ."' ><i class='fa fa-trash'></i></a>";
 
-        $action =
-            "<a class='btn btn-xs btn-info' href='schedules/".$schedule->id."/ubah' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
-        $action .= "<a class='delete-modal btn btn-xs btn-danger' data-id='". $schedule->id ."' ><i class='fa fa-trash'></i></a>";
-
+        }
+        else{
+            $action = "";
+        }
         return[
             'customer_name'         => $schedule->customer->name,
             'customer_parent_name'  => $schedule->customer->parent_name,
