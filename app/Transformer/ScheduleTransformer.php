@@ -34,6 +34,7 @@ class ScheduleTransformer extends TransformerAbstract
             'customer_parent_name'  => $schedule->customer->parent_name ?? '-',
             'course_name'           => $schedule->course->name,
             'coach_name'            => $schedule->course->coach->name,
+            'day'                   => $schedule->day,
             'start_date'            => $startDate,
             'finish_date'           => $finishDate,
             'meeting_amount'        => $schedule->meeting_amount." / ".$schedule->course->meeting_amount,

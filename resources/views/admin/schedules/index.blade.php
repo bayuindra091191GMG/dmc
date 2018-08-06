@@ -23,6 +23,7 @@
                     <th class="text-center">Nama Orang Tua</th>
                     <th class="text-center">Nama Kelas</th>
                     <th class="text-center">Nama Trainer</th>
+                    <th class="text-center">Waktu</th>
                     <th class="text-center">Tanggal Dimulai</th>
                     <th class="text-center">Tanggal Berakhir</th>
                     <th class="text-center">Jumlah Pertemuan</th>
@@ -57,19 +58,19 @@
                 serverSide: true,
                 ajax: '{!! route('datatables.schedules') !!}',
                 createdRow: function(row, data, dataIndex) {
-                    var $dateCellStart = $(row).find('td:eq(5)');
+                    var $dateCellStart = $(row).find('td:eq(6)');
                     var dateOrderStart = $dateCellStart.text();
                     $dateCellStart
                         .attr('data-order', dateOrderStart)
                         .text(moment(dateOrderStart).format('DD MMM YYYY'));
 
-                    var $dateCellFinish = $(row).find('td:eq(6)');
+                    var $dateCellFinish = $(row).find('td:eq(7)');
                     var dateOrderFinish = $dateCellFinish.text();
                     $dateCellFinish
                         .attr('data-order', dateOrderFinish)
                         .text(moment(dateOrderFinish).format('DD MMM YYYY'));
 
-                    var $dateCellCreated = $(row).find('td:eq(10)');
+                    var $dateCellCreated = $(row).find('td:eq(11)');
                     var dateOrderCreated = $dateCellCreated.text();
                     $dateCellCreated
                         .attr('data-order', dateOrderCreated)
@@ -81,6 +82,7 @@
                     { data: 'customer_parent_name', name: 'customer_parent_name', class: 'text-center'},
                     { data: 'course_name', name: 'course_name', class: 'text-center'},
                     { data: 'coach_name', name: 'coach_name', class: 'text-center'},
+                    { data: 'day', name: 'day', class: 'text-center'},
                     { data: 'start_date', name: 'start_date', class: 'text-center'},
                     { data: 'finish_date', name: 'finish_date', class: 'text-center'},
                     { data: 'meeting_amount', name: 'meeting_amount', class: 'text-center'},
