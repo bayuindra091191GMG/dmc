@@ -311,8 +311,8 @@ class ScheduleController extends Controller
     public function updateChange(Request $request, Schedule $schedule)
     {
         $dateTimeNow = Carbon::now('Asia/Jakarta');
+        $date = Carbon::createFromFormat('d M Y H:i', $request->input('date'), 'Asia/Jakarta');
 
-        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
         //save the attendance
         $attendanceCount = Attendance::where('customer_id', $schedule->customer_id)->where('schedule_id', $schedule->id)->count();
 

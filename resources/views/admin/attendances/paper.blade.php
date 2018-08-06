@@ -93,7 +93,11 @@
             <tr>
                 <td>Sisa Pertemuan</td>
                 <td>:</td>
-                <td>{{ $scheduleDB->meeting_amount }}</td>
+                @if($scheduleDB->course->type == 4)
+                    <td>{{ $remainAttendance }}</td>
+                @else
+                    <td>{{ $scheduleDB->meeting_amount }}</td>
+                @endif
             </tr>
             <tr>
                 <td>Expired</td>

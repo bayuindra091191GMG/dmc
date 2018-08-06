@@ -146,11 +146,26 @@ class AttendanceController extends Controller
                 ->withErrors('Harap Melakukan Pembayaran Pada Kelas ini.', 'default')
                 ->withInput();
         }
-        //for gymnastic
+        //for gymnastic checking only 2 times per week
         if($scheduleDB->course->type == 4){
+            $startWeek = Carbon::now()->startOfWeek()->toDateTimeString();
+            $endWeek = Carbon::now()->endOfWeek()->toDateTimeString();
 
+            $countAttendanceOfWeek = Attendance::where('customer_id', $customerID)
+                ->where('schedule_id', $scheduleID)
+                ->where('status_id', 1)
+                ->whereBetween('date', [$startWeek, $endWeek])
+                ->count();
+
+            if($countAttendanceOfWeek >= 2){
+                return redirect()
+                    ->back()
+                    ->withErrors('Absensi pada Kelas Gymnastic maksimal 2 kali per minggu.', 'default')
+                    ->withInput();
+            }
         }
 
+        //change schedule meeting amount
         if($scheduleDB->day == "Bebas"){
             if($scheduleDB->course->type == 3){
                 //change schedule amount (package increase, class decrese)
@@ -188,7 +203,6 @@ class AttendanceController extends Controller
 
         }
 
-
         $attendancePending = Attendance::where('customer_id', $customerID)
             ->where('schedule_id', $scheduleID)
             ->where('status_id', 2)
@@ -211,7 +225,7 @@ class AttendanceController extends Controller
             $attendance->save();
         }
         else{
-            $attendancePending->date = 1;
+            $attendancePending->date = $now->toDateTimeString();
             $attendancePending->status_id = 1;
             $attendancePending->save();
         }
@@ -235,7 +249,9 @@ class AttendanceController extends Controller
             //Print Absen
             $customerData = Customer::find($customerID);
             $date = $now->toDateTimeString();
-            return view('admin.attendances.paper', compact('scheduleDB', 'customerData', 'date', 'attendanceCount'));
+            $remainAttendance = 4 - $attendanceCount;
+            return view('admin.attendances.paper',
+                compact('scheduleDB', 'customerData', 'date', 'attendanceCount', 'remainAttendance'));
         }
 
         Session::flash('message', 'Berhasil membuat absensi!');
