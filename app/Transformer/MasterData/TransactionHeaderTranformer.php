@@ -17,7 +17,8 @@ class TransactionHeaderTranformer extends TransformerAbstract
 {
     public function transform(TransactionHeader $header){
 
-        $date = Carbon::parse($header->date)->format('d M Y');
+//        $date = Carbon::parse($header->date)->format('d M Y');
+        $date = Carbon::parse($header->date)->toIso8601String();
 
         $trxShowUrl = route('admin.transactions.show', ['transaction' => $header->id]);
 

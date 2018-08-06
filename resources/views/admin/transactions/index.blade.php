@@ -61,6 +61,13 @@
                 serverSide: true,
                 pageLength: 50,
                 ajax: '{!! route('datatables.transactions') !!}',
+                createdRow: function(row, data, dataIndex) {
+                    var $dateCell = $(row).find('td:eq(4)'); // get first column
+                    var dateOrder = $dateCell.text(); // get the ISO date
+                    $dateCell
+                        .attr('data-order', dateOrder) // set it to data-order
+                        .text(moment(dateOrder).format('DD MMM YYYY')); // and set the formatted text
+                },
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
                     { data: 'code', name: 'code', class: 'text-center'},

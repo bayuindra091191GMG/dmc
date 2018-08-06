@@ -58,7 +58,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="phone" type="number" class="form-control col-md-7 col-xs-12 @if($errors->has('phone')) parsley-error @endif"
-                           name="phone" value="{{ $coach->phone }}" required>
+                           name="phone" value="{{ $coach->phone }}">
                 </div>
             </div>
 

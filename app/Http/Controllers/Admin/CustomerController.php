@@ -67,8 +67,7 @@ class CustomerController extends Controller
             'name'              => 'required|max:50',
             'phone'             => 'required',
             'age'               => 'required',
-            'email'             => 'required|email',
-            'address'           => 'required'
+            'email'             => 'required|email'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
@@ -123,8 +122,7 @@ class CustomerController extends Controller
             'name'              => 'required|max:50',
             'phone'             => 'required',
             'age'               => 'required',
-            'email'             => 'required|email',
-            'address'           => 'required'
+            'email'             => 'required|email'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());

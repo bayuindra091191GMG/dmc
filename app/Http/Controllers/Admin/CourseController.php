@@ -91,12 +91,12 @@ class CourseController extends Controller
         }
         //check for class and gymnastic
         if($request->input('type') == 2 || $request->input('type') == 4){
-            $days = $request->get('chk');
+            $days = $request->input('chk');
 
             if($request->input('coach_id') === '-1'){
                 return redirect()->back()->withErrors('Belum ada Trainer yang dipilih', 'default')->withInput($request->all());
             }
-            if($days == null){
+            if(empty($days) ){
                 return redirect()->back()->withErrors('Belum ada hari yang dipilih', 'default')->withInput($request->all());
             }
 
@@ -184,99 +184,101 @@ class CourseController extends Controller
         ]);
 
         //Save Day and Hour if type == 2 or 3
-        $days = $request->get('chk');
-        foreach($days as $day){
-            $newDay = Day::create([
-                'course_id'     => $newCourse->id,
-                'day_string'    => $day
-            ]);
+        if($request->input('type') == 2 || $request->input('type') == 4){
+            $days = $request->get('chk');
+            foreach($days as $day){
+                $newDay = Day::create([
+                    'course_id'     => $newCourse->id,
+                    'day_string'    => $day
+                ]);
 
-            //Save Hour
-            switch ($day){
-                case 'Senin':
-                    Hour::create([
-                        'day_id'        => $newDay->id,
-                        'hour_string'   => $request->input('hourMonday1')
-                    ]);
-                    if($request->input('hourMonday2') != null){
+                //Save Hour
+                switch ($day){
+                    case 'Senin':
                         Hour::create([
                             'day_id'        => $newDay->id,
-                            'hour_string'   => $request->input('hourMonday2')
+                            'hour_string'   => $request->input('hourMonday1')
                         ]);
-                    }
-                    break;
-                case 'Selasa':
-                    Hour::create([
-                        'day_id'        => $newDay->id,
-                        'hour_string'   => $request->input('hourTuesday1')
-                    ]);
-                    if($request->input('hourTuesday2') != null){
+                        if($request->input('hourMonday2') != null){
+                            Hour::create([
+                                'day_id'        => $newDay->id,
+                                'hour_string'   => $request->input('hourMonday2')
+                            ]);
+                        }
+                        break;
+                    case 'Selasa':
                         Hour::create([
                             'day_id'        => $newDay->id,
-                            'hour_string'   => $request->input('hourTuesday2')
+                            'hour_string'   => $request->input('hourTuesday1')
                         ]);
-                    }
-                    break;
-                case 'Rabu':
-                    Hour::create([
-                        'day_id'        => $newDay->id,
-                        'hour_string'   => $request->input('hourWednesday1')
-                    ]);
-                    if($request->input('hourWednesday2') != null){
+                        if($request->input('hourTuesday2') != null){
+                            Hour::create([
+                                'day_id'        => $newDay->id,
+                                'hour_string'   => $request->input('hourTuesday2')
+                            ]);
+                        }
+                        break;
+                    case 'Rabu':
                         Hour::create([
                             'day_id'        => $newDay->id,
-                            'hour_string'   => $request->input('hourWednesday2')
+                            'hour_string'   => $request->input('hourWednesday1')
                         ]);
-                    }
-                    break;
-                case 'Kamis':
-                    Hour::create([
-                        'day_id'        => $newDay->id,
-                        'hour_string'   => $request->input('hourThursday1')
-                    ]);
-                    if($request->input('hourThursday2') != null){
+                        if($request->input('hourWednesday2') != null){
+                            Hour::create([
+                                'day_id'        => $newDay->id,
+                                'hour_string'   => $request->input('hourWednesday2')
+                            ]);
+                        }
+                        break;
+                    case 'Kamis':
                         Hour::create([
                             'day_id'        => $newDay->id,
-                            'hour_string'   => $request->input('hourThursday2')
+                            'hour_string'   => $request->input('hourThursday1')
                         ]);
-                    }
-                    break;
-                case 'Jumat':
-                    Hour::create([
-                        'day_id'        => $newDay->id,
-                        'hour_string'   => $request->input('hourFriday1')
-                    ]);
-                    if($request->input('hourFriday2') != null){
+                        if($request->input('hourThursday2') != null){
+                            Hour::create([
+                                'day_id'        => $newDay->id,
+                                'hour_string'   => $request->input('hourThursday2')
+                            ]);
+                        }
+                        break;
+                    case 'Jumat':
                         Hour::create([
                             'day_id'        => $newDay->id,
-                            'hour_string'   => $request->input('hourFriday2')
+                            'hour_string'   => $request->input('hourFriday1')
                         ]);
-                    }
-                    break;
-                case 'Sabtu':
-                    Hour::create([
-                        'day_id'        => $newDay->id,
-                        'hour_string'   => $request->input('hourSaturday1')
-                    ]);
-                    if($request->input('hourSaturday2') != null){
+                        if($request->input('hourFriday2') != null){
+                            Hour::create([
+                                'day_id'        => $newDay->id,
+                                'hour_string'   => $request->input('hourFriday2')
+                            ]);
+                        }
+                        break;
+                    case 'Sabtu':
                         Hour::create([
                             'day_id'        => $newDay->id,
-                            'hour_string'   => $request->input('hourSaturday2')
+                            'hour_string'   => $request->input('hourSaturday1')
                         ]);
-                    }
-                    break;
-                case 'Minggu':
-                    Hour::create([
-                        'day_id'        => $newDay->id,
-                        'hour_string'   => $request->input('hourSunday1')
-                    ]);
-                    if($request->input('hourSunday2') != null){
+                        if($request->input('hourSaturday2') != null){
+                            Hour::create([
+                                'day_id'        => $newDay->id,
+                                'hour_string'   => $request->input('hourSaturday2')
+                            ]);
+                        }
+                        break;
+                    case 'Minggu':
                         Hour::create([
                             'day_id'        => $newDay->id,
-                            'hour_string'   => $request->input('hourSunday2')
+                            'hour_string'   => $request->input('hourSunday1')
                         ]);
-                    }
-                    break;
+                        if($request->input('hourSunday2') != null){
+                            Hour::create([
+                                'day_id'        => $newDay->id,
+                                'hour_string'   => $request->input('hourSunday2')
+                            ]);
+                        }
+                        break;
+                }
             }
         }
 

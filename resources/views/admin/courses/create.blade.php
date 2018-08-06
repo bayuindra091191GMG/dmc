@@ -83,7 +83,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="price" class="form-control col-md-7 col-xs-12 @if($errors->has('price')) parsley-error @endif"
-                              name="price" value="{{ old('price') }}">
+                              name="price">
                 </div>
             </div>
 
@@ -190,8 +190,8 @@
                     Valid
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="valid" type="number" class="form-control col-md-7 col-xs-12 @if($errors->has('price')) parsley-error @endif"
-                           name="valid" value="{{ old('price') }}">
+                    <input id="valid" type="number" class="form-control col-md-7 col-xs-12 @if($errors->has('valid')) parsley-error @endif"
+                           name="valid" value="{{ old('valid') }}">
                 </div>
             </div>
 
@@ -276,11 +276,24 @@
         });
 
         // Add autonumeric
-        priceAddFormat = new AutoNumeric('#price', {
-            decimalCharacter: ',',
-            digitGroupSeparator: '.',
-            minimumValue: '0',
-            decimalPlaces: 0
-        });
+        @if(!empty(old('price')))
+            var price = '{{ old('price') }}'
+            var priceClean = price.replace(/\./g,'');
+            priceAddFormat = new AutoNumeric('#price', priceClean, {
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
+                minimumValue: '0',
+                decimalPlaces: 0
+            });
+        @else
+
+            priceAddFormat = new AutoNumeric('#price', {
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
+                minimumValue: '0',
+                decimalPlaces: 0
+            });
+        @endif
+
     </script>
 @endsection
