@@ -41,6 +41,9 @@ class CourseTransformer extends TransformerAbstract
         if($course->type == 3){
             $type = 'private';
         }
+        if($course->type == 4){
+            $type = 'gymnastic';
+        }
 
         return[
             'name'              => $name,

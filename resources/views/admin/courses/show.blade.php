@@ -45,6 +45,8 @@
                             Package
                         @elseif($course->type == 2)
                             Class
+                        @elseif($course->type == 4)
+                            Gymnastics
                         @else
                             Private
                         @endif
