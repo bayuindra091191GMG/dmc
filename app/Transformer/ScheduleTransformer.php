@@ -36,7 +36,7 @@ class ScheduleTransformer extends TransformerAbstract
             'coach_name'            => $schedule->course->coach->name,
             'start_date'            => $startDate,
             'finish_date'           => $finishDate,
-            'meeting_amount'        => $schedule->meeting_amount,
+            'meeting_amount'        => $schedule->meeting_amount." / ".$schedule->course->meeting_amount,
             'month_amount'          => $schedule->month_amount,
             'status'                => $schedule->status->description,
             'created_at'            => $createdDate,

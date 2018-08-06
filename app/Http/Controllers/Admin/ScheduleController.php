@@ -113,7 +113,7 @@ class ScheduleController extends Controller
         $dateTimeNow = Carbon::now('Asia/Jakarta');
         foreach ($courses as $course){
             $courseData = Course::find($course);
-
+            $meetingAmount = 0;
             if($courseData->type == 2 || $courseData->type == 4) {
                 $now = $dateTimeNow;
                 if($now->day < 10){
@@ -133,6 +133,7 @@ class ScheduleController extends Controller
 //                $finish->addDays(30);
             }
             else{
+                $meetingAmount = $courseData->meeting_amount;
                 $dateTimeNowFinish = Carbon::now('Asia/Jakarta');
                 $finish = $dateTimeNowFinish;
                 $finish->addDays($courseData->valid);
@@ -144,7 +145,7 @@ class ScheduleController extends Controller
                 'day'               => $dayAdd[$i],
                 'start_date'        => $dateTimeNow->toDateTimeString(),
                 'finish_date'       => $finish->toDateTimeString(),
-                'meeting_amount'    => $courseData->meeting_amount,
+                'meeting_amount'    => $meetingAmount,
                 'month_amount'      => 1,
                 'status_id'         => 2,
                 'created_by'        => $user->id,

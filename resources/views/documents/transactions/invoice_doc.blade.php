@@ -85,7 +85,7 @@
                                     <td class="text-center">{{ $detail->schedule->start_date_number }} - {{ $detail->schedule->finish_date_number }}</td>
 
                                     @if($header->type === 1)
-                                        <td class="text-center">{{ $detail->schedule->meeting_amount ?? 'BEBAS' }}</td>
+                                        <td class="text-center">{{ $detail->schedule->course->meeting_amount ?? 'BEBAS' }}</td>
                                     @elseif($header->type === 2)
                                         <td class="text-center">
                                             @if($detail->prorate == 1)
