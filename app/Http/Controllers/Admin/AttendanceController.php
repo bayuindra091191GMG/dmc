@@ -225,6 +225,8 @@ class AttendanceController extends Controller
             $attendance->save();
         }
         else{
+            $attendanceCount = Attendance::where('customer_id', $customerID)->where('schedule_id', $scheduleID)->count();
+
             $attendancePending->date = $now->toDateTimeString();
             $attendancePending->status_id = 1;
             $attendancePending->save();
