@@ -34,15 +34,15 @@ class CourseTransformer extends TransformerAbstract
         else{
             $action = "<a class='btn btn-xs btn-primary' href='show-this-day/" . $course->id . "' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
         }
-        $type = 'class';
+        $type = 'Class';
         if($course->type == 1){
-            $type = 'package';
+            $type = 'Package';
         }
         if($course->type == 3){
-            $type = 'private';
+            $type = 'Private';
         }
         if($course->type == 4){
-            $type = 'gymnastic';
+            $type = 'Gymnastic';
         }
 
         return[

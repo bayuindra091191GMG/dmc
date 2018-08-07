@@ -399,8 +399,7 @@ class ScheduleController extends Controller
 
             if($courseType !== 0){
                 $schedules = $schedules->whereHas('course', function ($query) use ($courseType){
-                    $query->where('type', 2);
-                    $query->orWhere('type', 4);
+                    $query->where('type', $courseType)->orWhere('type', 4);
                 })->get();
             }
             else{
