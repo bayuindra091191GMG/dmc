@@ -90,8 +90,8 @@ class CourseController extends Controller
             return redirect()->back()->withErrors('Hanya tipe kelas Class untuk Bayi', 'default')->withInput($request->all());
         }
         //check for class and gymnastic
+        $days = $request->input('chk');
         if($request->input('type') == 2 || $request->input('type') == 4){
-            $days = $request->input('chk');
 
             if($request->input('coach_id') === '-1'){
                 return redirect()->back()->withErrors('Belum ada Trainer yang dipilih', 'default')->withInput($request->all());
@@ -296,7 +296,8 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        if($course->type == 1 || $course->type == 3){
+        $courseSchedule = Day::where('course_id', $course->id)->count();
+        if($course->type == 1 || ($course->type == 3 && $courseSchedule == 0)){
             $days[0] = "Bebas";
             $hours[0] = "Bebas";
         }
