@@ -723,8 +723,9 @@ class CourseController extends Controller
             default: $dayQuery = 'Senin';
                 break;
         }
-
-        $courses = Course::where('type', 2)->where('day', 'LIKE', '%'. $dayQuery . '%')->get();
+        $dayDB = Day::select('course_id')->where('day_string', $dayQuery)->get();
+        $courses = Course::whereIn('id', $dayDB)->get();
+//        $courses = Course::where('type', 2)->where('day', 'LIKE', '%'. $dayQuery . '%')->get();
         return DataTables::of($courses)
             ->setTransformer(new CourseTransformer(2))
             ->addIndexColumn()
