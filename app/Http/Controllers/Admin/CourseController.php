@@ -87,7 +87,7 @@ class CourseController extends Controller
         $selectedHours = "";
         $baby = $request->input('is_baby');
         if($request->input('type') != 2 && $baby != null){
-            return redirect()->back()->withErrors('Tipe Kelas Package dan Private tidak bisa untuk Bayi', 'default')->withInput($request->all());
+            return redirect()->back()->withErrors('Hanya tipe kelas Class untuk Bayi', 'default')->withInput($request->all());
         }
         //check for class and gymnastic
         if($request->input('type') == 2 || $request->input('type') == 4){
@@ -184,7 +184,8 @@ class CourseController extends Controller
         ]);
 
         //Save Day and Hour if type == 2 or 3
-        if($request->input('type') == 2 || $request->input('type') == 4){
+        if(($request->input('type') == 2 || $request->input('type') == 4 || $request->input('type') == 3)
+            && !empty($days)){
             $days = $request->get('chk');
             foreach($days as $day){
                 $newDay = Day::create([

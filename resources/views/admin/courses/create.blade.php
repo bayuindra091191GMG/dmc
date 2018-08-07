@@ -55,7 +55,7 @@
                 </div>
                 <div class="col-md-3 col-sm-3 col-xs-12">
                     <div class="checkbox">
-                        <label>
+                        <label>co
                             <input type="checkbox" class="flat" id="is_baby" name="is_baby" @if(old('is_baby') != null) checked @endif> Kelas Bayi
                         </label>
                     </div>
@@ -71,7 +71,7 @@
                     <select id="coach_id" name="coach_id" class="form-control col-md-7 col-xs-12">
                         <option value="-1">Bebas</option>
                         @foreach($coaches as $coach)
-                            <option value="{{ $coach->id }}">{{ $coach->name }}</option>
+                            <option value="{{ $coach->id }}" @if(old('coach_id') == $coach->id) selected @endif>{{ $coach->name }}</option>
                         @endforeach
                     </select>
                 </div>
