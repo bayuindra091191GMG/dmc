@@ -99,7 +99,7 @@
                            name="meeting_amount" value="{{ $course->meeting_amount }}">
                 </div>
             </div>
-
+            @if(count($course->days) > 0)
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >
                     Hari Pertemuan
@@ -389,7 +389,7 @@
                     </div>
                 </div>
             </div>
-
+            @endif
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >
                     Status
