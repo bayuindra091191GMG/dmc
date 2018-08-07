@@ -438,15 +438,19 @@
             var normalPriceAdd = parseFloat($('#normal_price_add').val());
 
             if(normalPriceAdd && normalPriceAdd !== 0){
+                var splitted = $('#schedule_add').val().split('#');
                 var finalPriceAdd = 0;
-                if(valueProrateAdd === '1'){
-                    finalPriceAdd = normalPriceAdd / 4;
-                }
-                else if(valueProrateAdd === '2'){
-                    finalPriceAdd = normalPriceAdd / 2;
+
+                var prorateAddInt = parseInt(valueProrateAdd);;
+                var isDanceBaby = splitted[5] === '8';
+                if(isDanceBaby){
+                    finalPriceAdd = normalPriceAdd * ( prorateAddInt / 8 );
                 }
                 else{
-                    finalPriceAdd = normalPriceAdd * 3 / 4;
+                    if(prorateAddInt > 3){
+                        prorateAddInt = 3;
+                    }
+                    finalPriceAdd = normalPriceAdd * ( prorateAddInt / 4 );
                 }
 
                 priceAddFormat.clear();
@@ -462,17 +466,21 @@
         // Count prorate price for edit
         $('#prorate_edit').on('change', function (e) {
             var valueProrateEdit = this.value;
+            var splitted = $('#schedule_old_value').val().split('#');
 
             var normalPriceEdit = parseFloat($('#normal_price_edit').val());
             var finalPriceEdit = 0;
-            if(valueProrateEdit === '1'){
-                finalPriceEdit = normalPriceEdit / 4;
-            }
-            else if(valueProrateEdit === '2'){
-                finalPriceEdit = normalPriceEdit / 2;
+
+            var prorateEditInt = parseInt(valueProrateEdit);
+            var isDanceBaby = splitted[5] === '8';
+            if(isDanceBaby){
+                finalPriceEdit = normalPriceEdit * ( prorateEditInt / 8 );
             }
             else{
-                finalPriceEdit = normalPriceEdit * 3 / 4;
+                if(prorateEditInt > 3){
+                    prorateEditInt = 3;
+                }
+                finalPriceEdit = normalPriceEdit * ( prorateEditInt / 4 );
             }
 
             priceEditFormat.clear();
@@ -524,14 +532,17 @@
                     var valueProrateAdd = $('#prorate_add').val();
                     var normalPriceAdd = parseFloat(splitted[4]);
                     var finalPriceAdd = 0;
-                    if(valueProrateAdd === '1'){
-                        finalPriceAdd = normalPriceAdd / 4;
-                    }
-                    else if(valueProrateAdd === '2'){
-                        finalPriceAdd = normalPriceAdd / 2;
+
+                    var prorateAddInt = parseInt(valueProrateAdd);;
+                    var isDanceBaby = splitted[5] === '8';
+                    if(isDanceBaby){
+                        finalPriceAdd = normalPriceAdd * ( prorateAddInt / 8 );
                     }
                     else{
-                        finalPriceAdd = normalPriceAdd * 3 / 4;
+                        if(prorateAddInt > 3){
+                            prorateAddInt = 3;
+                        }
+                        finalPriceAdd = normalPriceAdd * ( prorateAddInt / 4 );
                     }
 
                     priceAddFormat.clear();
@@ -701,14 +712,17 @@
                 var valueProrateEdit = $('#prorate_edit').val();
                 var normalPriceEdit = parseFloat(splitted[4]);
                 var finalPriceEdit = 0;
-                if(valueProrateEdit === '1'){
-                    finalPriceEdit = normalPriceEdit / 4;
-                }
-                else if(valueProrateEdit === '2'){
-                    finalPriceEdit = normalPriceEdit / 2;
+
+                var prorateEditInt = parseInt(valueProrateEdit);;
+                var isDanceBaby = splitted[5] === '8';
+                if(isDanceBaby){
+                    finalPriceEdit = normalPriceEdit * ( prorateEditInt / 8 );
                 }
                 else{
-                    finalPriceEdit = normalPriceEdit * 3 / 4;
+                    if(prorateEditInt > 3){
+                        prorateEditInt = 3;
+                    }
+                    finalPriceEdit = normalPriceEdit * ( prorateEditInt / 4 );
                 }
 
                 priceEditFormat.clear();
@@ -734,13 +748,13 @@
 
             document.getElementById('prorate_edit').value = $(this).data('prorate');
 
-            discountEditFormat.clear();
-            discountEditFormat.set($(this).data('discount'), {
-                decimalCharacter: ',',
-                digitGroupSeparator: '.',
-                minimumValue: '0',
-                decimalPlaces: 0
-            });
+            // discountEditFormat.clear();
+            // discountEditFormat.set($(this).data('discount'), {
+            //     decimalCharacter: ',',
+            //     digitGroupSeparator: '.',
+            //     minimumValue: '0',
+            //     decimalPlaces: 0
+            // });
 
             $('#trainer_edit').val(splitted[2]);
             $('#editModal').modal('show');

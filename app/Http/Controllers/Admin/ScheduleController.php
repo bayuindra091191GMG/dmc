@@ -461,7 +461,7 @@ class ScheduleController extends Controller
         $formatted_tags = [];
 
         foreach ($schedules as $schedule) {
-            $formatted_tags[] = ['id' => $schedule->id. '#'. $schedule->course->name. '#'. $schedule->course->coach->name. '#'. $schedule->day. '#'. $schedule->course->price, 'text' => $schedule->course->name];
+            $formatted_tags[] = ['id' => $schedule->id. '#'. $schedule->course->name. '#'. $schedule->course->coach->name. '#'. $schedule->day. '#'. $schedule->course->price. '#'. $schedule->course->meeting_amount, 'text' => $schedule->course->name];
         }
 
         return Response::json($formatted_tags);
