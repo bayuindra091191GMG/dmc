@@ -495,7 +495,7 @@
                 width: '100%',
                 minimumInputLength: 0,
                 ajax: {
-                    url: '{{ route('select.schedules') }}',
+                    url: '{{ route('select.schedule_prorates') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {
@@ -673,7 +673,7 @@
                 width: '100%',
                 minimumInputLength: 0,
                 ajax: {
-                    url: '{{ route('select.schedules') }}',
+                    url: '{{ route('select.schedule_prorates') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {
