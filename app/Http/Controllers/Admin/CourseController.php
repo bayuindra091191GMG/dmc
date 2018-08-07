@@ -701,30 +701,40 @@ class CourseController extends Controller
     }
 
     public function getThisDayCourses(){
-        $now = Carbon::now('Asia/Jakarta');
-        $day = $now->format('l');
-
-        //Convert Day from English to Indonesian
-        switch ($day){
-            case 'Monday': $dayQuery = 'Senin';
-                            break;
-            case 'Tuesday': $dayQuery = 'Selasa';
-                            break;
-            case 'Wednesday': $dayQuery = 'Rabu';
-                break;
-            case 'Thursday': $dayQuery = 'Kamis';
-                break;
-            case 'Friday': $dayQuery = 'Jumat';
-                break;
-            case 'Saturday': $dayQuery = 'Sabtu';
-                break;
-            case 'Sunday': $dayQuery = 'Minggu';
-                break;
-            default: $dayQuery = 'Senin';
-                break;
-        }
-        $dayDB = Day::select('course_id')->where('day_string', $dayQuery)->get();
+        $hari = array ( 1 =>    'Senin',
+            'Selasa',
+            'Rabu',
+            'Kamis',
+            'Jumat',
+            'Sabtu',
+            'Minggu'
+        );
+        $today = Carbon::now('Asia/Jakarta')->format('N');
+        $dayDB = Day::select('course_id')->where('day_string', $hari[$today])->get();
         $courses = Course::whereIn('id', $dayDB)->get();
+
+//        $now = Carbon::now('Asia/Jakarta');
+//        $day = Carbon::now('Asia/Jakarta')->format('N');
+//
+//        //Convert Day from English to Indonesian
+//        switch ($day){
+//            case 'Monday': $dayQuery = 'Senin';
+//                            break;
+//            case 'Tuesday': $dayQuery = 'Selasa';
+//                            break;
+//            case 'Wednesday': $dayQuery = 'Rabu';
+//                break;
+//            case 'Thursday': $dayQuery = 'Kamis';
+//                break;
+//            case 'Friday': $dayQuery = 'Jumat';
+//                break;
+//            case 'Saturday': $dayQuery = 'Sabtu';
+//                break;
+//            case 'Sunday': $dayQuery = 'Minggu';
+//                break;
+//            default: $dayQuery = 'Senin';
+//                break;
+//        }
 //        $courses = Course::where('type', 2)->where('day', 'LIKE', '%'. $dayQuery . '%')->get();
         return DataTables::of($courses)
             ->setTransformer(new CourseTransformer(2))
