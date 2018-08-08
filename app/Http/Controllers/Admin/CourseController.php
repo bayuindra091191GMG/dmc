@@ -83,8 +83,6 @@ class CourseController extends Controller
             return redirect()->back()->withErrors('Pilih Tipe Kelas', 'default')->withInput($request->all());
         }
 
-        $selectedDays = "";
-        $selectedHours = "";
         $baby = $request->input('is_baby');
         $twicePerWeek = $request->input('twice_week');
         if($request->input('type') != 2 && $baby != null){
@@ -104,47 +102,6 @@ class CourseController extends Controller
             if(empty($days) ){
                 return redirect()->back()->withErrors('Belum ada hari yang dipilih', 'default')->withInput($request->all());
             }
-
-            //Check Hour
-//            foreach ($days as $day){
-//                switch ($day){
-//                    case 'Senin':
-//                        if($request->input('hourMonday1') == null){
-//                            return redirect()->back()->withErrors('Belum ada jam yang dipilih', 'default')->withInput($request->all());
-//                        }
-//                        break;
-//                    case 'Selasa':
-//                        if($request->input('hourTuesday1') == null){
-//                            return redirect()->back()->withErrors('Belum ada jam yang dipilih', 'default')->withInput($request->all());
-//                        }
-//                        break;
-//                    case 'Rabu':
-//                        if($request->input('hourWednesday1') == null){
-//                            return redirect()->back()->withErrors('Belum ada jam yang dipilih', 'default')->withInput($request->all());
-//                        }
-//                        break;
-//                    case 'Kamis':
-//                        if($request->input('hourThursday1') == null){
-//                            return redirect()->back()->withErrors('Belum ada jam yang dipilih', 'default')->withInput($request->all());
-//                        }
-//                        break;
-//                    case 'Jumat':
-//                        if($request->input('hourFriday1') == null){
-//                            return redirect()->back()->withErrors('Belum ada jam yang dipilih', 'default')->withInput($request->all());
-//                        }
-//                        break;
-//                    case 'Sabtu':
-//                        if($request->input('hourSaturday1') == null){
-//                            return redirect()->back()->withErrors('Belum ada jam yang dipilih', 'default')->withInput($request->all());
-//                        }
-//                        break;
-//                    case 'Minggu':
-//                        if($request->input('hourSunday1') == null){
-//                            return redirect()->back()->withErrors('Belum ada jam yang dipilih', 'default')->withInput($request->all());
-//                        }
-//                        break;
-//                }
-//            }
         }
 
         if($request->input('type') == 3){
@@ -360,10 +317,11 @@ class CourseController extends Controller
                 return redirect()->back()->withErrors('Pilih Trainer', 'default')->withInput($request->all());
             }
         }
+        $price = str_replace('.','', $request->get('price'));
 
         $course->name = $request->get('name');
         $course->type = $request->get('type');
-        $course->price = $request->get('price');
+        $course->price = $price;
         $course->coach_id = $request->get('coach_id');
         $course->meeting_amount = $request->get('meeting_amount');
         $course->updated_at = $dateTimeNow;
