@@ -510,6 +510,20 @@ class CourseController extends Controller
                 return Response::json(array('success' => 'VALID'));
             }
 
+            //Delete Days and Hours
+            //Delete Hours
+            $daysDelete = Day::where('course_id', $course->id)->get();
+            foreach($daysDelete as $dayDelete){
+                $hoursDelete = Hour::where('day_id', $dayDelete->id)->get();
+                foreach ($hoursDelete as $hourDelete){
+                    $hourDelete->delete();
+                }
+            }
+
+            foreach($daysDelete as $dayDelete){
+                $dayDelete->delete();
+            }
+
             $course->delete();
 
             Session::flash('message', 'Berhasil menghapus data Kelas '. $course->name);
