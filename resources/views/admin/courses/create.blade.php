@@ -63,6 +63,7 @@
                         <label>
                             <input type="checkbox" class="flat" id="twice_week" name="twice_week" @if(old('twice_week') != null) checked @endif> 2 Kali Seminggu (Gymnastic)
                         </label>
+
                     </div>
                 </div>
             </div>

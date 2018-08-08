@@ -90,7 +90,6 @@ class CourseController extends Controller
         if($request->input('type') != 2 && $baby != null){
             return redirect()->back()->withErrors('Hanya tipe kelas Class untuk Bayi', 'default')->withInput($request->all());
         }
-
         if($request->input('type') != 4 && $twicePerWeek != null){
             return redirect()->back()->withErrors('Hanya tipe kelas Gymnastic untuk 2 kali seminggu', 'default')->withInput($request->all());
         }

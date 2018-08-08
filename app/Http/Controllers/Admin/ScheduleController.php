@@ -144,10 +144,8 @@ class ScheduleController extends Controller
                 ->where('status_id', 2)
                 ->first();
             if($courseData->type == 4 && $courseData->meeting_amount == 8 && !empty($scheduleDB)){
-//                dd('asdf');
                 $selectedDay = $scheduleDB->day;
                 if(strpos($selectedDay, $dayAdd[$i]) === false){
-//                        dd("asdf");
                     $selectedDay .= " & ".$dayAdd[$i];
                     $scheduleDB->day = $selectedDay;
                     $scheduleDB->save();

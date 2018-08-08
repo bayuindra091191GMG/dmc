@@ -196,7 +196,7 @@ class AttendanceController extends Controller
 
             //for gymnastic checking for today attendance
             if($attendancePending == null){
-                if(strpos($scheduleDB->day, $hari[$today]) === false){
+                if(strpos($scheduleDB->day, $hari[$today])===false){
                     return redirect()
                         ->back()
                         ->withErrors('Tidak dapat Melakukan Absensi di Hari ini', 'default')
