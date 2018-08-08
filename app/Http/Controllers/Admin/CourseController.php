@@ -86,9 +86,15 @@ class CourseController extends Controller
         $selectedDays = "";
         $selectedHours = "";
         $baby = $request->input('is_baby');
+        $twicePerWeek = $request->input('twice_week');
         if($request->input('type') != 2 && $baby != null){
             return redirect()->back()->withErrors('Hanya tipe kelas Class untuk Bayi', 'default')->withInput($request->all());
         }
+
+        if($request->input('type') != 4 && $twicePerWeek != null){
+            return redirect()->back()->withErrors('Hanya tipe kelas Gymnastic untuk 2 kali seminggu', 'default')->withInput($request->all());
+        }
+
         //check for class and gymnastic
         $days = $request->input('chk');
         if($request->input('type') == 2 || $request->input('type') == 4){
@@ -148,7 +154,7 @@ class CourseController extends Controller
             }
         }
 
-        if($baby == null){
+        if($baby == null && $twicePerWeek == null){
             $meetingAmounts = 4;
         }
         else{

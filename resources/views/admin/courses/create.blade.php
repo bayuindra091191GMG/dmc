@@ -59,6 +59,11 @@
                             <input type="checkbox" class="flat" id="is_baby" name="is_baby" @if(old('is_baby') != null) checked @endif> Kelas Bayi
                         </label>
                     </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" class="flat" id="twice_week" name="twice_week" @if(old('twice_week') != null) checked @endif> 2 Kali Seminggu (Gymnastic)
+                        </label>
+                    </div>
                 </div>
             </div>
 

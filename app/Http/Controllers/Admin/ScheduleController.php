@@ -139,20 +139,36 @@ class ScheduleController extends Controller
                 $finish->addDays($courseData->valid);
             }
 
-            Schedule::create([
-                'customer_id'       => $request->get('customer_id'),
-                'course_id'         => $course,
-                'day'               => $dayAdd[$i],
-                'start_date'        => $dateTimeNow->toDateTimeString(),
-                'finish_date'       => $finish->toDateTimeString(),
-                'meeting_amount'    => $meetingAmount,
-                'month_amount'      => 1,
-                'status_id'         => 2,
-                'created_by'        => $user->id,
-                'created_at'        => $now->toDateTimeString(),
-                'updated_by'        => $user->id,
-                'updated_at'        => $now->toDateTimeString()
-            ]);
+            $scheduleDB = Schedule::where('customer_id', $request->get('customer_id'))
+                ->where('course_id', $course)
+                ->where('status_id', 2)
+                ->first();
+            if($courseData->type == 4 && $courseData->meeting_amount == 8 && !empty($scheduleDB)){
+//                dd('asdf');
+                $selectedDay = $scheduleDB->day;
+                if(strpos($selectedDay, $dayAdd[$i]) === false){
+//                        dd("asdf");
+                    $selectedDay .= " & ".$dayAdd[$i];
+                    $scheduleDB->day = $selectedDay;
+                    $scheduleDB->save();
+                }
+            }
+            else{
+                Schedule::create([
+                    'customer_id'       => $request->get('customer_id'),
+                    'course_id'         => $course,
+                    'day'               => $dayAdd[$i],
+                    'start_date'        => $dateTimeNow->toDateTimeString(),
+                    'finish_date'       => $finish->toDateTimeString(),
+                    'meeting_amount'    => $meetingAmount,
+                    'month_amount'      => 1,
+                    'status_id'         => 2,
+                    'created_by'        => $user->id,
+                    'created_at'        => $now->toDateTimeString(),
+                    'updated_by'        => $user->id,
+                    'updated_at'        => $now->toDateTimeString()
+                ]);
+            }
 
             $i++;
         }

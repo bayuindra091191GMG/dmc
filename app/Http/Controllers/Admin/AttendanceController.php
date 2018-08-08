@@ -138,9 +138,8 @@ class AttendanceController extends Controller
         );
 
         if($scheduleDB->course->type != 4 && $scheduleDB->day != "Bebas"){
-            $splitDay = explode (' - ',$scheduleDB->day);
             $today = Carbon::now('Asia/Jakarta')->format('N');
-            if($splitDay[0] != $hari[$today]){
+            if(strpos($scheduleDB->day, $hari[$today]) === false){
                 return redirect()
                     ->back()
                     ->withErrors('Tidak dapat Melakukan Absensi di Hari ini', 'default')
@@ -193,12 +192,11 @@ class AttendanceController extends Controller
                     ->withInput();
             }
 
-            $splitDay = explode (' - ',$scheduleDB->day);
             $today = Carbon::now('Asia/Jakarta')->format('N');
 
             //for gymnastic checking for today attendance
             if($attendancePending == null){
-                if($splitDay[0] != $hari[$today]){
+                if(strpos($scheduleDB->day, $hari[$today]) === false){
                     return redirect()
                         ->back()
                         ->withErrors('Tidak dapat Melakukan Absensi di Hari ini', 'default')
@@ -288,7 +286,7 @@ class AttendanceController extends Controller
             //Print Absen
             $customerData = Customer::find($customerID);
             $date = $now->toDateTimeString();
-            $remainAttendance = 4 - $attendanceCount;
+            $remainAttendance = $scheduleDB->course->meeting_amount - $attendanceCount;
             return view('admin.attendances.paper',
                 compact('scheduleDB', 'customerData', 'date', 'attendanceCount', 'remainAttendance'));
         }
