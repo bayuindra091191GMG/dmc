@@ -157,9 +157,9 @@ class CustomerController extends Controller
 
             //Check first if User already in Transaction
             $transaction = TransactionHeader::where('customer_id', $request->input('id'))->get();
-            if($transaction != null){
+            if($transaction->count() > 0){
                 Session::flash('error', 'Data Customer '. $customer->name . ' Tidak dapat dihapus karena masih memiliki Kelas atau Paket!');
-                return Response::json(array('success' => 'VALID'));
+                return Response::json(array('errors' => 'INVALID'));
             }
             $customer->delete();
 
