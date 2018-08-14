@@ -25,23 +25,28 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="invoice-title">
-                <h2><img src="{{URL::asset('assets/admin/images/DMC Clean.jpg')}}" width="50px"/> <br/></h2>
-                <h4 class="pull-right">Invoice <br/>{{ $header->invoice_number }}</h4>
+                <h2><img src="{{URL::asset('assets/admin/images/DMC Clean.jpg')}}" width="74px"/> <br/></h2>
+                <h5 class="pull-right">
+                    <strong>Invoice No.</strong> <br/>{{ $header->invoice_number }} <br>
+                    <strong>Invoice Date.</strong> <br/>{{ $header->date_string }}
+                </h5>
             </div>
-            <hr>
+            <hr style="margin-bottom: 10px; margin-top: 10px;">
             <div class="row">
                 <div class="col-xs-6">
+                    <address>
+                        <strong>Address:</strong><br>
+                        Pluit Karang Barat Blok O 6 no. 3 & 3A<br>
+                        666 78781 & 666 78782<br>
+                        0812 8888 258 (WA)
+                    </address>
+                </div>
+                <div class="col-xs-6 text-right">
                     <address>
                         <strong>Billed To:</strong><br>
                         {{ $header->customer->name }}<br>
                         {{ $header->customer->address }}<br>
                         {{ $header->customer->phone }}
-                    </address>
-                </div>
-                <div class="col-xs-6 text-right">
-                    <address>
-                        <strong>Invoice Date:</strong><br>
-                        {{ $header->date_string }}<br><br>
                     </address>
                 </div>
             </div>
@@ -55,7 +60,7 @@
                     <h3 class="panel-title"><strong>Invoice summary</strong></h3>
                 </div>
                 <div class="panel-body">
-                    <div class="table-responsive">
+                    <div>
                         <table class="table table-condensed" style="font-size: 12px;">
                             <thead>
                             <tr>
