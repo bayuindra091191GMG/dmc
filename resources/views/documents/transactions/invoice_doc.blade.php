@@ -46,7 +46,8 @@
                         <strong>Billed To:</strong><br>
                         {{ $header->customer->name }}<br>
                         {{ $header->customer->address }}<br>
-                        {{ $header->customer->phone }}
+                        {{ $header->customer->phone }}<br/>
+                        {{ $header->payment_method }}
                     </address>
                 </div>
             </div>

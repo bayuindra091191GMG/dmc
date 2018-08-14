@@ -81,6 +81,20 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="payment_method" >
+                    Metode Pembayaran
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="payment_method" name="payment_method" class="form-control col-md-7 col-xs-12">
+                        <option value="-1" selected> - Pilih Metode Pembyaran - </option>
+                        <option value="TUNAI">UANG TUNAI</option>
+                        <option value="TRANSFER">TRANSFER BANK</option>
+                        <option value="DEBIT">KARTU DEBIT</option>
+                    </select>
+                </div>
+            </div>
+
             <hr/>
 
             @if(!empty($customer))

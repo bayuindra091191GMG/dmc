@@ -70,6 +70,19 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="payment_method" >
+                    Metode Pembayaran
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="payment_method" name="payment_method" class="form-control col-md-7 col-xs-12">
+                        <option value="TUNAI" @if($header->payment_method === 'TUNAI') selected @endif>UANG TUNAI</option>
+                        <option value="TRANSFER" @if($header->payment_method === 'TRANSFER') selected @endif>TRANSFER BANK</option>
+                        <option value="DEBIT" @if($header->payment_method === 'DEBIT') selected @endif>KARTU DEBIT</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <div class="col-md-12 col-sm-12 col-xs-12 text-center">
                     <a class="btn btn-danger" href="{{ route('admin.transactions.show', ['transaction' => $header->id]) }}"> Batal</a>
                     <input type="submit" class="btn btn-success" value="Simpan">

@@ -84,6 +84,15 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
+                        Metode Pembayaran
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ $header->payment_method }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
                         Customer
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">

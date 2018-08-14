@@ -18,6 +18,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $type
  * @property int $customer_id
  * @property \Carbon\Carbon $date
+ * @property string $payment_method
  * @property float $total_price
  * @property float $total_prorate_price
  * @property float $total_discount
@@ -61,6 +62,7 @@ class TransactionHeader extends Eloquent
         'type',
 		'customer_id',
 		'date',
+        'payment_method',
 		'total_price',
         'total_prorate_price',
 		'total_discount',

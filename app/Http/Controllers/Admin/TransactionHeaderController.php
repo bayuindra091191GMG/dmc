@@ -110,6 +110,11 @@ class TransactionHeaderController extends Controller
             return redirect()->back()->withErrors('Nomor transaksi wajib diisi!', 'default')->withInput($request->all());
         }
 
+        // Validate payment method
+        if($request->input('payment_method') === '-1'){
+            return redirect()->back()->withErrors('Pilih metode pembayaran!', 'default')->withInput($request->all());
+        }
+
         // Validate details
         $schedules = $request->input('schedule');
         $prices = $request->input('price');
@@ -176,10 +181,14 @@ class TransactionHeaderController extends Controller
         $user = Auth::user();
         $now = Carbon::now('Asia/Jakarta');
 
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+
         $trxHeader = TransactionHeader::create([
             'code'                  => $trxCode,
             'type'                  => 1,
             'customer_id'           => $request->input('customer_id'),
+            'date'                  => $date->toDateTimeString(),
+            'payment_method'        => $request->input('payment_method'),
             'invoice_number'        => $invNumber,
             'status_id'             => 1,
             'created_by'            => $user->id,
@@ -187,11 +196,6 @@ class TransactionHeaderController extends Controller
             'updated_by'            => $user->id,
             'updated_at'            => $now->toDateTimeString()
         ]);
-
-        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
-        $trxHeader->date = $date->toDateTimeString();
-
-        $trxHeader->save();
 
         // Create transaction detail
         $totalPrice = 0;
@@ -329,6 +333,7 @@ class TransactionHeaderController extends Controller
             $regFee = 0;
         }
 
+        $transaction->payment_method = $request->input('payment_method');
         $transaction->registration_fee = $regFee;
         $transaction->total_payment = $transaction->total_payment - $oldRegFee + $regFee;
 

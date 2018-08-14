@@ -39,10 +39,10 @@ class TransactionHeaderTranformer extends TransformerAbstract
         $action .= "<a class='btn btn-xs btn-info' href='". $trxEditUrl."' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
         if($header->type === 1 || $header->type === 3){
-            $totalPrice = $header->total_price_string;
+            $totalPrice = $header->total_price;
         }
         else{
-            $totalPrice = $header->total_prorate_price_string;
+            $totalPrice = $header->total_prorate_price;
         }
 
         return[
@@ -50,10 +50,11 @@ class TransactionHeaderTranformer extends TransformerAbstract
             'invoice'           => $header->invoice_number,
             'type'              => $type,
             'date'              => $date,
-            'fee'               => $header->registration_fee_string,
+            'payment_method'    => $header->payment_method,
+            'fee'               => $header->registration_fee,
             'total_price'       => $totalPrice,
 //            'total_discount'    => $header->total_discount_string,
-            'total_payment'     => $header->total_payment_string,
+            'total_payment'     => $header->total_payment,
             'action'            => $action
         ];
     }
