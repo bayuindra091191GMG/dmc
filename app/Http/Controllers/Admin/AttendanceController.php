@@ -74,7 +74,7 @@ class AttendanceController extends Controller
         if(!empty(request()->customer)){
             $customer = Customer::find(request()->customer);
             $schedules = Schedule::where('customer_id', $customer->id)
-                ->where('status_id', 3)
+//                ->where('status_id', 3)
                 ->get();
             $customerPlaceholder = $customer->name. ' - '. $customer->email. ' - '. $customer->phone;
         }
@@ -162,11 +162,13 @@ class AttendanceController extends Controller
         }
 
         //check user already payment or not
-        if($scheduleDB->status_id == 2){
-            return redirect()
-                ->back()
-                ->withErrors('Harap Melakukan Pembayaran Pada Kelas ini.', 'default')
-                ->withInput();
+        if($scheduleDB->course->type == 1){
+            if($scheduleDB->status_id == 2){
+                return redirect()
+                    ->back()
+                    ->withErrors('Harap Melakukan Pembayaran Pada Kelas ini.', 'default')
+                    ->withInput();
+            }
         }
 
         $attendancePending = Attendance::where('customer_id', $customerID)
