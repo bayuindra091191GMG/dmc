@@ -385,6 +385,9 @@ class TransactionHeaderController extends Controller
     }
 
     public function downloadReport(Request $request) {
+        ini_set('max_execution_time', '3000');
+        ini_set('memory_limit', '2048M');
+
         $validator = Validator::make($request->all(),[
             'start_date'        => 'required',
             'end_date'          => 'required',
@@ -439,7 +442,7 @@ class TransactionHeaderController extends Controller
         $now = Carbon::now('Asia/Jakarta');
         $filename = 'DMC_TRANSACTION_REPORT_' . $now->toDateTimeString();
         $pdf->setOptions(["isPhpEnabled"=>true]);
-
+//dd($data);
         return $pdf->download($filename.'.pdf');
     }
 
