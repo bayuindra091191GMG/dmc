@@ -61,14 +61,12 @@ class DashboardController extends Controller
         $totalCustomer = Customer::all();
         $totalCourse = Course::all();
 
-
-
-
         $schedules = Schedule::where('status_id', 3)->get();
         $now = Carbon::now('Asia/Jakarta');
 
         $packageReminders = new Collection();
         $classReminders = new Collection();
+        $privateReminders = new Collection();
         foreach ($schedules as $schedule){
             $remindDate = Carbon::parse($schedule->finish_date)->subDays(5);
             if($schedule->course->type === 1){
@@ -87,8 +85,17 @@ class DashboardController extends Controller
                     }
                 }
             }
+            elseif($schedule->course->type === 3){
+                if($privateReminders->count() < 5){
+                    if($schedule->meeting_amount === 0){
+                        $privateReminders->add($schedule);
+                    }
+                }
+            }
 
-            if($packageReminders->count() == 5 && $classReminders->count() == 5){
+            if($packageReminders->count() == 5 &&
+                $classReminders->count() == 5 &&
+                $privateReminders->count() == 5){
                 break 1;
             }
         }
@@ -99,7 +106,8 @@ class DashboardController extends Controller
             'totalCustomer'             => $totalCustomer->count(),
             'totalClass'                => $totalCourse->count(),
             'packageReminders'          => $packageReminders,
-            'classReminders'            => $classReminders
+            'classReminders'            => $classReminders,
+            'privateReminders'          => $privateReminders
         ];
 
         return view('admin.dashboard')->with($data);

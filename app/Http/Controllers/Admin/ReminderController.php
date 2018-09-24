@@ -52,6 +52,11 @@ class ReminderController extends Controller
                     $reminders->add($schedule);
                 }
             }
+            elseif($schedule->course->type === 3){
+                if($schedule->meeting_amount === 0){
+                    $reminders->add($schedule);
+                }
+            }
         }
 
         return DataTables::of($reminders)
@@ -92,7 +97,7 @@ class ReminderController extends Controller
                     $schedule->meeting_amount = $schedule->course->meeting_amount;
                 }
             }
-            else{
+            elseif($schedule->course->type === 2){
                 $finishDate = Carbon::parse($schedule->finish_date)->addMonths(1);
                 $schedule->finish_date = $finishDate->toDateTimeString();
                 $schedule->meeting_amount = 0;
@@ -100,6 +105,10 @@ class ReminderController extends Controller
 
             $schedule->status_id = 2;
             $schedule->save();
+
+            if($schedule->course->type === 3){
+                return redirect()->route('admin.transactions.private.create')->with('customer', $schedule->customer_id);
+            }
 
             Session::flash('message', 'Berhasil memperbarui jadwal customer!');
 

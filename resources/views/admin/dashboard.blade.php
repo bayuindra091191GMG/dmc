@@ -37,6 +37,11 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            @include('partials._success')
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
@@ -131,12 +136,6 @@
 
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            @include('partials._success')
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="dashboard_graph">
 
                 <div class="row x_title">
@@ -205,6 +204,44 @@
                                     <strong>kelas {{ $class->course->name }}. </strong>
                                     <span>Sudah mendekati Tanggal Tagihan Bulanan.</span>
                                     <span>Tanggal Expired: {{ $class->finish_date_string }}.</span>
+                                    <button class="btn btn-success modal-renew" data-schedule-id="{{ $class->id }}" data-course="{{ $class->course->name }}" data-customer="{{ $class->customer->name }}" data-customer-parent="{{ $class->customer->parent_name }}">PERBARUI</button>
+                                    <button class="btn btn-warning modal-disable" data-schedule-id="{{ $class->id }}" data-course="{{ $class->course->name }}" data-customer="{{ $class->customer->name }}" data-customer-parent="{{ $class->customer->parent_name }}">HAPUS</button>
+                                </div>
+                            @endforeach
+                            <div>
+                                <span><a style="text-decoration: underline;" href="{{ route('admin.reminders') }}" target="_blank">Klik di sini untuk melihat semua</a></span>
+                            </div>
+                        @else
+                            <div class="alert alert-success fade in" role="alert">
+                                <strong>Tidak ada peringatan</strong>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="dashboard_graph">
+
+                <div class="row x_title">
+                    <div class="col-md-6">
+                        <h3>Private Reminder</h3>
+                    </div>
+                </div>
+
+                <div class="x_content">
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        @if($privateReminders->count() > 0)
+                            @foreach($privateReminders as $class)
+                                <div class="alert alert-danger fade in" role="alert">
+                                    <span>{{ $class->customer->name }}  ,</span>
+                                    <strong>kelas {{ $class->course->name }}. </strong>
+                                    <span>Jumlah meeting sudah habis.</span>
                                     <button class="btn btn-success modal-renew" data-schedule-id="{{ $class->id }}" data-course="{{ $class->course->name }}" data-customer="{{ $class->customer->name }}" data-customer-parent="{{ $class->customer->parent_name }}">PERBARUI</button>
                                     <button class="btn btn-warning modal-disable" data-schedule-id="{{ $class->id }}" data-course="{{ $class->course->name }}" data-customer="{{ $class->customer->name }}" data-customer-parent="{{ $class->customer->parent_name }}">HAPUS</button>
                                 </div>
