@@ -402,7 +402,8 @@ class ScheduleController extends Controller
                     })->get();
                 }
                 else{
-                    $schedules = $schedules->get();
+                    $schedules = $schedules->whereHas('course', function ($query){
+                        $query->where('type', '!=', 3);})->get();
                 }
             }
         }

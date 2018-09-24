@@ -74,7 +74,7 @@ class AttendanceController extends Controller
         if(!empty(request()->customer)){
             $customer = Customer::find(request()->customer);
             $schedules = Schedule::where('customer_id', $customer->id)
-//                ->where('status_id', 3)
+                ->where('status_id', 3)
                 ->get();
             $customerPlaceholder = $customer->name. ' - '. $customer->email. ' - '. $customer->phone;
         }
@@ -209,28 +209,25 @@ class AttendanceController extends Controller
 
         //change schedule meeting amount
         if($scheduleDB->day == "Bebas"){
-            if($scheduleDB->course->type == 3){
-                //change schedule amount (package increase, class decrese)
-                $temp = $scheduleDB->meeting_amount;
-                $scheduleDB->meeting_amount = $temp+1;
-                $scheduleDB->save();
+            if($scheduleDB->meeting_amount == 0){
+                return redirect()
+                    ->back()
+                    ->withErrors('Pertemuan sudah habis', 'default')
+                    ->withInput();
             }
-            else{
-                if($scheduleDB->meeting_amount == 0){
-                    return redirect()
-                        ->back()
-                        ->withErrors('Pertemuan sudah habis', 'default')
-                        ->withInput();
-                }
 
+            //change schedule amount (package increase, class decrese)
+            $temp = $scheduleDB->meeting_amount;
+            $scheduleDB->meeting_amount = $temp-1;
+            $scheduleDB->save();
+        }
+        else{
+            if($scheduleDB->course->type == 3){
                 //change schedule amount (package increase, class decrese)
                 $temp = $scheduleDB->meeting_amount;
                 $scheduleDB->meeting_amount = $temp-1;
                 $scheduleDB->save();
             }
-        }
-        else{
-
             if($scheduleDB->meeting_amount == $scheduleDB->course->meeting_amount){
                 return redirect()
                     ->back()
@@ -277,6 +274,12 @@ class AttendanceController extends Controller
             }
         }
         else{
+            if($scheduleDB->course->type == 3){
+                if($scheduleDB->meeting_amount == 0){
+                    $scheduleDB->status_id = 4;
+                    $scheduleDB->save();
+                }
+            }
 
             if($scheduleDB->meeting_amount == $scheduleDB->course->meeting_amount){
                 $scheduleDB->status_id = 4;
