@@ -391,11 +391,10 @@ class TransactionHeaderController extends Controller
 
         $validator = Validator::make($request->all(),[
             'start_date'        => 'required',
-            'end_date'          => 'required',
+            'end_date'          => 'required'
         ],[
             'start_date.required'   => 'Dari Tanggal wajib diisi!',
-            'end_date.required'     => 'Sampai Tanggal wajib diisi!',
-
+            'end_date.required'     => 'Sampai Tanggal wajib diisi!'
         ]);
 
         if ($validator->fails()) {
@@ -416,7 +415,20 @@ class TransactionHeaderController extends Controller
         $start = $start->addDays(-1);
         $end = $end->addDays(1);
 
-        $headers = TransactionHeader::whereBetween('date', array($start->toDateTimeString(), $end->toDateTimeString()));
+        $type = $request->input('class_type');
+        if($type == 0){
+            $headers = TransactionHeader::whereBetween('date', array($start->toDateTimeString(), $end->toDateTimeString()));
+        }
+        else{
+            $headers = TransactionHeader::whereBetween('date', array($start->toDateTimeString(), $end->toDateTimeString()))
+                ->whereHas('transaction_details', function ($query) use ($type){
+                    $query->whereHas('schedule', function($query) use ($type){
+                        $query->whereHas('course', function ($query) use ($type){
+                            $query->where('type', $type);
+                        });
+                    });
+                });
+        }
 
         $headers = $headers->orderByDesc('date')
             ->get();
@@ -430,10 +442,11 @@ class TransactionHeaderController extends Controller
         $totalStr = number_format($total, 0, ",", ".");
 
         $data =[
-            'header'         => $headers,
+            'header'            => $headers,
             'start_date'        => $request->input('start_date'),
             'finish_date'       => $request->input('end_date'),
-            'total'             => $totalStr
+            'total'             => $totalStr,
+            'type'              => $type
         ];
 
         //return view('documents.purchase_orders.purchase_orders_pdf')->with($data);

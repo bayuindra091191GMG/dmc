@@ -6770,7 +6770,18 @@
 <body>
 
 <div class="container">
-    <h3>Laporan Transaksi</h3>
+    <h3>
+        Laporan Transaksi
+        @if($type == 1)
+             - Package (Muaythai)
+        @elseif($type == 2)
+             - Kelas
+        @elseif($type == 3)
+             - Private
+        @elseif($type == 4)
+             - Gymnastic
+        @endif
+    </h3>
     <span style="font-size: 10px;">Tanggal: {{ $start_date }} - {{ $finish_date }}</span><br/>
     <table class="table" style="font-size: 10px;">
         <thead>
@@ -6810,6 +6821,7 @@
                         @else
                             Private
                         @endif
+                        - Customer: {{ $hdr->customer->name }}
                     </b>
                 </td>
             </tr>

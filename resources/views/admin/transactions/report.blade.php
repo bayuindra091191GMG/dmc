@@ -29,6 +29,21 @@
             @endif
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="class_type" >
+                    Tipe Kelas
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="class_type" name="class_type" class="form-control col-md-7 col-xs-12">
+                        <option value="0">Semua</option>
+                        <option value="1">Package (Muaythai)</option>
+                        <option value="2">Kelas</option>
+                        <option value="3">Private</option>
+                        <option value="4">Gymnastic</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="start_date" >
                     Dari Tanggal
                 </label>
