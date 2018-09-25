@@ -389,21 +389,35 @@ class ScheduleController extends Controller
         $schedules = null;
         if(!empty($request->customer)) {
             $customerId = $request->customer;
-            if(Customer::where('id', $customerId)->exists()){
-                $schedules = Schedule::where('customer_id', $customerId)
-                    ->where('status_id', 2)
-                    ->whereHas('course', function ($query) use ($term){
-                        $query->where('name','LIKE', '%'. $term. '%');
-                    });
 
-                if($courseType !== 0){
-                    $schedules = $schedules->whereHas('course', function ($query) use ($courseType){
-                        $query->where('type', $courseType);
-                    })->get();
+
+
+            if(Customer::where('id', $customerId)->exists()){
+
+                if($courseType === 3){
+                    $schedules = Schedule::where('customer_id', $customerId)
+                        ->whereIn('status_id', [2,3])
+                        ->whereHas('course', function ($query) use ($term){
+                            $query->where('name','LIKE', '%'. $term. '%')
+                                ->where('type', 3);
+                        })->get();
                 }
                 else{
-                    $schedules = $schedules->whereHas('course', function ($query){
-                        $query->where('type', '!=', 3);})->get();
+                    $schedules = Schedule::where('customer_id', $customerId)
+                        ->where('status_id', 2)
+                        ->whereHas('course', function ($query) use ($term){
+                            $query->where('name','LIKE', '%'. $term. '%');
+                        });
+
+                    if($courseType !== 0){
+                        $schedules = $schedules->whereHas('course', function ($query) use ($courseType){
+                            $query->where('type', $courseType);
+                        })->get();
+                    }
+                    else{
+                        $schedules = $schedules->whereHas('course', function ($query){
+                            $query->where('type', '!=', 3);})->get();
+                    }
                 }
             }
         }
