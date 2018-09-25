@@ -25,6 +25,7 @@
         "arcanedev/log-viewer": "~4.0",
         "barryvdh/laravel-dompdf": "^0.8.2",
         "barryvdh/laravel-ide-helper": "^2.4",
+        "barryvdh/laravel-snappy": "^0.4.3",
         "creativeorange/gravatar": "~1.0",
         "davejamesmiller/laravel-breadcrumbs": "^3.0",
         "intervention/image": "^2.4",

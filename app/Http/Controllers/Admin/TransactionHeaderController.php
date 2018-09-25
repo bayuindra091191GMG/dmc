@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 use PDF;
+use PDF2;
 
 class TransactionHeaderController extends Controller
 {
@@ -437,13 +438,21 @@ class TransactionHeaderController extends Controller
 
         //return view('documents.purchase_orders.purchase_orders_pdf')->with($data);
 
-        $pdf = PDF::loadView('documents.transactions.trx_report', $data)
-            ->setPaper('a4', 'portrait');
+//        $pdf = PDF::loadView('documents.transactions.trx_report', $data)
+//            ->setPaper('a4', 'portrait');
+//        $now = Carbon::now('Asia/Jakarta');
+//        $filename = 'DMC_TRANSACTION_REPORT_' . $now->toDateTimeString();
+//        $pdf->setOptions(["isPhpEnabled"=>true]);
+//
+//        return $pdf->download($filename.'.pdf');
+
+        $pdf = PDF2::loadView('documents.transactions.trx_report', $data)
+            ->setOption('footer-right', '[page] of [toPage]');
+
         $now = Carbon::now('Asia/Jakarta');
         $filename = 'DMC_TRANSACTION_REPORT_' . $now->toDateTimeString();
-        $pdf->setOptions(["isPhpEnabled"=>true]);
-//dd($data);
-        return $pdf->download($filename.'.pdf');
+
+        return $pdf->download($filename. '.pdf');
     }
 
     public function printDocument($id){

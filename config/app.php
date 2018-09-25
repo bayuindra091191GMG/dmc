@@ -204,6 +204,7 @@ return [
         \App\Providers\ProtectionProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Barryvdh\Snappy\ServiceProvider::class,
 
         \App\Providers\ComposerServiceProvider::class
     ],
@@ -273,6 +274,9 @@ return [
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
 
         'PDF'   => Barryvdh\DomPDF\Facade::class,
+
+        'PDF2' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+        'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class
     ],
 
 ];
