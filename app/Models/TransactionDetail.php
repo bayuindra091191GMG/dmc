@@ -19,6 +19,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $day
  * @property int $meeting_attendeds
  * @property int $meeting_amount
+ * @property int $month_amount
  * @property float $price
  * @property float $prorate_price
  * @property float $discount
@@ -41,6 +42,7 @@ class TransactionDetail extends Eloquent
 		'schedule_id' => 'int',
 		'meeting_attendeds' => 'int',
         'meeting_amount' => 'int',
+        'month_amount' => 'int',
 		'price' => 'float',
 		'discount' => 'float',
 		'subtotal' => 'float',
@@ -59,6 +61,7 @@ class TransactionDetail extends Eloquent
 		'day',
 		'meeting_attendeds',
         'meeting_amount',
+        'month_amount',
 		'price',
         'prorate_price',
 		'discount',

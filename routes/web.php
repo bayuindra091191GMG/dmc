@@ -150,10 +150,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('private/update/{private}', 'TransactionPrivateHeaderController@update')->name('transactions.private.update');
 
     //Transaction Private Details
-//    Route::get('private_details', 'TransactionPrivateDetailController@index')->name('private_details');
     Route::post('private_details/store', 'TransactionPrivateDetailController@store')->name('private_details.store');
     Route::put('private_details/update', 'TransactionPrivateDetailController@update')->name('private_details.update');
     Route::post('private_details/delete', 'TransactionPrivateDetailController@delete')->name('private_details.delete');
+
+    //Transaction Cuti Header
+    Route::get('cuti/create', 'TransactionCutiHeaderController@create')->name('transactions.cuti.create');
+    Route::post('cuti/store', 'TransactionCutiHeaderController@store')->name('transactions.cuti.store');
 
     //Reminders
     Route::get('reminders', 'ReminderController@index')->name('reminders');
