@@ -165,6 +165,12 @@ class TransactionCutiHeaderController extends Controller
 
                 // Activate schedule
                 $scheduleObj->status_id = 7;
+
+                // Update finish date
+                $finishDate = Carbon::parse($scheduleObj->finish_date);
+                $finishDate->addMonth($monthInt);
+                $scheduleObj->finish_date = $finishDate->toDateTimeString();
+                $scheduleObj->save();
             }
             $idx++;
         }
