@@ -444,6 +444,7 @@ class ScheduleController extends Controller
 
         return Response::json($formatted_tags);
     }
+
     public function getScheduleProrates(Request $request){
         $term = trim($request->q);
 
@@ -491,6 +492,31 @@ class ScheduleController extends Controller
 
         foreach ($schedules as $schedule) {
             $formatted_tags[] = ['id' => $schedule->id. '#'. $schedule->course->name. '#'. $schedule->course->coach->name. '#'. $schedule->day. '#'. $schedule->course->price. '#'. $schedule->course->meeting_amount, 'text' => $schedule->course->name];
+        }
+
+        return Response::json($formatted_tags);
+    }
+    public function getScheduleCuti(Request $request){
+        $term = trim($request->q);
+        $schedules = null;
+        if(!empty($request->customer)) {
+            $customerId = $request->customer;
+
+            if(Customer::where('id', $customerId)->exists()){
+
+                $schedules = Schedule::where('customer_id', $customerId)
+                    ->where('status_id', 3)
+                    ->whereHas('course', function ($query) use ($term){
+                        $query->where('name','LIKE', '%'. $term. '%')
+                            ->where('type', 2);
+                    })->get();
+            }
+        }
+
+        $formatted_tags = [];
+
+        foreach ($schedules as $schedule) {
+            $formatted_tags[] = ['id' => $schedule->id. '#'. $schedule->course->name. '#'. $schedule->course->coach->name. '#'. $schedule->day. '#'. $schedule->course->price, 'text' => $schedule->course->name];
         }
 
         return Response::json($formatted_tags);

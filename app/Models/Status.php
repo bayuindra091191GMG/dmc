@@ -103,4 +103,9 @@ class Status extends Eloquent
 	{
 		return $this->hasMany(\App\Models\Auth\User\User::class);
 	}
+
+    public function leaves()
+    {
+        return $this->hasMany(\App\Models\Leaf::class);
+    }
 }

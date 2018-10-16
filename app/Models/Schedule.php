@@ -122,4 +122,9 @@ class Schedule extends Eloquent
 	{
 		return $this->belongsTo(\App\Models\Status::class);
 	}
+
+    public function leaves()
+    {
+        return $this->hasMany(\App\Models\Leaf::class);
+    }
 }

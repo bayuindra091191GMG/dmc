@@ -12,6 +12,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
 use App\Models\Customer;
+use App\Models\Leaf;
 use App\Models\NumberingSystem;
 use App\Models\Schedule;
 use App\Models\TransactionDetail;
@@ -148,7 +149,7 @@ class TransactionCutiHeaderController extends Controller
         foreach($schedules as $schedule){
             if(!empty($schedule)){
                 $scheduleObj = Schedule::find($schedule);
-                $monthInt = (int) $months($idx);
+                $monthInt = (int) $months[$idx];
                 $subTotal = $monthInt * 150000;
                 TransactionDetail::create([
                     'header_id'             => $trxHeader->id,
@@ -163,14 +164,30 @@ class TransactionCutiHeaderController extends Controller
                 // Accumulate subtotal
                 $totalPayment += $subTotal;
 
-                // Activate schedule
-                $scheduleObj->status_id = 7;
+                // Create new cuti
+                $newMonth = $now->month + 1;
+                if($newMonth > 12){
+                    $newYear = $now->year + 1;
+                    $startDate = Carbon::createFromFormat('Y-m-d', $newYear.'-1-10');
+                }
+                else{
+                    $startDate = Carbon::createFromFormat('Y-m-d', $now->year.'-'.$newMonth.'-10');
+                }
 
-                // Update finish date
-                $finishDate = Carbon::parse($scheduleObj->finish_date);
-                $finishDate->addMonth($monthInt);
-                $scheduleObj->finish_date = $finishDate->toDateTimeString();
-                $scheduleObj->save();
+                $newLeave = Leaf::create([
+                    'schedule_id'           => $schedule,
+                    'month_amount'          => $monthInt,
+                    'start_date'            => $startDate->toDateTimeString(),
+                    'status_id'             => 1,
+                    'created_by'            => $user->id,
+                    'created_at'            => $now->toDateTimeString(),
+                    'updated_by'            => $user->id,
+                    'updated_at'            => $now->toDateTimeString()
+                ]);
+
+                $endDate = $startDate->addMonth($monthInt);
+                $newLeave->end_date = $endDate->toDateTimeString();
+                $newLeave->save();
             }
             $idx++;
         }

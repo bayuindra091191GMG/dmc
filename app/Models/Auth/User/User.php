@@ -261,4 +261,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\ItemStockNotification::class);
     }
+
+    public function leaves_createdBy()
+    {
+        return $this->hasMany(\App\Models\Leaf::class, 'created_by');
+    }
+
+    public function leaves_updatedBy()
+    {
+        return $this->hasMany(\App\Models\Leaf::class, 'updated_by');
+    }
 }

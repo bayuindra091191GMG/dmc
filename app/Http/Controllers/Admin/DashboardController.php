@@ -10,6 +10,7 @@ use App\Models\Auth\User\User;
 use App\Models\Course;
 use App\Models\Customer;
 use App\Models\ItemStockNotification;
+use App\Models\Leaf;
 use App\Models\PreferenceCompany;
 use App\Models\PurchaseOrderHeader;
 use App\Models\PurchaseRequestHeader;
@@ -99,6 +100,32 @@ class DashboardController extends Controller
                 break 1;
             }
         }
+
+        // Script checking cuti
+        $now = Carbon::today('Asia/Jakarta');
+        if($now->day > 10){
+            $leaves = Leaf::where('status_id', 1)->get();
+            foreach ($leaves as $leave){
+                $leaveStartDate = Carbon::parse($leave->start_date);
+                $leaveEndDate = Carbon::parse($leave->end_date);
+                if($now->greaterThan($leaveStartDate) && $now->lessThan($leaveEndDate)){
+                    $schedule = $leave->schedule;
+                    $schedule->status_id = 7;
+                    $schedule->save();
+                }
+                else{
+                    if($now->greaterThan($leaveEndDate)){
+                        $schedule = $leave->schedule;
+                        $schedule->status_id = 2;
+                        $schedule->save();
+
+                        $leave->status_id = 2;
+                        $leave->save();
+                    }
+                }
+            }
+        }
+
 
         $data = [
             'counts'                    => $counts,

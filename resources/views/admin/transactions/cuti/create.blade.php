@@ -5,14 +5,14 @@
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-            <h2>Buat Transaksi Prorate Baru</h2>
+            <h2>Buat Transaksi Cuti Baru</h2>
             <hr/>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
 
-            {{ Form::open(['route'=>['admin.transactions.prorate.store'],'method' => 'post','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.transactions.cuti.store'],'method' => 'post','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
 
             @if(count($errors))
                 <div class="form-group">
@@ -68,16 +68,6 @@
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
                            name="date" value="{{ old('date') }}" required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="registration_fee">
-                    Registration Fee
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="registration_fee" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('registration_fee')) parsley-error @endif"
-                           name="registration_fee"/>
                 </div>
             </div>
 
@@ -177,9 +167,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="cuti_add">Lama Cuti:</label>
+                            <label class="control-label col-sm-2" for="month_add">Lama Cuti:</label>
                             <div class="col-sm-10">
-                                <select class="form-control" id="cuti_add" name="cuti_add">
+                                <select class="form-control" id="month_add" name="month_add">
                                     <option value="-1">- Pilih Berapa Pertemuan -</option>
                                     <option value="1">1 Bulan</option>
                                     <option value="2">2 Bulan</option>
@@ -315,7 +305,7 @@
 
         $('#customer').on('select2:select', function (e) {
             var data = e.params.data;
-            var createUrl = '{{ route('admin.transactions.prorate.create') }}';
+            var createUrl = '{{ route('admin.transactions.cuti.create') }}';
             window.location.replace(createUrl + '?customer=' + data.id);
         });
 
@@ -330,7 +320,7 @@
         });
 
         // Count cuti price for add
-        $('#cuti_add').on('change', function (e) {
+        $('#month_add').on('change', function (e) {
             var valueMonthAdd = this.value;
 
             if(valueMonthAdd !== -1){
@@ -363,7 +353,7 @@
                 width: '100%',
                 minimumInputLength: 0,
                 ajax: {
-                    url: '{{ route('select.schedule_prorates') }}',
+                    url: '{{ route('select.schedule_cuti') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {
@@ -414,7 +404,7 @@
 
             var monthAddInt = parseInt(monthAddStr);
             var subTotalAddInt = monthAddInt * 150000;
-            var subTotalAddStr = rupiahFormat(subTotalAdd);
+            var subTotalAddStr = rupiahFormat(subTotalAddInt);
 
             // Split schedule value
             var splitted = scheduleAdd.split('#');
@@ -430,8 +420,8 @@
             sbAdd.append("<td class='text-center'>" + splitted[1] + "<input type='hidden' name='schedule[]'  value='" + splitted[0] + "'/>")
             sbAdd.append("<td class='text-center'>" + splitted[2] + "</td>");
             sbAdd.append("<td class='text-center'>" + splitted[3] + "</td>");
-            sbAdd.append("<td class='text-right>150.000</td>");
-            sbAdd.append("<td class='text-right'>" + monthAddStr + " Bulan<input type='hidden' name='month[]' value='" + monthAddStr + "'/></td>");
+            sbAdd.append("<td class='text-right'>150.000</td>");
+            sbAdd.append("<td class='text-center'>" + monthAddStr + " Bulan<input type='hidden' name='month[]' value='" + monthAddStr + "'/></td>");
             sbAdd.append("<td class='text-right'>" + subTotalAddStr + "</td>");
             sbAdd.append("<td class='text-center'>");
             sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-schedule='" + scheduleAdd + "'><span class='glyphicon glyphicon-trash'></span></a>");
