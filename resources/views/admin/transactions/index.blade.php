@@ -16,6 +16,9 @@
             <a href="{{ route('admin.transactions.private.create') }}" class="btn btn-app">
                 <i class="fa fa-plus"></i> Tambah Private
             </a>
+            <a href="{{ route('admin.transactions.cuti.create') }}" class="btn btn-app">
+                <i class="fa fa-plus"></i> Tambah Cuti
+            </a>
         </div>
         <div class="clearfix"></div>
     </div>
@@ -62,6 +65,7 @@
                 serverSide: true,
                 pageLength: 50,
                 ajax: '{!! route('datatables.transactions') !!}',
+                order: [ [4, 'desc'] ],
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
                     { data: 'code', name: 'code', class: 'text-center'},

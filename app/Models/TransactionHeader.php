@@ -131,4 +131,9 @@ class TransactionHeader extends Eloquent
 	{
 		return $this->hasMany(\App\Models\TransactionDetail::class, 'header_id');
 	}
+
+    public function leaves()
+    {
+        return $this->hasMany(\App\Models\Leaf::class, 'transaction_id');
+    }
 }

@@ -163,6 +163,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('reminders/renew', 'ReminderController@renew')->name('reminders.renew');
     Route::post('reminders/disable', 'ReminderController@disable')->name('reminders.disable');
 
+    //Cuti
+    Route::get('cuti', 'CutiController@index')->name('cuti');
+
     //DMC End
 
     // Notification
@@ -589,6 +592,7 @@ Route::get('/datatables-schedules', 'Admin\ScheduleController@anyData')->name('d
 Route::get('/datatables-transactions', 'Admin\TransactionHeaderController@anyData')->name('datatables.transactions');
 Route::get('/datatables-attendances', 'Admin\AttendanceController@anyData')->name('datatables.attendances');
 Route::get('/datatables-reminders', 'Admin\ReminderController@getIndex')->name('datatables.reminders');
+Route::get('/datatables-cuti', 'Admin\CutiController@getIndex')->name('datatables.cuti');
 //DMC End
 
 Route::get('/datatables-employees', 'Admin\EmployeeController@getIndex')->name('datatables.employees');

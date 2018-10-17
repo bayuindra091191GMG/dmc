@@ -30,19 +30,25 @@ class TransactionHeaderTranformer extends TransformerAbstract
             $type = 'PRORATE';
             $trxEditUrl = route('admin.transactions.prorate.edit', ['prorate' => $header->id]);
         }
-        else{
+        else if($header->type === 3){
             $type = 'PRIVATE';
             $trxEditUrl = route('admin.transactions.private.edit', ['private' => $header->id]);
         }
+        else{
+            $type = 'CUTI';
+        }
 
         $action = "<a class='btn btn-xs btn-primary' href='". $trxShowUrl."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
-        $action .= "<a class='btn btn-xs btn-info' href='". $trxEditUrl."' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
 
-        if($header->type === 1 || $header->type === 3){
+        if($header->type !== 4){
+            $action .= "<a class='btn btn-xs btn-info' href='". $trxEditUrl."' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+        }
+
+        if($header->type === 1 || $header->type === 3 || $header->type === 4){
             $totalPrice = $header->total_price;
         }
         else{
-            $totalPrice = $header->total_prorate_price;
+            $totalPrice = $header->total_prorate_price ?? 0;
         }
 
         return[

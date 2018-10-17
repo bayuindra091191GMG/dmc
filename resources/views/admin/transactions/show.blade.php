@@ -58,8 +58,10 @@
                             NORMAL
                         @elseif($header->type === 2)
                             PRORATE
-                        @else
+                        @elseif($header->type === 3)
                             PRIVATE
+                        @else
+                            CUTI
                         @endif
                     </div>
                 </div>
@@ -152,7 +154,7 @@
 
                 <div class="form-group">
                     <div class="col-lg-12 col-md-12 col-xs-12 column">
-                        <h4 class="text-center">Detil Kelas</h4>
+                        <h4 class="text-center">Detil Transaksi</h4>
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover">
                                 <thead>
@@ -198,7 +200,7 @@
                                         <th class="text-center" style="width: 15%">
                                             Subtotal
                                         </th>
-                                    @else
+                                    @elseif($header->type ===  3)
                                         <th class="text-center" style="width: 15%">
                                             Kelas
                                         </th>
@@ -213,6 +215,25 @@
                                         </th>
                                         <th class="text-center" style="width: 10%">
                                             Jumlah Pertemuan
+                                        </th>
+                                        <th class="text-center" style="width: 15%">
+                                            Subtotal
+                                        </th>
+                                    @else
+                                        <th class="text-center" style="width: 15%">
+                                            Kelas
+                                        </th>
+                                        <th class="text-center" style="width: 15%">
+                                            Trainer
+                                        </th>
+                                        <th class="text-center" style="width: 15%">
+                                            Hari
+                                        </th>
+                                        <th class="text-center" style="width: 15%">
+                                            Harga
+                                        </th>
+                                        <th class="text-center" style="width: 10%">
+                                            Lama Cuti
                                         </th>
                                         <th class="text-center" style="width: 15%">
                                             Subtotal
@@ -265,7 +286,7 @@
                                             <td class="text-right">
                                                 {{ $detail->subtotal_string }}
                                             </td>
-                                        @else
+                                        @elseif($header->type === 3)
                                             <td class="text-center">
                                                 {{ $detail->schedule->course->name }}
                                             </td>
@@ -280,6 +301,25 @@
                                             </td>
                                             <td class="text-center">
                                                 {{ $detail->meeting_amount }}
+                                            </td>
+                                            <td class="text-right">
+                                                {{ $detail->subtotal_string }}
+                                            </td>
+                                        @else
+                                            <td class="text-center">
+                                                {{ $detail->schedule->course->name }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $detail->schedule->course->coach->name }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $detail->schedule->day }}
+                                            </td>
+                                            <td class="text-right">
+                                                {{ $detail->price_string }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $detail->month_amount }} Bulan
                                             </td>
                                             <td class="text-right">
                                                 {{ $detail->subtotal_string }}

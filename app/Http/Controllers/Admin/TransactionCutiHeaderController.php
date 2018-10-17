@@ -176,6 +176,7 @@ class TransactionCutiHeaderController extends Controller
 
                 $newLeave = Leaf::create([
                     'schedule_id'           => $schedule,
+                    'transaction_id'        => $trxHeader->id,
                     'month_amount'          => $monthInt,
                     'start_date'            => $startDate->toDateTimeString(),
                     'status_id'             => 1,
