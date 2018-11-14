@@ -31,8 +31,9 @@
                     <th class="text-center" style="width: 10%;">Nomor Transaksi</th>
                     <th class="text-center" style="width: 5%;">Nomor Invoice</th>
                     <th class="text-center" style="width: 5%;">Jenis Transaksi</th>
-                    <th class="text-center" style="width: 10%;">Tanggal</th>
-                    <th class="text-center" style="width: 10%;">Metode Pembayaran</th>
+                    <th class="text-center" style="width: 5%;">Tanggal</th>
+                    <th class="text-center" style="width: 10%;">Nama Student</th>
+                    <th class="text-center" style="width: 5%;">Metode Pembayaran</th>
                     <th class="text-center" style="width: 10%;">Registration Fee</th>
                     <th class="text-center" style="width: 10%;">Total Harga</th>
                     {{--<th class="text-center" style="width: 10%;">Total Diskon</th>--}}
@@ -79,6 +80,7 @@
                             return data;
                         }
                     },
+                    { data: 'customer', name: 'customer', class: 'text-center'},
                     { data: 'payment_method', name: 'payment_method', class: 'text-center'},
                     { data: 'fee', name: 'fee', class: 'text-right',
                         render: function ( data, type, row ){

@@ -57,6 +57,11 @@ class ReminderController extends Controller
                     $reminders->add($schedule);
                 }
             }
+            elseif($schedule->course->type === 4){
+                if($now->greaterThanOrEqualTo($remindDate)){
+                    $reminders->add($schedule);
+                }
+            }
         }
 
         return DataTables::of($reminders)
@@ -86,19 +91,47 @@ class ReminderController extends Controller
                 $finishDate = Carbon::parse($schedule->finish_date)->addDays($schedule->course->valid);
                 $schedule->finish_date = $finishDate->toDateTimeString();
 
-                $remindDate = Carbon::parse($schedule->finish_date)->subDays(5);
+//                $remindDate = Carbon::parse($schedule->finish_date)->subDays(5);
                 $realFinishDate = Carbon::parse($schedule->finish_date);
                 $now = Carbon::now('Asia/Jakarta');
 
                 if($now->lessThanOrEqualTo($realFinishDate)){
-                    $schedule->meeting_amount += $schedule->course->meeting_amount;
+                    if($schedule->course->id === 3 || $schedule->course->id === 4){
+                        $schedule->meeting_amount += $schedule->course->meeting_amount + 3;
+                    }
+                    else{
+                        $schedule->meeting_amount += $schedule->course->meeting_amount;
+                    }
+
                 }
                 else{
-                    $schedule->meeting_amount = $schedule->course->meeting_amount;
+                    if($schedule->course->id === 3 || $schedule->course->id === 4){
+                        $schedule->meeting_amount = $schedule->course->meeting_amount + 3;
+                    }
+                    else{
+                        $schedule->meeting_amount = $schedule->course->meeting_amount;
+                    }
                 }
             }
             elseif($schedule->course->type === 2){
-                $finishDate = Carbon::parse($schedule->finish_date)->addMonths(1);
+                $finishDate = Carbon::parse($schedule->finish_date);
+                if($finishDate->day > 1){
+                    $finishDate->endOfMonth();
+                }
+                else{
+                    $finishDate->addMonth()->startOfMonth();
+                }
+                $schedule->finish_date = $finishDate->toDateTimeString();
+                $schedule->meeting_amount = 0;
+            }
+            elseif($schedule->course->type === 4){
+                $finishDate = Carbon::parse($schedule->finish_date);
+                if($finishDate->day > 1){
+                    $finishDate->endOfMonth();
+                }
+                else{
+                    $finishDate->addMonth()->startOfMonth();
+                }
                 $schedule->finish_date = $finishDate->toDateTimeString();
                 $schedule->meeting_amount = 0;
             }

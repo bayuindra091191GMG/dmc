@@ -170,12 +170,16 @@
 
             $('#renewModal').modal('show');
         });
+
+        $.ajaxSetup({
+            headers: { 'X-CSRF-Token' : $('meta[name="csrf-token"]').attr('content') }
+        });
+
         $('.modal-footer').on('click', '.renew', function() {
             $.ajax({
                 type: 'POST',
                 url: '{{ route('admin.reminders.renew') }}',
                 data: {
-                    '_token': '{{ csrf_token() }}',
                     'schedule_id' : $('#schedule_renew_id').val()
                 },
                 success: function(data) {

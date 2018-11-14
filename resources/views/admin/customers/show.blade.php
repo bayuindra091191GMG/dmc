@@ -154,8 +154,10 @@
                                                     PAKET
                                                 @elseif($schedule->course->type == 2)
                                                     KELAS
-                                                @else
+                                                @elseif($schedule->course->type == 3)
                                                     PRIVATE
+                                                @else
+                                                    GYMNASTIC
                                                 @endif
                                             </td>
                                             <td class="text-center">

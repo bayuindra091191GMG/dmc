@@ -111,29 +111,39 @@ class ScheduleController extends Controller
 
         $i = 0;
         $dateTimeNow = Carbon::now('Asia/Jakarta');
+
+        $first_day_of_the_current_month = Carbon::today()->startOfMonth();
+        $last_day_of_the_current_month = $first_day_of_the_current_month->copy()->endOfMonth();
+
         foreach ($courses as $course){
             $courseData = Course::find($course);
             $meetingAmount = 0;
             if($courseData->type == 2 || $courseData->type == 4) {
-                $now = $dateTimeNow;
-                if($now->day < 10){
-                    $finish = Carbon::createFromFormat('Y-m-d', $now->year.'-'.$now->month.'-10');
-                }
-                else{
-                    $newMonth = $now->month + 1;
-                    if($newMonth > 12){
-                        $newYear = $now->year + 1;
-                        $finish = Carbon::createFromFormat('Y-m-d', $newYear.'-1-10');
-                    }
-                    else{
-                        $finish = Carbon::createFromFormat('Y-m-d', $now->year.'-'.$newMonth.'-10');
-                    }
-                }
+//                $now = $dateTimeNow;
+//                if($now->day < 10){
+//                    $finish = Carbon::createFromFormat('Y-m-d', $now->year.'-'.$now->month.'-10');
+//                }
+//                else{
+//                    $newMonth = $now->month + 1;
+//                    if($newMonth > 12){
+//                        $newYear = $now->year + 1;
+//                        $finish = Carbon::createFromFormat('Y-m-d', $newYear.'-1-10');
+//                    }
+//                    else{
+//                        $finish = Carbon::createFromFormat('Y-m-d', $now->year.'-'.$newMonth.'-10');
+//                    }
+//                }
+
+                $finish = $last_day_of_the_current_month;
 //                $finish = $dateTimeNow;
 //                $finish->addDays(30);
             }
             else{
                 $meetingAmount = $courseData->meeting_amount;
+                if($courseData->id === 3 || $courseData->id === 4){
+                    $meetingAmount = $courseData->meeting_amount + 3;
+                }
+
                 $dateTimeNowFinish = Carbon::now('Asia/Jakarta');
                 $finish = $dateTimeNowFinish;
                 $finish->addDays($courseData->valid);

@@ -132,6 +132,16 @@ class TransactionHeaderController extends Controller
             if(empty($schedule)) $valid = false;
             if(empty($prices[$i]) || $prices[$i] == '0') $valid = false;
 
+            // Validate schedule
+            $scheduleObj = Schedule::find($schedule);
+            if(empty($scheduleObj)){
+                return redirect()->back()->withErrors('Jadwal atau kelas tidak ditemukan!', 'default')->withInput($request->all());
+            }
+
+            if($scheduleObj->status_id === 3){
+                return redirect()->back()->withErrors('Jadwal atau kelas sudah melakukan transaksi!', 'default')->withInput($request->all());
+            }
+
             // Validate discount
             $priceVad = str_replace('.','', $prices[$i]);
             $discountVad = str_replace('.','', $discounts[$i]);

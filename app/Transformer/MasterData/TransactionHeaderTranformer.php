@@ -56,6 +56,7 @@ class TransactionHeaderTranformer extends TransformerAbstract
             'invoice'           => $header->invoice_number,
             'type'              => $type,
             'date'              => $date,
+            'customer'          => $header->customer->name,
             'payment_method'    => $header->payment_method,
             'fee'               => $header->registration_fee,
             'total_price'       => $totalPrice,

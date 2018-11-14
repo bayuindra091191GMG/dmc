@@ -44,6 +44,11 @@ class DashboardController extends Controller
     public function index()
     {
 
+//        $first_day_of_the_current_month = Carbon::today()->startOfMonth();
+//        $last_day_of_the_current_month = $first_day_of_the_current_month->copy()->endOfMonth();
+//
+//        dd($first_day_of_the_current_month. " ". $last_day_of_the_current_month);
+
         //get nearly finish schedule
 //        $temp = Carbon::now('Asia/Jakarta');
 //        $start = Carbon::parse(date_format($temp,'d M Y'));
@@ -68,6 +73,7 @@ class DashboardController extends Controller
         $packageReminders = new Collection();
         $classReminders = new Collection();
         $privateReminders = new Collection();
+        $gymnasticReminders = new Collection();
         foreach ($schedules as $schedule){
             $remindDate = Carbon::parse($schedule->finish_date)->subDays(5);
             if($schedule->course->type === 1){
@@ -93,10 +99,18 @@ class DashboardController extends Controller
                     }
                 }
             }
+            elseif($schedule->course->type === 4){
+                if($gymnasticReminders->count() < 5){
+                    if($now->greaterThanOrEqualTo($remindDate)){
+                        $gymnasticReminders->add($schedule);
+                    }
+                }
+            }
 
             if($packageReminders->count() == 5 &&
                 $classReminders->count() == 5 &&
-                $privateReminders->count() == 5){
+                $privateReminders->count() == 5 &&
+                $gymnasticReminders->count() == 5){
                 break 1;
             }
         }
@@ -134,7 +148,8 @@ class DashboardController extends Controller
             'totalClass'                => $totalCourse->count(),
             'packageReminders'          => $packageReminders,
             'classReminders'            => $classReminders,
-            'privateReminders'          => $privateReminders
+            'privateReminders'          => $privateReminders,
+            'gymnasticReminders'        => $gymnasticReminders
         ];
 
         return view('admin.dashboard')->with($data);
