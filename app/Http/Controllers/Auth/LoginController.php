@@ -3,8 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Auth\User\User;
+use App\Models\Schedule;
+use App\Models\TransactionDetail;
+use App\Models\TransactionHeader;
+use Illuminate\Support\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
@@ -134,4 +140,127 @@ class LoginController extends Controller
 
         return view('auth.login', compact('redirect'));
     }
+
+    public function test(){
+
+        try {
+            DB::transaction(function () {
+                $now = Carbon::parse('2018-11-30 15:03:58');
+                $startDate = Carbon::parse('2018-11-01 15:03:58');
+                $items = Schedule::whereHas('course', function ($query) {
+                    $query->where('type', 4);
+                })
+                    ->whereDate('finish_date', '<', $startDate)
+                    ->where(function ($q) {
+                        $q->where('customer_id', 283)
+                            ->orWhere('customer_id', 78)
+                            ->orWhere('customer_id', 171)
+                            ->orWhere('customer_id', 105)
+                            ->orWhere('customer_id', 158)
+                            ->orWhere('customer_id', 1)
+                            ->orWhere('customer_id', 144)
+                            ->orWhere('customer_id', 294)
+                            ->orWhere('customer_id', 97)
+                            ->orWhere('customer_id', 177)
+                            ->orWhere('customer_id', 34)
+                            ->orWhere('customer_id', 13)
+                            ->orWhere('customer_id', 25)
+                            ->orWhere('customer_id', 53)
+                            ->orWhere('customer_id', 190)
+                            ->orWhere('customer_id', 52)
+                            ->orWhere('customer_id', 44)
+                            ->orWhere('customer_id', 185)
+                            ->orWhere('customer_id', 162)
+                            ->orWhere('customer_id', 101)
+                            ->orWhere('customer_id', 252)
+                            ->orWhere('customer_id', 168)
+                            ->orWhere('customer_id', 197)
+                            ->orWhere('customer_id', 84)
+                            ->orWhere('customer_id', 295)
+                            ->orWhere('customer_id', 160)
+                            ->orWhere('customer_id', 99)
+                            ->orWhere('customer_id', 258)
+                            ->orWhere('customer_id', 45)
+                            ->orWhere('customer_id', 146)
+                            ->orWhere('customer_id', 104)
+                            ->orWhere('customer_id', 274)
+                            ->orWhere('customer_id', 58)
+                            ->orWhere('customer_id', 257)
+                            ->orWhere('customer_id', 167)
+                            ->orWhere('customer_id', 299)
+                            ->orWhere('customer_id', 145)
+                            ->orWhere('customer_id', 169)
+                            ->orWhere('customer_id', 183)
+                            ->orWhere('customer_id', 24)
+                            ->orWhere('customer_id', 211)
+                            ->orWhere('customer_id', 76)
+                            ->orWhere('customer_id', 289)
+                            ->orWhere('customer_id', 19)
+                            ->orWhere('customer_id', 159)
+                            ->orWhere('customer_id', 43)
+                            ->orWhere('customer_id', 3)
+                            ->orWhere('customer_id', 56)
+                            ->orWhere('customer_id', 98)
+                            ->orWhere('customer_id', 305)
+                            ->orWhere('customer_id', 286)
+                            ->orWhere('customer_id', 100)
+                            ->orWhere('customer_id', 290)
+                            ->orWhere('customer_id', 79)
+                            ->orWhere('customer_id', 193)
+                            ->orWhere('customer_id', 194)
+                            ->orWhere('customer_id', 26)
+                            ->orWhere('customer_id', 170)
+                            ->orWhere('customer_id', 253)
+                            ->orWhere('customer_id', 127)
+                            ->orWhere('customer_id', 4)
+                            ->orWhere('customer_id', 23)
+                            ->orWhere('customer_id', 77)
+                            ->orWhere('customer_id', 297);
+                    })
+                    ->orderby('finish_date', 'desc')
+                    ->get();
+                dd($items);
+                $count = 1;
+                foreach ($items as $item) {
+                    $month = Carbon::parse($item->finish_date)->month;
+//                    dd($month);
+                    for($i=$month; $i < 10; $i++){
+                        $trxHeader = TransactionHeader::create([
+                            'code' => 'TRN/MAN/2018/11/' . $count,
+                            'type' => 1,
+                            'customer_id' => $item->customer_id,
+                            'date' => $now->toDateTimeString(),
+                            'payment_method' => 'TUNAI',
+                            'invoice_number' => 'INV/MAN/2018/11/' . $count,
+                            'registration_fee' => 0,
+                            'total_price' => $item->course->price,
+                            'total_payment' => $item->course->price,
+                            'status_id' => 1,
+                            'created_by' => 1,
+                            'created_at' => $now->toDateTimeString(),
+                            'updated_by' => 1,
+                            'updated_at' => $now->toDateTimeString()
+                        ]);
+
+                        $trxDetail = TransactionDetail::create([
+                            'header_id' => $trxHeader->id,
+                            'schedule_id' => $item->id,
+                            'day' => $item->day,
+                            'meeting_attendeds' => 0,
+                            'price' => $item->course->price
+                        ]);
+                        $trxDetail->save();
+
+                        $item->finish_date = $now->toDateTimeString();
+                        $item->save();
+
+                        $count++;
+                    }
+                }
+            });
+        }
+        catch(\Exception $ex){
+                error_log($ex);
+            }
+        }
 }

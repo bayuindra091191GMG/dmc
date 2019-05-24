@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 
 class AttendanceController extends Controller
@@ -95,210 +96,217 @@ class AttendanceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
-        $validator = Validator::make($request->all(),[
-            'customer_id'        => 'required',
-            'schedule_id'        => 'required'
-        ]);
+        try{
+            $validator = Validator::make($request->all(),[
+                'customer_id'        => 'required',
+                'schedule_id'        => 'required'
+            ]);
 
-        if ($validator->fails()) {
-            return redirect()
-                ->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-        $customerID = $request->input('customer_id');
-        $scheduleID = $request->input('schedule_id');
-
-        //Check payment due or not
-
-
-
-        $now = Carbon::now('Asia/Jakarta');
-        //Check if already absence today
-        $attendanceExist = Attendance::where('customer_id', $customerID)
-            ->where('schedule_id', $scheduleID)
-            ->whereDay('date', $now->day)
-            ->exists();
-        if($attendanceExist){
-            return redirect()
-                ->back()
-                ->withErrors('Sudah Melakukan Absensi di Hari ini', 'default')
-                ->withInput();
-        }
-
-        $scheduleDB = Schedule::find($scheduleID);
-        //check if schedule is today
-        $hari = array ( 1 =>    'Senin',
-            'Selasa',
-            'Rabu',
-            'Kamis',
-            'Jumat',
-            'Sabtu',
-            'Minggu'
-        );
-
-        if($scheduleDB->course->type != 4 && $scheduleDB->day != "Bebas"){
-            $today = Carbon::now('Asia/Jakarta')->format('N');
-            if(strpos($scheduleDB->day, $hari[$today]) === false){
+            if ($validator->fails()) {
                 return redirect()
                     ->back()
-                    ->withErrors('Tidak dapat Melakukan Absensi di Hari ini', 'default')
+                    ->withErrors($validator)
                     ->withInput();
             }
-        }
+            $customerID = $request->input('customer_id');
+            $scheduleID = $request->input('schedule_id');
+
+            //Check payment due or not
 
 
-        //Check if schedule date still
-        $nowFormated = Carbon::parse(date_format($now,'Y-m-d'));
-        $scheduleFinishDate = Carbon::parse(date_format($scheduleDB->finish_date, 'Y-m-d'));
-        if($scheduleFinishDate < $nowFormated){
-            $scheduleDB->status_id = 4;
-            $scheduleDB->save();
 
-            return redirect()
-                ->back()
-                ->withErrors('Masa Berlaku Kelas sudah Habis.', 'default')
-                ->withInput();
-        }
-
-        //check user already payment or not
-        if($scheduleDB->course->type == 1){
-            if($scheduleDB->status_id == 2){
-                return redirect()
-                    ->back()
-                    ->withErrors('Harap Melakukan Pembayaran Pada Kelas ini.', 'default')
-                    ->withInput();
-            }
-        }
-
-        $attendancePending = Attendance::where('customer_id', $customerID)
-            ->where('schedule_id', $scheduleID)
-            ->where('status_id', 2)
-            ->orderBy('created_at')
-            ->first();
-        if($scheduleDB->course->type == 4){
-            $startWeek = Carbon::now()->startOfWeek()->toDateTimeString();
-            $endWeek = Carbon::now()->endOfWeek()->toDateTimeString();
-
-            $countAttendanceOfWeek = Attendance::where('customer_id', $customerID)
+            $now = Carbon::now('Asia/Jakarta');
+            //Check if already absence today
+            $attendanceExist = Attendance::where('customer_id', $customerID)
                 ->where('schedule_id', $scheduleID)
-                ->where('status_id', 1)
-                ->whereBetween('date', [$startWeek, $endWeek])
-                ->count();
-
-            //for gymnastic checking only 2 times per week
-            if($countAttendanceOfWeek >= 2){
+                ->whereDay('date', $now->day)
+                ->whereMonth('date', $now->month)
+                ->exists();
+            if($attendanceExist){
                 return redirect()
                     ->back()
-                    ->withErrors('Absensi pada Kelas Gymnastic maksimal 2 kali per minggu.', 'default')
+                    ->withErrors('Sudah Melakukan Absensi di Hari ini', 'default')
                     ->withInput();
             }
 
-            $today = Carbon::now('Asia/Jakarta')->format('N');
+            $scheduleDB = Schedule::find($scheduleID);
+            //check if schedule is today
+            $hari = array ( 1 =>    'Senin',
+                'Selasa',
+                'Rabu',
+                'Kamis',
+                'Jumat',
+                'Sabtu',
+                'Minggu'
+            );
 
-            //for gymnastic checking for today attendance
-            if($attendancePending == null){
-                if(strpos($scheduleDB->day, $hari[$today])===false){
+            if($scheduleDB->course->type != 4 && $scheduleDB->day != "Bebas"){
+                $today = Carbon::now('Asia/Jakarta')->format('N');
+                if(strpos($scheduleDB->day, $hari[$today]) === false){
                     return redirect()
                         ->back()
                         ->withErrors('Tidak dapat Melakukan Absensi di Hari ini', 'default')
                         ->withInput();
                 }
             }
-        }
 
-        //change schedule meeting amount
-        if($scheduleDB->day == "Bebas"){
-            if($scheduleDB->meeting_amount == 0){
+
+            //Check if schedule date still
+            $nowFormated = Carbon::parse(date_format($now,'Y-m-d'));
+            $scheduleFinishDate = Carbon::parse(date_format($scheduleDB->finish_date, 'Y-m-d'));
+            if($scheduleFinishDate < $nowFormated){
+                $scheduleDB->status_id = 4;
+                $scheduleDB->save();
+
                 return redirect()
                     ->back()
-                    ->withErrors('Pertemuan sudah habis', 'default')
+                    ->withErrors('Masa Berlaku Kelas sudah Habis.', 'default')
                     ->withInput();
             }
 
-            //change schedule amount (package increase, class decrese)
-            $temp = $scheduleDB->meeting_amount;
-            $scheduleDB->meeting_amount = $temp-1;
-            $scheduleDB->save();
-        }
-        else{
-            if($scheduleDB->course->type == 3){
+            //check user already payment or not
+            if($scheduleDB->course->type == 1){
+                if($scheduleDB->status_id == 2){
+                    return redirect()
+                        ->back()
+                        ->withErrors('Harap Melakukan Pembayaran Pada Kelas ini.', 'default')
+                        ->withInput();
+                }
+            }
+
+            $attendancePending = Attendance::where('customer_id', $customerID)
+                ->where('schedule_id', $scheduleID)
+                ->where('status_id', 2)
+                ->orderBy('created_at')
+                ->first();
+            if($scheduleDB->course->type == 4){
+                $startWeek = Carbon::now()->startOfWeek()->toDateTimeString();
+                $endWeek = Carbon::now()->endOfWeek()->toDateTimeString();
+
+                $countAttendanceOfWeek = Attendance::where('customer_id', $customerID)
+                    ->where('schedule_id', $scheduleID)
+                    ->where('status_id', 1)
+                    ->whereBetween('date', [$startWeek, $endWeek])
+                    ->count();
+
+                //for gymnastic checking only 2 times per week
+                if($countAttendanceOfWeek >= 2){
+                    return redirect()
+                        ->back()
+                        ->withErrors('Absensi pada Kelas Gymnastic maksimal 2 kali per minggu.', 'default')
+                        ->withInput();
+                }
+
+                $today = Carbon::now('Asia/Jakarta')->format('N');
+
+                //for gymnastic checking for today attendance
+                if($attendancePending == null){
+                    if(strpos($scheduleDB->day, $hari[$today])===false){
+                        return redirect()
+                            ->back()
+                            ->withErrors('Tidak dapat Melakukan Absensi di Hari ini', 'default')
+                            ->withInput();
+                    }
+                }
+            }
+
+            //change schedule meeting amount
+            if($scheduleDB->day == "Bebas"){
+                if($scheduleDB->meeting_amount == 0){
+                    return redirect()
+                        ->back()
+                        ->withErrors('Pertemuan sudah habis', 'default')
+                        ->withInput();
+                }
+
                 //change schedule amount (package increase, class decrese)
                 $temp = $scheduleDB->meeting_amount;
                 $scheduleDB->meeting_amount = $temp-1;
                 $scheduleDB->save();
             }
-            if($scheduleDB->meeting_amount == $scheduleDB->course->meeting_amount){
-                return redirect()
-                    ->back()
-                    ->withErrors('Pertemuan sudah habis', 'default')
-                    ->withInput();
-            }
+            else{
+                if($scheduleDB->course->type == 3){
+                    //change schedule amount (package increase, class decrese)
+                    $temp = $scheduleDB->meeting_amount;
+                    $scheduleDB->meeting_amount = $temp-1;
+                    $scheduleDB->save();
+                }
+                if($scheduleDB->meeting_amount == $scheduleDB->course->meeting_amount){
+                    return redirect()
+                        ->back()
+                        ->withErrors('Pertemuan sudah habis', 'default')
+                        ->withInput();
+                }
 
-            //change schedule amount (package increase, class decrese)
-            $temp = $scheduleDB->meeting_amount;
-            $scheduleDB->meeting_amount = $temp+1;
-            $scheduleDB->save();
-
-        }
-
-        if($attendancePending == null){
-            //save the attendance
-            $attendanceCount = Attendance::where('customer_id', $customerID)->where('schedule_id', $scheduleID)->count();
-            $user = Auth::user();
-            $attendanceCount++;
-            $attendance = Attendance::create([
-                'customer_id'           => $customerID,
-                'schedule_id'           => $scheduleID,
-                'date'                  => $now->toDateTimeString(),
-                'meeting_number'        => $attendanceCount,
-                'status_id'             => 1,
-                'created_by'            => $user->id,
-                'created_at'            => $now->toDateTimeString()
-            ]);
-            $attendance->save();
-        }
-        else{
-            $attendanceCount = Attendance::where('customer_id', $customerID)->where('schedule_id', $scheduleID)->count();
-
-            $attendancePending->date = $now->toDateTimeString();
-            $attendancePending->status_id = 1;
-            $attendancePending->save();
-        }
-
-        //check if user meeting done
-        if($scheduleDB->day == "Bebas"){
-            if($scheduleDB->meeting_amount == 0){
-                $scheduleDB->status_id = 4;
+                //change schedule amount (package increase, class decrese)
+                $temp = $scheduleDB->meeting_amount;
+                $scheduleDB->meeting_amount = $temp+1;
                 $scheduleDB->save();
+
             }
-        }
-        else{
-            if($scheduleDB->course->type == 3){
+
+            if($attendancePending == null){
+                //save the attendance
+                $attendanceCount = Attendance::where('customer_id', $customerID)->where('schedule_id', $scheduleID)->count();
+                $user = Auth::user();
+                $attendanceCount++;
+                $attendance = Attendance::create([
+                    'customer_id'           => $customerID,
+                    'schedule_id'           => $scheduleID,
+                    'date'                  => $now->toDateTimeString(),
+                    'meeting_number'        => $attendanceCount,
+                    'status_id'             => 1,
+                    'created_by'            => $user->id,
+                    'created_at'            => $now->toDateTimeString()
+                ]);
+                $attendance->save();
+            }
+            else{
+                $attendanceCount = Attendance::where('customer_id', $customerID)->where('schedule_id', $scheduleID)->count();
+
+                $attendancePending->date = $now->toDateTimeString();
+                $attendancePending->status_id = 1;
+                $attendancePending->save();
+            }
+
+            //check if user meeting done
+            if($scheduleDB->day == "Bebas"){
                 if($scheduleDB->meeting_amount == 0){
                     $scheduleDB->status_id = 4;
                     $scheduleDB->save();
                 }
             }
+            else{
+                if($scheduleDB->course->type == 3){
+                    if($scheduleDB->meeting_amount == 0){
+                        $scheduleDB->status_id = 4;
+                        $scheduleDB->save();
+                    }
+                }
 
-            if($scheduleDB->meeting_amount == $scheduleDB->course->meeting_amount){
-                $scheduleDB->status_id = 4;
-                $scheduleDB->save();
+                if($scheduleDB->meeting_amount == $scheduleDB->course->meeting_amount){
+                    $scheduleDB->status_id = 4;
+                    $scheduleDB->save();
+                }
             }
+
+            if($scheduleDB->course->type == 1 || $scheduleDB->course->type == 4){
+                //Print Absen
+                $customerData = Customer::find($customerID);
+                $date = $now->toDateTimeString();
+                $remainAttendance = $scheduleDB->course->meeting_amount - $attendanceCount;
+                return view('admin.attendances.paper',
+                    compact('scheduleDB', 'customerData', 'date', 'attendanceCount', 'remainAttendance'));
+            }
+
+            Session::flash('message', 'Berhasil membuat absensi!');
+
+            return redirect()->route('admin.attendances');
         }
-
-        if($scheduleDB->course->type == 1 || $scheduleDB->course->type == 4){
-            //Print Absen
-            $customerData = Customer::find($customerID);
-            $date = $now->toDateTimeString();
-            $remainAttendance = $scheduleDB->course->meeting_amount - $attendanceCount;
-            return view('admin.attendances.paper',
-                compact('scheduleDB', 'customerData', 'date', 'attendanceCount', 'remainAttendance'));
+        catch (\Exception $exception){
+            Log::error("AttendanceController - store Error: ". $exception->getMessage());
+            return redirect()->route('admin.attendances');
         }
-
-        Session::flash('message', 'Berhasil membuat absensi!');
-
-        return redirect()->route('admin.attendances');
     }
 
     /**

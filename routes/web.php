@@ -18,6 +18,9 @@ Route::get('redirect','RedirectController@redirect')->name('redirect');
  */
 Route::group(['namespace' => 'Auth'], function () {
 
+//test
+    Route::get('/test', 'LoginController@test')->name('test');
+
     // Authentication Routes...
     Route::get('login', 'LoginController@showLoginForm')->name('login');
     Route::post('login', 'LoginController@login');
@@ -165,6 +168,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     //Cuti
     Route::get('cuti', 'CutiController@index')->name('cuti');
+
 
     //DMC End
 
