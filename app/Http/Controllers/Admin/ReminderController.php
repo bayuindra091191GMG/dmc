@@ -34,7 +34,7 @@ class ReminderController extends Controller
      */
     public function getIndex()
     {
-        $schedules = Schedule::where('status_id', 3)->get();
+        $schedules = Schedule::all();
         $now = Carbon::now('Asia/Jakarta');
 
         $reminders = new Collection();
@@ -126,13 +126,14 @@ class ReminderController extends Controller
             }
             elseif($schedule->course->type === 4){
                 $finishDate = Carbon::parse($schedule->finish_date);
-                if($finishDate->day > 1){
-                    $finishDate->endOfMonth();
-                }
-                else{
-                    $finishDate->addMonth()->startOfMonth();
-                }
-                $schedule->finish_date = $finishDate->toDateTimeString();
+                $newFinishDate = $finishDate->addMonths(1);
+//                if($finishDate->day > 1){
+//                    $finishDate->endOfMonth();
+//                }
+//                else{
+//                    $finishDate->addMonth()->startOfMonth();
+//                }
+                $schedule->finish_date = $newFinishDate->toDateTimeString();
                 $schedule->meeting_amount = 0;
             }
 
