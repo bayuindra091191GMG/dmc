@@ -86,6 +86,9 @@ class ReminderController extends Controller
                 return Response::json(array('errors' => 'INVALID'));
             }
 
+            error_log($schedule->course->type);
+            //dd($schedule->course->type);
+
             // If course type is package
             if($schedule->course->type === 1){
                 $finishDate = Carbon::parse($schedule->finish_date)->addDays($schedule->course->valid);
@@ -96,32 +99,34 @@ class ReminderController extends Controller
                 $now = Carbon::now('Asia/Jakarta');
 
                 if($now->lessThanOrEqualTo($realFinishDate)){
-                    if($schedule->course->id === 3 || $schedule->course->id === 4){
-                        $schedule->meeting_amount += $schedule->course->meeting_amount + 3;
-                    }
-                    else{
-                        $schedule->meeting_amount += $schedule->course->meeting_amount;
-                    }
-
+//                    if($schedule->course->id === 3 || $schedule->course->id === 4){
+//                        $schedule->meeting_amount += $schedule->course->meeting_amount + 3;
+//                    }
+//                    else{
+//                        $schedule->meeting_amount += $schedule->course->meeting_amount;
+//                    }
+                    $schedule->meeting_amount += $schedule->course->meeting_amount;
                 }
                 else{
-                    if($schedule->course->id === 3 || $schedule->course->id === 4){
-                        $schedule->meeting_amount = $schedule->course->meeting_amount + 3;
-                    }
-                    else{
-                        $schedule->meeting_amount = $schedule->course->meeting_amount;
-                    }
+//                    if($schedule->course->id === 3 || $schedule->course->id === 4){
+//                        $schedule->meeting_amount = $schedule->course->meeting_amount + 3;
+//                    }
+//                    else{
+//                        $schedule->meeting_amount = $schedule->course->meeting_amount;
+//                    }
+                    $schedule->meeting_amount = $schedule->course->meeting_amount;
                 }
             }
             elseif($schedule->course->type === 2){
                 $finishDate = Carbon::parse($schedule->finish_date);
-                if($finishDate->day > 1){
-                    $finishDate->endOfMonth();
-                }
-                else{
-                    $finishDate->addMonth()->startOfMonth();
-                }
-                $schedule->finish_date = $finishDate->toDateTimeString();
+                $newFinishDate = $finishDate->addMonths(1);
+//                if($finishDate->day > 1){
+//                    $finishDate->endOfMonth();
+//                }
+//                else{
+//                    $finishDate->addMonth()->startOfMonth();
+//                }
+                $schedule->finish_date = $newFinishDate->toDateTimeString();
                 $schedule->meeting_amount = 0;
             }
             elseif($schedule->course->type === 4){
