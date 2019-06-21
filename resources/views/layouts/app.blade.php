@@ -41,6 +41,7 @@
         @yield('page')
 
         {{--Common Scripts--}}
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
         {{ Html::script(mix('assets/app/js/app.js')) }}
 
         {{--Laravel Js Variables--}}
