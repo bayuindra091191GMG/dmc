@@ -40,40 +40,132 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="auto_number"></label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" class="flat" id="auto_number" name="auto_number" checked="checked"> Auto Number
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="customer" >
-                    Customer
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select type="text" id="customer" name="customer" class="form-control col-md-7 col-xs-12"></select>
-                    <input type="hidden" id="customer_id" name="customer_id" class="form-control col-md-7 col-xs-12" value="{{ $customer->id ?? '-1' }}">
-                </div>
-            </div>
-
-            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
                     Tanggal
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
-                           name="date" value="{{ old('date') }}" required>
+                           name="date" value="{{ !empty(old('date')) ? old('date') : $today }}" required>
                 </div>
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="auto_number"></label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" class="flat" id="auto_number" name="auto_number" checked> Auto Number
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <hr/>
+            <h4 class="text-center">Data Student</h4>
+
+            <div class="form-group" id="form_existing_student">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="customer" >
+                    Student Terdaftar
+                </label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <select type="text" id="customer" name="customer" class="form-control col-md-7 col-xs-12"></select>
+                    <input type="hidden" id="customer_id" name="customer_id" class="form-control col-md-7 col-xs-12" value="{{ $customer->id ?? '-1' }}">
+                </div>
+                <div class="col-md-2 col-sm-2 col-xs-12">
+                    <a href="javascript:void(0)" target="_blank" class="btn btn-primary" id="schedule_check">Cek Jadwal Teregistrasi Student</a>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="auto_number"></label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" class="flat" id="is_new_student" name="is_new_student" value="true"> Student Baru
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="form_new_student" style="display: none;">
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="student_name">
+                        Nama Student
+                        <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input id="student_name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('student_name')) parsley-error @endif"
+                               name="student_name" value="{{ old('student_name') }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dob">
+                        Tanggal Lahir
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input id="dob" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('dob')) parsley-error @endif"
+                               name="dob" value="{{ old('dob') }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="student_email">
+                        Alamat Email
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input id="student_email" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('student_email')) parsley-error @endif"
+                               name="student_email" value="{{ old('student_email') }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="student_phone">
+                        Nomor Telepon/Ponsel
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input id="student_phone" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('student_phone')) parsley-error @endif"
+                               name="student_phone" value="{{ old('student_phone') }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="student_parent_name">
+                        Nama Orang Tua
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input id="student_parent_name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('student_parent_name')) parsley-error @endif"
+                               name="student_parent_name" value="{{ old('student_parent_name') }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >
+                        Alamat Rumah
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                    <textarea id="student_address" rows="5" class="form-control col-md-7 col-xs-12 @if($errors->has('student_address')) parsley-error @endif"
+                              name="student_address">{{ old('student_address') }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            {{--            <div class="form-group" id="registration_alert">--}}
+            {{--                <div class="col-md-3 col-sm-3 col-xs-12"></div>--}}
+            {{--                <div class="col-md-6 col-sm-6 col-xs-12">--}}
+            {{--                    <div class="alert alert-warning alert-dismissible fade in" role="alert">--}}
+            {{--                        <span>Student </span>--}}
+            {{--                        <span id="warning_student_name"></span>--}}
+            {{--                    </div>--}}
+            {{--                </div>--}}
+            {{--            </div>--}}
+
+            <hr/>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="registration_fee">
-                    Registration Fee
+                    Fee Registrasi
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="registration_fee" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('registration_fee')) parsley-error @endif"
@@ -97,48 +189,46 @@
 
             <hr/>
 
-            @if(!empty($customer))
-                <div class="form-group">
-                    <div class="col-lg-12 col-md-12 col-xs-12 box-section">
-                        <h3 class="text-center">Detil Transaksi</h3>
-                        <a class="add-modal btn btn-info" style="margin-bottom: 10px;">
-                            <span class="glyphicon glyphicon-plus-sign"></span> Tambah
-                        </a>
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover" id="detail_table">
-                                <thead>
-                                <tr>
-                                    <th class="text-center" style="width: 20%">
-                                        Kelas
-                                    </th>
-                                    <th class="text-center" style="width: 20%">
-                                        Trainer
-                                    </th>
-                                    <th class="text-center" style="width: 15%">
-                                        Hari
-                                    </th>
-                                    <th class="text-center" style="width: 15%">
-                                        Harga
-                                    </th>
-                                    {{--<th class="text-center" style="width: 10%">--}}
-                                        {{--Diskon--}}
-                                    {{--</th>--}}
-                                    <th class="text-center" style="width: 15%">
-                                        Subtotal
-                                    </th>
-                                    <th class="text-center" style="width: 15%">
-                                        Tindakan
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody>
+            <div class="form-group">
+                <div class="col-lg-12 col-md-12 col-xs-12 box-section">
+                    <h3 class="text-center">Detil Transaksi</h3>
+                    <a class="add-modal btn btn-info" style="margin-bottom: 10px;">
+                        <span class="glyphicon glyphicon-plus-sign"></span> Tambah
+                    </a>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="detail_table">
+                            <thead>
+                            <tr>
+                                <th class="text-center" style="width: 20%">
+                                    Kelas
+                                </th>
+                                <th class="text-center" style="width: 20%">
+                                    Trainer
+                                </th>
+                                <th class="text-center" style="width: 15%">
+                                    Hari
+                                </th>
+                                <th class="text-center" style="width: 15%">
+                                    Harga
+                                </th>
+                                {{--<th class="text-center" style="width: 10%">--}}
+                                {{--Diskon--}}
+                                {{--</th>--}}
+                                <th class="text-center" style="width: 15%">
+                                    Subtotal
+                                </th>
+                                <th class="text-center" style="width: 15%">
+                                    Tindakan
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
 
-                                </tbody>
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            @endif
+            </div>
 
             <input id="index_counter" name="index_counter" type="hidden" value="0"/>
 
@@ -156,7 +246,7 @@
 
     <!-- Modal form to add new detail -->
     <div id="addModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">×</button>
@@ -165,9 +255,9 @@
                 <div class="modal-body">
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="schedule_add">Kelas:</label>
+                            <label class="control-label col-sm-2" for="course_add">Kelas:</label>
                             <div class="col-sm-10">
-                                <select class="form-control" id="schedule_add" name="schedule_add"></select>
+                                <select class="form-control" id="course_add" name="course_add"></select>
                             </div>
                         </div>
                         <div class="form-group">
@@ -182,12 +272,12 @@
                                 <input type="text" class="form-control" id="price_add" name="price_add" readonly>
                             </div>
                         </div>
-                        {{--<div class="form-group">--}}
-                            {{--<label class="control-label col-sm-2" for="discount_add">Diskon:</label>--}}
-                            {{--<div class="col-sm-10">--}}
-                                {{--<input type="text" class="form-control" id="discount_add" name="discount_add">--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="day_add">Hari dan Jam:</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="day_add" name="day_add"></select>
+                            </div>
+                        </div>
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
@@ -232,12 +322,6 @@
                                 <input type="text" class="form-control" id="price_edit" name="price_edit" readonly>
                             </div>
                         </div>
-                        {{--<div class="form-group">--}}
-                            {{--<label class="control-label col-sm-2" for="discount_edit">Diskon:</label>--}}
-                            {{--<div class="col-sm-10">--}}
-                                {{--<input type="text" class="form-control" id="discount_edit" name="discount_edit">--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
@@ -305,6 +389,15 @@
             border-radius: 2px;
             padding: 10px;
         }
+
+        .select2-container.select2-container-disabled .select2-choice {
+            background-color: #ddd;
+            border-color: #a8a8a8;
+        }
+
+        a[disabled="disabled"] {
+            pointer-events: none;
+        }
     </style>
 @endsection
 
@@ -318,6 +411,28 @@
         // Date Picker
         $('#date').datetimepicker({
             format: "DD MMM Y"
+        });
+
+        $('#dob').datetimepicker({
+            format: "DD MMM Y"
+        });
+
+        @if(!empty(old('is_new_student')))
+            $('#form_new_student').show();
+        @endif
+
+        // Show Create New Student Form
+        $('#is_new_student').change(function(){
+            if(this.checked){
+                $('#form_new_student').show();
+                $("#customer").prop("disabled", true);
+                //$('#form_existing_student').hide();
+            }
+            else{
+                $('#form_new_student').hide();
+                $("#customer").prop("disabled", false);
+                //$('#form_existing_student').show();
+            }
         });
 
         // Auto Numbering
@@ -338,7 +453,7 @@
                 text: '{{ $customer->name ?? ' - Pilih Customer - ' }}'
             },
             width: '100%',
-            minimumInputLength: 1,
+            minimumInputLength: 0,
             ajax: {
                 url: '{{ route('select.customers') }}',
                 dataType: 'json',
@@ -357,8 +472,14 @@
 
         $('#customer').on('select2:select', function (e) {
             var data = e.params.data;
-            window.location.replace('/admin/transactions/create?customer=' + data.id);
+            $('#customer_id').val(data.id);
+            //window.location.replace('/admin/transactions/create?customer=' + data.id);
+
+            // Update schedule check a href
+            var scheduleLinkBtn = document.getElementById("schedule_check");
+            scheduleLinkBtn.setAttribute("href","/admin/customers/show/" + data.id);
         });
+
 
         // Add autonumeric
         regisrationFeeFormat = new AutoNumeric('#registration_fee', {
@@ -397,24 +518,10 @@
             decimalPlaces: 0
         });
 
-        // discountAddFormat = new AutoNumeric('#discount_add', {
-        //     decimalCharacter: ',',
-        //     digitGroupSeparator: '.',
-        //     minimumValue: '0',
-        //     decimalPlaces: 0
-        // });
-        //
-        // discountEditFormat = new AutoNumeric('#discount_edit', {
-        //     decimalCharacter: ',',
-        //     digitGroupSeparator: '.',
-        //     minimumValue: '0',
-        //     decimalPlaces: 0
-        // });
-
         // Add new detail
         $(document).on('click', '.add-modal', function() {
-            var customerId = $('#customer_id').val();
-            $('#schedule_add').select2({
+            // var customerId = $('#customer_id').val();
+            $('#course_add').select2({
                 placeholder: {
                     id: '-1',
                     text: ' - Pilih Kelas - '
@@ -422,13 +529,13 @@
                 width: '100%',
                 minimumInputLength: 0,
                 ajax: {
-                    url: '{{ route('select.schedules') }}',
+                    url: '{{ route('select.extended.courses') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {
                             q: $.trim(params.term),
-                            customer: customerId,
-                            course_type: 0
+                            // customer: customerId,
+                            // course_type: 0
                         };
                     },
                     processResults: function (data) {
@@ -439,17 +546,40 @@
                 }
             });
 
-            $('#schedule_add').on('select2:select', function (e) {
+            $('#course_add').on('select2:select', function (e) {
                 var data = e.params.data;
                 var splitted = data.id.split('#');
                 $('#trainer_add').val(splitted[2]);
 
                 priceAddFormat.clear();
-                priceAddFormat.set(splitted[4], {
+                priceAddFormat.set(splitted[3], {
                     decimalCharacter: ',',
                     digitGroupSeparator: '.',
                     minimumValue: '0',
                     decimalPlaces: 0
+                });
+
+                //alert(splitted[0]);
+
+                $('#day_add').empty();
+                //Get Days Options
+                $.ajax({
+                    url: '{{ route('select.days') }}',
+                    dataType: 'json',
+                    data: {
+                        'id': splitted[0]
+                    },
+                    success: function (data) {
+                        var i;
+                        $('#day_add').empty();
+                        for(i=0; i<data.length; i++){
+                            $('#day_add')
+                                .append($("<option></option>")
+                                    .attr("value",data[i])
+                                    .text(data[i]));
+                        }
+                        $('#day_add_section').show();
+                    }
                 });
             });
 
@@ -461,12 +591,13 @@
         });
 
         $('.modal-footer').on('click', '.add', function() {
-            var scheduleAdd = $('#schedule_add').val();
+            var courseAdd = $('#course_add').val();
             var priceAdd = $('#price_add').val();
+            var dayAdd = $('#day_add').val();
             // var discountAdd = $('#discount_add').val();
 
             // Validate schedule
-            if(!scheduleAdd || scheduleAdd === ""){
+            if(!courseAdd || courseAdd === ""){
                 alert('Mohon pilih kelas!');
                 return false;
             }
@@ -478,7 +609,7 @@
             }
 
             // Split schedule value
-            var splitted = scheduleAdd.split('#');
+            var splitted = courseAdd.split('#');
 
             // Filter variables
             var price = 0;
@@ -508,7 +639,7 @@
             sbAdd.append("<tr class='item" + idx + "'>");
             sbAdd.append("<td class='text-center'>" + splitted[1] + "<input type='hidden' name='schedule[]'  value='" + splitted[0] + "'/>")
             sbAdd.append("<td class='text-center'>" + splitted[2] + "</td>");
-            sbAdd.append("<td class='text-center'>" + splitted[3] + "</td>");
+            sbAdd.append("<td class='text-center'>" + dayAdd + "</td>");
             sbAdd.append("<td class='text-right'>" + priceAdd + "<input type='hidden' name='price[]' value='" + priceAdd + "'/></td>");
 
             // if(discount > 0){
@@ -530,15 +661,15 @@
             sbAdd.append("<td class='text-right'>" + subtotalString + "<input type='hidden' value='" + subtotalString + "'/></td>");
 
             sbAdd.append("<td class='text-center'>");
-            sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-schedule='" + scheduleAdd + "' data-price='" + price + "'><span class='glyphicon glyphicon-edit'></span></a>");
-            sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-schedule='" + scheduleAdd + "' data-price='" + price + "'><span class='glyphicon glyphicon-trash'></span></a>");
+            // sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-schedule='" + scheduleAdd + "' data-price='" + price + "'><span class='glyphicon glyphicon-edit'></span></a>");
+            sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-schedule='" + courseAdd + "' data-price='" + price + "'><span class='glyphicon glyphicon-trash'></span></a>");
             sbAdd.append("</td>");
             sbAdd.append("</tr>");
 
             $('#detail_table').append(sbAdd.toString());
 
             // Reset add form modal
-            $('#schedule_add').val(null).trigger('change');
+            $('#course_add').val(null).trigger('change');
             $('#trainer_add').val('');
             priceAddFormat.clear();
             // $('#discount_add').val('');
@@ -546,7 +677,7 @@
 
         $("#addModal").on('hidden.bs.modal', function () {
             // Reset add form modal
-            $('#schedule_add').val(null).trigger('change');
+            $('#course_add').val(null).trigger('change');
             $('#trainer_add').val('');
             priceAddFormat.clear();
             // $('#discount_add').val('');

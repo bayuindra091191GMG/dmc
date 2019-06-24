@@ -77,12 +77,15 @@ class TransactionHeaderController extends Controller
         $sysNo = NumberingSystem::find(2);
         $autoNumber = Utilities::GenerateNumberPurchaseOrder($sysNo->document, $sysNo->next_no);
 
+        $today = Carbon::today('Asia/Jakarta')->format('d M y');
+
         $data = [
             'customer'          => $customer,
-            'autoNumber'        => $autoNumber
+            'autoNumber'        => $autoNumber,
+            'today'             => $today
         ];
 
-        return view('admin.transactions.create')->with($data);
+        return view('admin.transactions.create_complete')->with($data);
     }
 
     /**
@@ -277,6 +280,296 @@ class TransactionHeaderController extends Controller
 
         return redirect()->route('admin.transactions.show', ['transaction' => $trxHeader]);
     }
+
+    public function storeComplete(Request $request){
+        $validator = Validator::make($request->all(),[
+            'code'        => 'required|max:45|regex:/^\S*$/u',
+            'date'        => 'required',
+        ],[
+            'code.regex'  => 'Nomor Transaksi harus tanpa spasi!'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Validate transaction number
+        if(!$request->filled('auto_number') && (!$request->filled('code') || $request->input('retur_code') == "")){
+            return redirect()->back()->withErrors('Nomor transaksi wajib diisi!', 'default')->withInput($request->all());
+        }
+
+        // Validate student
+        if(!empty($request->input('is_new_student'))){
+            if(empty($request->input('student_name')) || empty($request->input('student_email'))){
+                return redirect()->back()->withErrors('Nama dan alamat email murid wajib diisi!', 'default')->withInput($request->all());
+            }
+            else{
+                // Validate unique
+                $nameFound = Customer::where('name', 'LIKE', '%'. $request->input('student_name'). '%')->first();
+                if(!empty($nameFound)){
+                    return redirect()->back()->withErrors('Nama murid sudah terdaftar!', 'default')->withInput($request->all());
+                }
+            }
+        }
+        else{
+            if(empty($request->input('customer'))){
+                return redirect()->back()->withErrors('Pilih murid!', 'default')->withInput($request->all());
+            }
+        }
+
+        // Validate payment method
+        if($request->input('payment_method') === '-1'){
+            return redirect()->back()->withErrors('Pilih metode pembayaran!', 'default')->withInput($request->all());
+        }
+
+        // Validate details
+        $courses = $request->input('course');
+        $prices = $request->input('price');
+        $days = $request->input('day');
+//        $discounts = $request->input('discount');
+        $valid = true;
+        $i = 0;
+
+//        if($schedules == null || $schedules->count() == 0){
+        if(empty($courses) || count($courses) == 0){
+            return redirect()->back()->withErrors('Detil kelas wajib diisi!', 'default')->withInput($request->all());
+        }
+
+        foreach($courses as $course){
+            if(empty($course)) $valid = false;
+            if(empty($prices[$i]) || $prices[$i] == '0') $valid = false;
+
+            // Validate schedule
+//            $scheduleObj = Schedule::find($schedule);
+//            if(empty($scheduleObj)){
+//                return redirect()->back()->withErrors('Jadwal atau kelas tidak ditemukan!', 'default')->withInput($request->all());
+//            }
+//
+//            if($scheduleObj->status_id === 3){
+//                return redirect()->back()->withErrors('Jadwal atau kelas sudah melakukan transaksi!', 'default')->withInput($request->all());
+//            }
+
+            // Validate discount
+//            $priceVad = str_replace('.','', $prices[$i]);
+//            $discountVad = str_replace('.','', $discounts[$i]);
+//            if((double) $discountVad > (double) $priceVad) return redirect()->back()->withErrors('Diskon tidak boleh melebihi harga!', 'default')->withInput($request->all());
+
+            $i++;
+        }
+
+        if(!$valid){
+            return redirect()->back()->withErrors('Detil harga wajib diisi!', 'default')->withInput($request->all());
+        }
+
+        // Check duplicate transaction
+        $valid = Utilities::arrayIsUnique($courses);
+        if(!$valid){
+            return redirect()->back()->withErrors('Detil kelas tidak boleh kembar!', 'default')->withInput($request->all());
+        }
+
+        // Generate auto number
+        if($request->filled('auto_number')){
+            $sysNo = NumberingSystem::find(2);
+            $trxCode = Utilities::GenerateNumber($sysNo->document, $sysNo->next_no);
+
+            // Check existing number
+            if(TransactionHeader::where('code', $trxCode)->exists()){
+                return redirect()->back()->withErrors('Nomor Transaksi sudah terdaftar!', 'default')->withInput($request->all());
+            }
+
+            $sysNo->next_no++;
+            $sysNo->save();
+        }
+        else{
+            $trxCode = $request->input('code');
+
+            // Check existing number
+            if(TransactionHeader::where('code', $trxCode)->exists()){
+                return redirect()->back()->withErrors('Nomor Transaksi sudah terdaftar!', 'default')->withInput($request->all());
+            }
+        }
+
+        // Generate invoice number
+        $sysNoInvoice = NumberingSystem::find(1);
+        $invNumber = Utilities::GenerateNumber($sysNoInvoice->document, $sysNoInvoice->next_no);
+        $sysNoInvoice->next_no++;
+        $sysNoInvoice->save();
+
+        $user = Auth::user();
+        $now = Carbon::now('Asia/Jakarta');
+
+
+        if(!empty($request->input('is_new_student'))){
+            // Create student if new
+            if(!empty($request->input('dob'))){
+                $dob = Carbon::createFromFormat('d M Y', $request->input('dob'), 'Asia/Jakarta');
+            }
+
+            $newStudent = Customer::create([
+                'name'          => $request->input('student_name'),
+                'phone'         => $request->input('student_phone') ?? null,
+                'email'         => $request->input('student_email'),
+                'address'       => $request->input('student_address') ?? null,
+                'dob'           => $dob->toDateTimeString() ?? null,
+                'parent_name'   => $request->input('student_parent_name') ?? null
+            ]);
+
+            $customerId = $newStudent->id;
+        }
+        else{
+            // Get existing student id
+            $customerId = $request->input('customer_id');
+        }
+
+        $date = Carbon::createFromFormat('d M Y', $request->input('date'), 'Asia/Jakarta');
+
+        $trxHeader = TransactionHeader::create([
+            'code'                  => $trxCode,
+            'type'                  => 1,
+            'customer_id'           => $customerId,
+            'date'                  => $date->toDateTimeString(),
+            'payment_method'        => $request->input('payment_method'),
+            'invoice_number'        => $invNumber,
+            'status_id'             => 1,
+            'created_by'            => $user->id,
+            'created_at'            => $now->toDateTimeString(),
+            'updated_by'            => $user->id,
+            'updated_at'            => $now->toDateTimeString()
+        ]);
+
+        // Create transaction detail
+        $totalPrice = 0;
+        $totalDiscount = 0;
+        $totalPayment = 0;
+        $idx = 0;
+
+        foreach($courses as $course){
+            if(!empty($course)){
+                $priceStr = str_replace('.','', $prices[$idx]);
+                $price = (double) $priceStr;
+
+                // Create new schedule
+                $courseData = Course::find($course);
+                $meetingAmount = 0;
+                if($courseData->type == 2 || $courseData->type == 4) {
+
+                    // Get next month date at 10th
+                    $nextMonthDate = $now->copy()->addMonthsNoOverflow(1);
+                    $month = $nextMonthDate->month;
+                    $year = $nextMonthDate->year;
+                    $finish = \Carbon\Carbon::create($year, $month, 10, 0, 0, 0);
+                }
+                else{
+                    $meetingAmount = $courseData->meeting_amount;
+                    if($courseData->id === 3 || $courseData->id === 4){
+                        $meetingAmount = $courseData->meeting_amount + 3;
+                    }
+
+                    $finish = Carbon::now('Asia/Jakarta');
+                    $finish->addDays($courseData->valid);
+                }
+
+                // Gymastic class logic
+                $scheduleDb = Schedule::where('customer_id', $request->get('customer_id'))
+                    ->where('course_id', $course)
+                    ->where('status_id', 2)
+                    ->first();
+
+                if($courseData->type == 4 && $courseData->meeting_amount == 8 && !empty($scheduleDb)){
+                    $selectedDay = $scheduleDb->day;
+                    if(strpos($selectedDay, $days[$i]) === false){
+                        $selectedDay .= " & ".$days[$i];
+                        $scheduleDb->day = $selectedDay;
+                        $scheduleDb->save();
+
+                    }
+
+                    $scheduleObj = $scheduleDb;
+                }
+                else{
+                    $newSchedule = Schedule::create([
+                        'customer_id'       => $customerId,
+                        'course_id'         => $course,
+                        'day'               => $days[$i],
+                        'start_date'        => $now->toDateTimeString(),
+                        'finish_date'       => $finish->toDateTimeString(),
+                        'meeting_amount'    => $meetingAmount,
+                        'month_amount'      => 1,
+                        'status_id'         => 2,
+                        'created_by'        => $user->id,
+                        'created_at'        => $now->toDateTimeString(),
+                        'updated_by'        => $user->id,
+                        'updated_at'        => $now->toDateTimeString()
+                    ]);
+
+                    $scheduleObj = $newSchedule;
+                }
+
+                $trxDetail = TransactionDetail::create([
+                    'header_id'             => $trxHeader->id,
+                    'schedule_id'           => $scheduleObj->id,
+                    'day'                   => $scheduleObj->day,
+                    'meeting_attendeds'     => 0,
+                    'price'                 => $priceStr
+                ]);
+
+                // Check discount
+//                if(!empty($discounts[$idx]) && $discounts[$idx] !== '0'){
+//                    $discountStr = str_replace('.','', $discounts[$idx]);
+//                    $trxDetail->discount = $discountStr;
+//
+//                    $discount = (double) $discountStr;
+//                    $trxDetail->subtotal = $price - $discount;
+//
+//                    // Accumulate total price
+//                    $totalPrice += $price;
+//
+//                    // Accumulate total discount
+//                    $totalDiscount += $discount;
+//                }
+//                else{
+//                    $trxDetail->subtotal = $price;
+//                    $totalPrice += $price;
+//                }
+
+                $trxDetail->subtotal = $price;
+                $totalPrice += $price;
+
+                $trxDetail->save();
+
+                // Accumulate subtotal
+                $totalPayment += $trxDetail->subtotal;
+
+                // Activate schedule
+                $scheduleObj->status_id = 3;
+                $scheduleObj->save();
+            }
+            $idx++;
+        }
+
+        if($totalDiscount > 0) $trxHeader->total_discount = $totalDiscount;
+
+        if($request->filled('registration_fee')){
+            $fee = str_replace('.','', $request->input('registration_fee'));
+        }
+        else{
+            $fee = 0;
+        }
+
+        $totalPayment += $fee;
+        $trxHeader->total_price = $totalPrice;
+        $trxHeader->total_payment = $totalPayment;
+        $trxHeader->registration_fee = $fee;
+        $trxHeader->save();
+
+        Session::flash('message', 'Berhasil membuat transaksi!');
+
+        return redirect()->route('admin.transactions.show', ['transaction' => $trxHeader]);
+    }
+
 
     /**
      * Display the specified resource.

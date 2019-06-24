@@ -164,7 +164,7 @@
             $('#course_add').select2({
                 placeholder: {
                     id: '-1',
-                    text: 'Pilih Kelas...'
+                    text: ' - Pilih Kelas - '
                 },
                 width: '100%',
                 minimumInputLength: 0,

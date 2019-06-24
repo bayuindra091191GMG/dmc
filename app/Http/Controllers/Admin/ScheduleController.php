@@ -112,8 +112,8 @@ class ScheduleController extends Controller
         $i = 0;
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
-        $first_day_of_the_current_month = Carbon::today()->startOfMonth();
-        $last_day_of_the_current_month = $first_day_of_the_current_month->copy()->endOfMonth();
+//        $first_day_of_the_current_month = Carbon::today()->startOfMonth();
+//        $last_day_of_the_current_month = $first_day_of_the_current_month->copy()->endOfMonth();
 
         foreach ($courses as $course){
             $courseData = Course::find($course);
@@ -134,9 +134,11 @@ class ScheduleController extends Controller
 //                    }
 //                }
 
-                $finish = $last_day_of_the_current_month;
-//                $finish = $dateTimeNow;
-//                $finish->addDays(30);
+                // Get next month date at 10th
+                $nextMonthDate = $dateTimeNow->copy()->addMonthsNoOverflow(1);
+                $month = $nextMonthDate->month;
+                $year = $nextMonthDate->year;
+                $finish = \Carbon\Carbon::create($year, $month, 10, 0, 0, 0);
             }
             else{
                 $meetingAmount = $courseData->meeting_amount;
@@ -144,21 +146,21 @@ class ScheduleController extends Controller
                     $meetingAmount = $courseData->meeting_amount + 3;
                 }
 
-                $dateTimeNowFinish = Carbon::now('Asia/Jakarta');
-                $finish = $dateTimeNowFinish;
+                $finish = Carbon::now('Asia/Jakarta');
                 $finish->addDays($courseData->valid);
             }
 
-            $scheduleDB = Schedule::where('customer_id', $request->get('customer_id'))
+            $scheduleDb = Schedule::where('customer_id', $request->get('customer_id'))
                 ->where('course_id', $course)
                 ->where('status_id', 2)
                 ->first();
-            if($courseData->type == 4 && $courseData->meeting_amount == 8 && !empty($scheduleDB)){
-                $selectedDay = $scheduleDB->day;
+
+            if($courseData->type == 4 && $courseData->meeting_amount == 8 && !empty($scheduleDb)){
+                $selectedDay = $scheduleDb->day;
                 if(strpos($selectedDay, $dayAdd[$i]) === false){
-                    $selectedDay .= " & ".$dayAdd[$i];
-                    $scheduleDB->day = $selectedDay;
-                    $scheduleDB->save();
+                    $selectedDay .= " & ". $dayAdd[$i];
+                    $scheduleDb->day = $selectedDay;
+                    $scheduleDb->save();
                 }
             }
             else{

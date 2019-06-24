@@ -49,8 +49,8 @@
                 <div class="col-md-3 col-sm-3 col-xs-12">
                     <select id="type" name="type" class="form-control col-md-7 col-xs-12">
                         <option value="-1"> - Pilih Tipe - </option>
-                        <option value="1" @if($course->type == 1) selected @endif>Package</option>
-                        <option value="2" @if($course->type == 2) selected @endif>Class</option>
+                        <option value="1" @if($course->type == 1) selected @endif>Muaythai</option>
+                        <option value="2" @if($course->type == 2) selected @endif>Dance</option>
                         <option value="4" @if($course->type == 4) selected @endif>Gymnastic</option>
                         <option value="3" @if($course->type == 3) selected @endif>Private</option>
                     </select>

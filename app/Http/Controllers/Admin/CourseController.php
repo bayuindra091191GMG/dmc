@@ -542,6 +542,35 @@ class CourseController extends Controller
         return \Response::json($formatted_tags);
     }
 
+    public function getExtendedCourses(Request $request){
+        $term = trim($request->q);
+        $courses= Course::where('name', 'LIKE', '%'. $term. '%')
+            ->get();
+
+        $formatted_tags = [];
+
+        foreach ($courses as $course) {
+            if($course->type == 1){
+                $courseType = "Muaythai";
+            }
+            else if($course->type == 2){
+                $courseType = "Dance";
+            }
+            else if($course->type == 4){
+                $courseType = "Gymnastic";
+            }
+            else{
+                $courseType = "Private";
+            }
+
+            $value = $course->id. '#'. $course->name. '#'. $course->coach->name. '#'. $course->price;
+
+            $formatted_tags[] = ['id' => $value, 'text' => $course->name.'('.$courseType. ') - '. $course->coach->name];
+        }
+
+        return \Response::json($formatted_tags);
+    }
+
     public function getDays(Request $request){
         try{
 
