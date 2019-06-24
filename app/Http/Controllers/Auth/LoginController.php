@@ -148,8 +148,8 @@ class LoginController extends Controller
         try {
             DB::transaction(function () {
 
-                $items = Schedule::whereIn('course_id', [6, 7, 9, 12, 14, 16])->get();
-                //ubah course di schedule menjadi 1
+                $items = Schedule::whereIn('course_id', [6, 7, 9, 12, 14, 16, 17, 19, 22, 24, 29])->get();
+                //ubah course di schedule menjadi 1 kelas aja
                 foreach ($items as $item) {
                     if($item->course_id == 6){
                         $item->course_id = 5;
@@ -175,9 +175,29 @@ class LoginController extends Controller
                         $item->course_id = 15;
                         $item->save();
                     }
+                    if($item->course_id == 17){
+                        $item->course_id = 18;
+                        $item->save();
+                    }
+                    if($item->course_id == 19){
+                        $item->course_id = 21;
+                        $item->save();
+                    }
+                    if($item->course_id == 22){
+                        $item->course_id = 23;
+                        $item->save();
+                    }
+                    if($item->course_id == 24){
+                        $item->course_id = 25;
+                        $item->save();
+                    }
+                    if($item->course_id == 29){
+                        $item->course_id = 30;
+                        $item->save();
+                    }
                 }
                 //ubah status course
-                $courses = Course::whereIn('id', [6, 7, 9, 12, 14, 16])->get();
+                $courses = Course::whereIn('id', [6, 7, 9, 12, 14, 16, 17, 19, 22, 24, 29])->get();
                 foreach($courses as $course){
                     $course->status_id = 2;
                     $course->save();
@@ -187,40 +207,6 @@ class LoginController extends Controller
                 $coach = Coach::find(5);
                 $coach->name = "Melisa / Han";
                 $coach->save();
-
-
-                $items22or23 = Schedule::where('course_id', 22)->get();
-                //ubah course di schedule menjadi 1
-                foreach ($items22or23 as $item) {
-                    $item->course_id = 23;
-                    $item->save();
-                }
-                //ubah status course
-                $course23 = Course::find(22);
-                $course23->status_id = 2;
-                $course23->save();
-
-                $items17or18 = Schedule::where('course_id', 17)->get();
-                //ubah course di schedule menjadi 1
-                foreach ($items17or18 as $item) {
-                    $item->course_id = 18;
-                    $item->save();
-                }
-                //ubah status course
-                $course18 = Course::find(17);
-                $course18->status_id = 2;
-                $course18->save();
-
-                $items17or18 = Schedule::where('course_id', 29)->get();
-                //ubah course di schedule menjadi 1
-                foreach ($items17or18 as $item) {
-                    $item->course_id = 30;
-                    $item->save();
-                }
-                //ubah status course
-                $course30 = Course::find(29);
-                $course30->status_id = 2;
-                $course30->save();
 
 //                $now = Carbon::parse('2018-11-30 15:03:58');
 //                $startDate = Carbon::parse('2018-11-01 15:03:58');
@@ -335,9 +321,11 @@ class LoginController extends Controller
 //                    }
 //                }
             });
+            return "success";
         }
         catch(\Exception $ex){
                 error_log($ex);
-            }
+            return "something went wrong. ". $ex;
+        }
         }
 }
