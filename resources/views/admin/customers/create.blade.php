@@ -47,7 +47,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="age" type="number" class="form-control col-md-7 col-xs-12 @if($errors->has('age')) parsley-error @endif"
-                           name="age" value="{{ old('age') }}" required>
+                           name="age" value="{{ old('age') }}">
                 </div>
             </div>
 
@@ -58,7 +58,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="email" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('email')) parsley-error @endif"
-                           name="email" value="{{ old('email') }}" required>
+                           name="email" value="{{ old('email') }}">
                 </div>
             </div>
 

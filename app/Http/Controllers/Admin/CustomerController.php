@@ -65,9 +65,7 @@ class CustomerController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'              => 'required|max:50',
-            'phone'             => 'required',
-            'age'               => 'required',
-            'email'             => 'required|email'
+            'phone'             => 'required'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
@@ -120,9 +118,7 @@ class CustomerController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'              => 'required|max:50',
-            'phone'             => 'required',
-            'age'               => 'required',
-            'email'             => 'required|email'
+            'phone'             => 'required'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
