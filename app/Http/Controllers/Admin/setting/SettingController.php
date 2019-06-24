@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Setting;
 
 use App\Models\Auth\User\User;
 use App\Models\PreferenceCompany;
+use App\Models\Schedule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -79,5 +80,33 @@ class SettingController extends Controller
         Session::flash('message', 'Berhasil mengganti data preferensi perusahaan!');
 
         return redirect()->route('admin.settings.preference');
+    }
+
+    public function expiredDays(){
+        return View('admin.settings.edit-expired-days');
+    }
+
+    public function addMoreExpiredDays(Request $request){
+        $validator = Validator::make($request->all(),[
+            'days'  => 'required'
+        ]);
+
+        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
+
+        //Add days to all the Package
+        $packages = Schedule::whereHas('course', function($query){
+            $query->where('type', 1);
+        })->get();
+
+        foreach ($packages as $package){
+            $temp = Carbon::parse($package->finish_date);
+            $temp->addDays($request->input('days'));
+            $package->finish_date = $temp->toDateTimeString();
+            $package->save();
+        }
+
+        Session::flash('message', 'Berhasil menambah hari expired untuk paket!');
+
+        return redirect()->route('admin.settings.edit_expired_days');
     }
 }

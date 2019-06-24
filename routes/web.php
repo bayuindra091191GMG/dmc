@@ -533,6 +533,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('settings/ubah/{id}', 'Setting\SettingController@update')->name('settings.update');
     Route::get('settings/perusahaan/ubah', 'Setting\SettingController@preference')->name('settings.preference');
     Route::put('settings/perusahaan/ubah/{preference}', 'Setting\SettingController@preferenceUpdate')->name('settings.preference-update');
+    Route::get('settings/expired-days', 'Setting\SettingController@expiredDays')->name('settings.expired-days');
+    Route::post('settings/expired-days/change', 'Setting\SettingController@addMoreExpiredDays')->name('settings.edit-expired-days');
 
     //Notifications
     Route::get('notifications', 'NotificationController@index')->name('notifications');
