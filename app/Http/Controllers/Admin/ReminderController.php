@@ -39,7 +39,7 @@ class ReminderController extends Controller
 
         $reminders = new Collection();
         foreach ($schedules as $schedule){
-            $remindDate = Carbon::parse($schedule->finish_date)->subDays(5);
+            $remindDate = Carbon::parse($schedule->finish_date)->subDays(15);
             if($schedule->course->type === 1){
                 if($now->greaterThanOrEqualTo($remindDate)){
                     if($schedule->meeting_amount > 5){
@@ -73,7 +73,7 @@ class ReminderController extends Controller
     /**
      * Renew customer schedule based on taken course
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param Request $request
      * @return JsonResponse
      */
     public function renew(Request $request){
@@ -86,7 +86,7 @@ class ReminderController extends Controller
                 return Response::json(array('errors' => 'INVALID'));
             }
 
-            error_log($schedule->course->type);
+            //error_log($schedule->course->type);
             //dd($schedule->course->type);
 
             // If course type is package
@@ -119,26 +119,26 @@ class ReminderController extends Controller
             }
             elseif($schedule->course->type === 2){
                 $finishDate = Carbon::parse($schedule->finish_date);
-                $newFinishDate = $finishDate->addMonths(1);
-//                if($finishDate->day > 1){
-//                    $finishDate->endOfMonth();
-//                }
-//                else{
-//                    $finishDate->addMonth()->startOfMonth();
-//                }
-                $schedule->finish_date = $newFinishDate->toDateTimeString();
+
+                // Get next month date at 10th
+                $nextMonthDate = $finishDate->copy()->addMonthsNoOverflow(1);
+                $month = $nextMonthDate->month;
+                $year = $nextMonthDate->year;
+                $nextMonthFinishDate = Carbon::create($year, $month, 10, 0, 0, 0);
+
+                $schedule->finish_date = $nextMonthFinishDate->toDateTimeString();
                 $schedule->meeting_amount = 0;
             }
             elseif($schedule->course->type === 4){
                 $finishDate = Carbon::parse($schedule->finish_date);
-                $newFinishDate = $finishDate->addMonths(1);
-//                if($finishDate->day > 1){
-//                    $finishDate->endOfMonth();
-//                }
-//                else{
-//                    $finishDate->addMonth()->startOfMonth();
-//                }
-                $schedule->finish_date = $newFinishDate->toDateTimeString();
+
+                // Get next month date at 10th
+                $nextMonthDate = $finishDate->copy()->addMonthsNoOverflow(1);
+                $month = $nextMonthDate->month;
+                $year = $nextMonthDate->year;
+                $nextMonthFinishDate = Carbon::create($year, $month, 10, 0, 0, 0);
+
+                $schedule->finish_date = $nextMonthFinishDate->toDateTimeString();
                 $schedule->meeting_amount = 0;
             }
 
@@ -162,7 +162,7 @@ class ReminderController extends Controller
     /**
      * Disable customer schedule based on taken course
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param Request $request
      * @return JsonResponse
      */
     public function disable(Request $request){

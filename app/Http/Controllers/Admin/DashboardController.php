@@ -75,7 +75,7 @@ class DashboardController extends Controller
         $privateReminders = new Collection();
         $gymnasticReminders = new Collection();
         foreach ($schedules as $schedule){
-            $remindDate = Carbon::parse($schedule->finish_date)->subDays(5);
+            $remindDate = Carbon::parse($schedule->finish_date)->subDays(15);
             if($schedule->course->type === 1){
                 if($packageReminders->count() < 5){
                     if($now->greaterThanOrEqualTo($remindDate)){
