@@ -307,10 +307,16 @@ class TransactionHeaderController extends Controller
                 return redirect()->back()->withErrors('Nama dan alamat email murid wajib diisi!', 'default')->withInput($request->all());
             }
             else{
-                // Validate unique
+                // Validate unique student name
                 $nameFound = Customer::where('name', 'LIKE', '%'. $request->input('student_name'). '%')->first();
                 if(!empty($nameFound)){
                     return redirect()->back()->withErrors('Nama murid sudah terdaftar!', 'default')->withInput($request->all());
+                }
+
+                // Validate unique student email
+                $emailFound = Customer::where('email', $request->input('student_email'))->first();
+                if(!empty($emailFound)){
+                    return redirect()->back()->withErrors('Alamat email sudah terdaftar!', 'default')->withInput($request->all());
                 }
             }
         }

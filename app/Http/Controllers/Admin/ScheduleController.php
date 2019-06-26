@@ -9,6 +9,7 @@ use App\Models\Customer;
 use App\Models\Schedule;
 use App\Models\TransactionDetail;
 use App\Transformer\ScheduleTransformer;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
@@ -191,7 +192,7 @@ class ScheduleController extends Controller
      * Display the specified resource.
      *
      * @param Schedule $schedule
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|\Illuminate\View\View
      */
     public function show(Schedule $schedule)
     {
@@ -201,7 +202,7 @@ class ScheduleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Coach $coach
+     * @param Schedule $schedule
      * @return \Illuminate\Http\Response
      */
     public function edit(Schedule $schedule)
@@ -239,8 +240,8 @@ class ScheduleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param Coach $coach
+     * @param \Illuminate\Http\Request $request
+     * @param Schedule $schedule
      * @return mixed
      */
     public function update(Request $request, Schedule $schedule)
@@ -258,12 +259,12 @@ class ScheduleController extends Controller
         if($courseDB->type == 2 || $courseDB->type == 4){
             $schedule->day = $request->get('day_add');
             $schedule->course_id = $request->get('course_add');
-            $schedule->updated_at = $dateTimeNow;
+            $schedule->updated_at = $dateTimeNow->toDateTimeString();
 //            $schedule->finish_date = $date->toDateTimeString();
             $schedule->save();
         }
         else{
-            $schedule->updated_at = $dateTimeNow;
+            $schedule->updated_at = $dateTimeNow->toDateTimeString();
            // $schedule->finish_date = $date->toDateTimeString();
             $schedule->save();
         }
@@ -309,7 +310,7 @@ class ScheduleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Coach $coach
+     * @param Schedule $schedule
      * @return \Illuminate\Http\Response
      */
     public function change(Schedule $schedule)

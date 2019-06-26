@@ -582,8 +582,16 @@ class CourseController extends Controller
 
     public function getExtendedCourses(Request $request){
         $term = trim($request->q);
-        $courses= Course::where('name', 'LIKE', '%'. $term. '%')
-            ->get();
+
+        if(!empty($request->type)){
+            $courses = Course::where('name', 'LIKE', '%'. $term. '%')
+                ->where('type', $request->type)
+                ->get();
+        }
+        else{
+            $courses = Course::where('name', 'LIKE', '%'. $term. '%')
+                ->get();
+        }
 
         $formatted_tags = [];
 
@@ -601,9 +609,16 @@ class CourseController extends Controller
                 $courseType = "Private";
             }
 
-            $value = $course->id. '#'. $course->name. '#'. $course->coach->name. '#'. $course->price;
+            if($course->coach_id === 0){
+                $coachName = 'Tidak Ada Coach';
+            }
+            else{
+                $coachName = $course->coach->name;
+            }
 
-            $formatted_tags[] = ['id' => $value, 'text' => $course->name.'('.$courseType. ') - '. $course->coach->name];
+            $value = $course->id. '#'. $course->name. '#'. $course->coach->name. '#'. $course->price. '#'. $course->meeting_amount;
+
+            $formatted_tags[] = ['id' => $value, 'text' => $course->name.'('.$courseType. ') - '. $coachName];
         }
 
         return \Response::json($formatted_tags);

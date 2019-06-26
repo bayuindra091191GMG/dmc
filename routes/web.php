@@ -175,6 +175,16 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     //Cuti
     Route::get('cuti', 'CutiController@index')->name('cuti');
 
+    // Registration Steps
+    Route::get('registration/muaythai/student', 'Registration\RegistrationStudentController@formStepOneMuaythai')->name('registration.muaythai.step-one');
+    Route::get('registration/dance/student', 'Registration\RegistrationStudentController@formStepOneDance')->name('registration.dance.step-one');
+    Route::get('registration/private/student', 'Registration\RegistrationStudentController@formStepOnePrivate')->name('registration.private.step-one');
+    Route::get('registration/gymnastic/student', 'Registration\RegistrationStudentController@formStepOneGymnastic')->name('registration.gymnastic.step-one');
+    Route::post('registration/student/store', 'Registration\RegistrationStudentController@store')->name('registration.step-one.store');
+    Route::get('registration/{type}/schedule/{student_id}', 'Registration\RegistrationScheduleController@formStepTwo')->name('registration.step-two');
+    Route::post('registration/schedule/store', 'Registration\RegistrationScheduleController@store')->name('registration.step-two.store');;
+    Route::get('registration/{type}/transaction/{student_id}', 'Registration\RegistrationTransactionController@formStepThree')->name('registration.step-three');
+    Route::post('registration/transaction/store', 'Registration\RegistrationTransactionController@store')->name('registration.step-three.store');
 
     //DMC End
 

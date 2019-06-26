@@ -1,0 +1,264 @@
+.@extends('admin.layouts.admin')
+
+{{--@section('title', 'Tambah Site' )--}}
+
+@section('content')
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+            <h2>Langkah 2 - Registrasi Jadwal Sesi/Kelas {{ $courseType }}</h2>
+            <hr/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            @include('partials._success')
+            {{ Form::open(['route'=>['admin.registration.step-two.store'],'method' => 'post','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
+
+            @if(count($errors))
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12 alert alert-danger alert-dismissible fade in" role="alert">
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            @endif
+
+            <input type="hidden" id="type" name="type" value="{{ $type }}"/>
+            <input type="hidden" id="customer_id" name="customer_id" value="{{ $student->id }}"/>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="student" >
+                    Murid
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="student" type="text" class="form-control col-md-7 col-xs-12"
+                           name="student" value="{{ $student->name }}" readonly>
+                </div>
+            </div>
+
+            <!-- Kelas -->
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 box-section">
+                    <h3 class="text-center">Kelas</h3>
+                    <div class="add-modal btn btn-info">
+                        <span class="glyphicon glyphicon-plus-sign"></span> Tambah
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="detailTable">
+                            <thead>
+                            <tr >
+                                <th class="text-center">
+                                    Nama Kelas
+                                </th>
+                                <th class="text-center">
+                                    Hari
+                                </th>
+                                <th class="text-center">
+                                    Jumlah Pertemuan
+                                </th>
+                                <th class="text-center">
+                                    Bonus Pertemuan
+                                </th>
+                                <th class="text-center" style="width: 15%;">
+                                    Tindakan
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+                    <a class="btn btn-danger" href="{{ route($backRoute, ['student_id' => $student->id]) }}"> Kembali</a>
+                    <button type="submit" class="btn btn-success"> Lanjutkan</button>
+                </div>
+            </div>
+            {{ Form::close() }}
+        </div>
+    </div>
+
+    <!-- Modal form to add new detail -->
+    <div id="addModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="course_add">Kelas</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="course_add" name="course_add"></select>
+                                <p class="errorItem text-center alert alert-danger hidden"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="meeting_add">Jumlah Pertemuan</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="meeting_add" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group" id="day_add_section" style="display: none;">
+                            <label class="control-label col-sm-2" for="day_add">Hari</label>
+                            <div class="col-sm-10">
+                                <select id="day_add" name="day_add" class="form-control col-md-7 col-xs-12">
+                                </select>
+                                <p class="errorQty text-center alert alert-danger hidden"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="bonus_meeting_add">Bonus Pertemuan</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="bonus_meeting_add">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">
+                            <span class='glyphicon glyphicon-remove'></span> Batal
+                        </button>
+                        <button type="button" class="btn btn-success add" data-dismiss="modal">
+                            <span id="" class='glyphicon glyphicon-check'></span> Simpan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('styles')
+    @parent
+    {{ Html::style(mix('assets/admin/css/select2.css')) }}
+    {{ Html::style(mix('assets/admin/css/bootstrap-datetimepicker.css')) }}
+    {{ Html::style(mix('assets/admin/css/users/edit.css')) }}
+@endsection
+
+@section('scripts')
+    @parent
+    {{ Html::script(mix('assets/admin/js/select2.js')) }}
+    {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
+    {{ Html::script(mix('assets/admin/js/users/edit.js')) }}
+    {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
+
+    <script type="text/javascript">
+        bonusMeetAddFormat = new AutoNumeric('#bonus_meeting_add', 0, {
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+            minimumValue: '0',
+            decimalPlaces: 0
+        });
+
+        // Add new detail
+        $(document).on('click', '.add-modal', function() {
+            bonusMeetAddFormat.set(0);
+            $('#day_add_section').hide();
+            $('#day_add').empty();
+            $('#course_add').select2({
+                placeholder: {
+                    id: '-1',
+                    text: ' - Pilih Kelas - '
+                },
+                width: '100%',
+                minimumInputLength: 0,
+                ajax: {
+                    url: '{{ route('select.extended.courses') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            q: $.trim(params.term),
+                            type: 1
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+
+            $('#course_add').on('select2:select', function(e){
+                let data = e.params.data;
+                let splitted = data.id.split('#');
+
+                $('#meeting_add').val(splitted[4]);
+
+                // Get Days Options
+                $('#day_add').empty();
+                $.ajax({
+                    url: '{{ route('select.days') }}',
+                    dataType: 'json',
+                    data: {
+                        'id': splitted[0]
+                    },
+                    success: function (data) {
+                        var i;
+                        $('#day_add').empty();
+                        for(i=0; i<data.length; i++){
+                            $('#day_add')
+                                .append($("<option></option>")
+                                    .attr("value",data[i])
+                                    .text(data[i]));
+                        }
+                        $('#day_add_section').show();
+                    }
+                });
+            });
+
+            $('.modal-title').text('Tambah Detail');
+            $('#addModal').modal('show');
+        });
+
+        $("#addModal").on('hide.bs.modal', function () {
+            $('#day_add').empty();
+            $('#course_add').val(null).trigger('change');
+        });
+
+        var i = 1;
+        $('.modal-footer').on('click', '.add', function() {
+
+            if($('select[name=day_add]').val() != null && $('#course_add').val() != null){
+
+                let value = $('#course_add').val();
+                let splitted = value.split('#');
+
+                $('#detailTable').append("<tr id='" + i + "' class='item" + splitted[0] + "' >" +
+                    "<td><input type='text' name='course[]' class='form-control' value='"+ splitted[1] + "' readonly/> <input type='hidden' name='course_id[]' value='" + splitted[0] +"'/></td>" +
+                    "<td><input type='text' name='day[]' class='form-control' value='" + $('select[name=day_add]').val() +"' readonly/></td>" +
+                    "<td class='text-right'>" + splitted[4] + "</td>" +
+                    "<td><input type='text' name='bonus[]' class='form-control text-right' value='" + $('#bonus_meeting_add').val() +"' readonly/></td>" +
+                    "<td class='text-center'><a class='delete-schedule btn btn-danger' data-id='" + i + "'><span class='glyphicon glyphicon-trash'></span></a></td></tr>");
+
+                $('#day_add').empty();
+                $('#course_add').empty();
+
+                // $("#delete_row" + i).click(function(){
+                //     if(i>1){
+                //         $("#"+(i-2)).html('');
+                //         i--;
+                //     }
+                // });
+
+                i++;
+            }
+        });
+
+        $(document).on('click', '.delete-schedule', function() {
+            var deletedId = $(this).data('id');
+
+            $('#' + deletedId).remove();
+        });
+    </script>
+@endsection
