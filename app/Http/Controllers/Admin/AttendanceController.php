@@ -74,8 +74,13 @@ class AttendanceController extends Controller
         $schedules = null;
         if(!empty(request()->customer)){
             $customer = Customer::find(request()->customer);
+
+            //get Ongoing schedule (status = 3) and attendance only muaythai
             $schedules = Schedule::where('customer_id', $customer->id)
                 ->where('status_id', 3)
+                ->whereHas('course', function($query){
+                    $query->where('type', 1);
+                })
                 ->get();
             $customerPlaceholder = $customer->name. ' - '. $customer->email. ' - '. $customer->phone;
         }

@@ -30,9 +30,32 @@ class CourseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function indexMuaythai()
     {
-        return view('admin.courses.index');
+        $selectedCourse = "muaythai";
+        return view('admin.courses.index', compact('selectedCourse'));
+    }
+    public function indexDance()
+    {
+        $selectedCourse = "dance";
+        return view('admin.courses.index', compact('selectedCourse'));
+    }
+    public function indexGymnastic()
+    {
+        $selectedCourse = "gymnastic";
+        return view('admin.courses.index', compact('selectedCourse'));
+    }
+    public function indexPrivate()
+    {
+        $selectedCourse = "private";
+        return view('admin.courses.index', compact('selectedCourse'));
+    }
+
+    public function index($courseName)
+    {
+        $selectedCourse = $courseName;
+        dd($courseName);
+        return view('admin.courses.index', compact('selectedCourse'));
     }
 
 
@@ -44,9 +67,24 @@ class CourseController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function anyData()
+    public function anyData(Request $request)
     {
-        $courses = Course::all();
+        $selectedCourseString = $request->input('course');
+        $selectedCourse = 1;
+        if($selectedCourseString == 'muaythai'){
+            $selectedCourse = 1;
+        }
+        if($selectedCourseString == 'dance'){
+            $selectedCourse = 2;
+        }
+        if($selectedCourseString == 'gymnastic'){
+            $selectedCourse = 4;
+        }
+        if($selectedCourseString == 'private'){
+            $selectedCourse = 3;
+        }
+        error_log($selectedCourse);
+        $courses = Course::where('type', $selectedCourse)->get();
         return DataTables::of($courses)
             ->setTransformer(new CourseTransformer(1))
             ->addIndexColumn()

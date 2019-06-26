@@ -51,7 +51,12 @@
             $('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('datatables.courses') !!}',
+                ajax: {
+                    url: '{!! route('datatables.courses') !!}',
+                    data: {
+                        'course': '{{$selectedCourse}}'
+                    }
+                },
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
                     { data: 'name', name: 'name', class: 'text-center'},
@@ -78,5 +83,6 @@
             $('#deleted-id').val($(this).data('id'));
         });
     </script>
-    @include('partials._deleteJs', ['routeUrl' => 'admin.courses.destroy', 'redirectUrl' => 'admin.courses'])
+    @php($url='admin.'.$selectedCourse.'.courses')
+    @include('partials._deleteJs', ['routeUrl' => 'admin.courses.destroy', 'redirectUrl' => $url])
 @endsection
