@@ -40,7 +40,7 @@
                             <option value="{{ $student->id }}">{{ $student->name }}</option>
                         @endif
                     </select>
-                    <input type="hidden" id="customer_id" name="customer_id" class="form-control col-md-7 col-xs-12" value="{{ $customer->id ?? '-1' }}">
+                    <input type="hidden" id="customer_id" name="customer_id" class="form-control col-md-7 col-xs-12" value="{{ $student->id ?? '-1' }}">
                 </div>
                 <div class="col-md-2 col-sm-2 col-xs-12">
                     @if(!empty($student))
@@ -76,16 +76,6 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dob">
-                        Tanggal Lahir
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input id="dob" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('dob')) parsley-error @endif"
-                               name="dob" value="{{ old('dob') }}">
-                    </div>
-                </div>
-
-                <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="student_email">
                         Alamat Email
                         <span class="required">*</span>
@@ -93,6 +83,26 @@
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         <input id="student_email" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('student_email')) parsley-error @endif"
                                name="student_email" value="{{ old('student_email') }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="age">
+                        Usia
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input id="age" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('age')) parsley-error @endif"
+                               name="age" value="{{ old('age') }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dob">
+                        Tanggal Lahir
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input id="dob" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('dob')) parsley-error @endif"
+                               name="dob" value="{{ old('dob') }}">
                     </div>
                 </div>
 

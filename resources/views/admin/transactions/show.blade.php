@@ -95,7 +95,7 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Customer
+                        Student
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         : {{ $header->customer->name }}
@@ -160,14 +160,17 @@
                                 <thead>
                                 <tr >
                                     @if($header->type === 1)
-                                        <th class="text-center" style="width: 20%">
+                                        <th class="text-center">
                                             Kelas
                                         </th>
-                                        <th class="text-center" style="width: 20%">
+                                        <th class="text-center">
                                             Trainer
                                         </th>
-                                        <th class="text-center" style="width: 15%">
+                                        <th class="text-center">
                                             Hari
+                                        </th>
+                                        <th class="text-center" style="width: 10%">
+                                            Jumlah Pertemuan
                                         </th>
                                         <th class="text-center" style="width: 15%">
                                             Harga
@@ -250,10 +253,13 @@
                                                 {{ $detail->schedule->course->name }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $detail->schedule->course->coach->name }}
+                                                {{ $detail->schedule->course->coach_id === 0 ? 'Tidak Ada Coach' : $detail->schedule->course->coach->name }}
                                             </td>
                                             <td class="text-center">
                                                 {{ $detail->schedule->day }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $detail->schedule->course->meeting_amount }}
                                             </td>
                                             <td class="text-right">
                                                 {{ $detail->price_string }}

@@ -12,7 +12,6 @@
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             @include('partials._success')
-            @include('partials._error')
             {{ Form::open(['route'=>['admin.customers.update', $customer->id],'method' => 'put','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
             {{ csrf_field() }}
 
@@ -42,19 +41,8 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="age" >
-                    Umur
-                    <span class="required">*</span>
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="age" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('age')) parsley-error @endif"
-                           name="age" value="{{ $customer->age }}">
-                </div>
-            </div>
-
-            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email" >
-                    Email
+                    Alamat Email
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -64,13 +52,23 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="age" >
+                    Usia
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="age" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('age')) parsley-error @endif"
+                           name="age" value="{{ $customer->age }}">
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone" >
-                    No Telepon
+                    Nomor Telepon
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="phone" type="number" class="form-control col-md-7 col-xs-12 @if($errors->has('phone')) parsley-error @endif"
-                           name="phone" value="{{ $customer->phone }}" required>
+                           name="phone" value="{{ $customer->phone }}">
                 </div>
             </div>
 
@@ -94,12 +92,13 @@
                 </div>
             </div>
 
-                <div class="form-group">
-                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                        <a class="btn btn-primary" href="{{ route('admin.customers') }}"> Batal</a>
-                        <button type="submit" class="btn btn-success"> Simpan</button>
-                    </div>
+            <div class="form-group">
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <a class="btn btn-warning" href="{{ route('admin.customers') }}"> Batal</a>
+                    <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
+            </div>
+
             {{ Form::close() }}
         </div>
     </div>

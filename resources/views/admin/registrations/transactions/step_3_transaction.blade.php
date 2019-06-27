@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
 
-            {{ Form::open(['route'=>['admin.transactions.store'],'method' => 'post','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.registration.step-three.store'],'method' => 'post','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
 
             @if(count($errors))
                 <div class="form-group">
@@ -27,6 +27,8 @@
                     </div>
                 </div>
             @endif
+
+            <input type="hidden" name="type" id="type" value="{{ $type }}"/>
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">

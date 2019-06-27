@@ -41,23 +41,6 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                    Transaksi
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <div class="radio">
-                        <label><input type="radio" name="transaction_type" value="normal" checked>Normal</label>
-                    </div>
-                    <div class="radio">
-                        <label><input type="radio" name="transaction_type" value="prorate">Prorate</label>
-                    </div>
-                    <div class="radio">
-                        <label><input type="radio" name="transaction_type" value="cuti">Cuti</label>
-                    </div>
-                </div>
-            </div>
-
             <!-- Kelas -->
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 box-section">
@@ -73,13 +56,13 @@
                                     Nama Kelas
                                 </th>
                                 <th class="text-center">
+                                    Trainer
+                                </th>
+                                <th class="text-center">
                                     Hari
                                 </th>
                                 <th class="text-center">
                                     Jumlah Pertemuan
-                                </th>
-                                <th class="text-center">
-                                    Bonus Pertemuan
                                 </th>
                                 <th class="text-center" style="width: 15%;">
                                     Tindakan
@@ -134,13 +117,6 @@
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
-
-                        <div class="form-group" @if($roleId !== 1) style="display: none" @endif>
-                            <label class="control-label col-sm-2" for="bonus_meeting_add">Bonus Pertemuan</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="bonus_meeting_add" @if($roleId !== 1) readonly @endif>
-                            </div>
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
@@ -163,7 +139,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-{{--                    <h4 class="modal-title">Modal Header</h4>--}}
+                    {{--                    <h4 class="modal-title">Modal Header</h4>--}}
                 </div>
                 <div class="modal-body text-center">
                     <h4>Apakah anda yakin ingin menyimpan jadwal?</h4>
@@ -194,12 +170,6 @@
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
 
     <script type="text/javascript">
-        bonusMeetAddFormat = new AutoNumeric('#bonus_meeting_add', 0, {
-            decimalCharacter: ',',
-            digitGroupSeparator: '.',
-            minimumValue: '0',
-            decimalPlaces: 0
-        });
 
         // Confirm submit form modal
         function confirmModal(){
@@ -212,9 +182,9 @@
 
         // Add new detail
         $(document).on('click', '.add-modal', function() {
-            bonusMeetAddFormat.set(0);
             $('#day_add_section').hide();
             $('#day_add').empty();
+
             $('#course_add').select2({
                 placeholder: {
                     id: '-1',
@@ -228,7 +198,7 @@
                     data: function (params) {
                         return {
                             q: $.trim(params.term),
-                            type: 1
+                            type: 4
                         };
                     },
                     processResults: function (data) {
@@ -288,7 +258,6 @@
                     "<td><input type='text' name='course[]' class='form-control' value='"+ splitted[1] + "' readonly/> <input type='hidden' name='course_id[]' value='" + splitted[0] +"'/></td>" +
                     "<td><input type='text' name='day[]' class='form-control' value='" + $('select[name=day_add]').val() +"' readonly/></td>" +
                     "<td class='text-center'>" + splitted[4] + "</td>" +
-                    "<td><input type='text' name='bonus[]' class='form-control text-center' value='" + $('#bonus_meeting_add').val() +"' readonly/></td>" +
                     "<td class='text-center'><a class='delete-schedule btn btn-danger' data-id='" + i + "'><span class='glyphicon glyphicon-trash'></span></a></td></tr>");
 
                 $('#day_add').empty();

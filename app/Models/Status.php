@@ -28,6 +28,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Illuminate\Database\Eloquent\Collection $purchase_request_headers
  * @property \Illuminate\Database\Eloquent\Collection $quotation_headers
  * @property \Illuminate\Database\Eloquent\Collection $users
+ * @property \Illuminate\Database\Eloquent\Collection $course_details
  *
  * @package App\Models
  */
@@ -107,5 +108,10 @@ class Status extends Eloquent
     public function leaves()
     {
         return $this->hasMany(\App\Models\Leaf::class);
+    }
+
+    public function course_details()
+    {
+        return $this->hasMany(\App\Models\CourseDetail::class);
     }
 }

@@ -5,7 +5,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-            <h2>Buat Transaksi Prorate Baru</h2>
+            <h2>Langkah 3 - Registrasi Transaksi Prorate {{ $courseType }}</h2>
             <hr/>
         </div>
     </div>
@@ -128,7 +128,7 @@
                                         Harga Prorate
                                     </th>
                                     {{--<th class="text-center" style="width: 10%">--}}
-                                        {{--Diskon--}}
+                                    {{--Diskon--}}
                                     {{--</th>--}}
                                     <th class="text-center" style="width: 15%">
                                         Subtotal
@@ -206,10 +206,10 @@
                             </div>
                         </div>
                         {{--<div class="form-group">--}}
-                            {{--<label class="control-label col-sm-2" for="discount_add">Diskon:</label>--}}
-                            {{--<div class="col-sm-10">--}}
-                                {{--<input type="text" class="form-control" id="discount_add" name="discount_add">--}}
-                            {{--</div>--}}
+                        {{--<label class="control-label col-sm-2" for="discount_add">Diskon:</label>--}}
+                        {{--<div class="col-sm-10">--}}
+                        {{--<input type="text" class="form-control" id="discount_add" name="discount_add">--}}
+                        {{--</div>--}}
                         {{--</div>--}}
                     </form>
                     <div class="modal-footer">
@@ -271,10 +271,10 @@
                             </div>
                         </div>
                         {{--<div class="form-group">--}}
-                            {{--<label class="control-label col-sm-2" for="discount_edit">Diskon:</label>--}}
-                            {{--<div class="col-sm-10">--}}
-                                {{--<input type="text" class="form-control" id="discount_edit" name="discount_edit">--}}
-                            {{--</div>--}}
+                        {{--<label class="control-label col-sm-2" for="discount_edit">Diskon:</label>--}}
+                        {{--<div class="col-sm-10">--}}
+                        {{--<input type="text" class="form-control" id="discount_edit" name="discount_edit">--}}
+                        {{--</div>--}}
                         {{--</div>--}}
                     </form>
                     <div class="modal-footer">
@@ -408,20 +408,20 @@
         });
 
         @if(!empty(old('registration_fee')))
-            regisrationFeeFormat.clear();
+        regisrationFeeFormat.clear();
 
-            var fee = '{{ old('registration_fee') }}';
-            var feeClean = fee.replace(/\./g,'');
+        var fee = '{{ old('registration_fee') }}';
+        var feeClean = fee.replace(/\./g,'');
 
-            regisrationFeeFormat.set(feeClean, {
-                decimalCharacter: ',',
-                digitGroupSeparator: '.',
-                minimumValue: '0',
-                decimalPlaces: 0
-            });
+        regisrationFeeFormat.set(feeClean, {
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+            minimumValue: '0',
+            decimalPlaces: 0
+        });
         @endif
 
-        priceAddFormat = new AutoNumeric('#price_add', {
+            priceAddFormat = new AutoNumeric('#price_add', {
             decimalCharacter: ',',
             digitGroupSeparator: '.',
             minimumValue: '0',

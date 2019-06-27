@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Auth\User\User;
 use App\Models\Coach;
 use App\Models\Course;
+use App\Models\CourseDetail;
 use App\Models\Schedule;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
@@ -327,5 +328,59 @@ class LoginController extends Controller
                 error_log($ex);
             return "something went wrong. ". $ex;
         }
+    }
+
+    public function courseScript(){
+        try{
+            $courses = Course::all();
+
+            foreach ($courses as $course){
+                foreach ($course->days as $day){
+                    foreach ($day->hours as $hour){
+                        $dayString = $day->day_string;
+
+                        if($dayString === 'Senin'){
+                            $dayNumber = 1;
+                        }
+                        else if($dayString === 'Selasa'){
+                            $dayNumber = 2;
+                        }
+                        else if($dayString === 'Rabu'){
+                            $dayNumber = 3;
+                        }
+                        else if($dayString === 'Kamis'){
+                            $dayNumber = 4;
+                        }
+                        else if($dayString === 'Jumat'){
+                            $dayNumber = 5;
+                        }
+                        else if($dayString === 'Sabtu'){
+                            $dayNumber = 6;
+                        }
+                        else{
+                            $dayNumber = 7;
+                        }
+
+                        //error_log($hour->hour_string. ':00');
+
+                        CourseDetail::create([
+                            'course_id'         => $course->id,
+                            'day_number'        => $dayNumber,
+                            'day_name'          => $dayString,
+                            'time'              => $hour->hour_string,
+                            'max_capacitiy'     => 0,
+                            'current_capacity'  => 0,
+                            'status_id'         => 1
+                        ]);
+                    }
+                }
+            }
+
+            return 'SUCCESS!';
         }
+        catch(\Exception $ex){
+            return $ex;
+        }
+
+    }
 }

@@ -5,7 +5,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-            <h2>Buat Customer Baru</h2>
+            <h2>Buat Student Baru</h2>
             <hr/>
         </div>
     </div>
@@ -38,22 +38,11 @@
                     <input id="name" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('name')) parsley-error @endif"
                            name="name" value="{{ old('name') }}" required>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="age" >
-                    Umur
-                    <span class="required">*</span>
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="age" type="number" class="form-control col-md-7 col-xs-12 @if($errors->has('age')) parsley-error @endif"
-                           name="age" value="{{ old('age') }}">
-                </div>
             </div>
-
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email" >
-                    Email
+                    Alamat Email
                     <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -63,9 +52,28 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="age" >
+                    Usia
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="age" type="number" class="form-control col-md-7 col-xs-12 @if($errors->has('age')) parsley-error @endif"
+                           name="age" value="{{ old('age') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dob">
+                    Tanggal Lahir
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="dob" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('dob')) parsley-error @endif"
+                           name="dob" value="{{ old('dob') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone" >
-                    No Telepon
-                    <span class="required">*</span>
+                    Nomor Telepon
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="phone" type="number" class="form-control col-md-7 col-xs-12 @if($errors->has('phone')) parsley-error @endif"

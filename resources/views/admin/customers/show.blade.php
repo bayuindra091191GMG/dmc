@@ -46,10 +46,19 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Umur
+                        Usia
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $customer->age }}
+                        : {{ $customer->age ?? '-' }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        Tanggal Lahir
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ $dob }}
                     </div>
                 </div>
 

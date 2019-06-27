@@ -26,6 +26,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $created_by
  * @property \Carbon\Carbon $updated_at
  * @property int $updated_by
+ * @property \Carbon\Carbon $dob
  * 
  * @property \App\Models\Status $status
  * @property \App\Models\Auth\User\User $user
@@ -53,7 +54,8 @@ class Customer extends Eloquent
         'address',
 		'status_id',
 		'created_by',
-		'updated_by'
+		'updated_by',
+        'dob'
 	];
 
 	public function status()

@@ -7,12 +7,14 @@ use App\Models\Customer;
 use App\Models\Schedule;
 use App\Models\TransactionHeader;
 use App\Transformer\MasterData\CustomerTransformer;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
 
 class CustomerController extends Controller
@@ -58,28 +60,34 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name'              => 'required|max:50',
-            'phone'             => 'required'
+            'email'             => 'required'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
+        $dob = null;
+        if(!empty($request->input('dob'))){
+            $dob = Carbon::createFromFormat('d M Y', $request->input('dob'), 'Asia/Jakarta');
+        }
+
         Customer::create([
             'name'          => $request->get('name'),
-            'phone'         => $request->get('phone'),
             'email'         => $request->get('email'),
-            'address'       => $request->get('address'),
-            'age'           => $request->get('age'),
-            'parent_name'   => $request->get('parent_name')
+            'phone'         => $request->get('phone') ?? null,
+            'address'       => $request->get('address') ?? null,
+            'age'           => $request->get('age') ?? null,
+            'dob'           => $dob !== null ? $dob->toDateTimeString() : null,
+            'parent_name'   => $request->get('parent_name') ?? null
         ]);
 
-        Session::flash('message', 'Berhasil membuat data Customer baru!');
+        Session::flash('message', 'Berhasil membuat data Student baru!');
 
         return redirect()->route('admin.customers');
     }
@@ -88,12 +96,24 @@ class CustomerController extends Controller
      * Display the specified resource.
      *
      * @param Customer $customer
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function show(Customer $customer)
     {
         $schedules = Schedule::where('customer_id', $customer->id)->get();
-        return view('admin.customers.show', ['customer' => $customer, 'schedules' => $schedules]);
+
+        $dob = '-';
+        if(!empty($customer->dob)){
+            $dob = Carbon::parse($customer->dob)->format('d M Y');
+        }
+
+        $data = [
+            'customer'      => $customer,
+            'schedules'     => $schedules,
+            'dob'           => $dob
+        ];
+
+        return view('admin.customers.show')->with($data);
     }
 
     /**
@@ -110,7 +130,7 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param Request $request
      * @param Customer $customer
      * @return mixed
      */
@@ -118,23 +138,29 @@ class CustomerController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'              => 'required|max:50',
-            'phone'             => 'required'
+            'email'             => 'required'
         ]);
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
-        $customer->name = $request->get('name');
-        $customer->email = $request->get('email');
-        $customer->age = $request->get('age');
-        $customer->parent_name = $request->get('parent_name');
-        $customer->address = $request->get('address');
-        $customer->phone = $request->get('phone');
+        $dob = null;
+        if(!empty($request->input('dob'))){
+            $dob = Carbon::createFromFormat('d M Y', $request->input('dob'), 'Asia/Jakarta');
+        }
+
+        $customer->name = $request->input('name');
+        $customer->email = $request->input('email');
+        $customer->age = $request->input('age') ?? null;
+        $customer->dob = $dob !== null ? $dob->toDateTimeString() : null;
+        $customer->parent_name = $request->input('parent_name') ?? null;
+        $customer->address = $request->input('address') ?? null;
+        $customer->phone = $request->input('phone') ?? null;
         $customer->updated_at = $dateTimeNow;
         $customer->save();
 
-        Session::flash('message', 'Berhasil mengubah data Customer!');
+        Session::flash('message', 'Berhasil mengubah data Student!');
 
         return redirect()->route('admin.customers.edit', ['customer' => $customer]);
     }
@@ -170,12 +196,18 @@ class CustomerController extends Controller
     public function getCustomers(Request $request){
         $term = trim($request->q);
         $customers= Customer::where('name', 'LIKE', '%'. $term. '%')
+            ->orderBy('name')
             ->get();
 
         $formatted_tags = [];
 
         foreach ($customers as $customer) {
-            $formatted_tags[] = ['id' => $customer->id, 'text' => $customer->name. ' - '. $customer->parent_name];
+            $parentName = 'Tidak Ada Data Ortu';
+            if(!empty($customer->parent_name)){
+                $parentName = $customer->parent_name;
+            }
+
+            $formatted_tags[] = ['id' => $customer->id, 'text' => $customer->name. ' - '. $parentName];
         }
 
         return \Response::json($formatted_tags);

@@ -83,6 +83,7 @@ class RegistrationStudentController extends Controller
 
         if(!empty($request->input('is_new_student'))){
             // Create student if new
+            $dob = null;
             if(!empty($request->input('dob'))){
                 $dob = Carbon::createFromFormat('d M Y', $request->input('dob'), 'Asia/Jakarta');
             }
@@ -92,7 +93,8 @@ class RegistrationStudentController extends Controller
                 'phone'         => $request->input('student_phone') ?? null,
                 'email'         => $request->input('student_email'),
                 'address'       => $request->input('student_address') ?? null,
-                'dob'           => $dob->toDateTimeString() ?? null,
+                'age'           => $request->input('age') ?? null,
+                'dob'           => $dob !== null ? $dob->toDateTimeString() : null,
                 'parent_name'   => $request->input('student_parent_name') ?? null
             ]);
 

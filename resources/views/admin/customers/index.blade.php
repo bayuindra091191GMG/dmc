@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Data Customers')
+@section('title', 'Data Student')
 
 @section('content')
 

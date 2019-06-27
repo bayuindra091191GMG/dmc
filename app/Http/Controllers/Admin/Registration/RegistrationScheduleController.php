@@ -45,16 +45,23 @@ class RegistrationScheduleController extends Controller
             dd('INVALID COURSE TYPE!');
         }
 
+
         $student = Customer::find($student_id);
         if(empty($student)){
             dd('INVALID STUDENT!');
         }
 
+        $user = Auth::user();
+        $roleId = $user->roles->pluck('id')[0];
+
+        //dd($roleId);
+
         $data = [
             'type'          => $type,
             'courseType'    => $courseType,
             'student'       => $student,
-            'backRoute'     => $backRoute
+            'backRoute'     => $backRoute,
+            'roleId'        => $roleId
         ];
 
         return view($viewPath)->with($data);
@@ -62,6 +69,8 @@ class RegistrationScheduleController extends Controller
 
     public function store(Request $request)
     {
+        //dd($request->input('transaction_type'));
+
         // Validate details
         $customer = $request->input('customer_id');
         $courses = $request->input('course_id');
@@ -178,7 +187,15 @@ class RegistrationScheduleController extends Controller
         }
 
 //        Session::flash('message', 'Berhasil membuat jadwal baru!');
-        return redirect()->route('admin.registration.step-three', ['type' => $request->input('type'), 'student_id' => $request->input('customer_id')]);
+        if($request->input('transaction_type') == 'normal'){
+            return redirect()->route('admin.registration.step-three', ['type' => $request->input('type'), 'student_id' => $request->input('customer_id')]);
+        }
+        else if($request->input('transaction_type') == 'prorate'){
+            return redirect()->route('admin.registration.prorate.step-three', ['type' => $request->input('type'), 'student_id' => $request->input('customer_id')]);
+        }
+        else{
+            return redirect()->route('admin.registration.cuti.step-three', ['type' => $request->input('type'), 'student_id' => $request->input('customer_id')]);
+        }
     }
 
 }

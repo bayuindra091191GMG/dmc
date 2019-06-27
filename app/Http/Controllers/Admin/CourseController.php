@@ -584,6 +584,7 @@ class CourseController extends Controller
         if(!empty($request->type)){
             $courses = Course::where('name', 'LIKE', '%'. $term. '%')
                 ->where('type', $request->type)
+                ->where('status_id', 1)
                 ->get();
         }
         else{
