@@ -82,12 +82,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('coaches/delete', 'CoachController@destroy')->name('coaches.destroy');
 
     //Courses
-    //    Route::get('courses', 'CourseController@index')->name('courses');
+    Route::get('courses', 'CourseController@index')->name('courses');
     Route::get('courses/muaythai', 'CourseController@indexMuaythai')->name('muaythai.courses');
     Route::get('courses/dance', 'CourseController@indexDance')->name('dance.courses');
     Route::get('courses/gymnastic', 'CourseController@indexGymnastic')->name('gymnastic.courses');
     Route::get('courses/private', 'CourseController@indexPrivate')->name('private.courses');
-    Route::get('courses/{courseName}', 'CourseController@index')->name('courses');
+//    Route::get('courses/{courseName}', 'CourseController@index')->name('courses');
 
     Route::get('courses/this-day', 'CourseController@thisDayCourses')->name('courses.this_day');
     Route::get('courses/show/{course}', 'CourseController@show')->name('courses.show');

@@ -51,10 +51,8 @@ class CourseController extends Controller
         return view('admin.courses.index', compact('selectedCourse'));
     }
 
-    public function index($courseName)
+    public function index()
     {
-        $selectedCourse = $courseName;
-        dd($courseName);
         return view('admin.courses.index', compact('selectedCourse'));
     }
 
