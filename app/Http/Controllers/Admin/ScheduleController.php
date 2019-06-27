@@ -207,34 +207,42 @@ class ScheduleController extends Controller
      */
     public function edit(Schedule $schedule)
     {
-        $course = Course::find($schedule->course_id);
 
-        $days = preg_split('@;@', $course->day, NULL, PREG_SPLIT_NO_EMPTY);
-        $hours = preg_split('@;@', $course->hour, NULL, PREG_SPLIT_NO_EMPTY);
-        $date = Carbon::parse($schedule->finish_date)->format('d M Y');
-        $dayTime = array();
+        $user = Auth::user();
+        $roleId = $user->roles->pluck('id')[0];
+        if($roleId == 1){
+            $course = Course::find($schedule->course_id);
 
-        $i = 0;
-        foreach ($days as $day){
-            if(!empty($course->hour))
-            {
-                array_push($dayTime,$day . '-' . $hours[$i]);
-                $i++;
+            $days = preg_split('@;@', $course->day, NULL, PREG_SPLIT_NO_EMPTY);
+            $hours = preg_split('@;@', $course->hour, NULL, PREG_SPLIT_NO_EMPTY);
+            $date = Carbon::parse($schedule->finish_date)->format('d M Y');
+            $dayTime = array();
+
+            $i = 0;
+            foreach ($days as $day){
+                if(!empty($course->hour))
+                {
+                    array_push($dayTime,$day . '-' . $hours[$i]);
+                    $i++;
+                }
+                else{
+                    array_push($dayTime,$day);
+                    $i++;
+                }
             }
-            else{
-                array_push($dayTime,$day);
-                $i++;
-            }
-        }
 
-        $data = [
-            'schedule'      => $schedule,
-            'course'      => $course,
-            'dayTime'      => $dayTime,
-            'date'      => $date
-        ];
+            $data = [
+                'schedule'      => $schedule,
+                'course'      => $course,
+                'dayTime'      => $dayTime,
+                'date'      => $date
+            ];
 //        dd($data);
-        return view('admin.schedules.edit')->with($data);
+            return view('admin.schedules.edit')->with($data);
+        }
+        else{
+            return redirect()->back();
+        }
     }
 
     /**
@@ -252,15 +260,16 @@ class ScheduleController extends Controller
 
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
-        //$date = Carbon::createFromFormat('d M Y', $request->input('finish_date'), 'Asia/Jakarta');
+        $date = Carbon::createFromFormat('d M Y', $request->input('finish_date'), 'Asia/Jakarta');
 
         //if course type = class
 //        dd($courseDB->type);
         if($courseDB->type == 2 || $courseDB->type == 4){
             $schedule->day = $request->get('day_add');
             $schedule->course_id = $request->get('course_add');
+            $schedule->meeting_amount = $request->get('meeting_amount');
             $schedule->updated_at = $dateTimeNow->toDateTimeString();
-//            $schedule->finish_date = $date->toDateTimeString();
+            $schedule->finish_date = $date->toDateTimeString();
             $schedule->save();
         }
         else{

@@ -5,7 +5,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-            <h2>Ubah Data Kelas {{ $schedule->customer->first_name}} {{ $schedule->customer->last_name}}</h2>
+            <h2>Ubah Data Schedule {{ $schedule->customer->first_name}} {{ $schedule->customer->last_name}}</h2>
             <hr/>
         </div>
     </div>
@@ -65,21 +65,32 @@
                         </select>
                     </div>
                 </div>
-                {{--<div class="form-group">--}}
-                    {{--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">--}}
-                        {{--Tanggal Berakhir Kelas--}}
-                        {{--<span class="required">*</span>--}}
-                    {{--</label>--}}
-                    {{--<div class="col-md-6 col-sm-6 col-xs-12">--}}
-                        {{--<input id="date1" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"--}}
-                               {{--name="finish_date" value="{{ $date }}" required>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
+                        Tanggal Berakhir
+                        <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input id="finish-date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
+                               name="finish_date" value="{{ $date }}" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
+                        Jumlah Pertemuan
+                        <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input id="meeting_amount" type="number" class="form-control col-md-7 col-xs-12"
+                               name="meeting_amount" value="{{ $schedule->meeting_amount }}" required>
+                    </div>
+                </div>
+
             @else
                 <input type="hidden" name="course_add" value="{{$schedule->course_id}}">
                 <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
-                        Tanggal Berakhir Paket
+                        Tanggal Berakhir
                         <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
@@ -120,6 +131,9 @@
             format: "10 MMM Y"
         });
         $('#date2').datetimepicker({
+            format: "DD MMM Y"
+        });
+        $('#finish-date').datetimepicker({
             format: "DD MMM Y"
         });
 
