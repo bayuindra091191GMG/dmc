@@ -41,6 +41,30 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                    Transaksi
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="radio">
+                        <label><input type="radio" name="transaction_type" value="normal" checked>Normal</label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" name="transaction_type" value="prorate">Prorate</label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" name="transaction_type" value="cuti">Cuti</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="control-label col-md-3 col-sm-3 col-xs-12"></div>
+                <div class="col-md-2 col-sm-2 col-xs-12">
+                    <a href="{{ route('admin.registration.course.info', ['type' => $type]) }}" target="_blank" class="btn btn-primary">Cek Info Kelas Gymnastic</a>
+                </div>
+            </div>
+
             <!-- Kelas -->
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 box-section">

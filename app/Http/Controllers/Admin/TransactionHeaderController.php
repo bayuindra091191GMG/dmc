@@ -6,6 +6,7 @@ use App\Libs\Utilities;
 use App\Models\Auth\User\User;
 use App\Models\Coach;
 use App\Models\Course;
+use App\Models\CourseDetail;
 use App\Models\Customer;
 use App\Models\NumberingSystem;
 use App\Models\Schedule;
@@ -85,7 +86,7 @@ class TransactionHeaderController extends Controller
             'today'             => $today
         ];
 
-        return view('admin.transactions.create_complete')->with($data);
+        return view('admin.transactions.create')->with($data);
     }
 
     /**
@@ -257,6 +258,18 @@ class TransactionHeaderController extends Controller
                 // Activate schedule
                 $scheduleObj->status_id = 3;
                 $scheduleObj->save();
+
+                // Increase student count
+                $splitted = explode('-', $scheduleObj->day);
+                $dayString = trim($splitted[0]);
+                $timeString = trim($splitted[1]);
+
+                $courseDetail = CourseDetail::where('course_id', $scheduleObj->course_id)
+                    ->where('day_name', $dayString)
+                    ->where('time', $timeString)
+                    ->first();
+                $courseDetail->current_capacity += 1;
+                $courseDetail->save();
             }
             $idx++;
         }

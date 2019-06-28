@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\CourseDetail;
 use App\Models\Schedule;
 use App\Transformer\ReminderTransformer;
 use Carbon\Carbon;
@@ -145,6 +146,18 @@ class ReminderController extends Controller
             $schedule->status_id = 2;
             $schedule->save();
 
+            // Decrease student count
+            $splitted = explode('-', $schedule->day);
+            $dayString = trim($splitted[0]);
+            $timeString = trim($splitted[1]);
+
+            $courseDetail = CourseDetail::where('course_id', $schedule->course_id)
+                ->where('day_name', $dayString)
+                ->where('time', $timeString)
+                ->first();
+            $courseDetail->current_capacity -= 1;
+            $courseDetail->save();
+
             if($schedule->course->type === 3){
                 return redirect()->route('admin.transactions.private.create')->with('customer', $schedule->customer_id);
             }
@@ -177,6 +190,18 @@ class ReminderController extends Controller
 
             $schedule->status_id = 5;
             $schedule->save();
+
+            // Decrease student count
+            $splitted = explode('-', $schedule->day);
+            $dayString = trim($splitted[0]);
+            $timeString = trim($splitted[1]);
+
+            $courseDetail = CourseDetail::where('course_id', $schedule->course_id)
+                ->where('day_name', $dayString)
+                ->where('time', $timeString)
+                ->first();
+            $courseDetail->current_capacity -= 1;
+            $courseDetail->save();
 
             Session::flash('message', 'Berhasil menghapus jadwal customer!');
 

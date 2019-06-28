@@ -202,8 +202,8 @@
 
         $('#customer').select2({
             placeholder: {
-                id: '{{ $customer->id ?? '-1' }}',
-                text: '{{ $customer->name ?? ' - Pilih Customer - ' }}'
+                id: '-1',
+                text: ' - Pilih Student - '
             },
             width: '100%',
             minimumInputLength: 0,

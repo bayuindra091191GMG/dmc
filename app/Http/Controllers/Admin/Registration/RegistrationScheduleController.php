@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin\Registration;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\CourseDetail;
 use App\Models\Customer;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
@@ -196,6 +197,38 @@ class RegistrationScheduleController extends Controller
         else{
             return redirect()->route('admin.registration.cuti.step-three', ['type' => $request->input('type'), 'student_id' => $request->input('customer_id')]);
         }
+    }
+
+    public function courseInfo(int $type){
+        if($type === 1){
+            $courseType = 'MUAYTHAI';
+        }
+        else if($type === 2){
+            $courseType = 'DANCE';
+        }
+        else if($type === 3){
+            $courseType = 'PRIVATE';
+        }
+        else if($type === 4){
+            $courseType = 'GYMNASTIC';
+        }
+        else{
+            $courseType = 'INVALID';
+            dd('INVALID COURSE TYPE!');
+        }
+
+        $couseDetails = CourseDetail::where('status_id', 1)
+            ->whereHas('course', function ($query) use ($type){
+                $query->where('type', $type);
+            })
+            ->get();
+
+        $data = [
+            'courseType'        => $courseType,
+            'couseDetails'      => $couseDetails
+        ];
+
+        return view('admin.registrations.schedules.course_info')->with($data);
     }
 
 }

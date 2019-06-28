@@ -21,6 +21,7 @@ Route::group(['namespace' => 'Auth'], function () {
 //test
     Route::get('/test', 'LoginController@test')->name('test');
     Route::get('/course-script', 'LoginController@courseScript')->name('course-script');
+    Route::get('/course-count-script', 'LoginController@countStudent')->name('course-count-script');
 
     // Authentication Routes...
     Route::get('login', 'LoginController@showLoginForm')->name('login');
@@ -189,7 +190,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('registration/{type}/transaction/{student_id}', 'Registration\RegistrationTransactionController@formStepThree')->name('registration.step-three');
     Route::post('registration/transaction/store', 'Registration\RegistrationTransactionController@store')->name('registration.step-three.store');
     Route::get('registration/{type}/transaction/{student_id}/prorate', 'Registration\RegistrationTransactionController@formStepThreeProrate')->name('registration.prorate.step-three');
-    Route::get('registration/{type}/transaction/{student_id}/cuti', 'Registration\RegistrationTransactionController@formStepThreeCuti')->name('registration.ruti.step-three');
+    Route::get('registration/{type}/transaction/{student_id}/cuti', 'Registration\RegistrationTransactionController@formStepThreeCuti')->name('registration.cuti.step-three');
+    Route::get('registration/{type}/info', 'Registration\RegistrationScheduleController@courseInfo')->name('registration.course.info');
 
     //DMC End
 

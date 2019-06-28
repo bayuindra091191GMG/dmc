@@ -35,9 +35,36 @@
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="student" >
                     Murid
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-4 col-sm-4 col-xs-12">
                     <input id="student" type="text" class="form-control col-md-7 col-xs-12"
                            name="student" value="{{ $student->name }}" readonly>
+                </div>
+                <div class="col-md-2 col-sm-2 col-xs-12">
+                    <a href="{{ route('admin.customers.show', ['customer' => $student->id]) }}" target="_blank" class="btn btn-primary" id="schedule_check">Cek Jadwal Teregistrasi Student</a>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                    Transaksi
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="radio">
+                        <label><input type="radio" name="transaction_type" value="normal" checked>Normal</label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" name="transaction_type" value="prorate">Prorate</label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" name="transaction_type" value="cuti">Cuti</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="control-label col-md-3 col-sm-3 col-xs-12"></div>
+                <div class="col-md-2 col-sm-2 col-xs-12">
+                    <a href="{{ route('admin.registration.course.info', ['type' => $type]) }}" target="_blank" class="btn btn-primary">Cek Info Kelas Dance</a>
                 </div>
             </div>
 

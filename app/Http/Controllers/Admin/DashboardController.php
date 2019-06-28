@@ -8,6 +8,7 @@ use App\Models\ApprovalRule;
 use App\Models\Auth\Role\Role;
 use App\Models\Auth\User\User;
 use App\Models\Course;
+use App\Models\CourseDetail;
 use App\Models\Customer;
 use App\Models\ItemStockNotification;
 use App\Models\Leaf;
@@ -135,11 +136,22 @@ class DashboardController extends Controller
 
                         $leave->status_id = 2;
                         $leave->save();
+
+                        // Decrease student count
+                        $splitted = explode('-', $schedule->day);
+                        $dayString = trim($splitted[0]);
+                        $timeString = trim($splitted[1]);
+
+                        $courseDetail = CourseDetail::where('course_id', $schedule->course_id)
+                            ->where('day_name', $dayString)
+                            ->where('time', $timeString)
+                            ->first();
+                        $courseDetail->current_capacity -= 1;
+                        $courseDetail->save();
                     }
                 }
             }
         }
-
 
         $data = [
             'counts'                    => $counts,

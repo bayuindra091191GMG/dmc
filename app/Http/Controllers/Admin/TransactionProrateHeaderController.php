@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
+use App\Models\CourseDetail;
 use App\Models\Customer;
 use App\Models\NumberingSystem;
 use App\Models\Schedule;
@@ -217,6 +218,18 @@ class TransactionProrateHeaderController extends Controller
 
                 // Activate schedule
                 $scheduleObj->status_id = 3;
+
+                // Increase student count
+                $splitted = explode('-', $scheduleObj->day);
+                $dayString = trim($splitted[0]);
+                $timeString = trim($splitted[1]);
+
+                $courseDetail = CourseDetail::where('course_id', $scheduleObj->course_id)
+                    ->where('day_name', $dayString)
+                    ->where('time', $timeString)
+                    ->first();
+                $courseDetail->current_capacity += 1;
+                $courseDetail->save();
             }
             $idx++;
         }

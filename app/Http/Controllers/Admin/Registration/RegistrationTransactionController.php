@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin\Registration;
 
 use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
+use App\Models\CourseDetail;
 use App\Models\Customer;
 use App\Models\NumberingSystem;
 use App\Models\Schedule;
@@ -204,6 +205,18 @@ class RegistrationTransactionController extends Controller
                 // Activate schedule
                 $schedule->status_id = 3;
                 $schedule->save();
+
+                // Increase student count
+                $splitted = explode('-', $schedule->day);
+                $dayString = trim($splitted[0]);
+                $timeString = trim($splitted[1]);
+
+                $courseDetail = CourseDetail::where('course_id', $schedule->course_id)
+                    ->where('day_name', $dayString)
+                    ->where('time', $timeString)
+                    ->first();
+                $courseDetail->current_capacity += 1;
+                $courseDetail->save();
             }
             $idx++;
         }

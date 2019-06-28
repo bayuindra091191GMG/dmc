@@ -383,4 +383,40 @@ class LoginController extends Controller
         }
 
     }
+
+    public function countStudent(){
+        try{
+            $courseDetails = CourseDetail::all();
+
+            $schedules = Schedule::whereIn('status_id', [1,3,7])
+                ->whereHas('course', function ($query){
+                    $query->where('type', '!=', 1)
+                        ->where('status_id', 1);
+                })
+                ->get();
+
+            foreach ($courseDetails as $detail){
+                $totalStudent = 0;
+                foreach ($schedules as $schedule){
+                    $splitted = explode('-', $schedule->day);
+                    $dayString = trim($splitted[0]);
+                    $timeString = trim($splitted[1]);
+
+                    if($detail->course_id === $schedule->course_id &&
+                        $detail->day_name === $dayString &&
+                        $detail->time === $timeString){
+                        $totalStudent++;
+                    }
+                }
+
+                $detail->current_capacity = $totalStudent;
+                $detail->save();
+            }
+
+            return 'SUCCESS';
+        }
+        catch (\Exception $ex){
+            return $ex;
+        }
+    }
 }

@@ -51,16 +51,6 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="customer" >
-                    Customer
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select type="text" id="customer" name="customer" class="form-control col-md-7 col-xs-12"></select>
-                    <input type="hidden" id="customer_id" name="customer_id" class="form-control col-md-7 col-xs-12" value="{{ $customer->id ?? '-1' }}">
-                </div>
-            </div>
-
-            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
                     Tanggal
                     <span class="required">*</span>
@@ -68,6 +58,20 @@
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
                            name="date" value="{{ old('date') }}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="customer" >
+                    Student
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select type="text" id="customer" name="customer" class="form-control col-md-7 col-xs-12">
+                        @if(!empty($customer))
+                            <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                        @endif
+                    </select>
+                    <input type="hidden" id="customer_id" name="customer_id" class="form-control col-md-7 col-xs-12" value="{{ $customer->id ?? '-1' }}">
                 </div>
             </div>
 
@@ -334,8 +338,8 @@
 
         $('#customer').select2({
             placeholder: {
-                id: '{{ $customer->id ?? '-1' }}',
-                text: '{{ $customer->name ?? ' - Pilih Customer - ' }}'
+                id: '-1',
+                text: ' - Pilih Customer - '
             },
             width: '100%',
             minimumInputLength: 1,
