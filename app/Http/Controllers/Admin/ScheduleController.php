@@ -274,7 +274,7 @@ class ScheduleController extends Controller
         }
         else{
             $schedule->updated_at = $dateTimeNow->toDateTimeString();
-           // $schedule->finish_date = $date->toDateTimeString();
+            $schedule->finish_date = $date->toDateTimeString();
             $schedule->save();
         }
 
