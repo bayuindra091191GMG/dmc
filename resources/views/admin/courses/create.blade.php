@@ -47,10 +47,10 @@
                 </label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
                     <select id="type" name="type" class="form-control col-md-7 col-xs-12">
-                        <option value="1" @if(old('type') == 1) selected @endif>Muaythai</option>
-                        <option value="2" @if(old('type') == 2) selected @endif>Dance</option>
-                        <option value="4" @if(old('type') == 4) selected @endif>Gymnastic</option>
-                        <option value="3" @if(old('type') == 3) selected @endif>Private</option>
+                        <option value="1" @if($type == 1) selected @endif>Muaythai</option>
+                        <option value="2" @if($type == 2) selected @endif>Dance</option>
+                        <option value="4" @if($type == 4) selected @endif>Gymnastic</option>
+                        <option value="3" @if($type == 3) selected @endif>Private</option>
                     </select>
                 </div>
                 <div class="col-md-3 col-sm-3 col-xs-12">
@@ -203,7 +203,7 @@
 
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a class="btn btn-danger" href="{{ route('admin.courses') }}"> Batal</a>
+                    <a class="btn btn-danger" href="{{ route($backRoute) }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>
                 </div>
             </div>

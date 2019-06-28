@@ -6,6 +6,7 @@ use App\Models\Attendance;
 use App\Models\Auth\User\User;
 use App\Models\Coach;
 use App\Models\Course;
+use App\Models\CourseDetail;
 use App\Models\Customer;
 use App\Models\Day;
 use App\Models\Hour;
@@ -33,22 +34,50 @@ class CourseController extends Controller
     public function indexMuaythai()
     {
         $selectedCourse = "muaythai";
-        return view('admin.courses.index', compact('selectedCourse'));
+        $type = 1;
+
+        $data = [
+            'selectedCourse'    => $selectedCourse,
+            'type'              => $type
+        ];
+
+        return view('admin.courses.index')->with($data);
     }
     public function indexDance()
     {
         $selectedCourse = "dance";
-        return view('admin.courses.index', compact('selectedCourse'));
+        $type = 2;
+
+        $data = [
+            'selectedCourse'    => $selectedCourse,
+            'type'              => $type
+        ];
+
+        return view('admin.courses.index')->with($data);
     }
     public function indexGymnastic()
     {
         $selectedCourse = "gymnastic";
-        return view('admin.courses.index', compact('selectedCourse'));
+        $type = 4;
+
+        $data = [
+            'selectedCourse'    => $selectedCourse,
+            'type'              => $type
+        ];
+
+        return view('admin.courses.index')->with($data);
     }
     public function indexPrivate()
     {
         $selectedCourse = "private";
-        return view('admin.courses.index', compact('selectedCourse'));
+        $type = 3;
+
+        $data = [
+            'selectedCourse'    => $selectedCourse,
+            'type'              => $type
+        ];
+
+        return view('admin.courses.index')->with($data);
     }
 
     public function index()
@@ -92,12 +121,34 @@ class CourseController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         $coaches = Coach::where('id', '!=', 0)->get();
-        return view('admin.courses.create', compact('coaches'));
+
+        $type = intval($request->type);
+        if($type === 1){
+            $backRoute = 'admin.muaythai.courses';
+        }
+        else if($type === 2){
+            $backRoute = 'admin.dance.courses';
+        }
+        else if($type === 3){
+            $backRoute = 'admin.private.courses';
+        }
+        else{
+            $backRoute = 'admin.gymnastic.courses';
+        }
+
+        $data = [
+            'type'      => $type,
+            'coaches'   => $coaches,
+            'backRoute' => $backRoute
+        ];
+
+        return view('admin.courses.create')->with($data);
     }
 
     /**
@@ -155,25 +206,25 @@ class CourseController extends Controller
         $validAmount = 0;
 
         //Package
-        if($request->get('type') == 1){
-            $meetingAmounts = $request->get('meeting_amount');
+        if($request->input('type') == 1){
+            $meetingAmounts = $request->input('meeting_amount');
             $trainer = 0;
-            $validAmount = $request->get('valid');
+            $validAmount = $request->input('valid');
             $hour = "NONE";
         }
-        else if($request->get('type') == 3){
+        else if($request->input('type') == 3){
             $meetingAmounts = 0;
-            $trainer = $request->get('coach_id');
+            $trainer = $request->input('coach_id');
         }
         else{
-            $trainer = $request->get('coach_id');
+            $trainer = $request->input('coach_id');
         }
 
         $price = str_replace('.','', $request->get('price'));
 
         $newCourse = Course::create([
-            'name'              => $request->get('name'),
-            'type'              => $request->get('type'),
+            'name'              => $request->input('name'),
+            'type'              => $request->input('type'),
             'price'             => $price,
             'coach_id'          => $trainer,
             'meeting_amount'    => $meetingAmounts,
@@ -184,12 +235,36 @@ class CourseController extends Controller
         //Save Day and Hour if type == 2 or 3
         if(($request->input('type') == 2 || $request->input('type') == 4 || $request->input('type') == 3)
             && !empty($days)){
-            $days = $request->get('chk');
+            $days = $request->input('chk');
             foreach($days as $day){
                 $newDay = Day::create([
                     'course_id'     => $newCourse->id,
                     'day_string'    => $day
                 ]);
+
+                $dayString = $day;
+
+                if($dayString === 'Senin'){
+                    $dayNumber = 1;
+                }
+                else if($dayString === 'Selasa'){
+                    $dayNumber = 2;
+                }
+                else if($dayString === 'Rabu'){
+                    $dayNumber = 3;
+                }
+                else if($dayString === 'Kamis'){
+                    $dayNumber = 4;
+                }
+                else if($dayString === 'Jumat'){
+                    $dayNumber = 5;
+                }
+                else if($dayString === 'Sabtu'){
+                    $dayNumber = 6;
+                }
+                else{
+                    $dayNumber = 7;
+                }
 
                 //Save Hour
                 switch ($day){
@@ -198,10 +273,33 @@ class CourseController extends Controller
                             'day_id'        => $newDay->id,
                             'hour_string'   => $request->input('hourMonday1')
                         ]);
+
+                        $hourString = $request->input('hourMonday1');
+                        CourseDetail::create([
+                            'course_id'         => $newCourse->id,
+                            'day_number'        => $dayNumber,
+                            'day_name'          => $dayString,
+                            'time'              => $hourString,
+                            'max_capacitiy'     => 0,
+                            'current_capacity'  => 0,
+                            'status_id'         => 1
+                        ]);
+
                         if($request->input('hourMonday2') != null){
                             Hour::create([
                                 'day_id'        => $newDay->id,
                                 'hour_string'   => $request->input('hourMonday2')
+                            ]);
+
+                            $hourString = $request->input('hourMonday2');
+                            CourseDetail::create([
+                                'course_id'         => $newCourse->id,
+                                'day_number'        => $dayNumber,
+                                'day_name'          => $dayString,
+                                'time'              => $hourString,
+                                'max_capacitiy'     => 0,
+                                'current_capacity'  => 0,
+                                'status_id'         => 1
                             ]);
                         }
                         break;
@@ -210,10 +308,33 @@ class CourseController extends Controller
                             'day_id'        => $newDay->id,
                             'hour_string'   => $request->input('hourTuesday1')
                         ]);
+
+                        $hourString = $request->input('hourTuesday1');
+                        CourseDetail::create([
+                            'course_id'         => $newCourse->id,
+                            'day_number'        => $dayNumber,
+                            'day_name'          => $dayString,
+                            'time'              => $hourString,
+                            'max_capacitiy'     => 0,
+                            'current_capacity'  => 0,
+                            'status_id'         => 1
+                        ]);
+
                         if($request->input('hourTuesday2') != null){
                             Hour::create([
                                 'day_id'        => $newDay->id,
                                 'hour_string'   => $request->input('hourTuesday2')
+                            ]);
+
+                            $hourString = $request->input('hourTuesday2');
+                            CourseDetail::create([
+                                'course_id'         => $newCourse->id,
+                                'day_number'        => $dayNumber,
+                                'day_name'          => $dayString,
+                                'time'              => $hourString,
+                                'max_capacitiy'     => 0,
+                                'current_capacity'  => 0,
+                                'status_id'         => 1
                             ]);
                         }
                         break;
@@ -222,10 +343,33 @@ class CourseController extends Controller
                             'day_id'        => $newDay->id,
                             'hour_string'   => $request->input('hourWednesday1')
                         ]);
+
+                        $hourString = $request->input('hourWednesday1');
+                        CourseDetail::create([
+                            'course_id'         => $newCourse->id,
+                            'day_number'        => $dayNumber,
+                            'day_name'          => $dayString,
+                            'time'              => $hourString,
+                            'max_capacitiy'     => 0,
+                            'current_capacity'  => 0,
+                            'status_id'         => 1
+                        ]);
+
                         if($request->input('hourWednesday2') != null){
                             Hour::create([
                                 'day_id'        => $newDay->id,
                                 'hour_string'   => $request->input('hourWednesday2')
+                            ]);
+
+                            $hourString = $request->input('hourWednesday2');
+                            CourseDetail::create([
+                                'course_id'         => $newCourse->id,
+                                'day_number'        => $dayNumber,
+                                'day_name'          => $dayString,
+                                'time'              => $hourString,
+                                'max_capacitiy'     => 0,
+                                'current_capacity'  => 0,
+                                'status_id'         => 1
                             ]);
                         }
                         break;
@@ -234,10 +378,33 @@ class CourseController extends Controller
                             'day_id'        => $newDay->id,
                             'hour_string'   => $request->input('hourThursday1')
                         ]);
+
+                        $hourString = $request->input('hourThursday1');
+                        CourseDetail::create([
+                            'course_id'         => $newCourse->id,
+                            'day_number'        => $dayNumber,
+                            'day_name'          => $dayString,
+                            'time'              => $hourString,
+                            'max_capacitiy'     => 0,
+                            'current_capacity'  => 0,
+                            'status_id'         => 1
+                        ]);
+
                         if($request->input('hourThursday2') != null){
                             Hour::create([
                                 'day_id'        => $newDay->id,
                                 'hour_string'   => $request->input('hourThursday2')
+                            ]);
+
+                            $hourString = $request->input('hourThursday2');
+                            CourseDetail::create([
+                                'course_id'         => $newCourse->id,
+                                'day_number'        => $dayNumber,
+                                'day_name'          => $dayString,
+                                'time'              => $hourString,
+                                'max_capacitiy'     => 0,
+                                'current_capacity'  => 0,
+                                'status_id'         => 1
                             ]);
                         }
                         break;
@@ -246,10 +413,33 @@ class CourseController extends Controller
                             'day_id'        => $newDay->id,
                             'hour_string'   => $request->input('hourFriday1')
                         ]);
+
+                        $hourString = $request->input('hourFriday1');
+                        CourseDetail::create([
+                            'course_id'         => $newCourse->id,
+                            'day_number'        => $dayNumber,
+                            'day_name'          => $dayString,
+                            'time'              => $hourString,
+                            'max_capacitiy'     => 0,
+                            'current_capacity'  => 0,
+                            'status_id'         => 1
+                        ]);
+
                         if($request->input('hourFriday2') != null){
                             Hour::create([
                                 'day_id'        => $newDay->id,
                                 'hour_string'   => $request->input('hourFriday2')
+                            ]);
+
+                            $hourString = $request->input('hourFriday2');
+                            CourseDetail::create([
+                                'course_id'         => $newCourse->id,
+                                'day_number'        => $dayNumber,
+                                'day_name'          => $dayString,
+                                'time'              => $hourString,
+                                'max_capacitiy'     => 0,
+                                'current_capacity'  => 0,
+                                'status_id'         => 1
                             ]);
                         }
                         break;
@@ -258,10 +448,33 @@ class CourseController extends Controller
                             'day_id'        => $newDay->id,
                             'hour_string'   => $request->input('hourSaturday1')
                         ]);
+
+                        $hourString = $request->input('hourSaturday1');
+                        CourseDetail::create([
+                            'course_id'         => $newCourse->id,
+                            'day_number'        => $dayNumber,
+                            'day_name'          => $dayString,
+                            'time'              => $hourString,
+                            'max_capacitiy'     => 0,
+                            'current_capacity'  => 0,
+                            'status_id'         => 1
+                        ]);
+
                         if($request->input('hourSaturday2') != null){
                             Hour::create([
                                 'day_id'        => $newDay->id,
                                 'hour_string'   => $request->input('hourSaturday2')
+                            ]);
+
+                            $hourString = $request->input('hourSaturday2');
+                            CourseDetail::create([
+                                'course_id'         => $newCourse->id,
+                                'day_number'        => $dayNumber,
+                                'day_name'          => $dayString,
+                                'time'              => $hourString,
+                                'max_capacitiy'     => 0,
+                                'current_capacity'  => 0,
+                                'status_id'         => 1
                             ]);
                         }
                         break;
@@ -270,10 +483,33 @@ class CourseController extends Controller
                             'day_id'        => $newDay->id,
                             'hour_string'   => $request->input('hourSunday1')
                         ]);
+
+                        $hourString = $request->input('hourSunday1');
+                        CourseDetail::create([
+                            'course_id'         => $newCourse->id,
+                            'day_number'        => $dayNumber,
+                            'day_name'          => $dayString,
+                            'time'              => $hourString,
+                            'max_capacitiy'     => 0,
+                            'current_capacity'  => 0,
+                            'status_id'         => 1
+                        ]);
+
                         if($request->input('hourSunday2') != null){
                             Hour::create([
                                 'day_id'        => $newDay->id,
                                 'hour_string'   => $request->input('hourSunday2')
+                            ]);
+
+                            $hourString = $request->input('hourSunday2');
+                            CourseDetail::create([
+                                'course_id'         => $newCourse->id,
+                                'day_number'        => $dayNumber,
+                                'day_name'          => $dayString,
+                                'time'              => $hourString,
+                                'max_capacitiy'     => 0,
+                                'current_capacity'  => 0,
+                                'status_id'         => 1
                             ]);
                         }
                         break;
@@ -283,7 +519,19 @@ class CourseController extends Controller
 
         Session::flash('message', 'Berhasil membuat data Kelas baru!');
 
-        return redirect()->route('admin.courses');
+        $type = $request->input('type');
+        if($type == 1){
+            return redirect()->route('admin.muaythai.courses');
+        }
+        else if($type == 2){
+            return redirect()->route('admin.dance.courses');
+        }
+        else if($type == 3){
+            return redirect()->route('admin.private.courses');
+        }
+        else{
+            return redirect()->route('admin.gymnastic.courses');
+        }
     }
 
     /**

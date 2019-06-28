@@ -461,7 +461,13 @@ class ScheduleController extends Controller
         $formatted_tags = [];
 
         foreach ($schedules as $schedule) {
-            $formatted_tags[] = ['id' => $schedule->id. '#'. $schedule->course->name. '#'. $schedule->course->coach->name. '#'. $schedule->day. '#'. $schedule->course->price, 'text' => $schedule->course->name];
+            $trainer = 'Tidak Ada Data Trainer';
+            if($schedule->course->coach_id !== 0){
+                $trainer = $schedule->course->coach->name;
+            }
+
+            $text = $schedule->course->name. ' - '. $trainer. ' - '. $schedule->day;
+            $formatted_tags[] = ['id' => $schedule->id. '#'. $schedule->course->name. '#'. $trainer. '#'. $schedule->day. '#'. $schedule->course->price, 'text' => $text];
         }
 
         return Response::json($formatted_tags);
@@ -513,7 +519,13 @@ class ScheduleController extends Controller
         $formatted_tags = [];
 
         foreach ($schedules as $schedule) {
-            $formatted_tags[] = ['id' => $schedule->id. '#'. $schedule->course->name. '#'. $schedule->course->coach->name. '#'. $schedule->day. '#'. $schedule->course->price. '#'. $schedule->course->meeting_amount, 'text' => $schedule->course->name];
+            $trainer = 'Tidak Ada Data Trainer';
+            if($schedule->course->coach_id !== 0){
+                $trainer = $schedule->course->coach->name;
+            }
+
+            $text = $schedule->course->name. ' - '. $trainer. ' - '. $schedule->day;
+            $formatted_tags[] = ['id' => $schedule->id. '#'. $schedule->course->name. '#'. $trainer. '#'. $schedule->day. '#'. $schedule->course->price. '#'. $schedule->course->meeting_amount, 'text' => $text];
         }
 
         return Response::json($formatted_tags);
@@ -538,7 +550,13 @@ class ScheduleController extends Controller
         $formatted_tags = [];
 
         foreach ($schedules as $schedule) {
-            $formatted_tags[] = ['id' => $schedule->id. '#'. $schedule->course->name. '#'. $schedule->course->coach->name. '#'. $schedule->day. '#'. $schedule->course->price, 'text' => $schedule->course->name];
+            $trainer = 'Tidak Ada Data Trainer';
+            if($schedule->course->coach_id !== 0){
+                $trainer = $schedule->course->coach->name;
+            }
+
+            $text = $schedule->course->name. ' - '. $trainer. ' - '. $schedule->day;
+            $formatted_tags[] = ['id' => $schedule->id. '#'. $schedule->course->name. '#'. $trainer. '#'. $schedule->day. '#'. $schedule->course->price, 'text' => $text];
         }
 
         return Response::json($formatted_tags);

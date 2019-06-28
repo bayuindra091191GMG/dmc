@@ -95,8 +95,10 @@ class SettingController extends Controller
 
         //Add days to all the Package
         $packages = Schedule::whereHas('course', function($query){
-            $query->where('type', 1)->where('status_id', 3);
-        })->get();
+                $query->where('type', 1);
+            })
+            ->where('status_id', 3)
+            ->get();
 
         foreach ($packages as $package){
             $temp = Carbon::parse($package->finish_date);

@@ -35,8 +35,8 @@
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select id="class_type" name="class_type" class="form-control col-md-7 col-xs-12">
                         <option value="0">Semua</option>
-                        <option value="1">Package (Muaythai)</option>
-                        <option value="2">Kelas</option>
+                        <option value="1">Muaythai</option>
+                        <option value="2">Dance</option>
                         <option value="3">Private</option>
                         <option value="4">Gymnastic</option>
                     </select>

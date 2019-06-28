@@ -7,7 +7,7 @@
     <div class="row">
         @include('partials._success')
         <div class="nav navbar-right">
-            <a href="{{ route('admin.courses.create') }}" class="btn btn-app">
+            <a href="{{ route('admin.courses.create', ['type' => $type]) }}" class="btn btn-app">
                 <i class="fa fa-plus"></i> Tambah
             </a>
         </div>
