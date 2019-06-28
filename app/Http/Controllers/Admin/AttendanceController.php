@@ -32,6 +32,12 @@ class AttendanceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function indexMuaythai()
+    {
+        $selectedCourse = "muaythai";
+//        dd($selectedCourse);
+        return view('admin.attendances.index', compact('selectedCourse'));
+    }
     public function index()
     {
         return view('admin.attendances.index');
@@ -43,9 +49,18 @@ class AttendanceController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function anyData()
+    public function anyData(Request $request)
     {
-        $attendances = Attendance::dateDescending()->get();
+        $selectedCourseString = $request->input('course');
+        $selectedCourse = 1;
+        if($selectedCourseString == 'muaythai'){
+            $selectedCourse = 1;
+        }
+        error_log($selectedCourse);
+        $courseIds = Course::select('id')->where('type', $selectedCourse)->get();
+        $scheduleIds = Schedule::select('id')->whereIn('course_id', $courseIds)->get();
+        $attendances = Attendance::whereIn('schedule_id', $scheduleIds)->dateDescending()->get();
+
         return DataTables::of($attendances)
             ->setTransformer(new AttendanceTransformer())
             ->addIndexColumn()

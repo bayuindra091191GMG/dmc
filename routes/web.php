@@ -115,6 +115,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     //Attendances
     Route::get('attendances', 'AttendanceController@index')->name('attendances');
+    Route::get('attendances/muaythai', 'AttendanceController@indexMuaythai')->name('muaythai.attendances');
+
     Route::get('attendances/create', 'AttendanceController@create')->name('attendances.create');
     Route::post('attendances/store', 'AttendanceController@store')->name('attendances.store');
     Route::get('attendances/{schedule}/edit/', 'AttendanceController@edit')->name('attendances.edit');

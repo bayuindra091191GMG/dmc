@@ -50,7 +50,12 @@
             $('#transaction-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('datatables.attendances') !!}',
+                ajax: {
+                    url: '{!! route('datatables.attendances') !!}',
+                    data: {
+                        'course': '{{$selectedCourse}}'
+                    }
+                },
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
                     { data: 'name', name: 'name', class: 'text-center'},

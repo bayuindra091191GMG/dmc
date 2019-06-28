@@ -77,5 +77,5 @@
             $('#deleted-id').val($(this).data('id'));
         });
     </script>
-    @include('partials._deleteJs', ['routeUrl' => 'admin.courses.destroy', 'redirectUrl' => 'admin.courses'])
+    @include('partials._deletejs', ['routeUrl' => 'admin.courses.destroy', 'redirectUrl' => 'admin.courses'])
 @endsection
