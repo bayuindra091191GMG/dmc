@@ -38,6 +38,7 @@ class AttendanceController extends Controller
 //        dd($selectedCourse);
         return view('admin.attendances.index', compact('selectedCourse'));
     }
+
     public function index()
     {
         return view('admin.attendances.index');
@@ -56,10 +57,19 @@ class AttendanceController extends Controller
         if($selectedCourseString == 'muaythai'){
             $selectedCourse = 1;
         }
-        error_log($selectedCourse);
-        $courseIds = Course::select('id')->where('type', $selectedCourse)->get();
-        $scheduleIds = Schedule::select('id')->whereIn('course_id', $courseIds)->get();
-        $attendances = Attendance::whereIn('schedule_id', $scheduleIds)->dateDescending()->get();
+//        error_log($selectedCourse);
+//        $courseIds = Course::select('id')->where('type', $selectedCourse)->get();
+//        $scheduleIds = Schedule::select('id')->whereIn('course_id', $courseIds)->get();
+//        $attendances = Attendance::whereIn('schedule_id', $scheduleIds)->dateDescending()->get();
+
+        $type = $selectedCourse;
+        $attendances = Attendance::whereHas('schedule', function($query1) use ($type){
+                $query1->whereHas('course', function($query2) use ($type){
+                    $query2->where('type', $type);
+                });
+            })
+            ->orderBy('date', 'desc')
+            ->get();
 
         return DataTables::of($attendances)
             ->setTransformer(new AttendanceTransformer())

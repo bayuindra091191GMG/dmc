@@ -13,8 +13,10 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             @include('partials._success')
             @include('partials._error')
-            {{ Form::open(['route'=>['admin.courses.update', $course->id],'method' => 'put','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.courses.update'],'method' => 'put','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
             {{ csrf_field() }}
+
+            <input type="hidden" name="edited_id" value="{{ $course->id }}"/>
 
             @if(count($errors))
                 <div class="form-group">
@@ -55,14 +57,14 @@
                         <option value="3" @if($course->type == 3) selected @endif>Private</option>
                     </select>
                 </div>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" class="flat" id="is_baby" name="is_baby"
-                                   @if($course->type == 2 && $course->meeting_amount == 8) checked @endif> Kelas Bayi
-                        </label>
-                    </div>
-                </div>
+{{--                <div class="col-md-3 col-sm-3 col-xs-12">--}}
+{{--                    <div class="checkbox">--}}
+{{--                        <label>--}}
+{{--                            <input type="checkbox" class="flat" id="is_baby" name="is_baby"--}}
+{{--                                   @if($course->type == 2 && $course->meeting_amount == 8) checked @endif> Kelas Bayi--}}
+{{--                        </label>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
             </div>
 
             <div class="form-group">

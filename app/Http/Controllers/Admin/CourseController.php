@@ -33,11 +33,11 @@ class CourseController extends Controller
      */
     public function indexMuaythai()
     {
-        $selectedCourse = "muaythai";
+        $courseType = "muaythai";
         $type = 1;
 
         $data = [
-            'selectedCourse'    => $selectedCourse,
+            'courseType'        => $courseType,
             'type'              => $type
         ];
 
@@ -45,11 +45,11 @@ class CourseController extends Controller
     }
     public function indexDance()
     {
-        $selectedCourse = "dance";
+        $courseType = "dance";
         $type = 2;
 
         $data = [
-            'selectedCourse'    => $selectedCourse,
+            'courseType'        => $courseType,
             'type'              => $type
         ];
 
@@ -57,11 +57,11 @@ class CourseController extends Controller
     }
     public function indexGymnastic()
     {
-        $selectedCourse = "gymnastic";
+        $courseType = "gymnastic";
         $type = 4;
 
         $data = [
-            'selectedCourse'    => $selectedCourse,
+            'courseType'        => $courseType,
             'type'              => $type
         ];
 
@@ -69,11 +69,11 @@ class CourseController extends Controller
     }
     public function indexPrivate()
     {
-        $selectedCourse = "private";
+        $courseType = "private";
         $type = 3;
 
         $data = [
-            'selectedCourse'    => $selectedCourse,
+            'courseType'        => $courseType,
             'type'              => $type
         ];
 
@@ -91,29 +91,20 @@ class CourseController extends Controller
     /**
      * Process datatables ajax request.
      *
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function anyData(Request $request)
+    public function getIndex(Request $request)
     {
-        $selectedCourseString = $request->input('course');
-        $selectedCourse = 1;
-        if($selectedCourseString == 'muaythai'){
-            $selectedCourse = 1;
-        }
-        if($selectedCourseString == 'dance'){
-            $selectedCourse = 2;
-        }
-        if($selectedCourseString == 'gymnastic'){
-            $selectedCourse = 4;
-        }
-        if($selectedCourseString == 'private'){
-            $selectedCourse = 3;
-        }
-        error_log($selectedCourse);
-        $courses = Course::where('type', $selectedCourse)->get();
+        $type = $request->input('type');
+
+        $courses = Course::where('type', $type)
+            ->orderBy('name')
+            ->get();
+
         return DataTables::of($courses)
-            ->setTransformer(new CourseTransformer(1))
+            ->setTransformer(new CourseTransformer)
             ->addIndexColumn()
             ->make(true);
     }
@@ -565,7 +556,7 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        $coaches = Coach::all();
+        $coaches = Coach::orderBy('name')->get();
         if($course->type == 2){
             $days = preg_split('@;@', $course->day, NULL, PREG_SPLIT_NO_EMPTY);
             $hours = preg_split('@;@', $course->hour, NULL, PREG_SPLIT_NO_EMPTY);
@@ -581,7 +572,7 @@ class CourseController extends Controller
      * @param Course $course
      * @return mixed
      */
-    public function update(Request $request, Course $course)
+    public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name'              => 'required|max:50',
@@ -603,6 +594,7 @@ class CourseController extends Controller
         }
         $price = str_replace('.','', $request->get('price'));
 
+        $course = Course::find($request->input('edited_id'));
         $course->name = $request->get('name');
         $course->type = $request->get('type');
         $course->price = $price;
@@ -929,10 +921,31 @@ class CourseController extends Controller
     }
 
     public function thisDayCourses(){
-        return view('admin.courses.thisday');
+        $type = 0;
+        return view('admin.courses.thisday', compact('type'));
     }
 
-    public function getThisDayCourses(){
+    public function thisDayMuaythaiCourses(){
+        $type = 1;
+        return view('admin.courses.thisday', compact('type'));
+    }
+
+    public function thisDayDanceCourses(){
+        $type = 2;
+        return view('admin.courses.thisday', compact('type'));
+    }
+
+    public function thisDayPrivateCourses(){
+        $type = 3;
+        return view('admin.courses.thisday', compact('type'));
+    }
+
+    public function thisDayGymnasticCourses(){
+        $type = 4;
+        return view('admin.courses.thisday', compact('type'));
+    }
+
+    public function getThisDayCourses(Request $request){
         $hari = array ( 1 =>    'Senin',
             'Selasa',
             'Rabu',
@@ -941,9 +954,20 @@ class CourseController extends Controller
             'Sabtu',
             'Minggu'
         );
+
         $today = Carbon::now('Asia/Jakarta')->format('N');
         $dayDB = Day::select('course_id')->where('day_string', $hari[$today])->get();
-        $courses = Course::whereIn('id', $dayDB)->get();
+
+        $type = intval($request->input('type'));
+
+        if($type !== 0){
+            $courses = Course::whereIn('id', $dayDB)
+                ->where('type', $type)
+                ->get();
+        }
+        else{
+            $courses = Course::whereIn('id', $dayDB)->get();
+        }
 
 //        $now = Carbon::now('Asia/Jakarta');
 //        $day = Carbon::now('Asia/Jakarta')->format('N');

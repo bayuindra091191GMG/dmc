@@ -52,6 +52,15 @@
                 </div>
             </div>
 
+            @if($type === 2 || $type === 4)
+                <div class="form-group">
+                    <div class="control-label col-md-3 col-sm-3 col-xs-12"></div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                        <a href="{{ route('admin.registration.course.info', ['type' => $type]) }}" target="_blank" class="btn btn-primary">Cek Info Kelas Dance</a>
+                    </div>
+                </div>
+            @endif
+
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="auto_number"></label>
                 <div class="col-md-6 col-sm-6 col-xs-12">

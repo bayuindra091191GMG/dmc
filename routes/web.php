@@ -92,12 +92,16 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 //    Route::get('courses/{courseName}', 'CourseController@index')->name('courses');
 
     Route::get('courses/this-day', 'CourseController@thisDayCourses')->name('courses.this_day');
+    Route::get('courses/dance/this-day', 'CourseController@thisDayDanceCourses')->name('courses.dance.this_day');
+    Route::get('courses/muaythai/this-day', 'CourseController@thisDayMuaythaiCourses')->name('courses.muaythai.this_day');
+    Route::get('courses/private/this-day', 'CourseController@thisDayPrivateCourses')->name('courses.private.this_day');
+    Route::get('courses/gymnastic/this-day', 'CourseController@thisDayGymnasticCourses')->name('courses.gymnastic.this_day');
     Route::get('courses/show/{course}', 'CourseController@show')->name('courses.show');
     Route::get('courses/show-this-day/{course}', 'CourseController@showThisDay')->name('courses.show_this_day');
     Route::get('courses/create', 'CourseController@create')->name('courses.create');
     Route::post('courses/store', 'CourseController@store')->name('courses.store');
-    Route::get('courses/{course}/edit/', 'CourseController@edit')->name('courses.edit');
-    Route::put('courses/edit/{course}', 'CourseController@update')->name('courses.update');
+    Route::get('courses/edit/{course}', 'CourseController@edit')->name('courses.edit');
+    Route::put('courses/edit/update', 'CourseController@update')->name('courses.update');
     Route::post('courses/delete', 'CourseController@destroy')->name('courses.destroy');
 
     //Schedules
@@ -178,6 +182,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     //Cuti
     Route::get('cuti', 'CutiController@index')->name('cuti');
+    Route::get('cuti/muaythai', 'CutiController@indexMuaythai')->name('cuti.muaythai');
+    Route::get('cuti/dance', 'CutiController@indexDance')->name('cuti.dance');
+    Route::get('cuti/private', 'CutiController@indexPrivate')->name('cuti.private');
+    Route::get('cuti/gymnastic', 'CutiController@indexGymnastic')->name('cuti.gymnastic');
 
     // Registration Steps
     Route::get('registration/muaythai/student', 'Registration\RegistrationStudentController@formStepOneMuaythai')->name('registration.muaythai.step-one');
@@ -615,7 +623,7 @@ Route::get('/select-item_receipts', 'Admin\Inventory\ItemReceiptController@getIt
 //DMC Start
 Route::get('/datatables-customers', 'Admin\CustomerController@anyData')->name('datatables.customers');
 Route::get('/datatables-coaches', 'Admin\CoachController@anyData')->name('datatables.coaches');
-Route::get('/datatables-courses', 'Admin\CourseController@anyData')->name('datatables.courses');
+Route::get('/datatables-courses', 'Admin\CourseController@getIndex')->name('datatables.courses');
 Route::get('/datatables-courses-this-day', 'Admin\CourseController@getThisDayCourses')->name('datatables.courses.this_day');
 Route::get('/datatables-users', 'Admin\UserController@getIndex')->name('datatables.users');
 Route::get('/datatables-schedules', 'Admin\ScheduleController@anyData')->name('datatables.schedules');

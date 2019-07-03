@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Data Kelas')
+@section('title', 'Data Kelas Tipe '. $courseType)
 
 @section('content')
 
@@ -54,7 +54,7 @@
                 ajax: {
                     url: '{!! route('datatables.courses') !!}',
                     data: {
-                        'course': '{{$selectedCourse}}'
+                        'type': '{{ $type }}'
                     }
                 },
                 columns: [
@@ -83,6 +83,6 @@
             $('#deleted-id').val($(this).data('id'));
         });
     </script>
-    @php($url='admin.'.$selectedCourse.'.courses')
-    @include('partials._deleteJs', ['routeUrl' => 'admin.courses.destroy', 'redirectUrl' => $url])
+{{--    @php($url='admin.'.$selectedCourse.'.courses')--}}
+{{--    @include('partials._deleteJs', ['routeUrl' => 'admin.courses.destroy', 'redirectUrl' => $url])--}}
 @endsection

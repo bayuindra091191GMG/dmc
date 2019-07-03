@@ -1,6 +1,18 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Daftar Cuti')
+@if($type === 1)
+    @php( $courseType = 'Muaythai')
+@elseif($type === 2)
+    @php( $courseType = 'Dance')
+@elseif($type === 3)
+    @php( $courseType = 'Private')
+@elseif($type === 4)
+    @php( $courseType = 'Gymnastic')
+@else
+    @php( $courseType = '')
+@endif
+
+@section('title', 'Daftar Cuti '. $courseType)
 
 @section('content')
 
@@ -51,7 +63,12 @@
                 processing: true,
                 serverSide: true,
                 pageLength: 50,
-                ajax: '{!! route('datatables.cuti') !!}',
+                ajax: {
+                    url: '{!! route('datatables.cuti') !!}',
+                    data: {
+                        'type': '{{ $type }}'
+                    }
+                },
                 order: [ [0, 'desc'] ],
                 columns: [
                     { data: 'start_date', name: 'start_date', class: 'text-center',

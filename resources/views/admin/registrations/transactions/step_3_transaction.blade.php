@@ -83,7 +83,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="registration_fee" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('registration_fee')) parsley-error @endif"
-                           name="registration_fee"/>
+                           name="registration_fee" autocomplete="off"/>
                 </div>
             </div>
 

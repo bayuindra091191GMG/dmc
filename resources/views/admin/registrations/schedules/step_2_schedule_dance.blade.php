@@ -55,9 +55,6 @@
                     <div class="radio">
                         <label><input type="radio" name="transaction_type" value="prorate">Prorate</label>
                     </div>
-                    <div class="radio">
-                        <label><input type="radio" name="transaction_type" value="cuti">Cuti</label>
-                    </div>
                 </div>
             </div>
 

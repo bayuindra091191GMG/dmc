@@ -1,6 +1,18 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Data Kelas Hari ini')
+@if($type === 1)
+    @php( $courseType = 'Muaythai')
+@elseif($type === 2)
+    @php( $courseType = 'Dance')
+@elseif($type === 3)
+    @php( $courseType = 'Private')
+@elseif($type === 4)
+    @php( $courseType = 'Gymnastic')
+@else
+    @php( $courseType = '')
+@endif
+
+@section('title', 'Data Kelas '. $courseType .' Hari Ini')
 
 @section('content')
 
@@ -51,7 +63,12 @@
             $('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('datatables.courses.this_day') !!}',
+                ajax: {
+                    url: '{!! route('datatables.courses.this_day') !!}',
+                    data: {
+                        'type': '{{ $type }}'
+                    }
+                },
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
                     { data: 'name', name: 'name', class: 'text-center'},

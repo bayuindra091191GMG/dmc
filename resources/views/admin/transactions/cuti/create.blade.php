@@ -52,7 +52,7 @@
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="customer" >
-                    Customer
+                    Student
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <select type="text" id="customer" name="customer" class="form-control col-md-7 col-xs-12"></select>
@@ -283,7 +283,7 @@
         $('#customer').select2({
             placeholder: {
                 id: '{{ $customer->id ?? '-1' }}',
-                text: '{{ $customer->name ?? ' - Pilih Customer - ' }}'
+                text: '{{ $customer->name ?? ' - Pilih Student - ' }}'
             },
             width: '100%',
             minimumInputLength: 1,
