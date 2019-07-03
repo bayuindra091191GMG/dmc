@@ -86,6 +86,35 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status" >
+                        Status Schedule
+                    </label>
+
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <select id="status_id" name="status_id" class="form-control col-md-7 col-xs-12">
+                            <option value="3" @if($schedule->status_id == 3) selected @endif>
+                                ONGOING
+                            </option>
+                            <option value="2" @if($schedule->status_id == 2) selected @endif>
+                                NOT ACTIVE
+                            </option>
+                            <option value="4" @if($schedule->status_id == 4) selected @endif>
+                                DONE
+                            </option>
+                            <option value="5" @if($schedule->status_id == 5) selected @endif>
+                                EXPIRED
+                            </option>
+                            <option value="6" @if($schedule->status_id == 6) selected @endif>
+                                STOPPED
+                            </option>
+                            <option value="7" @if($schedule->status_id == 7) selected @endif>
+                                CUTI
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
             @else
                 <input type="hidden" name="course_add" value="{{$schedule->course_id}}">
                 <div class="form-group">
@@ -96,6 +125,35 @@
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         <input id="date2" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
                                name="finish_date" value="{{ $date }}" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status" >
+                        Status Schedule
+                    </label>
+
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <select id="status_id" name="status_id" class="form-control col-md-7 col-xs-12">
+                            <option value="3" @if($schedule->status_id == 3) selected @endif>
+                                ONGOING
+                            </option>
+                            <option value="2" @if($schedule->status_id == 2) selected @endif>
+                                NOT ACTIVE
+                            </option>
+                            <option value="4" @if($schedule->status_id == 4) selected @endif>
+                                DONE
+                            </option>
+                            <option value="5" @if($schedule->status_id == 5) selected @endif>
+                                EXPIRED
+                            </option>
+                            <option value="6" @if($schedule->status_id == 6) selected @endif>
+                                STOPPED
+                            </option>
+                            <option value="7" @if($schedule->status_id == 7) selected @endif>
+                                CUTI
+                            </option>
+                        </select>
                     </div>
                 </div>
             @endif
