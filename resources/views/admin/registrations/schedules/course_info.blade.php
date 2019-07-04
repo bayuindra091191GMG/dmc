@@ -26,8 +26,8 @@
                     <tbody>
                     @foreach($couseDetails as $detail)
                        <tr>
-                           <td>{{ $detail->course->name }}</td>
-                           <td>{{ $detail->course->coach->name }}</td>
+                           <td><a href="{{ route('admin.courses.show', ['course' => $detail->course]) }}" style="text-decoration: underline;">{{ $detail->course->name }}</a></td>
+                           <td class="text-center">{{ $detail->course->coach->name }}</td>
                            <td class="text-center">{{ $detail->day_name }}</td>
                            <td class="text-center">{{ $detail->time }}</td>
                            <td class="text-right">{{ $detail->max_capacity }}</td>
