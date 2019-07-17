@@ -151,7 +151,7 @@ class LoginController extends Controller
         try {
             DB::transaction(function () {
                 //ubah student di schedule
-                $items = Schedule::whereIn('customer_id', [327, 237, 197, 225, 143, 301])->get();
+                $items = Schedule::whereIn('customer_id', [327, 405, 237, 197, 225, 143, 301])->get();
                 foreach ($items as $item1) {
                     if($item1->customer_id == 327){
                         $item1->customer_id = 354;
@@ -177,9 +177,13 @@ class LoginController extends Controller
                         $item1->customer_id = 444;
                         $item1->save();
                     }
+                    if($item1->customer_id == 405){
+                        $item1->customer_id = 406;
+                        $item1->save();
+                    }
                 }
                 //ganti attendance
-                $items2 = Attendance::whereIn('customer_id', [327, 237, 197, 225, 143, 301])->get();
+                $items2 = Attendance::whereIn('customer_id', [327, 405, 237, 197, 225, 143, 301])->get();
                 foreach ($items2 as $item2) {
                     if($item2->customer_id == 327){
                         $item2->customer_id = 354;
@@ -205,9 +209,13 @@ class LoginController extends Controller
                         $item2->customer_id = 444;
                         $item2->save();
                     }
+                    if($item2->customer_id == 405){
+                        $item2->customer_id = 406;
+                        $item2->save();
+                    }
                 }
                 //ganti transaction_header
-                $items3 = TransactionHeader::whereIn('customer_id', [327, 237, 197, 225, 143, 301])->get();
+                $items3 = TransactionHeader::whereIn('customer_id', [327, 405, 237, 197, 225, 143, 301])->get();
                 foreach ($items3 as $item3) {
                     if($item3->customer_id == 327){
                         $item3->customer_id = 354;
@@ -231,6 +239,10 @@ class LoginController extends Controller
                     }
                     if($item3->customer_id == 301){
                         $item3->customer_id = 444;
+                        $item3->save();
+                    }
+                    if($item3->customer_id == 405){
+                        $item3->customer_id = 406;
                         $item3->save();
                     }
                 }
