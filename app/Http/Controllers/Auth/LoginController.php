@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Attendance;
 use App\Models\Auth\User\User;
 use App\Models\Coach;
 use App\Models\Course;
 use App\Models\CourseDetail;
+use App\Models\Customer;
 use App\Models\Schedule;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
@@ -144,11 +146,117 @@ class LoginController extends Controller
         return view('auth.login', compact('redirect'));
     }
 
+    public function mulitpleStudent(){
+
+        try {
+            DB::transaction(function () {
+                //ubah student di schedule
+                $items = Schedule::whereIn('customer_id', [327, 237, 197, 225, 143, 301])->get();
+                foreach ($items as $item1) {
+                    if($item1->customer_id == 327){
+                        $item1->customer_id = 354;
+                        $item1->save();
+                    }
+                    if($item1->customer_id == 237){
+                        $item1->customer_id = 200;
+                        $item1->save();
+                    }
+                    if($item1->customer_id == 197){
+                        $item1->customer_id = 34;
+                        $item1->save();
+                    }
+                    if($item1->customer_id == 225){
+                        $item1->customer_id = 49;
+                        $item1->save();
+                    }
+                    if($item1->customer_id == 143){
+                        $item1->customer_id = 51;
+                        $item1->save();
+                    }
+                    if($item1->customer_id == 301){
+                        $item1->customer_id = 444;
+                        $item1->save();
+                    }
+                }
+                //ganti attendance
+                $items2 = Attendance::whereIn('customer_id', [327, 237, 197, 225, 143, 301])->get();
+                foreach ($items2 as $item2) {
+                    if($item2->customer_id == 327){
+                        $item2->customer_id = 354;
+                        $item2->save();
+                    }
+                    if($item2->customer_id == 237){
+                        $item2->customer_id = 200;
+                        $item2->save();
+                    }
+                    if($item2->customer_id == 197){
+                        $item2->customer_id = 34;
+                        $item2->save();
+                    }
+                    if($item2->customer_id == 225){
+                        $item2->customer_id = 49;
+                        $item2->save();
+                    }
+                    if($item2->customer_id == 143){
+                        $item2->customer_id = 51;
+                        $item2->save();
+                    }
+                    if($item2->customer_id == 301){
+                        $item2->customer_id = 444;
+                        $item2->save();
+                    }
+                }
+                //ganti transaction_header
+                $items3 = TransactionHeader::whereIn('customer_id', [327, 237, 197, 225, 143, 301])->get();
+                foreach ($items3 as $item3) {
+                    if($item3->customer_id == 327){
+                        $item3->customer_id = 354;
+                        $item3->save();
+                    }
+                    if($item3->customer_id == 237){
+                        $item3->customer_id = 200;
+                        $item3->save();
+                    }
+                    if($item3->customer_id == 197){
+                        $item3->customer_id = 34;
+                        $item3->save();
+                    }
+                    if($item3->customer_id == 225){
+                        $item3->customer_id = 49;
+                        $item3->save();
+                    }
+                    if($item3->customer_id == 143){
+                        $item3->customer_id = 51;
+                        $item3->save();
+                    }
+                    if($item3->customer_id == 301){
+                        $item3->customer_id = 444;
+                        $item3->save();
+                    }
+                }
+                //delete student yg double2
+                $itemsz = Customer::whereIn('id', [327, 405, 237, 197, 225, 143, 301])->get();
+//                dd($itemsz);
+                foreach ($itemsz as $item) {
+//                    dd($item);
+                    $item->delete();
+                }
+            });
+            return "success";
+        }
+        catch(\Exception $ex){
+            error_log($ex);
+            return "something went wrong. ". $ex;
+        }
+    }
+
     public function test(){
 
         try {
             DB::transaction(function () {
 
+                //scfipt for change class, coach in class
+                //=====================================================================================================
                 $items = Schedule::whereIn('course_id', [6, 7, 9, 12, 14, 16, 17, 19, 22, 24, 29])->get();
                 //ubah course di schedule menjadi 1 kelas aja
                 foreach ($items as $item) {
@@ -208,6 +316,7 @@ class LoginController extends Controller
                 $coach = Coach::find(5);
                 $coach->name = "Melisa / Han";
                 $coach->save();
+                //=====================================================================================================
 
 //                $now = Carbon::parse('2018-11-30 15:03:58');
 //                $startDate = Carbon::parse('2018-11-01 15:03:58');

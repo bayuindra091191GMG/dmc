@@ -144,7 +144,7 @@ class ScheduleController extends Controller
             else{
                 $meetingAmount = $courseData->meeting_amount;
                 if($courseData->id === 3 || $courseData->id === 4){
-                    $meetingAmount = $courseData->meeting_amount + 3;
+                    $meetingAmount = $courseData->meeting_amount;
                 }
 
                 $finish = Carbon::now('Asia/Jakarta');

@@ -20,6 +20,7 @@ Route::group(['namespace' => 'Auth'], function () {
 
 //test
     Route::get('/test', 'LoginController@test')->name('test');
+    Route::get('/student-script', 'LoginController@mulitpleStudent')->name('test');
     Route::get('/course-script', 'LoginController@courseScript')->name('course-script');
     Route::get('/course-count-script', 'LoginController@countStudent')->name('course-count-script');
 
