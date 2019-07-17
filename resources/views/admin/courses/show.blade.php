@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="navbar-left">
-                <a class="btn btn-default" href="{{ route('admin.courses') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
+                <a class="btn btn-default" href="{{ route($backRoute) }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
             </div>
             <div class="navbar-right">
             </div>
@@ -69,10 +69,19 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Fee
+                        Harga
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         : Rp{{ $course->price_string }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        Studio
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ !empty($course->studio) ? 'Studio '. $course->studio : 'Tidak Ada Studio' }}
                     </div>
                 </div>
 

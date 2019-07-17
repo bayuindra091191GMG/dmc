@@ -146,8 +146,10 @@ class DashboardController extends Controller
                             ->where('day_name', $dayString)
                             ->where('time', $timeString)
                             ->first();
-                        $courseDetail->current_capacity -= 1;
-                        $courseDetail->save();
+                        if(!empty($courseDetail)){
+                            $courseDetail->current_capacity -= 1;
+                            $courseDetail->save();
+                        }
                     }
                 }
             }

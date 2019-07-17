@@ -223,6 +223,12 @@ class CourseController extends Controller
             'status_id'         => 1
         ]);
 
+        // Get studio input
+        if($request->input('studio') != '-1'){
+            $newCourse->studio = $request->input('studio');
+            $newCourse->save();
+        }
+
         //Save Day and Hour if type == 2 or 3
         if(($request->input('type') == 2 || $request->input('type') == 4 || $request->input('type') == 3)
             && !empty($days)){
@@ -543,9 +549,23 @@ class CourseController extends Controller
             $hours = preg_split('@;@', $course->hour, NULL, PREG_SPLIT_NO_EMPTY);
         }
 
+        $type = $course->type;
+        if($type === 1){
+            $backRoute = 'admin.muaythai.courses';
+        }
+        else if($type === 2){
+            $backRoute = 'admin.dance.courses';
+        }
+        else if($type === 3){
+            $backRoute = 'admin.private.courses';
+        }
+        else{
+            $backRoute = 'admin.gymnastic.courses';
+        }
+
         //Get customer/murid
         $customers = Schedule::where('course_id', $course->id)->get();
-        return view('admin.courses.show', ['course' => $course, 'days' => $days, 'hours' => $hours, 'customers' => $customers]);
+        return view('admin.courses.show', ['course' => $course, 'days' => $days, 'hours' => $hours, 'customers' => $customers, 'backRoute' => $backRoute]);
     }
 
     /**
@@ -602,6 +622,15 @@ class CourseController extends Controller
         $course->meeting_amount = $request->get('meeting_amount');
         $course->updated_at = $dateTimeNow;
         $course->status_id = $request->get('status');
+
+        // Get studio input
+        if($request->input('studio') != '-1'){
+            $course->studio = $request->input('studio');
+        }
+        else{
+            $course->studio = null;
+        }
+
         $course->save();
 
         //Delete Days and Hours
@@ -777,10 +806,10 @@ class CourseController extends Controller
 
         foreach ($courses as $course) {
             if($course->type == 1){
-                $courseType = "Package";
+                $courseType = "Muaythai";
             }
             else if($course->type == 2){
-                $courseType = "Class";
+                $courseType = "Dance";
             }
             else if($course->type == 4){
                 $courseType = "Gymnastic";
@@ -788,7 +817,21 @@ class CourseController extends Controller
             else{
                 $courseType = "Private";
             }
-            $formatted_tags[] = ['id' => $course->id, 'text' => $course->name.'('.$courseType. ') - '. $course->coach->name];
+            if($course->coach_id === 0){
+                $coachName = 'Tidak Ada Coach';
+            }
+            else{
+                $coachName = $course->coach->name;
+            }
+
+            $text = $course->name.'('.$courseType. ')';
+            if(!empty($course->studio)){
+                $text .= ' - Studio '. $course->studio;
+            }
+
+            $text.= ' - '. $coachName;
+
+            $formatted_tags[] = ['id' => $course->id, 'text' => $text];
         }
 
         return \Response::json($formatted_tags);
@@ -804,10 +847,10 @@ class CourseController extends Controller
 
         foreach ($courses as $course) {
             if($course->type == 1){
-                $courseType = "Package";
+                $courseType = "Muaythai";
             }
             else if($course->type == 2){
-                $courseType = "Class";
+                $courseType = "Dance";
             }
             else{
                 $courseType = "Private";
@@ -855,9 +898,18 @@ class CourseController extends Controller
                 $coachName = $course->coach->name;
             }
 
+
+
             $value = $course->id. '#'. $course->name. '#'. $course->coach->name. '#'. $course->price. '#'. $course->meeting_amount;
 
-            $formatted_tags[] = ['id' => $value, 'text' => $course->name.'('.$courseType. ') - '. $coachName];
+            $text = $course->name.'('.$courseType. ')';
+            if(!empty($course->studio)){
+                $text .= ' - Studio '. $course->studio;
+            }
+
+            $text.= ' - '. $coachName;
+
+            $formatted_tags[] = ['id' => $value, 'text' => $text];
         }
 
         return \Response::json($formatted_tags);

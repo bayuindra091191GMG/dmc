@@ -148,8 +148,12 @@
                                                 </td>
                                                 @for($j=0; $j<$course->meeting_amount; $j++)
                                                     <td>
-                                                        @if(count($attendanceData[$idx]) > $j)
-                                                            {{ $attendanceData[$idx][$j]->created_at }}
+                                                        @if(!empty($attendanceData[$idx]))
+                                                            @if(count($attendanceData[$idx]) > $j)
+                                                                {{ $attendanceData[$idx][$j]->created_at }}
+                                                            @else
+                                                                <span>-</span>
+                                                            @endif
                                                         @else
                                                             <span>-</span>
                                                         @endif

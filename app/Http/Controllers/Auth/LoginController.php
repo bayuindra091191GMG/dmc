@@ -519,14 +519,19 @@ class LoginController extends Controller
             foreach ($courseDetails as $detail){
                 $totalStudent = 0;
                 foreach ($schedules as $schedule){
-                    $splitted = explode('-', $schedule->day);
-                    $dayString = trim($splitted[0]);
-                    $timeString = trim($splitted[1]);
+                    if(!empty($schedule->day)){
+                        $splitted = explode('-', $schedule->day);
+                        $dayString = trim($splitted[0]);
 
-                    if($detail->course_id === $schedule->course_id &&
-                        $detail->day_name === $dayString &&
-                        $detail->time === $timeString){
-                        $totalStudent++;
+                        if(!empty($splitted[1])){
+                            $timeString = trim($splitted[1]);
+
+                            if($detail->course_id === $schedule->course_id &&
+                                $detail->day_name === $dayString &&
+                                $detail->time === $timeString){
+                                $totalStudent++;
+                            }
+                        }
                     }
                 }
 

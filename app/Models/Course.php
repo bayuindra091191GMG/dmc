@@ -26,7 +26,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $created_by
  * @property \Carbon\Carbon $updated_at
  * @property int $updated_by
- * @property string $price_string
+ * @property string $studio
  * 
  * @property \App\Models\Coach $coach
  * @property \App\Models\Status $status
@@ -63,7 +63,8 @@ class Course extends Eloquent
 		'day',
 		'status_id',
 		'created_by',
-		'updated_by'
+		'updated_by',
+        'studio'
 	];
 
     public function getPriceStringAttribute(){

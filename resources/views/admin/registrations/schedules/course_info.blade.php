@@ -17,6 +17,7 @@
                     <tr>
                         <th class="text-center">Nama Kelas</th>
                         <th class="text-center">Trainer</th>
+                        <th class="text-center">Studio</th>
                         <th class="text-center">Hari</th>
                         <th class="text-center">Jam</th>
                         <th class="text-center" style="width: 10%">Kapasitas</th>
@@ -26,8 +27,9 @@
                     <tbody>
                     @foreach($couseDetails as $detail)
                        <tr>
-                           <td><a href="{{ route('admin.courses.show', ['course' => $detail->course]) }}" style="text-decoration: underline;">{{ $detail->course->name }}</a></td>
+                           <td><a href="{{ route('admin.courses.show', ['course' => $detail->course]) }}" style="text-decoration: underline;" target="_blank">{{ $detail->course->name }}</a></td>
                            <td class="text-center">{{ $detail->course->coach->name }}</td>
+                           <td class="text-center">{{ !empty($detail->course->studio) ? 'Studio '. $detail->course->studio : '-' }}</td>
                            <td class="text-center">{{ $detail->day_name }}</td>
                            <td class="text-center">{{ $detail->time }}</td>
                            <td class="text-right">{{ $detail->max_capacity }}</td>

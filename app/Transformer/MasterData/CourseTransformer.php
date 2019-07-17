@@ -55,11 +55,17 @@ class CourseTransformer extends TransformerAbstract
             $type = 'Private';
         }
 
+        $studio = '-';
+        if(!empty($course->studio)){
+            $studio = 'Studio '. $course->studio;
+        }
+
         return[
             'name'              => $name,
             'type'              => $type,
             'coach'             => $course->coach->name,
             'price'             => 'Rp '.$course->price_string,
+            'studio'            => $studio,
             'meeting_amount'    => $course->meeting_amount,
             'status'            => $course->status->description,
             'created_at'        => $createdDate,

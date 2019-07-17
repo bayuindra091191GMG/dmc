@@ -93,6 +93,19 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="studio" >
+                    Studio
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="studio" name="studio" class="form-control col-md-7 col-xs-12">
+                        <option value="-1" @if(empty($course->studio)) selected @endif> - Tidak Ada Studio - </option>
+                        <option value="1" @if(!empty($course->studio) && $course->studio == '1') selected @endif>Studio 1</option>
+                        <option value="2" @if(!empty($course->studio) && $course->studio == '2') selected @endif>Studio 2</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="meeting_amount" >
                     Jumlah Pertemuan
                 </label>

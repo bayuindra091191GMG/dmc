@@ -260,16 +260,19 @@ class TransactionHeaderController extends Controller
                 $scheduleObj->save();
 
                 // Increase student count
-                $splitted = explode('-', $scheduleObj->day);
-                $dayString = trim($splitted[0]);
-                $timeString = trim($splitted[1]);
+                if(!empty($schedule->day) && $scheduleObj->day != 'Bebas'){
+                    $splitted = explode('-', $scheduleObj->day);
+                    $dayString = trim($splitted[0]);
+                    $timeString = trim($splitted[1]);
 
-                $courseDetail = CourseDetail::where('course_id', $scheduleObj->course_id)
-                    ->where('day_name', $dayString)
-                    ->where('time', $timeString)
-                    ->first();
-                $courseDetail->current_capacity += 1;
-                $courseDetail->save();
+                    $courseDetail = CourseDetail::where('course_id', $scheduleObj->course_id)
+                        ->where('day_name', $dayString)
+                        ->where('time', $timeString)
+                        ->first();
+                    $courseDetail->current_capacity += 1;
+                    $courseDetail->save();
+                }
+
             }
             $idx++;
         }
