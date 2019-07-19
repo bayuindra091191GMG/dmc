@@ -61,7 +61,14 @@
                     { data: 'age', name: 'age', class: 'text-center'},
                     { data: 'parent_name', name: 'parent_name', class: 'text-center'},
                     { data: 'address', name: 'address', class: 'text-center'},
-                    { data: 'created_at', name: 'created_at', class: 'text-center'},
+                    { data: 'created_at', name: 'created_at', class: 'text-center',
+                        render: function ( data, type, row ){
+                            if ( type === 'display' || type === 'filter' ){
+                                return moment(data).format('DD MMM YYYY');
+                            }
+                            return data;
+                        }
+                    },
                     { data: 'action', name:'action', orderable: false, searchable: false, class: 'text-center'}
                 ],
                 language: {

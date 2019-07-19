@@ -16,7 +16,7 @@ class CustomerTransformer extends TransformerAbstract
 {
     public function transform(Customer $customer){
 
-        $createdDate = Carbon::parse($customer->created_at)->format('d M Y');
+        $createdDate = Carbon::parse($customer->created_at)->toIso8601String();
         $name = "<a href='/admin/customers/show/" . $customer->id. "' style='text-decoration: underline;'>". $customer->name. "</a>";
         $action = "<a class='btn btn-xs btn-primary' href='customers/show/". $customer->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
         $action .=
