@@ -92,7 +92,8 @@ class ReminderController extends Controller
 
             // If course type is package
             if($schedule->course->type === 1){
-                $finishDate = Carbon::parse($schedule->finish_date)->addDays($schedule->course->valid);
+                //$finishDate = Carbon::parse($schedule->finish_date)->addDays($schedule->course->valid);
+                $finishDate  = Carbon::now('Asia/Jakarta')->addDays($schedule->course->valid);
                 $schedule->finish_date = $finishDate->toDateTimeString();
 
 //                $remindDate = Carbon::parse($schedule->finish_date)->subDays(5);
@@ -122,7 +123,8 @@ class ReminderController extends Controller
                 $finishDate = Carbon::parse($schedule->finish_date);
 
                 // Get next month date at 10th
-                $nextMonthDate = $finishDate->copy()->addMonthsNoOverflow(1);
+                //$nextMonthDate = $finishDate->copy()->addMonthsNoOverflow(1);
+                $nextMonthDate = Carbon::now('Asia/Jakarta')->addMonthsNoOverflow(1);
                 $month = $nextMonthDate->month;
                 $year = $nextMonthDate->year;
                 $nextMonthFinishDate = Carbon::create($year, $month, 10, 0, 0, 0);
@@ -134,7 +136,8 @@ class ReminderController extends Controller
                 $finishDate = Carbon::parse($schedule->finish_date);
 
                 // Get next month date at 10th
-                $nextMonthDate = $finishDate->copy()->addMonthsNoOverflow(1);
+                //$nextMonthDate = $finishDate->copy()->addMonthsNoOverflow(1);
+                $nextMonthDate = Carbon::now('Asia/Jakarta')->addMonthsNoOverflow(1);
                 $month = $nextMonthDate->month;
                 $year = $nextMonthDate->year;
                 $nextMonthFinishDate = Carbon::create($year, $month, 10, 0, 0, 0);
@@ -149,14 +152,18 @@ class ReminderController extends Controller
             // Decrease student count
             $splitted = explode('-', $schedule->day);
             $dayString = trim($splitted[0]);
-            $timeString = trim($splitted[1]);
 
-            $courseDetail = CourseDetail::where('course_id', $schedule->course_id)
-                ->where('day_name', $dayString)
-                ->where('time', $timeString)
-                ->first();
-            $courseDetail->current_capacity -= 1;
-            $courseDetail->save();
+            if(!empty($splitted[1])){
+                $timeString = trim($splitted[1]);
+
+                $courseDetail = CourseDetail::where('course_id', $schedule->course_id)
+                    ->where('day_name', $dayString)
+                    ->where('time', $timeString)
+                    ->first();
+                $courseDetail->current_capacity -= 1;
+                $courseDetail->save();
+            }
+
 
             if($schedule->course->type === 3){
                 return redirect()->route('admin.transactions.private.create')->with('customer', $schedule->customer_id);

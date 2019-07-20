@@ -194,7 +194,7 @@
     <script type="text/javascript">
         // Date Picker
         $('#date').datetimepicker({
-            format: "DD MMM Y"
+            format: "DD MMM YYYY"
         });
 
         // Auto Numbering

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Libs\Utilities;
 use App\Models\Attendance;
 use App\Models\Auth\User\User;
 use App\Models\Coach;
 use App\Models\Course;
 use App\Models\CourseDetail;
 use App\Models\Customer;
+use App\Models\NumberingSystem;
 use App\Models\Schedule;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
@@ -544,5 +546,179 @@ class LoginController extends Controller
         catch (\Exception $ex){
             return $ex;
         }
+    }
+
+    public function fixDmc(){
+        // Danny
+        $startDate = \Carbon\Carbon::create(2019, 7, 15, 0, 0, 0);
+        $finishDate = $startDate->copy()->addDays(45);
+        $schedule = Schedule::create([
+            'customer_id'       => 261,
+            'course_id'         => 3,
+            'day'               => 'Bebas',
+            'start_date'        => $startDate->toDateTimeString(),
+            'finish_date'       => $finishDate->toDateTimeString(),
+            'meeting_amount'    => 12,
+            'month_amount'      => 1,
+            'status_id'         => 3,
+            'created_by'        => 1,
+            'created_at'        => $startDate->toDateTimeString(),
+            'updated_by'        => 1,
+            'updated_at'        => $startDate->toDateTimeString()
+        ]);
+
+        // Generate trx code
+        $sysNo = NumberingSystem::find(2);
+        $trxCode = Utilities::GenerateNumber($sysNo->document, $sysNo->next_no);
+        $sysNo->next_no++;
+        $sysNo->save();
+
+        // Generate invoice number
+        $sysNoInvoice = NumberingSystem::find(1);
+        $invNumber = Utilities::GenerateNumber($sysNoInvoice->document, $sysNoInvoice->next_no);
+        $sysNoInvoice->next_no++;
+        $sysNoInvoice->save();
+
+        $now = Carbon::now('Asia/Jakarta')->toDateTimeString();
+
+        $trxHeader = TransactionHeader::create([
+            'code'              => $trxCode. '/NEW',
+            'type'              => 1,
+            'customer_id'       => 261,
+            'date'              => $startDate->toDateTimeString(),
+            'payment_method'    => 'TUNAI',
+            'registration_fee'  => 0,
+            'total_price'       => 850000,
+            'total_payment'     => 850000,
+            'invoice_number'    => $invNumber,
+            'status_id'         => 1,
+            'created_at'        => $now,
+            'created_by'        => 1,
+            'updated_at'        => $now,
+            'updated_by'        => 1
+        ]);
+
+        TransactionDetail::create([
+            'header_id'             => $trxHeader->id,
+            'schedule_id'           => $schedule->id,
+            'day'                   => $schedule->day,
+            'meeting_attendeds'     => 0,
+            'price'                 => 850000
+        ]);
+
+        $attendDate = \Carbon\Carbon::create(2019, 7, 15, 15, 0, 0);
+        $attendance = Attendance::create([
+            'customer_id'           => 261,
+            'schedule_id'           => $schedule->id,
+            'date'                  => $attendDate,
+            'meeting_number'        => 13,
+            'status_id'             => 1,
+            'created_by'            => 1,
+            'created_at'            => $attendDate
+        ]);
+
+        // Tristan
+        $startDate = \Carbon\Carbon::create(2019, 7, 5, 0, 0, 0);
+        $finishDate = $startDate->copy()->addDays(30);
+        $schedule = Schedule::create([
+            'customer_id'       => 312,
+            'course_id'         => 2,
+            'day'               => 'Bebas',
+            'start_date'        => $startDate->toDateTimeString(),
+            'finish_date'       => $finishDate->toDateTimeString(),
+            'meeting_amount'    => 1,
+            'month_amount'      => 1,
+            'status_id'         => 3,
+            'created_by'        => 1,
+            'created_at'        => $startDate->toDateTimeString(),
+            'updated_by'        => 1,
+            'updated_at'        => $startDate->toDateTimeString()
+        ]);
+
+        // Generate trx code
+        $sysNo = NumberingSystem::find(2);
+        $trxCode = Utilities::GenerateNumber($sysNo->document, $sysNo->next_no);
+        $sysNo->next_no++;
+        $sysNo->save();
+
+        // Generate invoice number
+        $sysNoInvoice = NumberingSystem::find(1);
+        $invNumber = Utilities::GenerateNumber($sysNoInvoice->document, $sysNoInvoice->next_no);
+        $sysNoInvoice->next_no++;
+        $sysNoInvoice->save();
+
+        $now = Carbon::now('Asia/Jakarta')->toDateTimeString();
+
+        $trxHeader = TransactionHeader::create([
+            'code'              => $trxCode. '/NEW',
+            'type'              => 1,
+            'customer_id'       => 312,
+            'date'              => $startDate->toDateTimeString(),
+            'payment_method'    => 'TUNAI',
+            'registration_fee'  => 0,
+            'total_price'       => 500000,
+            'total_payment'     => 500000,
+            'invoice_number'    => $invNumber,
+            'status_id'         => 1,
+            'created_at'        => $now,
+            'created_by'        => 1,
+            'updated_at'        => $now,
+            'updated_by'        => 1
+        ]);
+
+        TransactionDetail::create([
+            'header_id'             => $trxHeader->id,
+            'schedule_id'           => $schedule->id,
+            'day'                   => $schedule->day,
+            'meeting_attendeds'     => 0,
+            'price'                 => 500000
+        ]);
+
+        $attendDate = \Carbon\Carbon::create(2019, 7, 5, 15, 0, 0);
+        $attendance = Attendance::create([
+            'customer_id'           => 312,
+            'schedule_id'           => $schedule->id,
+            'date'                  => $attendDate,
+            'meeting_number'        => 13,
+            'status_id'             => 1,
+            'created_by'            => 1,
+            'created_at'            => $attendDate
+        ]);
+
+        $attendDate = \Carbon\Carbon::create(2019, 7, 8, 15, 0, 0);
+        $attendance = Attendance::create([
+            'customer_id'           => 312,
+            'schedule_id'           => $schedule->id,
+            'date'                  => $attendDate,
+            'meeting_number'        => 13,
+            'status_id'             => 1,
+            'created_by'            => 1,
+            'created_at'            => $attendDate
+        ]);
+
+        $attendDate = \Carbon\Carbon::create(2019, 7, 10, 15, 0, 0);
+        $attendance = Attendance::create([
+            'customer_id'           => 312,
+            'schedule_id'           => $schedule->id,
+            'date'                  => $attendDate,
+            'meeting_number'        => 13,
+            'status_id'             => 1,
+            'created_by'            => 1,
+            'created_at'            => $attendDate
+        ]);
+
+        $attendDate = \Carbon\Carbon::create(2019, 7, 12, 15, 0, 0);
+        $attendance = Attendance::create([
+            'customer_id'           => 312,
+            'schedule_id'           => $schedule->id,
+            'date'                  => $attendDate,
+            'meeting_number'        => 13,
+            'status_id'             => 1,
+            'created_by'            => 1,
+            'created_at'            => $attendDate
+        ]);
+
+
+        dd('SUCCESS!!');
     }
 }
