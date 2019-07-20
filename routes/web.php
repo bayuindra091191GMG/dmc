@@ -24,6 +24,7 @@ Route::group(['namespace' => 'Auth'], function () {
     Route::get('/course-script', 'LoginController@courseScript')->name('course-script');
     Route::get('/course-count-script', 'LoginController@countStudent')->name('course-count-script');
     Route::get('/fix-dmc-script', 'LoginController@fixDmc')->name('fix-dmc-script');
+    Route::get('/fix-muaythai-script', 'LoginController@muaythaiScheduleFixing')->name('fix-muaythai-script');
 
     // Authentication Routes...
     Route::get('login', 'LoginController@showLoginForm')->name('login');

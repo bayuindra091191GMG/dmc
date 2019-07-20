@@ -721,4 +721,224 @@ class LoginController extends Controller
 
         dd('SUCCESS!!');
     }
+    public function muaythaiScheduleFixing(){
+        try{
+            DB::transaction(function () {
+
+                $customers = Customer::whereIn('id', [276, 461, 240])->get();
+
+                foreach ($customers as $customer){
+                    //vicke gahyadi = id 461
+                    //16 juli 2019 beli 10 sesi
+                    //pertemuan 2 pada 18 juli 2019
+                    if($customer->id == 461){
+                        //attendance
+                        $attDate =  \Carbon\Carbon::create(2019, 7, 16, 0, 0, 0);
+                        $attendance = Attendance::create([
+                            'customer_id'           => 461,
+                            'schedule_id'           => 707,
+                            'date'                  => $attDate,
+                            'meeting_number'        => 1,
+                            'status_id'             => 1,
+                            'created_by'            => 10,
+                            'created_at'            => $attDate,
+                            'updated_at'            => $attDate
+                        ]);
+
+                        //transaction detail
+                        $transactionHeader = TransactionHeader::find(2006);
+                        $transactionHeader->date = $attDate;
+                        $transactionHeader->created_at = $attDate;
+                        $transactionHeader->updated_at = $attDate;
+                        $transactionHeader->save();
+
+                        //transaction detail
+                        $schedule = Schedule::find(707);
+                        $schedule->start_date = $attDate;
+                        $schedule->created_at = $attDate;
+                        $schedule->updated_at = $attDate;
+                        $schedule->meeting_amount = 8;
+                        $schedule->save();
+
+                    }
+                    //tedy pratoyo = id 276
+                    //11 juli 2019 beli 10 sesi
+                    //pertemuan 4 pada 18 juli 2019
+                    if($customer->id == 276){
+                        $date =  \Carbon\Carbon::create(2019, 7, 11, 0, 0, 0);
+                        $finishDate = $date->copy()->addDays(45);
+                        //schedule
+                        $schedule = Schedule::create([
+                            'customer_id'       => 276,
+                            'course_id'         => 3,
+                            'day'               => "Bebas",
+                            'start_date'        => $date,
+                            'finish_date'       => $finishDate,
+                            'meeting_amount'    => 6,
+                            'month_amount'      => 1,
+                            'status_id'         => 2,
+                            'created_by'        => 10,
+                            'created_at'        => $date,
+                            'updated_by'        => 10,
+                            'updated_at'        => $date
+                        ]);
+
+                        //create transaction Header
+
+                        // Numbering System
+                        $sysNo = NumberingSystem::find(2);
+                        $autoNumber = Utilities::GenerateNumberPurchaseOrder($sysNo->document, $sysNo->next_no);
+
+                        // Generate invoice number
+                        $sysNoInvoice = NumberingSystem::find(1);
+                        $invNumber = Utilities::GenerateNumber($sysNoInvoice->document, $sysNoInvoice->next_no);
+                        $sysNoInvoice->next_no++;
+                        $sysNoInvoice->save();
+
+
+                        $trxHeader = TransactionHeader::create([
+                            'code'                  => $autoNumber."/NEW",
+                            'type'                  => 1,
+                            'customer_id'           => 276,
+                            'date'                  => $date,
+                            'payment_method'        => "DEBIT",
+                            'invoice_number'        => $invNumber."/NEW",
+                            'status_id'             => 1,
+                            'created_by'            => 10,
+                            'created_at'            => $date,
+                            'updated_by'            => 10,
+                            'total_payment'         => $schedule->course->price,
+                            'total_price'         => $schedule->course->price,
+                            'registration_fee'         => 0,
+                            'updated_at'            => $date
+                        ]);
+                        //create transaction detail
+                        $trxDetail = TransactionDetail::create([
+                            'header_id'             => $trxHeader->id,
+                            'schedule_id'           => $schedule->id,
+                            'day'                   => $schedule->day,
+                            'meeting_attendeds'     => 0,
+                            'price'                 => $schedule->course->price
+                        ]);
+
+                        //attendance
+                        for($i=1; $i<=4; $i++){
+                            $attDate = $date;
+                            if($i==1){
+                                $attDate = $date;
+                            }
+                            else if($i==2){
+                                $attDate =  \Carbon\Carbon::create(2019, 7, 12, 15, 0, 0);
+                            }
+                            else if($i==3){
+                                $attDate =  \Carbon\Carbon::create(2019, 7, 16, 15, 0, 0);
+                            }
+                            else if($i==4){
+                                $attDate =  \Carbon\Carbon::create(2019, 7, 18, 15, 0, 0);
+                            }
+                            $attendance = Attendance::create([
+                                'customer_id'           => 276,
+                                'schedule_id'           => $schedule->id,
+                                'date'                  => $attDate,
+                                'meeting_number'        => $i,
+                                'status_id'             => 1,
+                                'created_by'            => 10,
+                                'created_at'            => $attDate,
+                                'updated_at'            => $attDate
+                            ]);
+                        }
+                    }
+
+                    //jeremy = id 240
+                    //24 juli 2019 beli 5 sesi
+                    //kemungkinan pertemuan 3 pada 20 juli 2019
+                    if($customer->id == 240){
+                        $date =  \Carbon\Carbon::create(2019, 6, 24, 0, 0, 0);
+                        $finishDate = $date->copy()->addDays(45);
+                        //schedule
+                        $schedule = Schedule::create([
+                            'customer_id'       => 240,
+                            'course_id'         => 2,
+                            'day'               => "Bebas",
+                            'start_date'        => $date,
+                            'finish_date'       => $finishDate,
+                            'meeting_amount'    => 2,
+                            'month_amount'      => 1,
+                            'status_id'         => 2,
+                            'created_by'        => 10,
+                            'created_at'        => $date,
+                            'updated_by'        => 10,
+                            'updated_at'        => $date
+                        ]);
+
+                        //create transaction Header
+
+                        // Numbering System
+                        $sysNo = NumberingSystem::find(2);
+                        $autoNumber = Utilities::GenerateNumberPurchaseOrder($sysNo->document, $sysNo->next_no);
+
+                        // Generate invoice number
+                        $sysNoInvoice = NumberingSystem::find(1);
+                        $invNumber = Utilities::GenerateNumber($sysNoInvoice->document, $sysNoInvoice->next_no);
+                        $sysNoInvoice->next_no++;
+                        $sysNoInvoice->save();
+
+
+                        $trxHeader = TransactionHeader::create([
+                            'code'                  => $autoNumber."/NEW",
+                            'type'                  => 1,
+                            'customer_id'           => 240,
+                            'date'                  => $date,
+                            'payment_method'        => "TRANSFER",
+                            'invoice_number'        => $invNumber."/NEW",
+                            'status_id'             => 1,
+                            'created_by'            => 10,
+                            'created_at'            => $date,
+                            'updated_by'            => 10,
+                            'total_payment'         => $schedule->course->price,
+                            'total_price'         => $schedule->course->price,
+                            'registration_fee'         => 0,
+                            'updated_at'            => $date
+                        ]);
+                        //create transaction detail
+                        $trxDetail = TransactionDetail::create([
+                            'header_id'             => $trxHeader->id,
+                            'schedule_id'           => $schedule->id,
+                            'day'                   => $schedule->day,
+                            'meeting_attendeds'     => 0,
+                            'price'                 => $schedule->course->price
+                        ]);
+
+                        //attendance
+                        for($i=1; $i<=3; $i++){
+                            $attDate = $date;
+                            if($i==1){
+                                $attDate = $date;
+                            }
+                            else if($i==2){
+                                $attDate =  Carbon::create(2019, 7, 10, 15, 0, 0);
+                            }
+                            else if($i==3){
+                                $attDate =  \Carbon\Carbon::create(2019, 7, 20, 15, 0, 0);
+                            }
+                            $attendance = Attendance::create([
+                                'customer_id'           => 240,
+                                'schedule_id'           => $schedule->id,
+                                'date'                  => $attDate,
+                                'meeting_number'        => $i,
+                                'status_id'             => 1,
+                                'created_by'            => 10,
+                                'created_at'            => $attDate,
+                                'updated_at'            => $attDate
+                            ]);
+                        }
+                    }
+                }
+            });
+            return 'SUCCESS';
+        }
+        catch (\Exception $ex){
+            return $ex;
+        }
+    }
 }
