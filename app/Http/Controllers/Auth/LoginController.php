@@ -718,9 +718,99 @@ class LoginController extends Controller
             'created_at'            => $attendDate
         ]);
 
+        // Eugene VP
+        $startDate = \Carbon\Carbon::create(2019, 7, 16, 0, 0, 0);
+        $finishDate = $startDate->copy()->addDays(30);
+        $schedule = Schedule::create([
+            'customer_id'       => 172,
+            'course_id'         => 2,
+            'day'               => 'Bebas',
+            'start_date'        => $startDate->toDateTimeString(),
+            'finish_date'       => $finishDate->toDateTimeString(),
+            'meeting_amount'    => 2,
+            'month_amount'      => 1,
+            'status_id'         => 3,
+            'created_by'        => 1,
+            'created_at'        => $startDate->toDateTimeString(),
+            'updated_by'        => 1,
+            'updated_at'        => $startDate->toDateTimeString()
+        ]);
+
+        // Generate trx code
+        $sysNo = NumberingSystem::find(2);
+        $trxCode = Utilities::GenerateNumber($sysNo->document, $sysNo->next_no);
+        $sysNo->next_no++;
+        $sysNo->save();
+
+        // Generate invoice number
+        $sysNoInvoice = NumberingSystem::find(1);
+        $invNumber = Utilities::GenerateNumber($sysNoInvoice->document, $sysNoInvoice->next_no);
+        $sysNoInvoice->next_no++;
+        $sysNoInvoice->save();
+
+        $now = Carbon::now('Asia/Jakarta')->toDateTimeString();
+
+        $trxHeader = TransactionHeader::create([
+            'code'              => $trxCode. '/NEW',
+            'type'              => 1,
+            'customer_id'       => 172,
+            'date'              => $startDate->toDateTimeString(),
+            'payment_method'    => 'TUNAI',
+            'registration_fee'  => 0,
+            'total_price'       => 500000,
+            'total_payment'     => 500000,
+            'invoice_number'    => $invNumber,
+            'status_id'         => 1,
+            'created_at'        => $now,
+            'created_by'        => 1,
+            'updated_at'        => $now,
+            'updated_by'        => 1
+        ]);
+
+        TransactionDetail::create([
+            'header_id'             => $trxHeader->id,
+            'schedule_id'           => $schedule->id,
+            'day'                   => $schedule->day,
+            'meeting_attendeds'     => 0,
+            'price'                 => 500000
+        ]);
+
+        $attendDate = \Carbon\Carbon::create(2019, 7, 16, 15, 0, 0);
+        $attendance = Attendance::create([
+            'customer_id'           => 172,
+            'schedule_id'           => $schedule->id,
+            'date'                  => $attendDate,
+            'meeting_number'        => 13,
+            'status_id'             => 1,
+            'created_by'            => 1,
+            'created_at'            => $attendDate
+        ]);
+
+        $attendDate = \Carbon\Carbon::create(2019, 7, 17, 15, 0, 0);
+        $attendance = Attendance::create([
+            'customer_id'           => 172,
+            'schedule_id'           => $schedule->id,
+            'date'                  => $attendDate,
+            'meeting_number'        => 13,
+            'status_id'             => 1,
+            'created_by'            => 1,
+            'created_at'            => $attendDate
+        ]);
+
+        $attendDate = \Carbon\Carbon::create(2019, 7, 18, 15, 0, 0);
+        $attendance = Attendance::create([
+            'customer_id'           => 172,
+            'schedule_id'           => $schedule->id,
+            'date'                  => $attendDate,
+            'meeting_number'        => 13,
+            'status_id'             => 1,
+            'created_by'            => 1,
+            'created_at'            => $attendDate
+        ]);
 
         dd('SUCCESS!!');
     }
+
     public function muaythaiScheduleFixing(){
         try{
             DB::transaction(function () {
@@ -776,7 +866,7 @@ class LoginController extends Controller
                             'finish_date'       => $finishDate,
                             'meeting_amount'    => 6,
                             'month_amount'      => 1,
-                            'status_id'         => 2,
+                            'status_id'         => 3,
                             'created_by'        => 10,
                             'created_at'        => $date,
                             'updated_by'        => 10,
@@ -864,7 +954,7 @@ class LoginController extends Controller
                             'finish_date'       => $finishDate,
                             'meeting_amount'    => 2,
                             'month_amount'      => 1,
-                            'status_id'         => 2,
+                            'status_id'         => 3,
                             'created_by'        => 10,
                             'created_at'        => $date,
                             'updated_by'        => 10,
