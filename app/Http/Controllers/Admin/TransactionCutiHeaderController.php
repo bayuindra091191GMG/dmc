@@ -165,14 +165,14 @@ class TransactionCutiHeaderController extends Controller
                 $totalPayment += $subTotal;
 
                 // Create new cuti
-                $newMonth = $now->month + 1;
-                if($newMonth > 12){
-                    $newYear = $now->year + 1;
-                    $startDate = Carbon::createFromFormat('Y-m-d', $newYear.'-1-10');
-                }
-                else{
-                    $startDate = Carbon::createFromFormat('Y-m-d', $now->year.'-'.$newMonth.'-10');
-                }
+                $startDate = $date->addMonthsNoOverflow(1);
+//                if($newMonth > 12){
+//                    $newYear = $date->addYearNoOverflow();
+//                    $startDate = Carbon::createFromFormat('Y-m-d', $newYear.'-1-10');
+//                }
+//                else{
+//                    $startDate = Carbon::createFromFormat('Y-m-d', $date->year.'-'.$newMonth.'-10');
+//                }
 
                 $newLeave = Leaf::create([
                     'schedule_id'           => $schedule,
@@ -186,7 +186,7 @@ class TransactionCutiHeaderController extends Controller
                     'updated_at'            => $now->toDateTimeString()
                 ]);
 
-                $endDate = $startDate->addMonth($monthInt);
+                $endDate = $startDate->copy()->addMonthsNoOverflow($monthInt);
                 $newLeave->end_date = $endDate->toDateTimeString();
                 $newLeave->save();
             }
