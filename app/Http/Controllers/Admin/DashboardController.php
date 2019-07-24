@@ -130,7 +130,13 @@ class DashboardController extends Controller
                 }
                 else{
                     if($now->greaterThan($leaveEndDate)){
+                        $nextMonthDate = Carbon::now('Asia/Jakarta')->addMonthsNoOverflow(1);
+                        $month = $nextMonthDate->month;
+                        $year = $nextMonthDate->year;
+                        $nextMonthFinishDate = Carbon::create($year, $month, 10, 0, 0, 0);
+
                         $schedule = $leave->schedule;
+                        $schedule->finish_date = $nextMonthFinishDate;
                         $schedule->status_id = 2;
                         $schedule->save();
 
