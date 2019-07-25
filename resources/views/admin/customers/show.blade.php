@@ -160,9 +160,9 @@
                                             </td>
                                             <td class="text-center">
                                                 @if($schedule->course->type == 1)
-                                                    PAKET
+                                                    MUAYTHAI
                                                 @elseif($schedule->course->type == 2)
-                                                    KELAS
+                                                    DANCE
                                                 @elseif($schedule->course->type == 3)
                                                     PRIVATE
                                                 @else

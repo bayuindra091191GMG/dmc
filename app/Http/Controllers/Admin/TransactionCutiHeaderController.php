@@ -165,7 +165,10 @@ class TransactionCutiHeaderController extends Controller
                 $totalPayment += $subTotal;
 
                 // Create new cuti
-                $startDate = $date->addMonthsNoOverflow(1);
+                $leaveStartDate = $date;
+                $month = $leaveStartDate->month;
+                $year = $leaveStartDate->year;
+                $newLeaveStartDate = Carbon::create($year, $month, 10, 0, 0, 0);
 //                if($newMonth > 12){
 //                    $newYear = $date->addYearNoOverflow();
 //                    $startDate = Carbon::createFromFormat('Y-m-d', $newYear.'-1-10');
@@ -178,7 +181,7 @@ class TransactionCutiHeaderController extends Controller
                     'schedule_id'           => $schedule,
                     'transaction_id'        => $trxHeader->id,
                     'month_amount'          => $monthInt,
-                    'start_date'            => $startDate->toDateTimeString(),
+                    'start_date'            => $newLeaveStartDate->toDateTimeString(),
                     'status_id'             => 1,
                     'created_by'            => $user->id,
                     'created_at'            => $now->toDateTimeString(),
@@ -186,8 +189,11 @@ class TransactionCutiHeaderController extends Controller
                     'updated_at'            => $now->toDateTimeString()
                 ]);
 
-                $endDate = $startDate->copy()->addMonthsNoOverflow($monthInt);
-                $newLeave->end_date = $endDate->toDateTimeString();
+                $leaveEndDate = $newLeaveStartDate->copy()->addMonthsNoOverflow($monthInt);
+                $month = $leaveEndDate->month;
+                $year = $leaveEndDate->year;
+                $newLeaveEndDate = Carbon::create($year, $month, 1, 0, 0, 0);
+                $newLeave->end_date = $newLeaveEndDate->toDateTimeString();
                 $newLeave->save();
             }
             $idx++;
