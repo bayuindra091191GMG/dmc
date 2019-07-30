@@ -274,6 +274,7 @@ class ScheduleController extends Controller
             $schedule->save();
         }
         else{
+            $schedule->meeting_amount = $request->input('meeting_amount');
             $schedule->updated_at = $dateTimeNow->toDateTimeString();
             $schedule->finish_date = $date->toDateTimeString();
             $schedule->status_id = $request->input('status_id');
