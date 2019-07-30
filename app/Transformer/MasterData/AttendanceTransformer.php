@@ -20,11 +20,10 @@ class AttendanceTransformer extends TransformerAbstract
         $date = Carbon::parse($attendance->date)->format('d M Y, H:i');
 //        $action = "<a class='btn btn-xs btn-info' href='attendances/show/".$attendance->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-eye'></i></a>";
 //        $action = "<a class='btn btn-xs btn-info' href='attendances/edit/".$attendance->id."' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
+
+        $attendPrintUrl = route('admin.attendances.paper', ['customerId' => $attendance->customer_id, 'scheduleId' => $attendance->schedule_id, 'attendanceId' => $attendance->id]);
         $action = "<a class='btn btn-xs btn-info' href='#' data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>";
-        $action .= "<a class='btn btn-xs btn-info' href='attendances/paper?customerId=".
-            $attendance->customer_id ."&scheduleId=".
-            $attendance->schedule_id ."&attendanceId=".
-            $attendance->id. "' data-toggle='tooltip' data-placement='top'><i class='fa fa-book'></i></a>";
+        $action .= "<a class='btn btn-xs btn-info' href='". $attendPrintUrl. "' data-toggle='tooltip' data-placement='top'><i class='fa fa-book'></i></a>";
 
         return[
             'name'              => $attendance->Customer->name,
