@@ -127,8 +127,9 @@
                         <div class="form-group" id="day_add_section" style="display: none;">
                             <label class="control-label col-sm-2" for="day_add">Hari</label>
                             <div class="col-sm-10">
-                                <select id="day_add" name="day_add" class="form-control col-md-7 col-xs-12">
-                                </select>
+                                <input type="hidden" id="day_add" name="day_add">
+{{--                                <select id="day_add" name="day_add" class="form-control col-md-7 col-xs-12">--}}
+{{--                                </select>--}}
                                 <p class="errorQty text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -198,7 +199,8 @@
         // Add new detail
         $(document).on('click', '.add-modal', function() {
             $('#day_add_section').hide();
-            $('#day_add').empty();
+            // $('#day_add').empty();
+            $('#day_add').val('');
             $('#course_add').select2({
                 placeholder: {
                     id: '-1',
@@ -207,7 +209,7 @@
                 width: '100%',
                 minimumInputLength: 0,
                 ajax: {
-                    url: '{{ route('select.extended.courses') }}',
+                    url: '{{ route('select.extended_day.courses') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {
@@ -226,27 +228,27 @@
             $('#course_add').on('select2:select', function(e){
                 let data = e.params.data;
                 let splitted = data.id.split('#');
-
+                $('#day_add').val(splitted[5]);
                 // Get Days Options
-                $('#day_add').empty();
-                $.ajax({
-                    url: '{{ route('select.days') }}',
-                    dataType: 'json',
-                    data: {
-                        'id': splitted[0]
-                    },
-                    success: function (data) {
-                        var i;
-                        $('#day_add').empty();
-                        for(i=0; i<data.length; i++){
-                            $('#day_add')
-                                .append($("<option></option>")
-                                    .attr("value",data[i])
-                                    .text(data[i]));
-                        }
-                        $('#day_add_section').show();
-                    }
-                });
+                {{--$('#day_add').empty();--}}
+                {{--$.ajax({--}}
+                {{--    url: '{{ route('select.days') }}',--}}
+                {{--    dataType: 'json',--}}
+                {{--    data: {--}}
+                {{--        'id': splitted[0]--}}
+                {{--    },--}}
+                {{--    success: function (data) {--}}
+                {{--        var i;--}}
+                {{--        $('#day_add').empty();--}}
+                {{--        for(i=0; i<data.length; i++){--}}
+                {{--            $('#day_add')--}}
+                {{--                .append($("<option></option>")--}}
+                {{--                    .attr("value",data[i])--}}
+                {{--                    .text(data[i]));--}}
+                {{--        }--}}
+                {{--        $('#day_add_section').show();--}}
+                {{--    }--}}
+                {{--});--}}
             });
 
             $('.modal-title').text('Tambah Detail');
@@ -254,14 +256,15 @@
         });
 
         $("#addModal").on('hide.bs.modal', function () {
-            $('#day_add').empty();
+            $('#day_add').val('');
             $('#course_add').val(null).trigger('change');
         });
 
         var i = 1;
         $('.modal-footer').on('click', '.add', function() {
 
-            if($('select[name=day_add]').val() != null && $('#course_add').val() != null){
+            // if($('select[name=day_add]').val() != null && $('#course_add').val() != null){
+            if($('#day_add').val() != null && $('#course_add').val() != null){
 
                 let value = $('#course_add').val();
                 let splitted = value.split('#');
@@ -269,10 +272,10 @@
                 $('#detailTable').append("<tr id='" + i + "' class='item" + splitted[0] + "' >" +
                     "<td><input type='text' name='course[]' class='form-control' value='"+ splitted[1] + "' readonly/> <input type='hidden' name='course_id[]' value='" + splitted[0] +"'/></td>" +
                     "<td>" + splitted[2] + "</td>" +
-                    "<td><input type='text' name='day[]' class='form-control' value='" + $('select[name=day_add]').val() +"' readonly/></td>" +
+                    "<td><input type='text' name='day[]' class='form-control' value='" + $('#day_add').val() +"' readonly/></td>" +
                     "<td class='text-center'><a class='delete-schedule btn btn-danger' data-id='" + i + "'><span class='glyphicon glyphicon-trash'></span></a></td></tr>");
 
-                $('#day_add').empty();
+                $('#day_add').val('');
                 $('#course_add').empty();
 
                 i++;

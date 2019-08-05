@@ -596,6 +596,7 @@ Route::get('/select-customers', 'Admin\CustomerController@getCustomers')->name('
 Route::get('/select-courses', 'Admin\CourseController@getCourses')->name('select.courses');
 Route::get('/select-courses-package', 'Admin\CourseController@getCoursesPackage')->name('select.courses_package');
 Route::get('/select-courses-extended', 'Admin\CourseController@getExtendedCourses')->name('select.extended.courses');
+Route::get('/select-courses-extended-day', 'Admin\CourseController@getExtendedCoursesDay')->name('select.extended_day.courses');
 Route::get('/select-schedules', 'Admin\ScheduleController@getSchedules')->name('select.schedules');
 Route::get('/select-schedule-prorates', 'Admin\ScheduleController@getScheduleProrates')->name('select.schedule_prorates');
 Route::get('/select-schedule-cuti', 'Admin\ScheduleController@getScheduleCuti')->name('select.schedule_cuti');

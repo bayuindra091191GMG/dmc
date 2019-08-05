@@ -915,6 +915,72 @@ class CourseController extends Controller
         return \Response::json($formatted_tags);
     }
 
+    public function getExtendedCoursesDay(Request $request){
+        $term = trim($request->q);
+        $type = $request->type;
+        if(!empty($request->type)){
+            $couseDetails = CourseDetail::where('status_id', 1)
+                ->whereHas('course', function ($query) use ($type, $term){
+                    $query
+                        ->where('name', 'LIKE', '%'. $term. '%')
+                        ->where('type', $type)
+                        ->where('status_id', 1)
+                    ;
+                })
+                ->get();
+        }
+        else{
+            $couseDetails = CourseDetail::where('status_id', 1)
+                ->whereHas('course', function ($query) use ($type, $term){
+                    $query
+                        ->where('name', 'LIKE', '%'. $term. '%')
+                        ->where('status_id', 1)
+                    ;
+                })
+                ->get();
+        }
+
+        $formatted_tags = [];
+
+        foreach ($couseDetails as $courseDetail) {
+            if($courseDetail->course->type == 1){
+                $courseType = "Muaythai";
+            }
+            else if($courseDetail->course->type == 2){
+                $courseType = "Dance";
+            }
+            else if($courseDetail->course->type == 4){
+                $courseType = "Gymnastic";
+            }
+            else{
+                $courseType = "Private";
+            }
+
+            if($courseDetail->course->coach_id === 0){
+                $coachName = 'Tidak Ada Coach';
+            }
+            else{
+                $coachName = $courseDetail->course->coach->name;
+            }
+
+            $dateDetail = $courseDetail->day_name. " - ".$courseDetail->time;
+            $value = $courseDetail->course->id. '#'. $courseDetail->course->name. '#'. $courseDetail->course->coach->name. '#'. $courseDetail->course->price. '#'. $courseDetail->course->meeting_amount. '#'. $dateDetail;
+
+            $text = $courseDetail->course->name.'('.$courseType. ')';
+            if(!empty($courseDetail->course->studio)){
+                $text .= ' - Studio '. $courseDetail->course->studio;
+            }
+
+            $text.= ' ('. $dateDetail.')';
+            $text.= ' - '. $coachName;
+
+            $formatted_tags[] = ['id' => $value, 'text' => $text];
+
+        }
+
+        return \Response::json($formatted_tags);
+    }
+
     public function getDays(Request $request){
         try{
 
