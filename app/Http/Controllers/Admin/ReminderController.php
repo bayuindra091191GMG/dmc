@@ -86,11 +86,7 @@ class ReminderController extends Controller
             if($schedule->status_id !== 3){
                 return Response::json(array('errors' => 'INVALID'));
             }
-
-            //error_log($schedule->course->type);
-            //dd($schedule->course->type);
-
-            // If course type is package
+            // If course type is Muaythai
             if($schedule->course->type === 1){
                 //$finishDate = Carbon::parse($schedule->finish_date)->addDays($schedule->course->valid);
                 $finishDate  = Carbon::now('Asia/Jakarta')->addDays($schedule->course->valid);
@@ -98,32 +94,24 @@ class ReminderController extends Controller
 
 //                $remindDate = Carbon::parse($schedule->finish_date)->subDays(5);
                 $realFinishDate = Carbon::parse($schedule->finish_date);
+                $carryOverFinishDate = $realFinishDate->subDays(7);
                 $now = Carbon::now('Asia/Jakarta');
 
-                if($now->lessThanOrEqualTo($realFinishDate)){
-//                    if($schedule->course->id === 3 || $schedule->course->id === 4){
-//                        $schedule->meeting_amount += $schedule->course->meeting_amount + 3;
-//                    }
-//                    else{
-//                        $schedule->meeting_amount += $schedule->course->meeting_amount;
-//                    }
+                if($now->lessThanOrEqualTo($carryOverFinishDate)){
+                    // Carry over previous Muaythai meeting amount
                     $schedule->meeting_amount += $schedule->course->meeting_amount;
                 }
                 else{
-//                    if($schedule->course->id === 3 || $schedule->course->id === 4){
-//                        $schedule->meeting_amount = $schedule->course->meeting_amount + 3;
-//                    }
-//                    else{
-//                        $schedule->meeting_amount = $schedule->course->meeting_amount;
-//                    }
-                    $schedule->meeting_amount = $schedule->course->meeting_amount;
+                    if($now->lessThanOrEqualTo($realFinishDate)){
+                        $schedule->meeting_amount = $schedule->course->meeting_amount;
+                    }
                 }
             }
+            // If course type is Dance
             elseif($schedule->course->type === 2){
-                $finishDate = Carbon::parse($schedule->finish_date);
+                //$finishDate = Carbon::parse($schedule->finish_date);
 
                 // Get next month date at 10th
-                //$nextMonthDate = $finishDate->copy()->addMonthsNoOverflow(1);
                 $nextMonthDate = Carbon::now('Asia/Jakarta')->addMonthsNoOverflow(1);
                 $month = $nextMonthDate->month;
                 $year = $nextMonthDate->year;
@@ -132,11 +120,11 @@ class ReminderController extends Controller
                 $schedule->finish_date = $nextMonthFinishDate->toDateTimeString();
                 $schedule->meeting_amount = 0;
             }
+            // If course type is Gymnastic
             elseif($schedule->course->type === 4){
-                $finishDate = Carbon::parse($schedule->finish_date);
+                //$finishDate = Carbon::parse($schedule->finish_date);
 
                 // Get next month date at 10th
-                //$nextMonthDate = $finishDate->copy()->addMonthsNoOverflow(1);
                 $nextMonthDate = Carbon::now('Asia/Jakarta')->addMonthsNoOverflow(1);
                 $month = $nextMonthDate->month;
                 $year = $nextMonthDate->year;
@@ -164,12 +152,11 @@ class ReminderController extends Controller
                 $courseDetail->save();
             }
 
-
             if($schedule->course->type === 3){
                 return redirect()->route('admin.transactions.private.create')->with('customer', $schedule->customer_id);
             }
 
-            Session::flash('message', 'Berhasil memperbarui jadwal customer!');
+            Session::flash('message', 'Berhasil memperbaharui jadwal Student!');
 
             return new JsonResponse($schedule);
         }

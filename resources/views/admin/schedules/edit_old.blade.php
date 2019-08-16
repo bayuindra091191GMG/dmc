@@ -33,21 +33,22 @@
 
             @if($schedule->day != "Bebas")
                 <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="course_edit" >
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="type" >
                         Tipe Kelas
                         <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <select class="form-control" id="course_edit" name="course_edit">
-                            <option value="{{$schedule->course_id}}" selected>{{$schedule->course->name}} - {{$schedule->course->coach->name}}</option>
+                        <select class="form-control" id="course_add" name="course_add">
+                            <option value="{{$schedule->course_id}}">{{$schedule->course->name}} - {{$schedule->course->coach->name}}</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="day_add" >
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >
                         Hari Pertemuan
                     </label>
+
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         <select id="day_add" name="day_add" class="form-control col-md-7 col-xs-12">
                             @foreach($course->days as $day)
@@ -65,17 +66,17 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="finish_date">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
                         Tanggal Berakhir
                         <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input id="finish_date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
+                        <input id="finish-date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
                                name="finish_date" value="{{ $date }}" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="meeting_amount">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
                         Jumlah Pertemuan
                         <span class="required">*</span>
                     </label>
@@ -115,52 +116,19 @@
                 </div>
 
             @else
-{{--                <input type="hidden" name="course_add" value="{{$schedule->course_id}}">--}}
+                <input type="hidden" name="course_add" value="{{$schedule->course_id}}">
                 <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="course_edit" >
-                        Kelas
-                        <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        <select class="form-control" id="course_edit" name="course_edit_2">
-                            <option value="{{$schedule->course_id}}" selected>{{$schedule->course->name}} - {{$schedule->course->coach->name}}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div id="section_day" class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >
-                        Hari Pertemuan
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        <select id="day_add" name="day_add" class="form-control col-md-7 col-xs-12">
-                            @foreach($course->days as $day)
-                                @if(count($day->hours) > 1)
-                                    <option value="{{$day->day_string}} - {{ $day->hours[1]->hour_string }}">
-                                        {{ $day->day_string }} - {{ $day->hours[1]->hour_string }}
-                                    </option>
-                                @else
-                                    <option value="{{$day->day_string}} - {{ $day->hours[0]->hour_string }}">
-                                        {{ $day->day_string }} - {{ $day->hours[0]->hour_string }}
-                                    </option>
-                                @endif
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="finish_date">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
                         Tanggal Berakhir
                         <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input id="finish_date" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
+                        <input id="date2" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('date')) parsley-error @endif"
                                name="finish_date" value="{{ $date }}" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="meeting_amount">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="date">
                         Jumlah Pertemuan
                         <span class="required">*</span>
                     </label>
@@ -227,10 +195,10 @@
 
 
     <script type="text/javascript">
-        $('#finish_date').datetimepicker({
+        $('#date1').datetimepicker({
             format: "10 MMM Y"
         });
-        $('#finish_date').datetimepicker({
+        $('#date2').datetimepicker({
             format: "DD MMM Y"
         });
         $('#finish-date').datetimepicker({
@@ -241,108 +209,51 @@
             $('input[type="checkbox"]').not(this).prop('checked', false);
         });
 
-        @if($schedule->day != "Bebas")
-            $('#course_edit').select2({
-                placeholder: {
-                    id: '{{$schedule->course_id}}',
-                    text: '{{$schedule->course->name}} - {{$schedule->course->coach->name}}'
+        //Add kelas
+        $('#course_add').select2({
+            placeholder: {
+                id: '{{$schedule->course_id}}',
+                text: '{{$schedule->course->name}} - {{$schedule->course->coach->name}}'
+            },
+            val: '{{$schedule->course_id}}',
+            width: '100%',
+            minimumInputLength: 1,
+            ajax: {
+                url: '{{ route('select.courses') }}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: $.trim(params.term),
+                        customer: $('#course_add').val()
+                    };
                 },
-                val: '{{$schedule->course_id}}',
-                width: '100%',
-                minimumInputLength: 1,
-                ajax: {
-                    url: '{{ route('select.courses') }}',
-                    dataType: 'json',
-                    data: function (params) {
-                        return {
-                            q: $.trim(params.term),
-                            customer: $('#course_edit').val()
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: data
-                        };
-                    }
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
                 }
-            });
-
-            $('#course_edit').on('select2:select', function(){
-                $('#day_add').empty();
-                //Get Days Options
-                $.ajax({
-                    url: '{{ route('select.days') }}',
-                    dataType: 'json',
-                    data: {
-                        'id': $('select[name=course_add]').val()
-                    },
-                    success: function (data) {
-                        var i;
-                        for(i=0; i<data.length; i++){
-
-                            $('#day_add')
-                                .append($("<option></option>")
-                                    .attr("value",data[i])
-                                    .text(data[i]));
-                        }
-                    }
-                });
-            });
-        @else
-            $('#course_edit').select2({
-                placeholder: {
-                    id: '-1',
-                    text: ' - Pilih Kelas - '
+            }
+        });
+        $('#course_add').on('select2:select', function(){
+            $('#day_add').empty();
+            //Get Days Options
+            $.ajax({
+                url: '{{ route('select.days') }}',
+                dataType: 'json',
+                data: {
+                    'id': $('select[name=course_add]').val()
                 },
-                val: '{{$schedule->course_id}}',
-                width: '100%',
-                minimumInputLength: 1,
-                ajax: {
-                    url: '{{ route('select.type.courses') }}',
-                    dataType: 'json',
-                    data: function (params) {
-                        return {
-                            q: $.trim(params.term)
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: data
-                        };
+                success: function (data) {
+                    var i;
+                    for(i=0; i<data.length; i++){
+
+                        $('#day_add')
+                            .append($("<option></option>")
+                                .attr("value",data[i])
+                                .text(data[i]));
                     }
                 }
             });
-
-            $('#course_edit').on('select2:select', function(){
-                let value = e.params.data.id;
-                let valueArr = value.split("#");
-                alert(valueArr[1]);
-                if(valueArr[1] !== '1'){
-                    alert('check!');
-                    $('#section_day').show(600);
-                    $('#day_add').empty();
-                    $.ajax({
-                        url: '{{ route('select.days') }}',
-                        dataType: 'json',
-                        data: {
-                            'id': valueArr[0]
-                        },
-                        success: function (data) {
-                            var i;
-                            for(i=0; i<data.length; i++){
-
-                                $('#day_add')
-                                    .append($("<option></option>")
-                                        .attr("value",data[i])
-                                        .text(data[i]));
-                            }
-                        }
-                    });
-                }
-                else{
-                    $('#section_day').hide(600);
-                }
-            });
-        @endif
+        });
     </script>
 @endsection

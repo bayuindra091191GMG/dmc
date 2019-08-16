@@ -254,19 +254,15 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, Schedule $schedule)
     {
-        //dd($schedule);
         $courseDB = Course::find($request->input('course_add'));
-//        if($courseDB->type == 1) return redirect()->back()->withErrors("Kelas Wajib dipilih!");
 
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
         $date = Carbon::createFromFormat('d M Y', $request->input('finish_date'), 'Asia/Jakarta');
 
-        //if course type = class
-//        dd($courseDB->type);
         if($courseDB->type == 2 || $courseDB->type == 4){
             $schedule->day = $request->input('day_add');
-            $schedule->course_id = $request->input('course_add');
+            $schedule->course_id = $request->input('course_edit');
             $schedule->meeting_amount = $request->input('meeting_amount');
             $schedule->status_id = $request->input('status_id');
             $schedule->updated_at = $dateTimeNow->toDateTimeString();
@@ -274,6 +270,7 @@ class ScheduleController extends Controller
             $schedule->save();
         }
         else{
+            $schedule->course_id = $request->input('course_edit');
             $schedule->meeting_amount = $request->input('meeting_amount');
             $schedule->updated_at = $dateTimeNow->toDateTimeString();
             $schedule->finish_date = $date->toDateTimeString();

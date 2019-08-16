@@ -981,6 +981,50 @@ class CourseController extends Controller
         return \Response::json($formatted_tags);
     }
 
+    public function getCourseWithType(Request $request){
+        $term = trim($request->q);
+
+        $courses = Course::where('name', 'LIKE', '%'. $term. '%')
+            ->get();
+
+        $formatted_tags = [];
+
+        foreach ($courses as $course) {
+            if($course->type == 1){
+                $courseType = "Muaythai";
+            }
+            else if($course->type == 2){
+                $courseType = "Dance";
+            }
+            else if($course->type == 4){
+                $courseType = "Gymnastic";
+            }
+            else{
+                $courseType = "Private";
+            }
+
+            if($course->coach_id === 0){
+                $coachName = 'Tidak Ada Coach';
+            }
+            else{
+                $coachName = $course->coach->name;
+            }
+
+            $value = $course->id. '#'. $course->type;
+
+            $text = $course->name.'('.$courseType. ')';
+            if(!empty($course->studio)){
+                $text .= ' - Studio '. $course->studio;
+            }
+
+            $text.= ' - '. $coachName;
+
+            $formatted_tags[] = ['id' => $value, 'text' => $text];
+        }
+
+        return \Response::json($formatted_tags);
+    }
+
     public function getDays(Request $request){
         try{
 

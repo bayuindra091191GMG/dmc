@@ -8,7 +8,7 @@
     </div>
     <div class="row tile_count">
         <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-            <span class="count_top"> Total Customer</span>
+            <span class="count_top"> Total Student</span>
             {{--<div class="count green">{{ $counts['users'] }}</div>--}}
             <div class="count green">{{ $totalCustomer }}</div>
         </div>
@@ -140,7 +140,7 @@
 
                 <div class="row x_title">
                     <div class="col-md-6">
-                        <h3>Package Reminder</h3>
+                        <h3>Muaythai Reminder</h3>
                     </div>
                     {{--<div class="col-md-6">--}}
                     {{--<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">--}}
@@ -185,7 +185,7 @@
 
                 <div class="row x_title">
                     <div class="col-md-6">
-                        <h3>Class Reminder</h3>
+                        <h3>Dance Reminder</h3>
                     </div>
                 </div>
 
