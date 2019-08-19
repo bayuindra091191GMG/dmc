@@ -254,7 +254,8 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, Schedule $schedule)
     {
-        $courseDB = Course::find($request->input('course_add'));
+        $courseArr = explode('#', $request->input('course_edit'));
+        $courseDB = Course::find($courseArr[0]);
 
         $dateTimeNow = Carbon::now('Asia/Jakarta');
 
@@ -262,7 +263,7 @@ class ScheduleController extends Controller
 
         if($courseDB->type == 2 || $courseDB->type == 4){
             $schedule->day = $request->input('day_add');
-            $schedule->course_id = $request->input('course_edit');
+            $schedule->course_id = $courseArr[0];
             $schedule->meeting_amount = $request->input('meeting_amount');
             $schedule->status_id = $request->input('status_id');
             $schedule->updated_at = $dateTimeNow->toDateTimeString();
@@ -270,7 +271,8 @@ class ScheduleController extends Controller
             $schedule->save();
         }
         else{
-            $schedule->course_id = $request->input('course_edit');
+            $schedule->day = 'Bebas';
+            $schedule->course_id = $courseArr[0];
             $schedule->meeting_amount = $request->input('meeting_amount');
             $schedule->updated_at = $dateTimeNow->toDateTimeString();
             $schedule->finish_date = $date->toDateTimeString();

@@ -5,7 +5,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-            <h2>UBAH DATA JADWAL {{ $schedule->customer->first_name}} {{ $schedule->customer->last_name}}</h2>
+            <h2>UBAH DATA JADWAL {{ $schedule->customer->name}}</h2>
             <hr/>
         </div>
     </div>
@@ -228,13 +228,7 @@
 
     <script type="text/javascript">
         $('#finish_date').datetimepicker({
-            format: "10 MMM Y"
-        });
-        $('#finish_date').datetimepicker({
-            format: "DD MMM Y"
-        });
-        $('#finish-date').datetimepicker({
-            format: "DD MMM Y"
+            format: "DD MMM YYYY"
         });
 
         $('input[type="checkbox"]').on('change', function() {
@@ -251,7 +245,7 @@
                 width: '100%',
                 minimumInputLength: 1,
                 ajax: {
-                    url: '{{ route('select.courses') }}',
+                    url: '{{ route('select.type.courses') }}',
                     dataType: 'json',
                     data: function (params) {
                         return {
@@ -267,14 +261,17 @@
                 }
             });
 
-            $('#course_edit').on('select2:select', function(){
+            $('#course_edit').on('select2:select', function(e){
+
+                let value = e.params.data.id;
+                let valueArr = value.split("#");
                 $('#day_add').empty();
                 //Get Days Options
                 $.ajax({
                     url: '{{ route('select.days') }}',
                     dataType: 'json',
                     data: {
-                        'id': $('select[name=course_add]').val()
+                        'id': valueArr[0]
                     },
                     success: function (data) {
                         var i;
@@ -313,7 +310,7 @@
                 }
             });
 
-            $('#course_edit').on('select2:select', function(){
+            $('#course_edit').on('select2:select', function(e){
                 let value = e.params.data.id;
                 let valueArr = value.split("#");
                 alert(valueArr[1]);
