@@ -6,6 +6,7 @@ use App\Models\Attendance;
 use App\Models\Coach;
 use App\Models\Course;
 use App\Models\Customer;
+use App\Models\Leaf;
 use App\Models\Schedule;
 use App\Models\TransactionDetail;
 use App\Transformer\ScheduleTransformer;
@@ -295,22 +296,26 @@ class ScheduleController extends Controller
     public function destroy(Request $request)
     {
         try{
-            $coach = Coach::find($request->input('id'));
+            $schedule = Schedule::find($request->input('id'));
 
-            //Check first if Trainer already in Transaction
-            $classes = Course::where('coach_id', $coach->id)->get();
-            if($classes != null){
-                foreach ($classes as $data){
-                    $transaction = TransactionDetail::where('class_id', $data->id)->get();
-                    if($transaction != null){
-                        Session::flash('error', 'Data Trainer '. $coach->name . ' Tidak dapat dihapus karena masih wajib mengajar!');
-                        return Response::json(array('success' => 'VALID'));
-                    }
-                }
+            //check transaction detail, leaf, attendance
+            $transactionDetail = TransactionDetail::where('schedule_id', $schedule->id)->get();
+            if(!empty($transactionDetail)){
+                Session::flash('error', 'Jadwal Tidak dapat dihapus karena terdapat Transaksi yang dibuat!');
+                return Response::json(array('success' => 'VALID'));
             }
-            $coach->delete();
-
-            Session::flash('message', 'Berhasil menghapus data Trainer '. $coach->name);
+            $leaf = Leaf::where('schedule_id', $schedule->id)->get();
+            if(!empty($leaf)){
+                Session::flash('error', 'Jadwal Tidak dapat dihapus karena terdapat Cuti yang dibuat!');
+                return Response::json(array('success' => 'VALID'));
+            }
+            $attendance = Attendance::where('schedule_id', $schedule->id)->get();
+            if(!empty($attendance)){
+                Session::flash('error', 'Jadwal Tidak dapat dihapus karena terdapat Absensi yang dibuat!');
+                return Response::json(array('success' => 'VALID'));
+            }
+            $schedule->delete();
+            Session::flash('message', 'Berhasil menghapus Jadwal');
             return Response::json(array('success' => 'VALID'));
         }
         catch(\Exception $ex){
