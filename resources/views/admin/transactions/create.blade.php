@@ -121,8 +121,11 @@
                                     <th class="text-center" style="width: 15%">
                                         Hari
                                     </th>
-                                    <th class="text-center" style="width: 15%">
+                                    <th class="text-center" style="width: 10%">
                                         Harga
+                                    </th>
+                                    <th class="text-center" style="width: 10%">
+                                        Jumlah Bulan/Paket
                                     </th>
                                     {{--<th class="text-center" style="width: 10%">--}}
                                         {{--Diskon--}}
@@ -130,7 +133,7 @@
                                     <th class="text-center" style="width: 15%">
                                         Subtotal
                                     </th>
-                                    <th class="text-center" style="width: 15%">
+                                    <th class="text-center" style="width: 10%">
                                         Tindakan
                                     </th>
                                 </tr>
@@ -184,6 +187,12 @@
                             <label class="control-label col-sm-2" for="price_add">Harga:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="price_add" name="price_add" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="month_add">Jumlah Bulan:</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" id="month_add" name="month_add">
                             </div>
                         </div>
                         {{--<div class="form-group">--}}
@@ -447,6 +456,7 @@
                 var data = e.params.data;
                 var splitted = data.id.split('#');
                 $('#trainer_add').val(splitted[2]);
+                $('#month_add').val(1);
 
                 priceAddFormat.clear();
                 priceAddFormat.set(splitted[4], {
@@ -467,6 +477,7 @@
         $('.modal-footer').on('click', '.add', function() {
             var scheduleAdd = $('#schedule_add').val();
             var priceAdd = $('#price_add').val();
+            var monthAdd = $('#month_add').val();
             // var discountAdd = $('#discount_add').val();
 
             // Validate schedule
@@ -481,15 +492,26 @@
                 return false;
             }
 
+            // Validate month
+            if(!monthAdd || monthAdd === "" || monthAdd === "0"){
+                alert('Mohon isi jumlah bulan!')
+                return false;
+            }
+
             // Split schedule value
             var splitted = scheduleAdd.split('#');
 
             // Filter variables
             var price = 0;
+            let month = parseFloat(monthAdd);
             if(priceAdd && priceAdd !== "" && priceAdd !== "0"){
                 var priceClean = priceAdd.replace(/\./g,'');
                 price = parseFloat(priceClean);
             }
+
+            // Count Subtotal
+            let subtotal = price * month;
+
             // var discount = 0;
             // if(discountAdd && discountAdd !== "" && discountAdd !== "0"){
             //     var discountClean = discountAdd.replace(/\./g,'');
@@ -529,12 +551,13 @@
             // else{
             //     subtotal = price;
             // }
-            var subtotalString = rupiahFormat(price);
+            var subtotalString = rupiahFormat(subtotal);
 
+            sbAdd.append("<td class='text-center'>" + monthAdd + "<input type='hidden' name='months[]' value='" + monthAdd + "'/></td>");
             sbAdd.append("<td class='text-right'>" + subtotalString + "<input type='hidden' value='" + subtotalString + "'/></td>");
 
             sbAdd.append("<td class='text-center'>");
-            sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-schedule='" + scheduleAdd + "' data-price='" + price + "'><span class='glyphicon glyphicon-edit'></span></a>");
+            // sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-schedule='" + scheduleAdd + "' data-price='" + price + "'><span class='glyphicon glyphicon-edit'></span></a>");
             sbAdd.append("<a class='delete-modal btn btn-danger' data-id='" + idx + "' data-schedule='" + scheduleAdd + "' data-price='" + price + "'><span class='glyphicon glyphicon-trash'></span></a>");
             sbAdd.append("</td>");
             sbAdd.append("</tr>");

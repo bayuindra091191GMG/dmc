@@ -126,12 +126,15 @@
                                     <th class="text-center">
                                         Harga
                                     </th>
+                                    <th class="text-center">
+                                        Jumlah Bulan
+                                    </th>
 {{--                                    <th class="text-center" style="width: 10%">--}}
 {{--                                        Diskon--}}
 {{--                                    </th>--}}
-{{--                                    <th class="text-center">--}}
-{{--                                        Subtotal--}}
-{{--                                    </th>--}}
+                                    <th class="text-center">
+                                        Subtotal
+                                    </th>
 {{--                                    <th class="text-center" style="width: 15%">--}}
 {{--                                        Tindakan--}}
 {{--                                    </th>--}}
@@ -139,12 +142,20 @@
                                 </thead>
                                 <tbody>
                                     @foreach($schedules as $schedule)
-                                        <tr>
-                                            <td>{{ $schedule->course->name }}</td>
+                                        <tr id="{{ $schedule->id }}">
+                                            <td>
+                                                <input type="hidden" name="schedule_ids[]" value="{{ $schedule->id }}">
+                                                {{ $schedule->course->name }}
+                                            </td>
                                             <td>{{ $schedule->course->coach_id === 0 ? 'Tidak Ada Coach' : $schedule->course->coach->name}}</td>
                                             <td>{{ $schedule->day }}</td>
                                             <td class="text-right">{{ $schedule->meeting_amount }}</td>
-                                            <td class="text-right">{{ $schedule->course->price_string }}</td>
+                                            <td class="text-right">
+                                                <input type="hidden" id="price_{{ $schedule->id }}" value="{{ $schedule->course->price }}">
+                                                {{ $schedule->course->price_string }}
+                                            </td>
+                                            <td><input type="number" name="months[]" id="month_{{ $schedule->id }}" class="form-control text-right auto-blur" value="1" onfocusout="countSubtotal('{{ $schedule->id }}')"/></td>
+                                            <td class="text-right" id="subtotal_{{ $schedule->id }}">{{ $schedule->course->price_string }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -209,7 +220,6 @@
             }
         });
 
-
         // Add autonumeric
         regisrationFeeFormat = new AutoNumeric('#registration_fee', {
             decimalCharacter: ',',
@@ -232,6 +242,22 @@
                 decimalPlaces: 0
             });
         @endif
+
+        function countSubtotal(idx){
+            let price = parseFloat($('#price_' + idx).val());
+            let month = parseFloat($('#month_' + idx).val());
+
+            let subtotal = price * month;
+            let subtotalStr = rupiahFormat(subtotal);
+            $('#subtotal_' + idx).html(subtotalStr);
+        }
+
+        // Auto onfocusout when enter is pressed
+        $('.auto-blur').keypress(function (e) {
+            if (e.which == 13) {
+                $(this).blur();
+            }
+        });
 
         function rupiahFormat(nStr) {
             nStr += '';

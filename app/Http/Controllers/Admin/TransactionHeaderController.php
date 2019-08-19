@@ -218,8 +218,11 @@ class TransactionHeaderController extends Controller
         $totalPayment = 0;
         $idx = 0;
 
+        $months = $request->input('months');
+
         foreach($schedules as $schedule){
             if(!empty($schedule)){
+                $month = floatval($months[$idx]);
                 $priceStr = str_replace('.','', $prices[$idx]);
                 $price = (double) $priceStr;
                 $scheduleObj = Schedule::find($schedule);
@@ -227,33 +230,59 @@ class TransactionHeaderController extends Controller
                     'header_id'             => $trxHeader->id,
                     'schedule_id'           => $schedule,
                     'day'                   => $scheduleObj->day,
+                    'month_amount'          => $month,
                     'meeting_attendeds'     => 0,
                     'price'                 => $priceStr
                 ]);
 
                 // Check discount
-                if(!empty($discounts[$idx]) && $discounts[$idx] !== '0'){
-                    $discountStr = str_replace('.','', $discounts[$idx]);
-                    $trxDetail->discount = $discountStr;
+//                if(!empty($discounts[$idx]) && $discounts[$idx] !== '0'){
+//                    $discountStr = str_replace('.','', $discounts[$idx]);
+//                    $trxDetail->discount = $discountStr;
+//
+//                    $discount = (double) $discountStr;
+//                    $trxDetail->subtotal = $price - $discount;
+//
+//                    // Accumulate total price
+//                    $totalPrice += $price;
+//
+//                    // Accumulate total discount
+//                    $totalDiscount += $discount;
+//                }
+//                else{
+//                    $trxDetail->subtotal = $price;
+//                    $totalPrice += $price;
+//                }
 
-                    $discount = (double) $discountStr;
-                    $trxDetail->subtotal = $price - $discount;
-
-                    // Accumulate total price
-                    $totalPrice += $price;
-
-                    // Accumulate total discount
-                    $totalDiscount += $discount;
-                }
-                else{
-                    $trxDetail->subtotal = $price;
-                    $totalPrice += $price;
-                }
-
-                $trxDetail->save();
+                $totalPrice += $month * $price;
+                $trxDetail->subtotal = $month * $price;
+                $trxDetail->meeting_amount = $scheduleObj->course->meeting_amount;
 
                 // Accumulate subtotal
                 $totalPayment += $trxDetail->subtotal;
+
+                // Check more than 1 month payment
+                if($month > 1){
+                    if($scheduleObj->course->type === 1){
+                        $addedTimes = $month - 1;
+
+                        $addedValid = $addedTimes * $scheduleObj->course->valid;
+                        $newFinishDate = Carbon::parse($scheduleObj->finish_date)->addDays($addedValid);
+                        $scheduleObj->finish_date =  $newFinishDate->toDateTimeString();
+                        $scheduleObj->meeting_amount +=  ($addedTimes * $scheduleObj->course->meeting_amount);
+
+                        $trxDetail->meeting_amount += ($addedTimes * $scheduleObj->course->meeting_amount);
+                    }
+                    else{
+                        $addedMonth = $month - 1;
+                        $newFinishDate = Carbon::parse($scheduleObj->finish_date)->addMonthNoOverflow($addedMonth);
+                        $scheduleObj->finish_date =  $newFinishDate->toDateTimeString();
+
+                        $trxDetail->meeting_amount += ($addedMonth * $scheduleObj->course->meeting_amount);
+                    }
+                }
+
+                $trxDetail->save();
 
                 // Activate schedule
                 $scheduleObj->status_id = 3;

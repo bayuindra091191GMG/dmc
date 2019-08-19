@@ -256,6 +256,7 @@ class ScheduleController extends Controller
     public function update(Request $request, Schedule $schedule)
     {
         $courseArr = explode('#', $request->input('course_edit'));
+        //dd($courseArr);
         $courseDB = Course::find($courseArr[0]);
 
         $dateTimeNow = Carbon::now('Asia/Jakarta');

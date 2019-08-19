@@ -34,7 +34,7 @@
             @if($schedule->day != "Bebas")
                 <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="course_edit" >
-                        Tipe Kelas
+                        Kelas
                         <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
@@ -122,13 +122,13 @@
                         <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <select class="form-control" id="course_edit" name="course_edit_2">
+                        <select class="form-control" id="course_edit" name="course_edit">
                             <option value="{{$schedule->course_id}}" selected>{{$schedule->course->name}} - {{$schedule->course->coach->name}}</option>
                         </select>
                     </div>
                 </div>
 
-                <div id="section_day" class="form-group">
+                <div id="section_day" class="form-group" style="display: none;">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address" >
                         Hari Pertemuan
                     </label>
@@ -313,9 +313,9 @@
             $('#course_edit').on('select2:select', function(e){
                 let value = e.params.data.id;
                 let valueArr = value.split("#");
-                alert(valueArr[1]);
+                //alert(valueArr[1]);
                 if(valueArr[1] !== '1'){
-                    alert('check!');
+                    //alert('check!');
                     $('#section_day').show(600);
                     $('#day_add').empty();
                     $.ajax({

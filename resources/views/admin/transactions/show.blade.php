@@ -175,6 +175,9 @@
                                         <th class="text-center" style="width: 15%">
                                             Harga
                                         </th>
+                                        <th class="text-center">
+                                            Jumlah Bulan/Paket
+                                        </th>
                                         {{--<th class="text-center" style="width: 10%">--}}
                                             {{--Diskon--}}
                                         {{--</th>--}}
@@ -213,11 +216,14 @@
                                         <th class="text-center" style="width: 15%">
                                             Hari
                                         </th>
+                                        <th class="text-center" style="width: 10%">
+                                            Jumlah Pertemuan
+                                        </th>
                                         <th class="text-center" style="width: 15%">
                                             Harga
                                         </th>
-                                        <th class="text-center" style="width: 10%">
-                                            Jumlah Pertemuan
+                                        <th class="text-center">
+                                            Jumlah Bulan/Paket
                                         </th>
                                         <th class="text-center" style="width: 15%">
                                             Subtotal
@@ -259,10 +265,13 @@
                                                 {{ $detail->schedule->day }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $detail->schedule->course->meeting_amount }}
+                                                {{ $detail->meeting_amount }}
                                             </td>
                                             <td class="text-right">
                                                 {{ $detail->price_string }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $detail->month_amount ?? '1' }}
                                             </td>
                                             {{--<td class="text-right">--}}
                                                 {{--{{ $detail->discount_string ?? '0' }}--}}
@@ -302,11 +311,14 @@
                                             <td class="text-center">
                                                 {{ $detail->schedule->day }}
                                             </td>
+                                            <td class="text-center">
+                                                {{ $detail->meeting_amount }}
+                                            </td>
                                             <td class="text-right">
                                                 {{ $detail->price_string }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $detail->meeting_amount }}
+                                                {{ $detail->month_amount ?? '1' }}
                                             </td>
                                             <td class="text-right">
                                                 {{ $detail->subtotal_string }}
