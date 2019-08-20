@@ -30,6 +30,26 @@
             @endif
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="member_id">
+                    ID Member
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="member_id" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('member_id')) parsley-error @endif"
+                           name="member_id" value="{{ old('member_id') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="barcode">
+                    Kode Barcode
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="barcode" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('barcode')) parsley-error @endif"
+                           name="barcode" value="{{ old('barcode') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name" >
                     Nama
                     <span class="required">*</span>

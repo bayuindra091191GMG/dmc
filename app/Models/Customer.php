@@ -13,6 +13,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * Class Customer
  * 
  * @property int $id
+ * @property string $member_id
+ * @property string $barcode
  * @property string $name
  * @property string $username
  * @property string $email
@@ -44,6 +46,8 @@ class Customer extends Eloquent
 	];
 
 	protected $fillable = [
+	    'member_id',
+        'barcode',
 		'name',
 		'username',
 		'email',

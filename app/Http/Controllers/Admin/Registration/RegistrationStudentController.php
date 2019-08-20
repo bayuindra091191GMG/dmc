@@ -89,6 +89,8 @@ class RegistrationStudentController extends Controller
             }
 
             $newStudent = Customer::create([
+                'member_id'     => $request->input('member_id') ?? null,
+                'barcode'       => $request->input('barcode') ?? null,
                 'name'          => $request->input('student_name'),
                 'phone'         => $request->input('student_phone') ?? null,
                 'email'         => $request->input('student_email'),

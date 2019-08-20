@@ -18,15 +18,15 @@
                width="100%" id="customers-table">
             <thead>
                 <tr>
-                    <th class="text-center" style="width: 10%;">No</th>
-                    <th class="text-center" style="width: 10%;">Nama</th>
+                    <th class="text-center" style="width: 5%;">No</th>
+                    <th class="text-center" style="width: 15%;">Nama</th>
+                    <th class="text-center" style="width: 15%;">ID Member</th>
                     <th class="text-center" style="width: 10%;">Email</th>
                     <th class="text-center" style="width: 10%;">No Telepon</th>
-                    <th class="text-center" style="width: 10%;">Umur</th>
-                    <th class="text-center" style="width: 10%;">Nama Orang Tua</th>
-                    <th class="text-center" style="width: 20%;">Alamat</th>
+                    <th class="text-center" style="width: 10%;">Tanggal Lahir</th>
+                    <th class="text-center" style="width: 15%;">Nama Orang Tua</th>
                     <th class="text-center" style="width: 10%;">Tanggal Dibuat</th>
-                    <th class="text-center" style="width: 10%;">Action</th>
+                    <th class="text-center" style="width: 10%;">Tindakan</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,15 +52,24 @@
             $('#customers-table').DataTable({
                 processing: true,
                 serverSide: true,
+                pageLength: 25,
                 ajax: '{!! route('datatables.customers') !!}',
+                order: [ [1, 'asc'] ],
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
                     { data: 'name', name: 'name', class: 'text-center'},
+                    { data: 'member_id', name: 'member_id', class: 'text-center'},
                     { data: 'email', name: 'email', class: 'text-center'},
                     { data: 'phone', name: 'phone', class: 'text-center'},
-                    { data: 'age', name: 'age', class: 'text-center'},
+                    { data: 'dob', name: 'dob', class: 'text-center',
+                        render: function ( data, type, row ){
+                            if ( (type === 'display' || type === 'filter') && data !== '-' ){
+                                return moment(data).format('DD MMM YYYY');
+                            }
+                            return data;
+                        }
+                    },
                     { data: 'parent_name', name: 'parent_name', class: 'text-center'},
-                    { data: 'address', name: 'address', class: 'text-center'},
                     { data: 'created_at', name: 'created_at', class: 'text-center',
                         render: function ( data, type, row ){
                             if ( type === 'display' || type === 'filter' ){

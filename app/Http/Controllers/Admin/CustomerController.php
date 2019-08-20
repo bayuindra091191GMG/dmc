@@ -78,6 +78,8 @@ class CustomerController extends Controller
         }
 
         Customer::create([
+            'member_id'     => $request->input('member_id') ?? null,
+            'barcode'       => $request->input('barcode') ?? null,
             'name'          => $request->get('name'),
             'email'         => $request->get('email'),
             'phone'         => $request->get('phone') ?? null,
@@ -150,6 +152,8 @@ class CustomerController extends Controller
             $dob = Carbon::createFromFormat('d M Y', $request->input('dob'), 'Asia/Jakarta');
         }
 
+        $customer->member_id = $request->input('member_id') ?? null;
+        $customer->barcode = $request->input('barcode') ?? null;
         $customer->name = $request->input('name');
         $customer->email = $request->input('email');
         $customer->age = $request->input('age') ?? null;

@@ -28,6 +28,24 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
+                        ID Member
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ $customer->member_id ?? '-' }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        Nama
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ $customer->barcode ?? '-' }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
                         Nama
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
