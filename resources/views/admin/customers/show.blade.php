@@ -28,6 +28,20 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
+                        Photo
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        :
+                        @if(!empty($customer->photo_path))
+                            <img src="{{ asset('storage/students/'. $customer->photo_path) }}" id="existing_photo" style="width: 400px; height: auto;">
+                        @else
+                            Tidak Ada Foto
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
                         ID Member
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">

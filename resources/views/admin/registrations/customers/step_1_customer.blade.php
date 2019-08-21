@@ -74,6 +74,19 @@
 
             <div id="form_new_student" style="display: none;">
                 <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="photo">
+                        Foto
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div id="my_camera"></div>
+                        <br/>
+                        <input type="button" class="btn btn-primary" id="btn_snapshot" value="Take Snapshot" onClick="take_snapshot()">
+                        <input type="hidden" name="photo" class="image-tag">
+                        <div id="results"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="member_id">
                         ID Member
                     </label>
@@ -205,6 +218,7 @@
     {{ Html::script(mix('assets/admin/js/autonumeric.js')) }}
     {{ Html::script(mix('assets/admin/js/stringbuilder.js')) }}
     {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
+    <script src="{{ asset('assets/admin/js/webcam.min.js') }}"></script>
     <script type="text/javascript">
 
         $('#dob').datetimepicker({
@@ -261,5 +275,24 @@
             var scheduleLinkBtn = document.getElementById("schedule_check");
             scheduleLinkBtn.setAttribute("href","/admin/customers/show/" + data.id);
         });
+
+        Webcam.set({
+            width: 490,
+            height: 390,
+            image_format: 'jpeg',
+            jpeg_quality: 90
+        });
+
+        Webcam.attach( '#my_camera' );
+
+        function take_snapshot() {
+            Webcam.snap( function(data_uri) {
+                $('#my_camera').hide();
+                $('#btn_snapshot').hide();
+                $(".image-tag").val(data_uri);
+                document.getElementById('results').innerHTML = '<img src="'+data_uri+'"/>';
+                Webcam.reset();
+            } );
+        }
     </script>
 @endsection

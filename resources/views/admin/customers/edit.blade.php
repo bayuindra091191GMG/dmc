@@ -30,6 +30,23 @@
             @endif
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="photo">
+                    Foto
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    @if(!empty($customer->photo_path))
+                        <img src="{{ asset('storage/students/'. $customer->photo_path) }}" id="existing_photo" style="width: 400px; height: auto;">
+                    @endif
+                    <div id="my_camera"></div>
+                    <br/>
+                    <input type="button" class="btn btn-primary" id="btn_prepare_photo" value="AMBIL FOTO" onClick="prepare_photo()">
+                    <input type="button" class="btn btn-primary" id="btn_snapshot" value="FOTO" style="display: none;" onClick="take_snapshot()">
+                    <input type="hidden" name="photo" class="image-tag">
+                    <div id="results"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="member_id">
                     ID Member
                 </label>
@@ -132,4 +149,30 @@
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/users/edit.js')) }}
+    <script src="{{ asset('assets/admin/js/webcam.min.js') }}"></script>
+    <script>
+        Webcam.set({
+            width: 490,
+            height: 390,
+            image_format: 'jpeg',
+            jpeg_quality: 90
+        });
+
+        function prepare_photo(){
+            $('#existing_photo').hide();
+            Webcam.attach( '#my_camera' );
+            $('#btn_prepare_photo').hide();
+            $('#btn_snapshot').show();
+        }
+
+        function take_snapshot() {
+            Webcam.snap( function(data_uri) {
+                $('#my_camera').hide();
+                $('#btn_snapshot').hide();
+                $(".image-tag").val(data_uri);
+                document.getElementById('results').innerHTML = '<img src="'+data_uri+'"/>';
+                Webcam.reset();
+            } );
+        }
+    </script>
 @endsection

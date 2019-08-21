@@ -56,6 +56,7 @@ class RegistrationStudentController extends Controller
     }
 
     public function store(Request $request){
+
         // Validate student
         if(!empty($request->input('is_new_student'))){
             if(empty($request->input('student_name')) || empty($request->input('student_email'))){
@@ -99,6 +100,17 @@ class RegistrationStudentController extends Controller
                 'dob'           => $dob !== null ? $dob->toDateTimeString() : null,
                 'parent_name'   => $request->input('student_parent_name') ?? null
             ]);
+
+            if($request->filled('photo')){
+                $image = str_replace('data:image/jpeg;base64,', '', $request->input('photo'));
+                $image = str_replace(' ', '+', $image);
+                $imageName = $newStudent->name.'_photo.jpg';
+                \File::put(public_path(). '/storage/students/' . $imageName, base64_decode($image));
+
+                $newStudent->photo_path = $imageName;
+                $newStudent->save();
+            }
+
 
             $studentId = $newStudent->id;
         }

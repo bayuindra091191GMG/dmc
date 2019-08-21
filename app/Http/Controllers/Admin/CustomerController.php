@@ -162,6 +162,16 @@ class CustomerController extends Controller
         $customer->address = $request->input('address') ?? null;
         $customer->phone = $request->input('phone') ?? null;
         $customer->updated_at = $dateTimeNow;
+
+        if($request->filled('photo')){
+            $image = str_replace('data:image/jpeg;base64,', '', $request->input('photo'));
+            $image = str_replace(' ', '+', $image);
+            $imageName = $customer->name.'_photo.jpg';
+            \File::put(public_path(). '/storage/students/' . $imageName, base64_decode($image));
+
+            $customer->photo_path = $imageName;
+        }
+
         $customer->save();
 
         Session::flash('message', 'Berhasil mengubah data Student!');
