@@ -229,17 +229,26 @@
             $('#form_new_student').show();
         @endif
 
+        Webcam.set({
+            width: 490,
+            height: 390,
+            image_format: 'jpeg',
+            jpeg_quality: 90
+        });
+
         // Show Create New Student Form
         $('#is_new_student').change(function(){
             if(this.checked){
                 $('#form_new_student').show();
                 $("#customer").prop("disabled", true);
+                Webcam.attach( '#my_camera' );
                 //$('#form_existing_student').hide();
             }
             else{
                 $('#form_new_student').hide();
                 $("#customer").prop("disabled", false);
                 //$('#form_existing_student').show();
+                Webcam.reset();
             }
         });
 
@@ -275,15 +284,6 @@
             var scheduleLinkBtn = document.getElementById("schedule_check");
             scheduleLinkBtn.setAttribute("href","/admin/customers/show/" + data.id);
         });
-
-        Webcam.set({
-            width: 490,
-            height: 390,
-            image_format: 'jpeg',
-            jpeg_quality: 90
-        });
-
-        Webcam.attach( '#my_camera' );
 
         function take_snapshot() {
             Webcam.snap( function(data_uri) {
