@@ -219,7 +219,7 @@
                                             <td class="text-center">
                                                 <a class='btn btn-xs btn-info' href="{{route('admin.schedules.edit', ['schedule'=>$schedule->id])}}" data-toggle='tooltip' data-placement='top'><i class='fa fa-pencil'></i></a>
                                                 @if($schedule->status_id !== 6)
-                                                    <a class='btn btn-xs btn-danger stop-modal' data-toggle='tooltip' data-placement='top' data-schedule-id="{{ $schedule->id }}"><i class='fa fa-times'></i></a>
+                                                    <a class='btn btn-xs btn-danger stop-modal' data-toggle='tooltip' data-placement='top' data-schedule-id="{{ $schedule->id }}"><i class='fa fa-trash'></i></a>
                                                 @endif
                                             </td>
                                         </tr>
@@ -243,7 +243,7 @@
                     <button type="button" class="close" data-dismiss="modal">×</button>
                 </div>
                 <div class="modal-body">
-                    <h3 class="text-center">Apakah anda yakin ingin membatalkan jadwal kelas ini?</h3>
+                    <h3 class="text-center">Apakah anda yakin ingin menghapus jadwal kelas ini?</h3>
                     <br />
 
                     <form role="form">
@@ -295,21 +295,31 @@
         $('.modal-footer').on('click', '.stop', function() {
             $.ajax({
                 type: 'POST',
-                url: '{{ route('admin.schedules.user.stop') }}',
+                url: '{{ route('admin.schedules.destroy') }}',
                 data: {
                     '_token': '{{ csrf_token() }}',
-                    'schedule_id': $('#schedule_id').val()
+                    'id': $('#schedule_id').val()
                 },
                 success: function(data) {
                     if ((data.errors)){
-                        if(data.errors === "STOPPED"){
+                        if(data.errors === "TRANSACTION_DETAIL"){
                             setTimeout(function () {
-                                toastr.error('Jadwal kelas sudah dibatalkan!!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                                toastr.error('Jadwal Tidak dapat dihapus karena terdapat Transaksi yang dibuat!!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                            }, 500);
+                        }
+                        else if(data.errors === "LEAF"){
+                            setTimeout(function () {
+                                toastr.error('Jadwal Tidak dapat dihapus karena terdapat Cuti yang dibuat!!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                            }, 500);
+                        }
+                        else if(data.errors === "ATTENDANCE"){
+                            setTimeout(function () {
+                                toastr.error('Jadwal Tidak dapat dihapus karena terdapat Absensi yang dibuat!!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
                             }, 500);
                         }
                         else{
                             setTimeout(function () {
-                                toastr.error('Gagal membatalkan jadwal kelas!!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
+                                toastr.error('Gagal menghapus jadwal kelas!!', 'Peringatan', {timeOut: 6000, positionClass: "toast-top-center"});
                             }, 500);
                         }
                     }

@@ -297,29 +297,27 @@ class ScheduleController extends Controller
     public function destroy(Request $request)
     {
         try{
+//            error_log($request->input('id'));
             $schedule = Schedule::find($request->input('id'));
 
             //check transaction detail, leaf, attendance
-            $transactionDetail = TransactionDetail::where('schedule_id', $schedule->id)->get();
+            $transactionDetail = TransactionDetail::where('schedule_id', $schedule->id)->first();
             if(!empty($transactionDetail)){
-                Session::flash('error', 'Jadwal Tidak dapat dihapus karena terdapat Transaksi yang dibuat!');
-                return Response::json(array('success' => 'VALID'));
+                return Response::json(array('errors' => 'TRANSACTION_DETAIL'));
             }
-            $leaf = Leaf::where('schedule_id', $schedule->id)->get();
+            $leaf = Leaf::where('schedule_id', $schedule->id)->first();
             if(!empty($leaf)){
-                Session::flash('error', 'Jadwal Tidak dapat dihapus karena terdapat Cuti yang dibuat!');
-                return Response::json(array('success' => 'VALID'));
+                return Response::json(array('errors' => 'LEAF'));
             }
-            $attendance = Attendance::where('schedule_id', $schedule->id)->get();
+            $attendance = Attendance::where('schedule_id', $schedule->id)->first();
             if(!empty($attendance)){
-                Session::flash('error', 'Jadwal Tidak dapat dihapus karena terdapat Absensi yang dibuat!');
-                return Response::json(array('success' => 'VALID'));
+                return Response::json(array('errors' => 'ATTENDANCE'));
             }
             $schedule->delete();
-            Session::flash('message', 'Berhasil menghapus Jadwal');
             return Response::json(array('success' => 'VALID'));
         }
         catch(\Exception $ex){
+            error_log($ex);
             return Response::json(array('errors' => 'INVALID'));
         }
     }
