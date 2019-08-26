@@ -192,7 +192,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="month_add">Jumlah Bulan:</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="month_add" name="month_add">
+                                <input type="number" class="form-control" id="month_add" name="month_add" value="1">
                             </div>
                         </div>
                         {{--<div class="form-group">--}}
