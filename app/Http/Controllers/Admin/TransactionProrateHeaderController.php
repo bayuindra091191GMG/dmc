@@ -218,6 +218,7 @@ class TransactionProrateHeaderController extends Controller
 
                 // Activate schedule
                 $scheduleObj->status_id = 3;
+                $scheduleObj->save();
 
                 // Increase student count
                 $splitted = explode('-', $scheduleObj->day);
@@ -228,8 +229,10 @@ class TransactionProrateHeaderController extends Controller
                     ->where('day_name', $dayString)
                     ->where('time', $timeString)
                     ->first();
-                $courseDetail->current_capacity += 1;
-                $courseDetail->save();
+                if(!empty($courseDetail)){
+                    $courseDetail->current_capacity += 1;
+                    $courseDetail->save();
+                }
             }
             $idx++;
         }
