@@ -19,8 +19,8 @@
             <thead>
                 <tr>
                     <th class="text-center" style="width: 5%;">No</th>
-                    <th class="text-center" style="width: 15%;">Nama</th>
                     <th class="text-center" style="width: 15%;">ID Member</th>
+                    <th class="text-center" style="width: 15%;">Nama</th>
                     <th class="text-center" style="width: 10%;">Email</th>
                     <th class="text-center" style="width: 10%;">No Telepon</th>
                     <th class="text-center" style="width: 10%;">Tanggal Lahir</th>
@@ -54,11 +54,11 @@
                 serverSide: true,
                 pageLength: 25,
                 ajax: '{!! route('datatables.customers') !!}',
-                order: [ [1, 'asc'] ],
+                order: [ [0, 'asc'] ],
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false, class: 'text-center'},
-                    { data: 'name', name: 'name', class: 'text-center'},
                     { data: 'member_id', name: 'member_id', class: 'text-center'},
+                    { data: 'name', name: 'name', class: 'text-center'},
                     { data: 'email', name: 'email', class: 'text-center'},
                     { data: 'phone', name: 'phone', class: 'text-center'},
                     { data: 'dob', name: 'dob', class: 'text-center',

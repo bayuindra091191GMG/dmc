@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Registration;
 
 
 use App\Http\Controllers\Controller;
+use App\Libs\Utilities;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -20,36 +21,57 @@ class RegistrationStudentController extends Controller
             }
         }
 
+        $prepend = '2501';
+        $nextNo = Utilities::GetNextMemberNumber($prepend);
+        $memberId = Utilities::GenerateMemberNumber($prepend, $nextNo);
+
         $data = [
             'type'          => 1,
             'courseType'    => 'MUAYTHAI',
-            'student'       => $student ?? null
+            'student'       => $student ?? null,
+            'memberId'      => $memberId
         ];
 
         return view('admin.registrations.customers.step_1_customer')->with($data);
     }
 
     public function formStepOneDance(){
+        $prepend = '2501';
+        $nextNo = Utilities::GetNextMemberNumber($prepend);
+        $memberId = Utilities::GenerateMemberNumber($prepend, $nextNo);
+
         $data = [
             'type'          => 2,
-            'courseType'    => 'DANCE'
+            'courseType'    => 'DANCE',
+            'memberId'      => $memberId
         ];
 
         return view('admin.registrations.customers.step_1_customer')->with($data);
     }
 
     public function formStepOnePrivate(){
+        $prepend = '2501';
+        $nextNo = Utilities::GetNextMemberNumber($prepend);
+        $memberId = Utilities::GenerateMemberNumber($prepend, $nextNo);
+
         $data = [
             'type'          => 3,
-            'courseType'    => 'PRIVATE'
+            'courseType'    => 'PRIVATE',
+            'memberId'      => $memberId
         ];
 
         return view('admin.registrations.customers.step_1_customer')->with($data);
     }
+
     public function formStepOneGymnastic(){
+        $prepend = '2501';
+        $nextNo = Utilities::GetNextMemberNumber($prepend);
+        $memberId = Utilities::GenerateMemberNumber($prepend, $nextNo);
+
         $data = [
             'type'          => 4,
-            'courseType'    => 'GYMNASTIC'
+            'courseType'    => 'GYMNASTIC',
+            'memberId'      => $memberId
         ];
 
         return view('admin.registrations.customers.step_1_customer')->with($data);
@@ -83,6 +105,11 @@ class RegistrationStudentController extends Controller
         }
 
         if(!empty($request->input('is_new_student'))){
+            // Generate member ID
+            $prepend = '2501';
+            $nextNo = Utilities::GetNextMemberNumber($prepend);
+            $memberId = Utilities::GenerateMemberNumber($prepend, $nextNo);
+
             // Create student if new
             $dob = null;
             if(!empty($request->input('dob'))){
@@ -90,7 +117,7 @@ class RegistrationStudentController extends Controller
             }
 
             $newStudent = Customer::create([
-                'member_id'     => $request->input('member_id') ?? null,
+                'member_id'     => $memberId,
                 'barcode'       => $request->input('barcode') ?? null,
                 'name'          => $request->input('student_name'),
                 'phone'         => $request->input('student_phone') ?? null,
@@ -113,6 +140,9 @@ class RegistrationStudentController extends Controller
 
 
             $studentId = $newStudent->id;
+
+            // Update auto number
+            Utilities::UpdateMemberNumber('2501');
         }
         else{
             // Get existing student id

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Libs\Utilities;
 use App\Models\Auth\User\User;
 use App\Models\Customer;
 use App\Models\Schedule;
@@ -54,7 +55,15 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return view('admin.customers.create');
+        $prepend = '2501';
+        $nextNo = Utilities::GetNextMemberNumber($prepend);
+        $memberId = Utilities::GenerateMemberNumber($prepend, $nextNo);
+
+        $data = [
+            'memberId'      => $memberId
+        ];
+
+        return view('admin.customers.create')->with($data);
     }
 
     /**
@@ -72,13 +81,18 @@ class CustomerController extends Controller
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
 
+        // Generate member ID
+        $prepend = '2501';
+        $nextNo = Utilities::GetNextMemberNumber($prepend);
+        $memberId = Utilities::GenerateMemberNumber($prepend, $nextNo);
+
         $dob = null;
         if(!empty($request->input('dob'))){
             $dob = Carbon::createFromFormat('d M Y', $request->input('dob'), 'Asia/Jakarta');
         }
 
         Customer::create([
-            'member_id'     => $request->input('member_id') ?? null,
+            'member_id'     => $memberId,
             'barcode'       => $request->input('barcode') ?? null,
             'name'          => $request->get('name'),
             'email'         => $request->get('email'),
@@ -88,6 +102,9 @@ class CustomerController extends Controller
             'dob'           => $dob !== null ? $dob->toDateTimeString() : null,
             'parent_name'   => $request->get('parent_name') ?? null
         ]);
+
+        // Update member autonumber
+        Utilities::UpdateMemberNumber($prepend);
 
         Session::flash('message', 'Berhasil membuat data Student baru!');
 
@@ -152,7 +169,7 @@ class CustomerController extends Controller
             $dob = Carbon::createFromFormat('d M Y', $request->input('dob'), 'Asia/Jakarta');
         }
 
-        $customer->member_id = $request->input('member_id') ?? null;
+//        $customer->member_id = $request->input('member_id') ?? null;
         $customer->barcode = $request->input('barcode') ?? null;
         $customer->name = $request->input('name');
         $customer->email = $request->input('email');

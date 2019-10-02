@@ -688,3 +688,6 @@ Route::get('/datatables-roles', 'Admin\RoleController@getIndex')->name('datatabl
 Route::get('/documents/purchase-request', function (){
    return view('documents.Victor23mega PR Example');
 });
+
+// SCRIPT
+Route::get('/script/generate-member-id', 'Admin\ScriptController@generateMemberId');

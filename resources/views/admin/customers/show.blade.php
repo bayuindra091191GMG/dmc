@@ -45,7 +45,7 @@
                         ID Member
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        : {{ $customer->member_id ?? '-' }}
+                        : {{ $customer->member_id }}
                     </div>
                 </div>
 

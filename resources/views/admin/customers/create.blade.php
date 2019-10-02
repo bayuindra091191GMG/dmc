@@ -35,7 +35,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="member_id" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('member_id')) parsley-error @endif"
-                           name="member_id" value="{{ old('member_id') }}">
+                           name="member_id" value="{{ $memberId }}" readonly>
                 </div>
             </div>
 
