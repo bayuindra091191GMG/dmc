@@ -142,9 +142,6 @@ class AttendanceController extends Controller
             $scheduleID = $request->input('schedule_id');
 
             //Check payment due or not
-
-
-
             $now = Carbon::now('Asia/Jakarta');
             //Check if already absence today
             $attendanceExist = Attendance::where('customer_id', $customerID)
@@ -496,5 +493,9 @@ class AttendanceController extends Controller
         $attendanceCount = Attendance::where('customer_id', $customerData->id)->where('schedule_id', $scheduleDB->id)->count();
         $date = $attendanceData->date->toDateTimeString();
         return view('admin.attendances.paper', compact('scheduleDB', 'customerData', 'date', 'attendanceCount'));
+    }
+
+    public function scanReceiver(){
+        return view('admin.attendances.scan');
     }
 }

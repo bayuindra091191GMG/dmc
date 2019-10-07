@@ -133,6 +133,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('attendances/report', 'AttendanceController@report')->name('attendances.report');
     Route::post('attendances/report/download', 'AttendanceController@showDocument')->name('attendances.show-report');
     Route::get('attendances/paper/', 'AttendanceController@printAttendancePaper')->name('attendances.paper');
+    Route::get('attendances/scan/', 'AttendanceController@scanReceiver')->name('attendances.scan');
+    Route::post('attendances/scan/submit', 'CustomerController@getStudentScanResult')->name('attendances.scan.submit');
 
     //Transaction Header
     Route::get('transactions', 'TransactionHeaderController@index')->name('transactions');
@@ -536,31 +538,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('item_receipt_details/simpan', 'Inventory\ItemReceiptDetailController@store')->name('item_receipt_details.store');
     Route::put('item_receipt_details/ubah', 'Inventory\ItemReceiptDetailController@update')->name('item_receipt_details.update');
     Route::post('item_receipt_details/hapus', 'Inventory\ItemReceiptDetailController@delete')->name('item_receipt_details.delete');
-
-    //Stock Adjustment
-    Route::get('stock_adjustments', 'Inventory\StockAdjustmentController@index')->name('stock_adjustments');
-    Route::get('stock_adjustments/tambah', 'Inventory\StockAdjustmentController@create')->name('stock_adjustments.create');
-    Route::post('stock_adjustments/simpan', 'Inventory\StockAdjustmentController@store')->name('stock_adjustments.store');
-
-    //Stock In
-    Route::get('stock_ins', 'Inventory\StockInController@index')->name('stock_ins');
-    Route::get('stock_ins/tambah', 'Inventory\StockInController@create')->name('stock_ins.create');
-    Route::post('stock_ins/simpan', 'Inventory\StockInController@store')->name('stock_ins.store');
-
-    //Stock Card
-    Route::get('stock_cards', 'Inventory\StockCardController@index')->name('stock_cards');
-    Route::get('stock_cards/tambah', 'Inventory\StockCardController@create')->name('stock_cards.create');
-    Route::post('stock_cards/simpan', 'Inventory\StockCardController@store')->name('stock_cards.store');
-
-    //Stock Item Mutation
-    Route::get('item_mutations', 'Inventory\ItemMutationController@index')->name('item_mutations');
-    Route::get('item_mutations/tambah', 'Inventory\ItemMutationController@create')->name('item_mutations.create');
-    Route::post('item_mutations/simpan', 'Inventory\ItemMutationController@store')->name('item_mutations.store');
-
-    //Interchanges
-    Route::get('interchanges', 'Inventory\InterchangeController@index')->name('interchanges');
-    Route::get('interchanges/tambah', 'Inventory\InterchangeController@create')->name('interchanges.create');
-    Route::post('interchanges/simpan', 'Inventory\InterchangeController@store')->name('interchanges.store');
 
     //Settings
     Route::get('settings/ubah', 'Setting\SettingController@edit')->name('settings.edit');

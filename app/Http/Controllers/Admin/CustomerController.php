@@ -3,15 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Libs\Utilities;
+use App\Models\Attendance;
 use App\Models\Auth\User\User;
 use App\Models\Customer;
 use App\Models\Schedule;
 use App\Models\TransactionHeader;
 use App\Transformer\MasterData\CustomerTransformer;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -258,5 +261,52 @@ class CustomerController extends Controller
         }
 
         return \Response::json($formatted_tags);
+    }
+
+    public function getStudentScanResult(Request $request){
+        try{
+            $barcode = $request->input('barcode');
+            error_log($barcode);
+            $student = Customer::where('barcode', $barcode)->first();
+
+            if(empty($student)){
+                return Response::json(array('errors' => 'INVALID'));
+            }
+
+            $schedules = Schedule::where('customer_id', $student->id)
+                ->where('status_id', 3)
+                ->whereHas('course', function($query){
+                    $query->whereIn('type', [1,2]);
+                })
+                ->get();
+
+            $scheduleJsons = collect();
+            foreach ($schedules as $schedule){
+                $scheduleJson = collect([
+                    'schedule_id'       => $schedule->id,
+                    'course_name'       => $schedule->course->name,
+                    'coach'             => $schedule->course->coach->name,
+                    'day'               => $schedule->day
+                ]);
+
+                $scheduleJsons->push($scheduleJson);
+            }
+
+            $studentJson = collect([
+                'student_id'        => $student->id,
+                'name'              => $student->name,
+                'parent_name'       => $student->parent_name,
+                'phone'             => $student->phone,
+                'email'             => $student->email,
+                'photo_path'        => asset('storage/students/'. $student->image_profile),
+                'schedules'         => $scheduleJsons
+            ]);
+
+            return new JsonResponse($studentJson);
+        }
+        catch (\Exception $ex){
+            Log::error('Admin/CustomerController - getStudentScanResult - error EX: '. $ex);
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 }
