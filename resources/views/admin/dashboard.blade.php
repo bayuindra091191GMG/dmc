@@ -44,41 +44,32 @@
     </div>
 
     <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="col-md-12">
             <div class="dashboard_graph">
-
                 <div class="row x_title">
                     <div class="col-md-6">
                         <h3>Selamat Datang</h3>
                     </div>
-                    {{--<div class="col-md-6">--}}
-                    {{--<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">--}}
-                    {{--<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>--}}
-                    {{--<span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>--}}
-                    {{--</div>--}}
-                    {{--</div>--}}
                 </div>
-
-                <div class="col-md-9 col-sm-9 col-xs-12">
-
-                    {{--@if($scheduleFinishCount->count() > 0)--}}
-                        {{--<div class="alert alert-warning alert-dismissible fade in" role="alert">--}}
-                            {{--Terdapat {{ $scheduleFinishCount->count() }} jadwal Customer hampir selesai.--}}
-                        {{--</div>--}}
-                    {{--@endif--}}
-                    <div class="alert alert-success alert-dismissible fade in" role="alert">
-                        Absensi Customer, klik <a style="color: red;" href="{{ route('admin.attendances.create') }}"><strong>disini</strong></a>
+                <div class="row">
+                    <div class="col-md-3 text-center">
+                        <a href="{{ route('admin.attendances.scan') }}" class="btn btn-primary" target="_blank" style="margin-top: 25px;">
+                            <i class="fa fa-barcode"></i><br/>
+                            Scan Absensi
+                        </a>
                     </div>
-                    <div class="alert alert-success alert-dismissible fade in" role="alert">
-                        Tambah Customer baru, klik <a style="color: red;" href="{{ route('admin.customers.create') }}"><strong>disini</strong></a>
+                    <div class="col-md-9">
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            Absensi Customer, klik <a style="color: red;" href="{{ route('admin.attendances.create') }}"><strong>disini</strong></a>
+                        </div>
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            Tambah Customer baru, klik <a style="color: red;" href="{{ route('admin.customers.create') }}"><strong>disini</strong></a>
+                        </div>
                     </div>
-
                 </div>
-
-
-                <div class="clearfix"></div>
             </div>
         </div>
+
     </div>
     <br/>
 
