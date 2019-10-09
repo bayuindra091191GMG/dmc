@@ -229,7 +229,10 @@
                             $('#email').val (data.email);
                             $('#parent_name').val (data.parent_name);
                             $('#phone').val (data.phone);
-                            $("#photo").attr("src", data.photo_path);
+
+                            if(data.photo_path !== 'EMPTY'){
+                                $("#photo").attr("src", data.photo_path);
+                            }
 
                             // Empty schedule table
                             $('#content_schedule').html('');

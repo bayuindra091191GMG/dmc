@@ -292,13 +292,18 @@ class CustomerController extends Controller
                 $scheduleJsons->push($scheduleJson);
             }
 
+            $path = 'EMPTY';
+            if(!empty($student->image_profile)){
+                $path = asset('storage/students/'. $student->image_profile);
+            }
+
             $studentJson = collect([
                 'student_id'        => $student->id,
                 'name'              => $student->name,
                 'parent_name'       => $student->parent_name,
                 'phone'             => $student->phone,
                 'email'             => $student->email,
-                'photo_path'        => asset('storage/students/'. $student->image_profile),
+                'photo_path'        => $path,
                 'schedules'         => $scheduleJsons
             ]);
 
