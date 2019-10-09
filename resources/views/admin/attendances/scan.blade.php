@@ -174,6 +174,8 @@
     {{ Html::script(mix('assets/admin/js/stringbuilder.js')) }}
     <script src="{{ asset('custom/jquery.scannerdetection.js') }}"></script>
     <script>
+        var defaultPhotoUrl = '{{ asset('custom/photo-default.png') }}';
+
         // Attend modal
         var deletedId = "0";
         $(document).on('click', '.add-modal', function() {
@@ -223,6 +225,16 @@
                         if ((data.errors)) {
                             setTimeout(function () {
                                 toastr.error('Kode barcode member tidak ditemukan!', 'Peringatan', {timeOut: 5000});
+
+                                $('#name').val ('');
+                                $('#email').val ('');
+                                $('#parent_name').val ('');
+                                $('#phone').val ('');
+
+                                // Empty schedule table
+                                $('#content_schedule').html('');
+
+                                $("#photo").attr("src", defaultPhotoUrl);
                             }, 500);
                         } else {
                             $('#name').val (data.name);
@@ -252,7 +264,7 @@
                                     sbSchedule.append("data-id='" + schedules[j].schedule_id + "'");
                                     sbSchedule.append("data-schedule='" + data.name + "#" + schedules[j].course_name + "#" + schedules[j].coach + "'");
                                     sbSchedule.append("data-schedule_id='" + data.student_id + "#" + schedules[j].schedule_id + "'>");
-                                    sbSchedule.append("<span class='glyphicon glyphicon-check'></span>");
+                                    sbSchedule.append("<span class='glyphicon glyphicon-check' style='color: #fff;'></span>");
                                     sbSchedule.append("</tr>");
                                 }
                             }
@@ -271,5 +283,9 @@
 
             }
         });
+
+        $("#general-form").on("submit", function(){
+            $('#addModal').modal('hide');
+        })
     </script>
 @endsection

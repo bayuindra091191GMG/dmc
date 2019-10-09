@@ -276,7 +276,7 @@ class CustomerController extends Controller
             $schedules = Schedule::where('customer_id', $student->id)
                 ->where('status_id', 3)
                 ->whereHas('course', function($query){
-                    $query->whereIn('type', [1,2]);
+                    $query->whereIn('type', [1,4]);
                 })
                 ->get();
 
