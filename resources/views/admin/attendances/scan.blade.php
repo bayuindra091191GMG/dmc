@@ -9,33 +9,16 @@
                             <h3>Data Student</h3>
                         </div>
                     </div>
-                    <div class="row" style="margin-bottom: 20px;">
-                        <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
                             <div class="form-group">
-                                <label class="control-label col-md-4 col-sm-4 col-xs-12" for="scan_input" >
-                                    BARCODE SCAN
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="scan_input" >
+                                    BARCODE SCAN &nbsp;
                                 </label>
-                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                <div class="col-md-9 col-sm-9 col-xs-12">
                                     <input type="text" id="scan_input" name="scan_input" class="form-control">
                                 </div>
                             </div>
-                            @if(count($errors))
-                                <div class="form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                                    </label>
-                                    <div class="col-md-5 col-sm-5 col-xs-12 alert alert-danger alert-dismissible fade in" role="alert">
-                                        <ul>
-                                            @foreach($errors->all() as $error)
-                                                <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-xs-12">
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name" >
                                     Nama &nbsp;
@@ -70,7 +53,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-12 text-center  ">
-                            <img src="{{ asset('custom/photo-default.png') }}" id="photo" style="width: 180px; height: auto;">
+                            <img src="{{ asset('custom/photo-default.png') }}" id="photo" style="width: 220px; height: auto;">
                         </div>
                     </div>
                 </form>

@@ -293,8 +293,8 @@ class CustomerController extends Controller
             }
 
             $path = 'EMPTY';
-            if(!empty($student->image_profile)){
-                $path = asset('storage/students/'. $student->image_profile);
+            if(!empty($student->photo_path)){
+                $path = asset('storage/students/'. $student->photo_path);
             }
 
             $studentJson = collect([
