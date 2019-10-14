@@ -7,6 +7,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -63,6 +64,14 @@ class Customer extends Eloquent
         'dob',
         'photo_path'
 	];
+
+	protected $appends = [
+	    'dob_string'
+    ];
+
+    public function getDobStringAttribute(){
+        return Carbon::parse($this->attributes['dob'])->format('d M Y');
+    }
 
 	public function status()
 	{

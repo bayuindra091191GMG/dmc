@@ -99,6 +99,16 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dob">
+                    Tanggal Lahir
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="dob" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('dob')) parsley-error @endif"
+                           name="dob" value="{{ $customer->dob_string }}">
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone" >
                     Nomor Telepon
                     <span class="required">*</span>
@@ -144,13 +154,19 @@
 @section('styles')
     @parent
     {{ Html::style(mix('assets/admin/css/users/edit.css')) }}
+    {{ Html::style(mix('assets/admin/css/bootstrap-datetimepicker.css')) }}
 @endsection
 
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/users/edit.js')) }}
     <script src="{{ asset('assets/admin/js/webcam.min.js') }}"></script>
+    {{ Html::script(mix('assets/admin/js/bootstrap-datetimepicker.js')) }}
     <script>
+        $('#dob').datetimepicker({
+            format: "DD MMM Y"
+        });
+
         Webcam.set({
             width: 490,
             height: 390,
