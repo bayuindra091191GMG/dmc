@@ -82,7 +82,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="discount_percentage" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('discount_percentage')) parsley-error @endif"
-                           name="discount_percentage" value="{{ old('discount_percentage') }}" required>
+                           name="discount_percentage" value="{{ old('discount_percentage') }}">
                 </div>
             </div>
 
@@ -93,7 +93,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="discount_total" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('discount_total')) parsley-error @endif"
-                           name="discount_total" value="{{ old('discount_total') }}" required>
+                           name="discount_total" value="{{ old('discount_total') }}">
                 </div>
             </div>
 
@@ -104,7 +104,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="free_package" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('free_package')) parsley-error @endif"
-                           name="free_package" value="{{ old('free_package') }}" required>
+                           name="free_package" value="{{ old('free_package') }}">
                 </div>
             </div>
 

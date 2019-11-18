@@ -99,6 +99,38 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="voucher_code">
+                    Voucher
+                </label>
+                <div class="col-md-5 col-sm-6 col-xs-12">
+                    <input id="voucher_code" type="text" class="form-control col-md-7 col-xs-12"
+                           name="voucher_code"/>
+                </div>
+                <div class="col-md-1 col-sm-6 col-xs-12" style="text-align: right;">
+                    <a href="#" id="checkVoucher" class="btn btn-primary">Check</a>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="voucher_amount">
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="voucher_amount" type="text" class="form-control col-md-7 col-xs-12"
+                           name="voucher_amount"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="total">
+                    Total
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="total" type="text" class="form-control col-md-7 col-xs-12"
+                           name="total"/>
+                </div>
+            </div>
+
             <hr/>
 
             @if(!empty($customer))
@@ -769,5 +801,39 @@
             }
             return x1 + x2;
         }
+
+        $("#checkVoucher").on("click", function(){
+            var voucherCode = $('#voucher_code').val();
+            var customerId = $('#customer_id').val();
+
+            $.ajax({
+                url: "{{ route('admin.vouchers.check') }}",
+                type: 'POST',
+                datatype : "application/json",
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'voucher_code': voucherCode,
+                    'customer_id': customerId
+                },
+                success: function(result){
+                    if (typeof result == "string")
+                        result = JSON.parse(result);
+                    if (result.success) {
+                        if(result.type === 'voucher_amount'){
+                            var totalAmount = $('#total').val();
+                            totalAmount -= result.discount_total;
+                            $('#total').val(totalAmount);
+                            $('#voucher_amount').val(totalAmount);
+                        }
+                        else if(result.type === 'voucher_percentage'){
+                            var totalPercentage = $('#total').val();
+                            totalPercentage = totalPercentage - (totalPercentage * result.discount_total / 100);
+                            $('#total').val(totalPercentage);
+                            $('#voucher_amount').val(totalPercentage);
+                        }
+                    }
+                }
+            });
+        });
     </script>
 @endsection

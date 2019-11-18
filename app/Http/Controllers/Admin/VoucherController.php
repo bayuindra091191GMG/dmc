@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
@@ -267,7 +268,7 @@ class VoucherController extends Controller
         $history->save();
 
         Session::flash('message', 'Customer ' . $customer->name . ' Berhasil membeli voucher '. $voucher->name);
-        return Response::json(array('success' => 'VALID'));
+        return view('admin.vouchers.buy');
     }
 
     /**
@@ -335,5 +336,39 @@ class VoucherController extends Controller
         }
 
         return Response::json($formatted_tags);
+    }
+
+    public function checkVoucher(Request $request){
+        try{
+            if(!DB::table('vouchers')
+                ->where('name', $request->input('voucher_name'))
+                ->where('type', '!=', 'goods')
+                ->where('type', '!=', 'free_package')
+                ->exist()){
+                return Response::json(array('errors' => 'INVALID'));
+            }
+            else{
+                $voucher = Voucher::where('name', $request->input('name'))->first();
+                if(!DB::table('customer_vouchers')
+                    ->where('customer_id', $request->input('customer_id'))
+                    ->where('voucher_id', $voucher->id)
+                    ->where('status_id', 1)
+                    ->exist()){
+//                    $custVoucher = CustomerVoucher::where('customer_id', $request->input('customer_id'))
+//                        ->where('voucher_id', $voucher->id)
+//                        ->where('status_id', 1)
+//                        ->first();
+
+                    return Response::json([
+                        'type'  => $voucher->type,
+                        'discount_total' => $voucher->discount_total,
+                        'discount_percentage' => $voucher->discount_percentage
+                    ]);
+                }
+            }
+        }
+        catch (\Exception $ex){
+            return Response::json(array('errors' => 'INVALID'));
+        }
     }
 }
