@@ -86,6 +86,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::put('coaches/edit/{coach}', 'CoachController@update')->name('coaches.update');
     Route::post('coaches/delete', 'CoachController@destroy')->name('coaches.destroy');
 
+    //Voucher
+    Route::get('vouchers', 'VoucherController@index')->name('vouchers');
+    Route::get('vouchers/create', 'VoucherController@create')->name('vouchers.create');
+    Route::post('vouchers/store', 'VoucherController@store')->name('vouchers.store');
+    Route::get('vouchers/{voucher}/edit/', 'VoucherController@edit')->name('vouchers.edit');
+    Route::put('vouchers/edit/{voucher}', 'VoucherController@update')->name('vouchers.update');
+    Route::post('vouchers/delete', 'VoucherController@destroy')->name('vouchers.destroy');
+
     //Courses
     Route::get('courses', 'CourseController@index')->name('courses');
     Route::get('courses/muaythai', 'CourseController@indexMuaythai')->name('muaythai.courses');
@@ -603,6 +611,7 @@ Route::get('/select-item_receipts', 'Admin\Inventory\ItemReceiptController@getIt
 // MASTER DATA
 
 //DMC Start
+Route::get('/datatables-vouchers', 'Admin\VoucherController@anyData')->name('datatables.vouchers');
 Route::get('/datatables-customers', 'Admin\CustomerController@anyData')->name('datatables.customers');
 Route::get('/datatables-coaches', 'Admin\CoachController@anyData')->name('datatables.coaches');
 Route::get('/datatables-courses', 'Admin\CourseController@getIndex')->name('datatables.courses');

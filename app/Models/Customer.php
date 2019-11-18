@@ -24,6 +24,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $age
  * @property string $address
  * @property string $image_profile
+ * @property int $point
  * @property int $status_id
  * @property \Carbon\Carbon $created_at
  * @property int $created_by
@@ -44,7 +45,8 @@ class Customer extends Eloquent
 	protected $casts = [
 		'status_id' => 'int',
 		'created_by' => 'int',
-		'updated_by' => 'int'
+		'updated_by' => 'int',
+        'point' => 'int'
 	];
 
 	protected $fillable = [
@@ -62,7 +64,8 @@ class Customer extends Eloquent
 		'created_by',
 		'updated_by',
         'dob',
-        'photo_path'
+        'photo_path',
+        'point'
 	];
 
 	protected $appends = [
@@ -97,4 +100,9 @@ class Customer extends Eloquent
 	{
 		return $this->hasMany(\App\Models\TransactionHeader::class);
 	}
+
+    public function customer_point_histories()
+    {
+        return $this->hasMany(\App\Models\CustomerPointHistory::class);
+    }
 }
