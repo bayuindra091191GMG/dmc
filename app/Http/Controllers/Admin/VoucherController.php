@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Customer;
+use App\Models\CustomerPointHistory;
 use App\Models\CustomerVoucher;
 use App\Models\Voucher;
 use App\Transformer\MasterData\VoucherTransformer;
@@ -213,12 +215,125 @@ class VoucherController extends Controller
         }
     }
 
-    public function redeemPage(){
-        return view('admin.vouchers.redeem_page');
+    /**
+     * Function to show buy voucher page.
+    */
+    public function buyPage(){
+        return view('admin.vouchers.buy');
     }
 
+    /**
+     * Function to buy the Voucher.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function buy(Request $request){
+        $validator = Validator::make($request->all(), [
+            'customer_id'   => 'required|max:50',
+            'voucher_id'    => 'required'
+        ]);
 
+        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
+
+        //Buy Voucher
+        $customer = Customer::find($request->input('customer_id'));
+        $voucher = Voucher::find($request->input('voucher_id'));
+
+        //Check Point
+        if($customer->point < $voucher->point_needed){
+            return redirect()->back()->withErrors('Point Customer Tidak Cukup')->withInput($request->all());
+        }
+
+        CustomerVoucher::create([
+            'customer_id'   => $customer->id,
+            'voucher_id'    => $voucher->id,
+            'created_at'    => Carbon::now('Asia/Jakarta'),
+            'status_id'     => 1
+        ]);
+
+        $history = CustomerPointHistory::create([
+            'customer_id'   => $customer->id,
+            'point_from'    => $customer->point
+        ]);
+
+        $customer->point -= $voucher->point_needed;
+        $customer->save();
+
+        $history->point_min = $voucher->point_needed;
+        $history->point_result = $customer->point;
+        $history->voucher_id = $voucher->id;
+        $history->notes = 'Point berkurang dikarenakan beli voucher!';
+        $history->save();
+
+        Session::flash('message', 'Customer ' . $customer->name . ' Berhasil membeli voucher '. $voucher->name);
+        return Response::json(array('success' => 'VALID'));
+    }
+
+    /**
+     * Function to show Redeem Page.
+    */
+    public function redeemPage(){
+        return view('admin.vouchers.redeem');
+    }
+
+    /**
+     * Function to redeem the Voucher.
+     * Can only Redeem Voucher with Type Tukar Barang.
+     * For Discount Percentage, Discount Total, and Free Packages will be done in the Transaction page.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function redeem(Request $request){
+        $validator = Validator::make($request->all(), [
+            'customer_id'   => 'required|max:50',
+            'voucher_id'    => 'required'
+        ]);
 
+        if($validator->fails()) return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
+
+        $voucher = Voucher::find($request->input('voucher_id'));
+        if($voucher->type != 'goods'){
+            return redirect()->back()->withErrors('Fungsi ini hanya bisa untuk tukar barang!')->withInput($request->all());
+        }
+
+        $customer = Customer::find($request->input('customer_id'));
+        $customerVoucher = CustomerVoucher::where('customer_id', $customer->id)->where('voucher_id', $voucher->id)->first();
+        $customerVoucher->status_id = 8;
+        $customerVoucher->save();
+
+        Session::flash('message', 'Customer ' . $customer->name . ' Berhasil redeem voucher '. $voucher->name);
+        return Response::json(array('success' => 'VALID'));
+    }
+
+    public function getVouchers(Request $request){
+        $term = trim($request->q);
+        $vouchers = Voucher::where('name', 'LIKE', '%'. $term. '%')
+            ->orderBy('name')
+            ->get();
+
+        $formatted_tags = [];
+
+        foreach ($vouchers as $voucher) {
+            $formatted_tags[] = ['id' => $voucher->id, 'text' => $voucher->name. ' - Point: '. $voucher->point_needed];
+        }
+
+        return Response::json($formatted_tags);
+    }
+
+    public function getGoodsVouchers(Request $request){
+        $term = trim($request->q);
+        $vouchers = Voucher::where('type', 'goods')->where('name', 'LIKE', '%'. $term. '%')
+            ->orderBy('name')
+            ->get();
+
+        $formatted_tags = [];
+
+        foreach ($vouchers as $voucher) {
+            $formatted_tags[] = ['id' => $voucher->id, 'text' => $voucher->name. ' - Point: '. $voucher->point_needed];
+        }
+
+        return Response::json($formatted_tags);
     }
 }

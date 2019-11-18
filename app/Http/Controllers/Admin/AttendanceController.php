@@ -8,6 +8,7 @@ use App\Models\Auth\User\User;
 use App\Models\Coach;
 use App\Models\Course;
 use App\Models\Customer;
+use App\Models\CustomerPointHistory;
 use App\Models\NumberingSystem;
 use App\Models\Schedule;
 use App\Models\TransactionDetail;
@@ -287,6 +288,25 @@ class AttendanceController extends Controller
                     'created_at'            => $now->toDateTimeString()
                 ]);
                 $attendance->save();
+
+                //Tambah Point jika MuayThai
+                if($scheduleDB->course->type == 1){
+                    $customerData = Customer::find($customerID);
+
+                    $history = CustomerPointHistory::create([
+                        'customer_id'   => $customerID,
+                        'point_from'    => $customerData->point
+                    ]);
+
+                    $customerData->point += 10;
+                    $customerData->save();
+
+                    $history->point_add = 10;
+                    $history->point_result = $customerData->point;
+                    $history->attendance_id = $attendance->id;
+                    $history->notes = 'Point bertambah dikarenakan absensi Muay Thai!';
+                    $history->save();
+                }
             }
             else{
                 $attendanceCount = Attendance::where('customer_id', $customerID)->where('schedule_id', $scheduleID)->count();

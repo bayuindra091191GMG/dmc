@@ -93,6 +93,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('vouchers/{voucher}/edit/', 'VoucherController@edit')->name('vouchers.edit');
     Route::put('vouchers/edit/{voucher}', 'VoucherController@update')->name('vouchers.update');
     Route::post('vouchers/delete', 'VoucherController@destroy')->name('vouchers.destroy');
+    Route::get('vouchers/buy', 'VoucherController@buyPage')->name('vouchers-buy-page');
+    Route::post('vouchers/buy', 'VoucherController@buy')->name('vouchers-buy');
+    Route::get('vouchers/redeem', 'VoucherController@redeemPage')->name('vouchers-redeem-page');
+    Route::post('vouchers/redeem', 'VoucherController@redeem')->name('vouchers-redeem');
 
     //Courses
     Route::get('courses', 'CourseController@index')->name('courses');
@@ -576,6 +580,8 @@ Route::group(['as' => 'protection.'], function () {
  * Select2
  */
 
+Route::get('/select-vouchers', 'Admin\VoucherController@getVouchers')->name('select.vouchers');
+Route::get('/select-voucher-goods', 'Admin\VoucherController@getGoodsVouchers')->name('select.voucher-goods');
 Route::get('/select-days', 'Admin\CourseController@getDays')->name('select.days');
 Route::get('/select-customers', 'Admin\CustomerController@getCustomers')->name('select.customers');
 Route::get('/select-courses', 'Admin\CourseController@getCourses')->name('select.courses');
