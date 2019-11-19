@@ -554,9 +554,11 @@
             let subtotal = price * month;
 
             // Add Total
-            var tmpTotal = $('#total').val();
+            let tmpStrTotal = $('#total').val().replace(/\./g,'');
+            let tmpTotal = parseFloat(tmpStrTotal);
             tmpTotal = tmpTotal + subtotal;
-            $('#total').val(tmpTotal);
+            $('#total').val(rupiahFormat(tmpTotal));
+
             // var discount = 0;
             // if(discountAdd && discountAdd !== "" && discountAdd !== "0"){
             //     var discountClean = discountAdd.replace(/\./g,'');
@@ -598,8 +600,9 @@
             // }
             var subtotalString = rupiahFormat(subtotal);
 
+            var priceId = 'priceId' + idx;
             sbAdd.append("<td class='text-center'>" + monthAdd + "<input type='hidden' name='months[]' value='" + monthAdd + "'/></td>");
-            sbAdd.append("<td class='text-right'>" + subtotalString + "<input type='hidden' value='" + subtotalString + "'/></td>");
+            sbAdd.append("<td class='text-right'>" + subtotalString + "<input type='hidden' id='" + priceId + "' value='" + subtotalString + "'/></td>");
 
             sbAdd.append("<td class='text-center'>");
             // sbAdd.append("<a class='edit-modal btn btn-info' data-id='" + idx + "' data-schedule='" + scheduleAdd + "' data-price='" + price + "'><span class='glyphicon glyphicon-edit'></span></a>");
@@ -800,6 +803,13 @@
             idx--;
             $('#index_counter').val(idx);
 
+            let tmpStrTotal = $('#total').val().replace(/\./g,'');
+            let tmpSubTotal = $('#priceId'+deletedId).val().replace(/\./g,'');
+            let subtotal = parseFloat(tmpSubTotal);
+            let tmpTotal = parseFloat(tmpStrTotal);
+            tmpTotal = tmpTotal - subtotal;
+            $('#total').val(rupiahFormat(tmpTotal));
+
             $('.item' + deletedId).remove();
         });
 
@@ -830,17 +840,18 @@
                 },
                 success: function(result){
                     if(result.type === 'discount_total'){
-                        var totalAmount = $('#total').val();
-                        alert(totalAmount);
+                        let tmpStrTotal = $('#total').val().replace(/\./g,'');
+                        let totalAmount = parseFloat(tmpStrTotal);
                         totalAmount -= result.discount_total;
-                        $('#total').val(totalAmount);
-                        $('#voucher_amount').val(totalAmount);
+                        $('#total').val(rupiahFormat(totalAmount));
+                        $('#voucher_amount').val(rupiahFormat(result.discount_total));
                     }
                     else if(result.type === 'discount_percentage'){
-                        var totalPercentage = $('#total').val();
-                        totalPercentage = totalPercentage - (totalPercentage * result.discount_total / 100);
-                        $('#total').val(totalPercentage);
-                        $('#voucher_amount').val(totalPercentage);
+                        let tmpStrTotal = $('#total').val().replace(/\./g,'');
+                        let totalPercentage = parseFloat(tmpStrTotal);
+                        totalPercentage = totalPercentage - (totalPercentage * result.discount_percentage / 100);
+                        $('#total').val(rupiahFormat(totalPercentage));
+                        $('#voucher_amount').val(result.discount_percentage + '%');
                     }
 
                 },
