@@ -8,6 +8,7 @@ use App\Models\Coach;
 use App\Models\Course;
 use App\Models\CourseDetail;
 use App\Models\Customer;
+use App\Models\CustomerVoucher;
 use App\Models\NumberingSystem;
 use App\Models\Schedule;
 use App\Models\TransactionDetail;
@@ -18,6 +19,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -70,8 +72,12 @@ class TransactionHeaderController extends Controller
     public function create()
     {
         $customer = null;
+        $vouchers = null;
         if(!empty(request()->customer)){
             $customer = Customer::find(request()->customer);
+            if(DB::table('customer_vouchers')->where('customer_id', $customer->id)->exists()){
+                $vouchers = CustomerVoucher::where('customer_id', $customer->id)->where('status_id', 1)->get();
+            }
         }
 
         // Numbering System
@@ -83,7 +89,8 @@ class TransactionHeaderController extends Controller
         $data = [
             'customer'          => $customer,
             'autoNumber'        => $autoNumber,
-            'today'             => $today
+            'today'             => $today,
+            'vouchers'          => $vouchers
         ];
 
         return view('admin.transactions.create')->with($data);

@@ -340,25 +340,28 @@ class VoucherController extends Controller
 
     public function checkVoucher(Request $request){
         try{
+            //return Response::json(array('voucher' => $request->input('voucher_name')));
             if(!DB::table('vouchers')
                 ->where('name', $request->input('voucher_name'))
                 ->where('type', '!=', 'goods')
                 ->where('type', '!=', 'free_package')
-                ->exist()){
-                return Response::json(array('errors' => 'INVALID'));
+                ->exists()){
+                return Response::json(array('errors' => 'INVALID1'));
             }
             else{
-                $voucher = Voucher::where('name', $request->input('name'))->first();
-                if(!DB::table('customer_vouchers')
+                $voucher = Voucher::where('name', $request->input('voucher_name'))->first();
+                //return Response::json(array('result'=>$request->input('customer_id')));
+                if(DB::table('customer_vouchers')
                     ->where('customer_id', $request->input('customer_id'))
                     ->where('voucher_id', $voucher->id)
                     ->where('status_id', 1)
-                    ->exist()){
+                    ->exists()){
 //                    $custVoucher = CustomerVoucher::where('customer_id', $request->input('customer_id'))
 //                        ->where('voucher_id', $voucher->id)
 //                        ->where('status_id', 1)
 //                        ->first();
 
+                    //return Response::json(array('result' => $voucher));
                     return Response::json([
                         'type'  => $voucher->type,
                         'discount_total' => $voucher->discount_total,
@@ -368,7 +371,7 @@ class VoucherController extends Controller
             }
         }
         catch (\Exception $ex){
-            return Response::json(array('errors' => 'INVALID'));
+            return Response::json(array('errors' => 'INVALID ' . $ex));
         }
     }
 }

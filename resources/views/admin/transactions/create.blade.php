@@ -104,11 +104,20 @@
                     Voucher
                 </label>
                 <div class="col-md-5 col-sm-6 col-xs-12">
-                    <input id="voucher_code" type="text" class="form-control col-md-7 col-xs-12"
-                           name="voucher_code"/>
+                    @if($vouchers == null)
+                        <select id="voucher_code" name="voucher_code" class="form-control col-md-7 col-xs-12">
+                            <option value="-1" selected> - Tidak Ada Voucher - </option>
+                        </select>
+                    @else
+                        <select id="voucher_code" name="voucher_code" class="form-control col-md-7 col-xs-12">
+                            @foreach($vouchers as $voucher)
+                                <option value="{{ $voucher->voucher->name }}">{{ $voucher->voucher->name }}</option>
+                            @endforeach
+                        </select>
+                    @endif
                 </div>
                 <div class="col-md-1 col-sm-6 col-xs-12" style="text-align: right;">
-                    <a href="#" id="checkVoucher" class="btn btn-primary">Check</a>
+                    <a href="#" id="checkVoucher" class="btn btn-primary">Gunakan</a>
                 </div>
             </div>
 
@@ -127,7 +136,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="total" type="text" class="form-control col-md-7 col-xs-12"
-                           name="total"/>
+                           name="total" value="0" readonly/>
                 </div>
             </div>
 
@@ -544,6 +553,10 @@
             // Count Subtotal
             let subtotal = price * month;
 
+            // Add Total
+            var tmpTotal = $('#total').val();
+            tmpTotal = tmpTotal + subtotal;
+            $('#total').val(tmpTotal);
             // var discount = 0;
             // if(discountAdd && discountAdd !== "" && discountAdd !== "0"){
             //     var discountClean = discountAdd.replace(/\./g,'');
@@ -812,26 +825,27 @@
                 datatype : "application/json",
                 data: {
                     '_token': '{{ csrf_token() }}',
-                    'voucher_code': voucherCode,
+                    'voucher_name': voucherCode,
                     'customer_id': customerId
                 },
                 success: function(result){
-                    if (typeof result == "string")
-                        result = JSON.parse(result);
-                    if (result.success) {
-                        if(result.type === 'voucher_amount'){
-                            var totalAmount = $('#total').val();
-                            totalAmount -= result.discount_total;
-                            $('#total').val(totalAmount);
-                            $('#voucher_amount').val(totalAmount);
-                        }
-                        else if(result.type === 'voucher_percentage'){
-                            var totalPercentage = $('#total').val();
-                            totalPercentage = totalPercentage - (totalPercentage * result.discount_total / 100);
-                            $('#total').val(totalPercentage);
-                            $('#voucher_amount').val(totalPercentage);
-                        }
+                    if(result.type === 'discount_total'){
+                        var totalAmount = $('#total').val();
+                        alert(totalAmount);
+                        totalAmount -= result.discount_total;
+                        $('#total').val(totalAmount);
+                        $('#voucher_amount').val(totalAmount);
                     }
+                    else if(result.type === 'discount_percentage'){
+                        var totalPercentage = $('#total').val();
+                        totalPercentage = totalPercentage - (totalPercentage * result.discount_total / 100);
+                        $('#total').val(totalPercentage);
+                        $('#voucher_amount').val(totalPercentage);
+                    }
+
+                },
+                error: function(errors){
+                    alert(errors);
                 }
             });
         });
