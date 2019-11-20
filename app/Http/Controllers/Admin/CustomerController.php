@@ -6,6 +6,7 @@ use App\Libs\Utilities;
 use App\Models\Attendance;
 use App\Models\Auth\User\User;
 use App\Models\Customer;
+use App\Models\CustomerVoucher;
 use App\Models\Schedule;
 use App\Models\TransactionHeader;
 use App\Transformer\MasterData\CustomerTransformer;
@@ -129,10 +130,13 @@ class CustomerController extends Controller
             $dob = Carbon::parse($customer->dob)->format('d M Y');
         }
 
+        $vouchers = CustomerVoucher::where('status_id', 1)->where('customer_id', $customer->id)->get();
+
         $data = [
             'customer'      => $customer,
             'schedules'     => $schedules,
-            'dob'           => $dob
+            'dob'           => $dob,
+            'vouchers'      => $vouchers
         ];
 
         return view('admin.customers.show')->with($data);

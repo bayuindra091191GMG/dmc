@@ -130,6 +130,18 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        Vouchers
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        :
+                        @foreach($vouchers as $voucher)
+                            {{ $voucher->voucher->name }},
+                        @endforeach
+                    </div>
+                </div>
+
                 <hr/>
 
                 @if($schedules != null)
