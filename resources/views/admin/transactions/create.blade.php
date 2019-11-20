@@ -122,11 +122,11 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="voucher_amount">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="voucher_amount" id="voucher_label">
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="voucher_amount" type="text" class="form-control col-md-7 col-xs-12"
-                           name="voucher_amount"/>
+                           name="voucher_amount" readonly/>
                 </div>
             </div>
 
@@ -852,6 +852,10 @@
                         totalPercentage = totalPercentage - (totalPercentage * result.discount_percentage / 100);
                         $('#total').val(rupiahFormat(totalPercentage));
                         $('#voucher_amount').val(result.discount_percentage + '%');
+                    }
+                    else if(result.type === 'free_package'){
+                        $('#voucher_label').html('Free Package');
+                        $('#voucher_amount').val(result.free_package);
                     }
 
                 },

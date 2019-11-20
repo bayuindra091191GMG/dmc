@@ -13,6 +13,7 @@ use App\Models\NumberingSystem;
 use App\Models\Schedule;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
+use App\Models\Voucher;
 use App\Transformer\MasterData\CoachTransformer;
 use App\Transformer\MasterData\TransactionHeaderTranformer;
 use Illuminate\Http\Request;
@@ -289,6 +290,17 @@ class TransactionHeaderController extends Controller
                     }
                 }
 
+                if($request->filled('voucher_code')){
+                    $voucher = Voucher::where('name', $request->input('voucher_code'))->first();
+                    if($voucher->type == 'free_package'){
+                        $trxDetail->meeting_amount += $voucher->free_package;
+                    }
+
+                    $customerVoucher = CustomerVoucher::where('voucher_id', $voucher->id)->where('customer_id', $studentId)->first();
+                    $customerVoucher->status_id = 8;
+                    $customerVoucher->save();
+                }
+
                 $trxDetail->save();
 
                 // Activate schedule
@@ -322,8 +334,27 @@ class TransactionHeaderController extends Controller
             $fee = 0;
         }
 
+        $totalAmount = 0;
+        $totalDiscount = 0;
+        if($request->filled('voucher_code')){
+            $voucher = Voucher::where('name', $request->input('voucher_code'))->first();
+            if($voucher->type == 'discount_percentage'){
+                $totalDiscount = $totalPrice * $voucher->discount_percentage / 100;
+                $totalAmount = $totalPrice - $totalDiscount;
+            }
+            else if($voucher->type == 'discount_total'){
+                $totalDiscount = $voucher->discount_total;
+                $totalAmount = $totalPrice - $voucher->discount_total;
+            }
+
+            $customerVoucher = CustomerVoucher::where('voucher_id', $voucher->id)->where('customer_id', $studentId)->first();
+            $customerVoucher->status_id = 8;
+            $customerVoucher->save();
+        }
+
         $totalPayment += $fee;
-        $trxHeader->total_price = $totalPrice;
+        $trxHeader->total_discount = $totalDiscount;
+        $trxHeader->total_price = $totalAmount;
         $trxHeader->total_payment = $totalPayment;
         $trxHeader->registration_fee = $fee;
         $trxHeader->save();

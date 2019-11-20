@@ -8,13 +8,16 @@ use App\Http\Controllers\Controller;
 use App\Libs\Utilities;
 use App\Models\CourseDetail;
 use App\Models\Customer;
+use App\Models\CustomerVoucher;
 use App\Models\NumberingSystem;
 use App\Models\Schedule;
 use App\Models\TransactionDetail;
 use App\Models\TransactionHeader;
+use App\Models\Voucher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
@@ -63,13 +66,20 @@ class RegistrationTransactionController extends Controller
             ->where('status_id', 2)
             ->get();
 
+        // Vouchers
+        $vouchers = null;
+        if(DB::table('customer_vouchers')->where('customer_id', $student_id)->exists()){
+            $vouchers = CustomerVoucher::where('customer_id', $student_id)->where('status_id', 1)->get();
+        }
+
         $data = [
             'type'              => $type,
             'courseType'        => $courseType,
             'student'           => $student,
             'autoNumber'        => $autoNumber,
             'today'             => $today,
-            'schedules'         => $schedules
+            'schedules'         => $schedules,
+            'vouchers'          => $vouchers
         ];
 
         return view('admin.registrations.transactions.step_3_transaction')->with($data);
@@ -231,6 +241,16 @@ class RegistrationTransactionController extends Controller
                     }
                 }
 
+                if($request->filled('voucher_code')){
+                    $voucher = Voucher::where('name', $request->input('voucher_code'))->first();
+                    if($voucher->type == 'free_package'){
+                        $trxDetail->meeting_amount += $voucher->free_package;
+                    }
+
+                    $customerVoucher = CustomerVoucher::where('voucher_id', $voucher->id)->where('customer_id', $studentId)->first();
+                    $customerVoucher->status_id = 8;
+                    $customerVoucher->save();
+                }
                 $trxDetail->save();
 
                 // Activate schedule
@@ -264,8 +284,26 @@ class RegistrationTransactionController extends Controller
             $fee = 0;
         }
 
+        $totalAmount = 0;
+        $totalDiscount = 0;
+        if($request->filled('voucher_code')){
+            $voucher = Voucher::where('name', $request->input('voucher_code'))->first();
+            if($voucher->type == 'discount_percentage'){
+                $totalDiscount = $totalPrice * $voucher->discount_percentage / 100;
+                $totalAmount = $totalPrice - $totalDiscount;
+            }
+            else if($voucher->type == 'discount_total'){
+                $totalDiscount = $voucher->discount_total;
+                $totalAmount = $totalPrice - $voucher->discount_total;
+            }
+            $customerVoucher = CustomerVoucher::where('voucher_id', $voucher->id)->where('customer_id', $studentId)->first();
+            $customerVoucher->status_id = 8;
+            $customerVoucher->save();
+        }
+
         $totalPayment += $fee;
-        $trxHeader->total_price = $totalPrice;
+        $trxHeader->total_discount = $totalDiscount;
+        $trxHeader->total_price = $totalAmount;
         $trxHeader->total_payment = $totalPayment;
         $trxHeader->registration_fee = $fee;
         $trxHeader->save();

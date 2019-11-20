@@ -103,7 +103,7 @@
                 text: 'Pilih Voucher...'
             },
             width: '100%',
-            minimumInputLength: 1,
+            minimumInputLength: 0,
             ajax: {
                 url: '{{ route('select.vouchers') }}',
                 dataType: 'json',

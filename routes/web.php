@@ -93,10 +93,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('vouchers/{voucher}/edit/', 'VoucherController@edit')->name('vouchers.edit');
     Route::put('vouchers/edit/{voucher}', 'VoucherController@update')->name('vouchers.update');
     Route::post('vouchers/delete', 'VoucherController@destroy')->name('vouchers.destroy');
-    Route::get('vouchers/buy', 'VoucherController@buyPage')->name('vouchers-buy-page');
+    Route::get('vouchers/buy', 'VoucherController@buyPage')->name('vouchers.buy.page');
     Route::post('vouchers/buy', 'VoucherController@buy')->name('vouchers.buy');
-    Route::get('vouchers/redeem', 'VoucherController@redeemPage')->name('vouchers-redeem-page');
-    Route::post('vouchers/redeem', 'VoucherController@redeem')->name('vouchers-redeem');
+    Route::get('vouchers/redeem', 'VoucherController@redeemPage')->name('vouchers.redeem.page');
+    Route::post('vouchers/redeem', 'VoucherController@redeem')->name('vouchers.redeem');
     Route::post('vouchers/check', 'VoucherController@checkVoucher')->name('vouchers.check');
 
     //Courses

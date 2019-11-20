@@ -101,6 +101,47 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="voucher_code">
+                    Voucher
+                </label>
+                <div class="col-md-5 col-sm-6 col-xs-12">
+                    @if($vouchers == null)
+                        <select id="voucher_code" name="voucher_code" class="form-control col-md-7 col-xs-12">
+                            <option value="-1" selected> - Tidak Ada Voucher - </option>
+                        </select>
+                    @else
+                        <select id="voucher_code" name="voucher_code" class="form-control col-md-7 col-xs-12">
+                            @foreach($vouchers as $voucher)
+                                <option value="{{ $voucher->voucher->name }}">{{ $voucher->voucher->name }}</option>
+                            @endforeach
+                        </select>
+                    @endif
+                </div>
+                <div class="col-md-1 col-sm-6 col-xs-12" style="text-align: right;">
+                    <a href="#" id="checkVoucher" class="btn btn-primary">Gunakan</a>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="voucher_amount" id="voucher_label">
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="voucher_amount" type="text" class="form-control col-md-7 col-xs-12"
+                           name="voucher_amount" readonly/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="total">
+                    Total
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="total" type="text" class="form-control col-md-7 col-xs-12"
+                           name="total" value="0" readonly/>
+                </div>
+            </div>
+
             <hr/>
 
             @if(!empty($student))
@@ -270,5 +311,45 @@
             }
             return x1 + x2;
         }
+
+        $("#checkVoucher").on("click", function(){
+            var voucherCode = $('#voucher_code').val();
+            var customerId = $('#customer_id').val();
+
+            $.ajax({
+                url: "{{ route('admin.vouchers.check') }}",
+                type: 'POST',
+                datatype : "application/json",
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'voucher_name': voucherCode,
+                    'customer_id': customerId
+                },
+                success: function(result){
+                    if(result.type === 'discount_total'){
+                        let tmpStrTotal = $('#total').val().replace(/\./g,'');
+                        let totalAmount = parseFloat(tmpStrTotal);
+                        totalAmount -= result.discount_total;
+                        $('#total').val(rupiahFormat(totalAmount));
+                        $('#voucher_amount').val(rupiahFormat(result.discount_total));
+                    }
+                    else if(result.type === 'discount_percentage'){
+                        let tmpStrTotal = $('#total').val().replace(/\./g,'');
+                        let totalPercentage = parseFloat(tmpStrTotal);
+                        totalPercentage = totalPercentage - (totalPercentage * result.discount_percentage / 100);
+                        $('#total').val(rupiahFormat(totalPercentage));
+                        $('#voucher_amount').val(result.discount_percentage + '%');
+                    }
+                    else if(result.type === 'free_package'){
+                        $('#voucher_label').html('Free Package');
+                        $('#voucher_amount').val(result.free_package);
+                    }
+
+                },
+                error: function(errors){
+                    alert(errors);
+                }
+            });
+        });
     </script>
 @endsection

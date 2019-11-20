@@ -305,7 +305,7 @@ class VoucherController extends Controller
         $customerVoucher->save();
 
         Session::flash('message', 'Customer ' . $customer->name . ' Berhasil redeem voucher '. $voucher->name);
-        return Response::json(array('success' => 'VALID'));
+        return view('admin.vouchers.redeem');
     }
 
     public function getVouchers(Request $request){
@@ -344,7 +344,6 @@ class VoucherController extends Controller
             if(!DB::table('vouchers')
                 ->where('name', $request->input('voucher_name'))
                 ->where('type', '!=', 'goods')
-                ->where('type', '!=', 'free_package')
                 ->exists()){
                 return Response::json(array('errors' => 'INVALID1'));
             }
@@ -363,9 +362,10 @@ class VoucherController extends Controller
 
                     //return Response::json(array('result' => $voucher));
                     return Response::json([
-                        'type'  => $voucher->type,
-                        'discount_total' => $voucher->discount_total,
-                        'discount_percentage' => $voucher->discount_percentage
+                        'type'                  => $voucher->type,
+                        'discount_total'        => $voucher->discount_total,
+                        'discount_percentage'   => $voucher->discount_percentage,
+                        'free_package'          => $voucher->free_package
                     ]);
                 }
             }
