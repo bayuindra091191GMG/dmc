@@ -138,7 +138,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input id="total" type="text" class="form-control col-md-7 col-xs-12"
-                           name="total" value="0" readonly/>
+                           name="total" value="{{ $totalPrice }}" readonly/>
                 </div>
             </div>
 

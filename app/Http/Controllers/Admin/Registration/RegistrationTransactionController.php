@@ -66,6 +66,11 @@ class RegistrationTransactionController extends Controller
             ->where('status_id', 2)
             ->get();
 
+        $totalPrice = 0;
+        foreach ($schedules as $schedule){
+            $totalPrice += $schedule->course->price;
+        }
+
         // Vouchers
         $vouchers = null;
         if(DB::table('customer_vouchers')->where('customer_id', $student_id)->exists()){
@@ -79,7 +84,8 @@ class RegistrationTransactionController extends Controller
             'autoNumber'        => $autoNumber,
             'today'             => $today,
             'schedules'         => $schedules,
-            'vouchers'          => $vouchers
+            'vouchers'          => $vouchers,
+            'totalPrice'        => $totalPrice
         ];
 
         return view('admin.registrations.transactions.step_3_transaction')->with($data);
