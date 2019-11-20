@@ -13,7 +13,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             @include('partials._success')
             @include('partials._error')
-            {{ Form::open(['route'=>['admin.vouchers.update'],'method' => 'post','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
+            {{ Form::open(['route'=>['admin.vouchers.update', 'voucher' => $voucher->id],'method' => 'put','id' => 'general-form','class'=>'form-horizontal form-label-left']) }}
 
             @if(count($errors))
                 <div class="form-group">
