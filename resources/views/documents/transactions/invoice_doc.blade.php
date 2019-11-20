@@ -120,6 +120,14 @@
                                 <td class="text-right">Rp{{ $header->registration_fee_string }}</td>
                             </tr>
                             <tr>
+                                <td>Discount</td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-right">-Rp{{ $header->total_discount_string }}</td>
+                            </tr>
+                            <tr>
                                 <td class="thick-line"></td>
                                 <td class="thick-line"></td>
                                 <td class="thick-line"></td>

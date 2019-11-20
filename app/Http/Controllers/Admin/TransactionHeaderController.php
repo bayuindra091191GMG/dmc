@@ -296,7 +296,7 @@ class TransactionHeaderController extends Controller
                         $trxDetail->meeting_amount += $voucher->free_package;
                     }
 
-                    $customerVoucher = CustomerVoucher::where('voucher_id', $voucher->id)->where('customer_id', $studentId)->first();
+                    $customerVoucher = CustomerVoucher::where('voucher_id', $voucher->id)->where('customer_id', $request->input('customer_id'))->first();
                     $customerVoucher->status_id = 8;
                     $customerVoucher->save();
                 }
@@ -347,7 +347,7 @@ class TransactionHeaderController extends Controller
                 $totalAmount = $totalPrice - $voucher->discount_total;
             }
 
-            $customerVoucher = CustomerVoucher::where('voucher_id', $voucher->id)->where('customer_id', $studentId)->first();
+            $customerVoucher = CustomerVoucher::where('voucher_id', $voucher->id)->where('customer_id', $request->input('customer_id'))->first();
             $customerVoucher->status_id = 8;
             $customerVoucher->save();
         }
