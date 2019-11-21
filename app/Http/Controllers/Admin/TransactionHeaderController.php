@@ -222,8 +222,6 @@ class TransactionHeaderController extends Controller
 
         // Create transaction detail
         $totalPrice = 0;
-        $totalDiscount = 0;
-        $totalPayment = 0;
         $idx = 0;
 
         $months = $request->input('months');
@@ -265,9 +263,6 @@ class TransactionHeaderController extends Controller
                 $totalPrice += $month * $price;
                 $trxDetail->subtotal = $month * $price;
                 $trxDetail->meeting_amount = $scheduleObj->course->meeting_amount;
-
-                // Accumulate subtotal
-                $totalPayment += $trxDetail->subtotal;
 
                 // Check more than 1 month payment
                 if($month > 1){
@@ -327,8 +322,6 @@ class TransactionHeaderController extends Controller
             $idx++;
         }
 
-        if($totalDiscount > 0) $trxHeader->total_discount = $totalDiscount;
-
         if($request->filled('registration_fee')){
             $fee = str_replace('.','', $request->input('registration_fee'));
         }
@@ -336,33 +329,27 @@ class TransactionHeaderController extends Controller
             $fee = 0;
         }
 
-        $totalAmount = 0;
         $totalDiscount = 0;
-        if($request->filled('voucher_code') && $request->input('is_discount') == 1){
-            if(DB::table('vouchers')->where('name', $request->input('voucher_code'))->exists()) {
-                $voucher = Voucher::where('name', $request->input('voucher_code'))->first();
-                if ($voucher->type == 'discount_percentage') {
-                    $totalDiscount = $totalPrice * $voucher->discount_percentage / 100;
-                    $totalAmount = $totalPrice - $totalDiscount;
-                } else if ($voucher->type == 'discount_total') {
-                    $totalDiscount = $voucher->discount_total;
-                    $totalAmount = $totalPrice - $voucher->discount_total;
-                }
-
-                $customerVoucher = CustomerVoucher::where('voucher_id', $voucher->id)->where('customer_id', $request->input('customer_id'))->first();
-                $customerVoucher->status_id = 8;
-                $customerVoucher->save();
+        if($request->filled('voucher_code')){
+            $voucher = Voucher::where('name', $request->input('voucher_code'))->first();
+            if($voucher->type == 'discount_percentage'){
+                $totalDiscount = $totalPrice * $voucher->discount_percentage / 100;
             }
+            else if($voucher->type == 'discount_total'){
+                $totalDiscount = $voucher->discount_total;
+            }
+            $customerVoucher = CustomerVoucher::where('voucher_id', $voucher->id)->where('customer_id', $request->input('customer_id'))->first();
+            $customerVoucher->status_id = 8;
+            $customerVoucher->save();
         }
 
-        $totalPayment += $fee;
         $trxHeader->total_discount = $totalDiscount;
-        $trxHeader->total_price = $totalAmount;
-        $trxHeader->total_payment = $totalPayment;
+        $trxHeader->total_price = $totalPrice;
+        $trxHeader->total_payment = ($totalPrice  - $totalDiscount) +  $fee;
         $trxHeader->registration_fee = $fee;
         $trxHeader->save();
 
-        Session::flash('message', 'Berhasil membuat transaksi!');
+        Session::flash('message', 'Berhasil membuat transaksi baru!');
 
         return redirect()->route('admin.transactions.show', ['transaction' => $trxHeader]);
     }
