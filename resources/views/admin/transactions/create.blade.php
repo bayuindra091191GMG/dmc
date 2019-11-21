@@ -114,6 +114,7 @@
                                 <option value="{{ $voucher->voucher->name }}">{{ $voucher->voucher->name }}</option>
                             @endforeach
                         </select>
+                        <input type="hidden" name="is_discount" value="0" id="is_discount"/>
                     @endif
                 </div>
                 <div class="col-md-1 col-sm-6 col-xs-12" style="text-align: right;">
@@ -857,7 +858,7 @@
                         $('#voucher_label').html('Free Package');
                         $('#voucher_amount').val(result.free_package);
                     }
-
+                    $('#is_discount').val(1);
                 },
                 error: function(errors){
                     alert(errors);

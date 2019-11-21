@@ -290,15 +290,17 @@ class TransactionHeaderController extends Controller
                     }
                 }
 
-                if($request->filled('voucher_code')){
-                    $voucher = Voucher::where('name', $request->input('voucher_code'))->first();
-                    if($voucher->type == 'free_package'){
-                        $trxDetail->meeting_amount += $voucher->free_package;
-                    }
+                if($request->filled('voucher_code') && $request->input('is_discount') == 1) {
+                    if (DB::table('vouchers')->where('name', $request->input('voucher_code'))->exists()) {
+                        $voucher = Voucher::where('name', $request->input('voucher_code'))->first();
+                        if ($voucher->type == 'free_package') {
+                            $trxDetail->meeting_amount += $voucher->free_package;
+                        }
 
-                    $customerVoucher = CustomerVoucher::where('voucher_id', $voucher->id)->where('customer_id', $request->input('customer_id'))->first();
-                    $customerVoucher->status_id = 8;
-                    $customerVoucher->save();
+                        $customerVoucher = CustomerVoucher::where('voucher_id', $voucher->id)->where('customer_id', $request->input('customer_id'))->first();
+                        $customerVoucher->status_id = 8;
+                        $customerVoucher->save();
+                    }
                 }
 
                 $trxDetail->save();
@@ -336,20 +338,21 @@ class TransactionHeaderController extends Controller
 
         $totalAmount = 0;
         $totalDiscount = 0;
-        if($request->filled('voucher_code')){
-            $voucher = Voucher::where('name', $request->input('voucher_code'))->first();
-            if($voucher->type == 'discount_percentage'){
-                $totalDiscount = $totalPrice * $voucher->discount_percentage / 100;
-                $totalAmount = $totalPrice - $totalDiscount;
-            }
-            else if($voucher->type == 'discount_total'){
-                $totalDiscount = $voucher->discount_total;
-                $totalAmount = $totalPrice - $voucher->discount_total;
-            }
+        if($request->filled('voucher_code') && $request->input('is_discount') == 1){
+            if(DB::table('vouchers')->where('name', $request->input('voucher_code'))->exists()) {
+                $voucher = Voucher::where('name', $request->input('voucher_code'))->first();
+                if ($voucher->type == 'discount_percentage') {
+                    $totalDiscount = $totalPrice * $voucher->discount_percentage / 100;
+                    $totalAmount = $totalPrice - $totalDiscount;
+                } else if ($voucher->type == 'discount_total') {
+                    $totalDiscount = $voucher->discount_total;
+                    $totalAmount = $totalPrice - $voucher->discount_total;
+                }
 
-            $customerVoucher = CustomerVoucher::where('voucher_id', $voucher->id)->where('customer_id', $request->input('customer_id'))->first();
-            $customerVoucher->status_id = 8;
-            $customerVoucher->save();
+                $customerVoucher = CustomerVoucher::where('voucher_id', $voucher->id)->where('customer_id', $request->input('customer_id'))->first();
+                $customerVoucher->status_id = 8;
+                $customerVoucher->save();
+            }
         }
 
         $totalPayment += $fee;
