@@ -169,8 +169,6 @@ class RegistrationTransactionController extends Controller
 
         // Create transaction detail
         $totalPrice = 0;
-        //$totalDiscount = 0;
-        $totalPayment = 0;
         $idx = 0;
 
         // Get not active schedule
@@ -222,9 +220,6 @@ class RegistrationTransactionController extends Controller
                 $totalPrice += ($month * $schedule->course->price);
                 $trxDetail->subtotal = $month * $schedule->course->price;
                 $trxDetail->meeting_amount = $schedule->course->meeting_amount;
-
-                // Accumulate subtotal
-                $totalPayment += $trxDetail->subtotal;
 
                 // Check more than 1 month payment
                 if($month > 1){
@@ -290,27 +285,23 @@ class RegistrationTransactionController extends Controller
             $fee = 0;
         }
 
-        $totalAmount = 0;
         $totalDiscount = 0;
         if($request->filled('voucher_code')){
             $voucher = Voucher::where('name', $request->input('voucher_code'))->first();
             if($voucher->type == 'discount_percentage'){
                 $totalDiscount = $totalPrice * $voucher->discount_percentage / 100;
-                $totalAmount = $totalPrice - $totalDiscount;
             }
             else if($voucher->type == 'discount_total'){
                 $totalDiscount = $voucher->discount_total;
-                $totalAmount = $totalPrice - $voucher->discount_total;
             }
             $customerVoucher = CustomerVoucher::where('voucher_id', $voucher->id)->where('customer_id', $studentId)->first();
             $customerVoucher->status_id = 8;
             $customerVoucher->save();
         }
 
-        $totalPayment += $fee;
         $trxHeader->total_discount = $totalDiscount;
-        $trxHeader->total_price = $totalAmount;
-        $trxHeader->total_payment = $totalPayment;
+        $trxHeader->total_price = $totalPrice;
+        $trxHeader->total_payment = ($totalPrice  - $totalDiscount) +  $fee;
         $trxHeader->registration_fee = $fee;
         $trxHeader->save();
 

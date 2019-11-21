@@ -127,6 +127,7 @@
                                 <td class="text-center"></td>
                                 <td class="text-right">-Rp{{ $header->total_discount_string }}</td>
                             </tr>
+                            @php( $total -= $header->total_discount )
                             <tr>
                                 <td class="thick-line"></td>
                                 <td class="thick-line"></td>

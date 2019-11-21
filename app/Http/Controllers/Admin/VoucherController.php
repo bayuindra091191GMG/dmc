@@ -243,7 +243,7 @@ class VoucherController extends Controller
 
         //Check Point
         if($customer->point < $voucher->point_needed){
-            return redirect()->back()->withErrors('Point Customer Tidak Cukup')->withInput($request->all());
+            return redirect()->back()->withErrors('Point Student Tidak Cukup')->withInput($request->all());
         }
 
         CustomerVoucher::create([
@@ -264,10 +264,10 @@ class VoucherController extends Controller
         $history->point_min = $voucher->point_needed;
         $history->point_result = $customer->point;
         $history->voucher_id = $voucher->id;
-        $history->notes = 'Point berkurang dikarenakan beli voucher!';
+        $history->notes = 'Beli Voucher '. $voucher->name;
         $history->save();
 
-        Session::flash('message', 'Customer ' . $customer->name . ' Berhasil membeli voucher '. $voucher->name);
+        Session::flash('message', 'Student ' . $customer->name . ' berhasil membeli voucher '. $voucher->name);
         return view('admin.vouchers.buy');
     }
 

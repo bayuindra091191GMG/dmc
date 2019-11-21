@@ -51,10 +51,19 @@
 
                 <div class="form-group">
                     <label class="col-md-3 col-sm-3 col-xs-12">
-                        Nama
+                        Kode Barcode
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         : {{ $customer->barcode ?? '-' }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12">
+                        Poin
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        : {{ $customer->point ?? 0 }}
                     </div>
                 </div>
 

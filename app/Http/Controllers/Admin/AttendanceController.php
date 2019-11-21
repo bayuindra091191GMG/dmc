@@ -348,7 +348,13 @@ class AttendanceController extends Controller
 
             Session::flash('message', 'Berhasil membuat absensi!');
 
-            return redirect()->route('admin.attendances');
+            if($scheduleDB->course->type == 1){
+                return redirect()->route('admin.muaythai.attendances');
+            }
+            else{
+                return redirect()->route('admin.attendances');
+            }
+
         }
         catch (\Exception $exception){
             Log::error("AttendanceController - store Error: ". $exception->getMessage());
