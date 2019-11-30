@@ -330,7 +330,7 @@ class TransactionHeaderController extends Controller
         }
 
         $totalDiscount = 0;
-        if($request->filled('voucher_code')){
+        if($request->filled('voucher_code') && $request->input('voucher_code') != -1){
             $voucher = Voucher::where('name', $request->input('voucher_code'))->first();
             if($voucher->type == 'discount_percentage'){
                 $totalDiscount = $totalPrice * $voucher->discount_percentage / 100;
