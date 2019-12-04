@@ -142,22 +142,37 @@ class AttendanceController extends Controller
             $customerID = $request->input('customer_id');
             $scheduleID = $request->input('schedule_id');
 
+            $scheduleDB = Schedule::find($scheduleID);
             //Check payment due or not
             $now = Carbon::now('Asia/Jakarta');
             //Check if already absence today
-            $attendanceExist = Attendance::where('customer_id', $customerID)
-                ->where('schedule_id', $scheduleID)
-                ->whereDay('date', $now->day)
-                ->whereMonth('date', $now->month)
-                ->exists();
-            if($attendanceExist){
-                return redirect()
-                    ->back()
-                    ->withErrors('Sudah Melakukan Absensi di Hari ini', 'default')
-                    ->withInput();
+            if($scheduleDB->course->type == 1){
+                $attendanceExist = Attendance::where('customer_id', $customerID)
+                    ->where('schedule_id', $scheduleID)
+                    ->whereDay('date', $now->day)
+                    ->whereMonth('date', $now->month)
+                    ->get();
+                if($attendanceExist->count() >= 2){
+                    return redirect()
+                        ->back()
+                        ->withErrors('Sudah Melakukan Absensi 2 kali di Hari ini', 'default')
+                        ->withInput();
+                }
+            }
+            else{
+                $attendanceExist = Attendance::where('customer_id', $customerID)
+                    ->where('schedule_id', $scheduleID)
+                    ->whereDay('date', $now->day)
+                    ->whereMonth('date', $now->month)
+                    ->exists();
+                if($attendanceExist){
+                    return redirect()
+                        ->back()
+                        ->withErrors('Sudah Melakukan Absensi di Hari ini', 'default')
+                        ->withInput();
+                }
             }
 
-            $scheduleDB = Schedule::find($scheduleID);
             //check if schedule is today
             $hari = array ( 1 =>    'Senin',
                 'Selasa',
