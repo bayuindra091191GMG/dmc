@@ -104,6 +104,11 @@
                 <td>:</td>
                 <td>{{ $scheduleDB->finish_date_string }}</td>
             </tr>
+            <tr>
+                <td>DMC Point</td>
+                <td>:</td>
+                <td>{{ $customerData->point }}</td>
+            </tr>
         </table>
     </article>
 </section>
