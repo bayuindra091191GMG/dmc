@@ -100,14 +100,14 @@
                 @endif
             </tr>
             <tr>
-                <td>Expired</td>
-                <td>:</td>
-                <td>{{ $scheduleDB->finish_date_string }}</td>
-            </tr>
-            <tr>
                 <td>DMC Point</td>
                 <td>:</td>
                 <td>{{ $customerData->point }}</td>
+            </tr>
+            <tr>
+                <td>Expired</td>
+                <td>:</td>
+                <td>{{ $scheduleDB->finish_date_string }}</td>
             </tr>
         </table>
     </article>

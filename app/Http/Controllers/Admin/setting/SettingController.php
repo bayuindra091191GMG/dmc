@@ -109,6 +109,6 @@ class SettingController extends Controller
 
         Session::flash('message', 'Berhasil menambah hari expired untuk paket!');
 
-        return redirect()->route('admin.settings.edit_expired_days');
+        return redirect()->route('admin.settings.expired-days');
     }
 }

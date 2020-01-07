@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
@@ -202,16 +203,17 @@ class VoucherController extends Controller
 
             //Check first if Voucher already in Transaction
             $classes = CustomerVoucher::where('voucher_id', $voucher->id)->get();
-            if($classes != null){
-                Session::flash('error', 'Data Trainer '. $voucher->name . ' Tidak dapat dihapus karena voucher sudah pernah diredeem!');
-                return Response::json(array('success' => 'VALID'));
+            if($classes->count() > 0){
+                Session::flash('errors', 'Voucher '. $voucher->name . ' Tidak dapat dihapus karena sudah pernah diredeem!');
+                return Response::json(array('errors' => 'INVALID'));
             }
             $voucher->delete();
 
-            Session::flash('message', 'Berhasil menghapus data Trainer '. $voucher->name);
+            Session::flash('message', 'Berhasil menghapus data Voucher '. $voucher->name);
             return Response::json(array('success' => 'VALID'));
         }
         catch(\Exception $ex){
+            Log::error('Admin/VoucherController - destroy ERROR : '.$ex);
             return Response::json(array('errors' => 'INVALID'));
         }
     }
