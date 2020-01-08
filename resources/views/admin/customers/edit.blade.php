@@ -140,6 +140,16 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="parent_name" >
+                    Point Terkumpul
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="point" type="text" class="form-control col-md-7 col-xs-12 @if($errors->has('point')) parsley-error @endif"
+                           name="point" value="{{ $customer->point }}">
+                </div>
+            </div>
+
+            <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                     <a class="btn btn-warning" href="{{ route('admin.customers') }}"> Batal</a>
                     <button type="submit" class="btn btn-success"> Simpan</button>

@@ -320,8 +320,9 @@ class AttendanceController extends Controller
                         $history->point_add = 50;
                         $history->point_result = $customerData->point;
                         $history->attendance_id = $attendance->id;
-                        $history->notes = 'Point bertambah dikarenakan absensi Muay Thai!';
+                        $history->notes = 'Point bertambah dikarenakan absensi Muay Thai';
                         $history->save();
+
                     }
                 }
             }

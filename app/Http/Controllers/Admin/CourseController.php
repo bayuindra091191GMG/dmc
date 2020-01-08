@@ -574,15 +574,29 @@ class CourseController extends Controller
      * @param Course $course
      * @return \Illuminate\Http\Response
      */
-    public function edit(Course $course)
+    public function edit(Request $request, Course $course)
     {
+        $type = intval($request->type);
+        if($type === 1){
+            $backRoute = 'admin.muaythai.courses';
+        }
+        else if($type === 2){
+            $backRoute = 'admin.dance.courses';
+        }
+        else if($type === 3){
+            $backRoute = 'admin.private.courses';
+        }
+        else{
+            $backRoute = 'admin.gymnastic.courses';
+        }
+
         $coaches = Coach::orderBy('name')->get();
         if($course->type == 2){
             $days = preg_split('@;@', $course->day, NULL, PREG_SPLIT_NO_EMPTY);
             $hours = preg_split('@;@', $course->hour, NULL, PREG_SPLIT_NO_EMPTY);
-            return view('admin.courses.edit',compact('course', 'coaches', 'days', 'hours'));
+            return view('admin.courses.edit',compact('course', 'coaches', 'days', 'hours', 'backRoute'));
         }
-        return view('admin.courses.edit',compact('course', 'coaches'));
+        return view('admin.courses.edit',compact('course', 'coaches', 'backRoute'));
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Libs\Utilities;
 use App\Models\Attendance;
 use App\Models\Auth\User\User;
 use App\Models\Customer;
+use App\Models\CustomerPointHistory;
 use App\Models\CustomerVoucher;
 use App\Models\Schedule;
 use App\Models\TransactionHeader;
@@ -186,6 +187,29 @@ class CustomerController extends Controller
         $customer->address = $request->input('address') ?? null;
         $customer->phone = $request->input('phone') ?? null;
         $customer->updated_at = $dateTimeNow;
+
+        if(!empty($request->input('point'))){
+            $result = $request->input('point');
+            if($customer->point != $result){
+                $history = CustomerPointHistory::create([
+                    'customer_id'   => $customer->id,
+                    'point_from'    => $customer->point,
+                    'point_result'    => $result,
+                    'notes'    => "Perubahan point dari edit student"
+                ]);
+                if($result > $customer->point){
+                    $diffPoint = $result - $customer->point;
+                    $history->point_add = $diffPoint;
+                    $history->save();
+                }
+                else{
+                    $diffPoint = $customer->point - $result;
+                    $history->point_min = $diffPoint;
+                    $history->save();
+                }
+                $customer->point = $result ?? null;
+            }
+        }
 
         if($request->filled('photo')){
             $image = str_replace('data:image/jpeg;base64,', '', $request->input('photo'));

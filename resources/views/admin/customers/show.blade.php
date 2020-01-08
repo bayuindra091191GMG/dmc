@@ -7,6 +7,7 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="navbar-left">
                 <a class="btn btn-default" href="{{ route('admin.customers') }}"><i class="fa fa-arrow-circle-o-left fa-2x" aria-hidden="true"></i></a>
+                <a class="btn btn-info" href="{{ route('admin.customers.edit', ['customer'=>$customer->id]) }}">Edit</a>
             </div>
             <div class="navbar-right">
             </div>
