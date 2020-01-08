@@ -313,17 +313,7 @@ class AttendanceController extends Controller
                         'point_from'    => $customerData->point
                     ]);
 
-                    if((strpos($scheduleDB->course->names, 'private') !== false) || (strpos($scheduleDB->course->names, 'Private') !== false)){
-                        $customerData->point += 10;
-                        $customerData->save();
-
-                        $history->point_add = 10;
-                        $history->point_result = $customerData->point;
-                        $history->attendance_id = $attendance->id;
-                        $history->notes = 'Point bertambah dikarenakan absensi Muay Thai!';
-                        $history->save();
-                    }
-                    else{
+                    if($scheduleDB->course->meeting_amount > 1){
                         $customerData->point += 50;
                         $customerData->save();
 
