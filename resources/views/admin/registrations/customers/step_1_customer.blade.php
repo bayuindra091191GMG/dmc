@@ -229,26 +229,26 @@
             $('#form_new_student').show();
         @endif
 
-        // Webcam.set({
-        //     width: 490,
-        //     height: 390,
-        //     image_format: 'jpeg',
-        //     jpeg_quality: 90
-        // });
+        Webcam.set({
+            width: 490,
+            height: 390,
+            image_format: 'jpeg',
+            jpeg_quality: 90
+        });
 
         // Show Create New Student Form
         $('#is_new_student').change(function(){
             if(this.checked){
                 $('#form_new_student').show();
                 $("#customer").prop("disabled", true);
-                // Webcam.attach( '#my_camera' );
+                Webcam.attach( '#my_camera' );
                 //$('#form_existing_student').hide();
             }
             else{
                 $('#form_new_student').hide();
                 $("#customer").prop("disabled", false);
                 //$('#form_existing_student').show();
-                // Webcam.reset();
+                Webcam.reset();
             }
         });
 
@@ -285,14 +285,14 @@
             scheduleLinkBtn.setAttribute("href","/admin/customers/show/" + data.id);
         });
 
-        // function take_snapshot() {
-        //     Webcam.snap( function(data_uri) {
-        //         $('#my_camera').hide();
-        //         $('#btn_snapshot').hide();
-        //         $(".image-tag").val(data_uri);
-        //         document.getElementById('results').innerHTML = '<img src="'+data_uri+'"/>';
-        //         Webcam.reset();
-        //     } );
-        // }
+        function take_snapshot() {
+            Webcam.snap( function(data_uri) {
+                $('#my_camera').hide();
+                $('#btn_snapshot').hide();
+                $(".image-tag").val(data_uri);
+                document.getElementById('results').innerHTML = '<img src="'+data_uri+'"/>';
+                Webcam.reset();
+            } );
+        }
     </script>
 @endsection
