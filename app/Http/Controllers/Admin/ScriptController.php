@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\Schedule;
 use Carbon\Carbon;
 
 class ScriptController extends Controller
@@ -44,5 +45,34 @@ class ScriptController extends Controller
 
         $number = $code. $modulus. $nextNumber;
         return $number;
+    }
+
+    public function refreshExpiredMembers(){
+        try {
+            $schedules = Schedule::with(['course', 'customer'])
+                ->whereIn('course_id', [1,2,3,4])
+                ->where('status_id', 3)
+                ->whereBetween('finish_date', array('2020-03-15 00:00:00', '2020-07-13 00:00:00'))
+                ->get();
+
+            //dd($schedules);
+
+            $liveDate = Carbon::create(2020,7,13,0,0,0);
+            foreach ($schedules as $schedule){
+                $finishDate = Carbon::parse($schedule->finish_date);
+                $diffInDays = $finishDate->diffInDays($liveDate);
+                $newFinishDate = $liveDate->copy()->addDays($diffInDays);
+
+                $schedule->finish_date = $newFinishDate->toDateTimeString();
+                $schedule->save();
+
+                //error_log($diffInDays. ' - '. $newFinishDate->toDateTimeString());
+            }
+
+            return 'SCRIPT SUCCESS!';
+        }
+        catch (\Exception $ex){
+            dd($ex);
+        }
     }
 }

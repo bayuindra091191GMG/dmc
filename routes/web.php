@@ -684,3 +684,4 @@ Route::get('/documents/purchase-request', function (){
 
 // SCRIPT
 Route::get('/script/generate-member-id', 'Admin\ScriptController@generateMemberId');
+Route::get('/script/refresh-expired-members', 'Admin\ScriptController@refreshExpiredMembers');
