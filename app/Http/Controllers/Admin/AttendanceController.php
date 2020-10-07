@@ -499,8 +499,8 @@ class AttendanceController extends Controller
         $customers = Schedule::where('course_id', $course->id)->get();
 
         //Get Attendance
-        $startDate = Carbon::parse($request->input('date'))->format('m');
-        $finishDate = Carbon::parse($request->input('date'))->addMonth()->format('m');
+        $startDate = Carbon::parse($request->input('date'))->startOfMonth();
+        $finishDate = Carbon::parse($request->input('date'))->startOfMonth()->addMonth(1);
         $attendanceData = [];
         foreach ($customers as $customer){
             if(Attendance::
@@ -508,8 +508,8 @@ class AttendanceController extends Controller
                     ['customer_id', $customer->customer_id],
                     ['schedule_id', $customer->id]
                 ])
-                    ->whereMonth('created_at', '>=', $startDate)
-                    ->whereMonth('created_at', '<', $finishDate)
+                    ->where('created_at', '>=', $startDate)
+                    ->where('created_at', '<', $finishDate)
                     ->orderBy('created_at')
                     ->exists())
             {
@@ -518,8 +518,8 @@ class AttendanceController extends Controller
                     ['customer_id', $customer->customer_id],
                     ['schedule_id', $customer->id]
                 ])
-                    ->whereMonth('created_at', '>=', $startDate)
-                    ->whereMonth('created_at', '<', $finishDate)
+                    ->where('created_at', '>=', $startDate)
+                    ->where('created_at', '<', $finishDate)
                     ->orderBy('created_at')
                     ->get();
                 array_push($attendanceData, $attendance);
